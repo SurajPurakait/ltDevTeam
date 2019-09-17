@@ -1,0 +1,1 @@
+<p><?php echo $msg_details['message']; ?></p>

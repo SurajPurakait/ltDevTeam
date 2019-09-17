@@ -1,0 +1,893 @@
+var base_url = document.getElementById('base_url').value;
+
+function add_lead_type() {
+    if (!requiredValidation('add-lead-type-form')) {
+        return false;
+    }
+
+    var form_data = new FormData(document.getElementById('add-lead-type-form'));
+
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'lead_management/Lead_type/add_lead_type',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            if (result.trim() == "1") {
+                swal({title: "Success!", text: "Lead Type Successfully Added!", type: "success"}, function () {
+                    goURL(base_url + 'lead_management/lead_type');
+                });
+            } else if (result.trim() == "-1") {
+                swal("ERROR!", "Unable To Add Lead Type", "error");
+            } else {
+                swal("ERROR!", "Lead Type Already Exists", "error");
+            }
+        }
+    });
+
+}
+
+function edit_lead_type() {
+    if (!requiredValidation('edit-lead-type-form')) {
+        return false;
+    }
+
+    var form_data = new FormData(document.getElementById('edit-lead-type-form'));
+
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'lead_management/Lead_type/edit_lead_type',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            if (result.trim() == "1") {
+                swal({title: "Success!", text: "Lead Type Name Successfully Updated!", type: "success"}, function () {
+                    goURL(base_url + 'lead_management/lead_type');
+                });
+            } else if (result.trim() == "-1") {
+                swal("ERROR!", "Unable To Update Lead Type Name", "error");
+            } else {
+                swal("ERROR!", "Lead Type Name Already Exists", "error");
+            }
+        }
+    });
+}
+
+function delete_lead_type(lead_id) {
+    swal({
+        title: "Are you sure want to delete?",
+        text: "Your will not be able to recover this lead type!!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+    },
+            function () {
+                $.ajax({
+                    type: 'POST',
+                    url: base_url + 'lead_management/Lead_type/delete_lead_type',
+                    data: {
+                        lead_id: lead_id
+                    },
+                    success: function (result) {
+                        if (result == "1") {
+                            swal({
+                                title: "Success!",
+                                "text": "lead type been deleted successfully!",
+                                "type": "success"
+                            }, function () {
+                                goURL(base_url + 'lead_management/lead_type');
+                            });
+                        } else {
+                            swal("ERROR!", "Unable to delete this lead type!!", "error");
+                        }
+                    }
+                });
+            });
+}
+
+function add_lead_ref() {
+    if (!requiredValidation('add-lead-ref-form')) {
+        return false;
+    }
+
+    var form_data = new FormData(document.getElementById('add-lead-ref-form'));
+
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'partners/add_ref',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            if (result.trim() == "1") {
+                swal({title: "Success!", text: "Lead Reference Successfully Added!", type: "success"}, function () {
+                    goURL(base_url + 'partners/referral_agent_type');
+                });
+            } else if (result.trim() == "-1") {
+                swal("ERROR!", "Unable To Add Lead Reference", "error");
+            } else {
+                swal("ERROR!", "Lead Reference Already Exists", "error");
+            }
+        }
+    });
+
+}
+
+function edit_lead_ref() {
+    if (!requiredValidation('edit-lead-ref-form')) {
+        return false;
+    }
+
+    var form_data = new FormData(document.getElementById('edit-lead-ref-form'));
+
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'partners/edit_ref',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            if (result.trim() == "1") {
+                swal({
+                    title: "Success!",
+                    text: "Lead Reference Name Successfully Updated!",
+                    type: "success"
+                }, function () {
+                    goURL(base_url + 'partners/referral_agent_type');
+                });
+            } else if (result.trim() == "-1") {
+                swal("ERROR!", "Unable To Update Lead reference Name", "error");
+            } else {
+                swal("ERROR!", "Lead reference Name Already Exists", "error");
+            }
+        }
+    });
+}
+
+function delete_lead_ref(lead_id) {
+    swal({
+        title: "Are you sure want to delete?",
+        text: "Your will not be able to recover this lead reference!!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+    },
+            function () {
+                $.ajax({
+                    type: 'POST',
+                    url: base_url + 'partners/delete_ref',
+                    data: {
+                        lead_id: lead_id
+                    },
+                    success: function (result) {
+                        if (result == "1") {
+                            swal({
+                                title: "Success!",
+                                "text": "lead reference been deleted successfully!",
+                                "type": "success"
+                            }, function () {
+                                goURL(base_url + 'partners/referral_agent_type');
+                            });
+                        } else {
+                            swal("ERROR!", "Unable to delete this lead reference!!", "error");
+                        }
+                    }
+                });
+            });
+}
+
+function add_lead_source() {
+    if (!requiredValidation('add-lead-source-form')) {
+        return false;
+    }
+
+    var form_data = new FormData(document.getElementById('add-lead-source-form'));
+
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'lead_management/lead_source/add_lead_source',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            if (result.trim() == "1") {
+                swal({title: "Success!", text: "Lead Source Successfully Added!", type: "success"}, function () {
+                    goURL(base_url + 'lead_management/lead_source');
+                });
+            } else if (result.trim() == "-1") {
+                swal("ERROR!", "Unable To Add Lead Source", "error");
+            } else {
+                swal("ERROR!", "Lead Source Already Exists", "error");
+            }
+        }
+    });
+
+}
+
+function edit_lead_source() {
+    if (!requiredValidation('edit-lead-source-form')) {
+        return false;
+    }
+
+    var form_data = new FormData(document.getElementById('edit-lead-source-form'));
+
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'lead_management/lead_source/edit_lead_source',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            if (result.trim() == "1") {
+                swal({title: "Success!", text: "Lead Source Name Successfully Updated!", type: "success"}, function () {
+                    goURL(base_url + 'lead_management/lead_source');
+                });
+            } else if (result.trim() == "-1") {
+                swal("ERROR!", "Unable To Update Lead Source Name", "error");
+            } else {
+                swal("ERROR!", "Lead Source Name Already Exists", "error");
+            }
+        }
+    });
+}
+
+function delete_lead_source(source_id) {
+    swal({
+        title: "Are you sure want to delete?",
+        text: "Your will not be able to recover this lead source!!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+    },
+            function () {
+                $.ajax({
+                    type: 'POST',
+                    url: base_url + 'lead_management/lead_source/delete_lead_source',
+                    data: {
+                        source_id: source_id
+                    },
+                    success: function (result) {
+                        if (result == "1") {
+                            swal({
+                                title: "Success!",
+                                "text": "Lead Source Been Deleted Successfully!",
+                                "type": "success"
+                            }, function () {
+                                goURL(base_url + 'lead_management/lead_source');
+                            });
+                        } else {
+                            swal("ERROR!", "Unable To Delete This Lead Source!!", "error");
+                        }
+                    }
+                });
+            });
+}
+
+function add_lead_prospect(added_by,event_lead ="") {
+    if (!requiredValidation('form_add_new_prospect')) {
+        return false;
+    }
+    var form_data = new FormData(document.getElementById('form_add_new_prospect'));
+    form_data.append('added_by', added_by);
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'lead_management/new_prospect/insert_new_prospect',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            //console.log(result); return false;
+            if (result.trim() == "0") {
+                swal("ERROR!", "Lead Prospect Already Exists", "error");
+            } else if (result.trim() == "-1") {
+                swal("ERROR!", "Unable To Add Lead Prospect", "error");
+            } else {
+                swal({title: "Success!", text: "Lead Prospect Successfully Added!", type: "success"}, function () {
+                    if (added_by == 'refagent') {
+                        goURL(base_url + 'referral_partner/referral_partners/referral_partner_dashboard');
+                    }else if(event_lead == "event_lead"){
+                        goURL(base_url + 'lead_management/event');
+                    }
+                     else {
+                        goURL(base_url + 'lead_management/home');
+                    }
+                });
+                window.open((($('#mail_campaign_status').val() != 0) ? base_url + 'lead_management/home/mail_campaign/y/' + result.trim() : base_url + 'lead_management/home/mail_campaign/n/' + result.trim()), 'Mail Campaign Popup', "width=1080, height=480, top=100, left=170, scrollbars=no");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function cancel_lead_prospect(added_by) {
+    if (added_by == 'refagent') {
+        goURL(base_url + 'referral_partner/referral_partners/lead_dashboard');
+    } else {
+        goURL(base_url + 'lead_management/home');
+    }
+}
+
+function add_lead_referral(partner) {
+    if (!requiredValidation('form_add_new_referral')) {
+        return false;
+    }
+
+    var form_data = new FormData(document.getElementById('form_add_new_referral'));
+
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'partners/insert_new_referral',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            if (result.trim() == "0") {
+                swal("ERROR!", "Lead Prospect Already Referral", "error");
+            } else if (result.trim() == "-1") {
+                swal("ERROR!", "Unable To Add Lead Referral", "error");
+            } else {
+                if (partner != '') {
+                    swal({title: "Success!", text: "Referral Partner Successfully Added!", type: "success"}, function () {
+                        goURL(base_url + 'referral_partner/referral_partners/partners');
+                    });
+                } else {
+                    swal({title: "Success!", text: "Lead Referral Successfully Added!", type: "success"}, function () {
+                        goURL(base_url + 'lead_management/home');
+                    });
+                }
+                window.open((($('#mail_campaign_status').val() != 0) ? base_url + 'lead_management/home/mail_campaign/y/' + result.trim() : base_url + 'lead_management/home/mail_campaign/n/' + result.trim()), 'Mail Campaign Popup', "width=1080, height=480, top=100, left=170, scrollbars=no");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function cancel_save_lead_mail() {
+    goURL(base_url + 'lead_management/lead_mail');
+}
+
+
+function save_lead_mail() {
+    if (!requiredValidation('form_save_lead_mail')) {
+        return false;
+    }
+    var form_data = new FormData(document.getElementById('form_save_lead_mail'));
+
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'lead_management/lead_mail/insert_mail_content',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            if (result.trim() == "1") {
+                swal({title: "Success!", text: "Mail Content Successfully Saved", type: "success"}, function () {
+                    goURL(base_url + 'lead_management/lead_mail');
+                });
+            } else {
+                swal("ERROR!", "Some Error Occured", "error");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function cancel_save_lead_mail_campaign() {
+    goURL(base_url + 'lead_management/lead_mail/lead_mail_campaign');
+}
+
+function save_lead_mail_campaign() {
+    if (!requiredValidation('form_save_lead_mail')) {
+        return false;
+    }
+    var form_data = new FormData(document.getElementById('form_save_lead_mail'));
+
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'lead_management/lead_mail/insert_mail_campaign_content',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            if (result.trim() == "1") {
+                swal({title: "Success!", text: "Mail Content Successfully Saved", type: "success"}, function () {
+                    goURL(base_url + 'lead_management/lead_mail/lead_mail_campaign');
+                });
+            } else {
+                swal("ERROR!", "Some Error Occured", "error");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function delete_lead_mail(id) {
+    swal({
+        title: "Are you sure want to delete?",
+        text: "Your will not be able to recover this service!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+    },
+            function () {
+                $.ajax({
+                    type: 'POST',
+                    url: base_url + '/lead_management/lead_mail/delete_lead_mail',
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+                        //alert(result);
+                        if (result == "1") {
+                            swal({
+                                title: "Success!",
+                                "text": "Email deleted successfully!",
+                                "type": "success"
+                            }, function () {
+                                goURL(base_url + '/lead_management/lead_mail');
+                            });
+                        } else {
+                            swal("ERROR!", "Unable to delete the Email", "error");
+                        }
+                    }
+                });
+            });
+}
+
+function delete_mail_campaign(id) {
+    swal({
+        title: "Are you sure want to delete?",
+        text: "Your will not be able to recover this mail!!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+    },
+            function () {
+                $.ajax({
+                    type: 'POST',
+                    url: base_url + 'lead_management/lead_mail/delete_mail_campaign',
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+                        if (result == "1") {
+                            swal({
+                                title: "Success!",
+                                "text": "Mail has been deleted successfully!",
+                                "type": "success"
+                            }, function () {
+                                goURL(base_url + 'lead_management/lead_mail/lead_mail_campaign');
+                            });
+                        } else {
+                            swal("ERROR!", "Unable to delete this Mail!!", "error");
+                        }
+                    }
+                });
+            });
+}
+
+function load_campaign_mails(service, language, day, status) {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'lead_management/lead_mail/load_campaign_mails',
+        data: {
+            service: service, language: language, day: day, status: status
+        },
+        success: function (result) {
+            $("#load_data").html(result);
+        }
+    });
+}
+
+
+function displayMailCampaignTemplate(leadID, day, isCampaign) {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'lead_management/lead_mail/mail_campaign_template_ajax',
+        data: {
+            lead_id: leadID,
+            day: day,
+            is_campaign: isCampaign
+        },
+        success: function (result) {
+            if (result != 0) {
+                var mail_campaign = JSON.parse(result);
+                $('#mail-subject').html(mail_campaign.subject);
+                $('#mail-body').html(mail_campaign.body);
+                $('#mail-campaign-template-modal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+            } else {
+                swal("ERROR!", "Lead mail not avalable...!", "error");
+            }
+        }
+    });
+}
+
+function viewMailCampaignTemplate(contactType, language, day, firstName, companyName, phone, email) {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'lead_management/lead_mail/show_mail_campaign_template_ajax',
+        data: {
+            service: contactType,
+            language: language,
+            day: day,
+            first_name: firstName,
+            company_name: companyName,
+            phone: phone,
+            email: email
+        },
+        success: function (result) {
+            if (result != 0) {
+                var mail_campaign = JSON.parse(result);
+//                console.log(mail_campaign);
+                $('#mail-subject').html(mail_campaign.subject);
+                $('#mail-body').html(mail_campaign.body);
+                $('#mail-campaign-template-modal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+            } else {
+                swal("ERROR!", "Lead mail not avalable...!", "error");
+            }
+        }
+    });
+}
+
+function loadLeadDashboard(leadType, status, requestBy, leadContactType) {
+    $.ajax({
+        type: "POST",
+        data: {
+            lead_type: leadType,
+            status: status,
+            request_by: requestBy,
+            lead_contact_type: leadContactType
+        },
+        url: base_url + 'lead_management/home/dashboard_ajax',
+        success: function (lead_result) {
+//            console.log(action_result);
+            $("#lead_dashboard_div").html(lead_result);
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function loadEventDashboard() {
+    $.ajax({
+        type: "POST",
+        // data: {
+        //     lead_type: leadType,
+        //     status: status,
+        //     request_by: requestBy,
+        //     lead_contact_type: leadContactType
+        // },
+        url: base_url + 'lead_management/event/dashboard_ajax',
+        success: function (event_result) {
+            $("#event_dashboard_div").html(event_result);
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function loadStaffDLLValue(officeID, staffID) {
+    $.ajax({
+        type: "POST",
+        data: {
+            office_id: officeID
+        },
+        url: base_url + 'services/home/load_partner_manager',
+        dataType: "html",
+        success: function (result) {
+            var lead_staff = document.getElementById('lead_staff');
+            lead_staff.innerHTML = "";
+            if (result != 0) {
+                var staff = JSON.parse(result);
+                lead_staff.options[lead_staff.options.length] = new Option("Select an option", "");
+                for (var i = 0; i < staff.length; i++) {
+                    lead_staff.options[lead_staff.options.length] = new Option(staff[i].name, staff[i].id);
+                }
+                if (staffID != '') {
+                    $('#lead_staff').val(staffID);
+                }
+            } else {
+                lead_staff.options[lead_staff.options.length] = new Option("Select an option", "");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function changeCampaignStatus(service, language, status) {
+    swal({
+        title: 'Are you sure?',
+        text: "You want to " + (status == 0 ? 'In' : '') + "active!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Change!'
+    }, function (isConfirm) {
+        if (isConfirm) {
+            $.ajax({
+                type: "POST",
+                data: {
+                    service: service,
+                    language: language,
+                    status: status
+                },
+                url: base_url + 'lead_management/home/change_mail_campaign_status',
+                dataType: "html",
+                success: function (result) {
+                    if (result != 0) {
+                        swal("Success!", "Successfully " + (status == 0 ? 'In' : '') + "actived!", "success");
+                        goURL(base_url + 'lead_management/lead_mail/lead_mail_campaign');
+                    } else {
+                        swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+                    }
+                },
+                beforeSend: function () {
+                    openLoading();
+                },
+                complete: function (msg) {
+                    closeLoading();
+                }
+            });
+        }
+    });
+}
+
+function leadFilter() {
+    var form_data = new FormData(document.getElementById('filter-form'));
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'lead_management/home/lead_filter',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            //console.log("Result: " + result);
+            $("#lead_dashboard_div").html(result);
+            $("[data-toggle=popover]").popover();
+//            $("#clear_filter").show();
+//            $('#btn_clear_filter').show();
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+var delete_lead_management = (id) => {
+    swal({
+        title: "Are you sure want to delete?",
+        text: "Your will not be able to recover this lead management!!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+    },
+    function () {
+        $.ajax({
+            type: 'POST',
+            url: base_url + 'lead_management/home/delete_lead',
+            data: {
+                id: id
+            },
+            success: function (result) {
+                // alert(result);
+                if (result == "1") {
+                    swal({
+                        title: "Success!",
+                        "text": "Lead Management been deleted successfully!",
+                        "type": "success"
+                    }, function () {
+                        goURL(base_url + 'lead_management/home');
+                    });
+                } else {
+                    swal("ERROR!", "Unable to delete this Lead Management!!", "error");
+                }
+            }
+        });
+    });
+}
+
+function add_event (){
+    if (!requiredValidation('form_add_new_event')) {
+        return false;
+    }
+    
+    var form_data = new FormData(document.getElementById('form_add_new_event'));
+    // console.log(form_data);return false;
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'lead_management/event/insert_new_event',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            // alert(result);return false;
+            if (result == 1) {
+                swal("Success!", "Event Added Successfully", "success");
+                goURL(base_url + 'lead_management/event');
+            } else {
+                swal("ERROR!", "Unable To Add Event", "error");
+            }
+        },
+        beforeSend: function () {
+            $("#eventadd").prop('disabled', true).html('Processing...');
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+
+}
+
+function change_zip_by_country(val){
+    if(val == '230'){
+        $("#zip_div").show();
+    }else{
+        $("#zip_div").hide();
+    }
+}
+
+var mail_campaign_status_change = (id,value) => {
+    $.ajax({
+        type: "POST",
+        data: { 
+            id : id,
+            value : value 
+        },
+        url: base_url + 'lead_management/home/change_tracking_status',
+        dataType: "html",
+        success: function (result) {
+            if (result == 1) {
+                swal("Success!", "Tracking is Actived Now", "success");
+            }
+        },
+    });            
+}
+
+function assign_as_client(id,partner_id) {
+    $.ajax({
+        type: "POST",
+        data: { 
+            id : id,
+            partner_id : partner_id 
+        },
+        url: base_url + 'lead_management/home/assign_lead_as_client',
+        dataType: "html",
+        success: function (result) {
+            if(result == 1){
+                $("#assign_as_client-" + id).replaceWith('<a href="javascript:void(0);" class="btn btn-warning btn-xs btn-assign-client"> Assigned as Client</a>');
+                swal("Success!", "Successfully Assigned as Client", "success");    
+            }
+        },
+    });
+}
+
+
+function update_event(id){
+    // alert(id);return false;   
+     var form_data = new FormData(document.getElementById('event_modal_form_submit'));
+           $.ajax({
+              type: 'POST',
+              url: base_url + 'lead_management/event/update_event/'+ id,
+              data: form_data,
+              processData: false,
+              contentType: false,
+              success: function (result) {
+                   // alert(result);return false;
+                  if(result.trim() == 1 ){
+                      swal("Success!", "Successfully updated event!", "success");
+                      $("#event-form-modal").modal('hide');
+                      goURL(base_url + 'lead_management/event');
+                     
+                   }else{
+                      swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+                   }
+                 
+              },
+              beforeSend: function () {
+                  $("#eventupdate").prop('disabled', true).html('Processing...');
+                  openLoading();
+              },
+              complete: function (msg) {
+                  closeLoading();
+              }
+          });
+}
+
+
+
+
+

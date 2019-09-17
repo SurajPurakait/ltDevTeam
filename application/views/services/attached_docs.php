@@ -1,0 +1,1 @@
+<input type="hidden" name="attached_document_array[]" value="<?= $data["id"]; ?>">
