@@ -1115,7 +1115,7 @@ class Service_model extends CI_Model {
 
     public function check_if_contact_with_same_ph_email_exists($fname, $lname, $phone, $email) {
         //$query = "select * from contact_info where (TRIM(LOWER(first_name))='" . trim(strtolower($fname)) . "' and TRIM(LOWER(last_name))='" . trim(strtolower($lname)) . "' and phone1='" . $phone . "' and reference='individual' and status='1') or (TRIM(LOWER(first_name))='" . trim(strtolower($fname)) . "' and TRIM(LOWER(last_name))='" . trim(strtolower($lname)) . "' and email1='" . $email . "' and reference='individual' and status='1')";
-        $query = "select * from contact_info where TRIM(LOWER(first_name))='" . trim(strtolower($fname)) . "' and TRIM(LOWER(last_name))='" . trim(strtolower($lname)) . "' and phone1='" . $phone . "' and email1='" . $email . "' and reference='individual' and status='1'";
+        $query = "select * from contact_info where TRIM(LOWER(first_name))='" . trim(strtolower($fname)) . "' and TRIM(LOWER(last_name))='" . trim(strtolower($lname)) . "' and phone1='" . trim($phone) . "' and email1='" . trim($email) . "' and reference='individual' and status='1'";
 
         return $this->db->query($query)->row_array();
     }

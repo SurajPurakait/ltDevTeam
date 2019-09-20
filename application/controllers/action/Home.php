@@ -457,12 +457,12 @@ class Home extends CI_Controller {
                         if ((isset($data['owner_first_name']) && $data['owner_first_name'] != '') && (isset($data['owner_last_name']) && $data['owner_last_name'] != '') && (isset($data['office_name']) && $data['office_name'] != '') && (isset($data['partner_name']) && $data['partner_name'] != '') && (isset($data['manager_name']) && $data['manager_name'] != '')) {
                             $check_if_individual_exists = $this->action_model->check_if_owner_exists($data['owner_first_name'],$data['owner_last_name']);
                                 if (empty($check_if_individual_exists)) {
-                                    $check_if_contact_with_same_ph_email_exists = $this->service_model->check_if_contact_with_same_ph_email_exists($data['contact_phone'],$data['contact_email']);
-                                    if(empty($check_if_contact_with_same_ph_email_exists)){
+                                    // $check_if_contact_with_same_ph_email_exists = $this->service_model->check_if_contact_with_same_ph_email_exists($data['contact_first_name'],$data['contact_last_name'],$data['contact_phone'],$data['contact_email']);
+                                    // if(empty($check_if_contact_with_same_ph_email_exists)){
                                         $this->action_model->import_individual($data);
-                                    }else{
-                                        $this->action_model->import_failed_data($data, 'contact email/phone exists', '2');
-                                    }                                    
+                                    // }else{
+                                    //     $this->action_model->import_failed_data($data, 'contact email/phone exists', '2');
+                                    // }                                    
                                 }else{ 
                                     $this->action_model->update_import_individual($data,$check_if_individual_exists['id']);
                                 }
@@ -628,6 +628,7 @@ class Home extends CI_Controller {
         $render_data['company_order_data'] = $this->company_model->get_company_order_data($reference_id);
         $render_data['company_internal_data'] = $this->company_model->get_company_internal_data($reference_id);
         $render_data['account_details'] = $this->company_model->get_account_details($render_data['company_data'][0]['id']);
+        $render_data['account_details_bookkeeping'] = $this->company_model->get_account_details_bookkeeping($render_data['company_data'][0]['id']);
 //        $render_data['documents']= $this->company_model->get_business_attachment($reference_id);
         $this->load->template('action/edit_business', $render_data);
     }

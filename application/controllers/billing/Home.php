@@ -57,6 +57,8 @@ class Home extends CI_Controller {
         asort($this->filter_element);
         $render_data['filter_element_list'] = $this->filter_element;
         $render_data['sorting_element'] = $this->sorting_element;
+        $render_data['contador_office_list'] = $this->administration->get_office_list_by_name_like('Contador');
+        $render_data['taxleaf_office_list'] = $this->administration->get_office_list_by_name_like('TaxLeaf');
         $this->load->template('billing/dashboard', $render_data);
     }
 

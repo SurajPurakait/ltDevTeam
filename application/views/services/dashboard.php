@@ -110,8 +110,6 @@ if ($status == '') {
                                             <th class="text-center">Not Started</th>
                                             <th class="text-center">Started</th>
                                             <th class="text-center">Late</th>
-                                            <!-- <th class="text-center">Completed</th> -->
-                                            <th class="text-center">Canceled</th>
                                             <th class="text-center">SOS</th>
                                         </tr>
                                     </thead>
@@ -139,20 +137,6 @@ if ($status == '') {
                                                         </span>
                                                     </a>
                                                 </td>
-                                                <!-- <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byme-0">
-                                                        <span class="label label-warning">
-                                                            <?//= count_services('0', 'byme'); ?>
-                                                        </span>
-                                                    </a>
-                                                </td> -->
-                                                <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byme-7">
-                                                        <span class="label label-warning">
-                                                            <?= count_services('7', 'byme'); ?>
-                                                        </span>
-                                                    </a>
-                                                </td>
                                                 <?php // if($stafftype != 1) {?>
                                                 <td class="text-center">
                                                     <a class="filter-button" onclick="sos_filter('order', 'byme');" title="By Me"><span class="label label-success label-byme" id="sos-byme"><?= sos_dashboard_count('order', 'byme'); ?></span></a>
@@ -162,7 +146,6 @@ if ($status == '') {
                                             <?php
                                         }
                                         if ($stafftype == 1 || $stafftype == 2) {
-//                                        if ($stafftype == 1 || $stafftype == 2 || $stafftype == 3) {
                                             ?>
                                             <tr>
                                                 <th>To me</th>
@@ -184,20 +167,6 @@ if ($status == '') {
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-tome-3">
                                                         <span class="label label-warning">
                                                             <?= count_services('3', 'tome'); ?>
-                                                        </span>
-                                                    </a>
-                                                </td>
-                                                <!-- <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-tome-0">
-                                                        <span class="label label-warning">
-                                                            <?//= count_services('0', 'tome'); ?>
-                                                        </span>
-                                                    </a>
-                                                </td> -->
-                                                <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-tome-7">
-                                                        <span class="label label-warning">
-                                                            <?= count_services('7', 'tome'); ?>
                                                         </span>
                                                     </a>
                                                 </td>
@@ -232,71 +201,12 @@ if ($status == '') {
                                                         </span>
                                                     </a>
                                                 </td>
-                                                <!-- <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-0">
-                                                        <span class="label label-warning">
-                                                            <?//= count_services('0', 'byothers'); ?>
-                                                        </span>
-                                                    </a>
-                                                </td> -->
-                                                <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-7">
-                                                        <span class="label label-warning">
-                                                            <?= count_services('7', 'byothers'); ?>
-                                                        </span>
-                                                    </a>
-                                                </td>
                                             </tr>
                                         <?php } ?>
-<!-- <tr>
-<th>Unassigned</th>
-<td class="text-center">
-<a href="javascript:void(0)" class="filter-button" id="filter-unassigned-2">
-<span class="label label-warning">
-<?//= count_services('2', 'unassigned'); ?>
-</span>
-</a></td>
-<td class="text-center">                                                    
-<a href="javascript:void(0)" class="filter-button" id="filter-unassigned-1">
-<span class="label label-warning">
-<?//= count_services('1', 'unassigned'); ?>
-</span>
-</a>
-</td>
-<td class="text-center">
-<a href="javascript:void(0)" class="filter-button" id="filter-unassigned-3">
-<span class="label label-warning">
-<?//= count_services('3', 'unassigned'); ?>
-</span>
-</a>
-</td>
-<td class="text-center">
-<a href="javascript:void(0)" class="filter-button" id="filter-unassigned-0">
-<span class="label label-warning">
-<?//= count_services('0', 'unassigned'); ?>
-</span>
-</a>
-</td>
-<td class="text-center">
-<a href="javascript:void(0)" class="filter-button" id="filter-unassigned-7">
-<span class="label label-warning">
-<?//= count_services('7', 'unassigned'); ?>
-</span>
-</a>
-</td>
-</tr> -->
                                     <tbody>
                                 </table>
                             </div>
                             <div class="row">
-                                <?php if ($stafftype == 1) { ?>
-                                    <!--                                <div class="col-xs-6 col-sm-4">
-                                                                        <a class="btn  notification-btn p-l-0" onclick="sos_filter('order', 'tome')" title="To Me">SOS To Me <span class="label label-danger label-tome"><?= sos_dashboard_count('order', 'tome'); ?></span></a>
-                                                                    </div>
-                                                                    <div class="col-xs-6 col-sm-4">
-                                                                        <a class="btn  notification-btn p-l-0" onclick="sos_filter('order', 'byme')" title="By Me">SOS By Me <span class="label label-success label-byme"><?= sos_dashboard_count('order', 'byme'); ?></span></a>
-                                                                    </div>-->
-                                <?php } ?>
                                 <div class="col-xs-6 col-sm-4">
                                     <a class="btn notification-btn filter-button p-l-0" id="filter-unassigned-u" title="By Me">Unassigned <span class="label label-success label-byme"><?= count_services('u', 'unassigned'); ?></span></a>
                                 </div>
@@ -318,20 +228,11 @@ if ($status == '') {
                                                 <?php } ?>
                                             </h4>
                                         </span>
-
-
                                     <?php } ?>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!--                    <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="alert alert-success">
-                                                    <h3><i class="fa fa-archive"></i> Total Price: $<span id="total_price"></span></h3>
-                                                </div>
-                                            </div>
-                                        </div>-->
                     <div class="hr-line-dashed"></div>
                     <div class="ajaxdiv"></div>
                 </div>
@@ -349,7 +250,6 @@ if ($status == '') {
                 </button>
                 <h4 class="modal-title" id="myModalLabel">Notes</h4>
             </div>
-            <!-- <form method="post" action="<?//= base_url(); ?>services/home/updateNotes"> -->
             <form method="post" id="modal_note_form_update" onsubmit="update_service_note()">    
                 <div id="notes-modal-body" class="modal-body p-b-0">
 
@@ -359,7 +259,6 @@ if ($status == '') {
                 </div>
             </form>
             <hr class="m-0"/>
-            <!-- <form method="post" id="modal_note_form" action="<?//= base_url(); ?>services/home/addNotesmodal"> -->
             <form method="post" id="modal_note_form" onsubmit="add_service_notes()">    
                 <div class="modal-body">
                     <h4>Add Note</h4>
@@ -395,10 +294,7 @@ if ($status == '') {
                 </button>
                 <h4 class="modal-title" id="myModalLabel">SOS</h4>
             </div>
-            <div id="notes-modal-body" class="modal-body p-b-0">
-
-            </div>
-            <!-- <form method="post" id="sos_note_form" action="<?//= base_url(); ?>home/addSos"> -->
+            <div id="notes-modal-body" class="modal-body p-b-0"></div>
             <form method="post" id="sos_note_form" onsubmit="add_sos()">    
                 <div class="modal-body">
                     <h4 id="sos-title">Add New SOS</h4>
@@ -406,7 +302,6 @@ if ($status == '') {
                         <div class="note-textarea">
                             <textarea class="form-control" name="sos_note"  title="SOS Note"></textarea>
                         </div>
-                        <!-- <a href="javascript:void(0)" class="text-success add-referreal-note block m-t-10"><i class="fa fa-plus"></i> Add Notes</a> -->
                     </div>
                     <input type="hidden" name="reference" id="reference" value="order">
                     <input type="hidden" name="refid" id="refid">
@@ -416,7 +311,6 @@ if ($status == '') {
                     <input type="hidden" name="servreqid" id="servreqid" value="">
                 </div>
                 <div class="modal-footer">
-                    <!-- <button type="submit" id="save_sos" class="btn btn-primary" onclick="document.getElementById('sos_note_form').submit();this.disabled = true;this.innerHTML = 'Processing...';">Post SOS</button> -->
                     <button type="button" id="save_sos" class="btn btn-primary" onclick="add_sos()">Post SOS</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>

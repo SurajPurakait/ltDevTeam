@@ -47,6 +47,9 @@
                         <div class="form-group">
                             <input type="hidden" id="action_id" name="action_id" value="<?php echo $id; ?>">
                         </div>
+                        <div>
+                            <input type="hidden" id="staff_list" name="staff_list" value="<?php echo $staff_list; ?>">
+                        </div>
                         <div class="form-group">    
                             <div class="upload-file-div">
                                 <label class="col-sm-3 col-md-2 control-label">Upload File</label>

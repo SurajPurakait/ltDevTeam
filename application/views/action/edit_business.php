@@ -274,29 +274,104 @@
                 </div>
                 <div class="tab-pane" role="tabpanel" id="account_info">
                     <div class="panel-body"> 
-                        <?php foreach ($account_details as $ad) { ?>
+                         <?php foreach ($account_details as $ad) { ?> 
+                            Payroll #<?= $ad['order_id'] ?>
                             <div class="form-group">
                                 <label id="referred-label" class="col-lg-2 control-label">Bank Name</label>
+                                
                                 <div class="col-lg-10">
-                                    <p placeholder="Bank Name" type="text" id="bank_name" name="bank_name" title="Bank Name"><?= $ad['bank_name'] ?></p>
+                                    <input type="text" name="bank_name" id="bank_name" class="form-control" value="<?= $ad['bank_name'] ?>" disabled>
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
+
                             <div class="form-group">
-                                <label id="referred-label" class="col-lg-2 control-label">Bank Account Number</label>
+
+                                <label id="referred-label" class="col-lg-2 control-label"> Account Number</label>
                                 <div class="col-lg-10">
-                                    <p placeholder="Bank Account Number" type="text" id="bank_account_number" name="bank_account_number" title="Bank Account Number"><?= $ad['ban_account_number'] ?></p>
+                                     <input type="text" name="account_number" id="account_number" 
+                                     class="form-control" value="<?= $ad['ban_account_number'] ?>" disabled>
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label id="referred-label" class="col-lg-2 control-label">Bank Routing Number</label>
+
+
+                             <div class="form-group">
+                                <label id="referred-label" class="col-lg-2 control-label"> Routing Number</label>
                                 <div class="col-lg-10">
-                                    <p placeholder="Bank Routing Number" type="text" id="bank_routing_number" name="bank_routing_number" title="Bank Routing Number"><?= $ad['bank_routing_number'] ?></p>
+                                    <input type="text" name="routing_number" id="routing_number"  class="form-control" value="<?= $ad['bank_routing_number'] ?>" disabled>
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
+
                         <?php } ?>
+
+                         <?php foreach ($account_details_bookkeeping as $bk) { ?> 
+                        Bookkeeping #<?= $bk['order_id']; ?>
+                        <div class="form-group">
+                                <label id="referred-label" class="col-lg-2 control-label">Bank Name</label>
+                                
+                                <div class="col-lg-10">
+                                    <input type="text" name="bank_name" id="bank_name" class="form-control" value="<?= $bk['bank_name'] ?>" disabled>
+                                    <div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label id="referred-label" class="col-lg-2 control-label">Account Type</label>
+                                <div class="col-lg-10">
+                                     <input type="text" name="account_type" id="account_type" class="form-control" value="<?= $bk['type_of_account'] ?>" disabled>
+                                    <div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+
+                                <label id="referred-label" class="col-lg-2 control-label"> Account Number</label>
+                                <div class="col-lg-10">
+                                    <input type="text" name="account_number" id="account_number" 
+                                     class="form-control" value="<?= $bk['account_number'] ?>" disabled>
+                                    <div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+
+
+                             <div class="form-group">
+                                <label id="referred-label" class="col-lg-2 control-label"> Routing Number</label>
+                                <div class="col-lg-10">
+                                    <input type="text" name="routing_number" id="routing_number"  class="form-control" value="<?= $bk['routing_number'] ?>" disabled>
+                                    <div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label id="referred-label" class="col-lg-2 control-label">Bank URL</label>
+                                <div class="col-lg-10">
+                                    <input type="text" name="bank_url" id="bank_url"  class="form-control" value="<?= $bk['bank_website'] ?>" disabled>
+                                   <!--  <p placeholder="Bank URL" type="text" id="bank_url" name="bank_url" title="Bank URL"></p> -->
+                                    <div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label id="referred-label" class="col-lg-2 control-label">User</label>
+                                <div class="col-lg-10">
+                                    <input type="text" name="user" id="user" class="form-control" value="<?= $bk['user'] ?>" disabled>
+                                    <div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+
+                           <div class="form-group">
+                                <label id="referred-label" class="col-lg-2 control-label">Password</label>
+                                <div class="col-lg-10">
+                                    <input type="text" name="password" id="password" class="form-control" value="<?= $bk['password'] ?>" disabled>
+                                    <div class="errorMessage text-danger"></div>
+                                </div>
+                            </div> 
+
+                        <?php } ?>
+
                         <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
                                 <input type="hidden" name="reference_id" id="reference_id" value="<?= $reference_id; ?>">

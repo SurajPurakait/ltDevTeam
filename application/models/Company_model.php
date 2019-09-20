@@ -974,7 +974,19 @@ class Company_model extends CI_Model {
     public function get_account_details($reference_id) {
         $this->db->select("*");
         $this->db->from("payroll_account_numbers");
+        $this->db->join("company","company.id=payroll_account_numbers.reference_id");
         $this->db->where("reference_id", $reference_id);
+        $this->db->group_by("ban_account_number");
+        $data = $this->db->get()->result_array();
+        return $data;
+    }
+
+    public function get_account_details_bookkeeping($reference_id) {
+        $this->db->select("*");
+        $this->db->from("financial_accounts");
+        $this->db->join("company","company.id=financial_accounts.company_id");
+        $this->db->where("financial_accounts.company_id", $reference_id);
+        $this->db->group_by("account_number");
         $data = $this->db->get()->result_array();
         return $data;
     }

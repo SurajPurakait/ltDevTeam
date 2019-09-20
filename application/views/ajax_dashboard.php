@@ -225,7 +225,7 @@ if ($section == 'action') {
                                 <?php
                                 //echo ($priority == 'important') ? 'style="display:none;"':''
                                 ?>
-                                    ><a class="label bg-green p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('action/home/index/6/' . $priority_index . '/' . $rtl['request'] . '/' . (($office_id != '') ? '/' . $office_id : '0') . '/' . (($department_id != '') ? '/' . $department_id : '0')); ?>" title="Start"><?= $action[$rtl['request']][$priority]['resolved']; ?></a></td>
+                                    ><a class="label bg-green p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('action/home/index/6/' . $priority_index . '/' . $rtl['request'] . '/' . (($office_id != '') ? '/' . $office_id : '0') . '/' . (($department_id != '') ? '/' . $department_id : '0')); ?>" title="Resolved"><?= $action[$rtl['request']][$priority]['resolved']; ?></a></td>
                                     <!-- <td class="text-center v-align-middle"><a class="label bg-green p-l-10 p-r-10 p-t-5 p-b-5" href="<?//= base_url('action/home/index/2/' . $priority_index . '/' . $rtl['request'] . '/' . (($office_id != '') ? '/' . $office_id : '0') . '/' . (($department_id != '') ? '/' . $department_id : '0')); ?>" title="Complete"><?//= $action[$rtl['request']][$priority]['complete']; ?></a></td> -->
                                 <td class="text-center v-align p-t-2 p-b-2"
                                 <?php

@@ -1227,25 +1227,28 @@ class Billing_model extends CI_Model {
         }
 
         if (!empty($filter_data)) {
+            $key = 0;
             if (isset($filter_data['criteria_dropdown'])) {
                 foreach ($filter_data['criteria_dropdown'] as $filter_key => $filter) {
                     unset($where_or);
+                    $condition = $filter_data['condition_dropdown'][$key];
                     if ($filter_key == "creation_date") {
                         if (strlen($filter[0]) == 10) {
                             $date_value = date("Y-m-d", strtotime($filter[0]));
-                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' IN ("' . $date_value . '") ';
+                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . $date_value . '") ';
                         } elseif (strlen($filter[0]) == 23) {
                             $date_value = explode(" - ", $filter[0]);
                             foreach ($date_value as $date_key => $date) {
                                 $date_value[$date_key] = "'" . date("Y-m-d", strtotime($date)) . "'";
                             }
-                            $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') BETWEEN ' . implode(' AND ', $date_value) . ') ';
+                            $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'BETWEEN ' . implode(' AND ', $date_value) . ') ';
                         }
                     } else {
                         if (!empty($filter)) {
-                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' IN ("' . implode('", "', $filter) . '") ';
+                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . implode('", "', $filter) . '") ';
                         }
                     }
+                    $key++;
                 }
             }
         }
@@ -1257,7 +1260,11 @@ class Billing_model extends CI_Model {
 
         if ($office != '') {
             unset($where_or);
-            $where['indt.office'] = 'AND `indt`.`office` = ' . $office . ' ';
+            if (strpos($office, ',') !== false) {
+                $where['indt.office'] = 'AND `indt`.`office` IN (' . $office . ') ';
+            } else {
+                $where['indt.office'] = 'AND `indt`.`office` = ' . $office . ' ';
+            }
         }
 
         if ($reference_id != '') {

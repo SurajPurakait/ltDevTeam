@@ -38,6 +38,7 @@ class Action_model extends CI_Model {
         $this->action_select[] = '(SELECT COUNT(act_fl.id) FROM action_files AS act_fl WHERE act_fl.action_id = act.id) AS files';
         $this->action_select[] = '(SELECT COUNT(act_stf.id) FROM action_staffs AS act_stf WHERE act_stf.action_id = act.id) AS action_staff_count';
         $this->action_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(act_stf2.staff_id) FROM action_staffs AS act_stf2 WHERE act_stf2.action_id = act.id),","), " ", "") AS all_action_staffs';
+        $this->action_select[] = '(SELECT COUNT(frss.id) FROM file_read_status_staff AS frss WHERE frss.reference_id = act.id AND frss.reference = "action" AND frss.read_status = "n") AS unread_files_count';
 
         $this->filter_element = [
             1 => "priority",
@@ -106,7 +107,11 @@ class Action_model extends CI_Model {
         if ($request != '') {
 
             if ($request == 'byme') {
-                $this->db->where(['added_by_user' => $staff_id, 'my_task' => 0]);
+//            echo $status;die;
+            
+                 $this->db->where(['added_by_user' => $staff_id, 'my_task' => 0]);
+                
+    
             } elseif ($request == 'tome') {
                 $having[] = 'all_action_staffs LIKE "%,' . $staff_id . ',%" AND added_by_user != "' . $staff_id . '" AND my_task = "0"';
             } elseif ($request == 'byother') {
@@ -156,7 +161,7 @@ class Action_model extends CI_Model {
                     }
                 }
             } elseif ($request == 'mytask') {
-                $this->db->where(['my_task' => $staff_id, 'added_by_user' => $staff_id]);
+                $this->db->where(['added_by_user' => $staff_id, 'my_task' => $staff_id]);
             } elseif ($request == 'unassigned') {
                 if ($user_type == 1 || ($user_type == 2 && $user_department == 14)) {
                     $having[] = 'action_staff_count > 1 AND added_by_user != "' . $staff_id . '" AND my_task = "0"';
@@ -280,10 +285,12 @@ class Action_model extends CI_Model {
         }
 
         if ($status != '') {
+            
 //            echo $status;die;
             if ($status == '0' || $status == '1' || $status == '6' || $status == '2' || $status == '7') {
                 $this->db->where('act.status', $status);
-            } else if ($status == 3) {
+            }
+             else if ($status == 3) {
                 $this->db->where('act.status!=', 2);
             }
         } else {
@@ -1074,7 +1081,11 @@ class Action_model extends CI_Model {
         $query = $this->db->query("select * from action_files where action_id='" . $id . "'");
         return $query->result_array();
     }
-
+    public function updateFileReadStatus($id) {
+        $this->db->set('read_status','y');
+        $this->db->where('reference_id',$id);
+        $this->db->update('file_read_status_staff');
+    }
     public function msg_details($action_id) {
         $query = $this->db->query("select * from actions where id='" . $action_id . "'");
         return $query->row_array();
@@ -2622,12 +2633,24 @@ class Action_model extends CI_Model {
     }
 
     public function insert_contact_data($data, $reference_id, $ref, $state_id) {
-        $fname = $data['contact_first_name'];
-        $lname = $data['contact_last_name'];
+        $fname = trim($data['contact_first_name']);
+        $lname = trim($data['contact_last_name']);
         // $con = explode(" ", trim($data['contact_name']));
         // $fname = $con[0];
         // unset($con[0]);
         // $lname = implode(" ", $con);
+        if($data['contact_address']==''){
+            $data['contact_address'] = 'Unknown';
+        }
+        if($data['contact_city']==''){
+            $data['contact_city'] = 'Unknown';
+        }
+        if($data['contact_phone']==''){
+            $data['contact_phone'] = '12345';
+        }
+        if($data['contact_zip']==''){
+            $data['contact_zip'] = '12345';
+        }
         $insert_data = array(
             'id' => '',
             'reference' => $ref,
@@ -2990,7 +3013,11 @@ class Action_model extends CI_Model {
 
     public function get_contact_state($state) {
         $result = $this->db->get_where('states', array('state_code' => $state))->row_array();
-        return $result['id'];
+        if(!empty($result)){
+            return $result['id'];
+        }else{
+            return '10';
+        }        
     }
 
     public function update_import_clients($data, $reference_id) {
@@ -3116,12 +3143,24 @@ class Action_model extends CI_Model {
     }
 
     public function update_contact_data($data, $reference_id, $ref, $state_id) {
-        $fname = $data['contact_first_name'];
-        $lname = $data['contact_last_name'];
+        $fname = trim($data['contact_first_name']);
+        $lname = trim($data['contact_last_name']);
         // $con = explode(" ", trim($data['contact_name']));
         // $fname = $con[0];
         // unset($con[0]);
         // $lname = implode(" ", $con);
+        if($data['contact_address']==''){
+            $data['contact_address'] = 'Unknown';
+        }
+        if($data['contact_city']==''){
+            $data['contact_city'] = 'Unknown';
+        }
+        if($data['contact_phone']==''){
+            $data['contact_phone'] = '12345';
+        }
+        if($data['contact_zip']==''){
+            $data['contact_zip'] = '12345';
+        }
         $update_data = array(
             'type' => '1',
             'first_name' => $fname,
@@ -3217,8 +3256,7 @@ class Action_model extends CI_Model {
         // return $result['read_status'];
     }
 
-    public function file_upload_actions($id, $files) {
-        // print_r($files); echo $data; exit;
+    public function file_upload_actions($data, $files) {
         if (!empty($files["name"])) {
             $filesCount = count($files['name']);
             for ($i = 0; $i < $filesCount; $i++) {
@@ -3239,7 +3277,7 @@ class Action_model extends CI_Model {
                     $fileData = $this->upload->data();
                     $uploadData[$i]['file_name'] = $fileData['file_name'];
                     $uploadData[$i]['added_by_user'] = sess('user_id');
-                    $uploadData[$i]['action_id'] = $id;
+                    $uploadData[$i]['action_id'] = $data['action_id'];
                 }
             }
         }
@@ -3247,7 +3285,27 @@ class Action_model extends CI_Model {
         if (!empty($uploadData)) {
             $this->db->insert_batch('action_files', $uploadData);
         }
-        return $filesCount;
+
+        $last_id_arr = [];
+        $last_id = $this->db->insert_id();
+        for($j=0;$j<count($files['name']);$j++) {
+            if (!empty($files['name'][$j])) {    
+                array_push($last_id_arr,$last_id+$j);
+                $variable = explode(',',$data['staff_list']);
+
+                foreach ($variable as $value) {
+                    $staff_array = array(
+                        'file_id' => $last_id_arr[$j],
+                        'reference' => 'action',
+                        'reference_id' => $data['action_id'],
+                        'staff_id' => $value
+                    );
+                    $this->db->insert('file_read_status_staff',$staff_array);
+                }
+            }
+        }
+
+        return $this->db->get_where('action_files',array('action_id'=>$data['action_id']))->num_rows();;
     }
 
     public function get_business_info($id) {

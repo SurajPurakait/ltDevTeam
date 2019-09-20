@@ -313,14 +313,19 @@ function show_action_notes(id) {
     });
 }
 
-function show_action_files(id) {
+function show_action_files(id,staff) {
     $.ajax({
         type: 'POST',
         url: base_url + 'modal/show_action_files',
         data: {
-            id: id
+            id: id,
+            staff : staff
         },
         success: function (result) {
+            if($("#actionfilespan" + id).find("a").hasClass('label-danger')) {
+                $("#actionfilespan" + id).find("a").removeClass('label-danger');
+                $("#actionfilespan" + id).find("a").addClass('label-success');
+            }
             $('#showFiles #files-modal-body').html(result);
             openModal('showFiles');
         }
@@ -1051,13 +1056,11 @@ function show_project_notes(id) {
 }
 
 var file_upload_action = () => {
-    // alert("Hello");return false;
     if (!requiredValidation('file_upload_action_modal')) {
         return false;
     }
     var form_data = new FormData(document.getElementById("file_upload_action_modal"));
     var action_id = $("#action_id").val();
-    // console.log(form_data);return false;
     $.ajax({
         type: "POST",
         data: form_data,
@@ -1068,14 +1071,16 @@ var file_upload_action = () => {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-            if (result.trim() == 0) {
-                swal("ERROR!", "Unable To Add File", "error");
+            // console.log(result);return false;
+            var oldactionfilecount = $("#actionfile" + action_id).attr('count');
+            if (result.trim() == oldactionfilecount) {
+                swal("ERROR!", "Unable To Add Empty File", "error");
             } else {
                 swal({title: "Success!", text: "Successfully Saved!", type: "success"}, function () {
-                    var oldactionfilecount = $("#actionfile" + action_id).attr('count');
-                    var newactionfilecount = parseInt(oldactionfilecount) + parseInt(result.trim());
+                    // var oldactionfilecount = $("#actionfile" + action_id).attr('count');
+                    // var newactionfilecount = parseInt(oldactionfilecount) + parseInt(result.trim());
                     //alert(newactionfilecount);
-                    $("#actionfilespan" + action_id).html('<a class="label label-danger" href="javascript:void(0)" onclick="show_action_files(' + action_id + ')"><b>' + newactionfilecount + '</b></a>');
+                    $("#actionfilespan" + action_id).html('<a class="label label-danger" href="javascript:void(0)" onclick="show_action_files(' + action_id + ')"><b>' + result + '</b></a>');
                 });
             }
             document.getElementById("file_upload_action_modal").reset();

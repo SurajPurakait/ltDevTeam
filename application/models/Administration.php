@@ -33,14 +33,11 @@ class Administration extends CI_Model {
 
         unset($data['id']);
         //unset($data['deptmngr']);
-
         // if (isset($manager_id) && $manager_id != '' && $manager_id != '0') {
         //     $this->db->set(["role" => '4'])->where("id", $manager_id)->update("staff");
         // } else {
         //     $this->db->set(["role" => '3'])->where("id", $manager_id)->update("staff");
         // }
-
-
         // $check_if_dept_manager_exists = $this->db->query("select * from department_manager where department_id='" . $department_id . "'")->row_array();
         // if (!empty($check_if_dept_manager_exists)) {
         //     if (isset($manager_id) && $manager_id != '' && $manager_id != '0') {
@@ -51,7 +48,6 @@ class Administration extends CI_Model {
         //         $this->db->query("INSERT INTO `department_manager` (`id`, `department_id`, `manager_id`) VALUES ('', '" . $department_id . "', '" . $manager_id . "')");
         //     }
         // }
-
         //$data['manager_fname'] = $manager_data['first_name'];
         //$data['manager_lname'] = $manager_data['last_name'];
         $this->db->where("id", $department_id);
@@ -77,7 +73,7 @@ class Administration extends CI_Model {
 
     public function get_all_dept() {
         $this->db->order_by('name', 'ASC');
-        $this->db->where_not_in('id', array(1,2));
+        $this->db->where_not_in('id', array(1, 2));
         return $this->db->get('department')->result_array();
     }
 
@@ -100,6 +96,11 @@ class Administration extends CI_Model {
     public function get_office_by_id($office_id) {
         $this->db->select('office.*, (SELECT state_name FROM states WHERE id = office.state) AS state_name');
         return $this->db->get_where('office', ["id" => $office_id])->row_array();
+    }
+
+    public function get_office_list_by_name_like($office_name) {
+        $this->db->like('name', $office_name, 'both');
+        return $this->db->get("office")->result_array();
     }
 
     public function insert_franchise($data) {
@@ -184,14 +185,14 @@ class Administration extends CI_Model {
             }
             $department_data['department_id'] = [2];
         }
-        
+
         $office_data = $data['office'];
         $department_data = $data['department'];
         $dob = strtr($data['birth_date'], '/', '-');
         $data['birth_date'] = date('Y-m-d', strtotime($dob));
-        if(isset($data['ssn_itin']) && $data['ssn_itin']!=''){
-            $data['ssn_itin'] = str_replace("-","",$data['ssn_itin']);
-        }else{
+        if (isset($data['ssn_itin']) && $data['ssn_itin'] != '') {
+            $data['ssn_itin'] = str_replace("-", "", $data['ssn_itin']);
+        } else {
             $data['ssn_itin'] = '';
         }
 
@@ -246,7 +247,7 @@ class Administration extends CI_Model {
         }
     }
 
-    public function update_staff($data) {        
+    public function update_staff($data) {
         if ($data['type'] == 1) {
             $department_data['department_id'] = [1];
             $data['role'] = 0;
@@ -277,12 +278,12 @@ class Administration extends CI_Model {
         $dob = strtr($data['birth_date'], '/', '-');
         $data['birth_date'] = date('Y-m-d', strtotime($dob));
 
-        if(isset($data['ssn_itin']) && $data['ssn_itin']!=''){
-            $data['ssn_itin'] = str_replace("-","",$data['ssn_itin']);
-        }else{
+        if (isset($data['ssn_itin']) && $data['ssn_itin'] != '') {
+            $data['ssn_itin'] = str_replace("-", "", $data['ssn_itin']);
+        } else {
             $data['ssn_itin'] = '';
         }
-        
+
         $staff_id = $data['id'];
         $office_data = $data['office'];
         $department_data = $data['department'];
@@ -365,34 +366,32 @@ class Administration extends CI_Model {
         return $data;
     }
 
-    public function get_service_fees_list($edit_id){
-       $this->db->select('*');
-       $this->db->from('office_service_fees');
-       $this->db->where('office_id',$edit_id);
-        return $this->db->get()->result_array();        
-
+    public function get_service_fees_list($edit_id) {
+        $this->db->select('*');
+        $this->db->from('office_service_fees');
+        $this->db->where('office_id', $edit_id);
+        return $this->db->get()->result_array();
     }
 
-    public function get_service_fees($office_id, $service_id){
-       return $this->db->get_where('office_service_fees', ['office_id' => $office_id, 'service_id' => $service_id])->row_array();       
-
+    public function get_service_fees($office_id, $service_id) {
+        return $this->db->get_where('office_service_fees', ['office_id' => $office_id, 'service_id' => $service_id])->row_array();
     }
 
-    public function insert_service_fees($data){
-        if(!empty($data['service']) && !empty($data['percentage']) && $data['franchise_office_id']!=''){
-            foreach($data['service'] as $key=>$val){
+    public function insert_service_fees($data) {
+        if (!empty($data['service']) && !empty($data['percentage']) && $data['franchise_office_id'] != '') {
+            foreach ($data['service'] as $key => $val) {
                 $array_service[$key] = array(
                     'service_id' => $val,
                     'office_id' => $data['franchise_office_id'],
                     'percentage' => $data['percentage'][$key]
                 );
+            }
+            $this->db->delete('office_service_fees', ['office_id' => $data['franchise_office_id']]);
+            return $this->db->insert_batch('office_service_fees', $array_service);
         }
-         $this->db->delete('office_service_fees', ['office_id' =>$data['franchise_office_id']]); 
-        return $this->db->insert_batch('office_service_fees', $array_service);
+        // print_r($array_service);exit; 
     }
-    // print_r($array_service);exit; 
-     
-}
+
     public function get_all_categories() {
         return $this->db->get("category")->result_array();
     }
@@ -418,7 +417,7 @@ class Administration extends CI_Model {
         return $data;
     }
 
-    public function add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note,$fixedcost) {
+    public function add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost) {
         $this->db->trans_begin();
 
         $insert_data = array('id' => '',
@@ -426,7 +425,7 @@ class Administration extends CI_Model {
             'description' => $servicename,
             'ideas' => $shortcode,
             'tutorials' => 'NULL',
-            'fixed_cost' => $fixedcost. '.00',
+            'fixed_cost' => $fixedcost . '.00',
             'retail_price' => $retailprice . '.00',
             'dept' => $dept,
             'status' => 1,
@@ -462,7 +461,7 @@ class Administration extends CI_Model {
         }
     }
 
-    public function update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note,$fixedcost) {
+    public function update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost) {
         $this->db->trans_begin();
 
         $update_data = array('category_id' => $servicecat,
@@ -733,17 +732,16 @@ class Administration extends CI_Model {
     }
 
     public function get_all_office_staff_by_office_id_multiple($office_id) {
-        $this->db->where_in('office_id',$office_id);
+        $this->db->where_in('office_id', $office_id);
         return $this->db->get('office_staff')->result_array();
     }
 
-    public function get_all_office_staff($staff_id){
+    public function get_all_office_staff($staff_id) {
         $ofc_ids = $this->db->get_where('office_staff', ['staff_id' => $staff_id])->result_array();
-            $ofc_ids = array_column($ofc_ids, 'office_id');
-            $this->db->where_in('office_id', $ofc_ids);
-            return $this->db->get('office_staff')->result_array();
+        $ofc_ids = array_column($ofc_ids, 'office_id');
+        $this->db->where_in('office_id', $ofc_ids);
+        return $this->db->get('office_staff')->result_array();
     }
-
 
 //    public function save_office_staff_manager($staff_id, $office_id) {
 //        $this->load->model("system");
@@ -915,15 +913,15 @@ ORDER BY `submit_time` DESC";
 
                         if (trim($res['domain_city_name']) == '') {
                             $city = 'Unknown';
-                            $ofc = '0'; 
-                            $url= 'taxleaf.com';
+                            $ofc = '0';
+                            $url = 'taxleaf.com';
                         } else {
                             $city = $res['domain_city_name'];
                             $ofc = '17';
-                            if($res['domain_city_name']=='Corporate'){
-                                $url= 'taxleaf.com';
-                            }else{
-                                $url= strtolower($res['domain_city_name']).'.taxleaf.com';
+                            if ($res['domain_city_name'] == 'Corporate') {
+                                $url = 'taxleaf.com';
+                            } else {
+                                $url = strtolower($res['domain_city_name']) . '.taxleaf.com';
                             }
                         }
 
@@ -1022,63 +1020,59 @@ ORDER BY `submit_time` DESC";
         }
     }
 
-    public function get_dept_mngr($dept_id){
-        if($dept_id==1){
+    public function get_dept_mngr($dept_id) {
+        if ($dept_id == 1) {
             return get_assigned_by_staff_name(4);
-        }else{
-            $sql = "select * from department_staff where department_id='".$dept_id."'";
-            $res = $this->db->query($sql)->result_array();  
+        } else {
+            $sql = "select * from department_staff where department_id='" . $dept_id . "'";
+            $res = $this->db->query($sql)->result_array();
             //print_r($res);          
-            if(!empty($res)){
+            if (!empty($res)) {
                 $dept_arr = [];
-                foreach($res as $a){
-                    $check_if_manager_sql = "select * from staff where id='".$a["staff_id"]."' and status='1' and role='4'"; 
+                foreach ($res as $a) {
+                    $check_if_manager_sql = "select * from staff where id='" . $a["staff_id"] . "' and status='1' and role='4'";
                     $result = $this->db->query($check_if_manager_sql)->row_array();
-                    if(!empty($result)){
-                        array_push($dept_arr,get_assigned_by_staff_name($result['id']));
-                    }                   
+                    if (!empty($result)) {
+                        array_push($dept_arr, get_assigned_by_staff_name($result['id']));
+                    }
                 }
-                if(!empty($dept_arr)){
+                if (!empty($dept_arr)) {
                     return implode(' / ', $dept_arr);
-                  }else{
+                } else {
                     return 'N/A';
-                  }
-            }else{
+                }
+            } else {
                 return 'N/A';
-            }            
+            }
         }
-
-
     }
 
-    public function get_ofc_mngr($ofc_id){
+    public function get_ofc_mngr($ofc_id) {
         // if($dept_id==1){
         //     return get_assigned_by_staff_name(4);
         // }else{
-            $sql = "select * from office_staff where office_id='".$ofc_id."'";
-            $res = $this->db->query($sql)->result_array();  
-            //print_r($res);          
-            if(!empty($res)){
-                $ofc_arr = [];
-                foreach($res as $a){
-                    $check_if_manager_sql = "select * from staff where id='".$a["staff_id"]."' and status='1' and role='2'"; 
-                    $result = $this->db->query($check_if_manager_sql)->row_array();
-                    //print_r($result);
-                    if(!empty($result)){
-                        array_push($ofc_arr,get_assigned_by_staff_name($result['id']));
-                    }                   
+        $sql = "select * from office_staff where office_id='" . $ofc_id . "'";
+        $res = $this->db->query($sql)->result_array();
+        //print_r($res);          
+        if (!empty($res)) {
+            $ofc_arr = [];
+            foreach ($res as $a) {
+                $check_if_manager_sql = "select * from staff where id='" . $a["staff_id"] . "' and status='1' and role='2'";
+                $result = $this->db->query($check_if_manager_sql)->row_array();
+                //print_r($result);
+                if (!empty($result)) {
+                    array_push($ofc_arr, get_assigned_by_staff_name($result['id']));
                 }
-                  if(!empty($ofc_arr)){
-                    return implode(' / ', $ofc_arr);
-                  }else{
-                    return 'N/A';
-                  }                  
-            }else{
+            }
+            if (!empty($ofc_arr)) {
+                return implode(' / ', $ofc_arr);
+            } else {
                 return 'N/A';
-            }            
+            }
+        } else {
+            return 'N/A';
         }
-
+    }
 
     //}
-
 }
