@@ -20,7 +20,7 @@
          }else{
             $type = get_type_of_contact_name($value['type_of_contact'],2)['name'];
          }
-         $notes = get_notes_ref_partner($value['partner_id']);  
+         $notes = get_notes_ref_partner($value['lead_id']);  
 
      ?>
         <div class="panel panel-default service-panel type2 filter-active">

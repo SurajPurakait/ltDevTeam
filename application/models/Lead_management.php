@@ -4,6 +4,7 @@ Class Lead_management extends CI_Model {
 
     private $lead_select;
     private $filter_element;
+    private $filter_element_partner;
 
     public function __construct() {
         parent::__construct();
@@ -35,12 +36,19 @@ Class Lead_management extends CI_Model {
         $this->lead_select[] = 'lm.day_3_mail_date AS day_3_mail_date';
         $this->lead_select[] = 'lm.day_6_mail_date AS day_6_mail_date';
         $this->filter_element = [
-            "type" => "type",
+            "type" => "type_of_contact",
             "tracking" => "status",
             "office" => "office",
             "staff" => "staff_requested_by",
             "active_date" => "active_date",
             "complete_date" => "complete_date"
+        ];
+        $this->filter_element_partner = [
+            "type" => "type_of_contact",
+            "tracking" => "status",
+            "requested_by"=> "staff_requested_by",
+            "requested_to"=> "rl.referred_to",
+            "submission_date" => "submission_date"
         ];
     }
 
@@ -195,13 +203,79 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_leads_referred_by_to_him() {
+    public function get_leads_referred_by_to_him($status = "",$request = "", $filter_data = []) {
+        
         $user_id = sess('user_id');
         $this->db->select("lm.*,rl.*");
         $this->db->from('lead_management lm');
         $this->db->join('referred_lead rl', 'rl.lead_id = lm.id');
-        $this->db->where('rl.referred_by', $user_id);
-        $this->db->or_where('rl.referred_to', $user_id);
+        $this->db->group_start();
+        if($request == 'byme') {
+            $this->db->where('rl.referred_by', $user_id);
+            if($status == 0) { //new
+                $this->db->where("lm.status",$status);
+            } elseif ($status == 1) { // completed
+                $this->db->where("lm.status",$status);
+            } elseif ($status == 2) { // inactive
+                $this->db->where("lm.status",$status);
+            } elseif($status == 3) { // active
+                $this->db->where("lm.status",$status);
+            } 
+        } elseif($request == 'tome') {
+            $this->db->where('rl.referred_to', $user_id);
+            if($status == 0) { //new
+                $this->db->where("lm.status",$status);
+            } elseif ($status == 1) { // completed
+                $this->db->where("lm.status",$status);
+            } elseif ($status == 2) { // inactive
+                $this->db->where("lm.status",$status);
+            } elseif($status == 3) { // active
+                $this->db->where("lm.status",$status);
+            }
+        } else {
+            $this->db->where('rl.referred_by', $user_id);
+            $this->db->or_where('rl.referred_to', $user_id);    
+        }
+        $this->db->group_end();
+        // filter
+        $filter_where_in = [];
+        $between = '';
+        if (!empty($filter_data)) {
+            if (isset($filter_data['criteria_dropdown'])) {
+                foreach ($filter_data['criteria_dropdown'] as $filter_key => $filter) {
+                    $filter_key = trim($filter_key);
+                    if ($filter_key == "submission_date") {
+                        if (strlen($filter[0]) == 10) {
+                            $date_value = date("Y-m-d", strtotime($filter[0]));
+                            $filter_where_in[$this->filter_element_partner[$filter_key]][] = $date_value;
+                        } elseif (strlen($filter[0]) == 23) {
+                            $date_value = explode(" - ", $filter[0]);
+                            foreach ($date_value as $date_key => $date) {
+                                $date_value[$date_key] = "'" . date("Y-m-d", strtotime($date)) . "'";
+                            }
+                            $between = 'Date(' . $this->filter_element_partner[$filter_key] . ') BETWEEN ' . implode(' AND ', $date_value);
+                        }
+                    } else {
+                        foreach ($filter as $key => $filter_value) {
+                            if ($filter_value != '') {
+                                $filter_where_in[$this->filter_element_partner[$filter_key]][] = $filter_value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!empty($filter_where_in)) {
+            foreach ($filter_where_in as $column => $in) {
+                $this->db->where_in($column, $in);
+            }
+        }
+
+        if ($between != '') {
+            $this->db->where($between);
+        }
+
         $this->db->group_by('lm.id');
         return $this->db->get()->result_array();
     }
@@ -1221,7 +1295,49 @@ Class Lead_management extends CI_Model {
         $this->db->where(['id' => $mail_id]);
         return $this->db->update("lead_mail_chain", $data);
     }
-
+    
+    public function get_partner_filter_element_value($element_key, $office) {
+        $tracking_array = [
+                ["id" => 0, "name" => "New"],
+                ["id" => 1, "name" => "Complete"],
+                ["id" => 2, "name" => "Inactive"],
+                ["id" => 3, "name" => "Active"]
+        ];
+        switch ($element_key):
+            case 1: {
+                    return $this->db->get('type_of_contact_referral')->result_array();
+                }
+                break;
+            case 2: {
+                    return $tracking_array;
+                }
+                break;
+            case 4: {
+                    $this->db->select("st.id AS id, CONCAT(st.last_name, ', ',st.first_name,' ',st.middle_name) AS name");
+                    $this->db->from('staff AS st');
+                    if ($office != ''):
+                        $this->db->join('office_staff os', 'os.staff_id = st.id');
+                        $this->db->where(['os.office_id' => $office]);
+                    endif;
+                    return $this->db->get()->result_array();
+                }
+                break;
+            case 7: {
+                    $this->db->select("st.id AS id, CONCAT(st.last_name, ', ',st.first_name,' ',st.middle_name) AS name");
+                    $this->db->from('staff AS st');
+                    if ($office != ''):
+                        $this->db->join('office_staff os', 'os.staff_id = st.id');
+                        $this->db->where(['os.office_id' => $office]);
+                    endif;
+                    return $this->db->get()->result_array();
+                }
+                break;    
+            default: {
+                    return [];
+                }
+                break;
+        endswitch;
+    }
     public function get_lead_filter_element_value($element_key, $office) {
         $tracking_array = [
                 ["id" => 0, "name" => "New"],
@@ -1229,13 +1345,14 @@ Class Lead_management extends CI_Model {
                 ["id" => 2, "name" => "Inactive"],
                 ["id" => 3, "name" => "Active"]
         ];
-        $type_array = [
-                ["id" => 1, "name" => "LEADS"],
-                ["id" => 2, "name" => "REFERRAL AGENT"]
-        ];
+        // $type_array = [
+        //         ["id" => 1, "name" => "LEADS"],
+        //         ["id" => 2, "name" => "REFERRAL AGENT"]
+        // ];
         switch ($element_key):
             case 1: {
-                    return $type_array;
+                    // return $type_array;
+                    return $this->db->get('type_of_contact_referral')->result_array();
                 }
                 break;
             case 2: {

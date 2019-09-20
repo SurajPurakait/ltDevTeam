@@ -853,10 +853,15 @@ class Project_Template_model extends CI_Model {
     function requestCreateProject($post) {
         $this->db->trans_begin();
 //        print_r($post);die;
+        $project_client_ids = $post['project']['client_id'];
+        if(!empty($project_client_ids)){
+        foreach($project_client_ids as $pcid){
+
         $project = $post['project'];
         if (isset($project['office_id']) && $project['office_id'] != '') {
             $post['project']['office_id'] = $project['office_id'];
         }
+        $post['project']['client_id'] = $pcid;
         $this->db->insert('projects', $post['project']);
         $insert_id = $this->db->insert_id();
         $notedata = $this->input->post('project_note');
@@ -1078,8 +1083,8 @@ class Project_Template_model extends CI_Model {
 //        echo $tid[$key];
 //        print_r($project_task_notes);
 //        die;
-
-
+          } //end project_client_id forach
+        }  //end project_client_id empty checking
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return "-1";
@@ -2009,6 +2014,9 @@ class Project_Template_model extends CI_Model {
                         $having_or[] = 'all_project_staffs LIKE "%,' . $staff_id . ',%"';
                         if (!empty($department_staff)) {
                             $having_or[] = 'added_by_user IN (' . implode(',', $department_staff) . ')';
+                            foreach($department_staff as $ds){
+                                $having_or[] = 'all_project_staffs LIKE "%,' . $ds . ',%"';
+                            }
                         }
 //                    $having_or[] = 'my_task = "' . $staff_id . '"';
                         $having_or[] = 'department_id IN (' . implode(',', $departments) . ')';

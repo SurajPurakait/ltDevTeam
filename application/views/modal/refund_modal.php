@@ -21,7 +21,12 @@ if ($modal_type == "edit") {
                         <label>Refund Type<span class="text-danger">*</span></label>
                         <select class="form-control" name="payment_type" id="payment_type" required="" onchange="changeAlternateFields(this.value);" title="Refund Type">
                             <option value="">-- Select --</option>
-                            <?php foreach ($payment_type as $val) { ?>
+                            <?php
+                            foreach ($payment_type as $val) {
+                                if ($val['name'] == 'Pay NOW') {
+                                    continue;
+                                }
+                                ?>
                                 <option value="<?php echo $val['id']; ?>"><?php echo $val['name']; ?></option>
                             <?php } ?>
                         </select>

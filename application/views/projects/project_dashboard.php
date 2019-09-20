@@ -87,9 +87,9 @@ if (!empty($project_list)) {
         ?>
         <div class="panel panel-default service-panel type2 filter-active" id="action<?= $list['id'] ?>">
             <div class="panel-heading"> 
-                <a href="javascript:void(0)" onclick="delete_project(<?= $list['id']; ?>,<?= $list['template_id']; ?>)" class="btn btn-danger btn-xs btn-service-view-project"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a> &nbsp;
-                <a href="javascript:void(0)" onclick="CreateProjectModal('edit',<?= $list['id'] ?>);" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>  &nbsp; 
-                <a href="<?= base_url() . 'project/edit_project_template/' . base64_encode($list['id']); ?>" class="btn btn-primary btn-xs btn-service-edit-project"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Project</a> 
+                <a href="javascript:void(0)" onclick="delete_project(<?= $list['id']; ?>,<?= $list['template_id']; ?>)" class="btn btn-danger btn-xs btn-service-edit"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a> &nbsp;
+                <!-- <a href="javascript:void(0)" onclick="CreateProjectModal('edit',<?//= $list['id'] ?>);" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>  &nbsp; --> 
+                <a target="_blank" href="<?= base_url() . 'project/edit_project_template/' . base64_encode($list['id']); ?>" class="btn btn-primary btn-xs btn-service-edit-project"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Project</a> 
                                                 
                 <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $list['id']; ?>" aria-expanded="false" class="collapsed">
                     <div class="table-responsive">
@@ -128,7 +128,7 @@ if (!empty($project_list)) {
                                         ?> </td>   
                                     <td title="Requested By"><?php echo staff_info_by_id($list['added_by_user'])['full_name']; ?></td>
                                     <td title="Assign To"><span class="text-success"><?php echo get_assigned_dept_staff_project_main($list['id']); ?></span><br><?php echo get_assigned_project_main_department($list['id']); ?></td>                                                  
-                                    <td title="Tracking" class="text-center"><span class="label <?= $trk_class ?>"><?= $tracking ?></span></td>
+                                    <td title="Tracking" class="text-center"><span id="trackouter-<?php echo $list['id']; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></td>
                                     <td title="Creation Date"><?= date('Y-m-d', strtotime($list['created_at'])) ?></td>
                                     <td title="Due Date"><?= $dueDate ?></td>
 
@@ -240,7 +240,7 @@ if (!empty($project_list)) {
                                         <?php } ?>
                                         <td title="Start Date" class="text-center"><?= $targetSstartDate ?></td>
                                         <td title="Complete Date" class="text-center"><?= $targetCompleteDate ?></td>
-                                        <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task->id; ?>,<?= $status; ?>, <?= $task->id ?>);'><span class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
+                                        <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task->id; ?>,<?= $status; ?>, <?= $task->id ?>);'><span id="trackinner-<?= $task->id ?>" projectid="<?= $list['id']; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                                         <td title="SOS" style="text-align: center;">
                                             <span>
                                                 <a id="projectsoscount-<?= $list['id']; ?>-<?php echo $task->id; ?>" class="d-inline p-t-5 p-b-5 p-r-8 p-l-8 label <?php echo (get_sos_count('projects', $task->id, $list['id']) == 0) ? 'label-primary' : 'label-danger'; ?>" title="SOS" href="javascript:void(0)" onclick="show_sos('projects', '<?= $task->id; ?>', '<?= $new_staffs ?>', '<?= $list['id']; ?>', '<?= $task->project_id; ?>');"><?php echo (get_sos_count('projects', $task->id, $list['id']) == 0) ? '<i class="fa fa-plus"></i>' : '<i class="fa fa-bell"></i>'; ?></a>                                                   
@@ -256,19 +256,19 @@ if (!empty($project_list)) {
                                             if (get_project_task_note_count($task->id) > 0 && in_array(0, $read_status)) {
                                                 ?> 
 
-                                              <a id="notecount-<?= $task->id ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task->id; ?>)"><b> <?= get_project_task_note_count($task->id) ?></b></a>
+                                              <a id="notecountinner-<?= $task->id ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task->id; ?>)"><b> <?= get_project_task_note_count($task->id) ?></b></a>
 
                                                 <?php
                                             } elseif (get_project_task_note_count($task->id) > 0 && in_array(1, $read_status)) {
                                                 ?> 
 
-                                              <a id="notecount-<?= $task->id ?>" class="label label-success" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task->id; ?>)"><b> <?= get_project_task_note_count($task->id) ?></b></a>
+                                              <a id="notecountinner-<?= $task->id ?>" class="label label-success" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task->id; ?>)"><b> <?= get_project_task_note_count($task->id) ?></b></a>
 
                                                 <?php
                                             } else {
                                                 ?>
 
-                                               <a id="notecount-<?= $task->id ?>" class="label label-secondary" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task->id; ?>)"><b> <?= get_project_task_note_count($task->id) ?></b></a>
+                                               <a id="notecountinner-<?= $task->id ?>" class="label label-secondary" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task->id; ?>)"><b> <?= get_project_task_note_count($task->id) ?></b></a>
 
                                                 <?php
                                             }

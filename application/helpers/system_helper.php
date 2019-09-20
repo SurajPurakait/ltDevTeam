@@ -64,7 +64,7 @@ if (!function_exists('payeezy_payment')) {
                 'type' => strval(htmlspecialchars(stripslashes(trim($card_type)))),
                 'cardholder_name' => strval(htmlspecialchars(stripslashes(trim($card_holder_name)))),
                 'card_number' => strval(htmlspecialchars(stripslashes(trim($card_number)))),
-                'exp_date' => strval(htmlspecialchars(stripslashes(trim($card_expiry)))),
+                'exp_date' => strval(htmlspecialchars(stripslashes(trim($card_expiry)))),   #mmdd
                 'cvv' => strval(htmlspecialchars(stripslashes(trim($card_cvv)))),
             ]
         ];
@@ -3166,7 +3166,7 @@ if (!function_exists('get_lead_list_to_partner')) {
         $ci = &get_instance();
         $ci->load->model('Referral_partner');
         // return $ci->referral_partner->get_lead_list_referred_by_partner($lead_id);
-        return $ci->referral_partner->load_referral_partners_dashboard_data('', '', $lead_id);
+        return $ci->referral_partner->load_referral_partners_dashboard_data($lead_id);
     }
 
 }
@@ -3175,7 +3175,8 @@ if (!function_exists('get_partner_to_staff_count')) {
     function get_partner_to_staff_count($lead_id) {
         $ci = &get_instance();
         $ci->load->model('Referral_partner');
-        return count($ci->referral_partner->load_referral_partners_dashboard_data('', '', $lead_id));
+        // return count($ci->referral_partner->load_referral_partners_dashboard_data('', '', $lead_id));
+        return count($ci->referral_partner->load_referral_partners_dashboard_data($lead_id));
     }
 
 }
@@ -3216,4 +3217,11 @@ if (!function_exists('get_project_officeID_by_project_id')) {
         return $ci->Project_Template_model->get_project_officeID_by_project_id($project_id);
     }
 
+}
+if (!function_exists('partnerList')) {
+    function partnerList($status,$request) {
+        $ci = &get_instance();
+        $ci->load->model('lead_management');
+        return count($ci->lead_management->get_leads_referred_by_to_him($status,$request));
+    }
 }

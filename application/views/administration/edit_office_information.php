@@ -75,7 +75,15 @@
                                                 <div class="errorMessage text-danger"></div>
                                             </div>
                                         </div>
-
+                                        <div class="form-group">
+                                            <label class="col-lg-3 control-label">Merchant Token</label>
+                                            <div class="col-lg-9">
+                                                <input placeholder="Merchant Token" class="form-control" type="text" name="merchant_token" id="merchant_token"
+                                                       title="Merchant Token" value="<?php echo $franchise_info['merchant_token']; ?>">
+                                                <div class="errorMessage text-danger"></div>
+                                            </div>
+                                        </div>
+                                        
                                         <div class="form-group">
                                             <label class="col-lg-3 control-label">Address<span class="text-danger">*</span></label>
                                             <div class="col-lg-9">

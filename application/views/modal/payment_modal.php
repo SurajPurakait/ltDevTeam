@@ -46,6 +46,34 @@ if ($modal_type == "edit") {
                         <label>Reference</label>
                         <input type="text" name="ref_no" id="ref_no" class="form-control" title="Reference" placeholder="Reference">
                         <div class="errorMessage text-danger"></div>
+                    </div>                    
+                    <div class="pay-now-div" style="display: none;">
+                        <div class="form-group">
+                            <label>Card Number<span class="text-danger">*</span></label>
+                            <input type="text" name="card_number" numeric_valid="" required="" id="card_number" class="form-control" title="Card Number" placeholder="Card Number">
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Card Holder Name<span class="text-danger">*</span></label>
+                            <input type="text" name="card_holder_name" id="card_holder_name" required="" class="form-control" title="Card Holder Name" placeholder="Card Holder Name">
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Card Expiry<span class="text-danger">*</span></label>
+                                    <input type="text" name="card_expiry" id="card_expiry" required="" class="form-control" data-mask="99/99" title="Card Expiry" placeholder="mm/dd">
+                                    <div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>CVV<span class="text-danger">*</span></label>
+                                    <input type="password" name="cvv" numeric_valid="" required="" id="cvv" maxlength="3" class="form-control" title="CVV" placeholder="***">
+                                    <div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Note</label>
@@ -56,7 +84,7 @@ if ($modal_type == "edit") {
                         <label>Attachments</label>
                         <input type="file" title="File" name="payment_file" id="payment_file">
                         <div class="errorMessage text-danger"></div>
-                    </div>                    
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="invoice_id" id="invoice_id" value="<?= $invoice_id; ?>"/>

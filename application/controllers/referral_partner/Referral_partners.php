@@ -94,7 +94,8 @@ class Referral_partners extends CI_Controller {
     function load_referral_partners_dashboard() {
         $type = post('type');
         $status = post('status');
-        $render_data['referral_partner_data'] = $this->referral_partner->load_referral_partners_dashboard_data($type, $status);
+        // $render_data['referral_partner_data'] = $this->referral_partner->load_referral_partners_dashboard_data($type, $status);
+        $render_data['referral_partner_data'] = $this->referral_partner->load_referral_partners_dashboard_data();
         $this->load->view('referral_partner/load_referral_partners_dashboard_data', $render_data);
     }
 

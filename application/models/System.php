@@ -784,7 +784,8 @@ Class System extends CI_Model {
 
     public function clear_sos($sosids, $reference = '', $reference_id) {
         foreach ($sosids as $id) {
-            $this->db->query("UPDATE `sos_notification_staff` SET `read_status` = '1' WHERE sos_notification_id = '" . $id . "' and staff_id = " . sess('user_id') . "");
+            // $this->db->query("UPDATE `sos_notification_staff` SET `read_status` = '1' WHERE sos_notification_id = '" . $id . "' and staff_id = " . sess('user_id') . "");
+            $this->db->query("UPDATE `sos_notification_staff` SET `read_status` = '1' WHERE sos_notification_id = '" . $id . "'");
         }
         $this->save_general_notification($reference, $reference_id, 'clear');
     }

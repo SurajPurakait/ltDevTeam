@@ -19,7 +19,6 @@ $role = $user_info['role'];
                                             <div class="col-xs-12">
                                                 <button type="button" class="btn btn-primary"  onclick="CreateProjectModal('add', '');" ><i class="fa fa-plus"></i> &nbsp;Create Project</button>
                                                 <button type="button" class="btn btn-success"  onclick="taskDashboard();" >&nbsp;Task Dahsboard</button>
-                                                <a title="Recurrence Cron" href="<?php echo base_url(); ?>project_recurrence_cron.php" target="_blank"><i class="fa fa-crosshairs fa-2x"></i></a>
                                             </div>
                                         </div>
                                         <div class="filter-div m-b-20 row" id="original-filter">                                           
@@ -247,6 +246,7 @@ $role = $user_info['role'];
                                 <div class="col-sm-4 col-xs-12">
                                     <a class="btn notification-btn" id="notification-project-button" onclick="openProjectNotificationModal();" href="javascript:void(0);" title="Project Notifications">Notifications <span class="label label-danger"><?= get_project_notifications_count(); ?></span></a>
                                 </div>
+                                <a class="pull-right" style="opacity:0.3;" title="Recurrence Cron" href="<?php echo base_url(); ?>project_recurrence_cron.php" target="_blank"><i class="fa fa-crosshairs fa-1x"></i></a>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 p-t-5">
@@ -473,7 +473,7 @@ $role = $user_info['role'];
             </div>
             <div class="modal-footer text-center">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="updateProjectStatusinner()">Save changes</button>
+                <button type="button" id="project-tracking-save" class="btn btn-primary" onclick="updateProjectStatusinner()">Save changes</button>
             </div>
             <div class="modal-body" style="display: none;" id="log_modal">
                 <div style="height:200px; overflow-y: scroll">
@@ -566,8 +566,33 @@ $role = $user_info['role'];
 //                    $("#changeStatusinner").modal('hide');
 //                    return false;
                     //swal("Success!", "Successfully updated!", "success");
-                    goURL(base_url + 'project');
+                    if(statusval==0){
+                        var tracking = 'Not Started';
+                        var trk_class = 'label label-success';
+                    }else if(statusval==1){
+                        var tracking = 'Started';
+                        var trk_class = 'label label-yellow';
+                    }else if(statusval==2){
+                        var tracking = 'Completed';
+                        var trk_class = 'label label-primary';
+                    }
+                    $("#trackinner-"+prosubid).removeClass().addClass(trk_class);
+                    $("#trackinner-"+prosubid).parent('a').removeAttr('onclick');
+                    $("#trackinner-"+prosubid).parent('a').attr('onclick','change_project_status_inner('+prosubid+','+statusval+', '+prosubid+');');
+                    $("#trackinner-"+prosubid).html(tracking);
+                    var projectid = $("#trackinner-"+prosubid).attr('projectid');
+                    $("#trackouter-"+projectid).removeClass().addClass(trk_class);
+                    $("#trackouter-"+projectid).html(tracking);
+                    $('#changeStatusinner').modal('hide');
                 }
+            },
+            beforeSend: function () {
+                $("#project-tracking-save").prop('disabled', true).html('Processing...');
+                openLoading();
+            },
+            complete: function (msg) {
+                $("#project-tracking-save").removeAttr('disabled').html('Save Changes');
+                closeLoading();
             }
         });
     }

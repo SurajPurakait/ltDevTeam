@@ -18,16 +18,23 @@ if($conn === false){
                 from `order` o
                 inner join company c on c.id = o.reference_id
                 inner join staff st on st.id = o.staff_requested_service
-                where o.status = 1
+                where o.status not in(0,7,10)
                 order by o.order_date desc";
         if($result = mysqli_query($conn, $sql)){
            if(mysqli_num_rows($result) > 0){  
                 while($ld = mysqli_fetch_array($result)){
-                        $target_end_date = $ld['target_complete_date'];
-                        if (strtotime($target_end_date) < strtotime(date('Y-m-d')) ) {
-                            $updatesql = "update `order` set late_status= 1 where id = " . $ld['id'];
-                                mysqli_query($conn, $updatesql);
-                        }
+                       $sql_service = "select * from service_request where order_id='".$ld['id']."'";
+                       if($result_service = mysqli_query($conn, $sql_service)){ 
+                          if(mysqli_num_rows($result_service) > 0){  
+                                while($sd = mysqli_fetch_array($result_service)){
+                                    $target_end_date = $sd['date_completed'];
+                                    if (strtotime($target_end_date) < strtotime(date('Y-m-d h:i:s')) ) {
+                                        $updatesql = "update `order` set late_status= 1 where id = " . $ld['id'];
+                                            mysqli_query($conn, $updatesql);
+                                    }
+                                }
+                           }
+                       }
                     }       
 
                 }

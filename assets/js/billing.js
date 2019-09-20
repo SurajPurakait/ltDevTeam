@@ -357,7 +357,7 @@ function loadBillingDashboard(status = '', by = '', office = '', payment_status 
                 $(".variable-dropdown").val('');
                 $(".condition-dropdown").val('');
                 $(".criteria-dropdown").val('');
-                $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>'); 
+                $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>');
                 $(".criteria-dropdown").trigger("chosen:updated");
                 $('#btn_clear_filter').css('display', 'none');
                 $("a.filter-button span:contains('-')").html(0);
@@ -765,6 +765,21 @@ function savePayment()
         swal("ERROR!", "payment amount can't exceed the due amount", "error");
         return false;
     }
+    var cardType = "";
+    var cardNumber = $("input#card_number").val();
+    if (cardNumber != '') {
+        if (cardNumber.length != 16){
+            $("input#card_number").next('div.errorMessage').html('Card Number Not Valid');
+            return false;
+        }
+        cardType = GetCardType(cardNumber);
+        if (cardType == "") {
+            $("input#card_number").next('div.errorMessage').html('Card Number Not Valid');
+            return false;
+        }
+    }
+    form_data.append('card_type', cardType);
+
     var invoice_id = $("#invoice_id").val();
     $.ajax({
         type: "POST",
@@ -779,11 +794,13 @@ function savePayment()
 //            alert(result);
 //            return false;
 //            console.log("Result: " + result);
-            if (result != 0) {
+            if (result == 1) {
 //                swal("Success!", "Successfully saved!", "success");
                 goURL(base_url + 'billing/payments/details/' + btoa(invoice_id));
-            } else {
+            } else if (result == 0) {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+            } else {
+                swal("ERROR!", result, "error");
             }
         },
         beforeSend: function () {
@@ -1086,10 +1103,11 @@ function invoiceFilter() {
 }
 
 var changeAlternateFields = function (PaymentTypeID) {
-    $(".alternate-field-div").hide();
+    $(".alternate-field-div, div.pay-now-div").hide();
     $(".alternate-field-div input").prop('required', false);
     $('#ref_no').prev().html('Reference');
     $('#ref_no').prop({'title': 'Reference', 'placeholder': 'Reference'});
+    $('div.pay-now-div').find('input').prop('required', false);
     switch (parseInt(PaymentTypeID)) {
         case 1:     //Cash
             $('#ref_no').parent().show();
@@ -1118,6 +1136,10 @@ var changeAlternateFields = function (PaymentTypeID) {
             $('#ref_no').prop({'title': 'Authorized By', 'placeholder': 'Authorized By'});
             $('#payment_file').parent().show();
             $('#payment_file').prop('required', false);
+            break;
+        case 9:     //Pay NOW
+            $('div.pay-now-div').show();
+            $('div.pay-now-div').find('input').prop('required', true);
             break;
         default:
             $("#payment_note").parent().show();

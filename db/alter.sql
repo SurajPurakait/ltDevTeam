@@ -901,7 +901,9 @@ ALTER TABLE `invoice_info` CHANGE `payment_status` `payment_status` ENUM('1','2'
 /* 13.09.19 */
 ALTER TABLE `office` ADD `merchant_token` VARCHAR(255) NOT NULL AFTER `office_id`;
 
-/* live end */
-
 /* 13.09.19 */
 ALTER TABLE `invoice_info` ADD `client_id` INT(11) NOT NULL COMMENT 'company_id for business client, individual_id for individual client' AFTER `type`; 
+
+/* live end */
+
+INSERT INTO `payment_type` (`id`, `name`) VALUES (NULL, 'Pay NOW');

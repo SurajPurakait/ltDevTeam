@@ -1547,11 +1547,11 @@ function add_project_task_notes(){
                 success: function (result) {
                    swal({title: "Success!", text: "Successfully Saved!", type: "success"}, function () {
                        if(result!='0'){
-                            var prevnotecount = $("#notecount-"+taskid).text();
+                            var prevnotecount = $("#notecountinner-"+taskid).text();
                            var notecount = parseInt(prevnotecount)+parseInt(result);
-                           $("#notecount-"+taskid).text(notecount);
+                           $("#notecountinner-"+taskid).text(notecount);
                        }
-                       $("#notecount-"+taskid).removeClass('label label-warning').addClass('label label-danger');
+                       $("#notecountinner-"+taskid).removeClass('label label-warning').addClass('label label-danger');
                         document.getElementById("project_task_modal_note_form").reset(); 
                         $(".removenoteselector").trigger('click');
                         $('#showProjectTaskNotes').modal('hide');

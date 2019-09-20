@@ -26,8 +26,8 @@ class Task extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Task Dashboard";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'task_dashboard';
-        $render_data['menu'] = 'task';
+        $render_data['main_menu'] = 'project_dashboard';
+        $render_data['menu'] = 'task_dashboard';
         $render_data['header_title'] = $title;
 //        $render_data['filter_element_list'] = $this->filter_element;
 //        $render_data['project_list']=$this->Project_Template_model->getProjectList();

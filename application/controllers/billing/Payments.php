@@ -121,19 +121,31 @@ class Payments extends CI_Controller {
                 $data[$file_name] = '';
             }
         }
+        $invoice_info = $this->billing_model->get_invoice_by_id($data['invoice_id']);
+        $office_id = $invoice_info['office_id'];
+        $office_info = $this->administration->get_office_by_id($office_id);
+        if ($office_info['merchant_token'] != '') {
+            $data['card_expiry'] = str_replace("/", "", $data['card_expiry']);
+            $result = payeezy_payment($office_info['merchant_token'], $data['payment_amount'], $data['card_number'], $data['card_holder_name'], $data['card_expiry'], $data['cvv'], $data['card_type']);
+            if ($result['status'] != 201) {
+                exit($result['message']);
+            }
+        } else {
+            exit("Token missing, Please add merchant token for the office and try again.");
+        }
         $prev_status = $this->billing_model->get_invoice_payment_status_by_invoice_id($data['invoice_id']);
         $result = $this->billing_model->save_payment($data);
         if ($result) {
             $status = $this->billing_model->get_invoice_payment_status_by_invoice_id($data['invoice_id']);
             //insert action on invoice
-            $data = $this->billing_model->get_invoice_by_id($data['invoice_id']);
+            $data = $invoice_info;
             $staff_info = staff_info();
             $this->db->where_in('department_id', '3');
             $department_staffs = $this->db->get('department_staff')->result_array();
             $department_staff = array_column($department_staffs, 'staff_id');
 
 
-            $action_data['created_office'] = $data['office_id'];
+            $action_data['created_office'] = $office_id;
             $action_data['priority'] = '3';
             $action_data['department'] = '3';
             $action_data['office'] = '17';

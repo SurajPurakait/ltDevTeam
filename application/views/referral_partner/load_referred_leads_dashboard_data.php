@@ -3,6 +3,7 @@
 // print_r($referred_lead_data);
 // echo '</pre>'; exit; ?>
 <?php if (!empty($referred_lead_data)): ?>
+    <h3><?= count($referred_lead_data) ;?> Results Found</h3> 
     <?php foreach ($referred_lead_data as $key => $value):
         $staff_data = staff_info_by_id($value["staff_requested_by"]);
         if($value["status"]==0){

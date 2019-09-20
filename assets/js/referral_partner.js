@@ -259,3 +259,51 @@ var delete_referral_partner = (id) =>{
         });
     });
 }
+
+function loadPartnerDashboard(status, request) {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'partners/ajax_dashboard',
+        data : { 
+            status: status,
+            request: request
+        },
+        success: function (result) {
+            if (result.trim() != '') {
+                $(".ajaxdiv").html(result);
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+            jumpDiv();
+        }
+    });
+}
+
+function partnerFilter() {
+    var form_data = new FormData(document.getElementById('filter-form'));
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'partners/partner_filter',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            console.log(result);
+            $(".ajaxdiv").html(result);
+            $("[data-toggle=popover]").popover();
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}

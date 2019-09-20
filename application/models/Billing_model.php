@@ -1220,7 +1220,7 @@ class Billing_model extends CI_Model {
         } else if ($payment_status == 3) {
             unset($where_or);
             $where['inv.payment_status'] = 'AND `inv`.`payment_status` = ' . $payment_status . ' ';
-            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 3, 7) ';
+//            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 3, 7) ';
         } else {
             unset($where_or);
             $where['inv.payment_status'] = 'AND `inv`.`payment_status` = ' . $payment_status . ' ';

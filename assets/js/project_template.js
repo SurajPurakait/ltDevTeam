@@ -1212,7 +1212,9 @@ function projectContainerAjax(client_type, client_id, project_id)
         success: function (result) {
 //            alert(result);
             if (result != '0') {
+                $('#project_container').find('#individual_list_ddl').chosen('destroy');
                 $('#project_container').html(result);
+                $('#project_container').find('#individual_list_ddl').chosen();
             } else {
                 go('project');
             }
@@ -1236,7 +1238,9 @@ function refresh_existing_client_list(office_id='',client_id='') {
         dataType: "html",
         success: function (result) {
 //            alert(result);
+            $("#client_list_ddl").chosen("destroy");
             $("#client_list_ddl").html(result);
+            $("#client_list_ddl").chosen();
         },
         beforeSend: function () {
             openLoading();

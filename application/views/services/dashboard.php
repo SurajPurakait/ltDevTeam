@@ -118,7 +118,7 @@ if ($status == '') {
                                     <tbody>
                                         <?php if ($stafftype == 1 || $stafftype == 2 || $stafftype == 3) { ?>
                                             <tr>
-                                                <th>Requested by me</th>
+                                                <th>By me</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byme-2">
                                                         <span class="label label-warning">
@@ -165,7 +165,7 @@ if ($status == '') {
 //                                        if ($stafftype == 1 || $stafftype == 2 || $stafftype == 3) {
                                             ?>
                                             <tr>
-                                                <th>Requested to me</th>
+                                                <th>To me</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-tome-2">
                                                         <span class="label label-warning">
@@ -210,7 +210,7 @@ if ($status == '') {
                                         if ($stafftype == 1 || ($stafftype == 3 && $staffrole == 2) || ($stafftype == 2 && $staffrole == 4)) {
                                             ?>
                                             <tr>
-                                                <th>Requested by others</th>
+                                                <th>Others</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byothers-2">
                                                         <span class="label label-warning">

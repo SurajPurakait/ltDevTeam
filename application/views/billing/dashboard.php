@@ -111,7 +111,7 @@ $staffrole = $staff_info['role'];
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <th>Requested by me</th>
+                                            <th>By me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-1" onclick="loadBillingDashboard('', 'byme', '', 1);">
                                                     <span class="label label-warning filter-byme-1">-</span>
@@ -135,7 +135,7 @@ $staffrole = $staff_info['role'];
                                         </tr>
                                         <?php if ($stafftype == 1 || $stafftype == 2 || ($stafftype == 3 && $staffrole == 2)) { ?>
                                             <tr>
-                                                <th>Requested by others</th>
+                                                <th>By others</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byothers-1" onclick="loadBillingDashboard('', 'tome', '', 1);">
                                                         <span class="label label-warning filter-byothers-1">-</span>

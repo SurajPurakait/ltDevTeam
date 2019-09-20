@@ -40,7 +40,7 @@
                                 ?>
                                 <div class="panel panel-default service-panel type2 filter-active" id="action<?= $list['id'] ?>">
                                     <div class="panel-heading">  
-                                        <a href="<?= base_url().'administration/template/edit_project_template/'.$list['id'] ?>" class="btn btn-primary btn-xs btn-service-edit project-btn-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>                                
+                                        <a target="_blank" href="<?= base_url().'administration/template/edit_project_template/'.$list['id'] ?>" class="btn btn-primary btn-xs btn-service-edit project-btn-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>                                
                                         <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $list['id']; ?>" aria-expanded="false" class="collapsed">
                                             <div class="table-responsive">
                                                 <table class="table table-borderless text-center" style="margin-bottom: 0px;">

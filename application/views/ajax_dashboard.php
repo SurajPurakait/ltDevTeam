@@ -519,7 +519,8 @@ if ($section == 'news_update') {
                             }
                         }
                         ?>
-                        <a id="text-link-<?= $news_update['id'] ?>" class="media-body <?= $class ?>" href="javascript:void(0)" onclick="getNewsDetailsModal('<?= $news_update['id'] ?>', '<?= $staff_info['type'] ?>', '<?= $staff_info['id'] ?>');">
+                        <!-- <a id="text-link-<?//= $news_update['id'] ?>" class="media-body <?= $class ?>" href="javascript:void(0)" onclick="getNewsDetailsModal('<?//= $news_update['id'] ?>', '<?//= $staff_info['type'] ?>', '<?//= $staff_info['id'] ?>');"> -->
+                        <a id="text-link-<?= $news_update['id'] ?>" class="media-body <?= $class ?>" href="<?= base_url().'news'; ?>">    
                             <span class="label d-inline <?= $class1 ?>"><?= $news_update['news_type'] ?></span>&nbsp;<strong><?php echo ((strlen($news_update['subject']) > 25) ? (substr_replace($news_update['subject'], '...', 25)) : $news_update['subject']) ?></strong><br>
                             <small class="text-muted"><?= ($diff_days == 0 ? date('h:i A', strtotime($news_update['created_type'])) . ', Today' : date('h:i A - m/d/Y', strtotime($news_update['created_type']))) ?><?php if ($staff_info['type'] == 1 || $user_department == 14) { ?> |&nbsp;<?php
                                     $get_name = get_assigned_dept_news($news_update['id'], $news_update['office_type']);

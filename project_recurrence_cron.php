@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$db = 'leafnet_uttam_db';
+$db = 'leafnet_db';
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $db);
 // Check connection
@@ -14,6 +14,7 @@ if ($conn === false) {
 }
 
 $sql = 'SELECT * from project_recurrence_main where generation_type="1"';
+$project_id_array = array();
 if ($result = mysqli_query($conn, $sql)) {
     if (mysqli_num_rows($result) > 0) {
         while ($pattern_details = mysqli_fetch_array($result)) {
@@ -28,6 +29,14 @@ if ($result = mysqli_query($conn, $sql)) {
                 $actual_day = '0' . $actual_day;
             }
             $dueDate = $actual_mnth . '-' . $actual_day . '-' . $actual_yr;
+
+            if($pattern_details['generation_month']==''){
+                $pattern_details['generation_month'] = '0';
+            }
+
+            if($pattern_details['generation_day']==''){
+                $pattern_details['generation_day'] = '0';
+            }
 
             $recur_days = (int)($pattern_details['generation_month']*30) + (int)$pattern_details['generation_day'];
 
@@ -54,7 +63,7 @@ if ($result = mysqli_query($conn, $sql)) {
                         mysqli_query($conn, $insert_projects_sql);
                         $project_id_new = mysqli_insert_id($conn);
                         //end projects table
-
+                        array_push($project_id_array,$project_id_new);
                         //insert project_main table
                         $get_project_main_data = 'SELECT * from project_main where project_id="' . $project_id . '"';
                         $get_project_main_result = mysqli_query($conn, $get_project_main_data);
@@ -293,5 +302,9 @@ if ($result = mysqli_query($conn, $sql)) {
         }
     }
 }
-
+if(!empty($project_id_array)){
+    echo count($project_id_array).' projects created successfully';
+}else{
+    echo 'No project created';
+}
 ?>

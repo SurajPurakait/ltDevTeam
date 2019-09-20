@@ -171,57 +171,89 @@ class Referral_partner extends CI_Model {
         $sql = "select * from lead_management where id='" . $id . "'";
         return $this->db->query($sql)->row_array();
     }
-
-    public function load_referral_partners_dashboard_data($type, $status,$partner_id="") {
-        if ($partner_id != '') {
-            $this->db->select('staff.id as staff_id');
-            $this->db->from('staff');
-            $this->db->join('lead_management','staff.user = lead_management.email');
-            $this->db->where('lead_management.id',$partner_id);
-            $data = $this->db->get()->row_array();
-            $userinfo['id'] = $data['staff_id'];
-        }else{
-            $userinfo = staff_info();    
-        }
-        $this->db->select('ref.*,lm.*');
-        $this->db->from('referral_partner ref');
-        $this->db->join('lead_management lm', 'lm.id = ref.partner_id');
-        if ($type == '') {
-            $this->db->where("(ref.assisned_by_userid='" . $userinfo['id'] . "' OR ref.assigned_to_clientid='" . $userinfo['id'] . "')");
-        } elseif ($type == 1) {
-            $this->db->where('ref.assisned_by_userid', $userinfo['id']);
-        } elseif ($type == 2) {
-            $this->db->where('ref.assigned_to_clientid', $userinfo['id']);
-        }
-        if ($status != '') {
-            $this->db->where('lm.status', $status);
-        }
-        $this->db->where('lm.referred_status','0');
-        return $this->db->get()->result_array();
-        // return $this->db->last_query();
-    }
-
-    public function load_referred_leads_dashboard_data($status,$partner_id="") {
-        if ($partner_id != '') {
-            $userinfo['id'] = $partner_id;
-        }else{
-            $userinfo = staff_info();
-            $lead_email = $this->db->get_where('staff',array('id'=>$userinfo['id']))->row_array()['user'];
-            $lead_id = $this->db->get_where('lead_management',array('email'=>$lead_email,'type'=>'2'))->row_array()['id'];
-            $userinfo['id'] = $lead_id;    
-        }
+    public function load_referral_partners_dashboard_data($lead_id="") {
+        $lead_email = $this->db->get_where('lead_management',array('id'=>$lead_id,'type'=>'2'))->row_array()['email'];
+        $staff_id = $this->db->get_where('staff',array('user'=>$lead_email))->row_array()['id'];
 
         $this->db->select('rl.*,lm.*');
         $this->db->from('referred_lead rl');
         $this->db->join('lead_management lm', 'lm.id = rl.lead_id');
-        if ($status != '' && $status != 7) {
-            $this->db->where('lm.status', $status);
-
+        if ($lead_id != '') {
+            $this->db->where('rl.referred_by',$staff_id);   
+            $this->db->where('rl.referred_to',sess('user_id'));   
+        } else {
+            $this->db->where('rl.referred_by',sess('user_id'));    
         }
-        $this->db->where('rl.referred_by',$userinfo['id']);
+        $this->db->where('lm.referred_status','0');
+        return $this->db->get()->result_array();
+    }
+    // public function load_referral_partners_dashboard_data($type, $status,$partner_id="") {
+    //     if ($partner_id != '') {
+    //         $this->db->select('staff.id as staff_id');
+    //         $this->db->from('staff');
+    //         $this->db->join('lead_management','staff.user = lead_management.email');
+    //         $this->db->where('lead_management.id',$partner_id);
+    //         $data = $this->db->get()->row_array();
+    //         $userinfo['id'] = $data['staff_id'];
+    //     }else{
+    //         $userinfo = staff_info();    
+    //     }
+    //     $this->db->select('ref.*,lm.*');
+    //     $this->db->from('referral_partner ref');
+    //     $this->db->join('lead_management lm', 'lm.id = ref.partner_id');
+    //     if ($type == '') {
+    //         $this->db->where("(ref.assisned_by_userid='" . $userinfo['id'] . "' OR ref.assigned_to_clientid='" . $userinfo['id'] . "')");
+    //     } elseif ($type == 1) {
+    //         $this->db->where('ref.assisned_by_userid', $userinfo['id']);
+    //     } elseif ($type == 2) {
+    //         $this->db->where('ref.assigned_to_clientid', $userinfo['id']);
+    //     }
+    //     if ($status != '') {
+    //         $this->db->where('lm.status', $status);
+    //     }
+    //     $this->db->where('lm.referred_status','0');
+    //     return $this->db->get()->result_array();
+    //     // return $this->db->last_query();
+    // }
+
+    public function load_referred_leads_dashboard_data($status,$lead_id="") {
+        $lead_email = $this->db->get_where('lead_management',array('id'=>$lead_id,'type'=>'2'))->row_array()['email'];
+        $staff_id = $this->db->get_where('staff',array('user'=>$lead_email))->row_array()['id'];
+
+        $this->db->select('rl.*,lm.*');
+        $this->db->from('referred_lead rl');
+        $this->db->join('lead_management lm', 'lm.id = rl.lead_id');
+        if ($lead_id != '') {
+            $this->db->where('rl.referred_to',$staff_id);   
+            $this->db->where('rl.referred_by',sess('user_id'));   
+        } else {
+            $this->db->where('rl.referred_to',sess('user_id'));    
+        }
         $this->db->where('lm.referred_status','1');
         return $this->db->get()->result_array();
     }
+    // old function
+    // public function load_referred_leads_dashboard_data($status,$partner_id="") {
+    //     if ($partner_id != '') {
+    //         $userinfo['id'] = $partner_id;
+    //     }else{
+    //         $userinfo = staff_info();
+    //         $lead_email = $this->db->get_where('staff',array('id'=>$userinfo['id']))->row_array()['user'];
+    //         $lead_id = $this->db->get_where('lead_management',array('email'=>$lead_email,'type'=>'2'))->row_array()['id'];
+    //         $userinfo['id'] = $lead_id;    
+    //     }
+
+    //     $this->db->select('rl.*,lm.*');
+    //     $this->db->from('referred_lead rl');
+    //     $this->db->join('lead_management lm', 'lm.id = rl.lead_id');
+    //     if ($status != '' && $status != 7) {
+    //         $this->db->where('lm.status', $status);
+
+    //     }
+    //     $this->db->where('rl.referred_by',$userinfo['id']);
+    //     $this->db->where('lm.referred_status','1');
+    //     return $this->db->get()->result_array();
+    // }
 
     public function load_referred_leads_count($status) {
         $userinfo = staff_info();

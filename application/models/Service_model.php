@@ -261,6 +261,8 @@ class Service_model extends CI_Model {
             }
             elseif ($request_type == 'byothers') {
                 $where[] = 'o.staff_requested_service != "' . $staff_id . '"';
+            }elseif ($request_type == 'tome'){
+                $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND o.staff_requested_service != "' . $staff_id . '")';
             }
         } elseif ($usertype == 2) {
             if (in_array(6, explode(',', $user_dept))) {
@@ -362,7 +364,7 @@ class Service_model extends CI_Model {
             if ($status == 'u') {
                 $where[] = 'o.status not in ("0","7")';
             } elseif ($status == '3') {
-                $where[] = 'o.status = "1" and o.late_status = "1"';
+                $where[] = 'o.status not in ("0","7") and o.late_status = "1"';
             } elseif ($status == '4') {
                 $where[] = 'o.status not in ("0","7")';
             } else {
@@ -444,7 +446,8 @@ class Service_model extends CI_Model {
         return $render_data;
     }
 
-    public function count_service_filter($status, $request_type, $category_id, $request_by = "", $department = "", $office = "", $staff_type = "", $sort = "", $form_data = "", $sos_value = "") {
+    public function count_service_filter($status, $request_type, $category_id, $request_by = "", $department = "", $office = "", $staff_type = "", $sort = "", $form_data = "", $sos_value = "", $sort_criteria = "", $sort_type = "") {
+        //print_r($form_data);
         $staff_id = sess('user_id');
         $user_info = staff_info();
         $user_dept = $user_info['department'];
@@ -452,14 +455,16 @@ class Service_model extends CI_Model {
         $userrole = $user_info['role'];
         $useroffice = $user_info['office'];
         $sql = "SELECT st.first_name AS requested_staff,o.staff_requested_service, o.assign_user, st.department AS dept,o.staff_office,
-              o.id, o.order_serial_id, o.order_date, o.start_date, o.complete_date, o.target_start_date, o.target_complete_date, o.total_of_order, o.tracking,
-               company.name AS client_name,o.reference_id,o.reference,o.status,o.late_status,o.start_date,o.complete_date,o.category_id,o.service_id,indt.office AS office_id,
-               (SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as office,services.description AS service_name,services.ideas AS service_shortname,
-               CONCAT(',', (SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = services.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = o.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),''), ',') AS all_staffs
-           FROM `order` AS o INNER JOIN company ON o.reference_id=company.id 
-               INNER JOIN internal_data indt ON indt.reference_id = company.id
-           INNER JOIN services ON services.id=o.service_id
-               INNER JOIN staff st ON st.id=o.staff_requested_service";
+                o.id, o.order_serial_id, o.order_date, o.start_date, o.complete_date, o.target_start_date, o.target_complete_date, o.total_of_order, o.tracking,
+                (CASE WHEN `o`.`reference` = 'company' THEN company.name ELSE CONCAT(ind.last_name,', ',ind.first_name) END) AS client_name,o.reference_id,o.reference,o.status,o.late_status,o.start_date,o.complete_date,o.category_id,o.service_id,indt.office AS office_id,
+                (SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as office,services.description AS service_name,services.ideas AS service_shortname,
+                CONCAT(',', (SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = services.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = o.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),''), ',') AS all_staffs
+                FROM `order` AS o LEFT OUTER JOIN company ON o.reference_id=company.id 
+                LEFT OUTER JOIN `title` AS `tl` ON `tl`.`company_id` = `o`.`reference_id` AND `tl`.`status` = 1 
+                LEFT OUTER JOIN `individual` AS `ind` ON `ind`.`id` = `tl`.`individual_id` 
+                INNER JOIN internal_data indt ON indt.reference_id = `o`.`reference_id` AND indt.reference = `o`.`reference` 
+                INNER JOIN services ON services.id=o.service_id
+                INNER JOIN staff st ON st.id=o.staff_requested_service";
         if (isset($form_data)) {
             if (isset($form_data['variable_dropdown'])) {
                 if (in_array('9', $form_data['variable_dropdown'])) {
@@ -476,7 +481,7 @@ class Service_model extends CI_Model {
         if ($department != '') {
             $where[] = 'services.dept = "' . $department . '"';
         }
-        $where[] = "o.reference = 'company'";
+        $where[] = "o.reference != 'invoice'";
         if ($category_id != '') {
             $where[] = 'o.category_id="' . $category_id . '"';
         }
@@ -484,8 +489,11 @@ class Service_model extends CI_Model {
         if ($usertype == 1) {
             if ($request_type == "byme") {
                 $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
-            } elseif ($request_type == 'byothers') {
+            }
+            elseif ($request_type == 'byothers') {
                 $where[] = 'o.staff_requested_service != "' . $staff_id . '"';
+            }elseif ($request_type == 'tome'){
+                $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND o.staff_requested_service != "' . $staff_id . '")';
             }
         } elseif ($usertype == 2) {
             if (in_array(6, explode(',', $user_dept))) {
@@ -587,7 +595,7 @@ class Service_model extends CI_Model {
             if ($status == 'u') {
                 $where[] = 'o.status not in ("0","7")';
             } elseif ($status == '3') {
-                $where[] = 'o.status = "1" and o.late_status = "1"';
+                $where[] = 'o.status not in ("0","7") and o.late_status = "1"';
             } elseif ($status == '4') {
                 $where[] = 'o.status not in ("0","7")';
             } else {
@@ -632,11 +640,18 @@ class Service_model extends CI_Model {
         if (count($having) != 0) {
             $sql .= " HAVING " . implode(' OR ', $having);
         }
-
-        $sql .= " ORDER BY o.id ASC";
+        if ($sort_criteria != '') {
+            // $this->db->order_by($sort_criteria, $sort_type);
+            $sql .= " ORDER BY " . $sort_criteria . " " . $sort_type;
+            // echo $sql;exit; 
+        } else {
+            $sql .= " ORDER BY o.id DESC";
+        }
+        // echo "<pre>";
+        // echo $sql;exit;
         $this->db->query('SET SQL_BIG_SELECTS=1');
         $result = $this->db->query($sql)->result();
-        //echo $this->db->last_query();
+//        echo $this->db->last_query();die;
 //        echo'<pre>';
 //        print_r($result);
 //        die;
@@ -1752,9 +1767,9 @@ class Service_model extends CI_Model {
                     $query = $column_name . (($condition_val == 1) ? ' = ' : ' != ') . $criteria_val[0];
                 } else {
                     if ($condition_val == 1) {
-                        $query = $column_name . ' = 1 and o.late_status = 1';
+                        $query = 'o.status not in ("0","7") and o.late_status = 1';
                     } else {
-                        $query = $column_name . ' != 1 and o.late_status != 1';
+                        $query = 'o.status not in ("0","7") and o.late_status != 1';
                     }
                 }
             } elseif ($condition_val == 2 || $condition_val == 4) {
@@ -1769,9 +1784,9 @@ class Service_model extends CI_Model {
                         if ($i == 0) {
                             if ($cv == 3) {
                                 if ($condition_val == 2) {
-                                    $q .= '(' . $column_name . ' = 1 and o.late_status = 1';
+                                    $q .= '(o.status not in ("0","7") and o.late_status = 1';
                                 } else {
-                                    $q .= '(' . $column_name . ' != 1 and o.late_status != 1';
+                                    $q .= '(o.status not in ("0","7") and o.late_status != 1';
                                 }
                             } else {
                                 $q .= '(' . $column_name . (($condition_val == 2) ? ' = ' : ' != ') . $cv;
@@ -1779,9 +1794,9 @@ class Service_model extends CI_Model {
                         } else if ($i == $len - 1) {
                             if ($cv == 3) {
                                 if ($condition_val == 2) {
-                                    $q .= ' AND ' . $column_name . ' = 1 and o.late_status = 1)';
+                                    $q .= ' AND o.status not in ("0","7") and o.late_status = 1)';
                                 } else {
-                                    $q .= ' AND ' . $column_name . ' != 1 and o.late_status != 1)';
+                                    $q .= ' AND o.status not in ("0","7") and o.late_status != 1)';
                                 }
                             } else {
                                 $q .= ' AND ' . $column_name . (($condition_val == 2) ? ' = ' : ' != ') . $cv . ')';
@@ -1789,9 +1804,9 @@ class Service_model extends CI_Model {
                         } else {
                             if ($cv == 3) {
                                 if ($condition_val == 2) {
-                                    $q .= ' AND ' . $column_name . ' = 1 and o.late_status = 1';
+                                    $q .= ' AND o.status not in ("0","7") and o.late_status = 1';
                                 } else {
-                                    $q .= ' AND ' . $column_name . ' != 1 and o.late_status != 1';
+                                    $q .= ' AND o.status not in ("0","7") and o.late_status != 1';
                                 }
                             } else {
                                 $q .= ' AND ' . $column_name . (($condition_val == 2) ? ' = ' : ' != ') . $cv;

@@ -45,8 +45,8 @@ if (count($referral_data) != 0): ?>
                                             $partner_to_staff_count = get_partner_to_staff_count($value["id"]); // green // Referred // 0
                                             $staff_to_partner_count = get_staff_to_partner_count($value["id"]); // blue // Sent // 1
                                         ?>
-                                        <a href="#" class="label label-primary"><span ><?= $partner_to_staff_count; ?></span></a>&nbsp;
-                                        <a href="#" class="label label-success"><span ></span><?= $staff_to_partner_count; ?></a>
+                                        <a href="javascript:void(0)" class="label label-primary" data-toggle="tooltip" data-placement="top" title="To Me"><span ><?= $partner_to_staff_count; ?></span></a>&nbsp;
+                                        <a href="javascript:void(0)" class="label label-success" data-toggle="tooltip" data-placement="top" title="By Me"><span ></span><?= $staff_to_partner_count; ?></a>
                                     </td>
                                     <?php echo '<td title="Notes"><span>' . (($value["notes"] > 0) ? '<a class="label label-warning" href="javascript:void(0)" onclick="show_ref_partner_notes(\'' . $value["id"] . '\')"><b>' . $value["notes"] . '</b></a>' : '<b class="label label-warning">' . $value["notes"] . '</b>') . '</span></td>'; ?>
                                 </tr>

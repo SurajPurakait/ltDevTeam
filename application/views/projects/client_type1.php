@@ -14,7 +14,7 @@
     <div class="form-group client_type_div0" id="client_list">
         <label class="col-lg-6 control-label">Client List<span class="text-danger">*</span></label>
 
-        <select class="form-control client_type_field0" name="project[client_id]" id="client_list_ddl" title="Client List" required>
+        <select class="form-control client_type_field0" name="project[client_id][]" id="client_list_ddl" title="Client List" <?php echo (isset($client_id) && $client_id !='') ? 'disabled' : ''; ?> multiple required>
             <option value="">Select an option</option>
         </select>
         <div class="errorMessage text-danger"></div>
@@ -24,4 +24,5 @@
     <?php if(isset($project_id) && $project_id!=''){ ?>
         refresh_existing_client_list('<?= $office_id ?>','<?= $client_id ?>');
    <?php }?>
+   $("#client_list_ddl").chosen();
     </script>

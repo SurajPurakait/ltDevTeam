@@ -286,13 +286,16 @@ $office_id = get_office_id($staff_info['office']);
                             <li <?= active_menu($menu, "project_dashboard"); ?>>
                                 <a href="javascript:void(0);" onclick="CreateProjectModal('add', '');">- Add New Project</a>
                             </li>
+                            <li <?= active_menu($menu, "task_dashboard"); ?> >
+                                <a href="<?= base_url(); ?>task">- Task Dashboard</span></a>
+                            </li>
                         </ul>
                     </li>
                 <?php // } ?>
                 <!--Task Dashboard-->
                 <?php // if ($staff_info['type'] != 3) { ?>
-                    <li <?= active_menu($main_menu, "task_dashboard"); ?> >
-                        <a href="<?= base_url(); ?>task"><i class="fa fa-tasks"></i> <span class="nav-label">Tasks</span></a>
+                    <!-- <li <?//= active_menu($main_menu, "task_dashboard"); ?> >
+                        <a href="<?//= base_url(); ?>task"><i class="fa fa-tasks"></i> <span class="nav-label">Tasks</span></a> -->
                         <!--                        <ul class="nav nav-second-level collapse" style="height: 0px;">
                                                     <li <?//= active_menu($menu, "project"); ?>>                            
                                                         <a href="<?//= base_url(); ?>project">Dashboard</a>
@@ -301,7 +304,7 @@ $office_id = get_office_id($staff_info['office']);
                                                         <a href="javascript:void(0);" onclick="CreateProjectModal('add', '');">- Add New Project</a>
                                                     </li>
                                                 </ul>-->
-                    </li>
+                    <!-- </li> -->
                 <?php // } ?>
     <!--                <li <?= active_menu($main_menu, "messages"); ?> >
     <a href="javascript:void(0);">
@@ -350,7 +353,7 @@ $office_id = get_office_id($staff_info['office']);
                             <a href="<?//= base_url(); ?>partners/create_referral_agent">- New Referral Agent</a>
                         </li> -->
                         <li <?= active_menu($menu, "partners"); ?>>
-                            <a href="<?= base_url(); ?>partners/referral_agent_type">Referral Agent Type</a>
+                            <a href="<?= base_url(); ?>partners/referral_agent_type">Referral Partner Type</a>  <!-- N.B : Referral Agent concept is deprecated from sept,19 and it moves into type section, and Referral Agent Type is converted into Referral Partner Type -->
                         </li>
                     </ul>
                 </li>
@@ -544,15 +547,16 @@ $office_id = get_office_id($staff_info['office']);
                     <?php
                     if ($staff_info['type'] != '1') {
 
-                        if ($staff_info['type'] == '2')
+                        if ($staff_info['type'] == '2'){
                             $ret = count_unread_news_update_by_userId($staff_info['id'], $staff_info['type'], $staff_info['department']);
-                        else
+                        } else {
                             $ret = count_unread_news_update_by_userId($staff_info['id'], $staff_info['type'], $staff_info['office']);
-
+                        }
+                        // echo $ret;   
                         if ($ret) {
                             ?>
                             <a href="javascript:void(0)" class="pull-right notification">
-                                <i class="fa fa-bell m-r-0"></i>
+                                <i class="fa fa-bell m-r-0" style="color: red;"></i>
                             </a>
                             <?php
                         }
