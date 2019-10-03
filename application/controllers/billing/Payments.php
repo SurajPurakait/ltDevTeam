@@ -124,15 +124,19 @@ class Payments extends CI_Controller {
         $invoice_info = $this->billing_model->get_invoice_by_id($data['invoice_id']);
         $office_id = $invoice_info['office_id'];
         $office_info = $this->administration->get_office_by_id($office_id);
-        if ($office_info['merchant_token'] != '') {
-            $data['card_expiry'] = str_replace("/", "", $data['card_expiry']);
-            $result = payeezy_payment($office_info['merchant_token'], $data['payment_amount'], $data['card_number'], $data['card_holder_name'], $data['card_expiry'], $data['cvv'], $data['card_type']);
-            if ($result['status'] != 201) {
-                exit($result['message']);
+
+        if ($data['payment_type'] == 9) {
+            if ($office_info['merchant_token'] != '') {
+                $data['card_expiry'] = str_replace("/", "", $data['card_expiry']);
+                $result = payeezy_payment($office_info['merchant_token'], $data['payment_amount'], $data['card_number'], $data['card_holder_name'], $data['card_expiry'], $data['cvv'], $data['card_type']);
+                if ($result['status'] != 201) {
+                    exit($result['message']);
+                }
+            } else {
+                exit("Token missing, Please add merchant token for the office and try again.");
             }
-        } else {
-            exit("Token missing, Please add merchant token for the office and try again.");
         }
+
         $prev_status = $this->billing_model->get_invoice_payment_status_by_invoice_id($data['invoice_id']);
         $result = $this->billing_model->save_payment($data);
         if ($result) {

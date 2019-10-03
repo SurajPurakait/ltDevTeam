@@ -12,8 +12,8 @@ if(isset($ismyself)){
 <div class="form-group">
     <label class="col-lg-2 control-label">Assign To<span class="text-danger">*</span></label>
     <div class="col-lg-10">
-        <label class="m-r-10"><input type="radio" <?php echo $disabled; ?> <?php echo $req; ?> id="is_chk_all" class="is_all" name="is_all" value="1" onclick="selectAll(this.value);" title="Assign Type"> Entire Department</label>
-        <label><input type="radio" <?php echo $disabled; ?> <?php echo $req; ?> id="not_chk_all" class="is_all" name="is_all" value="0" onclick="selectAll(this.value);" title="Assign Type"> Individual Staff</label>
+        <label class="m-r-10"><input type="radio" <?php echo $req; ?> id="is_chk_all" class="is_all" name="is_all" value="1" onclick="selectAll(this.value);" title="Assign Type"> Entire Department</label>
+        <label><input type="radio" <?php echo $req; ?> id="not_chk_all" class="is_all" name="is_all" value="0" onclick="selectAll(this.value);" title="Assign Type"> Individual Staff</label>
         <!-- <label><input type="radio" required id="is_chk_mytask" class="is_all" name="is_all" value="2" onclick="selectAll(this.value);" title="Assign Type"> Assign Myself</label> -->
         <div class="errorMessage text-danger" id="is_all_error"></div>
     </div>
@@ -21,7 +21,7 @@ if(isset($ismyself)){
 <div class="form-group" id="staff_ddl_div" style="display: none;">
     <label class="col-lg-2 control-label">Staff<span class="text-danger">*</span></label>
     <div class="col-lg-10">
-        <select class="form-control" title="Staff" name="staff[]" id="staff" multiple="" <?php echo $disabled; ?>>
+        <select class="form-control" title="Staff" name="staff[]" id="staff" multiple="">
             <?php foreach ($staff_list as $sl): ?>
                 <option value="<?= $sl["id"]; ?>" <?= in_array($sl["id"], explode(",", $select_staffs)) ? "selected='selected'" : ""; ?>><?= $sl["name"]; ?></option>
             <?php endforeach; ?>

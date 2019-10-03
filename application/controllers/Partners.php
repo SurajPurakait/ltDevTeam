@@ -21,14 +21,24 @@ class Partners extends CI_Controller
             6 => "Submission Date"
         ];
     }
-    public function index(){
+    public function index($status = "",$request = ""){
         $this->load->layout = 'dashboard';
         $title = "Dashboard";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'referral_partners';
+        $render_data['main_menu'] = "referral_partners'_leads";
         $render_data['menu'] = 'partner';
         $render_data['header_title'] = $title;
         $render_data['filter_element_list'] = $this->filter_element;
+        
+        if (empty($status) && $status != '0') { 
+            $render_data['status'] = '';
+        }
+        if ($request == '0') { 
+            $render_data['request'] = '';
+        }
+        $render_data['status'] = $status;
+        $render_data['request'] = $request;
+        
         $this->load->template('partners/dashboard', $render_data);    
     }
     public function ajax_dashboard() {

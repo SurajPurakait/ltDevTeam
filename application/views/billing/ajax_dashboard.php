@@ -72,23 +72,22 @@ foreach ($result as $value):
             <?php if (in_array(3, explode(',', $user_dept)) && $payment_status != 4): ?>
                     <!--<a href="javascript:void(0);" onclick="changePaymentStatus(<?= $row->invoice_id; ?>);" class="btn btn-primary btn-xs btn-service-assign "><i class="fa fa-check" aria-hidden="true"></i> Complete</a>-->
             <?php endif; ?>
+
             <a href="<?= base_url("billing/invoice/details/" . base64_encode($row->invoice_id)); ?>" target="_blank" class="btn btn-primary btn-xs btn-service-edit-project btn-service-invoice"><i class="fa fa-dollar" aria-hidden="true"></i> Invoice</a>
             <a href="<?= base_url("billing/invoice/place/" . base64_encode($row->invoice_id) . "/" . base64_encode('view')); ?>" target="_blank" class="btn btn-primary btn-xs btn-service-view"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
             <a href="<?= base_url() . 'billing/payments/details/' . base64_encode($row->invoice_id); ?>" target="_blank" class="btn-show-details"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
             <a class="panel-title" style="cursor: default;" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $row->invoice_id; ?>" aria-expanded="false" class="collapsed">
                 <div class="table-responsive">
-                    <table class="table table-borderless text-center" style="margin-bottom: 0px;">
+                    <table class="table table-borderless text-center m-t-15" style="margin-bottom: 0px;">
                         <tr>
-                            <th class="text-center" width="5%">Order ID#</th>
-                            <!-- <th class="text-center" width="5%">Order#</th> -->
-                            <th class="text-center" width="15%">Client Name</th>
-                            <th class="text-center" width="5%">Office ID</th>
+                            <th class="text-center" width="5%">Order&nbsp;ID#</th>
+                            <th class="text-center" width="15%">Client&nbsp;Name</th>
+                            <th class="text-center" width="5%">Office&nbsp;ID</th>
                             <th class="text-center" width="5%">Partner</th>
                             <th class="text-center" width="5%">Manager</th>
                             <th class="text-center" width="10%">Tracking</th>
-                            <th class="text-center" width="10%">Requested by</th>
-                            <!-- <th class="text-center" width="10%">Invoice Type</th> -->
-                            <th class="text-center" width="10%">Created Date</th>
+                            <th class="text-center" width="10%">Requested&nbsp;by</th>
+                            <th class="text-center" width="10%">Created&nbsp;Date</th>
                             <th class="text-center" width="5%">Due Date</th>
                             <th class="text-center" width="5%">Services</th>
                             <th class="text-center" width="5%">Total</th>
@@ -101,16 +100,13 @@ foreach ($result as $value):
                             <td title="Office"><?= $row->officeid; ?></td>
                             <td title="Partner"><?= $row->partner; ?></td>
                             <td title="Manager"><?= $row->manager; ?></td>
-                            <td title="Tracking"><a href="javascript:void(0)" <?php // (in_array(3, explode(',', $user_dept)) || in_array(14, explode(',', $user_dept)) || $usertype == 1) ?                          ?> onclick="billingDashboardTrackingModal(<?= $row->invoice_id; ?>, <?= $row->invoice_status; ?>);"><span class="label <?= $tracking_class ?> invoice-tracking-span-<?= $row->invoice_id; ?>"><b><?= $tracking[$row->invoice_status]; ?></b></span></a></td>
-                            <!-- <td title="Invoice Type"><?//= ($row->invoice_type == 1) ? 'Business Client' : 'Individual'; ?></td> -->
+                            <td title="Tracking"><a href="javascript:void(0)" onclick="billingDashboardTrackingModal(<?= $row->invoice_id; ?>, <?= $row->invoice_status; ?>);"><span class="label <?= $tracking_class ?> invoice-tracking-span-<?= $row->invoice_id; ?>"><b><?= $tracking[$row->invoice_status]; ?></b></span></a></td>
                             <td title="Requested by"><?= $row->created_by_name; ?></td>
                             <td title="Create Time"><?= date('m/d/Y', strtotime($row->created_time)); ?></td>
-                            <td title="Create Time"><?= date('m/d/Y', strtotime('+30 days', strtotime($row->created_time))); ?></td>
-                            <!--<td align="center" title="Services"><?php // implode(', ', array_column($service_list, 'service'));                             ?></td>-->
+                            <td title="Create Time"><?= date('m/d/Y', strtotime('+30 days', strtotime($row->created_time))); ?></td>                            
                             <td align="center" title="Services"><span class="label label-success"><b><?= count($service_list); ?></b></span></td>
                             <td title="Total Amount">$<?= $total_price; ?></td>
                             <td title="Payment status"><a href="javascript:void(0);"><span class="label <?= $status_class ?>"><b><?= $payment_status_array[$payment_status]; ?></b></span></a></td>
-
                         </tr>
                     </table>
                 </div>
@@ -136,7 +132,7 @@ foreach ($result as $value):
                         <?php
 //                            print_r($service_list);
                         if (!empty($service_list)):
-                            foreach ($service_list as $row_inner):
+                            foreach ($service_list as $key => $row_inner):
                                 $order_id = $row_inner['order_id'];
                                 $service_id = $row_inner['service_id'];
                                 $row_inner = (object) $row_inner;
@@ -155,7 +151,7 @@ foreach ($result as $value):
                                 }
                                 ?>
                                 <tr>
-                                    <td title="ID">#<?= $row_inner->order_id; ?></td>
+                                    <td title="ID"><?= $row->invoice_id . '-' . ($key + 1); ?></td>
                                     <td title="Category"><?= $row_inner->service_category; ?></td>
                                     <td title="Service Name"><?= $row_inner->service; ?></td>
                                     <td title="Retail Price">$<?= number_format((float) $row_inner->retail_price, 2, '.', ''); ?></td>
@@ -201,9 +197,9 @@ else:
     ?>
     <script>
         $(function () {
-            <?php foreach ($filter_array as $key => $value): ?>
+    <?php foreach ($filter_array as $key => $value): ?>
                 $('span.filter-<?= $key; ?>').html('<?= $value != '' ? $value : 0; ?>');
-            <?php endforeach; ?>
+    <?php endforeach; ?>
             $('.dashboard-item-result').html('<?= $i; ?> Results found');
             $('[data-toggle="tooltip"]').tooltip();
         });

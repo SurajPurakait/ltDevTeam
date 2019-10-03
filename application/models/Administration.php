@@ -100,6 +100,7 @@ class Administration extends CI_Model {
 
     public function get_office_list_by_name_like($office_name) {
         $this->db->like('name', $office_name, 'both');
+        $this->db->where('status', 1);
         return $this->db->get("office")->result_array();
     }
 
@@ -215,24 +216,23 @@ class Administration extends CI_Model {
         if ($data['type'] == 2) {
             $this->db->select('*');
             $this->db->from('actions act');
-            $this->db->join('action_assign_to_department_rel act_rl', 'act_rl.action_id = act.id');
-            $this->db->where_in('department_id', $department_data);
-            $this->db->where(['act.office' => $office_data[0], 'act_rl.is_all' => 1]);
+            $this->db->where_in('department', $department_data);
+            $this->db->where(['act.office' => $office_data[0], 'act.is_all' => 1]);
             $action_details = $this->db->get()->result_array();
             if (count($action_details) != 0) {
                 foreach ($action_details as $action) {
-                    $data = array('action_id' => $action['action_id'], 'staff_id' => $staff_id);
+                    $data = array('action_id' => $action['id'], 'staff_id' => $staff_id);
                     $this->db->insert('action_staffs', $data);
                 }
             }
         } else {
-            $this->db->where_in('department_id', $department_data);
+            $this->db->where_in('department', $department_data);
             $this->db->where('is_all', 1);
-            $action_details = $this->db->get('action_assign_to_department_rel')->result_array();
+            $action_details = $this->db->get('actions')->result_array();
             if ($data['type'] != 3) {
                 if (count($action_details) != 0) {
                     foreach ($action_details as $action) {
-                        $data = array('action_id' => $action['action_id'], 'staff_id' => $staff_id);
+                        $data = array('action_id' => $action['id'], 'staff_id' => $staff_id);
                         $this->db->insert('action_staffs', $data);
                     }
                 }

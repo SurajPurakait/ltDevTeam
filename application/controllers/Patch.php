@@ -556,4 +556,94 @@ class Patch extends CI_Controller {
         }
     }
 
+    public function update_action_is_all_value() {
+        $data = $this->db->query("SELECT adr.action_id,adr.is_all FROM action_assign_to_department_rel adr INNER JOIN actions a ON(a.id=adr.action_id)")->result_array();
+        if (!empty($data)) {
+            foreach ($data as $val) {
+                $this->db->where('id', $val['action_id']);
+                $this->db->update('actions', ['is_all' => $val['is_all']]);
+            }
+        }
+    }
+
+    public function update_practice_id() {
+        $client_list = $this->db->get('internal_data')->result_array();
+        foreach ($client_list as $key => $cl) {
+            if (trim($cl['practice_id']) == '') {
+                $reference_id = $cl['reference_id'];
+                if ($cl['reference'] == 'individual') {
+                    $details = $this->db->get_where('individual', ['id' => $reference_id])->row_array();
+                    $name = trim($details['last_name']) . trim($details['first_name']);
+                    $name = strtoupper(str_replace(' ', '', $name));
+                    $c = preg_replace("/[^a-zA-Z0-9]/", "", $name);
+                    $practice_id = substr($c, 0, 11);
+                } elseif ($cl['reference'] == 'company') {
+                    $details = $this->db->get_where('company', ['id' => $reference_id])->row_array();
+                    $name = strtoupper(str_replace(' ', '', trim($details['name'])));
+                    $c = preg_replace("/[^a-zA-Z0-9]/", "", $name);
+                    $practice_id = substr($c, 0, 11);
+                }
+
+                $update_data['practice_id'] = $practice_id;
+                $this->db->where('id', $cl['id']);
+                $this->db->update('internal_data', $update_data);
+            }  //end practice_id blank checking   
+        } //end foreach
+    }
+
+    public function update_service_request_department() {
+        $service_request_list = $this->db->get('service_request')->result_array();
+        foreach ($service_request_list as $srl) {
+            $result = $this->db->get_where('services', ['id' => $srl['services_id']])->row_array();
+            if (!empty($result)) {
+                $this->db->where('id', $srl['id']);
+                $this->db->update('service_request', ['responsible_department' => $result['dept']]);
+            }
+        }
+    }
+
+    public function project_due_date_generation_date_fix(){ 
+            $data = $this->db->get('project_recurrence_main')->result_array();
+            //print_r($data); exit;
+            if(!empty($data)){
+                foreach ($data as $val){
+                    $due_date = $val['actual_due_year'] . '-' . $val['actual_due_month'] . '-' . $val['actual_due_day'];
+                
+                    if($val['generation_month']==''){
+                        $val['generation_month'] = '0';
+                    }
+
+                    if($val['generation_day']==''){
+                        $val['generation_day'] = '0';
+                    }
+                    
+                    $update_data['due_date'] = $due_date;
+                        
+                    if($val['pattern']=='monthly'){
+                        $next_due_date = date("Y-m-d", strtotime("+1 month", strtotime($due_date)));
+                        $update_data['next_due_date'] = $next_due_date;
+                    }elseif($val['pattern']=='annually'){
+                        $next_due_date = date("Y-m-d", strtotime("+1 year", strtotime($due_date)));
+                        $update_data['next_due_date'] = $next_due_date;
+                    }elseif($val['pattern']=='weekly'){
+                        $next_due_date = date("Y-m-d", strtotime("+7 days", strtotime($due_date)));
+                        $update_data['next_due_date'] = $next_due_date;
+                    }elseif($val['pattern']=='quarterly'){
+                        $next_due_date = date("Y-m-d", strtotime("+3 months", strtotime($due_date)));
+                        $update_data['next_due_date'] = $next_due_date;
+                    }else{
+                        $update_data['next_due_date'] = '0000-00-00';
+                    }
+                    if($val['generation_type']==1){
+                        $generation_days = ((int)$val['generation_month']*30) + (int)$val['generation_day'];
+
+                        $generation_date = date('Y-m-d', strtotime('-'.$generation_days.' days', strtotime($update_data['next_due_date'])));
+                        $update_data['generation_date'] = $generation_date; 
+                    }                
+                    $this->db->where('id', $val['id']);
+                    $this->db->update('project_recurrence_main', $update_data);
+                }
+            }
+        }
+
 }

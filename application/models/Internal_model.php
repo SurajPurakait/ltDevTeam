@@ -10,10 +10,17 @@ Class Internal_model extends CI_Model {
         unset($internal_data_columns['id']);
         foreach ($internal_data_columns as $column) {
             if (isset($data[$column])) {
-                $save_data[$column] = $data[$column];
+                if ($column == 'practice_id') {
+                    if (isset($data['practice_id'])) {
+                        $save_data['practice_id'] = $data['practice_id'] == '' ? $this->system->generete_practice_id($data['reference_id'], $data['reference']) : $data['practice_id'];
+                    } else {
+                        $save_data['practice_id'] = $this->system->generete_practice_id($data['reference_id'], $data['reference']);
+                    }
+                } else {
+                    $save_data[$column] = $data[$column];
+                }
             }
         }
-//        print_r($save_data);exit;
         $exist_internal_data = $this->db->get_where('internal_data', ['reference' => $data['reference'], 'reference_id' => $data['reference_id']])->row_array();
         if (!empty($exist_internal_data)) {     // Update section
             unset($save_data['reference']);
@@ -34,6 +41,7 @@ Class Internal_model extends CI_Model {
             foreach ($owner_list as $ol) {
                 $save_data['reference'] = 'individual';
                 $save_data['reference_id'] = $reference_id = $ol['individual_id'];
+                $save_data['practice_id'] = '';
                 $exist_owner_internal_data = $this->db->get_where('internal_data', ['reference' => 'individual', 'reference_id' => $reference_id])->row_array();
                 if (!empty($exist_owner_internal_data)) {     // Update section
                     if (isset($save_data['reference'])) {
@@ -45,11 +53,17 @@ Class Internal_model extends CI_Model {
                     if (isset($save_data['status'])) {
                         unset($save_data['status']);
                     }
+                    if ($exist_owner_internal_data['practice_id'] == '') {
+                        $save_data['practice_id'] = $this->system->generete_practice_id($save_data['reference_id'], $save_data['reference']);
+                    }
                     $internal_data_id = $exist_owner_internal_data['id'];
                     $this->db->where('id', $internal_data_id);
                     $this->db->update('internal_data', $save_data);
                     $this->system->log("update", "internal_data", $internal_data_id);
                 } else {    // Insert section
+                    if ($save_data['practice_id'] == '') {
+                        $save_data['practice_id'] = $this->system->generete_practice_id($save_data['reference_id'], $save_data['reference']);
+                    }
                     $save_data['status'] = 1;
                     $this->db->insert('internal_data', $save_data);
                     $internal_data_id = $this->db->insert_id();

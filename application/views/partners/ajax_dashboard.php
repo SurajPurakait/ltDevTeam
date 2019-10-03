@@ -9,26 +9,31 @@
     foreach ($leads_list as $lead):
         $staff_data_by = staff_info_by_id($lead["referred_by"]);
         $staff_data_to = staff_info_by_id($lead["referred_to"]);
+        $type = get_type_of_contact_name($lead['type_of_contact'],'1');
         ?>
         <div class="panel panel-default service-panel type2 filter-active">
             <div class="panel-heading">
+                <div class="referral-partner-status-btn-list">
+                    <a href="<?= base_url('/lead_management/home/view/' . $lead['lead_id'].'/'.$lead['type']); ?>" class="btn btn-primary btn-xs btn-service-view"><i class="fa fa-eye" aria-hidden="true"></i>
+                        View</a>                                  
+                </div>
                 <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse89" aria-expanded="false">
                     <div class="table-responsive">
                         <table class="table table-borderless" style="margin-bottom: 0px;">
                             <tbody>
                                 <tr>
-                                    <th class="text-center" width="10%">Type</th>
-                                    <th class="text-center" width="20%">Name</th>
-                                    <th class="text-center" width="20%">Tracking</th>
+                                    <th class="text-center" width="15%">Type</th>
+                                    <th class="text-center" width="15%">Name</th>
+                                    <th class="text-center" width="15%">Tracking</th>
                                     <th class="text-center" style="white-space:nowrap" width="15%">Requested By</th>
                                     <th class="text-center" style="white-space:nowrap" width="15%">Requested To</th>
-                                    <th class="text-center" style="white-space:nowrap" width="20%">Submission Date</th>
+                                    <th class="text-center" style="white-space:nowrap" width="25%">Submission Date</th>
                                 </tr>
                                 <tr>
-                                    <td title="Type" class="text-center" width="10%" style="word-break:break-all"><?= ($lead["type_of_contact"]!=0) ? $lead["type_of_contact"] : 'Unknown'; ?></td>
+                                    <td title="Type" class="text-center" width="15%" style="word-break:break-all"><?= (!empty($type['name'])) ? $type['name'] : 'Unknown'; ?></td>
 
-                                    <td title="Name" class="text-center" width="20%"><?= $lead["first_name"]." ".$lead["last_name"] ; ?></td>
-                                    <td align='left' title="Tracking Description" class="text-center" width="20%">
+                                    <td title="Name" class="text-center" width="15%"><?= $lead["first_name"]." ".$lead["last_name"] ; ?></td>
+                                    <td align='left' title="Tracking Description" class="text-center" width="15%">
                                         <?php
                                             if ($lead["status"] == 0) {
                                                 $trk_class = "label label-success";

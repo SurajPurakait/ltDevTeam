@@ -2,6 +2,9 @@
 <?php 
 if ($element_key == 9) : //start date and complete date and creation date and due date      ?>
     <input placeholder="dd/mm/yyyy" class="form-control <?= ($condition == 2 || $condition == 4) ? 'datepicker_range_mdy' : 'datepicker_mdy'; ?>" type="text" title="<?= $element_array[$element_key]; ?>" name="criteria_dropdown[<?= 'created_at' ?>][]">
+<?php
+elseif($element_key == 11): ?>
+    <input placeholder="dd/mm/yyyy" class="form-control <?= ($condition == 2 || $condition == 4) ? 'datepicker_range_mdy' : 'datepicker_mdy'; ?>" type="text" title="<?= $element_array[$element_key]; ?>" name="criteria_dropdown[<?= 'due_date' ?>][]">
 <?php else: ?>
     <select class='form-control criteria-dropdown chosen-select' placeholder='All Criteria' title="<?= $element_array[$element_key]; ?>" name='criteria_dropdown[<?= $element_name; ?>][]'>
         <option value=''>All Criteria</option>

@@ -305,7 +305,7 @@ function add_lead_prospect(added_by,event_lead ="") {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-            //console.log(result); return false;
+            // console.log(result); return false;
             if (result.trim() == "0") {
                 swal("ERROR!", "Lead Prospect Already Exists", "error");
             } else if (result.trim() == "-1") {
@@ -321,7 +321,7 @@ function add_lead_prospect(added_by,event_lead ="") {
                         goURL(base_url + 'lead_management/home');
                     }
                 });
-                window.open((($('#mail_campaign_status').val() != 0) ? base_url + 'lead_management/home/mail_campaign/y/' + result.trim() : base_url + 'lead_management/home/mail_campaign/n/' + result.trim()), 'Mail Campaign Popup', "width=1080, height=480, top=100, left=170, scrollbars=no");
+                // window.open((($('#mail_campaign_status').val() != 0) ? base_url + 'lead_management/home/mail_campaign/y/' + result.trim() : base_url + 'lead_management/home/mail_campaign/n/' + result.trim()), 'Mail Campaign Popup', "width=1080, height=480, top=100, left=170, scrollbars=no");
             }
         },
         beforeSend: function () {

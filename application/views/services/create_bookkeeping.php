@@ -297,6 +297,7 @@
                                 <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>" />
                                 <input type="hidden" name="editval" id="editval" value="">
                                 <input type="hidden" name="bookkeeping_sub_cat" id="bookkeeping_sub_cat" value="1">
+                                <input type="hidden" name="exist_client_id" id="exist_client_id">
                                 <button class="btn btn-success" type="button" onclick="request_create_bookkeeping()">Save changes</button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button" onclick="go('services/home');">Cancel</button>
                             </div>

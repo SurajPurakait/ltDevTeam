@@ -274,11 +274,11 @@
                 </div>
                 <div class="tab-pane" role="tabpanel" id="account_info">
                     <div class="panel-body"> 
-                         <?php foreach ($account_details as $ad) { ?> 
+                        <?php foreach ($account_details as $ad) { ?> 
                             Payroll #<?= $ad['order_id'] ?>
                             <div class="form-group">
                                 <label id="referred-label" class="col-lg-2 control-label">Bank Name</label>
-                                
+
                                 <div class="col-lg-10">
                                     <input type="text" name="bank_name" id="bank_name" class="form-control" value="<?= $ad['bank_name'] ?>" disabled>
                                     <div class="errorMessage text-danger"></div>
@@ -289,14 +289,14 @@
 
                                 <label id="referred-label" class="col-lg-2 control-label"> Account Number</label>
                                 <div class="col-lg-10">
-                                     <input type="text" name="account_number" id="account_number" 
-                                     class="form-control" value="<?= $ad['ban_account_number'] ?>" disabled>
+                                    <input type="text" name="account_number" id="account_number" 
+                                           class="form-control" value="<?= $ad['ban_account_number'] ?>" disabled>
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
 
 
-                             <div class="form-group">
+                            <div class="form-group">
                                 <label id="referred-label" class="col-lg-2 control-label"> Routing Number</label>
                                 <div class="col-lg-10">
                                     <input type="text" name="routing_number" id="routing_number"  class="form-control" value="<?= $ad['bank_routing_number'] ?>" disabled>
@@ -306,22 +306,21 @@
 
                         <?php } ?>
 
-                         <?php foreach ($account_details_bookkeeping as $bk) { ?> 
-                        Bookkeeping #<?= $bk['order_id']; ?>
-                        <div class="form-group">
+                        <?php foreach ($account_details_bookkeeping as $bk) { ?> 
+                            Bookkeeping #<?= $bk['order_id']; ?>
+                            <div class="form-group">
                                 <label id="referred-label" class="col-lg-2 control-label">Bank Name</label>
-                                
+
                                 <div class="col-lg-10">
                                     <input type="text" name="bank_name" id="bank_name" class="form-control" value="<?= $bk['bank_name'] ?>" disabled>
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
 
-
                             <div class="form-group">
                                 <label id="referred-label" class="col-lg-2 control-label">Account Type</label>
                                 <div class="col-lg-10">
-                                     <input type="text" name="account_type" id="account_type" class="form-control" value="<?= $bk['type_of_account'] ?>" disabled>
+                                    <input type="text" name="account_type" id="account_type" class="form-control" value="<?= $bk['type_of_account'] ?>" disabled>
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
@@ -331,13 +330,13 @@
                                 <label id="referred-label" class="col-lg-2 control-label"> Account Number</label>
                                 <div class="col-lg-10">
                                     <input type="text" name="account_number" id="account_number" 
-                                     class="form-control" value="<?= $bk['account_number'] ?>" disabled>
+                                           class="form-control" value="<?= $bk['account_number'] ?>" disabled>
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
 
 
-                             <div class="form-group">
+                            <div class="form-group">
                                 <label id="referred-label" class="col-lg-2 control-label"> Routing Number</label>
                                 <div class="col-lg-10">
                                     <input type="text" name="routing_number" id="routing_number"  class="form-control" value="<?= $bk['routing_number'] ?>" disabled>
@@ -362,7 +361,7 @@
                                 </div>
                             </div>
 
-                           <div class="form-group">
+                            <div class="form-group">
                                 <label id="referred-label" class="col-lg-2 control-label">Password</label>
                                 <div class="col-lg-10">
                                     <input type="text" name="password" id="password" class="form-control" value="<?= $bk['password'] ?>" disabled>
@@ -416,7 +415,7 @@
 <div id="contact-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="document-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script type="text/javascript">
-    loadBillingDashboard('', '', '', '', '<?= $reference_id.'-company'; ?>');
+    loadBillingDashboard('', '', '', '', '<?= $reference_id . '-company'; ?>');
     get_contact_list('<?= $reference_id; ?>', 'company');
     reload_owner_list('<?= $reference_id; ?>', 'main');
     get_document_list('<?= $reference_id; ?>', 'company');

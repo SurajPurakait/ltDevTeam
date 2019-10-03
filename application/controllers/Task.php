@@ -66,10 +66,9 @@ class Task extends CI_Controller {
         $sort_type = post("sort_type");
         $client_type = post("client_type");
         $client_id = post("client_id");
+        $render_data['page_number'] = post('page_number');
         $render_data["task_list"] = $this->Task_model->get_task_list($request, $status, $priority, $office_id, $department_id, $filter_assign, $filter_data, $sos_value, $sort_criteria, $sort_type, $client_type, $client_id);
-//        print_r($render_data["project_list"]);die;
-        $return["result"] = $this->load->view("task/task_dashboard", $render_data, true);
-        echo json_encode($return);
+        $this->load->view("task/task_dashboard", $render_data);
     }
     public function sort_task_dashboard(){
         $formdata = post();

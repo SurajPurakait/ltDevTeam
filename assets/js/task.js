@@ -1,4 +1,4 @@
-function loadTaskDashboard(status, request, priority, officeID, departmentID, filter_assign, filter_data, sos_value, sort_criteria, sort_type, client_type, client_id, clients) {
+function loadTaskDashboard(status, request, priority, officeID, departmentID, filter_assign, filter_data, sos_value, sort_criteria, sort_type, client_type, client_id, clients, pageNumber = 0) {
 //   alert("hi");return false;
     $.ajax({
         type: "POST",
@@ -14,26 +14,36 @@ function loadTaskDashboard(status, request, priority, officeID, departmentID, fi
             sort_criteria: sort_criteria,
             sort_type: sort_type,
             client_type: client_type,
-            client_id: client_id
+            client_id: client_id,
+            page_number: pageNumber
         },
         url: base_url + 'task/task_dashboard_ajax',
         success: function (task_result) {
-//            console.log("Result: " + action_result); return false;
-            var data = JSON.parse(task_result);
-            $(".status-dropdown").val(status);
-            $(".request-dropdown").val(request);
-            $("#task_dashboard_div").html(data.result);
-            $("[data-toggle=popover]").popover();
-            var filter_result = '';
-            if (filter_result != '') {
-                $("#clear_filter").html(filter_result + ' &nbsp; ');
-                $("#clear_filter").show();
-                $('#btn_clear_filter').show();
-            } else {
-                $("#clear_filter").html('');
-                $("#clear_filter").hide();
-                $('#btn_clear_filter').hide();
+            if (task_result.trim() != '') {
+                if (pageNumber == 1 || pageNumber == 0) {
+                     $("#task_dashboard_div").html(task_result);
+                    //$("a.filter-button span:contains('-')").html(0);
+                } else {
+                    $("#task_dashboard_div").append(task_result);
+                    $('.result-header').not(':first').remove();
+                }
+                if (pageNumber != 0) {
+                    $('.load-more-btn').not(':last').remove();
+                }
+                $(".status-dropdown").val(status);
+                $(".request-dropdown").val(request);
+                $("[data-toggle=popover]").popover();
             }
+            // var filter_result = '';
+            // if (filter_result != '') {
+            //     $("#clear_filter").html(filter_result + ' &nbsp; ');
+            //     $("#clear_filter").show();
+            //     $('#btn_clear_filter').show();
+            // } else {
+            //     $("#clear_filter").html('');
+            //     $("#clear_filter").hide();
+            //     $('#btn_clear_filter').hide();
+            // }
         },
         beforeSend: function () {
             openLoading();

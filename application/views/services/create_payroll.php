@@ -196,6 +196,8 @@
                         <div class="accounts-details">
                             <div id="accounts-list"></div>
                         </div>
+                        <div id="payroll-accounts-details">
+                        </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Bank Name<span class="text-danger">*</span></label>
                             <div class="col-lg-10">

@@ -95,7 +95,7 @@ $office_id = get_office_id($staff_info['office']);
                 <a href="<?= base_url((staff_info()['type'] != 4) ? 'home/dashboard' : 'referral_partner/referral_partners/referral_partner_dashboard'); ?>"><i class="fa fa-home"></i>Home</a>
             </li>
             <?php if ($staff_info['type'] != 4) { ?>
-                <?php if ($staff_info['department'] == '1') { ?>
+                <?php if ($staff_info['type'] == '1') { ?>
                     <!-- Administration -->
                     <li <?= active_menu($main_menu, "administration"); ?> >
                         <a href="javascript:void(0);">
@@ -365,11 +365,11 @@ $office_id = get_office_id($staff_info['office']);
                     <div class="dashboard-icons pull-right">
                         <a href="<?= base_url(); ?>lead_management/home/index/0/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php echo get_new_lead_count(1); ?></a>
                         <a href="<?= base_url(); ?>lead_management/home/index/3/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php echo get_active_lead_count(1); ?></a>
-                        <div class="clearfix"></div>
-                        <a href="<?= base_url(); ?>lead_management/home/index/0/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php echo get_new_lead_count(2); ?></a>
-                        <a href="<?= base_url(); ?>lead_management/home/index/3/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php echo get_active_lead_count(2); ?></a>
+                        <!-- <div class="clearfix"></div> -->
+                        <!-- <a href="<?//= base_url(); ?>lead_management/home/index/0/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php// echo get_new_lead_count(2); ?></a>
+                        <a href="<?//= base_url(); ?>lead_management/home/index/3/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php //echo get_active_lead_count(2); ?></a> -->
                     </div>
-                    <a href="javascript:void(0);" class="four-noti">
+                    <a href="javascript:void(0);"> <!-- class="four-noti" removed -->
                         <i class="fa fa-user-plus"></i>
                         <span class="nav-label">Leads</span>
                         <span class="fa arrow main-cat"></span>
@@ -585,7 +585,9 @@ $office_id = get_office_id($staff_info['office']);
                     </li>
                 <?php } ?>
 
-            <?php } else { ?>
+            <?php } else { 
+                $user_who_referred = user_who_referred(sess('user_id'));
+                ?>
                 <li <?= active_menu($main_menu, "referral_partners"); ?> >
                     <a href="javascript:void(0);"><i class="fa fa-users"></i> <span class="nav-label">Referral Partners</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse" style="height: 0px;">
@@ -593,7 +595,7 @@ $office_id = get_office_id($staff_info['office']);
                             <a href="<?= base_url(); ?>referral_partner/referral_partners/referral_partner_dashboard">Dashboard</a>
                         </li>
                         <li <?= active_menu($menu, "refferred_leads_dashboard"); ?>>
-                            <a href="<?= base_url(); ?>referral_partner/referral_partners/refferred_leads">Refered Leads</a>
+                            <a href="<?= base_url(); ?>referral_partner/referral_partners/add_lead/<?= $user_who_referred['office_manager']; ?>">Refer a Lead</a>
                         </li>
                     </ul>
                 </li>
@@ -602,7 +604,7 @@ $office_id = get_office_id($staff_info['office']);
 
                 <div class="box-profile">
                     <?php
-                    $user_who_referred = user_who_referred(sess('user_id'));
+                    // echo $user_who_referred['office_manager'];
                     $referred_info = staff_info_by_id($user_who_referred['office_manager']);
                     $referred_address_info = staff_address_by_id($user_who_referred['office_manager']);
                     if ($referred_info['photo'] != '') {

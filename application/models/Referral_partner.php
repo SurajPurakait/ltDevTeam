@@ -18,7 +18,7 @@ class Referral_partner extends CI_Model {
             $i++;
         }
         $where = $having = [];
-        $sql = "SELECT lm.id,lm.type_of_contact, lm.type as lead_type, rf.assigned_date,rf.assisned_by_userid, (case when lm.type = '1' then (select name from type_of_contact_prospect where id = lm.type_of_contact) else (select name from type_of_contact_referral where id = lm.type_of_contact) end) as type,concat(lm.last_name, ', ', lm.first_name) as name, (case when lm.status = '0' then 'New' when lm.status = '1' then 'Complete' when lm.status = '2' then 'Inactive' when lm.status = '3' then 'Active' else 'Unknown' end) as status, concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as requested_by,s.id as requested_by_id, lm.submission_date, lm.active_date, lm.inactive_date, lm.complete_date, (select count(ln.id) from lead_notes as ln where ln.lead_id = lm.id) as notes from lead_management as lm inner join staff as s on s.id = lm.staff_requested_by left join referral_partner as rf on rf.partner_id = lm.id";
+        $sql = "SELECT lm.id,lm.type_of_contact,lm.email, lm.type as lead_type, rf.assigned_date,rf.assisned_by_userid, (case when lm.type = '1' then (select name from type_of_contact_prospect where id = lm.type_of_contact) else (select name from type_of_contact_referral where id = lm.type_of_contact) end) as type,concat(lm.last_name, ', ', lm.first_name) as name, (case when lm.status = '0' then 'New' when lm.status = '1' then 'Complete' when lm.status = '2' then 'Inactive' when lm.status = '3' then 'Active' else 'Unknown' end) as status, concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as requested_by,s.id as requested_by_id, lm.submission_date, lm.active_date, lm.inactive_date, lm.complete_date, (select count(ln.id) from lead_notes as ln where ln.lead_id = lm.id) as notes from lead_management as lm inner join staff as s on s.id = lm.staff_requested_by left join referral_partner as rf on rf.partner_id = lm.id";
         $where[] = 'lm.type="2" and lm.status="1"';
         if ($userinfo['type'] == 3) {
             if ($userinfo['role'] == 1) {
@@ -171,50 +171,51 @@ class Referral_partner extends CI_Model {
         $sql = "select * from lead_management where id='" . $id . "'";
         return $this->db->query($sql)->row_array();
     }
-    public function load_referral_partners_dashboard_data($lead_id="") {
+    public function load_referral_partners_dashboard_data($lead_id="",$data = "") {
         $lead_email = $this->db->get_where('lead_management',array('id'=>$lead_id,'type'=>'2'))->row_array()['email'];
         $staff_id = $this->db->get_where('staff',array('user'=>$lead_email))->row_array()['id'];
 
         $this->db->select('rl.*,lm.*');
         $this->db->from('referred_lead rl');
         $this->db->join('lead_management lm', 'lm.id = rl.lead_id');
+        $this->db->group_start();
         if ($lead_id != '') {
             $this->db->where('rl.referred_by',$staff_id);   
-            $this->db->where('rl.referred_to',sess('user_id'));   
         } else {
             $this->db->where('rl.referred_by',sess('user_id'));    
+            $this->db->or_where('rl.referred_to',sess('user_id'));    
         }
-        $this->db->where('lm.referred_status','0');
+        $this->db->group_end();
+        if (!empty($data)) {
+            if ($data['type'] == 1) { // By Me
+                
+                if ($data['status'] == 0) { // New
+                    $this->db->where('lm.status',$data['status']);    
+                } elseif ($data['status'] == 1) { // Completed
+                    $this->db->where('lm.status',$data['status']);
+                } elseif ($data['status'] == 2) { // Inactive
+                    $this->db->where('lm.status',$data['status']);
+                } elseif ($data['status'] == 3) { // Active
+                    $this->db->where('lm.status',$data['status']);
+                }
+                $this->db->where('lm.referred_status','0'); // partner to staff
+            } elseif ($data['type'] == 2) { // To Me
+                
+                if ($data['status'] == 0) { // New
+                    $this->db->where('lm.status',$data['status']);
+                } elseif ($data['status'] == 1) { // Completed
+                    $this->db->where('lm.status',$data['status']);
+                } elseif ($data['status'] == 2) { // Inactive
+                    $this->db->where('lm.status',$data['status']);
+                } elseif ($data['status'] == 3) { // Active
+                    $this->db->where('lm.status',$data['status']);
+                }
+                $this->db->where('lm.referred_status','1'); // staff to partner
+            }
+        }
+        
         return $this->db->get()->result_array();
     }
-    // public function load_referral_partners_dashboard_data($type, $status,$partner_id="") {
-    //     if ($partner_id != '') {
-    //         $this->db->select('staff.id as staff_id');
-    //         $this->db->from('staff');
-    //         $this->db->join('lead_management','staff.user = lead_management.email');
-    //         $this->db->where('lead_management.id',$partner_id);
-    //         $data = $this->db->get()->row_array();
-    //         $userinfo['id'] = $data['staff_id'];
-    //     }else{
-    //         $userinfo = staff_info();    
-    //     }
-    //     $this->db->select('ref.*,lm.*');
-    //     $this->db->from('referral_partner ref');
-    //     $this->db->join('lead_management lm', 'lm.id = ref.partner_id');
-    //     if ($type == '') {
-    //         $this->db->where("(ref.assisned_by_userid='" . $userinfo['id'] . "' OR ref.assigned_to_clientid='" . $userinfo['id'] . "')");
-    //     } elseif ($type == 1) {
-    //         $this->db->where('ref.assisned_by_userid', $userinfo['id']);
-    //     } elseif ($type == 2) {
-    //         $this->db->where('ref.assigned_to_clientid', $userinfo['id']);
-    //     }
-    //     if ($status != '') {
-    //         $this->db->where('lm.status', $status);
-    //     }
-    //     $this->db->where('lm.referred_status','0');
-    //     return $this->db->get()->result_array();
-    //     // return $this->db->last_query();
-    // }
 
     public function load_referred_leads_dashboard_data($status,$lead_id="") {
         $lead_email = $this->db->get_where('lead_management',array('id'=>$lead_id,'type'=>'2'))->row_array()['email'];
@@ -225,35 +226,12 @@ class Referral_partner extends CI_Model {
         $this->db->join('lead_management lm', 'lm.id = rl.lead_id');
         if ($lead_id != '') {
             $this->db->where('rl.referred_to',$staff_id);   
-            $this->db->where('rl.referred_by',sess('user_id'));   
         } else {
             $this->db->where('rl.referred_to',sess('user_id'));    
         }
         $this->db->where('lm.referred_status','1');
         return $this->db->get()->result_array();
     }
-    // old function
-    // public function load_referred_leads_dashboard_data($status,$partner_id="") {
-    //     if ($partner_id != '') {
-    //         $userinfo['id'] = $partner_id;
-    //     }else{
-    //         $userinfo = staff_info();
-    //         $lead_email = $this->db->get_where('staff',array('id'=>$userinfo['id']))->row_array()['user'];
-    //         $lead_id = $this->db->get_where('lead_management',array('email'=>$lead_email,'type'=>'2'))->row_array()['id'];
-    //         $userinfo['id'] = $lead_id;    
-    //     }
-
-    //     $this->db->select('rl.*,lm.*');
-    //     $this->db->from('referred_lead rl');
-    //     $this->db->join('lead_management lm', 'lm.id = rl.lead_id');
-    //     if ($status != '' && $status != 7) {
-    //         $this->db->where('lm.status', $status);
-
-    //     }
-    //     $this->db->where('rl.referred_by',$userinfo['id']);
-    //     $this->db->where('lm.referred_status','1');
-    //     return $this->db->get()->result_array();
-    // }
 
     public function load_referred_leads_count($status) {
         $userinfo = staff_info();
@@ -266,27 +244,9 @@ class Referral_partner extends CI_Model {
         return $this->db->get()->num_rows();
     }
 
-    public function load_partner_count($type, $status) {
-        $userinfo = staff_info();
-        $this->db->select('ref.*,lm.*');
-        $this->db->from('referral_partner ref');
-        $this->db->join('lead_management lm', 'lm.id = ref.partner_id');
-        if ($type == '') {
-            $this->db->where("(ref.assisned_by_userid='" . $userinfo['id'] . "' OR ref.assigned_to_clientid='" . $userinfo['id'] . "')");
-        } elseif ($type == 1) {
-            $this->db->where('ref.assisned_by_userid', $userinfo['id']);
-        } elseif ($type == 2) {
-            $this->db->where('ref.assigned_to_clientid', $userinfo['id']);
-        }
-        if ($status != '' || $status == 0) {
-            $this->db->where('lm.status', $status);
-        }
-        return $this->db->get()->num_rows();
-    }
-
-    public function set_password($data, $pwd,$staffrequestedby) {
+    public function set_password($data, $pwd,$staffrequestedby) { 
         $query = $this->db->query('select * from staff where user="' . $data['email'] . '"')->row_array();
-        if (!empty($query)) {
+        if (!empty($query)) { 
             $this->db->query("update staff set password='" . md5($pwd) . "' where id='" . $query["id"] . "'");
         } else {
             $insert_data = array(
@@ -540,15 +500,9 @@ class Referral_partner extends CI_Model {
             return 1;
         }
     }
-
-    // public function get_lead_list_referred_by_partner($lead_id){
-    //     $this->db->select('lm.*,COUNT(ln.id) as notes_count');
-    //     $this->db->from('lead_management lm');
-    //     $this->db->join('lead_notes ln','lm.id = ln.lead_id');
-
-    //     $this->db->where('lm.id',$lead_id);
-    //     $this->db->where('lm.referred_status','0');
-    //     return $this->db->get()->result_array();
-    // }
+    public function is_staff_check($data) {
+        $email = $data['email'];
+        return $this->db->get_where('staff',array('user'=>$email))->num_rows();
+    }
 
 }

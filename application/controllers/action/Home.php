@@ -340,6 +340,8 @@ class Home extends CI_Controller {
 
     public function request_create_business() {
         $data = post();
+        // echo "<pre>";
+        // print_r($data);exit;
         if ($this->action_model->request_create_business($data)) {
             echo 1;
         } else {

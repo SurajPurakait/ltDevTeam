@@ -204,39 +204,103 @@ Class Lead_management extends CI_Model {
     }
 
     public function get_leads_referred_by_to_him($status = "",$request = "", $filter_data = []) {
-        
+        $staff_info = staff_info();
         $user_id = sess('user_id');
+        
         $this->db->select("lm.*,rl.*");
         $this->db->from('lead_management lm');
         $this->db->join('referred_lead rl', 'rl.lead_id = lm.id');
-        $this->db->group_start();
-        if($request == 'byme') {
-            $this->db->where('rl.referred_by', $user_id);
-            if($status == 0) { //new
-                $this->db->where("lm.status",$status);
-            } elseif ($status == 1) { // completed
-                $this->db->where("lm.status",$status);
-            } elseif ($status == 2) { // inactive
-                $this->db->where("lm.status",$status);
-            } elseif($status == 3) { // active
-                $this->db->where("lm.status",$status);
-            } 
-        } elseif($request == 'tome') {
-            $this->db->where('rl.referred_to', $user_id);
-            if($status == 0) { //new
-                $this->db->where("lm.status",$status);
-            } elseif ($status == 1) { // completed
-                $this->db->where("lm.status",$status);
-            } elseif ($status == 2) { // inactive
-                $this->db->where("lm.status",$status);
-            } elseif($status == 3) { // active
-                $this->db->where("lm.status",$status);
-            }
-        } else {
-            $this->db->where('rl.referred_by', $user_id);
-            $this->db->or_where('rl.referred_to', $user_id);    
+        if($request == 'byother') {
+            $this->db->join('staff s', 's.id = rl.referred_by');
+        } elseif ($request == 'toother') {
+            $this->db->join('staff s', 's.id = rl.referred_to' );
         }
-        $this->db->group_end();
+        
+        if($staff_info['type'] != 1) {
+            $this->db->group_start();
+            if($request == 'byme') {
+                $this->db->where('rl.referred_by', $user_id);
+                if($status == 0) { //new
+                    $this->db->where("lm.status",$status);
+                } elseif ($status == 1) { // completed
+                    $this->db->where("lm.status",$status);
+                } elseif ($status == 2) { // inactive
+                    $this->db->where("lm.status",$status);
+                } elseif($status == 3) { // active
+                    $this->db->where("lm.status",$status);
+                } 
+            } elseif($request == 'tome') {
+                $this->db->where('rl.referred_to', $user_id);
+                if($status == 0) { //new
+                    $this->db->where("lm.status",$status);
+                } elseif ($status == 1) { // completed
+                    $this->db->where("lm.status",$status);
+                } elseif ($status == 2) { // inactive
+                    $this->db->where("lm.status",$status);
+                } elseif($status == 3) { // active
+                    $this->db->where("lm.status",$status);
+                }
+            } else {
+                $this->db->where('rl.referred_by', $user_id);
+                $this->db->or_where('rl.referred_to', $user_id);    
+            }
+            $this->db->group_end();
+        } else {
+            $this->db->group_start();
+            if($request == 'byme') {
+                $this->db->where('rl.referred_by', $user_id);
+                if($status == 0) { //new
+                    $this->db->where("lm.status",$status);
+                } elseif ($status == 1) { // completed
+                    $this->db->where("lm.status",$status);
+                } elseif ($status == 2) { // inactive
+                    $this->db->where("lm.status",$status);
+                } elseif($status == 3) { // active
+                    $this->db->where("lm.status",$status);
+                } 
+            } elseif($request == 'tome') {
+                $this->db->where('rl.referred_to', $user_id);
+                if($status == 0) { //new
+                    $this->db->where("lm.status",$status);
+                } elseif ($status == 1) { // completed
+                    $this->db->where("lm.status",$status);
+                } elseif ($status == 2) { // inactive
+                    $this->db->where("lm.status",$status);
+                } elseif($status == 3) { // active
+                    $this->db->where("lm.status",$status);
+                }
+            } elseif ($request == 'byother') {
+                $this->db->where('rl.referred_by!=', $user_id);
+                $this->db->where('s.type!=', '4');
+
+                if($status == 0) { //new
+                    $this->db->where("lm.status",$status);
+                } elseif ($status == 1) { // completed
+                    $this->db->where("lm.status",$status);
+                } elseif ($status == 2) { // inactive
+                    $this->db->where("lm.status",$status);
+                } elseif($status == 3) { // active
+                    $this->db->where("lm.status",$status);
+                }
+            } elseif ($request == 'toother') {
+                $this->db->where('rl.referred_to!=', $user_id);
+                $this->db->where('s.type!=', '4');
+                                
+                if($status == 0) { //new
+                    $this->db->where("lm.status",$status);
+                } elseif ($status == 1) { // completed
+                    $this->db->where("lm.status",$status);
+                } elseif ($status == 2) { // inactive
+                    $this->db->where("lm.status",$status);
+                } elseif($status == 3) { // active
+                    $this->db->where("lm.status",$status);
+                }
+            } else {
+                $this->db->where("lm.referred_status!=",'2');
+                $this->db->where("lm.type",'1');
+            }
+            $this->db->group_end();
+        }
         // filter
         $filter_where_in = [];
         $between = '';
@@ -310,6 +374,12 @@ Class Lead_management extends CI_Model {
             unset($data["ref_partner_id"]);
         } else {
             $ref_partner_id = '';
+        }
+        
+        if ($data['referred_status'] == '') {
+            $data['referred_status'] = '2';
+        } elseif ($data['referred_status'] == 'partnertolead') {
+            $data['referred_status'] = '0';
         }
 
         if ($data['lead_source'] == 5) {
@@ -453,6 +523,9 @@ Class Lead_management extends CI_Model {
         }
         if ($lead_type != '') {
             $this->db->where(['lm.type' => $lead_type]);
+        }
+         else {
+            $this->db->where(['lm.type' => '1']);
         }
         $filter_where_in = [];
         $between = '';
@@ -1402,7 +1475,12 @@ Class Lead_management extends CI_Model {
         );
 
         if ($id != "") {
-
+            $ar = array(
+        'type' => 1,
+        'lead_source' => 11,
+        'lead_source_detail' => $data['event_type']." - ".$data['event_name']
+         );
+            $this->db->set($ar);
             $id_arr = explode(",", $id);
             $this->db->where_in('id', $id_arr);
             return $this->db->update('lead_management', $values);
@@ -1478,6 +1556,14 @@ Class Lead_management extends CI_Model {
         );
 
         if ($leadid != "") {
+
+               $d = array(
+            'type' => 1,
+            'lead_source' => 11,
+            'lead_source_detail' => $data['event_type']." - ".$data['event_name']
+             );
+
+            $this->db->set($d);
             $id_arr = explode(",", $leadid);
             $this->db->where_in('id', $id_arr);
             return $this->db->update('lead_management', $values);
@@ -1734,6 +1820,19 @@ Class Lead_management extends CI_Model {
         $this->db->where('e.id', $id);
         $result = $this->db->get()->result_array();
         return $result;
+    }
+
+    public function get_partner_count_by_staff($request_type) {
+        if ($request_type == 'byme') {
+            $this->db->where('type',2);
+            $this->db->where('staff_requested_by',sess('user_id'));
+            return $this->db->get('lead_management')->result_array();    
+        } elseif ($request_type == 'byothers') {
+            $this->db->where('type',2);
+            $this->db->where('staff_requested_by!=',sess('user_id'));
+            return $this->db->get('lead_management')->result_array();
+        }
+        
     }
 
 }

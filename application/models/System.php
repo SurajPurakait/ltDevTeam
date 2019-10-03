@@ -12,6 +12,7 @@ Class System extends CI_Model {
         $this->load->model('action_model');
         $this->load->model('billing_model');
         $this->load->model('administration');
+        $this->load->model('individual');
         $this->tracking_status_array['order'] = [
             0 => 'Completed',
             1 => 'Started',
@@ -34,7 +35,6 @@ Class System extends CI_Model {
     }
 
     function authentication($user_post) {
-        //$this->load->model('service');
         $user_post['is_delete'] = 'n';
         $user_post['status'] = '1';
         $this->db->select('id as user_id, security_level');
@@ -46,11 +46,6 @@ Class System extends CI_Model {
             $result['user_office_id'] = $this->db->get_where("office_staff", ['staff_id' => $result['user_id']])->row_array()['office_id'];
             $result['login'] = 'ok';
             $result['user_type'] = $this->db->get_where("staff", ['id' => $result['user_id']])->row_array()['type'];
-            // foreach ($result as $index => $value) {
-            //     $this->session->set_userdata($index, $value);
-            // }
-//            $this->updateLateStatusSystem();
-            //$this->log('login', 'staff', $result['user_id']);
             return $result;
         } else {
             return false;
@@ -68,6 +63,7 @@ Class System extends CI_Model {
         $result['user_office_id'] = $this->db->get_where("office_staff", ['staff_id' => $result['user_id']])->row_array()['office_id'];
         $result['login'] = 'ok';
         $result['user_type'] = $this->db->get_where("staff", ['id' => $result['user_id']])->row_array()['type'];
+        $result['staff_info'] = $this->get_staff_info($id);
         foreach ($result as $index => $value) {
             $this->session->set_userdata($index, $value);
         }
@@ -152,12 +148,27 @@ Class System extends CI_Model {
             }
             $result['office'] = implode(',', $office_list);
 
+            if (!empty($office_list)) {
+                $this->db->where_in('office_id', $office_list);
+                $office_staff = $this->db->get('office_staff')->result_array();
+                $office_staff = array_column($office_staff, 'staff_id');
+                $result['office_staff'] = implode(',', $office_staff);
+            }
+
+
             $department_staff = $this->db->get_where('department_staff', ['staff_id' => $staff_id])->result_array();
             $department_list = [];
             foreach ($department_staff as $ds) {
                 $department_list[] = $ds['department_id'];
             }
             $result['department'] = implode(',', $department_list);
+
+            if (!empty($department_list)) {
+                $this->db->where_in('department_id', $department_list);
+                $department_staff = $this->db->get('department_staff')->result_array();
+                $department_staff = array_column($department_staff, 'staff_id');
+                $result['department_staff'] = implode(',', $department_staff);
+            }
             return $result;
         } else {
             return [];
@@ -507,7 +518,7 @@ Class System extends CI_Model {
 
 //        echo $query;die;
         $res = $this->db->query($query)->result_array();
-        
+
         $returnarray = array_map("unserialize", array_unique(array_map("serialize", $res)));
         // echo '<pre>';
         // print_r($input);    
@@ -520,7 +531,7 @@ Class System extends CI_Model {
     }
 
     public function insert_sos($data) {
-     //  print_r($data);die;
+        //  print_r($data);die;
         $all_staffs = explode(",", $data['staffs']);
         if ($data['serviceid'] == '') {
             $data['serviceid'] = '0';
@@ -898,10 +909,10 @@ Class System extends CI_Model {
             $notification_text = 'ORDER(#' . $order_info['order_serial_id'] . ')';
         }
         if ($reference == 'action') {
-            if ($action != 'insert' && $action != 'sos' && $action != 'edit' && $action != 'note' && $action != 'tracking' && $action != 'assign'){
+            if ($action != 'insert' && $action != 'sos' && $action != 'edit' && $action != 'note' && $action != 'tracking' && $action != 'assign') {
                 $action_staff = $this->action_model->get_action_staff_by_action_id($reference_id);
                 $action_info = $this->action_model->get_action_by_action_id($reference_id);
-            }else{
+            } else {
                 $user_id_array = array_merge($user_id_array, [sess('user_id')]);
                 $action_info = $this->action_model->get_action_by_action_id($reference_id);
             }
@@ -1348,6 +1359,19 @@ Class System extends CI_Model {
     public function task_created_by_staff($task_id) {
         $result = $this->db->get_where('project_task', ['id' => $task_id])->row_array();
         return $result['added_by_user'];
+    }
+
+    public function generete_practice_id($reference_id, $reference) {
+        if ($reference == 'company') {
+            $company_info = $this->company_model->get_company_by_id($reference_id);
+            $client_name = $company_info['name'];
+        } else {
+            $individual_info = $this->individual->get_individual_by_id($reference_id);
+            $client_name = $individual_info['last_name'] . $individual_info['first_name'];
+        }
+        $company_name = str_replace(' ', '',$client_name);
+        $c = preg_replace("/[^a-zA-Z0-9]/", "",$company_name);
+        return strtoupper(substr($c, 0, 11));
     }
 
 }

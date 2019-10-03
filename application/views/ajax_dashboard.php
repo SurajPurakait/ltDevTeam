@@ -296,32 +296,47 @@ if ($section == 'lead') {
     <?php
 }
 if ($section == 'partner') {
-?>
+?>  
+    <p class="p-10 text-success p-b-0" data-toggle="collapse" data-target="#referralPartner"><strong>Referral Partners</strong></p>
+    <div class="table-responsive collapse in" id="referralPartner">
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <td class="v-align-middle">Referred By Me</td>
+                    <td class="text-center v-align-middle p-t-2 p-b-2"><a href="<?= base_url('referral_partner/referral_partners/partners/1'); ?>" class="label bg-blue-new p-l-10 p-r-10 p-t-5 p-b-5" ><?= $partner_list['referred_by_me']; ?></a></td> </tr>
+                <tr>
+                    <td class="v-align-middle">Referred By Others</td>
+                    <td class="text-center v-align-middle p-t-2 p-b-2"><a href="<?= base_url('referral_partner/referral_partners/partners/2'); ?>" class="label bg-yellow p-l-10 p-r-10 p-t-5 p-b-5" ><?= $partner_list['referred_by_other']; ?></a></td>
+                </tr>
+            </tbody>
+        </table>        
+    </div>
+    <p class="p-10 text-success p-b-0" data-toggle="collapse" data-target="#leadPartner"><strong>Partners' Lead</strong></p>
     <div class="table-responsive collapse in" id="leadPartner">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th width="20%" class="v-align-middle"></th>
-                    <th class="text-center v-align-middle" width="15%">Total</th>
-                    <th class="text-center v-align-middle" width="15%">New</th>
-                    <th class="text-center v-align-middle" width="15%">Active</th>
-                    <th class="text-center v-align-middle" width="15%">Inactive</th>
-                    <th width="20%" class="text-center v-align-middle">&nbsp;</th>
+                    <th width="25%" class="v-align-middle"></th>
+                    <th class="text-center v-align-middle" width="20%">New</th>
+                    <th class="text-center v-align-middle" width="20%">Active</th>
+                    <th class="text-center v-align-middle" width="20%">Inactive</th>
+                    <th width="15%" class="text-center v-align-middle">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
 
-                <?php foreach ($partner as $partner_index => $partner_array) { ?>
+                <?php foreach ($partner as $partner_index => $partner_array) { 
+                    $partner_index_param = str_replace('_', '', $partner_index);
+                    ?>
                     <tr>
                         <td class="v-align-middle"><?= ucwords(str_replace('_', ' ', $partner_index)); ?></td>
-                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-dark-grey p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('referral_partner/referral_partners/leads_ref_by_refpartner_dashboard/4/' . (($partner_index == 'referred_to_me') ? '1' : '2') . (($lead_type_id != '') ? '/' . $lead_type_id : '')); ?>" title="Total"><?= $partner_array['total']; ?></a></td>
-                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-blue-new p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('referral_partner/referral_partners/leads_ref_by_refpartner_dashboard/0/' . (($partner_index == 'referred_to_me') ? '1' : '2') . (($lead_type_id != '') ? '/' . $lead_type_id : '')); ?>" title="New"><?= $partner_array['new']; ?></a></td>
-                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-yellow p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('referral_partner/referral_partners/leads_ref_by_refpartner_dashboard/3/' . (($partner_index == 'referred_to_me') ? '1' : '2') . (($lead_type_id != '') ? '/' . $lead_type_id : '')); ?>" title="Active"><?= $partner_array['active']; ?></a></td>
-                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-light-grey p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('referral_partner/referral_partners/leads_ref_by_refpartner_dashboard/2/' . (($partner_index == 'referred_to_me') ? '1' : '2') . (($lead_type_id != '') ? '/' . $lead_type_id : '')); ?>" title="Inactive"><?= $partner_array['inactive']; ?></a></td>
+                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-blue-new p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('partners/index/0/' . (($partner_index_param != '') ? $partner_index_param : '0')); ?>" title="New"><?= $partner_array['new']; ?></a></td>
+                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-yellow p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('partners/index/3/' . (($partner_index_param != '') ? $partner_index_param : '0')); ?>" title="Active"><?= $partner_array['active']; ?></a></td>
+                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-light-grey p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('partners/index/2/' . (($partner_index_param != '') ? $partner_index_param : '0')); ?>" title="Inactive"><?= $partner_array['inactive']; ?></a></td>
                         <td class="text-center v-align p-t-2 p-b-2">
-                            <div class="lead-campaigns-donut" data-size="50" id="lead_donut_<?= $partner_index; ?>" data-json="lead_data_<?= $partner_index; ?>"></div>
+                            <div class="partner-campaigns-donut" data-size="50" id="lead_donut_<?= $partner_index; ?>" data-json="partner_data_<?= $partner_index; ?>"></div>
                             <script>
-                                var lead_data_<?= $partner_index; ?> = [{'section_label': 'Inactive', 'value': <?= $partner_array['inactive']; ?>, 'color': '#d2d2d280'}, {'section_label': 'Active', 'value': <?= $partner_array['active']; ?>, 'color': '#FFB046'}, {'section_label': 'New', 'value': <?= $partner_array['new']; ?>, 'color': '#06a0d6'}];
+                                var partner_data_<?= $partner_index; ?> = [{'section_label': 'Inactive', 'value': <?= $partner_array['inactive']; ?>, 'color': '#d2d2d280'}, {'section_label': 'Active', 'value': <?= $partner_array['active']; ?>, 'color': '#FFB046'}, {'section_label': 'New', 'value': <?= $partner_array['new']; ?>, 'color': '#06a0d6'}];
                             </script>
                         </td>
                     </tr>
@@ -332,7 +347,7 @@ if ($section == 'partner') {
         </table>
     </div>
     <script type="text/javascript">
-        // pieChart('lead-campaigns-donut');
+        pieChart('partner-campaigns-donut');
     </script>    
 <?php    
 }

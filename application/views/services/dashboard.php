@@ -116,58 +116,44 @@ if ($status == '') {
                                     <tbody>
                                         <?php if ($stafftype == 1 || $stafftype == 2 || $stafftype == 3) { ?>
                                             <tr>
-                                                <th>By me</th>
+                                                <th>By ME</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byme-2">
-                                                        <span class="label label-warning">
-                                                            <?= count_services('2', 'byme'); ?>
-                                                        </span>
+                                                        <span class="label label-warning">-</span>
                                                     </a></td>
                                                 <td class="text-center">                                                    
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byme-1">
-                                                        <span class="label label-warning">
-                                                            <?= count_services('1', 'byme'); ?>
-                                                        </span>
+                                                        <span class="label label-warning">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byme-3">
-                                                        <span class="label label-warning">
-                                                            <?= count_services('3', 'byme'); ?>
-                                                        </span>
+                                                        <span class="label label-warning">-</span>
                                                     </a>
                                                 </td>
-                                                <?php // if($stafftype != 1) {?>
                                                 <td class="text-center">
                                                     <a class="filter-button" onclick="sos_filter('order', 'byme');" title="By Me"><span class="label label-success label-byme" id="sos-byme"><?= sos_dashboard_count('order', 'byme'); ?></span></a>
                                                 </td>
-                                                <?php // } ?>
                                             </tr>
                                             <?php
                                         }
                                         if ($stafftype == 1 || $stafftype == 2) {
                                             ?>
                                             <tr>
-                                                <th>To me</th>
+                                                <th>To ME</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-tome-2">
-                                                        <span class="label label-warning">
-                                                            <?= count_services('2', 'tome'); ?>
-                                                        </span>
+                                                        <span class="label label-warning">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-tome-1">
-                                                        <span class="label label-warning">
-                                                            <?= count_services('1', 'tome'); ?>
-                                                        </span>
+                                                        <span class="label label-warning">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-tome-3">
-                                                        <span class="label label-warning">
-                                                            <?= count_services('3', 'tome'); ?>
-                                                        </span>
+                                                        <span class="label label-warning">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
@@ -182,23 +168,17 @@ if ($status == '') {
                                                 <th>Others</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byothers-2">
-                                                        <span class="label label-warning">
-                                                            <?= count_services('2', 'byothers'); ?>
-                                                        </span>
+                                                        <span class="label label-warning">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byothers-1">
-                                                        <span class="label label-warning">
-                                                            <?= count_services('1', 'byothers'); ?>
-                                                        </span>
+                                                        <span class="label label-warning">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byothers-3">
-                                                        <span class="label label-warning">
-                                                            <?= count_services('3', 'byothers'); ?>
-                                                        </span>
+                                                        <span class="label label-warning">-</span>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -208,7 +188,7 @@ if ($status == '') {
                             </div>
                             <div class="row">
                                 <div class="col-xs-6 col-sm-4">
-                                    <a class="btn notification-btn filter-button p-l-0" id="filter-unassigned-u" title="By Me">Unassigned <span class="label label-success label-byme"><?= count_services('u', 'unassigned'); ?></span></a>
+                                    <a class="btn notification-btn filter-button p-l-0" id="filter-unassigned-u" title="By Me">Unassigned <span class="label label-success label-byme">-</span></a>
                                 </div>
                                 <div class="col-xs-6 col-sm-4">
                                     <a class="btn notification-btn filter-button p-l-0" id="service-notifcation-toggle" value='forme' onclick="openServiceNotificationModal('');" href="javascript:void(0);" title="Service Notifications">Notifications <span class="label label-danger notification_count"><?= get_service_notifications_count('forme'); ?></span></a>
@@ -233,7 +213,7 @@ if ($status == '') {
                             </div>
                         </div>
                     </div>
-                    <div class="hr-line-dashed"></div>
+                    <div class="hr-line-dashed"></div>                    
                     <div class="ajaxdiv"></div>
                 </div>
             </div>
@@ -425,18 +405,10 @@ if ($status == '') {
     </div>
 </div>
 <script type="text/javascript">
+    loadServiceDashboard('<?= $status == '' ? 4 : ''; ?>', '<?= $category_id ?>', 'on_load', '<?= $office_id; ?>', 1);
     var content = $(".filter-div").html();
     var variable_dd_array = [];
     var element_array = [];
-<?php if ($status != '' && $category_id == '') { ?>
-        loadServiceDashboard('<?= $status; ?>', '', '', '<?= $office_id; ?>');
-<?php } elseif ($status != '' && $category_id != '') { ?>
-        loadServiceDashboard('<?= $status; ?>', '<?= $category_id; ?>', '', '<?= $office_id; ?>');
-<?php } elseif ($status == '' && $category_id == '') { ?>
-        loadServiceDashboard('4', '', '', '<?= $office_id; ?>');
-<?php } else { ?>
-        loadServiceDashboard('4', '', '', '<?= $office_id; ?>');
-<?php } ?>
     function show_notes_outer(reference, reference_id, new_staffs, order_id) {
         var url = '<?= base_url(); ?>services/home/getNotesContent';
         var data = {

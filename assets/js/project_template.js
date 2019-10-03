@@ -1341,7 +1341,7 @@ function projectFilter() {
         }
     });
 }
-function loadProjectDashboard(status, request, priority, officeID, departmentID, filter_assign, filter_data, sos_value, sort_criteria, sort_type, client_type, client_id, clients) {
+function loadProjectDashboard(status, request, priority, officeID, departmentID, filter_assign, filter_data, sos_value, sort_criteria, sort_type, client_type, client_id, clients, pageNumber = 0) {
    
 //    if (request != '') {
 //        activeShortColumn(request, short_column);
@@ -1362,47 +1362,46 @@ function loadProjectDashboard(status, request, priority, officeID, departmentID,
             sort_criteria: sort_criteria,
             sort_type: sort_type,
             client_type: client_type,
-            client_id: client_id
+            client_id: client_id,
+            page_number: pageNumber
         },
         url: base_url + 'project/dashboard_ajax',
-        success: function (action_result) {
-//            console.log("Result: " + action_result); return false;
-            var data = JSON.parse(action_result);
-//            if (short_column != '') {
-//                $(".short-value-dropdown").html(data.column_value).show();
-//            } else {
-//                $(".short-value-dropdown").hide();
-//            }
-            
-            $(".status-dropdown").val(status);
-            $(".request-dropdown").val(request);
-            $("#action_dashboard_div").html(data.result);
-            $("[data-toggle=popover]").popover();
-            var filter_result = '';
-//            if (request == 'byme') {
-//                filter_result = 'By Me';
-//            } else if (request == 'tome') {
-//                filter_result = 'To Me';
-//            } else if (request == 'byother') {
-//                filter_result = 'By Other';
-//            } else if (request == 'mytask') {
-//                filter_result = 'My Task';
-//            }
-            if (filter_result != '') {
-//                var status_arr = ['New', 'Started', 'Completed', 'Not Completed', 'All'];
-//                if (status != '') {
-//                    filter_result += ' - ' + status_arr[parseInt(status)];
-//                } else if (status == '0') {
-//                    filter_result += ' - ' + status_arr[0];
-//                }
-                $("#clear_filter").html(filter_result + ' &nbsp; ');
-                $("#clear_filter").show();
-                $('#btn_clear_filter').show();
-            } else {
-                $("#clear_filter").html('');
-                $("#clear_filter").hide();
-                $('#btn_clear_filter').hide();
+        success: function (project_result) {
+            //console.log(project_result); return false;
+      
+            if (project_result.trim() != '') {
+                if (pageNumber == 1 || pageNumber == 0) {
+                     $("#action_dashboard_div").html(project_result);
+                    //$("a.filter-button span:contains('-')").html(0);
+                } else {
+                    $("#action_dashboard_div").append(project_result);
+                    $('.result-header').not(':first').remove();
+                }
+                if (pageNumber != 0) {
+                    $('.load-more-btn').not(':last').remove();
+                }
+                $(".status-dropdown").val(status);
+                $(".request-dropdown").val(request);
+                $("[data-toggle=popover]").popover();
             }
+
+             var filter_result = '';
+
+             if (filter_result != '') {
+                 $("#clear_filter").html(filter_result + ' &nbsp; ');
+                 $("#clear_filter").show();
+                 $('#btn_clear_filter').show();
+             } else {
+                 $("#clear_filter").html('');
+                 $("#clear_filter").hide();
+                 $('#btn_clear_filter').hide();
+                 
+                 $(".variable-dropdown").val('');
+                $(".condition-dropdown").val('');
+                $(".criteria-dropdown").val('');
+                $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>'); 
+                $(".criteria-dropdown").trigger("chosen:updated");
+             }
         },
         beforeSend: function () {
             openLoading();
@@ -1524,4 +1523,22 @@ function delete_project(project_id,project_template_id) {
 }
 function taskDashboard(){
     goURL(base_url + 'task');
+}
+
+function load_project_tasks(id,created_at,dueDate){
+    if (!$('#collapse' + id).hasClass('in')) {
+        $('#collapse' + id).html('<div class="text-center"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>');
+        
+        $.ajax({
+            type: "POST",
+            url: base_url + 'project/load_project_tasks',
+            dataType: "html",
+            data: {id: id, created_at: created_at, dueDate: dueDate},
+            success: function (result) {
+                if(result.trim()!=''){
+                    $("#collapse"+id).html(result.trim());
+                }
+            }
+        });
+    }
 }

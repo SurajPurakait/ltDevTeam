@@ -253,7 +253,7 @@ function request_create_new_florida_pa() {
             //console.log("Result: " + result);
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
-                 goURL(base_url + 'services/home/view/' + result.trim());
+                goURL(base_url + 'services/home/view/' + result.trim());
             } else {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
             }
@@ -447,7 +447,7 @@ function get_all_contacts(ref_id) {
     });
 }
 
-function loadServiceDashboard(status, categoryID, requestType, officeID) {
+function loadServiceDashboard(status, categoryID, requestType, officeID, pageNumber = 0) {
     var requestBy = $('.staff-dropdown option:selected').val();
     $.ajax({
         type: 'POST',
@@ -457,13 +457,23 @@ function loadServiceDashboard(status, categoryID, requestType, officeID) {
             request_type: requestType,
             status: status,
             request_by: requestBy,
-            office_id: officeID
+            office_id: officeID,
+            page_number: pageNumber
         },
         success: function (result) {
             //alert(result);
             //console.log(result); return false;
             if (result.trim() != '') {
-                $(".ajaxdiv").html(result);
+                if (pageNumber == 1 || pageNumber == 0) {
+                    $(".ajaxdiv").html(result);
+                    $("a.filter-button span:contains('-')").html(0);
+                } else {
+                    $(".ajaxdiv").append(result);
+                    $('.result-header').not(':first').remove();
+                }
+                if (pageNumber != 0) {
+                    $('.load-more-btn').not(':last').remove();
+                }
             }
         },
         beforeSend: function () {
@@ -1996,7 +2006,9 @@ function fetchExistingClientData(reference_id, new_reference_id, reference, serv
         get_state_of_incorporation_value(reference_id);
         get_company_type(reference_id);
         $('.disabled_field').prop('disabled', true);
-        //get_state_county_val(reference_id)  
+        //get_state_county_val(reference_id)
+        payroll_account_details(reference_id);
+        $('#exist_client_id').val(reference_id);
     } else {
         $("#contact-list").html(blank_contact_list());
         $("#owners-list").html(blank_owner_list());
@@ -2648,18 +2660,18 @@ var add_service_notes = () => {
                         $("#notecount-" + orderid).find('b').html(notecount);
                     } else {
                         var prevnotecount = $("#collapse" + orderid).find("#orderservice-" + serviceid).attr('count');
-                       // alert(prevnotecount);return false;
+                        // alert(prevnotecount);return false;
                         var notecount = parseInt(prevnotecount) + parseInt(result);
                         $("#collapse" + orderid).find("#orderservice-" + serviceid).attr('count', notecount);
                         $("#collapse" + orderid).find("#orderservice-" + serviceid).find('b').html(notecount);
-                        
+
                     }
                 }
                 $("#notecount-" + orderid).removeClass('label label-warning').addClass('label label-danger');
                 document.getElementById("modal_note_form").reset();
                 $(".removenoteselector").trigger('click');
                 $('#show_notes').modal('hide');
-               
+
             });
         },
         beforeSend: function () {
@@ -3136,4 +3148,59 @@ var saveRelatedService = function () {
             closeLoading();
         }
     });
+}
+
+var serviceListAjax = function (orderID, allStaffs) {
+    if (!$('#collapse' + orderID).hasClass('in')) {
+        $('#collapse' + orderID).html('<div class="text-center"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>');
+        $.ajax({
+            type: "POST",
+            data: {
+                order_id: orderID,
+                all_staffs: allStaffs
+            },
+            url: base_url + 'services/home/service_list_ajax',
+            dataType: "html",
+            success: function (result) {
+                if (result != 0) {
+                    $('#collapse' + orderID).html(result);
+                } else {
+                    swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+                }
+            }
+        });
+    }
+}
+function payroll_account_details(reference_id){
+    $.ajax({
+        type: "POST",
+        data: {
+            reference_id: reference_id
+        },
+        url: base_url + 'services/home/get_payroll_account_list',
+        dataType: "html",
+        success: function (result) {
+//            alert(result);return false;
+            if(result){
+                $("#payroll-accounts-details").html(result);
+                $("#payroll-accounts-details").show();
+            }else{
+                $("#payroll-accounts-details").hide();
+                $("#bank_name").val('');
+                $("#bank_account").val('');
+                $("#bank_routing").val('');
+            }
+        }
+    });
+}
+function set_exist_account_details(bank_name,bank_number,route_number){
+    if(bank_name!='' && bank_number!='' && route_number!=''){
+        $("#bank_name").val(bank_name);
+        $("#bank_account").val(bank_number);
+        $("#bank_routing").val(route_number);
+    }else{
+        $("#bank_name").val('');
+        $("#bank_account").val('');
+        $("#bank_routing").val('');
+    }
 }

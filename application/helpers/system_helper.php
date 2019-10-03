@@ -64,7 +64,7 @@ if (!function_exists('payeezy_payment')) {
                 'type' => strval(htmlspecialchars(stripslashes(trim($card_type)))),
                 'cardholder_name' => strval(htmlspecialchars(stripslashes(trim($card_holder_name)))),
                 'card_number' => strval(htmlspecialchars(stripslashes(trim($card_number)))),
-                'exp_date' => strval(htmlspecialchars(stripslashes(trim($card_expiry)))),   #mmdd
+                'exp_date' => strval(htmlspecialchars(stripslashes(trim($card_expiry)))), #mmdd
                 'cvv' => strval(htmlspecialchars(stripslashes(trim($card_cvv)))),
             ]
         ];
@@ -138,6 +138,7 @@ if (!function_exists('get_user_logo')) {
 
     function get_user_logo($id) {
         $ci = &get_instance();
+        $ci->load->model('system');
         return $ci->system->get_user_logo($id);
     }
 
@@ -146,6 +147,7 @@ if (!function_exists('get_office_id')) {
 
     function get_office_id($id) {
         $ci = &get_instance();
+        $ci->load->model('system');
         return $ci->system->get_office_id($id);
     }
 
@@ -626,9 +628,7 @@ if (!function_exists('get_corp_tax_return_from_bookkeeping')) {
 if (!function_exists('staff_info')) {
 
     function staff_info() {
-        $ci = &get_instance();
-        $ci->load->model('system');
-        return $ci->system->get_staff_info(sess('user_id'));
+        return $_SESSION['staff_info'];
     }
 
 }
@@ -1744,7 +1744,11 @@ if (!function_exists('load_partner_count')) {
     function load_partner_count($by, $status) {
         $ci = &get_instance();
         $ci->load->model('Referral_partner');
-        return $ci->Referral_partner->load_partner_count($by, $status);
+        $arr_val = array(
+            'type' => $by,
+            'status' => $status
+        );
+        return count($ci->Referral_partner->load_referral_partners_dashboard_data('', $arr_val));
     }
 
 }
@@ -2718,7 +2722,7 @@ if (!function_exists('notes_read_status')) {
 }
 
 
-if (!function_exists(' project_notes_read_status')) {
+if (!function_exists('project_notes_read_status')) {
 
     function project_notes_read_status($id) {
         $ci = &get_instance();
@@ -2825,10 +2829,10 @@ if (!function_exists('get_assigned_office_staff_project_template')) {
 }
 if (!function_exists('get_assigned_office_staff_project_main')) {
 
-    function get_assigned_office_staff_project_main($project_id) {
+    function get_assigned_office_staff_project_main($project_id, $client_id) {
         $ci = &get_instance();
         $ci->load->model('Project_Template_model');
-        return $ci->Project_Template_model->get_assigned_office_staff_project_main($project_id);
+        return $ci->Project_Template_model->get_assigned_office_staff_project_main($project_id, $client_id);
     }
 
 }
@@ -2963,12 +2967,12 @@ if (!function_exists('get_p_m_ca_ofc_name')) {
 }
 
 
-if (!function_exists('get_individual_name_by_reference_id')) {
+if (!function_exists('get_individual_by_id')) {
 
-    function get_individual_name_by_reference_id($reference_id) {
+    function get_individual_by_id($individual_id) {
         $ci = &get_instance();
         $ci->load->model('individual');
-        return $ci->individual->get_individual_name_by_reference_id($reference_id);
+        return $ci->individual->get_individual_by_id($individual_id);
     }
 
 }
@@ -3170,6 +3174,16 @@ if (!function_exists('get_lead_list_to_partner')) {
     }
 
 }
+if (!function_exists('get_lead_list_by_partner')) {
+
+    function get_lead_list_by_partner($lead_id) {
+        $ci = &get_instance();
+        $ci->load->model('Referral_partner');
+        return $ci->referral_partner->load_referred_leads_dashboard_data('', $lead_id);
+    }
+
+}
+
 if (!function_exists('get_partner_to_staff_count')) {
 
     function get_partner_to_staff_count($lead_id) {
@@ -3219,9 +3233,22 @@ if (!function_exists('get_project_officeID_by_project_id')) {
 
 }
 if (!function_exists('partnerList')) {
-    function partnerList($status,$request) {
+
+    function partnerList($status, $request) {
         $ci = &get_instance();
         $ci->load->model('lead_management');
-        return count($ci->lead_management->get_leads_referred_by_to_him($status,$request));
+        return count($ci->lead_management->get_leads_referred_by_to_him($status, $request));
     }
+
 }
+
+if (!function_exists('get_partner_count')) {
+
+    function get_partner_count($request_type) {
+        $ci = &get_instance();
+        $ci->load->model('lead_management');
+        return count($ci->referral_partner->getReferralPartnerData($request_type));
+    }
+
+}
+

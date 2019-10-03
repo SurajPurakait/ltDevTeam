@@ -415,6 +415,7 @@ function show_document_modal(modal_type, reference, reference_id, id) {
 
 function account_modal(modal_type, id, section) {
     var reference_id = $("#reference_id").val();
+    var exist_client_id=$("#exist_client_id").val();
     if ($("#editval").val() == '') {
         reference_id = $("#new_reference_id").val();
     }
@@ -426,15 +427,47 @@ function account_modal(modal_type, id, section) {
             id: id,
             reference_id: reference_id,
             order_id: $("#editval").val(),
-            section: section
+            section: section,
+            client_id:exist_client_id
         },
         success: function (result) {
-            $('#accounts-form').html(result).modal({
-                backdrop: 'static',
-                keyboard: false
-            });
+            if(result){
+                $('#accounts-form').html(result).modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $("#bookkeeping_account_list").show();
+            }else{
+                $("#bookkeeping_account_list").hide();
+                $("#acc_type").val('');
+                $("#bank_name").val('');
+                $("#acc_no").val('');
+                $("#routing_no").val('');
+                $("#website").val('');
+                $("#user_id").val('');
+                $("#password").val('');
+            }
         }
     });
+}
+function set_exist_bookkeeping_value(account_type,bank_name,account_no,routing_no,bank_url,user,password){
+    if(bank_name!='' && account_no!=''){
+        $("#acc_type").val(account_type);
+        $("#bank_name").val(bank_name);
+        $("#acc_no").val(account_no);
+        $("#routing_no").val(routing_no);
+        $("#website").val(bank_url)
+        $("#user_id").val(user);
+        $("#password").val(password);
+    }else{
+        $("#acc_type").val('');
+        $("#bank_name").val('');
+        $("#acc_no").val('');
+        $("#routing_no").val('');
+        $("#website").val('');
+        $("#user_id").val('');
+        $("#password").val('');
+    }
 }
 
 function open_owner_modal(modal_type, service_id, reference_id, reference, id) {
@@ -901,7 +934,7 @@ function clear_sos_notifications(sosids, reference, reference_id, service_id = '
         confirmButtonText: "Yes, clear it!",
         cancelButtonText: "No, cancel plz!",
         closeOnConfirm: true,
-        closeOnCancel: false
+        closeOnCancel: true
     },
     function (isConfirm) {
         if (isConfirm) {
@@ -944,8 +977,6 @@ function clear_sos_notifications(sosids, reference, reference_id, service_id = '
                     closeLoading();
                 }
             });
-        } else {
-            swal("Cancelled", "Your imaginary file is safe :)", "error");
         }
     });    
 }
@@ -1264,7 +1295,7 @@ function clearActionNotificationList(userid) {
         confirmButtonText: "Yes, clear it!",
         cancelButtonText: "No, cancel plz!",
         closeOnConfirm: false,
-        closeOnCancel: false
+        closeOnCancel: true
     },
     function (isConfirm) {
         if (isConfirm) {
@@ -1289,8 +1320,6 @@ function clearActionNotificationList(userid) {
                     closeLoading();
                 }
             });
-        } else {
-            swal("Cancelled", "Your imaginary file is safe :)", "error");
         }
     });
 }
@@ -1304,7 +1333,7 @@ function clearServiceNotificationList(userid) {
         confirmButtonText: "Yes, clear it!",
         cancelButtonText: "No, cancel plz!",
         closeOnConfirm: false,
-        closeOnCancel: false
+        closeOnCancel: true
     },
     function (isConfirm) {
         if (isConfirm) {
@@ -1329,8 +1358,6 @@ function clearServiceNotificationList(userid) {
                     closeLoading();
                 }
             });
-        } else {
-            swal("Cancelled", "Your imaginary file is safe :)", "error");
         }
     });
 

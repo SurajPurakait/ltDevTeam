@@ -117,7 +117,6 @@ class Company_model extends CI_Model {
             } else {
                 return false;
             }
-
         } else {
             $reference_id = $data['id'];
             $this->db->where(['id' => $reference_id]);
@@ -129,8 +128,6 @@ class Company_model extends CI_Model {
                 return false;
             }
         }
-
-
     }
 
     public function make_company_data($data) {
@@ -327,7 +324,7 @@ class Company_model extends CI_Model {
             $this->system->save_general_notification('order', $order_id, 'insert');
             //end
 
-            if($data['type_of_client'] == 1){
+            if ($data['type_of_client'] == 1) {
                 //insert action on invoice
                 $staff_info = staff_info();
                 $this->db->where_in('department_id', '6');
@@ -343,7 +340,7 @@ class Company_model extends CI_Model {
                 $action_data['staff'] = $department_staff;
                 $action_data['client_id'] = '';
                 $action_data['subject'] = 'New Client has been created';
-                $action_data['message'] = $staff_info['full_name'].' has added a new client on order #'.$order_id;
+                $action_data['message'] = $staff_info['full_name'] . ' has added a new client on order #' . $order_id;
                 $action_data['action_notes'] = array();
                 $action_data['due_date'] = '';
 
@@ -448,6 +445,7 @@ class Company_model extends CI_Model {
 
             $data['internal_data']['reference_id'] = $reference_id;
             $data['internal_data']['reference'] = "company";
+            $data['internal_data']['practice_id'] = $data['internal_data']['practice_id'];
             // Save company internal data
             if (!$this->internal_model->save_internal_data($data['internal_data'])) {
                 return false;
@@ -486,7 +484,6 @@ class Company_model extends CI_Model {
 //            $this->action_model->insert_client_action($data);
             $this->system->save_general_notification('order', $order_id, 'insert');
             //end
-
             //insert action on invoice
             $staff_info = staff_info();
             $this->db->where_in('department_id', '6');
@@ -501,7 +498,7 @@ class Company_model extends CI_Model {
             $action_data['staff'] = $department_staff;
             $action_data['client_id'] = '';
             $action_data['subject'] = 'New Client has been created';
-            $action_data['message'] = $staff_info['full_name'].' has added a new client on order #'.$order_id;
+            $action_data['message'] = $staff_info['full_name'] . ' has added a new client on order #' . $order_id;
             $action_data['action_notes'] = array();
             $action_data['due_date'] = '';
 
@@ -640,7 +637,6 @@ class Company_model extends CI_Model {
 //            $this->action_model->insert_client_action($data);
             $this->system->save_general_notification('order', $order_id, 'insert');
             //end
-
             //insert action on invoice
             $staff_info = staff_info();
             $this->db->where_in('department_id', '6');
@@ -656,7 +652,7 @@ class Company_model extends CI_Model {
             $action_data['staff'] = $department_staff;
             $action_data['client_id'] = '';
             $action_data['subject'] = 'New Client has been created';
-            $action_data['message'] = $staff_info['full_name'].' has added a new client on order #'.$order_id;
+            $action_data['message'] = $staff_info['full_name'] . ' has added a new client on order #' . $order_id;
             $action_data['action_notes'] = array();
             $action_data['due_date'] = '';
 
@@ -798,7 +794,6 @@ class Company_model extends CI_Model {
 //            $this->action_model->insert_client_action($data);
             $this->system->save_general_notification('order', $order_id, 'insert');
             //end
-
             //insert action on invoice
             $staff_info = staff_info();
             $this->db->where_in('department_id', '6');
@@ -814,7 +809,7 @@ class Company_model extends CI_Model {
             $action_data['staff'] = $department_staff;
             $action_data['client_id'] = '';
             $action_data['subject'] = 'New Client has been created';
-            $action_data['message'] = $staff_info['full_name'].' has added a new client on order #'.$order_id;
+            $action_data['message'] = $staff_info['full_name'] . ' has added a new client on order #' . $order_id;
             $action_data['action_notes'] = array();
             $action_data['due_date'] = '';
 
@@ -974,7 +969,7 @@ class Company_model extends CI_Model {
     public function get_account_details($reference_id) {
         $this->db->select("*");
         $this->db->from("payroll_account_numbers");
-        $this->db->join("company","company.id=payroll_account_numbers.reference_id");
+        $this->db->join("company", "company.id=payroll_account_numbers.reference_id");
         $this->db->where("reference_id", $reference_id);
         $this->db->group_by("ban_account_number");
         $data = $this->db->get()->result_array();
@@ -982,13 +977,14 @@ class Company_model extends CI_Model {
     }
 
     public function get_account_details_bookkeeping($reference_id) {
-        $this->db->select("*");
-        $this->db->from("financial_accounts");
-        $this->db->join("company","company.id=financial_accounts.company_id");
-        $this->db->where("financial_accounts.company_id", $reference_id);
-        $this->db->group_by("account_number");
-        $data = $this->db->get()->result_array();
-        return $data;
+        $order_list = $this->db->get_where('order', ['reference_id' => $reference_id, 'reference' => 'company'])->result_array();
+        if (!empty($order_list)) {
+            $this->db->where_in("order_id", array_column($order_list, 'id'));
+            $this->db->group_by("account_number");
+            return $this->db->get('financial_accounts')->result_array();
+        } else {
+            return [];
+        }
     }
 
     public function get_fein_details($id) {
@@ -1047,7 +1043,7 @@ class Company_model extends CI_Model {
             $this->billing_model->insert_invoice_data($data);
             $this->system->save_general_notification('order', $order_id, 'insert');
             //end
-            if ($data['type_of_client'] == 1){
+            if ($data['type_of_client'] == 1) {
                 //insert action on invoice
                 $staff_info = staff_info();
                 $this->db->where_in('department_id', '6');
@@ -1063,7 +1059,7 @@ class Company_model extends CI_Model {
                 $action_data['staff'] = $department_staff;
                 $action_data['client_id'] = '';
                 $action_data['subject'] = 'New Client has been created';
-                $action_data['message'] = $staff_info['full_name'].' has added a new client on order #'.$order_id;
+                $action_data['message'] = $staff_info['full_name'] . ' has added a new client on order #' . $order_id;
                 $action_data['action_notes'] = array();
                 $action_data['due_date'] = '';
 
@@ -1180,7 +1176,7 @@ class Company_model extends CI_Model {
                 $action_data['staff'] = $department_staff;
                 $action_data['client_id'] = '';
                 $action_data['subject'] = 'New Client has been created';
-                $action_data['message'] = $staff_info['full_name'].' has added a new client on order #'.$order_id;
+                $action_data['message'] = $staff_info['full_name'] . ' has added a new client on order #' . $order_id;
                 $action_data['action_notes'] = array();
                 $action_data['due_date'] = '';
 
@@ -1278,7 +1274,7 @@ class Company_model extends CI_Model {
             $this->system->save_general_notification('order', $order_id, 'insert');
             //end
 
-            if($data['type_of_client'] == 1){
+            if ($data['type_of_client'] == 1) {
                 //insert action on invoice
                 $staff_info = staff_info();
                 $this->db->where_in('department_id', '6');
@@ -1294,7 +1290,7 @@ class Company_model extends CI_Model {
                 $action_data['staff'] = $department_staff;
                 $action_data['client_id'] = '';
                 $action_data['subject'] = 'New Client has been created';
-                $action_data['message'] = $staff_info['full_name'].' has added a new client on order #'.$order_id;
+                $action_data['message'] = $staff_info['full_name'] . ' has added a new client on order #' . $order_id;
                 $action_data['action_notes'] = array();
                 $action_data['due_date'] = '';
 
@@ -1422,7 +1418,7 @@ class Company_model extends CI_Model {
                 $action_data['staff'] = $department_staff;
                 $action_data['client_id'] = '';
                 $action_data['subject'] = 'New Client has been created';
-                $action_data['message'] = $staff_info['full_name'].' has added a new client on order #'.$order_id;
+                $action_data['message'] = $staff_info['full_name'] . ' has added a new client on order #' . $order_id;
                 $action_data['action_notes'] = array();
                 $action_data['due_date'] = '';
 
@@ -1465,7 +1461,6 @@ class Company_model extends CI_Model {
 //                $data['related_service'][$data['editval']][$data['extra_10']]['override_price'] = (int) $extra_service_data3['retail_price'];
 //                $data['related_services'][] = $data['extra_10'];
 //            }
-            
             //    Save order
             $data['order_id'] = $order_id = $this->service_model->save_order($data);
             if (isset($data['service_notes'])) {
@@ -1595,7 +1590,7 @@ class Company_model extends CI_Model {
                 $action_data['staff'] = $department_staff;
                 $action_data['client_id'] = '';
                 $action_data['subject'] = 'New Client has been created';
-                $action_data['message'] = $staff_info['full_name'].' has added a new client on order #'.$order_id;
+                $action_data['message'] = $staff_info['full_name'] . ' has added a new client on order #' . $order_id;
                 $action_data['action_notes'] = array();
                 $action_data['due_date'] = '';
 
@@ -1676,6 +1671,7 @@ class Company_model extends CI_Model {
     public function get_company_name_by_company_id($company_id) {
         return $this->db->get_where('new_company', ["company_id" => $company_id])->row_array();
     }
+
     public function request_create_firpta($data) {
         $this->db->trans_begin();
         if ($data['type_of_client'] == 0) {
@@ -1712,16 +1708,16 @@ class Company_model extends CI_Model {
                 }
             }
 
-            
+
 
 
             $this->company->update_title_status($data["reference_id"]);
             $this->system->update_order_serial_id_by_order_id($order_id);
             $this->system->log("insert", "order", $order_id);
 
-            $this->service_model->update_buyer_order_id($data['new_reference_id'],$order_id);
-            $this->service_model->update_seller_order_id($data['new_reference_id'],$order_id);
-            
+            $this->service_model->update_buyer_order_id($data['new_reference_id'], $order_id);
+            $this->service_model->update_seller_order_id($data['new_reference_id'], $order_id);
+
             $extra_data['order_id'] = $order_id;
             $extra_data['property_address'] = $data['property_address'];
             $extra_data['property_city'] = $data['property_city'];
@@ -1734,7 +1730,7 @@ class Company_model extends CI_Model {
             $this->billing_model->insert_invoice_data($data);
             $this->system->save_general_notification('order', $order_id, 'insert');
             //end
-            if ($data['type_of_client'] == 1){
+            if ($data['type_of_client'] == 1) {
                 //insert action on invoice
                 $staff_info = staff_info();
                 $this->db->where_in('department_id', '6');
@@ -1750,7 +1746,7 @@ class Company_model extends CI_Model {
                 $action_data['staff'] = $department_staff;
                 $action_data['client_id'] = '';
                 $action_data['subject'] = 'New Client has been created';
-                $action_data['message'] = $staff_info['full_name'].' has added a new client on order #'.$order_id;
+                $action_data['message'] = $staff_info['full_name'] . ' has added a new client on order #' . $order_id;
                 $action_data['action_notes'] = array();
                 $action_data['due_date'] = '';
 
@@ -1794,16 +1790,16 @@ class Company_model extends CI_Model {
                 }
             }
 
-            $this->service_model->update_buyer_order_id($data['new_reference_id'],$order_id);
-            $this->service_model->update_seller_order_id($data['new_reference_id'],$order_id);
-            
+            $this->service_model->update_buyer_order_id($data['new_reference_id'], $order_id);
+            $this->service_model->update_seller_order_id($data['new_reference_id'], $order_id);
+
             $extra_data['property_address'] = $data['property_address'];
             $extra_data['property_city'] = $data['property_city'];
             $extra_data['property_state'] = $data['property_state'];
             $extra_data['property_zip'] = $data['property_zip'];
             $extra_data['closing_date'] = date('Y-m-d', strtotime($data['closing_date']));
 
-            $this->db->where('order_id',$order_id);
+            $this->db->where('order_id', $order_id);
             $this->db->update('order_extra_data', $extra_data);
 
             $this->company->update_title_status($data["reference_id"]);

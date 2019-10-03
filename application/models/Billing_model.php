@@ -204,6 +204,8 @@ class Billing_model extends CI_Model {
                     $this->service_model->updateCompany($data);
                 } else {
                     if ($this->service_model->insertCompany($data)) {
+
+                        $data['practice_id'] = $data['internal_data']['practice_id'];
                         if (!$this->internal->saveInternalData($data)) {
                             return false;
                         }
@@ -260,6 +262,8 @@ class Billing_model extends CI_Model {
                     $this->db->insert('title', $title_insert_data);
                     $internal_data = $data;
                     $internal_data['reference_id'] = $individual_id;
+                    $internal_data['practice_id'] = $data['internal_data']['practice_id'];
+
                     if (!$this->internal->saveInternalData($internal_data)) {
                         return false;
                     }
@@ -305,6 +309,7 @@ class Billing_model extends CI_Model {
                         return false;
                     }
                     // Save company internal data
+                    $data['practice_id'] = $data['internal_data']['practice_id'];
                     if (!$this->internal->saveInternalData($data)) {
                         return false;
                     }
@@ -340,6 +345,7 @@ class Billing_model extends CI_Model {
                     // Save company internal data
                     $internal_data = $data;
                     $internal_data['reference_id'] = $data['individual_id'];
+                    $internal_data['practice_id'] = $data['internal_data']['practice_id'];
                     if (!$this->internal->saveInternalData($internal_data)) {
                         return false;
                     }
@@ -1164,7 +1170,7 @@ class Billing_model extends CI_Model {
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = indt.manager) as manager',
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = inv.created_by) as created_by_name',
             '(SELECT CONCAT(",", GROUP_CONCAT(`service_id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services',
-            '(CAST((SELECT sr.price_charged FROM service_request sr WHERE sr.order_id = ord.id AND sr.services_id = ord.service_id) AS Decimal(10,2)) * ord.quantity) as sub_total',
+//            '(CAST((SELECT sr.price_charged FROM service_request sr WHERE sr.order_id = ord.id AND sr.services_id = ord.service_id) AS Decimal(10,2)) * ord.quantity) as sub_total',
             '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
         ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';

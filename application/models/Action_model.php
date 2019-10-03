@@ -96,7 +96,7 @@ class Action_model extends CI_Model {
         $this->db->select('subject', 'id');
         // $this->db->select('id');
         $this->db->from('actions AS act');
-        $this->db->join('action_assign_to_department_rel AS ass_dept', 'ass_dept.action_id = act.id');
+//        $this->db->join('action_assign_to_department_rel AS ass_dept', 'ass_dept.action_id = act.id');
         $this->db->join('department AS dprt', 'dprt.id = act.department');
         $this->db->join('staff AS st', 'st.id = act.added_by_user');
         if (isset($sos_value) && $sos_value != '') {
@@ -429,13 +429,13 @@ class Action_model extends CI_Model {
     }
 
     public function get_sentto_staff_for_dashboard_dd() {
+//                . 'INNER JOIN action_assign_to_department_rel asdr ON(a.id=asdr.action_id) '   remove from $sql join 
         $staff_info = staff_info();
         $staff_arr = array();
 //        print_r($staff_info);
         $sql = 'SELECT asf.staff_id '
                 . 'FROM actions a '
                 . 'INNER JOIN action_staffs asf ON(a.id=asf.action_id) '
-                . 'INNER JOIN action_assign_to_department_rel asdr ON(a.id=asdr.action_id) '
                 . 'WHERE a.added_by_user=' . $staff_info['id'] . ' AND asdr.is_all=0';
         $staff_arr1 = $this->db->query($sql)->result_array();
         $staff_arr_mod1 = array_map(function($value) {
@@ -461,7 +461,6 @@ class Action_model extends CI_Model {
         $sql2 = 'SELECT a.added_by_user '
                 . 'FROM actions a '
                 . 'INNER JOIN action_staffs asf ON(a.id=asf.action_id) '
-                . 'INNER JOIN action_assign_to_department_rel asdr ON(a.id=asdr.action_id) '
                 . 'WHERE asf.staff_id=' . $staff_info['id'] . '';
         $staff_arr2 = $this->db->query($sql2)->result_array();
         $staff_arr_mod2 = array_map(function($value2) {
@@ -483,12 +482,15 @@ class Action_model extends CI_Model {
     public function get_sentto_department_for_dashboard_dd() {
         $staff_info = staff_info();
         $staff_arr = array();
-        $sql2 = 'SELECT a.department '
-                . 'FROM actions a '
-                . 'INNER JOIN action_assign_to_department_rel asdr ON(a.id=asdr.action_id AND a.department=asdr.department_id) '
-                . 'WHERE a.added_by_user=' . $staff_info['id'] . ' AND asdr.is_all=1 AND asdr.department_type!=2';
-        $staff_arr2 = $this->db->query($sql2)->result_array();
-
+        $staffid=$staff_info['id'];
+//        $sql2 = 'SELECT a.department '
+//                . 'FROM actions a '
+//                . 'WHERE a.added_by_user=' . $staff_info['id'] . ' AND a.is_all=1 AND a.department_type!=2';
+//        $staff_arr2 = $this->db->query($sql2)->result_array();
+        $this->db->select('department');
+        $this->db->where(['added_by_user'=>$staffid,'is_all'=>1]);
+        $this->db->where('department_type!=',2);
+        $staff_arr2=$this->db->get('actions')->result_array();
         $staff_arr_mod2 = array_map(function($value2) {
             return $value2['department'];
         }, $staff_arr2);
@@ -562,7 +564,14 @@ class Action_model extends CI_Model {
             // }
         }
         unset($data['assign_to_myself']);
+        if(isset($data['my_task']) && $data['my_task']!=''){
+            $data['is_all']=0;
+        }else{
+            $data['is_all']=$is_all;
+        }
         $actions = array_merge($data, ["added_by_user" => $user_id, "status" => 0, "due_date" => $date]);
+        
+        
         $this->db->trans_begin();
         $this->db->insert('actions', $actions);
         $id = $this->db->insert_id();
@@ -578,11 +587,11 @@ class Action_model extends CI_Model {
         //     $this->db->insert('action_add_by_user_office', $insert_action_add_by_user_office);
         // }
 
-        $dept_type_arr = $this->db->query('select type from department where id="' . $data["department"] . '"')->result_array();
-        if (isset($is_all) && $is_all == 1)
-            $this->db->insert('action_assign_to_department_rel', ["action_id" => $id, "department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 1]);
-        else
-            $this->db->insert('action_assign_to_department_rel', ["action_id" => $id, "department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 0]);
+//        $dept_type_arr = $this->db->query('select type from department where id="' . $data["department"] . '"')->result_array();
+//        if (isset($is_all) && $is_all == 1)
+//            $this->db->insert('action_assign_to_department_rel', ["action_id" => $id, "department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 1]);
+//        else
+//            $this->db->insert('action_assign_to_department_rel', ["action_id" => $id, "department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 0]);
 
         if (!empty($notes)) {
             $this->notes->insert_note(2, $notes, "action_id", $id);
@@ -706,17 +715,17 @@ class Action_model extends CI_Model {
         $action_data['added_by_user'] = sess('user_id');
 
         // print_r($action_data);exit;
-
+        if (isset($data['is_all']) && $data['is_all'] != '') {
+            $action_data['is_all']= $data['is_all'];
+        } else {
+            $action_data['is_all'] = 1;
+        }
         $this->db->trans_begin();
         $this->db->insert('actions', $action_data);
         $action_id = $this->db->insert_id();
 
-        if (isset($data['is_all']) && $data['is_all'] != '') {
-            $is_all = $data['is_all'];
-        } else {
-            $is_all = 1;
-        }
-        $this->db->insert('action_assign_to_department_rel', ["action_id" => $action_id, "department_id" => $action_data['department'], "department_type" => 1, "is_all" => $is_all]);
+        
+//        $this->db->insert('action_assign_to_department_rel', ["action_id" => $action_id, "department_id" => $action_data['department'], "department_type" => 1, "is_all" => $is_all]);
 
         $department_staffs = $this->db->get_where('department_staff', ['department_id' => $action_data['department']])->result_array();
         foreach ($department_staffs as $ds) {
@@ -890,7 +899,7 @@ class Action_model extends CI_Model {
     }
 
     public function edit_action($action_id, $data, $files) {
-
+//        print_r($data);echo "<br>";
         if (isset($data['assign_to_myself'])) {
             $is_all = '2';
             $data["is_all"] = '2';
@@ -934,30 +943,37 @@ class Action_model extends CI_Model {
         if ($data['due_date'] != '') {
             $data['due_date'] = date('Y-m-d', strtotime($data['due_date']));
         }
-
-        $actions = $data;
-
-        $this->db->trans_begin();
-
-        $this->db->set($actions)->where("id", $action_id)->update('actions');
-
-        $is_exist_all_arr = $this->db->query('select COUNT(id) as count_data from action_assign_to_department_rel where action_id="' . $action_id . '" and department_id="' . $data["department"] . '"')->result_array();
-        $dept_type_arr = $this->db->query('select type from department where id="' . $data["department"] . '"')->result_array();
-
-        if ($is_exist_all_arr[0]['count_data'] == 0) {
-
-            if (isset($is_all) && $is_all == 1)
-                $this->db->insert('action_assign_to_department_rel', ["action_id" => $action_id, "department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 1]);
-            else
-                $this->db->insert('action_assign_to_department_rel', ["action_id" => $action_id, "department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 0]);
-        }else {
-
-            if (isset($is_all) && $is_all == 1)
-                $this->db->set(["department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 1])->where("action_id", $action_id)->where("department_id", $old_dept_id)->update('action_assign_to_department_rel');
-            else
-                $this->db->set(["department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 0])->where("action_id", $action_id)->where("department_id", $old_dept_id)->update('action_assign_to_department_rel');
+        if(isset($data['my_task']) && $data['my_task']!=''){
+            $data['is_all']= 0;
+        }else{
+            $data['my_task']=0;
+            $data['is_all']=$is_all;
         }
 
+        $actions = $data;
+        $this->db->trans_begin();
+//        print_r($actions);
+//        echo "<br>".$action_id."<br>".$staff_hidden."<br>";
+//        print_r($staffs);die;
+        $this->db->set($actions)->where("id", $action_id)->update('actions');
+
+//        $is_exist_all_arr = $this->db->query('select COUNT(id) as count_data from action_assign_to_department_rel where action_id="' . $action_id . '" and department_id="' . $data["department"] . '"')->result_array();
+//        $dept_type_arr = $this->db->query('select type from department where id="' . $data["department"] . '"')->result_array();
+
+//        if ($is_exist_all_arr[0]['count_data'] == 0) {
+//            echo 'a';die;
+//            if (isset($is_all) && $is_all == 1)
+//                $this->db->insert('action_assign_to_department_rel', ["action_id" => $action_id, "department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 1]);
+//            else
+//                $this->db->insert('action_assign_to_department_rel', ["action_id" => $action_id, "department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 0]);
+//        }else {
+//            echo 'b';die;
+//            if (isset($is_all) && $is_all == 1)
+//                $this->db->set(["department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 1])->where("action_id", $action_id)->where("department_id", $old_dept_id)->update('action_assign_to_department_rel');
+//            else
+//                $this->db->set(["department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 0])->where("action_id", $action_id)->where("department_id", $old_dept_id)->update('action_assign_to_department_rel');
+//        }
+//        die;
         if (!empty($notes)) {
             $this->notes->insert_note(2, $notes, "action_id", $action_id);
         }
@@ -966,7 +982,7 @@ class Action_model extends CI_Model {
             $this->notes->update_note(2, $edit_action_notes);
         }
 
-        if ($staff_hidden != 1) {
+        if ($staff_hidden != 1 || $staff_hidden==1) {
             $this->db->delete('action_staffs', ["action_id" => $action_id]);
             if (!empty($staffs)) {
                 foreach ($staffs as $value) {
@@ -1013,6 +1029,8 @@ class Action_model extends CI_Model {
             if (($key = array_search(sess('user_id'), $staffs)) !== false) {
                 unset($staffs[$key]);
             }
+            $this->db->where(['reference_id'=>$action_id,'reference'=>'action','action'=>'edit']);
+            $this->db->delete('general_notifications');
             $this->system->save_general_notification('action', $action_id, 'edit', $staffs);
             return "1";
         }
@@ -1163,7 +1181,8 @@ class Action_model extends CI_Model {
                 $this->company_model->remove_company_temp_flag($reference_id);
             }
             $data['internal_data']['reference_id'] = $reference_id;
-            $data['internal_data']['reference'] = "company";
+            $data['internal_data']['reference'] = "company";          
+            $data['internal_data']['practice_id'] = $data['internal_data']['practice_id'];
             // Save company internal data
             if (!$this->internal_model->save_internal_data($data['internal_data'])) {
                 return false;
@@ -1315,11 +1334,11 @@ class Action_model extends CI_Model {
             if (!$this->Internal->saveInternalData($data)) {
                 return false;
             }
-
+            $this->company_model->save_company_name_options($data['new_company'], $data['reference_id']);
             // Save name options for the new company
-            $data['name_of_business2'] = $data['new_company']['name2'];
-            $data['name_of_business3'] = $data['new_company']['name3'];
-            $this->Company->saveCompanyNameOptions($data);
+            // $data['name_of_business2'] = $data['new_company']['name2'];
+            // $data['name_of_business3'] = $data['new_company']['name3'];
+            // $this->Company->saveCompanyNameOptions($data);
 
 //            $this->Notes->saveupdateNotes($data);
             $data = (object) $data;
@@ -2002,16 +2021,16 @@ class Action_model extends CI_Model {
 
     public function assign_action_by_action_id($action_id, $staff_id, $all_staffs = []) {
         $this->db->trans_begin();
-        $this->db->where('action_id', $action_id);
-        $this->db->update('action_assign_to_department_rel', ['is_all' => 0]);
+        $this->db->where('id', $action_id);
+        $this->db->update('actions', ['is_all' => 0]);
         $this->db->where('action_id', $action_id);
         $this->db->delete("action_staffs");
         if ($staff_id != 0) {
             $this->db->insert("action_staffs", ['action_id' => $action_id, 'staff_id' => $staff_id]);
         } else {
             if(empty($all_staffs)){
-                $res = $this->db->get_where('action_assign_to_department_rel', ['action_id' => $action_id])->row_array();
-                $dept_id = $res['department_id'];
+                $res = $this->db->get_where('actions', ['id' => $action_id])->row_array();
+                $dept_id = $res['department'];
                 $department_staffs = $this->db->get_where('department_staff', ['department_id' => $dept_id])->result_array();
                     foreach ($department_staffs as $ds) {
                     $this->db->insert('action_staffs', ["action_id" => $action_id, "staff_id" => $ds['staff_id']]);
@@ -2131,7 +2150,7 @@ class Action_model extends CI_Model {
                 if (!empty($action_staffs)) {
                     $action_id = $unassigned = [];
                     foreach ($action_staffs as $as) {
-                        $action_assign = $this->db->get_where('action_assign_to_department_rel', ['action_id' => $as['action_id']])->row_array();
+                        $action_assign = $this->db->get_where('actions', ['id' => $as['action_id']])->row_array();
                         if (!empty($action_assign)) {
                             if ($action_assign['is_all'] == '1') {
                                 $this->db->where_in('department', array_column($departments, 'department_id'));
@@ -2170,7 +2189,7 @@ class Action_model extends CI_Model {
             if (!empty($action_staffs)) {
                 $action_id = $unassigned = [];
                 foreach ($action_staffs as $as) {
-                    $action_assign = $this->db->get_where('action_assign_to_department_rel', ['action_id' => $as['action_id']])->row_array();
+                    $action_assign = $this->db->get_where('actions', ['id' => $as['action_id']])->row_array();
                     if (!empty($action_assign)) {
                         if ($action_assign['is_all'] == '1') {
                             $this->db->where_in('department', array_column($dept_ids, 'department_id'));
@@ -2315,15 +2334,25 @@ class Action_model extends CI_Model {
             }
         } else {
             if ($condition_value == 1 || $condition_value == 3) {
+                // if ($variable_value == 3) {
+                //     $query = 'office_id' . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
+                //     $query .= ' and created_office' . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
+                // } elseif ($variable_value == 4) {
+                //     $query = 'department_id' . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
+                //     $query .= ' and created_department' . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
+                // } else {
+                //     $query = $column_name . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
+                // }
                 if ($variable_value == 3) {
-                    $query = 'office_id' . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
-                    $query .= ' or created_office' . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
-                } elseif ($variable_value == 4) {
-                    $query = 'department_id' . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
-                    $query .= ' or created_department' . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
-                } else {
+
                     $query = $column_name . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
-                }
+
+                }elseif ($variable_value == 4) {
+                     $query = $column_name . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
+                 }else{
+                    $query = $column_name . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
+                    
+                 }
             } elseif ($condition_value == 2 || $condition_value == 4) {
                 if ($variable_value == 1) {
                     $criterias = implode(",", $criteria_value);
@@ -2340,15 +2369,16 @@ class Action_model extends CI_Model {
                 } elseif ($variable_value == 9) {
                     $criterias = implode(",", $criteria_value);
                 }
-                if ($variable_value == 3) {
-                    $query = 'office_id' . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
-                    $query .= ' or created_office' . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
-                } elseif ($variable_value == 4) {
-                    $query = 'department_id' . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
-                    $query .= ' or created_department' . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
-                } else {
-                    $query = $column_name . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
-                }
+                // if ($variable_value == 3) {
+                //     $query = 'office_id' . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
+                //     $query .= ' or created_office' . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
+                // } elseif ($variable_value == 4) {
+                //     $query = 'department_id' . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
+                //     $query .= ' or created_department' . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
+                // } else {
+                //     $query = $column_name . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
+                // }
+                $query = $column_name . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
             }
         }
         return $query;
@@ -2739,16 +2769,16 @@ class Action_model extends CI_Model {
         $this->db->insert('title', $insert_data);
     }
 
-    public function get_action_by_id($action_id) {
-        $select = implode(', ', $this->action_select);
-        $this->db->select($select);
-        $this->db->from('actions AS act');
-        $this->db->join('action_assign_to_department_rel AS ass_dept', 'ass_dept.action_id = act.id');
-        $this->db->join('department AS dprt', 'dprt.id = act.department');
-        $this->db->join('staff AS st', 'st.id = act.added_by_user');
-        $this->db->where('act.id', $action_id);
-        return $this->db->get("actions")->row_array();
-    }
+//    public function get_action_by_id($action_id) {
+//        $select = implode(', ', $this->action_select);
+//        $this->db->select($select);
+//        $this->db->from('actions AS act');
+//        $this->db->join('action_assign_to_department_rel AS ass_dept', 'ass_dept.action_id = act.id');
+//        $this->db->join('department AS dprt', 'dprt.id = act.department');
+//        $this->db->join('staff AS st', 'st.id = act.added_by_user');
+//        $this->db->where('act.id', $action_id);
+//        return $this->db->get("actions")->row_array();
+//    }
 
     public function get_action_by_action_id($action_id) {
         $this->db->where('id', $action_id);

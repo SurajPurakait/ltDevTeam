@@ -8,11 +8,6 @@
                             <div class="filter-outer">
                                 <form name="filter_form" id="filter-form"  method="post" onsubmit="partnerFilter()">
                                     <div class="form-group filter-inner">
-                                        <div class="row">
-                                            <div class="m-b-10 pull-left col-md-10">
-                                                <a class="btn btn-primary" href="<?= base_url(); ?>referral_partner/referral_partners/new_referral_agent?q=partner"><i class="fa fa-plus"></i> Add New Partner</a>
-                                            </div>
-                                        </div>
                                         <div class="filter-div m-b-20 row" id="original-filter">                                           
                                             <div class="col-sm-3 m-t-10">
                                                 <select class="form-control variable-dropdown" name="variable_dropdown[]" onchange="changeVariable(this)">
@@ -121,12 +116,69 @@
                                                 </a>
                                             </td>
                                         </tr>
+                                        <?php
+                                            $staff_info = staff_info();
+                                            if($staff_info['type'] == 1) {
+                                        ?>
+                                        <!-- byother section-->
+                                        <tr id="byother" class="action-row-border-bottom">
+                                            <th>By Other</th>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byother-0">
+                                                    <span class="label label-success" id="requested_by_other_new" onclick="loadPartnerDashboard(0,'byother');"><?= partnerList(0,'byother'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byother-3">
+                                                    <span class="label label-warning" id="requested_by_other_started" onclick="loadPartnerDashboard(3,'byother');"><?= partnerList(3,'byother'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byother-1">
+                                                    <span class="label label-primary" id="requested_by_other_completed" onclick="loadPartnerDashboard(1,'byother');"><?= partnerList(1,'byother'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byother-2">
+                                                    <span class="label label-danger" id="requested_by_other_important" onclick="loadPartnerDashboard(2,'byother');"><?= partnerList(2,'byother'); ?></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <!-- toother section -->
+                                        <tr id="toother" class="action-row-border-bottom">
+                                            <th>To Other</th>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-toother-0">
+                                                    <span class="label label-success" id="requested_to_other_new" onclick="loadPartnerDashboard(0,'toother');"><?= partnerList(0,'toother'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-toother-3">
+                                                    <span class="label label-warning" id="requested_to_other_started" onclick="loadPartnerDashboard(3,'toother');"><?= partnerList(3,'toother'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-toother-1">
+                                                    <span class="label label-primary" id="requested_to_other_completed" onclick="loadPartnerDashboard(1,'toother');"><?= partnerList(1,'toother'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-toother-2">
+                                                    <span class="label label-danger" id="requested_to_other_important" onclick="loadPartnerDashboard(2,'toother');"><?= partnerList(2,'toother'); ?></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                            }
+                                        ?>
+
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                     <hr class="hr-line-dashed m-b-10">
+
                     <div class="ajaxdiv"></div>
                     <div class="row m-b-0">
                     </div>
@@ -137,7 +189,7 @@
 </div>
 <div id="modal_area" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script type="text/javascript">
-	loadPartnerDashboard('','');
+	loadPartnerDashboard('<?= ($status != '') ? $status:''; ?>','<?= ($request != '') ? $request:''; ?>');
 
 	var content = $(".filter-div").html();
     var variableArray = [];

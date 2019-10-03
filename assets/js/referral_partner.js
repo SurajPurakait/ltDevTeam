@@ -124,6 +124,28 @@ function show_ref_partner_client_notes_modal(ref_partner_table_id) {
     });
 }
 
+function reffer_lead_to_partner_view(id,email,is_partner) {
+    $.ajax({
+        type: "POST",
+        data: { email:email },
+        url: base_url + 'referral_partner/referral_partners/is_staff',
+        dataType: "html",
+        success: function (result) {
+            if (result.trim() == "0") {
+                swal("ERROR!", "Unable to Refer a Lead!, Please SET Password to Refer", "error");
+            } else {
+                window.location = base_url + "referral_partner/referral_partners/reffer_lead_to_partner/"+id+"/"+is_partner;                    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+    
+}
 
 function reffer_lead_to_partner() {
     if (!requiredValidation('form_add_new_prospect')) {
@@ -298,6 +320,43 @@ function partnerFilter() {
             console.log(result);
             $(".ajaxdiv").html(result);
             $("[data-toggle=popover]").popover();
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function load_partners_dashboard(type = '', status = '', req_by = '') {
+    $.ajax({
+        type: "POST",
+        url: base_url + 'referral_partner/referral_partners/load_partner_dashboard',
+        data: {
+            type: type,
+            status: status,
+            req_by: req_by
+        },
+        success: function (data) {
+            //alert(data);
+            $("#load_data").html(data);
+            if (req_by != '') {
+                //alert(status);
+                if (req_by == 1) {
+                    var byval = 'Added By Me';
+                } else if (req_by == 2) {
+                    var byval = 'Added By Others';
+                }
+                $("#clear_filter span").html('');
+                $("#clear_filter span").html(byval);
+                $("#clear_filter").show();
+            } else {
+                //alert(status);
+                $("#clear_filter span").html('');
+                $("#clear_filter").hide();
+            }
         },
         beforeSend: function () {
             openLoading();

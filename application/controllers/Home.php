@@ -138,7 +138,6 @@ class Home extends CI_Controller {
     public function logout() {
         if ($this->session->userdata('user_id') && $this->session->userdata('user_id') != '') {
             $this->system->log('logout', 'staff', $this->session->userdata('user_id'));
-            $this->session->unset_userdata(['user_id', 'user_office_id', 'security_level', 'login']);
             $this->session->sess_destroy();
         }
         redirect(base_url());
@@ -452,15 +451,28 @@ class Home extends CI_Controller {
         }
         if (in_array('partner', $section_array)) {
             $json_data['section_index'][] = $data['section'] = 'partner';
-            $data['partner']['referred_to_me']['new'] = count($this->referral_partner->getLeadDataByRefPartner(1, '0', $data['lead_type_id']));
-            $data['partner']['referred_to_me']['active'] = count($this->referral_partner->getLeadDataByRefPartner(1, 3, $data['lead_type_id']));
-            $data['partner']['referred_to_me']['inactive'] = count($this->referral_partner->getLeadDataByRefPartner(1, 2, $data['lead_type_id']));
-            $data['partner']['referred_to_me']['total'] = count($this->referral_partner->getLeadDataByRefPartner(1, '', $data['lead_type_id']));
-            if ($user_type != 3 || $role == 2) {
-                $data['partner']['referred_to_others']['new'] = count($this->referral_partner->getLeadDataByRefPartner(2, '0', $data['lead_type_id']));
-                $data['partner']['referred_to_others']['active'] = count($this->referral_partner->getLeadDataByRefPartner(2, 3, $data['lead_type_id']));
-                $data['partner']['referred_to_others']['inactive'] = count($this->referral_partner->getLeadDataByRefPartner(2, 2, $data['lead_type_id']));
-                $data['partner']['referred_to_others']['total'] = count($this->referral_partner->getLeadDataByRefPartner(2, '', $data['lead_type_id']));
+            $data['partner_list']['referred_by_me'] = count($this->referral_partner->getReferralPartnerData(1));
+            $data['partner_list']['referred_by_other'] = count($this->referral_partner->getReferralPartnerData(2));
+
+            // $data['partner_list']['referred_by_me']['byme'] = count($this->referral_partner->getReferralPartnerData(1));
+            // $data['partner_list']['referred_by_other']['byother'] = count($this->referral_partner->getReferralPartnerData(2));                
+
+            $data['partner']['by_me']['new'] = count($this->lead_management->get_leads_referred_by_to_him(0,'byme'));
+            $data['partner']['by_me']['active'] = count($this->lead_management->get_leads_referred_by_to_him(3,'byme'));
+            $data['partner']['by_me']['inactive'] = count($this->lead_management->get_leads_referred_by_to_him(2,'byme'));
+            
+            $data['partner']['to_me']['new'] = count($this->lead_management->get_leads_referred_by_to_him(0,'tome'));
+            $data['partner']['to_me']['active'] = count($this->lead_management->get_leads_referred_by_to_him(3,'tome'));
+            $data['partner']['to_me']['inactive'] = count($this->lead_management->get_leads_referred_by_to_him(2,'tome'));
+
+            if ($user_type == 1) {
+                $data['partner']['by_other']['new'] = count($this->lead_management->get_leads_referred_by_to_him(0,'byother'));
+                $data['partner']['by_other']['active'] = count($this->lead_management->get_leads_referred_by_to_him(3,'byother'));
+                $data['partner']['by_other']['inactive'] = count($this->lead_management->get_leads_referred_by_to_him(2,'byother'));
+
+                $data['partner']['to_other']['new'] = count($this->lead_management->get_leads_referred_by_to_him(0,'toother'));
+                $data['partner']['to_other']['active'] = count($this->lead_management->get_leads_referred_by_to_him(3,'toother'));
+                $data['partner']['to_other']['inactive'] = count($this->lead_management->get_leads_referred_by_to_him(2,'toother'));
             }
             $json_data['section'][] = $this->load->view("ajax_dashboard", $data, true);
         }
