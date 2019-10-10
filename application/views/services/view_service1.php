@@ -219,15 +219,15 @@ if ($usertype != '3') {
                         Service Id:
                     </td>
                     <?php    if (!empty($services_list)) {
-                                $keysval = 1;
-                                foreach ($services_list as $keys => $row_inner) {
-                                    $keysval = $keysval + $keys;
+                                // $keysval = 1;
+                                // foreach ($services_list as $keys => $row_inner) {
+                                    // $keysval = $keysval + $keys;
                 ?>
                     <td style="<?= $td_style; ?>">
                         <!-- <?//= $order_info['service_id']; ?> -->
-                        <?= $invoice_info['id']; ?>-<?= $keysval ?>
+                        <?= $invoice_info['id']; ?>-<?= 1 ?>
                     </td>
-                     <?php }}  ?>
+                     <?php }  ?>
                 </tr>
 
            
