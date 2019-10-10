@@ -3,13 +3,13 @@
         <?php if ($view_type == 'place'): ?>        
             <h4 class="m-b-20 text-danger">Please Note, review all order information below and click save button to generate the invoice</h4>
         <?php endif; ?>
-        <h2 class="m-b-20">Order Summary #<?= str_pad($order_summary['invoice_id'], 10, 0, STR_PAD_LEFT); ?></h2>
+        <h2 class="m-b-20">ORDER ID: <?= $order_summary['invoice_id']; ?></h2>
         <?php $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;"'; ?>
         <table class="table table-striped table-bordered" style="width:100%;">
             <tbody>
                 <?php
                 if (!empty($order_summary)):
-                    $skip = ['invoice_id', 'reference_id', 'new_existing', 'existing_reference_id', 'contact_info', 'owners', 'documents', 'services', 'total_price', 'individual_id', 'invoice_status', 'invoice_type_id', 'invoice_notes', 'office_photo', 'sub_total', 'office_id', 'is_order'];
+                    $skip = ['invoice_id', 'reference_id', 'new_existing', 'existing_reference_id', 'contact_info', 'owners', 'documents', 'services', 'total_price', 'individual_id', 'invoice_status', 'invoice_type_id', 'invoice_notes', 'office_photo', 'sub_total', 'office_id', 'is_order', 'order_ID'];
                     foreach ($order_summary as $column => $os):
                         if ($os != ''):
                             if ($column == 'order_id'):
