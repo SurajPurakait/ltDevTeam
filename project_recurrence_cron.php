@@ -13,7 +13,7 @@ if ($conn === false) {
 	//echo "Connected successfully"; 
 }
 
-$sql = 'SELECT * from project_recurrence_main where generation_type="1"';
+$sql = 'SELECT * from project_recurrence_main where generation_type="1" and generated_by_cron=0';
 $project_id_array = array();
 if ($result = mysqli_query($conn, $sql)) {
     if (mysqli_num_rows($result) > 0) {
@@ -50,6 +50,9 @@ if ($result = mysqli_query($conn, $sql)) {
             // }
             if(strtotime($curDate)==strtotime($recurDate)){
             	$project_id = $pattern_details['project_id'];
+                //update old table
+                $updatesql = "update `project_recurrence_main` set generated_by_cron= 1 where id = " . $pattern_details['id'];
+                 mysqli_query($conn, $updatesql);
                 //insert projects table
             	$get_projects_data = 'SELECT * from projects where id="' . $project_id . '"';
                 $get_projects_result = mysqli_query($conn, $get_projects_data);
@@ -246,7 +249,6 @@ if ($result = mysqli_query($conn, $sql)) {
             $generation_date = date('Y-m-d', strtotime('-'.$generation_days.' days', strtotime($insert_project_recurrence_main_data['next_due_date'])));
 
             $insert_project_recurrence_main_data['generation_date'] = $generation_date; 
-
             $columns4 = implode(", ",array_keys($insert_project_recurrence_main_data));
             $escaped_values4 = array_values($insert_project_recurrence_main_data);
             $values4  = implode(", ", $escaped_values4);

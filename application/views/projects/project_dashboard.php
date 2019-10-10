@@ -123,6 +123,7 @@ if (!empty($project_list)) {
                                     <th style="width:8%; text-align: center">Tracking</th>
                                     <th style="width:8%; text-align: center">Creation Date</th>
                                     <th style="width:8%; text-align: center">Due Date</th>
+                                    <th style="width:8%; text-align: center">Recurrence Date</th>
                                     <th style="width:8%; text-align: center">Note</th>
                                 </tr>
                                 <tr>
@@ -153,7 +154,7 @@ if (!empty($project_list)) {
                                         }
                                         echo $resp_name."<br><span class='text-info'>".$office_name." </span></td>";
                                         ?> </td>   
-                                    <td title="Requested By"><?php echo staff_info_by_id($list['added_by_user'])['full_name']; ?></td>
+                                    <td title="Requested By"><?php echo isset(staff_info_by_id($list['added_by_user'])['full_name']) ? staff_info_by_id($list['added_by_user'])['full_name'] : ''; ?></td>
                                     <td title="Assign To"><span class="text-success"><?php echo get_assigned_dept_staff_project_main($list['id']); ?></span><br><?php 
                                     if($list['project_office_id']!='2'){
                                        echo get_department_name_by_id($list['project_department_id']);
@@ -165,6 +166,7 @@ if (!empty($project_list)) {
                                     <td title="Tracking" class="text-center"><span id="trackouter-<?php echo $list['id']; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></td>
                                     <td title="Creation Date"><?= date('Y-m-d', strtotime($list['created_at'])) ?></td>
                                     <td title="Due Date"><?= $dueDate ?></td>
+                                    <td title="Recurrence Date"><?= $pattern_details->generation_date; ?></td>
 
                                     <!-- <td title='Note'><a id="notecount-<?//= $list['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_notes(<?//= $list["id"]; ?>)"><b> <?//= get_project_note_count($list['id']) ?></b></a> -->
 

@@ -51,7 +51,8 @@ $return = '';
                 $return .= '<option value="1">Started</option>';
                 $return .= '<option value="0">Completed</option>';
                 $return .= '<option value="3">Late</option>';
-                $return .= '<option value="4">Not Completed</option>';  
+                $return .= '<option value="4">Not Completed</option>';
+                $return .= '<option value="7">Cancelled</option>';
                 $return .= "</select>";
         }elseif($val==5){ //staff
             $options_val = get_filter_dropdown_options($val,$ofc_val);

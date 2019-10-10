@@ -973,14 +973,17 @@ class Home extends CI_Controller {
                 }
             }
         } else {
-            if (isset($service_id) && $service_id != "") {
+            // if (isset($service_id) && $service_id != "") {
+             if ($id != $order_id) {
                 if (!empty($data['modal_notes'][0])) {
                     $this->notes->insert_note(1, $notes, 'reference_id', $id, 'service');
                     echo count($notes);
                 } else {
                     echo '0';
                 }
-            } else {
+            } 
+        // }
+        else {
                 if (!empty($data['modal_notes'][0])) {
                     $this->notes->insert_note(1, $notes, 'reference_id', $id, 'order');
                     echo count($notes);

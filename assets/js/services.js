@@ -2633,6 +2633,7 @@ var add_service_notes = () => {
     var formData = new FormData(document.getElementById('modal_note_form'));
     var orderid = $("#modal_note_form #order_id").val();
     var serviceid = $("#modal_note_form #serviceid").val();
+    var ref_id = $("#modal_note_form #reference_id").val();
     // var reference = $("#modal_note_form #reference").val();
     // alert(reference);return false;
     formData.append('service_id', serviceid);
@@ -2652,18 +2653,21 @@ var add_service_notes = () => {
             // alert(result);return false;
             swal({title: "Success!", text: "Successfully Saved!", type: "success"}, function () {
                 if (result != '0') {
-                    if (serviceid == "") {
+                    if (ref_id == orderid) {
+                    // if (serviceid == "") {
                         var prevnotecount = $("#notecount-" + orderid).attr('count');
                         // alert(prevnotecount);return false;   
                         var notecount = parseInt(prevnotecount) + parseInt(result);
                         $("#notecount-" + orderid).attr('count', notecount);
                         $("#notecount-" + orderid).find('b').html(notecount);
-                    } else {
-                        var prevnotecount = $("#collapse" + orderid).find("#orderservice-" + serviceid).attr('count');
-                        // alert(prevnotecount);return false;
+                    } 
+                // }
+                else {
+                        var prevnotecount = $("#collapse" + orderid).find("#orderservice-" + serviceid +"-"+ ref_id).attr('count');
                         var notecount = parseInt(prevnotecount) + parseInt(result);
-                        $("#collapse" + orderid).find("#orderservice-" + serviceid).attr('count', notecount);
-                        $("#collapse" + orderid).find("#orderservice-" + serviceid).find('b').html(notecount);
+                           
+                        $("#collapse" + orderid).find("#orderservice-" + serviceid+"-"+ref_id).attr('count', notecount);
+                        $("#collapse" + orderid).find("#orderservice-" + serviceid+"-"+ref_id).find('b').html(notecount);
 
                     }
                 }

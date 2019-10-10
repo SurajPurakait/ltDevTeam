@@ -6,13 +6,13 @@
         <div class="dropdown" style="display: inline-block;">
             <a href="javascript:void(0);" id="sort-by-dropdown" data-toggle="dropdown" class="dropdown-toggle btn btn-success">Sort By <span class="caret"></span></a>
             <ul class="dropdown-menu">
-                <li><a id="order_serial_id-val" href="javascript:void(0);" onclick="sort_service_dashboard('o.order_serial_id')">ID</a></li>
+                <li><a id="order_serial_id-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.order_serial_id')">ID</a></li>
                 <li><a id="client_name-val" href="javascript:void(0);" onclick="sort_service_dashboard('client_name')">Client Name</a></li>
                 <li><a id="office_id-val" href="javascript:void(0);" onclick="sort_service_dashboard('office_id')">Office ID</a></li>
-                <li><a id="status-val" href="javascript:void(0);" onclick="sort_service_dashboard('o.status')">Tracking</a></li>
-                <li><a id="order_date-val" href="javascript:void(0);" onclick="sort_service_dashboard('o.order_date')">Requested Date</a></li>
-                <li><a id="start_date-val" href="javascript:void(0);" onclick="sort_service_dashboard('o.start_date')">Start Date</a></li>
-                <li><a id="complete_date-val" href="javascript:void(0);" onclick="sort_service_dashboard('o.complete_date')">Complete Date</a></li>
+                <li><a id="status-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.status')">Tracking</a></li>
+                <li><a id="order_date-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.order_date')">Requested Date</a></li>
+                <li><a id="start_date-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.start_date')">Start Date</a></li>
+                <li><a id="complete_date-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.complete_date')">Complete Date</a></li>
             </ul>
         </div>
         <div class="sort_type_div" style="display: none;">

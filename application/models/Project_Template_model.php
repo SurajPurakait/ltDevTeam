@@ -20,8 +20,9 @@ class Project_Template_model extends CI_Model {
             11 => "due_date"
         ];
 
+        // $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id),(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts left join project_task AS pt on pt.id=pts.task_id WHERE pt.project_id = pro.id),","), " ", "") AS all_project_staffs';
         $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id),","), " ", "") AS all_project_staffs';
-//        $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts WHERE pts.task_id = pt.id),","), " ", "") AS assign_staff';
+       $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts WHERE pts.task_id = pt.id),","), " ", "") AS all_task_staffs';
          $this->project_select[] = 'pro.*,pm.office_id as project_office_id,pm.department_id as project_department_id';
         $this->project_select[] = 'pm.added_by_user AS added_by_user';
         $this->project_select[] = 'pm.added_by_user AS staff_id';
@@ -1967,7 +1968,7 @@ class Project_Template_model extends CI_Model {
         $this->db->from('projects AS pro');
         $this->db->join('project_main AS pm', 'pm.project_id = pro.id', 'left');
         $this->db->join('project_recurrence_main AS prm', 'prm.project_id = pro.id', 'left');
-//        $this->db->join('project_task AS pt', 'pt.project_id = pro.id','left');
+        $this->db->join('project_task AS pt', 'pt.project_id = pro.id','left');
 //        $this->db->join('staff AS st', 'st.id = act.added_by_user');
         if (isset($sos_value) && $sos_value != '') {
             $this->db->join('sos_notification AS sos', 'sos.reference_id = pro.id');
@@ -1982,7 +1983,7 @@ class Project_Template_model extends CI_Model {
             if ($request == 'byme') {
                 $this->db->where(['pm.added_by_user' => $staff_id]);
             } elseif ($request == 'tome') {
-                $having[] = 'all_project_staffs LIKE "%,' . $staff_id . ',%" AND added_by_user != "' . $staff_id . '"';
+                $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%") AND added_by_user != "' . $staff_id . '"';
             }
 
 //            elseif ($request == 'byother') {
@@ -2016,11 +2017,14 @@ class Project_Template_model extends CI_Model {
                 if ($user_type == 3 && $role == 2) {
                     unset($office_staff[array_search(sess('user_id'), $office_staff)]);
                     $like_staffs = [];
+                    $like_staffs_task = [];
                     foreach ($office_staff as $staffID) {
                         $like_staffs[] = 'all_project_staffs LIKE "%,' . $staffID . ',%"';
+                        $like_staffs_task[] = 'all_task_staffs LIKE "%,' . $staffID . ',%"';
                     }
                     if (!empty($like_staffs)) {
-                        $having[] = 'all_project_staffs NOT LIKE "%,' . $staff_id . ',%" AND (' . implode(' OR ', $like_staffs) . ') AND added_by_user != "' . $staff_id . '"';
+                        // $having[] = 'all_project_staffs NOT LIKE "%,' . $staff_id . ',%" AND (' . implode(' OR ', $like_staffs) . ') AND added_by_user != "' . $staff_id . '"';
+                        $having[] = '(all_project_staffs NOT LIKE "%,' . $staff_id . ',%" AND (' . implode(' OR ', $like_staffs) . ') OR all_task_staffs NOT LIKE "%,' . $staff_id . ',%" AND (' . implode(' OR ', $like_staffs_task) . ')) AND added_by_user != "' . $staff_id . '"';
                     } else {
                         $having[] = 'added_by_user != "' . $staff_id . '"';
 //                        $having[] = 'added_by_user != "' . $staff_id . '" OR assign_staff LIKE "%,' . $staff_id . ',%"';
@@ -2028,8 +2032,8 @@ class Project_Template_model extends CI_Model {
                 }
                 if ($user_type == 2 && $role == 4) {
                     if ($user_department != 14) {
-                        if (!empty($departments)) {
-                            $having[] = 'all_project_staffs NOT LIKE "%,' . $staff_id . ',%" AND department_id IN (' . implode(',', $departments) . ') AND added_by_user != "' . $staff_id . '"';
+                        if (isset($departments)) {
+                            $having[] = '(all_project_staffs NOT LIKE "%,' . $staff_id . ',%" OR all_task_staffs NOT LIKE "%,' . $staff_id . ',%") AND department_id IN (' . $departments . ') AND added_by_user != "' . $staff_id . '"';
                         } else {
                             $having[] = 'added_by_user != "' . $staff_id . '"';
                         }
@@ -2069,38 +2073,38 @@ class Project_Template_model extends CI_Model {
             } else if ($user_type == 3 && $role == 2) {
 //                echo 'b2';die;
                 if (!empty($office_staff)) {
-                    $having_or[] = 'all_project_staffs LIKE "%,' . $staff_id . ',%"';
+                    $having_or[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%")';
                     $having_or[] = 'added_by_user IN (' . implode(',', $office_staff) . ')';
 //                    $having_or[] = 'my_task = "' . $staff_id . '"';
                     unset($office_staff[array_search(sess('user_id'), $office_staff)]);
                     foreach ($office_staff as $staffID) {
-                        $having_or[] = 'all_project_staffs LIKE "%,' . $staffID . ',%"';
+                        $having_or[] = '(all_project_staffs LIKE "%,' . $staffID . ',%" OR all_task_staffs LIKE "%,' . $staffID . ',%")';
                     }
                     $having[] = '(' . implode(' OR ', $having_or) . ')';
                 } else {
-                    $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" )';
+                    $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%" )';
                 }
             } else if ($user_type == 2 && $role == 4) {
 //                echo 'b3';die;
                 if ($user_department != 14) {
-                    if (!empty($departments)) {
-                        $having_or[] = 'all_project_staffs LIKE "%,' . $staff_id . ',%"';
+                    if (isset($departments)) {
+                        $having_or[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%")';
                         if (!empty($department_staff)) {
                             $having_or[] = 'added_by_user IN (' . implode(',', $department_staff) . ')';
                             foreach($department_staff as $ds){
-                                $having_or[] = 'all_project_staffs LIKE "%,' . $ds . ',%"';
+                                $having_or[] = '(all_project_staffs LIKE "%,' . $ds . ',%" OR all_task_staffs LIKE "%,' . $ds . ',%")';
                             }
                         }
 //                    $having_or[] = 'my_task = "' . $staff_id . '"';
-                        $having_or[] = 'department_id IN (' . implode(',', $departments) . ')';
+                        $having_or[] = 'department_id IN (' . $departments . ')';
                         $having[] = '(' . implode(' OR ', $having_or) . ')';
                     } else {
-                        $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%")';
+                        $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%")';
                     }
                 }
             } else {
 //                echo 'b4';die;
-                $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR added_by_user = "' . $staff_id . '")';
+                $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%" OR added_by_user = "' . $staff_id . '")';
             }
         }
 

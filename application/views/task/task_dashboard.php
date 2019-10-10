@@ -137,13 +137,17 @@ if (!empty($task_list)) {
                                         if($resp_value['office']!=0){
                                             $office_name = get_office_id($resp_value['office']);
                                         }else{
-                                            if($list['project_office_id']==1){
+                                            if(isset($task_list['project_office_id'])){
+                                                if($task_list['project_office_id']==1){
                                                  $office_name = 'Admin';
-                                            }elseif($list['project_office_id']==2){
-                                                $office_name = 'Corporate';
+                                                }elseif($task_list['project_office_id']==2){
+                                                    $office_name = 'Corporate';
+                                                }else{
+                                                    $office_name = 'Franchise';
+                                                }
                                             }else{
-                                                $office_name = 'Franchise';
-                                            }
+                                                 $office_name = 'Franchise';
+                                             }                                            
                                         }
                                         echo $resp_name."<br><span class='text-info'>".$office_name." </span></td>";
                                         ?> </td> <?php } else { ?> 

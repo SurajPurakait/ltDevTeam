@@ -787,7 +787,7 @@ Class Lead_management extends CI_Model {
         if ($status == 3) {
             $check = $this->db->query("select * from lead_management where id=$id")->row_array();
             if (!empty($check)) {
-                if ($check['day_0_mail_date'] == '0000-00-00') {
+                //if ($check['day_0_mail_date'] == '0000-00-00') {
                     /* mail section */
                     $user_email = $check['email'];
                     $config = Array(
@@ -985,7 +985,7 @@ Class Lead_management extends CI_Model {
                         $this->update_lead_day(0, $id);
                     }
                     /* mail section */
-                }
+                //}
             }
         }
 
@@ -1651,9 +1651,15 @@ Class Lead_management extends CI_Model {
     }
 
     public function update_lead_day($day, $lead_id) {
-        $this->db->set('day_' . $day . '_mail_date', date('Y-m-d'));
+        $date_array = array();
+        if($day==0){
+            $date_array['day_3_mail_date'] = '0000-00-00';
+            $date_array['day_6_mail_date'] = '0000-00-00';
+        }
+        $date_array['day_' . $day . '_mail_date'] = date('Y-m-d');
+        //$this->db->set('day_' . $day . '_mail_date', date('Y-m-d'));
         $this->db->where('id', $lead_id);
-        $this->db->update('lead_management');
+        $this->db->update('lead_management',$date_array);
     }
 
     // Assign a lead as Client

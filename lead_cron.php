@@ -443,7 +443,7 @@ if ($result = mysqli_query($conn, $sql)) {
                         mysqli_query($conn, "UPDATE `lead_management` SET `day_6_mail_date` = '" . date('Y-m-d') . "' WHERE `lead_management`.`id` = '{$ld['id']}'");
                     }
                     /* mail section */
-                    $updatesql = "update `lead_management` SET `status` = '2', `inactive_date` = '" . date('Y-m-d') . "' WHERE `lead_management`.`id` = " . $ld['id'] . "";
+                    $updatesql = "update `lead_management` SET `status` = '2', `mail_campaign_status` = '0', `inactive_date` = '" . date('Y-m-d') . "' WHERE `lead_management`.`id` = " . $ld['id'] . "";
                     mysqli_query($conn, $updatesql);
                     $insertlogsql = "INSERT INTO `tracking_logs` (`id`, `stuff_id`, `status_value`, `section_id`, `related_table_name`) VALUES ('', '4', '2', '" . $ld['id'] . "', 'lead_management')";
                     mysqli_query($conn, $insertlogsql);

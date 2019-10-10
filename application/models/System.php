@@ -138,7 +138,7 @@ Class System extends CI_Model {
     }
 
     public function get_staff_info($staff_id) {
-        $this->db->select("CONCAT(staff.last_name, ', ',staff.first_name,' ',staff.middle_name) as full_name, staff.*");
+        $this->db->select("CONCAT(staff.last_name, ', ',staff.first_name) as full_name, staff.*");
         $result = $this->db->get_where('staff', ['id' => $staff_id])->row_array();
         if (!empty($result)) {
             $office_staff = $this->db->get_where('office_staff', ['staff_id' => $staff_id])->result_array();

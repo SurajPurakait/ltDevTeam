@@ -602,48 +602,77 @@ class Patch extends CI_Controller {
         }
     }
 
-    public function project_due_date_generation_date_fix(){ 
-            $data = $this->db->get('project_recurrence_main')->result_array();
-            //print_r($data); exit;
-            if(!empty($data)){
-                foreach ($data as $val){
-                    $due_date = $val['actual_due_year'] . '-' . $val['actual_due_month'] . '-' . $val['actual_due_day'];
-                
-                    if($val['generation_month']==''){
-                        $val['generation_month'] = '0';
-                    }
+    public function project_due_date_generation_date_fix() {
+        $data = $this->db->get('project_recurrence_main')->result_array();
+        //print_r($data); exit;
+        if (!empty($data)) {
+            foreach ($data as $val) {
+                $due_date = $val['actual_due_year'] . '-' . $val['actual_due_month'] . '-' . $val['actual_due_day'];
 
-                    if($val['generation_day']==''){
-                        $val['generation_day'] = '0';
-                    }
-                    
-                    $update_data['due_date'] = $due_date;
-                        
-                    if($val['pattern']=='monthly'){
-                        $next_due_date = date("Y-m-d", strtotime("+1 month", strtotime($due_date)));
-                        $update_data['next_due_date'] = $next_due_date;
-                    }elseif($val['pattern']=='annually'){
-                        $next_due_date = date("Y-m-d", strtotime("+1 year", strtotime($due_date)));
-                        $update_data['next_due_date'] = $next_due_date;
-                    }elseif($val['pattern']=='weekly'){
-                        $next_due_date = date("Y-m-d", strtotime("+7 days", strtotime($due_date)));
-                        $update_data['next_due_date'] = $next_due_date;
-                    }elseif($val['pattern']=='quarterly'){
-                        $next_due_date = date("Y-m-d", strtotime("+3 months", strtotime($due_date)));
-                        $update_data['next_due_date'] = $next_due_date;
-                    }else{
-                        $update_data['next_due_date'] = '0000-00-00';
-                    }
-                    if($val['generation_type']==1){
-                        $generation_days = ((int)$val['generation_month']*30) + (int)$val['generation_day'];
-
-                        $generation_date = date('Y-m-d', strtotime('-'.$generation_days.' days', strtotime($update_data['next_due_date'])));
-                        $update_data['generation_date'] = $generation_date; 
-                    }                
-                    $this->db->where('id', $val['id']);
-                    $this->db->update('project_recurrence_main', $update_data);
+                if ($val['generation_month'] == '') {
+                    $val['generation_month'] = '0';
                 }
+
+                if ($val['generation_day'] == '') {
+                    $val['generation_day'] = '0';
+                }
+
+                $update_data['due_date'] = $due_date;
+
+                if ($val['pattern'] == 'monthly') {
+                    $next_due_date = date("Y-m-d", strtotime("+1 month", strtotime($due_date)));
+                    $update_data['next_due_date'] = $next_due_date;
+                } elseif ($val['pattern'] == 'annually') {
+                    $next_due_date = date("Y-m-d", strtotime("+1 year", strtotime($due_date)));
+                    $update_data['next_due_date'] = $next_due_date;
+                } elseif ($val['pattern'] == 'weekly') {
+                    $next_due_date = date("Y-m-d", strtotime("+7 days", strtotime($due_date)));
+                    $update_data['next_due_date'] = $next_due_date;
+                } elseif ($val['pattern'] == 'quarterly') {
+                    $next_due_date = date("Y-m-d", strtotime("+3 months", strtotime($due_date)));
+                    $update_data['next_due_date'] = $next_due_date;
+                } else {
+                    $update_data['next_due_date'] = '0000-00-00';
+                }
+                if ($val['generation_type'] == 1) {
+                    $generation_days = ((int) $val['generation_month'] * 30) + (int) $val['generation_day'];
+
+                    $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($update_data['next_due_date'])));
+                    $update_data['generation_date'] = $generation_date;
+                }
+                $this->db->where('id', $val['id']);
+                $this->db->update('project_recurrence_main', $update_data);
             }
         }
+    }
+
+    public function remove_non_input_form_invoice_orders() {
+        $this->db->where(['is_order' => 'y', 'order_id!=' => 0]);
+        $invoice_list = $this->db->get('invoice_info')->result_array();
+        $order_id_array = [];
+        foreach ($invoice_list as $il) {
+            $this->db->select('id');
+            $order_id_list = $this->db->get_where('order', ['invoice_id' => $il['id']])->result_array();
+            $order_ids = array_column($order_id_list, 'id');
+            if (empty($order_ids)) {
+                continue;
+            }
+            $this->db->select('service_request.services_id');
+            $this->db->where_in('order_id', $order_ids);
+            $service_request_info = $this->db->get('service_request')->result_array();
+
+            $this->db->where_in('service_id', array_column($service_request_info, 'services_id'));
+            $this->db->where(['input_form' => 'y']);
+            $target_days = $this->db->get('target_days')->result_array();
+            if (empty($target_days)) {  //check input-form exist or not 
+                $this->db->where('id', $il['id']);
+                $this->db->update('invoice_info', ['is_order' => 'n', 'order_id' => 0]);
+                $this->db->where('id', $il['order_id']);
+                $this->db->update('order', ['status' => '7', 'late_status' => '0']);
+                $order_id_array[] = $il['order_id'];
+            }
+        }
+        echo implode(', ', $order_id_array) . ' orders has been canceled';
+    }
 
 }
