@@ -210,7 +210,7 @@
                                             ?>
                                             <span class="label input-form-incomplete">Incomplete <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-plus" aria-hidden="true"></i> </a></span>
                                         <?php } else { ?>
-                                            <span class="label input-form-complete">Complete <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
+                                            <span class="label input-form-complete">Completed <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
                                             <?php
                                         }
                                     }
