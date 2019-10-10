@@ -224,7 +224,7 @@ class Project_Template_model extends CI_Model {
             $task_data['responsible_task_staff'] = $post['task']['responsible_task_staff'];
         }
         $task_staff_list = $this->get_department_staff_by_department_id($post['task']['department']);
-//        print_r($task_data);die;
+//        print_r($task_staff_list);die;
         $this->db->insert('project_template_task', $task_data);
         $insert_id = $this->db->insert_id();
         if ($post['task']['department'] != 2) {
@@ -237,7 +237,7 @@ class Project_Template_model extends CI_Model {
 //                echo "a";die;
                 foreach ($task_staff_list as $ins_staff_id) {
                     $staffId = $ins_staff_id['id'];
-                    $this->db->insert('project_task_staff', ['task_id' => $insert_id, 'staff_id' => $staffId]);
+                    $this->db->insert('project_template_task_staff', ['task_id' => $insert_id, 'staff_id' => $staffId]);
                 }
 //                echo $this->db->last_query();
             }
@@ -1069,6 +1069,17 @@ class Project_Template_model extends CI_Model {
                         $this->insert_task_note(11, $nd, "task_id", $project_task_id, 'task');
                     }
                 }
+                if (isset($project_task_staff_data) && !empty($project_task_staff_data)) {
+                    if($this->db->get_where('project_task_staff',['task_id'=>$project_task_id])->num_rows()<1){
+                        foreach ($project_task_staff_data as $key => $val) {
+                            unset($val['id']);
+                            unset($val['task_id']);
+                            $val['task_id'] = $project_task_id;
+                            $this->db->set($val);
+                            $this->db->insert('project_task_staff', $val);
+                        }
+                    }
+                }
             }
         }
         // Find partner or manager for project task for assign.
@@ -1123,15 +1134,7 @@ class Project_Template_model extends CI_Model {
                 $this->db->insert('project_staff_main', $val);
             }
         }
-        if (isset($project_task_staff_data) && !empty($project_task_staff_data)) {
-            foreach ($project_task_staff_data as $key => $val) {
-                unset($val['id']);
-                unset($val['task_id']);
-                $val['task_id'] = $tid[$key];
-                $this->db->set($val);
-                $this->db->insert('project_task_staff', $val);
-            }
-        }
+        
 //        echo $tid[$key];
 //        print_r($project_task_notes);
 //        die;
@@ -1421,7 +1424,7 @@ class Project_Template_model extends CI_Model {
 //                echo "a";die;
                 foreach ($task_staff_list as $ins_staff_id) {
                     $staffId = $ins_staff_id['id'];
-                    $this->db->insert('project_task_staff', ['task_id' => $task_id, 'staff_id' => $staffId]);
+                    $this->db->insert('project_template_task_staff', ['task_id' => $task_id, 'staff_id' => $staffId]);
                 }
 //                echo $this->db->last_query();
             }

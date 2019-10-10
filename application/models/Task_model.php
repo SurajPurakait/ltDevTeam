@@ -47,7 +47,7 @@ class Task_model extends CI_Model {
         $select = implode(', ', $this->project_select);
         $this->db->select($select);
         $this->db->select('pt.*');
-        $this->db->select('pm.created_at,pro.client_id,pm.office_id as project_office_id');
+        $this->db->select('pm.created_at as project_created_at,pro.client_id,pm.office_id as project_office_id');
         $this->db->from('project_task AS pt');
         $this->db->join('project_main AS pm', 'pm.id = pt.project_id', 'LEFT');
         $this->db->join('projects AS pro', 'pro.id = pt.project_id', 'inner');

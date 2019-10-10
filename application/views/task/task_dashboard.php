@@ -78,7 +78,7 @@ if (!empty($task_list)) {
 //                                                             start date and complete date calculation
 
         $created_at = strtotime(date('Y-m-d', strtotime($task['created_at'])));
-//                            $due_date = strtotime($dueDate);
+        $due_date = strtotime($dueDate);
         $start_date = $task['target_start_date'] . 'days';
         $complete_date = $task['target_complete_date'] . 'days';
         if ($task['target_start_day'] == 1) {
@@ -110,7 +110,7 @@ if (!empty($task_list)) {
                                 <th style='width:8%;  text-align: center;'>Description</th>
                                 <th style='width:8%;  text-align: center;'>Assign To</th>
                                 <th style='width:8%;  text-align: center;'>Start Date</th>
-                                <th style='width:8%;  text-align: center;'>Completed Date</th>
+                                <th style='width:8%;  text-align: center;'>Complete Date</th>
                                 <th style='width:8%;  text-align: center;'>Tracking Description</th>
                                 <th style="width:8%;  text-align: center;">SOS</th>
                                 <th style="width:8%;  text-align: center;">Note</th>
@@ -154,8 +154,8 @@ if (!empty($task_list)) {
                                     <td title="Assign To" class="text-center"><span class="text-success"><?php echo get_assigned_project_task_staff($task['id']); ?></span><br><?php echo get_assigned_project_task_department($task['id']); ?></td>                                                     
                                 <?php } ?>
                         <!--<td title="Assign To" class="text-center"><span class="text-success"><?php // echo get_assigned_project_task_staff($task['id']); ?></span><br><?php // echo get_assigned_project_task_department($task['id']); ?></td>-->                                                     
-                                <td title="Start Date" class="text-center"><?= $targetSstartDate ?></td>
-                                <td title="Complete Date" class="text-center"><?= $targetCompleteDate ?></td>
+                                <td title="Start Date" class="text-center">T: <?= $targetSstartDate ?></td>
+                                <td title="Complete Date" class="text-center">T: <?= $targetCompleteDate ?></td>
                                 <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task['id']; ?>,<?= $status; ?>, <?= $task['id'] ?>);'><span class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                                 <td title="SOS" style="text-align: center;">
                                     <span>
