@@ -67,7 +67,7 @@ foreach ($result as $value):
     <div class="panel panel-default service-panel">
         <div class="panel-heading">
             <?php if ($row->invoice_status == 1 && ($usertype == 1 || in_array(14, explode(',', $user_dept)) || in_array(3, explode(',', $user_dept)) || $row->created_by == sess('user_id'))) { ?>
-                <a href="<?= (($row->is_order == 'y' && $row->order_id != 0) || ($row->is_order == 'n' && $row->order_id == 0)) ? base_url("billing/invoice/edit/" . base64_encode($row->invoice_id)) : base_url() . edit_order_link($row->order_id); ?>" target="_blank" class="btn btn-primary btn-xs btn-service-edit btn-service-invoice-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+                <a href="<?= (($row->is_order == 'y' && $row->order_id != 0) || ($row->is_order == 'n' && $row->order_id == 0)) ? base_url("billing/invoice/edit/" . base64_encode($row->invoice_id)) : (edit_order_link($row->order_id) != '' ? base_url() . edit_order_link($row->order_id) : base_url("billing/invoice/edit/" . base64_encode($row->invoice_id))); ?>" target="_blank" class="btn btn-primary btn-xs btn-service-edit btn-service-invoice-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
             <?php } ?>
             <?php if (in_array(3, explode(',', $user_dept)) && $payment_status != 4): ?>
                     <!--<a href="javascript:void(0);" onclick="changePaymentStatus(<?= $row->invoice_id; ?>);" class="btn btn-primary btn-xs btn-service-assign "><i class="fa fa-check" aria-hidden="true"></i> Complete</a>-->

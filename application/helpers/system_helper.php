@@ -1831,6 +1831,9 @@ if (!function_exists('edit_order_link')) {
         $usertype = $user_info['type'];
         $ci->load->model('service_model');
         $result = $ci->service_model->get_order_by_id($order_id);
+        if (empty($result)) {
+            return '';
+        }
         $row = (object) $result;
         $service = $ci->service_model->get_service_by_id($row->service_id);
         $serviceid = $ci->service_model->get_service_by_shortname('acc_s_t_r');
