@@ -971,9 +971,9 @@ Class System extends CI_Model {
         }
     }
 
-    public function get_general_notification_by_user_id($user_id, $limit = '', $where = [], $start = '', $forother = '') {
+    public function get_general_notification_by_user_id($user_id, $limit = '', $where = [], $start = '', $request_type = '') {
         // For fetch all general notifications @sumanta
-//        echo $forother;die;
+//        echo $request_type;die;
         $user_info = staff_info();
         $staff_office = $user_info['office'];
         $select[] = 'gn.id AS id';
@@ -999,10 +999,10 @@ Class System extends CI_Model {
         $this->db->from('general_notifications AS gn');
         if ($user_info['type'] == 1 || $user_info['department'] == 14) {
             //$this->db->where(['gn.read_status' => 'n']);
-            if ($forother == 'forme') {
-                $this->db->where(['gn.user_id' => $user_id, 'gn.read_status' => 'n']);
-            } elseif ($forother == 'forother') {
-                $this->db->where(['gn.user_id!=' => $user_id, 'gn.read_status' => 'n', 'gn.added_by!=' => $user_id]);
+            if ($request_type == 'forme') {
+                $this->db->where(['gn.added_by' => $user_id, 'gn.read_status' => 'n']);
+            } elseif ($request_type == 'forother') {
+                $this->db->where(['gn.added_by!=' => $user_id, 'gn.read_status' => 'n', 'gn.added_by!=' => $user_id]);
             } else {
                 $this->db->where(['gn.user_id' => $user_id, 'gn.read_status' => 'n']);
             }
@@ -1015,9 +1015,9 @@ Class System extends CI_Model {
             $this->db->where_in('gn.user_id', $get_ofc_staffs);
             $this->db->where('gn.read_status', 'n');
         } else {
-            if ($forother == 'forme') {
+            if ($request_type == 'forme') {
                 $this->db->where(['gn.user_id' => $user_id, 'gn.read_status' => 'n']);
-            } elseif ($forother == 'forother') {
+            } elseif ($request_type == 'forother') {
                 $this->db->where(['gn.user_id!=' => $user_id, 'gn.read_status' => 'n', 'gn.added_by!=' => $user_id]);
             } else {
                 $this->db->where(['gn.user_id' => $user_id, 'gn.read_status' => 'n']);

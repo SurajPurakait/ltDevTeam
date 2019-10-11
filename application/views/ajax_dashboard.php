@@ -419,6 +419,7 @@ if ($section == 'notification') {
         <?php
         if (!empty($general_notification_list)) {
             foreach ($general_notification_list as $notification_index => $gnl) {
+
                 $diff_days = $gnl['how_old_days'];
                 $diff_text = 'more30';
                 if ($diff_days == 0) {
@@ -430,6 +431,13 @@ if ($section == 'notification') {
                 } elseif ($diff_days > 7 && $diff_days <= 30) {
                     $diff_text = 'last30';
                 }
+
+                // if (strpos($gnl['notification_text'], 'YOU') !== false) {
+                //     $ref_by = "byme";
+                // } else {
+                //     $ref_by = "byothers";
+                // }
+
                 if ($gnl['reference'] == 'invoice') {
                     $reference_type = "Billing";
                     $class = 'invoice';
@@ -446,8 +454,9 @@ if ($section == 'notification') {
                     $class1 = 'bg-yellow';
                     $view_url = base_url() . 'services/home/view/' . $gnl['reference_id'];
                 }
+
                 ?>
-                <div class="feed-element notification-item notification-<?= $gnl['reference']; ?> notification-<?= ($notification_index > 4) ? 'hide' : 'show'; ?> notification-<?= $diff_text; ?>" <?= ($notification_index > 4) ? 'style="display: none;"' : ''; ?> id="notification-div-<?= $gnl['id']; ?>">
+                <div class="feed-element notification-item notification-<?= $gnl['reference']; ?>  notification-<?= ($notification_index > 4) ? 'hide' : 'show'; ?> notification-<?= $diff_text; ?>" <?= ($notification_index > 4) ? 'style="display: none;"' : ''; ?> id="notification-div-<?= $gnl['id']; ?>">
                     <?php //if ($gnl['added_by'] != sess('user_id')):   ?>
                     <a href="javascript:void(0);" onclick="readNotification('<?= $gnl['id']; ?>');document.getElementById('notification-div-<?= $gnl['id']; ?>').remove();" class="pull-right text-muted p-5 p-t-0"><i class="fa fa-times"></i></a>
                     <?php //endif;   ?>
@@ -465,10 +474,11 @@ if ($section == 'notification') {
             <p class="text-danger notification-empty" <?= $notification_counts != 0 ? 'style="display: none;"' : ''; ?>>Notification not found</p>
         <?php } ?>
     </div>
-    <?php if ($notification_counts != 0) { ?>
-                                                                                                                <!--<button onclick="displayNotificationItems('item');" class="btn btn-primary btn-block m-t notification-see-more-btn"><i class="fa fa-arrow-down"></i> Show More</button>-->
+    <?php if ($notification_counts != 0) { ?>                                               
+        <!--<button onclick="displayNotificationItems('item');" class="btn btn-primary btn-block m-t notification-see-more-btn"><i class="fa fa-arrow-down"></i> Show More</button>-->
         <input type="hidden" name="start_val" id="start_val" value="<?= $notification_count ?>">
-        <button onclick="loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '<?= $notification_count ?>');" class="btn btn-primary btn-block m-t notification-see-more-btn"><i class="fa fa-arrow-down"></i> Load More</button>
+        <!-- <input type="hidden" name="request_type" id="request_type" value="<?= $request_type ?>"> -->
+        <button onclick="loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '<?= $notification_count ?>', '', '', '<?= $request_type ?>');" class="btn btn-primary btn-block m-t notification-see-more-btn"><i class="fa fa-arrow-down"></i> Load More</button>
         <?php
     }
 }

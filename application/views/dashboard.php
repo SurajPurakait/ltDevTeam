@@ -486,7 +486,7 @@ $staff_department_array = explode(',', $staffInfo['department']);
 
             <div class="ibox" id="widget_notification">
                 <div class="ibox-title">
-                    <h5 class="">General Notifications</h5>
+                    <h5 class="">Notifications</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link" href="javascript:void(0)">
                             <i class="fa fa-chevron-up"></i>
@@ -519,19 +519,27 @@ $staff_department_array = explode(',', $staffInfo['department']);
                             <i class="fa fa-refresh" title="Loading"></i>
                             <a href="javascript:void(0);" title="Refresh" onclick="loadHomeDashboard('notification', '<?= sess('user_id'); ?>', '', '', '', '', '', 'refresh');"><i class="fa fa-refresh"></i></a>
                         </div>
+                        <div class="dropdown pull-right m-r-5"> 
+                            <button class="btn btn-white btn-xs dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-user-circle-o"></i> <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="javascript:void(0);" onclick="loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '', '', '', 'forme');">By Me</a></li>
+                                <li><a href="javascript:void(0);" onclick="loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '', '', '', 'forother');">By Others</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div class="ibox-content">
                     <div class="notification-section"></div>
                     <div class="clear-notification"></div>
                 </div>
+                <div class=""></div>
             </div>            
         </div>
     </div>
 </div>
 <script type="text/javascript">
     loadHomeDashboard('sos', '<?= sess('user_id'); ?>', '', '', '');
-    loadHomeDashboard('notification', '<?= sess('user_id'); ?>', '', '', '');
+    loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '', '', '', 'forme');
     loadHomeDashboard('news_update', '<?= sess('user_id'); ?>', '', '', '');
 //    loadHomeDashboard('service', '<?//= sess('user_id'); ?>', '', '', '');
 //    loadHomeDashboard('action', '<?//= sess('user_id'); ?>', '', '', '');

@@ -496,7 +496,7 @@ function jumpDiv() {
 }
 
 var allAjaxRequest = [];
-function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID, limit = '10', start = '', refresh = '', is_clear = '') {
+function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID, limit = '10', start = '', refresh = '', is_clear = '', requestType = '') {
     var start_val;
     if (refresh != '') {
         start_val = '0';
@@ -536,15 +536,19 @@ function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID,
         };
     }
     if (section == 'notification') {
+        // if(requestType == '' || requestType == 'undefined') {
+        //     requestType = $('#request_type').val();
+        //     alert(requestType);
+        // }
         data = {
-
             section: section,
             staff_id: staffID,
             office_id: officeID,
             department_id: departmentID,
             lead_type_id: leadTypeID,
             start: start,
-            start_val: start_val
+            start_val: start_val,
+            request_type: requestType
         };
     }
     var thisAjaxRequest = $.ajax({
