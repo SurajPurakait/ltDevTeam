@@ -535,9 +535,10 @@ Class Lead_management extends CI_Model {
                     $filter_key = trim($filter_key);
                     if ($filter_key == "active_date" || $filter_key == "complete_date") {
                         if (strlen($filter[0]) == 10) {
-                            echo $date_value = date("Y-m-d", strtotime($filter[0]));
+                            $date_value = date("Y-m-d", strtotime($filter[0]));
+                            // echo $date_value;
                             $filter_where_in[$this->filter_element[$filter_key]][] = $date_value;
-                            print_r($filter_where_in);
+                            // print_r($filter_where_in);
                         } elseif (strlen($filter[0]) == 23) {
                             $date_value = explode(" - ", $filter[0]);
                             foreach ($date_value as $date_key => $date) {
@@ -1425,7 +1426,7 @@ Class Lead_management extends CI_Model {
         switch ($element_key):
             case 1: {
                     // return $type_array;
-                    return $this->db->get('type_of_contact_referral')->result_array();
+                    return $this->db->get('type_of_contact_prospect')->result_array();
                 }
                 break;
             case 2: {

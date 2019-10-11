@@ -34,9 +34,10 @@
                 <div class="table-responsive">
                     <table class="table table-borderless text-center" style="margin-bottom: 0px;">
                         <tr>
-                            <th class="text-center" width="20%">Visit Id</th>
-                            <th class="text-center" width="20%">Date</th>
-                            <th class="text-center" width="20%">Subject</th>
+                            <th class="text-center" width="10%">ID</th>
+                            <th class="text-center" width="10%">DATE</th>
+                            <th class="text-center" width="20%">OFFICE</th>
+                            <th class="text-center" width="20%">SUBJECT</th>
                             <th class="text-center" width="20%">Tracking</th>
                             <th class="text-center" width="20%">Created By</th>
                             <!-- <th class="text-center" width="25%">Office</th> -->
@@ -45,10 +46,20 @@
 
                         <tr>
                             <td title="Visit Id"><?= $value['id']; ?></td>
-                            <td title="Date"><?= $value['date']; ?></td>
+                            <td title="Date"><?= date("m-d-Y", strtotime($value['date']));?></td>
+                            <td title="Office">
+                                <?php
+                                    $val1 = explode(",",$value['office']);
+                                    for ($i=0; $i <count($val1) ; $i++) { 
+                                        echo get_office_name_by_office_id($val1[$i])."<br>";      
+                                    }
+                                ?> 
+                            </td>
                             <td title="Subject"><?= $value['subject']; ?></td>
                             <td title="Status"><a href='javascript:void(0);' onclick="change_visitation_status(<?= $value['id']; ?>,<?= $value['status']; ?>);" ><span class="<?= $visitation_trk; ?>" style="width: 80px; display: inline-block; text-align: center;"><?= $visitation_status; ?></span></a></td>
-                            <td title="Created By"><?= get_assigned_by_staff_name($value['added_by_user']); ?></td>
+                            <td title="Created By"><?= get_assigned_by_staff_name($value['added_by_user'])."<br>" ?>
+                               <?= staff_department_name($value['added_by_user']) ?>
+                            </td>
                             <!-- <td title="Office"><?//= $value['office_name']; ?></td> -->
                             <!-- <td title="Manager"> </td> -->
                            
@@ -66,9 +77,9 @@
                         <tr>
                             <!-- <th class="text-center">Franchise Id</th> -->
                             <!-- <th class="text-center">Franchise Manager</th> -->
-                            <th class="text-center">Start Time</th>
-                            <th class="text-center">End Time</th>
-                            <th class="text-center">Office</th>
+                            <th class="text-center">Time</th>
+                            <!-- <th class="text-center">Start Time</th> -->
+                            <!-- <th class="text-center">End Time</th> -->
                             <th class="text-center">Participants</th>
                             <th class="text-center">Notes</th>                            
                             <th class="text-center">Attachments</th>
@@ -78,20 +89,14 @@
                                     <!-- <td title="Franchise Id"></td> -->
                                     <!-- <td title="Franchise Manager"><?//= get_assigned_by_staff_name($value['manager']); ?></td> -->
                                     
-                                    <td title="Start Time"><?= $value['start_time']; ?></td>
-                                    <td title="End Time"><?= $value['end_time']; ?></td>
+                                    <td title="Time">Start: <?= $value['start_time']."<br>" ?>
+                                                    Finish: <?= $value['end_time']; ?>
+                                    </td>
+                                    <!-- <td title="Start Time"><?//= $value['start_time']; ?></td> -->
+                                    <!-- <td title="End Time"><?//= $value['end_time']; ?></td> -->
                                     <!-- <td title="Office"><?//= get_office_name_by_office_id(explode(",",$value['office'])); ?></td> -->
-                                    <?php 
-                                        
-                                    ?>
-                                    <td title="Office">
-                                        <?php
-                                            $val1 = explode(",",$value['office']);
-                                            for ($i=0; $i <count($val1) ; $i++) { 
-                                                echo get_office_name_by_office_id($val1[$i])."<br>";      
-                                            }
-                                        ?>        
-                                    </td> 
+                                    
+                                   
                                     <td title="Participants">
                                         <?php
                                             $val2 = explode(",",$value['participants']);

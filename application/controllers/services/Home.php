@@ -44,7 +44,9 @@ class Home extends CI_Controller {
     }
 
     public function edit($order_id = '') {
+
         $this->load->layout = 'dashboard';
+        $order_id = base64_decode($order_id);
         $edit_data = $this->service_model->get_order_info_by_id($order_id);
 // echo "<pre>";
 // print_r($edit_data);exit;
@@ -177,6 +179,7 @@ class Home extends CI_Controller {
 
     public function view($order_id = '') {
         $this->load->layout = 'dashboard';
+        $order_id = base64_decode($order_id);
         $order_info = $this->service_model->get_order_info_by_id($order_id);
         $title = (($order_info['service_shortname'] == 'inc_n_c_f' || $order_info['service_shortname'] == 'inc_n_c_d') ? 'New Company' : $order_info['service_name']);
         $render_data['title'] = $title . ' | Tax Leaf';

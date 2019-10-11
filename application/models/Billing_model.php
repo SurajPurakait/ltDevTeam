@@ -1284,9 +1284,11 @@ class Billing_model extends CI_Model {
 
         if ($reference_id != '') {
             unset($where_or);
+            unset($where['inv.payment_status']);
             $reference = explode("-", $reference_id);
             $where['indt.reference_id'] = 'AND `indt`.`reference_id` = ' . $reference[0] . ' ';
             $where['indt.reference'] = 'AND `indt`.`reference` = "' . $reference[1] . '" ';
+            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 7) ';
         }
 
         $table = '`invoice_info` AS `inv` ' .

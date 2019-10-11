@@ -146,6 +146,8 @@ class Incorporation extends CI_Controller {
         $this->load->model('Staff');
         $this->load->model('Service');
         $this->load->model('service_model');
+
+        $edit_id = base64_decode($edit_id);
         $edit_data = $this->Service->get_edit_data($edit_id);
         $this->load->layout = 'dashboard';
         $render_data['title'] = 'Edit Company | Tax Leaf';

@@ -1,6 +1,6 @@
 <?php
 if(!empty($mngrs)){ ?>
-    <option value="">Select Manager</option>
+    <option value="">Select an option</option>
 <?php 
 foreach($mngrs as $m){
     
@@ -11,5 +11,5 @@ if(is_array($selected)){ ?>
 <?php } 
 } // endforeach ?>
 <?php } else{ ?>
-<option value="">Select Manager</option>
+<option value="">Select an option</option>
 <?php } ?>

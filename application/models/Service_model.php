@@ -1705,6 +1705,7 @@ class Service_model extends CI_Model {
     }
 
     public function save_order($data) {
+//        print_r($data['related_services']);die;
         $user_info = staff_info();
         $user_department = $user_info['department'];
         $tracking = time();
@@ -1736,7 +1737,7 @@ class Service_model extends CI_Model {
                 'tracking' => $tracking,
                 'date_started' => $target['start_date'],
                 'date_completed' => $target['end_date'],
-                'responsible_department' => $user_department,
+                'responsible_department' => $service['service_department'],
                 'responsible_staff' => sess('user_id'),
                 'status' => '2'
             ];
@@ -1758,7 +1759,7 @@ class Service_model extends CI_Model {
                         'tracking' => $tracking,
                         'date_started' => $target['start_date'],
                         'date_completed' => $target['end_date'],
-                        'responsible_department' => $user_department,
+                        'responsible_department' => $service['service_department'],
                         'responsible_staff' => sess('user_id'),
                         'status' => '2'
                     ];
@@ -1814,44 +1815,51 @@ class Service_model extends CI_Model {
 
             $this->db->where(['order_id' => $data['editval'], 'services_id' => $data['service_id']]);
             $this->db->update('service_request', ['price_charged' => $price]);
+//            print_r($data['related_service']);
             if (isset($data['related_service']) && count($data['related_service']) > 0) {
-                $related_services = $data['related_service'];
+                $related_services = $data['related_services'];
+                $this->db->where(['order_id' => $order_id, 'services_id!=' => $data['service_id']]);
+                $this->db->delete('service_request');
                 foreach ($related_services as $service_order_id => $order_data) {
-                    $this->db->where(['order_id' => $service_order_id, 'services_id!=' => $data['service_id']]);
-                    $this->db->delete('service_request');
-                    foreach ($order_data as $service_id => $service_data) {
-                        $service = $this->get_service_by_id($service_id);
-                        if (isset($service_data['override_price']) && $service_data['override_price'] != '') {
-                            $service_request_data['price_charged'] = $service_data['override_price'];
+//                    print_r($order_data['related_service']);
+//                    $this->db->where(['order_id' => $order_id, 'services_id!=' => $data['service_id']]);
+//                    $this->db->delete('service_request');
+//                    foreach ($order_data as $service_id => $service_data) {
+//                        echo $service_id;die;
+                        $service = $this->get_service_by_id($srv_id);
+                        if (isset($data['override_price']) && $data['override_price'] != '') {
+                            $service_request_data['price_charged'] = $data['override_price'];
                         } else {
                             $service_request_data['price_charged'] = $service['retail_price'];
                         }
                         $service_request_data['tracking'] = $tracking;
-                        if ($service_id == $data['service_id']) {
-                            $this->db->where(['order_id' => $service_order_id, 'services_id' => $data['service_id']]);
-                            $this->db->update('service_request', $service_request_data);
-                        } elseif ($service_id == $data['related_service'][$order_id][$service_id]['service_id']) {
-                            if (isset($service_data['override_price']) && $service_data['override_price'] != '') {
-                                $price_charged = $service_data['override_price'];
+//                        if ($srv_id == $data['service_id']) {
+//                            echo 'a';die;
+//                            $this->db->where(['order_id' => $order_id, 'services_id' => $data['service_id']]);
+//                            $this->db->update('service_request', $service_request_data);
+//                        } else {
+//                            echo 'b';die;
+                            if (isset($data['override_price']) && $data['override_price'] != '') {
+                                $price_charged = $data['override_price'];
                             } else {
                                 $price_charged = $service['retail_price'];
                             }
-                            $target = $this->get_date_form_target_days($service_id);
+                            $target = $this->get_date_form_target_days($srv_id);
                             $service_request_data = [
                                 'order_id' => $order_id,
-                                'services_id' => $service_id,
-                                'price_charged' => $price_charged,
+                                'services_id' => $order_data,
+                                'price_charged' => $service['retail_price'],
                                 'tracking' => $tracking,
                                 'date_started' => $target['start_date'],
                                 'date_completed' => $target['end_date'],
-                                'responsible_department' => $user_department,
+                                'responsible_department' => $service['service_department'],
                                 'responsible_staff' => sess('user_id'),
                                 'status' => '2'
                             ];
 
                             $this->db->insert('service_request', $service_request_data);
-                        }
-                    } // inner foreach
+//                        }
+//                    } // inner foreach
                 } //outer foreach
             }
             $this->db->select('SUM(price_charged) AS total_price');
