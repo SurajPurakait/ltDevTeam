@@ -522,8 +522,8 @@ $staff_department_array = explode(',', $staffInfo['department']);
                         <div class="dropdown pull-right m-r-5"> 
                             <button class="btn btn-white btn-xs dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-user-circle-o"></i> <span class="caret"></span></button>
                             <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0);" onclick="loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '', '', '', 'forme');">By Me</a></li>
-                                <li><a href="javascript:void(0);" onclick="loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '', '', '', 'forother');">By Others</a></li>
+                                <li><a href="javascript:void(0);" onclick="loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '', '', '', 'forme');">Mine</a></li>
+                                <li><a href="javascript:void(0);" onclick="loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '', '', '', 'forother');">Others</a></li>
                             </ul>
                         </div>
                     </div>
