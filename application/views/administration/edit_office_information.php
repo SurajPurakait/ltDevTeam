@@ -12,6 +12,7 @@
                             
                         </div>
                         <div class="col-md-6 text-right">
+                            <a href="javascript:void(0);" id="savefee" class="btn btn-success" style="width: 100px; display: none;" onclick="save_service_fees()">Update</a>  
                             <a href="javascript:void(0);" class="btn btn-warning" style="width: 100px" onclick="cancel_office()">Back</a>                            
                             <a href="javascript:void(0);" class="btn btn-danger" style="width: 100px" onclick="delete_office('<?= $franchise_info['id']; ?>');">Delete</a>
                         </div>
@@ -19,8 +20,8 @@
                     <br>
                     <div class="tabs-container">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li class="active"><a class="nav-link active" data-toggle="tab" href="#tab-1"> INFO</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-2">FEES</a></li>
+                            <li class="active"><a class="nav-link active" data-toggle="tab" href="#tab-1" onclick="fee_update('info1','fee1')"> INFO</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#tab-2" id="fee" onclick="fee_update('fee1','info1')">FEES</a></li>
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" id="tab-1" class="tab-pane active">
@@ -194,12 +195,21 @@
             <div class="filter-outer">
                 <form name="filter_form" id="filter-form"  method="post">
                     <div class="form-group filter-inner">
-                        <table class="table table-bordered">
+                        <div class="form-group">
+                            <label class="control-label">Default %FEE&nbsp;&nbsp;</label>
+                             <input class="form-control m-r-10" type="text" id="default_fee" name="default_fee" style="width:150px; display: inline-block;">
+                             <button class="btn btn-success" type="button" onclick="show_default_fee()" style="margin-top: 3px">Apply To All</button></div>
+
+                        <table id="fees-tab" class="table table-bordered table-striped">
+                            <thead>
                             <tr>
                                 <th style="width: 35%;">Category</th>
                                 <th style="width: 35%;">Service</th>
                                 <th style="width: 35%;">% Fee</th>
                             </tr>
+                            </thead>
+
+                            <tbody>
                             <?php foreach($info_service_list as $service){
                             $fees = service_fees($franchise_info['id'], $service['id']); ?>
                             <tr>
@@ -208,7 +218,10 @@
                                     <?= $service['description']; ?>
                                     <input type="hidden" name="service[]" value="<?= $service['id']; ?>">  
                                 </td>
-                                <td><input type="text" placeholder="0.00" name="percentage[]" id="percentage" class="form-control" value="<?= isset($fees['percentage']) ? $fees['percentage'] : '0.00' ?>"></td>
+                                <td>
+                                    <!-- <input type="text" placeholder="0.00" name="percentage[]" id="percentage" class="form-control" value="<?//= isset($fees['percentage']) ? $fees['percentage'] : '0.00' ?>"> -->
+                                     <input type="text" placeholder="0.00" name="percentage[]" id="percentage" class="form-control percentage" value="<?= isset($fees['percentage']) ? $fees['percentage'] : '0.00' ?>">
+                                </td>
                             </tr>
 
                         <?php } ?>
@@ -222,13 +235,13 @@
                                 <td>the Bird</td>
                                 <td><input type="text" placeholder="" name="" class="form-control"></td>
                             </tr> -->
-                            
+                            </tbody>
                         </table>
                     </div>
                     <div class="col-md-12 text-right">  
                         <div class="m-b-10">
                             <input type="hidden" name="franchise_office_id" id="franchise_office_id" value="<?php echo $franchise_info['id']; ?>">
-                            <button class="btn btn-success"  type="button" onclick="save_service_fees()">Submit</button>
+                            <!-- <button class="btn btn-success"  type="button" onclick="save_service_fees()">Submit</button> -->
                         </div>
                     </div>
                     
@@ -311,5 +324,36 @@
         //         closeLoading();
         //     }
         // });
+
+       
     }
+
+    function fee_update(show,hide){
+       if(show == 'fee1'){
+        document.getElementById("savefee").style.display = 'inline-block';
+       }else{
+         document.getElementById("savefee").style.display = 'none';
+       }
+    }
+
+    function show_default_fee(){
+        var f = document.getElementById("default_fee").value;
+        if(f != ""){
+            $('input[name="percentage[]"]').val(f);
+        }
+    }
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        <?php if (isset($info_service_list) && count($info_service_list) > 0) { ?>
+        if ($('#fees-tab').length > 0) {
+            $("#fees-tab").dataTable({
+                "paging":   false,
+                "searching": false
+            });
+        }
+        <?php } ?>
+    });
 </script>

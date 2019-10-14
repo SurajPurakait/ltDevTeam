@@ -8872,4 +8872,13 @@ a.panel-title {
       margin-top: 0;
       padding: 5px 0 10px !important;
     }
+    
+}
+@media (max-width: 470px) {
+    .filter-inner label {
+        display: block;
+    }
+    .filter-inner input {
+        width: 105px !important;
+    }
 }
