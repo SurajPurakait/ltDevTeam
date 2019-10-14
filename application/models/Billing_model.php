@@ -1057,6 +1057,11 @@ class Billing_model extends CI_Model {
         if ($invoice_info['is_order'] == 'n') {
             return true;
         }
+        if ($invoice_info['type'] == 2) {
+            $this->db->where('id', $invoice_id);
+            $this->db->update('invoice_info', ['is_order' => 'n']);
+            return true; 
+        }
         $this->db->trans_begin();
         $service_request_columns = $this->db->list_fields('service_request');
         unset($service_request_columns[0]);
@@ -1065,15 +1070,15 @@ class Billing_model extends CI_Model {
         $order_id_list = $this->db->get_where('order', ['invoice_id' => $invoice_id])->result_array();
         $order_ids = array_column($order_id_list, 'id');
 
-        $this->db->select(implode(', ', $service_request_columns));
+        $this->db->select('service_request.' . implode(', service_request.', $service_request_columns));
+        $this->db->from('service_request');
+        $this->db->join('target_days', 'target_days.service_id = service_request.services_id');
         $this->db->order_by('service_request.id');
+        $this->db->where(['target_days.input_form' => 'y']);
         $this->db->where_in('order_id', $order_ids);
-        $service_request_info = $this->db->get('service_request')->result_array();
+        $service_request_info = $this->db->get()->result_array();
 
-        $this->db->where_in('service_id', array_column($service_request_info, 'services_id'));
-        $this->db->where(['input_form' => 'y']);
-        $target_days = $this->db->get('target_days')->result_array();
-        if (empty($target_days)) {  //check input-form exist or not 
+        if (empty($service_request_info)) {  //check input-form exist or not 
             $this->db->where('id', $invoice_id);
             $this->db->update('invoice_info', ['is_order' => 'n']);
             return true;

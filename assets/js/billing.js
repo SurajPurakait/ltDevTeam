@@ -334,7 +334,7 @@ function printOrder() {
     doPrint.print();
     doPrint.close();
 }
-function loadBillingDashboard(status = '', by = '', office = '', payment_status = '', reference_id = '') {
+function loadBillingDashboard(status = '', by = '', office = '', payment_status = '', reference_id = '', pageNumber = 0) {
     $.ajax({
         type: "POST",
         url: base_url + 'billing/home/dashboard_ajax',
@@ -343,24 +343,48 @@ function loadBillingDashboard(status = '', by = '', office = '', payment_status 
             by: by,
             office: office,
             payment_status: payment_status,
-            reference_id: reference_id
+            reference_id: reference_id,
+            page_number: pageNumber
         },
         dataType: "html",
         success: function (result) {
             if (result != '0') {
-                $('#dashboard_result_div').html(result);
-                $('.dropdown-menu li.active').removeClass('active');
-                $(".sort_type_div #sort-desc").hide();
-                $(".sort_type_div #sort-asc").css({display: 'inline-block'});
-                $("#sort-by-dropdown").html('Sort By <span class="caret"></span>');
-                $('.sort_type_div').css('display', 'none');
-                $(".variable-dropdown").val('');
-                $(".condition-dropdown").val('');
-                $(".criteria-dropdown").val('');
-                $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>');
-                $(".criteria-dropdown").trigger("chosen:updated");
-                $('#btn_clear_filter').css('display', 'none');
-                $("a.filter-button span:contains('-')").html(0);
+                if (pageNumber == 1 || pageNumber == 0) {
+                    $('#dashboard_result_div').html(result);
+                    $('.dropdown-menu li.active').removeClass('active');
+                    $(".sort_type_div #sort-desc").hide();
+                    $(".sort_type_div #sort-asc").css({display: 'inline-block'});
+                    $("#sort-by-dropdown").html('Sort By <span class="caret"></span>');
+                    $('.sort_type_div').css('display', 'none');
+                    $(".variable-dropdown").val('');
+                    $(".condition-dropdown").val('');
+                    $(".criteria-dropdown").val('');
+                    $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>');
+                    $(".criteria-dropdown").trigger("chosen:updated");
+                    $('#btn_clear_filter').css('display', 'none');
+                    $("a.filter-button span:contains('-')").html(0);
+                } else {
+                    $(".ajaxdiv").append(result);
+                    $('.result-header').not(':first').remove();
+                }
+                if (pageNumber != 0) {
+                    $('.load-more-btn').not(':last').remove();
+                }    
+            }
+
+
+
+            if (result.trim() != '') {
+                if (pageNumber == 1 || pageNumber == 0) {
+                    $(".ajaxdiv").html(result);
+                    $("a.filter-button span:contains('-')").html(0);
+                } else {
+                    $(".ajaxdiv").append(result);
+                    $('.result-header').not(':first').remove();
+                }
+                if (pageNumber != 0) {
+                    $('.load-more-btn').not(':last').remove();
+                }
             }
         },
         beforeSend: function () {

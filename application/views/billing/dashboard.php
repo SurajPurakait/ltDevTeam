@@ -109,22 +109,22 @@ $staffrole = $staff_info['role'];
                                         <tr>
                                             <th>By Me</th>
                                             <td class="text-center">
-                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-1" onclick="loadBillingDashboard('', 'byme', '', 1);">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-1" onclick="loadBillingDashboard('', 'byme', '', 1, '');">
                                                     <span class="label label-warning filter-byme-1">-</span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
-                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-2" onclick="loadBillingDashboard('', 'byme', '', 2);">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-2" onclick="loadBillingDashboard('', 'byme', '', 2, '');">
                                                     <span class="label label-success filter-byme-2">-</span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
-                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-3" onclick="loadBillingDashboard('', 'byme', '', 3);">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-3" onclick="loadBillingDashboard('', 'byme', '', 3, '');">
                                                     <span class="label label-primary filter-byme-3">-</span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
-                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-4" onclick="loadBillingDashboard('', 'byme', '', 4);">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-4" onclick="loadBillingDashboard('', 'byme', '', 4, '');">
                                                     <span class="label label-danger filter-byme-4">-</span>
                                                 </a>
                                             </td>
@@ -133,22 +133,22 @@ $staffrole = $staff_info['role'];
                                             <tr>
                                                 <th>By Others</th>
                                                 <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-1" onclick="loadBillingDashboard('', 'tome', '', 1);">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-1" onclick="loadBillingDashboard('', 'tome', '', 1, '');">
                                                         <span class="label label-warning filter-byothers-1">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-2" onclick="loadBillingDashboard('', 'tome', '', 2);">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-2" onclick="loadBillingDashboard('', 'tome', '', 2, '');">
                                                         <span class="label label-success filter-byothers-2">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-3" onclick="loadBillingDashboard('', 'tome', '', 3);">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-3" onclick="loadBillingDashboard('', 'tome', '', 3, '');">
                                                         <span class="label label-primary filter-byothers-3">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-4" onclick="loadBillingDashboard('', 'tome', '', 4);">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-4" onclick="loadBillingDashboard('', 'tome', '', 4, '');">
                                                         <span class="label label-danger filter-byothers-4">-</span>
                                                     </a>
                                                 </td>
@@ -178,7 +178,7 @@ $staffrole = $staff_info['role'];
                     <div class="clearfix">
                         <div class="row">
                             <div class="col-lg-6">
-                                <h2 class="text-primary dashboard-item-result"></h2>
+                                <h2 class="text-primary dashboard-item-result result-header"></h2>
                             </div>
                             <div class="col-lg-6">
                                 <div class="pull-right text-right">
@@ -326,7 +326,7 @@ $staffrole = $staff_info['role'];
     </div>
 </div>
 <script>
-    loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load');
+    loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1);
     var content = $(".filter-div").html();
     var variableArray = [];
     var elementArray = [];

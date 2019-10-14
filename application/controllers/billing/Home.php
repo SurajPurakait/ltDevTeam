@@ -74,6 +74,7 @@ class Home extends CI_Controller {
             $render_data['reference_id'] = $reference_id = post('reference_id');
         }
         $render_data['filter_status'] = post('payment_status');
+        $render_data['page_number'] = request('page_number');
         $render_data['result'] = $this->billing_model->billing_list($status, $by, $office, $payment_status, $reference_id);
         $this->load->view('billing/ajax_dashboard', $render_data);
     }

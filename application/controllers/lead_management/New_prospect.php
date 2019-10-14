@@ -191,34 +191,8 @@ class New_prospect extends CI_Controller {
                                   <td width="97%" class="textonegro"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                       <td valign="top">TaxLeaf <font color="#e46e04"><strong>Corporate</strong></font><br />
-                    1549 NE 123 ST<br />
-                    North Miami, FL 33161<br /></td>
-                                      <td valign="top"><p>TaxLeaf <font color="#e46e04"><strong>Coral Springs</strong></font><br />
-                                        3111 N University Ave #105<br />
-                                        Coral Springs, Fl 33065<br />
-                                        Phone: (954) 345-7585
-                                      </p>
-                                        <p>&nbsp;</p></td>
-                                      <td valign="top">TaxLeaf <font color="#e46e04"><strong>Doral</strong></font><br /> 
-                                        8175 NW 12 ST #130
-                    <br />
-                    Doral, Fl 33129<br />
-                    Phone: (305) 433-7945 </td>
-                                    </tr>
-                                    <tr>
-                                      <td valign="top"><br />
-                    Phone: (888) Y-TAXLEAF<br />
-                    Fax: (815) 550-1294<br />
-                    email: <a href="mailto:info@taxleaf.com" target="_blank">info@taxleaf.com</a></td>
-                                      <td valign="top">&nbsp;</td>
-                                      <td valign="top">&nbsp;</td>
-                                    </tr>
-                                  </table></td>
-                                  <td width="3%" valign="top"><table width="100%" border="0" cellspacing="7" cellpadding="0">
-                                    <tr>
-                                      <td width="75%"><img src="http://www.taxleaf.com/Email/1380919403_facebook_square.png" width="24" height="24" /></td>
-                                      <td width="13%"><img src="http://www.taxleaf.com/Email/1380919424_twitter_square.png" width="24" height="24" /></td>
-                                      <td width="12%"><img src="http://www.taxleaf.com/Email/1380919444_skype_square_color.png" width="24" height="24" /></td>
+                                            1549 NE 123 ST<br />
+                                            North Miami, FL 33161<br /></td>
                                     </tr>
                                   </table></td>
                                 </tr>

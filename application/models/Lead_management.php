@@ -471,7 +471,7 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_lead_list($lead_type, $status, $request_by = "", $lead_contact_type = "", $filter_data = [], $is_partner = "") {
+    public function get_lead_list($lead_type, $status, $request_by = "", $lead_contact_type = "", $filter_data = [], $is_partner = "",$sort_criteria = '', $sort_type = '') {
         $staff_info = staff_info();
         $user_department = $staff_info['department'];
         $staff_id = sess('user_id');
@@ -570,8 +570,15 @@ Class Lead_management extends CI_Model {
         if ($is_partner == 1) {
             $this->db->where(['lm.referred_status' => 1]);
         }
+        if ($sort_criteria != '') {
+//            echo $sort_criteria.', '.$sort_type;die;
+            $this->db->order_by($sort_criteria, $sort_type);
+        } else {
+            $this->db->order_by("lm.id", "DESC");
+        }
 
         $result = $this->db->get()->result_array();
+//        echo $this->db->last_query();die;
         return $result;
     }
 

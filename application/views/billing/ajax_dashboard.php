@@ -16,7 +16,18 @@ $tracking = [
     7 => 'Canceled'
 ];
 $i = 0;
-foreach ($result as $value):
+$row_number = 0;
+foreach ($result as $row_count => $value):
+    if(isset($page_number)){
+        if($page_number != 1){
+            if($row_count < (($page_number - 1) * 20)){
+                continue;
+            }
+        }
+        if($row_count == ($page_number * 20)){
+            break;
+        }
+    }
     $row = (object) $value;
     $service_list = billing_services($row->invoice_id);
     $payment_status = $row->payment_status;
@@ -177,7 +188,14 @@ foreach ($result as $value):
         <?php
     endif;
     $i++;
+    $row_number = $row_count + 1;
 endforeach;
+if(isset($page_number) && $row_number < count($result)): ?>
+    <div class="text-center p-0 load-more-btn">
+        <a href="javascript:void(0);" onclick="loadBillingDashboard('', '', '', '', 'on_load',<?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more result</a>
+    </div>
+<?php endif; ?>
+<?php
 if ($i == 0):
     ?>
     <div class="text-center m-t-30">
@@ -200,8 +218,11 @@ else:
     <?php foreach ($filter_array as $key => $value): ?>
                 $('span.filter-<?= $key; ?>').html('<?= $value != '' ? $value : 0; ?>');
     <?php endforeach; ?>
-            $('.dashboard-item-result').html('<?= $i; ?> Results found');
+            $('.dashboard-item-result').html('<?= isset($page_number) ? ((($page_number * 20) > count($result)) ? count($result):($page_number * 20) ) : ""; ?> Results found of <?= isset($page_number) ? count($result) : "" ; ?>');
             $('[data-toggle="tooltip"]').tooltip();
+            <?php if(isset($page_number) && $row_number == count($result)): ?>
+                $('.load-more-btn').remove();
+            <?php endif; ?>
         });
     </script>
 <?php endif; ?>
