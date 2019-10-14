@@ -1737,7 +1737,7 @@ class Service_model extends CI_Model {
                 'tracking' => $tracking,
                 'date_started' => $target['start_date'],
                 'date_completed' => $target['end_date'],
-                'responsible_department' => $service['service_department'],
+                'responsible_department' => $user_department,
                 'responsible_staff' => sess('user_id'),
                 'status' => '2'
             ];
@@ -1759,7 +1759,7 @@ class Service_model extends CI_Model {
                         'tracking' => $tracking,
                         'date_started' => $target['start_date'],
                         'date_completed' => $target['end_date'],
-                        'responsible_department' => $service['service_department'],
+                        'responsible_department' => $user_department,
                         'responsible_staff' => sess('user_id'),
                         'status' => '2'
                     ];

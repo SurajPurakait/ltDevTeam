@@ -369,21 +369,6 @@ function loadBillingDashboard(status = '', by = '', office = '', payment_status 
                 }
                 if (pageNumber != 0) {
                     $('.load-more-btn').not(':last').remove();
-                }    
-            }
-
-
-
-            if (result.trim() != '') {
-                if (pageNumber == 1 || pageNumber == 0) {
-                    $(".ajaxdiv").html(result);
-                    $("a.filter-button span:contains('-')").html(0);
-                } else {
-                    $(".ajaxdiv").append(result);
-                    $('.result-header').not(':first').remove();
-                }
-                if (pageNumber != 0) {
-                    $('.load-more-btn').not(':last').remove();
                 }
             }
         },

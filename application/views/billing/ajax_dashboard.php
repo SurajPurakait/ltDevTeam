@@ -18,13 +18,13 @@ $tracking = [
 $i = 0;
 $row_number = 0;
 foreach ($result as $row_count => $value):
-    if(isset($page_number)){
-        if($page_number != 1){
-            if($row_count < (($page_number - 1) * 20)){
+    if (isset($page_number)) {
+        if ($page_number != 1) {
+            if ($row_count < (($page_number - 1) * 20)) {
                 continue;
             }
         }
-        if($row_count == ($page_number * 20)){
+        if ($row_count == ($page_number * 20)) {
             break;
         }
     }
@@ -187,16 +187,16 @@ foreach ($result as $row_count => $value):
         <h3 class="pull-right alert alert-warning"><i class="fa fa-warning"></i> Total Due: $<?= number_format((float) array_sum(array_column($result, 'sub_total')) - array_sum(array_column($result, 'pay_amount')), 2, '.', ''); ?></h3>
         <?php
     endif;
-    $i++;
     $row_number = $row_count + 1;
 endforeach;
-if(isset($page_number) && $row_number < count($result)): ?>
+if (isset($page_number) && $row_number < count($result)):
+    ?>
     <div class="text-center p-0 load-more-btn">
-        <a href="javascript:void(0);" onclick="loadBillingDashboard('', '', '', '', 'on_load',<?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more result</a>
+        <a href="javascript:void(0);" onclick="loadBillingDashboard('', '', '', '', 'on_load', <?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more result</a>
     </div>
 <?php endif; ?>
 <?php
-if ($i == 0):
+if ($row_number == 0):
     ?>
     <div class="text-center m-t-30">
         <div class="alert alert-danger">
@@ -215,12 +215,12 @@ else:
     ?>
     <script>
         $(function () {
-    <?php foreach ($filter_array as $key => $value): ?>
+            <?php foreach ($filter_array as $key => $value): ?>
                 $('span.filter-<?= $key; ?>').html('<?= $value != '' ? $value : 0; ?>');
-    <?php endforeach; ?>
-            $('.dashboard-item-result').html('<?= isset($page_number) ? ((($page_number * 20) > count($result)) ? count($result):($page_number * 20) ) : ""; ?> Results found of <?= isset($page_number) ? count($result) : "" ; ?>');
-            $('[data-toggle="tooltip"]').tooltip();
-            <?php if(isset($page_number) && $row_number == count($result)): ?>
+            <?php endforeach; ?>
+                $('.dashboard-item-result').html('<?= isset($page_number) ? ((($page_number * 20) > count($result)) ? count($result) : ($page_number * 20) ) : ""; ?> Results found of <?= count($result); ?>');
+                $('[data-toggle="tooltip"]').tooltip();
+            <?php if (isset($page_number) && $row_number == count($result)): ?>
                 $('.load-more-btn').remove();
             <?php endif; ?>
         });
