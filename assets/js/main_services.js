@@ -359,7 +359,7 @@ function delete_document(reference, reference_id, id, file_name) {
 function employee_modal(modal_type, employee_id) {
     if (modal_type == "add") {
         var employee_count = $("#employee_info").val();
-        if ($("#payroll_employee_people_total")) {
+        if (typeof $("#payroll_employee_people_total option:selected").val() !== 'undefined') {
             var max_employee = $("#payroll_employee_people_total option:selected").val().split("-");
             max_employee = max_employee[1];
             if (parseInt(employee_count) > parseInt(max_employee)) {
