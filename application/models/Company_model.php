@@ -967,6 +967,7 @@ class Company_model extends CI_Model {
     }
 
     public function get_account_details($reference_id) {
+//        echo $reference_id;die;
         $this->db->select("*");
         $this->db->from("payroll_account_numbers");
         $this->db->join("company", "company.id=payroll_account_numbers.reference_id");
@@ -974,6 +975,22 @@ class Company_model extends CI_Model {
         $this->db->group_by("ban_account_number");
         $data = $this->db->get()->result_array();
         return $data;
+    }
+    public function getOrderID($reference_id){
+        $this->db->select('id');
+        $this->db->from('order');
+        $this->db->where(['reference_id'=>$reference_id,'reference'=>'company']);
+        return $this->db->get()->result_array();
+    }
+    public function getFinancialAccountDetails($orderid){
+        $oid=array();
+        foreach($orderid as $val){
+           $oid[]= $val['id'];
+        }
+        $this->db->select("bank_name, account_number as ban_account_number, routing_number as bank_routing_number");
+        $this->db->from('financial_accounts');
+        $this->db->where_in('order_id',$oid);
+        return $this->db->get()->result_array();
     }
 
     public function get_account_details_bookkeeping($reference_id) {

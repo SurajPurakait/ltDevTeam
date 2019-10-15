@@ -977,16 +977,16 @@ class Home extends CI_Controller {
             }
         } else {
             // if (isset($service_id) && $service_id != "") {
-             if ($id != $order_id) {
+            if ($id != $order_id) {
                 if (!empty($data['modal_notes'][0])) {
                     $this->notes->insert_note(1, $notes, 'reference_id', $id, 'service');
                     echo count($notes);
                 } else {
                     echo '0';
                 }
-            } 
-        // }
-        else {
+            }
+            // }
+            else {
                 if (!empty($data['modal_notes'][0])) {
                     $this->notes->insert_note(1, $notes, 'reference_id', $id, 'order');
                     echo count($notes);
@@ -1586,12 +1586,13 @@ class Home extends CI_Controller {
         $render_data['all_staff_id_list'] = implode(',', $all_staff_id_list);
         $this->load->view('services/order_service_inner_content', $render_data);
     }
-    public function get_payroll_account_list(){
-        $reference_id=post('reference_id');
-        $data['account_details']=$this->company_model->get_account_details($reference_id);
-        $this->load->view('services/show_payroll_account_list',$data);
+
+    public function get_payroll_account_list() {
+        $reference_id = post('reference_id');
+        $data['account_details'] = $this->company_model->get_account_details($reference_id);
+        $this->load->view('services/show_payroll_account_list', $data);
     }
-    
+
 }
 
 // End controller class

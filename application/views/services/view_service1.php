@@ -27,18 +27,18 @@ $url = '';
 if ($usertype != '3') {
     if ($order_info['category_id'] == 1) {
         if ($order_info['service_id'] == '3' || $order_info['service_id'] == '39' || $order_info['service_id'] == '48') {
-            $url = 'services/accounting_services/edit_annual_report/' . $order_info['id'];
+            $url = 'services/accounting_services/edit_annual_report/' . base64_encode($order_info['id']);
         } elseif ($order_info['service_id'] == '2' || $order_info['service_id'] == '4' || $order_info['service_id'] == '6' || $order_info['service_id'] == '53') {
-            $url = 'services/home/edit/' . $order_info['id'];
+            $url = 'services/home/edit/' . base64_encode($order_info['id']);
         } elseif ($order_info['service_id'] == '5' || $order_info['service_id'] == '54' || $order_info['service_id'] == '55') {
-            $url = 'services/home/edit/' . $order_info['id'];
+            $url = 'services/home/edit/' . base64_encode($order_info['id']);
         } elseif ($order_info['service_id'] == '7') {
-            $url = 'services/home/edit/' . $order_info['id'];
+            $url = 'services/home/edit/' . base64_encode($order_info['id']);
         } else {
             if ($order_info['service_shortname'] == 'inc_n_c_d' || $order_info['service_shortname'] == 'inc_n_c_f') {
-                $url = 'services/incorporation/edit_company/' . $order_info['id'];
+                $url = 'services/incorporation/edit_company/' . base64_encode($order_info['id']);
             } else {
-                $url = 'services/home/edit/' . $order_info['id'];
+                $url = 'services/home/edit/' . base64_encode($order_info['id']);
             }
         }
     } else {
@@ -46,44 +46,44 @@ if ($usertype != '3') {
             $res = get_bookkeeping_by_order_id($order_info['id']);
             if (!empty($res)) {
                 if ($res['sub_category'] == 2) {
-                    $url = 'services/accounting_services/edit_bookkeeping_by_date/' . $order_info['id'];
+                    $url = 'services/accounting_services/edit_bookkeeping_by_date/' . base64_encode($order_info['id']);
                 } else {
-                    $url = 'services/accounting_services/edit_bookkeeping/' . $order_info['id'];
+                    $url = 'services/accounting_services/edit_bookkeeping/' . base64_encode($order_info['id']);
                 }
             } else {
-                $url = 'services/accounting_services/edit_bookkeeping/' . $order_info['id'];
+                $url = 'services/accounting_services/edit_bookkeeping/' . base64_encode($order_info['id']);
             }
         } elseif ($order_info['service_id'] == '11') {
-            $url = 'services/accounting_services/edit_payroll/' . $order_info['id'];
+            $url = 'services/accounting_services/edit_payroll/' . base64_encode($order_info['id']);
         } elseif ($order_info['service_id'] == '12') {
-            $url = 'services/accounting_services/edit_sales_tax_application/' . $order_info['id'];
+            $url = 'services/accounting_services/edit_sales_tax_application/' . base64_encode($order_info['id']);
         } elseif ($order_info['service_id'] == '14') {
-            $url = 'services/accounting_services/edit_rt6_unemployment_app/' . $order_info['id'];
+            $url = 'services/accounting_services/edit_rt6_unemployment_app/' . base64_encode($order_info['id']);
         } elseif ($order_info['service_id'] == $service_id) {
-            $url = 'services/accounting_services/edit_sales_tax_recurring/' . $order_info['id'];
+            $url = 'services/accounting_services/edit_sales_tax_recurring/' . base64_encode($order_info['id']);
         } elseif ($order_info['service_id'] == '13') { //change in live
-            $url = 'services/accounting_services/edit_sales_tax_processing/' . $order_info['id'];
+            $url = 'services/accounting_services/edit_sales_tax_processing/' . base64_encode($order_info['id']);
         } elseif ($order_info['service_id'] == '3' || $order_info['service_id'] == '48') {
-            $url = 'services/accounting_services/edit_annual_report/' . $order_info['id'];
+            $url = 'services/accounting_services/edit_annual_report/' . base64_encode($order_info['id']);
         } elseif ($order_info['service_id'] == '48' || $order_info['service_id'] == '39') {
-            $url = 'services/accounting_services/edit_annual_report/' . $order_info['id'];
+            $url = 'services/accounting_services/edit_annual_report/' . base64_encode($order_info['id']);
         } else {
-            $url = 'services/home/edit/' . $order_info['id'];
+            $url = 'services/home/edit/' . base64_encode($order_info['id']);
         }
     }
     if (in_array($order_info['service_shortname'], edit_by_shortname_array())) {
-        $url = 'services/home/edit/' . $order_info['id'];
+        $url = 'services/home/edit/' . base64_encode($order_info['id']);
     }
 } else {
     if ($usertype == '3' && $status == 2) {
         if ($order_info['category_id'] == 1) {
             if ($order_info['service_id'] == '3' || $order_info['service_id'] == '39' || $order_info['service_id'] == '48') {
-                $url = 'services/accounting_services/edit_annual_report/' . $order_info['id'];
+                $url = 'services/accounting_services/edit_annual_report/' . base64_encode($order_info['id']);
             } else {
                 if ($order_info['service_shortname'] == 'inc_n_c_d' || $order_info['service_shortname'] == 'inc_n_c_f') {
-                    $url = 'services/incorporation/edit_company/' . $order_info['id'];
+                    $url = 'services/incorporation/edit_company/' . base64_encode($order_info['id']);
                 } else {
-                    $url = 'services/home/edit/' . $order_info['id'];
+                    $url = 'services/home/edit/' . base64_encode($order_info['id']);
                 }
             }
         } else {
@@ -91,29 +91,29 @@ if ($usertype != '3') {
                 $res = get_bookkeeping_by_order_id($order_info['id']);
                 if (!empty($res)) {
                     if ($res['sub_category'] == 2) {
-                        $url = 'services/accounting_services/edit_bookkeeping_by_date/' . $order_info['id'];
+                        $url = 'services/accounting_services/edit_bookkeeping_by_date/' . base64_encode($order_info['id']);
                     } else {
-                        $url = 'services/accounting_services/edit_bookkeeping/' . $order_info['id'];
+                        $url = 'services/accounting_services/edit_bookkeeping/' . base64_encode($order_info['id']);
                     }
                 } else {
-                    $url = 'services/accounting_services/edit_bookkeeping/' . $order_info['id'];
+                    $url = 'services/accounting_services/edit_bookkeeping/' . base64_encode($order_info['id']);
                 }
             } elseif ($order_info['service_id'] == '11') {
-                $url = 'services/accounting_services/edit_payroll/' . $order_info['id'];
+                $url = 'services/accounting_services/edit_payroll/' . base64_encode($order_info['id']);
             } elseif ($order_info['service_id'] == '12') {
-                $url = 'services/accounting_services/edit_sales_tax_application/' . $order_info['id'];
+                $url = 'services/accounting_services/edit_sales_tax_application/' . base64_encode($order_info['id']);
             } elseif ($order_info['service_id'] == '14') {
-                $url = 'services/accounting_services/edit_rt6_unemployment_app/' . $order_info['id'];
+                $url = 'services/accounting_services/edit_rt6_unemployment_app/' . base64_encode($order_info['id']);
             } elseif ($order_info['service_id'] == $serviceid) {
-                $url = 'services/accounting_services/edit_sales_tax_recurring/' . $order_info['id'];
+                $url = 'services/accounting_services/edit_sales_tax_recurring/' . base64_encode($order_info['id']);
             } elseif ($order_info['service_id'] == '13') { //change in live
-                $url = 'services/accounting_services/edit_sales_tax_processing/' . $order_info['id'];
+                $url = 'services/accounting_services/edit_sales_tax_processing/' . base64_encode($order_info['id']);
             } else {
-                $url = 'services/home/edit/' . $order_info['id'];
+                $url = 'services/home/edit/' . base64_encode($order_info['id']);
             }
         }
         if (in_array($order_info['service_shortname'], edit_by_shortname_array())) {
-            $url = 'services/home/edit/' . $order_info['id'];
+            $url = 'services/home/edit/' . base64_encode($order_info['id']);
         }
     }
 }
@@ -123,15 +123,15 @@ if ($usertype != '3') {
         <div class="table-responsive">
             <table class="table table-striped" style="width:100%;">
 
-                  <?php if(isset($order_info['invoiced_id']) && $order_info['invoiced_id']!=''): ?>
-                <tr>
-                    <td style="<?= $td_style; ?>">
-                        Order Id:
-                    </td>
-                    <td style="<?= $td_style; ?>">
-                        <a href="<?= base_url("billing/invoice/place/" . base64_encode($order_info['invoiced_id']) . "/" . base64_encode('view')); ?>" target="_blank" >#<?= $order_info['invoiced_id']; ?></a>
-                    </td>
-                </tr>
+                <?php if (isset($order_info['invoiced_id']) && $order_info['invoiced_id'] != ''): ?>
+                    <tr>
+                        <td style="<?= $td_style; ?>">
+                            Order Id:
+                        </td>
+                        <td style="<?= $td_style; ?>">
+                            <a href="<?= base_url("billing/invoice/place/" . base64_encode($order_info['invoiced_id']) . "/" . base64_encode('view')); ?>" target="_blank" >#<?= $order_info['invoiced_id']; ?></a>
+                        </td>
+                    </tr>
                 <?php endif ?>
 
                 <tr>
@@ -186,7 +186,7 @@ if ($usertype != '3') {
                         </td>
                     </tr>
                 <?php endif; ?>
-                
+
                 <?php
                 if (isset($order_info['main_order_status']) && $order_info['main_order_status'] != ''):
 
@@ -211,37 +211,38 @@ if ($usertype != '3') {
                     </tr>
                 <?php endif; ?>
 
-                <?php if(isset($order_info['service_id']) && $order_info['service_id']!=''): ?>
+                <?php if (isset($order_info['service_id']) && $order_info['service_id'] != ''): ?>
 
-                
-                <tr>
-                    <td style="<?= $td_style; ?>">
-                        Service Id:
-                    </td>
-                    <?php    if (!empty($services_list)) {
-                                // $keysval = 1;
-                                // foreach ($services_list as $keys => $row_inner) {
-                                    // $keysval = $keysval + $keys;
-                ?>
-                    <td style="<?= $td_style; ?>">
-                        <!-- <?//= $order_info['service_id']; ?> -->
-                        <?= $invoice_info['id']; ?>-<?= 1 ?>
-                    </td>
-                     <?php }  ?>
-                </tr>
 
-           
+                    <tr>
+                        <td style="<?= $td_style; ?>">
+                            Service Id:
+                        </td>
+                        <?php
+                        if (!empty($services_list)) {
+                            // $keysval = 1;
+                            // foreach ($services_list as $keys => $row_inner) {
+                            // $keysval = $keysval + $keys;
+                            ?>
+                            <td style="<?= $td_style; ?>">
+                                <!-- <?//= $order_info['service_id']; ?> -->
+                                <?= $invoice_info['id']; ?>-<?= 1 ?>
+                            </td>
+                        <?php } ?>
+                    </tr>
+
+
                 <?php endif ?>
 
-                <?php if(isset($order_info['service_name']) && $order_info['service_name']!=''): ?>
-                <tr>
-                    <td style="<?= $td_style; ?>">
-                        Service Name:
-                    </td>
-                    <td style="<?= $td_style; ?>">
-                        <?= $order_info['service_name']; ?>
-                    </td>
-                </tr>
+                <?php if (isset($order_info['service_name']) && $order_info['service_name'] != ''): ?>
+                    <tr>
+                        <td style="<?= $td_style; ?>">
+                            Service Name:
+                        </td>
+                        <td style="<?= $td_style; ?>">
+                            <?= $order_info['service_name']; ?>
+                        </td>
+                    </tr>
                 <?php endif ?>
 
                 <?php if (isset($company_info["state_name"]) && $company_info["state_name"] != ''): ?>
@@ -303,7 +304,7 @@ if ($usertype != '3') {
                         </td>
                     </tr>
                 <?php endif; ?>
-                
+
 
                 <?php if (isset($order_info['start_date']) && $order_info['start_date'] != '' && $order_info['start_date'] != '0000-00-00'): ?>
                     <tr>
@@ -370,7 +371,7 @@ if ($usertype != '3') {
                         </td>
                     </tr>
                 <?php endif; ?>
-                <!--                 <?php //if (isset($company_info['business_description']) && $company_info['business_description'] != ''):    ?>
+                <!--                 <?php //if (isset($company_info['business_description']) && $company_info['business_description'] != ''):      ?>
                                     <tr>
                                         <td style="<?= $td_style; ?>">
                                             Business Description:
@@ -454,8 +455,8 @@ if ($usertype != '3') {
                 <tr>
                     <td style="<?= $td_style; ?>">
                         Order Notes:
-                      
-                        
+
+
                     </td>
                     <td style="<?= $td_style; ?>">
                         <span>
@@ -1129,20 +1130,20 @@ if ($usertype != '3') {
                         </td>
                     </tr>
                 <?php endif; ?>
-                <!--                 <?php // if (!empty($note_list)):    ?>
+                <!--                 <?php // if (!empty($note_list)):      ?>
                                     <tr>
                                         <td style="<?= $td_style; ?>">
                                             <b>Order Notes:</b>
                                         </td>
                                         <td style="<?= $td_style; ?>">
-                <?php // foreach ($note_list as $nl):  ?>
+                <?php // foreach ($note_list as $nl):   ?>
                                                 <div id="<?//= 'note-notification-' . $nl['note_id']; ?>">
                                                     <p class="notification-text-area"><?//= $nl['note']; ?></p>
                                                 </div>
-                <?php // endforeach;  ?>
+                <?php // endforeach;   ?>
                                         </td>
                                     </tr>
-                <?php // endif;  ?> -->
+                <?php // endif;   ?> -->
 
                 <?php
                 if (!empty($payroll_data)) {
@@ -1315,7 +1316,6 @@ if ($usertype != '3') {
                     <?php if (!empty($related_service_list)): ?>
                         <td style="<?= $td_style; ?>">
                             <?php
-                        
                             foreach ($related_service_list as $key => $rsl):
                                 if ($order_status_array[$rsl['service_request_status']] == 'Completed') {
                                     $trk_class = 'label-primary';
@@ -1330,29 +1330,25 @@ if ($usertype != '3') {
                                 <div class="row" id = "collapse<?= $order_info['id']; ?>">
                                     <div class="col-md-6">
                                         <div class='media-body'>
-
-
-                                <h4 class='media-heading'><strong><?= ' #' . $invoice_info['id']; ?>-<?= $key+1; ?></strong>&nbsp;<label class='label label-primary'><?= $rsl['service_name']; ?></label></h4></label>
-
-
+                                            <h4 class='media-heading'><strong><?= ' #' . $invoice_info['id']; ?>-<?= $key + 1; ?></strong>&nbsp;<label class='label label-primary'><?= $rsl['service_name']; ?></label></h4>
                                             <p> 
                                                 <b>Service Category: </b> <?= $rsl['service_category']; ?><br>
                                                 <b>Responsible Department: </b> <?= $rsl['responsible_department']; ?><br>
                                                 <b>Notes: </b>
-                                                
+
                                                 <?php
                                                 $note_count_inner = getNoteCount('service', $rsl['id']);
 
                                                 if ($order_info['service_id'] == '11') {
                                                     if ($rsl['id'] == '11') {
-                                                        echo "<span title=\"Notes\"><span>" . (($note_count_inner > 0) ? '<a id="orderservice-' . $order_info['service_id'].'-'.$rsl['id'] . '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'payrollemp\',\'' . $rsl['id'] . '\',\'' . $order_info['service_id'] . '\',\'' . $order_info['company_id'] . '\',\'' . $order_info['id'] . '\')"><b>' . $note_count_inner . '</b></a>' : '<a id="orderservice-' . $order_info['service_id'].'-'.$rsl['id'] . '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'payrollemp\',\'' . $rsl['id'] . '\',\'' . $order_info['service_id'] . '\',\'' . $order_info['company_id'] . '\',\'' . $order_info['id'] . '\')"><b>' . $note_count_inner . '</b></a>') . "</span></span><br>";
+                                                        echo "<span title=\"Notes\"><span>" . (($note_count_inner > 0) ? '<a id="orderservice-' . $order_info['service_id'] . '-' . $rsl['id'] . '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'payrollemp\',\'' . $rsl['id'] . '\',\'' . $order_info['service_id'] . '\',\'' . $order_info['company_id'] . '\',\'' . $order_info['id'] . '\')"><b>' . $note_count_inner . '</b></a>' : '<a id="orderservice-' . $order_info['service_id'] . '-' . $rsl['id'] . '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'payrollemp\',\'' . $rsl['id'] . '\',\'' . $order_info['service_id'] . '\',\'' . $order_info['company_id'] . '\',\'' . $order_info['id'] . '\')"><b>' . $note_count_inner . '</b></a>') . "</span></span><br>";
                                                         ?>
                                                         <?php
                                                     } else {
-                                                        echo "<span title=\"Notes\"><span>" . (($note_count_inner > 0) ? '<a id="orderservice-' . $order_info['service_id'] .'-'.$rsl['id'] . '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'payrollrt6\',\'' . $rsl['id'] . '\',\'' . $order_info['service_id'] . '\',\'' . $order_info['company_id'] . '\',\'' . $order_info['id'] . '\')"><b>' . $note_count_inner . '</b></a>' : '<a id="orderservice-' . $order_info['service_id'].'-'.$rsl['id'] . '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'payrollrt6\',\'' . $rsl['id'] . '\',\'' . $order_info['service_id'] . '\',\'' . $order_info['company_id'] . '\',\'' . $order_info['id'] . '\')"><b>' . $note_count_inner . '</b></a>') . "</span></span><br>";
+                                                        echo "<span title=\"Notes\"><span>" . (($note_count_inner > 0) ? '<a id="orderservice-' . $order_info['service_id'] . '-' . $rsl['id'] . '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'payrollrt6\',\'' . $rsl['id'] . '\',\'' . $order_info['service_id'] . '\',\'' . $order_info['company_id'] . '\',\'' . $order_info['id'] . '\')"><b>' . $note_count_inner . '</b></a>' : '<a id="orderservice-' . $order_info['service_id'] . '-' . $rsl['id'] . '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'payrollrt6\',\'' . $rsl['id'] . '\',\'' . $order_info['service_id'] . '\',\'' . $order_info['company_id'] . '\',\'' . $order_info['id'] . '\')"><b>' . $note_count_inner . '</b></a>') . "</span></span><br>";
                                                     }
                                                 } else {
-                                                    echo "<span title=\"Notes\"><span>" . (($note_count_inner > 0) ? '<a id="orderservice-' . $order_info['service_id'].'-'.$rsl['id'] . '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'service\',\'' . $rsl['id'] . '\',\'' . $order_info['service_id'] . '\',\'' . $order_info['company_id'] . '\',\'' . $order_info['id'] . '\')"><b>' . $note_count_inner . '</b></a>' : '<a id="orderservice-' . $order_info['service_id'].'-'.$rsl['id'] . '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'service\',\'' . $rsl['id'] . '\',\'' . $order_info['service_id'] . '\',\'' . $order_info['company_id'] . '\',\'' . $order_info['id'] . '\')"><b>' . $note_count_inner . '</b></a>') . "</span></span><br>";
+                                                    echo "<span title=\"Notes\"><span>" . (($note_count_inner > 0) ? '<a id="orderservice-' . $order_info['service_id'] . '-' . $rsl['id'] . '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'service\',\'' . $rsl['id'] . '\',\'' . $order_info['service_id'] . '\',\'' . $order_info['company_id'] . '\',\'' . $order_info['id'] . '\')"><b>' . $note_count_inner . '</b></a>' : '<a id="orderservice-' . $order_info['service_id'] . '-' . $rsl['id'] . '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'service\',\'' . $rsl['id'] . '\',\'' . $order_info['service_id'] . '\',\'' . $order_info['company_id'] . '\',\'' . $order_info['id'] . '\')"><b>' . $note_count_inner . '</b></a>') . "</span></span><br>";
                                                 }
                                                 ?>
                                                 <b>Tracking Description: </b> 
@@ -1364,8 +1360,8 @@ if ($usertype != '3') {
                                                 <b>Retail Price: </b> <?= $rsl['retail_price']; ?>, 
                                                 <b>Override Price: </b><?= ($rsl['price_charged'] != '') ? $rsl['price_charged'] : 'N/A'; ?>
                                             </p>
-                                    
-                                            
+
+
                                         </div>
                                     </div>
                                     <div class="col-md-6">

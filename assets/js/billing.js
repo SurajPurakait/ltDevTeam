@@ -382,41 +382,6 @@ function loadBillingDashboard(status = '', by = '', office = '', payment_status 
     });
 }
 
-//var processing;
-//$(document).scroll(function (e) {
-//    if (processing) {
-//        return false;
-//    }
-//    if ($(window).scrollTop() >= ($(document).height() - $(window).height()) * 0.7) {
-//        processing = true;
-//        $.post('/echo/html/', 'html=<div class="loadedcontent">new div</div>', function (data) {
-//            $('#container').append(data);
-//            processing = false;
-//        });
-//    }
-//});
-function getInvoiceServiceList(invoiceID) {
-    $.ajax({
-        type: "POST",
-        url: base_url + 'billing/home/invoice_service_list_ajax',
-        data: {
-            invoice_id: invoiceID
-        },
-        dataType: "html",
-        success: function (result) {
-            if (result != '0') {
-                $('#dashboard_result_div').html(result);
-            }
-        },
-        beforeSend: function () {
-            openLoading();
-        },
-        complete: function (msg) {
-            closeLoading();
-        }
-    });
-}
-
 function billingDashboardNoteModal(order_id, service_id) {
     $.ajax({
         type: 'POST',
@@ -777,7 +742,7 @@ function savePayment()
     var cardType = "";
     var cardNumber = $("input#card_number").val();
     if (cardNumber != '') {
-        if (cardNumber.length != 16){
+        if (cardNumber.length != 16) {
             $("input#card_number").next('div.errorMessage').html('Card Number Not Valid');
             return false;
         }
@@ -1266,4 +1231,25 @@ function saveInvoiceNotes() {
             closeLoading();
         }
     });
+}
+
+var invoiceServiceListAjax = function (invoiceID) {
+    if (!$('#collapse' + invoiceID).hasClass('in')) {
+        $('#collapse' + invoiceID).html('<div class="text-center"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>');
+        $.ajax({
+            type: "POST",
+            data: {
+                invoice_id: invoiceID
+            },
+            url: base_url + 'billing/home/invoice_service_list_ajax',
+            dataType: "html",
+            success: function (result) {
+                if (result != 0) {
+                    $('#collapse' + invoiceID).html(result);
+                } else {
+                    swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+                }
+            }
+        });
+    }
 }
