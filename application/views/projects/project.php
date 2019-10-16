@@ -5,7 +5,6 @@ $user_type = $user_info['type'];
 $role = $user_info['role'];
 ?>
 <div class="wrapper wrapper-content">
-
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
@@ -17,7 +16,9 @@ $role = $user_info['role'];
                                     <div class="form-group filter-inner">
                                         <div class="row">
                                             <div class="col-xs-12">
+                                                <?php if($user_type!=3){ ?>
                                                 <button type="button" class="btn btn-primary"  onclick="CreateProjectModal('add', '');" ><i class="fa fa-plus"></i> &nbsp;Create Project</button>
+                                                <?php } ?>
                                                 <button type="button" class="btn btn-success"  onclick="taskDashboard();" >&nbsp;Task Dahsboard</button>
                                             </div>
                                         </div>
@@ -88,7 +89,7 @@ $role = $user_info['role'];
                                             <th>By Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-0">
-                                                    <span class="label label-warning" id="requested_by_me_new" onclick="loadProjectDashboard(0, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('byme', 0); ?></span>
+                                                    <span class="label label-success" id="requested_by_me_new" onclick="loadProjectDashboard(0, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('byme', 0); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
@@ -98,7 +99,7 @@ $role = $user_info['role'];
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-2">
-                                                    <span class="label label-warning" id="requested_by_me_completed" onclick="loadProjectDashboard(2, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('byme', 2); ?></span>
+                                                    <span class="label bg-purple" id="requested_by_me_completed" onclick="loadProjectDashboard(2, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('byme', 2); ?></span>
                                                 </a>
                                             </td> 
                                             <!-- <td class="text-center">
@@ -107,14 +108,14 @@ $role = $user_info['role'];
                                                 </a>
                                             </td> -->
                                             <td class="text-center">
-                                                <a class="filter-button" onclick="sos_filter_project('projects', 'byme');" title="By Me"><span class="label label-warning label-byme"><?= sos_dashboard_count('projects', 'byme'); ?></span></a>
+                                                <a class="filter-button" onclick="sos_filter_project('projects', 'byme');" title="By Me"><span class="label label-danger label-byme"><?= sos_dashboard_count('projects', 'byme'); ?></span></a>
                                             </td>
                                         </tr>
                                         <tr id="tome">
                                             <th>To Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-0">
-                                                    <span class="label label-warning" id="requested_to_me_new" onclick="loadProjectDashboard(0, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('tome', 0); ?></span>
+                                                    <span class="label label-success" id="requested_to_me_new" onclick="loadProjectDashboard(0, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('tome', 0); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
@@ -124,7 +125,7 @@ $role = $user_info['role'];
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-2">
-                                                    <span class="label label-warning" id="requested_to_me_completed" onclick="loadProjectDashboard(2, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('tome', 2); ?></span>
+                                                    <span class="label bg-purple" id="requested_to_me_completed" onclick="loadProjectDashboard(2, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('tome', 2); ?></span>
                                                 </a>
                                             </td>
                                             <!-- <td class="text-center">
@@ -133,7 +134,7 @@ $role = $user_info['role'];
                                                 </a>
                                             </td> -->
                                             <td class="text-center">
-                                                <a class="filter-button" onclick="sos_filter_project('projects', 'tome');" title="To Me"><span class="label label-warning label-tome"><?= sos_dashboard_count('projects', 'tome'); ?></span></a>
+                                                <a class="filter-button" onclick="sos_filter_project('projects', 'tome');" title="To Me"><span class="label label-danger label-tome"><?= sos_dashboard_count('projects', 'tome'); ?></span></a>
                                             </td>
                                         </tr>
                                         <?php // if ($user_type == 1 || ($user_type == 2 && $role == 4) || ($user_type == 3 && $role == 2)): ?>
@@ -171,7 +172,7 @@ $role = $user_info['role'];
                                                 <th>Others</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-0">
-                                                        <span class="label label-warning" id="requested_to_other_new" onclick="loadProjectDashboard(0, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('toother', 0); ?></span>
+                                                        <span class="label label-success" id="requested_to_other_new" onclick="loadProjectDashboard(0, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('toother', 0); ?></span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
@@ -181,7 +182,7 @@ $role = $user_info['role'];
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-2">
-                                                        <span class="label label-warning" id="requested_to_other_completed" onclick="loadProjectDashboard(2, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('toother', 2); ?></span>
+                                                        <span class="label bg-purple" id="requested_to_other_completed" onclick="loadProjectDashboard(2, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('toother', 2); ?></span>
                                                     </a>
                                                 </td> 
     <!--                                                 <td class="text-center">
@@ -272,10 +273,12 @@ $role = $user_info['role'];
                         </div>
                         <!-- end summary box section -->
                     </div>
-                    <div class="clearfix">
-
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <?php foreach ($templateIds as $tempid){ ?>
+                        <a class="btn btn-success" href="javascript:void(0);" onclick="loadProjectDashboard('', '', <?= $tempid['template_id'] ?>);"><?= $tempid['title'] ?></a>
+                        <?php } ?>
                     </div>
-
                     <hr class="hr-line-dashed  m-t-5 m-b-5">
                     <div id="action_dashboard_div">
                         <!--                        <div class="clearfix">
@@ -497,7 +500,7 @@ $role = $user_info['role'];
     </div>
 </div>
 <script>
-    loadProjectDashboard('<?= $status; ?>', '<?= $request_type; ?>', '<?= $priority; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '', '', '', '', '', '', '', '', 1);
+    loadProjectDashboard('<?= $status; ?>', '<?= $request_type; ?>', '<?= $template_id; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '', '', '', '', '', '', '', '', 1);
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
@@ -725,4 +728,5 @@ $role = $user_info['role'];
         variableArray.splice(index, 1);
         $("#" + divID).remove();
     }
+    
 </script>

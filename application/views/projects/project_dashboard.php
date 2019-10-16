@@ -6,7 +6,7 @@ $role = $user_info['role'];
 ?>
 <div class="clearfix result-header">
     <?php if (count($project_list) != 0): ?>
-    <h2 class="text-primary pull-left result-count-h2"><?= isset($page_number) ? ($page_number * 20) : count($project_list) ?> Results found <?= isset($page_number) ? 'of ' . count($project_list) : '' ?></h2>
+        <h2 class="text-primary pull-left result-count-h2"><?= isset($page_number) ? ($page_number * 20) : count($project_list) ?> Results found <?= isset($page_number) ? 'of ' . count($project_list) : '' ?></h2>
     <?php endif; ?>
     <div class="pull-right text-right p-t-5">
         <div class="dropdown" style="display: inline-block;">
@@ -37,13 +37,13 @@ $due_m = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 =>
 $row_number = 0;
 if (!empty($project_list)) {
     foreach ($project_list as $row_count => $list) {
-        if(isset($page_number)){
-            if($page_number != 1){
-                if($row_count < (($page_number - 1) * 20)){
+        if (isset($page_number)) {
+            if ($page_number != 1) {
+                if ($row_count < (($page_number - 1) * 20)) {
                     continue;
                 }
             }
-            if($row_count == ($page_number * 20)){
+            if ($row_count == ($page_number * 20)) {
                 break;
             }
         }
@@ -60,7 +60,7 @@ if (!empty($project_list)) {
 //                                $due_date=$pattern_details['actual_due_day'];
 //                                print_r($templatedetails);
 
-        
+
         $status = $templatedetails->status;
         if ($status == 2) {
             $tracking = 'Completed';
@@ -102,11 +102,11 @@ if (!empty($project_list)) {
 //                                }
         ?>
         <div class="panel panel-default service-panel type2 filter-active" id="action<?= $list['id'] ?>">
-            <div class="panel-heading" onclick="load_project_tasks('<?php echo $list['id']; ?>','<?php echo $list['created_at']; ?>','<?php echo $dueDate; ?>');"> 
+            <div class="panel-heading" onclick="load_project_tasks('<?php echo $list['id']; ?>', '<?php echo $list['created_at']; ?>', '<?php echo $dueDate; ?>');"> 
                 <a href="javascript:void(0)" onclick="delete_project(<?= $list['id']; ?>,<?= $list['template_id']; ?>)" class="btn btn-danger btn-xs btn-service-edit"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a> &nbsp;
                 <!-- <a href="javascript:void(0)" onclick="CreateProjectModal('edit',<?//= $list['id'] ?>);" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>  &nbsp; --> 
                 <a target="_blank" href="<?= base_url() . 'project/edit_project_template/' . base64_encode($list['id']); ?>" class="btn btn-primary btn-xs btn-service-edit-project"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Project</a> 
-                                                
+
                 <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $list['id']; ?>" aria-expanded="false" class="collapsed">
                     <div class="table-responsive">
                         <table class="table table-borderless text-center" style="margin-bottom: 0px;">
@@ -133,47 +133,47 @@ if (!empty($project_list)) {
                                     </td>
                                     <td title="Pattern"><?= ucfirst($pattern_details->pattern) ?></td>
                                     <td title="Pattern"><?= ($list['client_type'] == '1') ? 'Business Client' : 'Individual Client' ?></td>
-                                    <td title="Client"><?php echo getProjectClientName($list['client_id'], $list['client_type']); ?><br><span class="text-info"><?php // echo getProjectClient($list['office_id']);     ?> </span></td>                                                 
+                                    <td title="Client"><?php echo getProjectClientName($list['client_id'], $list['client_type']); ?><br><span class="text-info"><?php // echo getProjectClient($list['office_id']);      ?> </span></td>                                                 
                                     <td title="Responsible"><?php
-                                        $resp_value = get_assigned_office_staff_project_main($list['id'],$list['client_id']);
-                                        if(is_numeric($resp_value['name'])){
+                                        $resp_value = get_assigned_office_staff_project_main($list['id'], $list['client_id']);
+                                        if (is_numeric($resp_value['name'])) {
                                             $resp_name = get_assigned_by_staff_name($resp_value['name']);
-                                        }else{
+                                        } else {
                                             $resp_name = $resp_value['name'];
                                         }
-                                        if($resp_value['office']!=0){
+                                        if ($resp_value['office'] != 0) {
                                             $office_name = get_office_id($resp_value['office']);
-                                        }else{
-                                            if($list['project_office_id']==1){
-                                                 $office_name = 'Admin';
-                                            }elseif($list['project_office_id']==2){
+                                        } else {
+                                            if ($list['project_office_id'] == 1) {
+                                                $office_name = 'Admin';
+                                            } elseif ($list['project_office_id'] == 2) {
                                                 $office_name = 'Corporate';
-                                            }else{
+                                            } else {
                                                 $office_name = 'Franchise';
                                             }
                                         }
-                                        echo $resp_name."<br><span class='text-info'>".$office_name." </span></td>";
+                                        echo $resp_name . "<br><span class='text-info'>" . $office_name . " </span></td>";
                                         ?> </td>   
                                     <td title="Requested By"><?php echo isset(staff_info_by_id($list['added_by_user'])['full_name']) ? staff_info_by_id($list['added_by_user'])['full_name'] : ''; ?></td>
-                                    <td title="Assign To"><span class="text-success"><?php echo get_assigned_dept_staff_project_main($list['id']); ?></span><br><?php 
-                                    if($list['project_office_id']!='2'){
-                                       echo get_department_name_by_id($list['project_department_id']);
-                                    }else{
-                                       echo get_office_id($list['project_office_id']);
-                                    }
-                                     ?>
-                                     </td>                                                  
+                                    <td title="Assign To"><span class="text-success"><?php echo get_assigned_dept_staff_project_main($list['id']); ?></span><br><?php
+                                        if ($list['project_office_id'] != '2') {
+                                            echo get_department_name_by_id($list['project_department_id']);
+                                        } else {
+                                            echo get_office_id($list['project_office_id']);
+                                        }
+                                        ?>
+                                    </td>                                                  
                                     <td title="Tracking" class="text-center"><span id="trackouter-<?php echo $list['id']; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></td>
                                     <td title="Creation Date"><?= date('Y-m-d', strtotime($list['created_at'])) ?></td>
                                     <td title="Due Date"><?= $dueDate ?></td>
                                     <td title="Recurrence Date"><?= $pattern_details->generation_date; ?></td>
 
-                                    <!-- <td title='Note'><a id="notecount-<?//= $list['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_notes(<?//= $list["id"]; ?>)"><b> <?//= get_project_note_count($list['id']) ?></b></a> -->
+                                            <!-- <td title='Note'><a id="notecount-<?//= $list['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_notes(<?//= $list["id"]; ?>)"><b> <?//= get_project_note_count($list['id']) ?></b></a> -->
 
 
                                     <!-- </td> -->
 
-                                     <td title="Notes"><span> 
+                                    <td title="Notes"><span> 
                                             <?php
                                             $read_status = project_notes_read_status($list['id']);
                                             // print_r($read_status);
@@ -181,13 +181,13 @@ if (!empty($project_list)) {
                                             if (get_project_note_count($list['id']) > 0 && in_array(0, $read_status)) {
                                                 ?> 
 
-                                               <a id="notecount-<?= $list['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_notes(<?= $list["id"]; ?>)"><b> <?= get_project_note_count($list['id']) ?></b></a>
+                                                <a id="notecount-<?= $list['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_notes(<?= $list["id"]; ?>)"><b> <?= get_project_note_count($list['id']) ?></b></a>
 
                                                 <?php
                                             } elseif (get_project_note_count($list['id']) > 0 && in_array(1, $read_status)) {
                                                 ?> 
 
-                                               <a id="notecount-<?= $list['id'] ?>" class="label label-success" href="javascript:void(0)" onclick="show_project_notes(<?= $list["id"]; ?>)"><b> <?= get_project_note_count($list['id']) ?></b></a>
+                                                <a id="notecount-<?= $list['id'] ?>" class="label label-success" href="javascript:void(0)" onclick="show_project_notes(<?= $list["id"]; ?>)"><b> <?= get_project_note_count($list['id']) ?></b></a>
 
                                                 <?php
                                             } else {
@@ -197,10 +197,9 @@ if (!empty($project_list)) {
 
                                                 <?php
                                             }
-
                                             ?>
-                                        </span></td>
-
+                                        </span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -215,19 +214,20 @@ if (!empty($project_list)) {
         <?php
         $row_number = $row_count + 1;
     }
-    if(isset($page_number) && $row_number < count($project_list)): ?>
+    if (isset($page_number) && $row_number < count($project_list)):
+        ?>
         <div class="text-center p-0 load-more-btn">
             <a href="javascript:void(0);" onclick="loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', <?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more results</a>
         </div>
     <?php endif; ?>
-        <script>
-            $(function () {
-                $('h2.result-count-h2').html('<?= $row_number . ' Results found of ' . count($project_list) ?>');
-                 <?php if(isset($page_number) && $row_number === count($project_list)): ?>
-                 $('.load-more-btn').remove();
-                <?php endif; ?>
-            });
-        </script>
+    <script>
+        $(function () {
+            $('h2.result-count-h2').html('<?= $row_number . ' Results found of ' . count($project_list) ?>');
+    <?php if (isset($page_number) && $row_number === count($project_list)): ?>
+                $('.load-more-btn').remove();
+    <?php endif; ?>
+        });
+    </script>
 <?php } else {
     ?>
     <div class = "text-center m-t-30">

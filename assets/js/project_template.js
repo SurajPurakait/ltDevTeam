@@ -379,7 +379,7 @@ function request_create_template() {
     }
     var form_data = new FormData(document.getElementById("save_template_main"));
     var pattern = $("#pattern option:selected").val();
-    if(pattern==''){
+    if (pattern == '') {
         $("#err_generation").html("Please Select Pattern From Generation.");
         return false;
     }
@@ -1073,7 +1073,7 @@ function project_task_edit_modal(task_id) {
         }
     });
 }
-function update_project_task(task_id, template_id,project_id) {
+function update_project_task(task_id, template_id, project_id) {
 //    alert(task_id);return false;
     if (!requiredValidation('project-task-edit-modal')) {
         return false;
@@ -1227,12 +1227,12 @@ function projectContainerAjax(client_type, client_id, project_id)
         }
     });
 }
-function refresh_existing_client_list(office_id='',client_id='') {
+function refresh_existing_client_list(office_id = '', client_id = '') {
     $.ajax({
         type: "POST",
         data: {
             office_id: office_id,
-            client_id:client_id
+            client_id: client_id
         },
         url: base_url + 'project/get_completed_orders_officewise',
         dataType: "html",
@@ -1250,70 +1250,70 @@ function refresh_existing_client_list(office_id='',client_id='') {
         }
     });
 }
-function sort_project_dashboard(sort_criteria='',sort_type=''){
+function sort_project_dashboard(sort_criteria = '', sort_type = '') {
     var form_data = new FormData(document.getElementById('filter-form'));
 //    alert(form_data.value);return false;
-    if(sort_criteria==''){
-      var sc = $('.dropdown-menu li.active').find('a').attr('id'); 
-      var ex = sc.split('-');
-        if(ex[0]=='project_template'){
+    if (sort_criteria == '') {
+        var sc = $('.dropdown-menu li.active').find('a').attr('id');
+        var ex = sc.split('-');
+        if (ex[0] == 'project_template') {
             var sort_criteria = ex[0];
-        }else{
-            var sort_criteria = 'pro.'+ex[0];
-        }      
+        } else {
+            var sort_criteria = 'pro.' + ex[0];
+        }
     }
-    if(sort_type==''){
-      var sort_type = 'ASC';  
+    if (sort_type == '') {
+        var sort_type = 'ASC';
     }
-    
+
     if (sort_criteria.indexOf('.') > -1)
     {
-      var sp = sort_criteria.split(".");
-      var activehyperlink = sp[1]+'-val';  
-    }else{
-        var activehyperlink = sort_criteria+'-val';
+        var sp = sort_criteria.split(".");
+        var activehyperlink = sp[1] + '-val';
+    } else {
+        var activehyperlink = sort_criteria + '-val';
     }
-    form_data.append('sort_criteria',sort_criteria);
-    form_data.append('sort_type',sort_type);
+    form_data.append('sort_criteria', sort_criteria);
+    form_data.append('sort_type', sort_type);
     $.ajax({
-                type: "POST",
-                data: form_data,
-                url: base_url + 'project/sort_project_dashboard',
-                dataType: "html",
-                processData: false,
-                contentType: false,
-                enctype: 'multipart/form-data',
-                cache: false,
-                success: function (action_result) {
+        type: "POST",
+        data: form_data,
+        url: base_url + 'project/sort_project_dashboard',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (action_result) {
 //                    alert(action_result);return false;
-                    var data = JSON.parse(action_result);   
-                    $("#action_dashboard_div").html(data.result);
-                   $(".dropdown-menu li").removeClass('active');
-                   $("#"+activehyperlink).parent('li').addClass('active');
-                   if(sort_type=='ASC'){
-                    $(".sort_type_div #sort-desc").hide();
-                    $(".sort_type_div #sort-asc").css({display: 'inline-block'});
-                   }else{
-                    $(".sort_type_div #sort-asc").hide();
-                    $(".sort_type_div #sort-desc").css({display: 'inline-block'});
-                   }
-                   $(".sort_type_div").css({display: 'inline-block'});
-                   var text = $('.dropdown-menu li.active').find('a').text();
+            var data = JSON.parse(action_result);
+            $("#action_dashboard_div").html(data.result);
+            $(".dropdown-menu li").removeClass('active');
+            $("#" + activehyperlink).parent('li').addClass('active');
+            if (sort_type == 'ASC') {
+                $(".sort_type_div #sort-desc").hide();
+                $(".sort_type_div #sort-asc").css({display: 'inline-block'});
+            } else {
+                $(".sort_type_div #sort-asc").hide();
+                $(".sort_type_div #sort-desc").css({display: 'inline-block'});
+            }
+            $(".sort_type_div").css({display: 'inline-block'});
+            var text = $('.dropdown-menu li.active').find('a').text();
 //                   alert(text);return false;
-                   var textval = 'Sort By : '+text+' <span class="caret"></span>'; 
-                   $("#sort-by-dropdown").html(textval);
-                    $("[data-toggle=popover]").popover();
-                    // $("#clear_filter").html('');
-                    // $("#clear_filter").hide();
-                    //$('#btn_clear_filter').hide();
-                    },
-                    beforeSend: function () {
-                        openLoading();
-                    },
-                    complete: function (msg) {
-                        closeLoading();
-                    }
-                });
+            var textval = 'Sort By : ' + text + ' <span class="caret"></span>';
+            $("#sort-by-dropdown").html(textval);
+            $("[data-toggle=popover]").popover();
+            // $("#clear_filter").html('');
+            // $("#clear_filter").hide();
+            //$('#btn_clear_filter').hide();
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
 }
 function projectFilter() {
     var form_data = new FormData(document.getElementById('filter-form'));
@@ -1341,8 +1341,8 @@ function projectFilter() {
         }
     });
 }
-function loadProjectDashboard(status, request, priority, officeID, departmentID, filter_assign, filter_data, sos_value, sort_criteria, sort_type, client_type, client_id, clients, pageNumber = 0) {
-   
+function loadProjectDashboard(status = '', request = '', templateID = '', officeID = '', departmentID = '', filter_assign = '', filter_data = '', sos_value = '', sort_criteria = '', sort_type = '', client_type = '', client_id = '', clients = '', pageNumber = 0) {
+//   alert(pageNumber);
 //    if (request != '') {
 //        activeShortColumn(request, short_column);
 //    } else {
@@ -1353,7 +1353,7 @@ function loadProjectDashboard(status, request, priority, officeID, departmentID,
         data: {
             status: status,
             request: request,
-            priority: priority,
+            template_id: templateID,
             office_id: officeID,
             department_id: departmentID,
             filter_assign: filter_assign,
@@ -1367,11 +1367,10 @@ function loadProjectDashboard(status, request, priority, officeID, departmentID,
         },
         url: base_url + 'project/dashboard_ajax',
         success: function (project_result) {
-            //console.log(project_result); return false;
-      
+            //console.log(project_result); return false;      
             if (project_result.trim() != '') {
                 if (pageNumber == 1 || pageNumber == 0) {
-                     $("#action_dashboard_div").html(project_result);
+                    $("#action_dashboard_div").html(project_result);
                     //$("a.filter-button span:contains('-')").html(0);
                 } else {
                     $("#action_dashboard_div").append(project_result);
@@ -1384,24 +1383,23 @@ function loadProjectDashboard(status, request, priority, officeID, departmentID,
                 $(".request-dropdown").val(request);
                 $("[data-toggle=popover]").popover();
             }
+            var filter_result = '';
+            if (filter_result != '') {
+                $("#clear_filter").html(filter_result + ' &nbsp; ');
+                $("#clear_filter").show();
+                $('#btn_clear_filter').show();
+                
+            } else {
+                $("#clear_filter").html('');
+                $("#clear_filter").hide();
+                $('#btn_clear_filter').hide();
 
-             var filter_result = '';
-
-             if (filter_result != '') {
-                 $("#clear_filter").html(filter_result + ' &nbsp; ');
-                 $("#clear_filter").show();
-                 $('#btn_clear_filter').show();
-             } else {
-                 $("#clear_filter").html('');
-                 $("#clear_filter").hide();
-                 $('#btn_clear_filter').hide();
-                 
-                 $(".variable-dropdown").val('');
+                $(".variable-dropdown").val('');
                 $(".condition-dropdown").val('');
                 $(".criteria-dropdown").val('');
-                $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>'); 
+                $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>');
                 $(".criteria-dropdown").trigger("chosen:updated");
-             }
+            }
         },
         beforeSend: function () {
             openLoading();
@@ -1409,67 +1407,67 @@ function loadProjectDashboard(status, request, priority, officeID, departmentID,
         complete: function (msg) {
             closeLoading();
             jumpDiv();
-            if(clients=='clients'){
+            if (clients == 'clients') {
                 $("#action_dashboard_div").find(".clearfix").remove();
             }
         }
     });
 }
-function add_project_sos(){
+function add_project_sos() {
     var formData = new FormData(document.getElementById('sos_project_form'));
     var projectid = $("#sos_project_form #refid").val();
     var taskid = $("#sos_project_form #serviceid").val();
-    formData.append('project_id',projectid);
+    formData.append('project_id', projectid);
     $.ajax({
-                type: 'POST',
-                url: base_url + 'home/addSos',
-                data: formData,
-                enctype: 'multipart/form-data',
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (result) {
-                   swal({title: "Success!", text: "Successfully Added!", type: "success"}, function () {
-                       //if(result!='0'){
-                            var prevsoscount = $("#projectsoscount-"+projectid+'-'+taskid).text();
-                           var soscount = parseInt(prevsoscount)+parseInt(1);
-                           $("#projectsoscount-"+projectid+'-'+taskid).text(soscount);
-                       //}
-                       $("#projectsoscount-"+projectid+'-'+taskid).removeClass('label label-primary').addClass('label label-danger');
-                       //$("#soscount-"+projectid).html(soscount);
-                       $("#projectsoscount-"+projectid+'-'+taskid).html('<i class="fa fa-bell"></i>');
-                        document.getElementById("sos_project_form").reset(); 
-                        var prevbymecount =  $("#sos-byme").html();
-                        if(result==0){
-                            var newbymecount = parseInt(prevbymecount)+1;
-                            $("#sos-byme").html(newbymecount);
-                        }                        
-                        //$(".notification-btn .label-byme").html(newbymecount);
+        type: 'POST',
+        url: base_url + 'home/addSos',
+        data: formData,
+        enctype: 'multipart/form-data',
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (result) {
+            swal({title: "Success!", text: "Successfully Added!", type: "success"}, function () {
+                //if(result!='0'){
+                var prevsoscount = $("#projectsoscount-" + projectid + '-' + taskid).text();
+                var soscount = parseInt(prevsoscount) + parseInt(1);
+                $("#projectsoscount-" + projectid + '-' + taskid).text(soscount);
+                //}
+                $("#projectsoscount-" + projectid + '-' + taskid).removeClass('label label-primary').addClass('label label-danger');
+                //$("#soscount-"+projectid).html(soscount);
+                $("#projectsoscount-" + projectid + '-' + taskid).html('<i class="fa fa-bell"></i>');
+                document.getElementById("sos_project_form").reset();
+                var prevbymecount = $("#sos-byme").html();
+                if (result == 0) {
+                    var newbymecount = parseInt(prevbymecount) + 1;
+                    $("#sos-byme").html(newbymecount);
+                }
+                //$(".notification-btn .label-byme").html(newbymecount);
 //                        $("#action"+projectid).find(".priority").find('.m-t-5').remove();
 //                        $("#action"+projectid).find(".priority").append('<img src="'+base_url+'/assets/img/badge_sos_priority.png" class="m-t-5"/>');
-                        $('#showSos').modal('hide');
-                    });
-                },
-                beforeSend: function () {
-                    $("#save_sos").prop('disabled', true).html('Processing...');
-                    openLoading();
-                },
-                complete: function (msg) {
-                    $("#save_sos").removeAttr('disabled').html('Save SOS');
-                    closeLoading();
-                }
+                $('#showSos').modal('hide');
             });
+        },
+        beforeSend: function () {
+            $("#save_sos").prop('disabled', true).html('Processing...');
+            openLoading();
+        },
+        complete: function (msg) {
+            $("#save_sos").removeAttr('disabled').html('Save SOS');
+            closeLoading();
+        }
+    });
 }
-function tetmplate_task_delete_modal(task_id,template_id) {
+function tetmplate_task_delete_modal(task_id, template_id) {
 //    alert(task_id);return false;
     $.ajax({
         type: "POST",
         url: base_url + 'administration/template/delete_template_task_modal',
         dataType: "html",
-        data: {task_id: task_id,template_id: template_id},
+        data: {task_id: task_id, template_id: template_id},
         success: function (result) {
 //            alert(result);
-             if (result.trim() != "-1") {
+            if (result.trim() != "-1") {
                 swal({
                     title: "Success!",
                     text: "Project Task Successfully Deleted!",
@@ -1491,22 +1489,22 @@ function tetmplate_task_delete_modal(task_id,template_id) {
         }
     });
 }
-function delete_project(project_id,project_template_id) {
+function delete_project(project_id, project_template_id) {
 //    alert(project_id);return false;
     $.ajax({
         type: "POST",
-        url: base_url +'project/delete_project/',
+        url: base_url + 'project/delete_project/',
         dataType: "html",
-        data: {project_id: project_id,project_template_id: project_template_id},
+        data: {project_id: project_id, project_template_id: project_template_id},
         success: function (result) {
 //            alert(result);return false;
-             if (result.trim() != "-1") {
+            if (result.trim() != "-1") {
                 swal({
                     title: "Success!",
                     text: "Project Successfully Deleted!",
                     type: "success"
                 }, function () {
-                       loadProjectDashboard();
+                    loadProjectDashboard();
                 }
                 );
             } else {
@@ -1521,22 +1519,22 @@ function delete_project(project_id,project_template_id) {
         }
     });
 }
-function taskDashboard(){
+function taskDashboard() {
     goURL(base_url + 'task');
 }
 
-function load_project_tasks(id,created_at,dueDate){
+function load_project_tasks(id, created_at, dueDate) {
     if (!$('#collapse' + id).hasClass('in')) {
         $('#collapse' + id).html('<div class="text-center"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>');
-        
+
         $.ajax({
             type: "POST",
             url: base_url + 'project/load_project_tasks',
             dataType: "html",
             data: {id: id, created_at: created_at, dueDate: dueDate},
             success: function (result) {
-                if(result.trim()!=''){
-                    $("#collapse"+id).html(result.trim());
+                if (result.trim() != '') {
+                    $("#collapse" + id).html(result.trim());
                 }
             }
         });
