@@ -987,10 +987,14 @@ class Company_model extends CI_Model {
         foreach($orderid as $val){
            $oid[]= $val['id'];
         }
-        $this->db->select("bank_name, account_number as ban_account_number, routing_number as bank_routing_number");
-        $this->db->from('financial_accounts');
-        $this->db->where_in('order_id',$oid);
-        return $this->db->get()->result_array();
+        if(!empty($oid)){
+            $this->db->select("bank_name, account_number as ban_account_number, routing_number as bank_routing_number");
+            $this->db->from('financial_accounts');
+            $this->db->where_in('order_id',$oid);
+            return $this->db->get()->result_array();
+        }else{
+            return array();
+        }
     }
 
     public function get_account_details_bookkeeping($reference_id) {
