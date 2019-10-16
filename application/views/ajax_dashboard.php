@@ -414,6 +414,7 @@ if ($section == 'notification') {
 //    echo count($general_notification_list);
 //    echo "hi";die;
     $notification_counts = '';
+    $row_number=0;
     ?>
     <div class="feed-activity-list">
         <?php
@@ -467,6 +468,7 @@ if ($section == 'notification') {
                 </div>
                 <?php
                 $notification_counts++;
+                $row_number= $notification_index+1;
             }
             $notification_count = $notification_count + $notification_counts;
         } else {
@@ -474,12 +476,13 @@ if ($section == 'notification') {
             <p class="text-danger notification-empty" <?= $notification_counts != 0 ? 'style="display: none;"' : ''; ?>>Notification not found</p>
         <?php } ?>
     </div>
-    <?php if ($notification_counts != 0) { ?>                                               
-        <!--<button onclick="displayNotificationItems('item');" class="btn btn-primary btn-block m-t notification-see-more-btn"><i class="fa fa-arrow-down"></i> Show More</button>-->
+    <?php if ($notification_counts != 0) {
+        if($start!=$notification_count){
+        ?>   
         <input type="hidden" name="start_val" id="start_val" value="<?= $notification_count ?>">
-        <!-- <input type="hidden" name="request_type" id="request_type" value="<?= $request_type ?>"> -->
-        <button onclick="loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '<?= $notification_count ?>', '', '', '<?= $request_type ?>');" class="btn btn-primary btn-block m-t notification-see-more-btn"><i class="fa fa-arrow-down"></i> Load More</button>
+        <button onclick="loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '<?= $notification_count ?>', '', '', '<?= $request_type ?>','<?= $page_number+1?>');" class="btn btn-primary btn-block m-t notification-see-more-btn" id='load_more'><i class="fa fa-arrow-down"></i> Load More</button>
         <?php
+    }
     }
 }
 if ($section == 'news_update') {

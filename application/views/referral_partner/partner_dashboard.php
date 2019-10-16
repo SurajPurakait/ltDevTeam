@@ -20,6 +20,7 @@
                                                     <option value="1">Type</option>
                                                     <option value="2">Requested By</option>
                                                     <option value="3">Requested Date</option>
+                                                    <option value="4">Partner Name</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-4 m-t-5">
@@ -75,7 +76,7 @@
                                             $staff_info = staff_info();
                                             if($staff_info['type'] == 1) { 
                                         ?>
-                                        <tr id="tome" class="action-row-border-bottom">
+                                        <tr id="tome">
                                             <th>Added By Others</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-0">
@@ -94,6 +95,9 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                        <div class="col-md-12 col-lg-4 col-lg-offset-1 m-t-8">
+                            <a class="btn notification-btn" href="javascript:void(0);" title="Action Notifications">Notifications <span class="label label-danger">demo</span></a>
                         </div>
                     </div>
                     <hr class="hr-line-dashed">

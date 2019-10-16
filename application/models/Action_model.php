@@ -2255,6 +2255,7 @@ class Action_model extends CI_Model {
                         $this->db->join('office_staff os', 'os.staff_id = st.id');
                         $this->db->where(['os.office_id' => $office]);
                     endif;
+                    $this->db->where(['st.type!=' => 4]);
                     return $this->db->get()->result_array();
                 }
                 break;
@@ -2415,6 +2416,7 @@ class Action_model extends CI_Model {
             case 4: {
                     $this->db->select("st.id AS id, CONCAT(st.last_name, ', ',st.first_name,' ',st.middle_name) AS name");
                     $this->db->from('staff AS st');
+                    $this->db->where(['st.type!=' => 4]);
                     return $this->db->get()->result_array();
                 }
                 break;

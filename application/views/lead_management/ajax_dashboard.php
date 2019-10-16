@@ -28,10 +28,11 @@
         // $day3 = mail_campaign_list($lead['type_of_contact'], $lead['language'], 2);
         // $day6 = mail_campaign_list($lead['type_of_contact'], $lead['language'], 3);
         ?>
-        <div class="panel panel-default service-panel type2 filter-active">
+        <div class="panel panel-default service-panel type2 filter-active lead-<?= $lead['id']; ?>">
             <div class="panel-heading">
                 <?php
                 if ($lead['status'] == 1) {
+                    if($lead['type'] == 1) {
                     ?>
                     <?php
                     if ($lead['assigned_status'] == 'y') {
@@ -44,9 +45,12 @@
                         <?php
                     }
                     ?>
-
-
                     <?php
+                    } else {
+                    ?>
+                    <a href="javascript:void(0);" onclick="assign_as_partner(<?= $lead['id']; ?>)" class="btn btn-primary btn-xs btn-assign-client" id="assign_as_partner-<?= $lead['id']; ?>"><i class="fa fa-plus" aria-hidden="true"></i> Assign as Partner</a>
+                    <?php    
+                    }
                 }
                 if ($lead["type_of_contact"] == 1 || $lead["type_of_contact"] == 2) {
                     ?>

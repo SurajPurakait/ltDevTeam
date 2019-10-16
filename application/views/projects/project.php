@@ -615,12 +615,17 @@ $role = $user_info['role'];
             elementArray.push(element);
             variableArray.push(variableValue);
         }
-        if (variableValue == 4) {
+        if (variableValue == 10) {
             var checkOfficeValue = variableArray.includes('3');
             if (checkOfficeValue == true) {
-                officeValue = $("select[name='criteria_dropdown[office][]']").val();
+               var officeValue = $("select[name='criteria_dropdown[office][]']").val();
+            }else{
+               var officeValue = '';
             }
+        }else{
+            var officeValue = '';
         }
+        
         $.ajax({
             type: "POST",
             data: {

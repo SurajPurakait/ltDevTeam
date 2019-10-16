@@ -929,3 +929,5 @@ ALTER TABLE `project_recurrence_main` ADD `next_due_date` DATE NOT NULL AFTER `d
 ALTER TABLE `project_recurrence_main` ADD `generated_by_cron` INT(10) NOT NULL DEFAULT '0' AFTER `generation_date`; 
 
 /* live end */
+/* 15.10.2019 */
+ALTER TABLE `lead_management` CHANGE `type` `type` INT(10) NOT NULL COMMENT '1:Client Lead or Lead, 2 : Partner,  3 : Partner\'s Lead';

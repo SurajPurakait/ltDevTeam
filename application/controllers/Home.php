@@ -446,7 +446,7 @@ class Home extends CI_Controller {
             // $data['lead']['partner_leads']['inactive'] = count($this->lead_management->get_lead_list(2, 2, '', $data['lead_type_id']));
             // $data['lead']['partner_leads']['total'] = count($this->lead_management->get_lead_list(2, '', '', $data['lead_type_id']));
 
-            
+
             $json_data['section'][] = $this->load->view("ajax_dashboard", $data, true);
         }
         if (in_array('partner', $section_array)) {
@@ -457,22 +457,22 @@ class Home extends CI_Controller {
             // $data['partner_list']['referred_by_me']['byme'] = count($this->referral_partner->getReferralPartnerData(1));
             // $data['partner_list']['referred_by_other']['byother'] = count($this->referral_partner->getReferralPartnerData(2));                
 
-            $data['partner']['by_me']['new'] = count($this->lead_management->get_leads_referred_by_to_him(0,'byme'));
-            $data['partner']['by_me']['active'] = count($this->lead_management->get_leads_referred_by_to_him(3,'byme'));
-            $data['partner']['by_me']['inactive'] = count($this->lead_management->get_leads_referred_by_to_him(2,'byme'));
-            
-            $data['partner']['to_me']['new'] = count($this->lead_management->get_leads_referred_by_to_him(0,'tome'));
-            $data['partner']['to_me']['active'] = count($this->lead_management->get_leads_referred_by_to_him(3,'tome'));
-            $data['partner']['to_me']['inactive'] = count($this->lead_management->get_leads_referred_by_to_him(2,'tome'));
+            $data['partner']['by_me']['new'] = count($this->lead_management->get_leads_referred_by_to_him(0, 'byme'));
+            $data['partner']['by_me']['active'] = count($this->lead_management->get_leads_referred_by_to_him(3, 'byme'));
+            $data['partner']['by_me']['inactive'] = count($this->lead_management->get_leads_referred_by_to_him(2, 'byme'));
+
+            $data['partner']['to_me']['new'] = count($this->lead_management->get_leads_referred_by_to_him(0, 'tome'));
+            $data['partner']['to_me']['active'] = count($this->lead_management->get_leads_referred_by_to_him(3, 'tome'));
+            $data['partner']['to_me']['inactive'] = count($this->lead_management->get_leads_referred_by_to_him(2, 'tome'));
 
             if ($user_type == 1) {
-                $data['partner']['by_other']['new'] = count($this->lead_management->get_leads_referred_by_to_him(0,'byother'));
-                $data['partner']['by_other']['active'] = count($this->lead_management->get_leads_referred_by_to_him(3,'byother'));
-                $data['partner']['by_other']['inactive'] = count($this->lead_management->get_leads_referred_by_to_him(2,'byother'));
+                $data['partner']['by_other']['new'] = count($this->lead_management->get_leads_referred_by_to_him(0, 'byother'));
+                $data['partner']['by_other']['active'] = count($this->lead_management->get_leads_referred_by_to_him(3, 'byother'));
+                $data['partner']['by_other']['inactive'] = count($this->lead_management->get_leads_referred_by_to_him(2, 'byother'));
 
-                $data['partner']['to_other']['new'] = count($this->lead_management->get_leads_referred_by_to_him(0,'toother'));
-                $data['partner']['to_other']['active'] = count($this->lead_management->get_leads_referred_by_to_him(3,'toother'));
-                $data['partner']['to_other']['inactive'] = count($this->lead_management->get_leads_referred_by_to_him(2,'toother'));
+                $data['partner']['to_other']['new'] = count($this->lead_management->get_leads_referred_by_to_him(0, 'toother'));
+                $data['partner']['to_other']['active'] = count($this->lead_management->get_leads_referred_by_to_him(3, 'toother'));
+                $data['partner']['to_other']['inactive'] = count($this->lead_management->get_leads_referred_by_to_him(2, 'toother'));
             }
             $json_data['section'][] = $this->load->view("ajax_dashboard", $data, true);
         }
@@ -487,6 +487,8 @@ class Home extends CI_Controller {
             $json_data['section_index'][] = $data['notification_count'] = post('start_val');
             $data['general_notification_list'] = $this->system->get_general_notification_by_user_id($data['staff_id'], 5, '', $start, post('request_type'));
             $data['request_type'] = post('request_type');
+            $data['page_number']= post('page_number');
+            $data['start']=post('start');
             $json_data['section'][] = $this->load->view("ajax_dashboard", $data, true);
         }
         if (in_array('news_update', $section_array)) {
@@ -583,6 +585,19 @@ class Home extends CI_Controller {
         $render_data['menu'] = 'dashboard';
         $render_data['header_title'] = $title;
         $this->load->view('new_menu', $render_data);
+    }
+
+    public function report() {
+        if (!$this->session->userdata('user_id') && $this->session->userdata('user_id') == '') {
+            redirect(base_url());
+        }
+        $this->load->layout = 'dashboard';
+        $title = "Report";
+        $render_data['title'] = $title . ' | Tax Leaf';
+        $render_data['main_menu'] = 'dashboard';
+        $render_data['menu'] = 'dashboard';
+        $render_data['header_title'] = $title;
+        $this->load->template('report', $render_data);
     }
 
 }

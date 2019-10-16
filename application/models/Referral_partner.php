@@ -18,7 +18,7 @@ class Referral_partner extends CI_Model {
             $i++;
         }
         $where = $having = [];
-        $sql = "SELECT lm.id,lm.type_of_contact,lm.email, lm.type as lead_type, rf.assigned_date,rf.assisned_by_userid, (case when lm.type = '1' then (select name from type_of_contact_prospect where id = lm.type_of_contact) else (select name from type_of_contact_referral where id = lm.type_of_contact) end) as type,concat(lm.last_name, ', ', lm.first_name) as name, (case when lm.status = '0' then 'New' when lm.status = '1' then 'Complete' when lm.status = '2' then 'Inactive' when lm.status = '3' then 'Active' else 'Unknown' end) as status, concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as requested_by,s.id as requested_by_id, lm.submission_date, lm.active_date, lm.inactive_date, lm.complete_date, (select count(ln.id) from lead_notes as ln where ln.lead_id = lm.id) as notes from lead_management as lm inner join staff as s on s.id = lm.staff_requested_by left join referral_partner as rf on rf.partner_id = lm.id";
+        $sql = "SELECT lm.id,concat(lm.last_name, ', ', lm.first_name) as partner_name,lm.type_of_contact,lm.email, lm.type as lead_type, rf.assigned_date,rf.assisned_by_userid, (case when lm.type = '1' then (select name from type_of_contact_prospect where id = lm.type_of_contact) else (select name from type_of_contact_referral where id = lm.type_of_contact) end) as type,concat(lm.last_name, ', ', lm.first_name) as name, (case when lm.status = '0' then 'New' when lm.status = '1' then 'Complete' when lm.status = '2' then 'Inactive' when lm.status = '3' then 'Active' else 'Unknown' end) as status, concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as requested_by,s.id as requested_by_id, lm.submission_date, lm.active_date, lm.inactive_date, lm.complete_date, (select count(ln.id) from lead_notes as ln where ln.lead_id = lm.id) as notes from lead_management as lm inner join staff as s on s.id = lm.staff_requested_by left join referral_partner as rf on rf.partner_id = lm.id";
         $where[] = 'lm.type="2" and lm.status="1"';
         if ($userinfo['type'] == 3) {
             if ($userinfo['role'] == 1) {
@@ -76,6 +76,8 @@ class Referral_partner extends CI_Model {
             $column_name = 'lm.staff_requested_by';
         } elseif ($variable_val == 3) {
             $column_name = 'lm.submission_date';
+        } elseif ($variable_val == 4) {
+            $column_name = 'lm.id';
         }
         return $column_name;
     }
@@ -88,6 +90,8 @@ class Referral_partner extends CI_Model {
             $criteria_val = $criteria_dd['requested_by'];
         } elseif ($variable_val == 3) {
             $criteria_val = $criteria_dd['added_date'];
+        } elseif ($variable_val == 4) {
+            $criteria_val = $criteria_dd['partner_name'];
         }
         if ($variable_val == 3) { // added_date
             if ($condition_val == 1 || $condition_val == 3) {
@@ -504,5 +508,7 @@ class Referral_partner extends CI_Model {
         $email = $data['email'];
         return $this->db->get_where('staff',array('user'=>$email))->num_rows();
     }
-
+    public function getPartnerData() {
+        return $this->db->get_where('lead_management',array('type'=>'2'))->result_array();
+    }
 }

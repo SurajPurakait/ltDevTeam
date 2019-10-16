@@ -253,7 +253,9 @@
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-10">
                             <input type="hidden" name="type" id="type" value="1">
+                            <input type="hidden" name="lead_type" id="lead_type" value="<?= $lead_type; ?>">
                             <input type="hidden" name="partner_section" value="">
+                            <input type="hidden" name="referred_status" value="">
                             <button class="btn btn-success" type="button" onclick="add_lead_prospect('notrefagent','<?= $event_lead ?>')">Save Changes</button> &nbsp;&nbsp;&nbsp;
                             <button class="btn btn-default" type="button" onclick="cancel_lead_prospect('notrefagent')">Cancel</button>
                         </div>

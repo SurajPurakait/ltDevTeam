@@ -496,13 +496,17 @@ function jumpDiv() {
 }
 
 var allAjaxRequest = [];
-function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID, limit = '10', start = '', refresh = '', is_clear = '', requestType = '') {
+function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID, limit = '10', start = '', refresh = '', is_clear = '', requestType = '',pageNumber=0) {
+    
     var start_val;
     if (refresh != '') {
         start_val = '0';
+        start='';
     } else {
         start_val = $('#start_val').val();
     }
+    
+//    alert(pageNumber);
     if (section == 'stop') {
         allAjaxRequest.forEach(function (ajaxRequest) {
             ajaxRequest.abort();
@@ -536,10 +540,6 @@ function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID,
         };
     }
     if (section == 'notification') {
-        // if(requestType == '' || requestType == 'undefined') {
-        //     requestType = $('#request_type').val();
-        //     alert(requestType);
-        // }
         data = {
             section: section,
             staff_id: staffID,
@@ -548,9 +548,11 @@ function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID,
             lead_type_id: leadTypeID,
             start: start,
             start_val: start_val,
-            request_type: requestType
+            request_type: requestType,
+            page_number:pageNumber
         };
     }
+    $("#load_more").remove();
     var thisAjaxRequest = $.ajax({
         type: "POST",
 
@@ -562,8 +564,23 @@ function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID,
             var jsonData = JSON.parse(result);
             var sectionData = jsonData.section;
             sectionData.forEach(function (data, index) {
-                $('.' + jsonData.section_index[index] + '-section').html(data);
-                $('#widget_' + jsonData.section_index[index]).removeClass('loading');
+                if(jsonData.section_index[index]=='notification'){
+                    if(refresh!=''){
+                        $('.' + jsonData.section_index[index] + '-list-section').html(data);
+                        $('#widget_' + jsonData.section_index[index]).removeClass('loading');
+                    }else{
+                        if(requestType!='' && start==''){
+                            $('.' + jsonData.section_index[index] + '-list-section').html(data);
+                            $('#widget_' + jsonData.section_index[index]).removeClass('loading');
+                        }else{
+                            $('.' + jsonData.section_index[index] + '-list-section').append(data);
+                            $('#widget_' + jsonData.section_index[index]).removeClass('loading');
+                        }
+                    }
+                }else{
+                    $('.' + jsonData.section_index[index] + '-section').html(data);
+                    $('#widget_' + jsonData.section_index[index]).removeClass('loading');
+                }
             });
         }
     });

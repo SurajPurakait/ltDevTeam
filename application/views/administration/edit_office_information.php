@@ -2,28 +2,32 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
-                <div class="ibox-content">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <a href="#"><img src="<?php echo base_url(); ?>uploads/<?php echo $franchise_info['photo']; ?>" style="height:80px;"></a>
-                            <div class="m-l-5" style="display: inline-block;">
-                                <h2 class="text-info"><?php echo $franchise_info['office_id']; ?></h2>
+                <div class="ibox-content p-t-0 p-l-0 p-r-0">
+
+                    <div class="tabs-container fixed-container">
+                        <div class="fixed-header p-t-15">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a href="#"><img src="<?php echo base_url(); ?>uploads/<?php echo $franchise_info['photo']; ?>" style="height:80px;"></a>
+                                <div class="m-l-5" style="display: inline-block;">
+                                    <h2 class="text-info"><?php echo $franchise_info['office_id']; ?></h2>
+                                </div>
+                                
                             </div>
-                            
+                            <div class="col-md-6 text-right">
+                                <a href="javascript:void(0);" id="savefee" class="btn btn-success" style="width: 100px; display: none;" onclick="save_service_fees()">Update</a>  
+                                <a href="javascript:void(0);" class="btn btn-warning" style="width: 100px" onclick="cancel_office()">Back</a>                            
+                                <a href="javascript:void(0);" class="btn btn-danger" style="width: 100px" onclick="delete_office('<?= $franchise_info['id']; ?>');">Delete</a>
+                            </div>
                         </div>
-                        <div class="col-md-6 text-right">
-                            <a href="javascript:void(0);" id="savefee" class="btn btn-success" style="width: 100px; display: none;" onclick="save_service_fees()">Update</a>  
-                            <a href="javascript:void(0);" class="btn btn-warning" style="width: 100px" onclick="cancel_office()">Back</a>                            
-                            <a href="javascript:void(0);" class="btn btn-danger" style="width: 100px" onclick="delete_office('<?= $franchise_info['id']; ?>');">Delete</a>
-                        </div>
-                    </div>
+                   
                     <br>
-                    <div class="tabs-container">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="active"><a class="nav-link active" data-toggle="tab" href="#tab-1" onclick="fee_update('info1','fee1')"> INFO</a></li>
                             <li><a class="nav-link" data-toggle="tab" href="#tab-2" id="fee" onclick="fee_update('fee1','info1')">FEES</a></li>
                         </ul>
-                        <div class="tab-content">
+                         </div>
+                        <div class="tab-content p-l-20 p-r-20">
                             <div role="tabpanel" id="tab-1" class="tab-pane active">
                                 <div class="panel-body">
 
@@ -338,7 +342,7 @@
 
     function show_default_fee(){
         var f = document.getElementById("default_fee").value;
-        if(f != ""){
+        if(f != "" && f<=100 ){
             $('input[name="percentage[]"]').val(f);
         }
     }

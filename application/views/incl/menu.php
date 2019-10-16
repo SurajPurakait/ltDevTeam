@@ -379,7 +379,10 @@ $office_id = get_office_id($staff_info['office']);
                             <a href="<?= base_url(); ?>lead_management/home">Dashboard</a>
                         </li>
                         <li <?= active_menu($menu, "new_lead"); ?>>
-                            <a href="<?= base_url(); ?>lead_management/new_prospect">- Add New Lead</a>
+                            <a href="<?= base_url(); ?>lead_management/new_prospect/index/client_lead">- Add Client Lead</a>
+                        </li>
+                        <li <?= active_menu($menu, "new_lead"); ?>>
+                            <a href="<?= base_url(); ?>lead_management/new_prospect/index/partner_lead">- Add Partner Lead</a>
                         </li>
                         <!-- <li <?//= active_menu($menu, "new_referral_agent"); ?>>
                             <a href="<?//= base_url(); ?>lead_management/new_referral_agent">- New Referral Agent</a>
