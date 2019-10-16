@@ -901,7 +901,31 @@ ALTER TABLE `invoice_info` CHANGE `payment_status` `payment_status` ENUM('1','2'
 /* 13.09.19 */
 ALTER TABLE `office` ADD `merchant_token` VARCHAR(255) NOT NULL AFTER `office_id`;
 
-/* live end */
-
 /* 13.09.19 */
 ALTER TABLE `invoice_info` ADD `client_id` INT(11) NOT NULL COMMENT 'company_id for business client, individual_id for individual client' AFTER `type`; 
+
+INSERT INTO `payment_type` (`id`, `name`) VALUES (NULL, 'Pay NOW');
+
+/* 20.09.19 */
+/*import file_read_status_staff.sql*/
+/* 23.09.2019 */
+
+ALTER TABLE `lead_management` CHANGE `referred_status` `referred_status` ENUM('0','1','2') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '0' COMMENT '0:Partner to Staff, 1: Staff to Partner, 2:Others';
+
+/* 27.09.2019 */
+ALTER TABLE `actions` ADD `is_all` INT(11) NOT NULL DEFAULT '1' COMMENT '1 for all staff, 0 for individual staff' AFTER `my_task`; 
+
+
+/* 2.10.19 */
+ALTER TABLE `project_recurrence_main` ADD `due_date` DATE NULL DEFAULT NULL AFTER `created_at`; 
+ALTER TABLE `project_recurrence_main` ADD `generation_date` DATE NULL DEFAULT NULL AFTER `due_date`; 
+
+/* run the patch project_due_date_generation_date_fix() */
+
+/* 3.10.19 */
+
+ALTER TABLE `project_recurrence_main` ADD `next_due_date` DATE NOT NULL AFTER `due_date`; 
+
+ALTER TABLE `project_recurrence_main` ADD `generated_by_cron` INT(10) NOT NULL DEFAULT '0' AFTER `generation_date`; 
+
+/* live end */

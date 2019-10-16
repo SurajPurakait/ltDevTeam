@@ -4,90 +4,182 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="row">
-                    <?php
-                        // echo "<pre>";
-                        // print_r($leads_list);exit;
-                    if (count($leads_list) != 0): ?>
-                        <h2 class="text-primary"><?= count($leads_list); ?> Results found</h2>
-                    <?php endif; ?>
-                    <?php if (!empty($leads_list)): ?>
-                        <?php
-                        foreach ($leads_list as $lead):
-                            $staff_data_by = staff_info_by_id($lead["referred_by"]);
-                            $staff_data_to = staff_info_by_id($lead["referred_to"]);
-                            ?>
-                            <div class="panel panel-default service-panel type2 filter-active">
-                                <div class="panel-heading">
-                                    <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse89" aria-expanded="false">
-                                        <div class="table-responsive">
-                                            <table class="table table-borderless" style="margin-bottom: 0px;">
-                                                <tbody>
-                                                    <tr>
-                                                        <th class="text-center" width="10%">Type</th>
-                                                        <th class="text-center" width="20%">Name</th>
-                                                        <th class="text-center" width="20%">Tracking</th>
-                                                        <th class="text-center" style="white-space:nowrap" width="15%">Requested By</th>
-                                                        <th class="text-center" style="white-space:nowrap" width="15%">Requested To</th>
-                                                        <th class="text-center" style="white-space:nowrap" width="20%">Submission Date</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td title="Type" class="text-center" width="10%" style="word-break:break-all"><?= ($lead["type_of_contact"]!=0) ? $lead["type_of_contact"] : 'Unknown'; ?></td>
-
-                                                        <td title="Name" class="text-center" width="20%"><?= $lead["first_name"]." ".$lead["last_name"] ; ?></td>
-                                                        <td align='left' title="Tracking Description" class="text-center" width="20%">
-                                                            <?php
-                                                                if ($lead["status"] == 0) {
-                                                                    $trk_class = "label label-success";
-                                                                    $status_name = "New";   
-                                                                }elseif ($lead["status"] == 3) {
-                                                                    $trk_class = "label badge-warning"; //badge-warning for lead section only
-                                                                    $status_name = "Active";
-                                                                }elseif ($lead["status"] == 2) {
-                                                                    $trk_class = "label label-danger";
-                                                                    $status_name = "Inactive";
-                                                                }elseif ($lead["status"] == 1) {
-                                                                    $trk_class = "label label-primary";
-                                                                    $status_name = "Completed";
-                                                                }
-                                                                 
-                                                            ?>
-                                                            <a href='javascript:void(0);' onclick='show_lead_tracking_modal("<?= $lead["lead_id"]; ?>")'><span class="<?= $trk_class; ?>"><?= $status_name ?></span></a>
-                                                       </td>
-                                                        <td title="Requested By" class="text-center" width="15%">
-                                                            <?php if(isset($staff_data_by) && !empty($staff_data_by)){
-                                                                echo $staff_data_by["last_name"].', '.$staff_data_by["first_name"];
-                                                            }else{
-                                                                echo '-';
-                                                            } ?>
-                                                        </td>
-                                                        <td title="Requested To" class="text-center" width="15%">
-                                                            <?php if(isset($staff_data_to) && !empty($staff_data_to)){
-                                                                echo $staff_data_to["last_name"].', '.$staff_data_to["first_name"];
-                                                            }else{
-                                                                echo '-';
-                                                            } ?>
-                                                        </td>
-                                                        <td title="Submission Date" class="text-center" width="20%">
-                                                            <?= ($lead["submission_date"] != "0000-00-00") ? date('m/d/Y',strtotime($lead["submission_date"])) : "-"; ?>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                    	<div class="col-md-6">
+                            <div class="filter-outer">
+                                <form name="filter_form" id="filter-form"  method="post" onsubmit="partnerFilter()">
+                                    <div class="form-group filter-inner">
+                                        <div class="filter-div m-b-20 row" id="original-filter">                                           
+                                            <div class="col-sm-3 m-t-10">
+                                                <select class="form-control variable-dropdown" name="variable_dropdown[]" onchange="changeVariable(this)">
+                                                    <option value="">All Variable</option>
+                                                    <?php
+                                                    // asort($filter_element_list);
+                                                    foreach ($filter_element_list as $key => $fel):
+                                                        ?>
+                                                        <option value="<?= $key ?>"><?= $fel ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-4 m-t-10">
+                                                <select class="form-control condition-dropdown" name="condition_dropdown[]" onchange="changeCondition(this)">
+                                                    <option value="">All Condition</option>
+                                                    <option value="1">Is</option>
+                                                    <option value="2">Is in the list</option>
+                                                    <option value="3">Is not</option>
+                                                    <option value="4">Is not in the list</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-4 m-t-10 criteria-div">
+                                                <select class="form-control criteria-dropdown chosen-select" placeholder="All Criteria" name="criteria_dropdown[][]">
+                                                    <option value="">All Criteria</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-1 m-t-10 p-l-0">
+                                                <div class="add_filter_div text-right">
+                                                    <a href="javascript:void(0);" onclick="addFilterRow()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Filter">
+                                                        <i class="fa fa-plus" aria-hidden="true"></i> 
+                                                    </a>
+                                                </div>  
+                                            </div>                                            
                                         </div>
-                                    </h5>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="text-center m-t-30">
-                            <div class="alert alert-danger">
-                                <i class="fa fa-times-circle-o fa-4x"></i> 
-                                <h3><strong>Sorry !</strong> no data found</h3>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">                        
+                                            <div class="">
+                                                <button class="btn btn-success" type="button" onclick="partnerFilter()">Apply Filter</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <h4 class="m-t-5 m-r-5"><span class="text-success" style="display: none;" id="clear_filter"> &nbsp; </span><a href="javascript:void(0);" onclick="" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></h4>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
-                    <?php endif; ?>  
+                        <div class="col-md-6">
+                            <div class="bg-aqua table-responsive">
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th class="text-center">New</th>
+                                            <th class="text-center">Active</th>
+                                            <th class="text-center">Complete</th> 
+                                            <th class="text-center">Inactive</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr id="byme">
+                                            <th>By Me</th>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-0">
+                                                    <span class="label label-success" id="requested_by_me_new" onclick="loadPartnerDashboard(0,'byme'); "><?= partnerList(0,'byme'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-3">
+                                                    <span class="label label-warning" id="requested_by_me_started" onclick="loadPartnerDashboard(3,'byme');"><?= partnerList(3,'byme'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-1">
+                                                    <span class="label label-primary" id="requested_by_me_completed" onclick="loadPartnerDashboard(1,'byme');"><?= partnerList(1,'byme'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-2">
+                                                    <span class="label label-danger" id="requested_by_me_important" onclick="loadPartnerDashboard(2,'byme');"><?= partnerList(2,'byme'); ?></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr id="tome" class="action-row-border-bottom">
+                                            <th>To Me</th>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-tome-0">
+                                                    <span class="label label-success" id="requested_to_me_new" onclick="loadPartnerDashboard(0,'tome');"><?= partnerList(0,'tome'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-tome-3">
+                                                    <span class="label label-warning" id="requested_to_me_started" onclick="loadPartnerDashboard(3,'tome');"><?= partnerList(3,'tome'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-tome-1">
+                                                    <span class="label label-primary" id="requested_to_me_completed" onclick="loadPartnerDashboard(1,'tome');"><?= partnerList(1,'tome'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-tome-2">
+                                                    <span class="label label-danger" id="requested_to_me_important" onclick="loadPartnerDashboard(2,'tome');"><?= partnerList(2,'tome'); ?></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                            $staff_info = staff_info();
+                                            if($staff_info['type'] == 1) {
+                                        ?>
+                                        <!-- byother section-->
+                                        <tr id="byother" class="action-row-border-bottom">
+                                            <th>By Other</th>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byother-0">
+                                                    <span class="label label-success" id="requested_by_other_new" onclick="loadPartnerDashboard(0,'byother');"><?= partnerList(0,'byother'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byother-3">
+                                                    <span class="label label-warning" id="requested_by_other_started" onclick="loadPartnerDashboard(3,'byother');"><?= partnerList(3,'byother'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byother-1">
+                                                    <span class="label label-primary" id="requested_by_other_completed" onclick="loadPartnerDashboard(1,'byother');"><?= partnerList(1,'byother'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byother-2">
+                                                    <span class="label label-danger" id="requested_by_other_important" onclick="loadPartnerDashboard(2,'byother');"><?= partnerList(2,'byother'); ?></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <!-- toother section -->
+                                        <tr id="toother" class="action-row-border-bottom">
+                                            <th>To Other</th>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-toother-0">
+                                                    <span class="label label-success" id="requested_to_other_new" onclick="loadPartnerDashboard(0,'toother');"><?= partnerList(0,'toother'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-toother-3">
+                                                    <span class="label label-warning" id="requested_to_other_started" onclick="loadPartnerDashboard(3,'toother');"><?= partnerList(3,'toother'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-toother-1">
+                                                    <span class="label label-primary" id="requested_to_other_completed" onclick="loadPartnerDashboard(1,'toother');"><?= partnerList(1,'toother'); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-toother-2">
+                                                    <span class="label label-danger" id="requested_to_other_important" onclick="loadPartnerDashboard(2,'toother');"><?= partnerList(2,'toother'); ?></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                            }
+                                        ?>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                     <hr class="hr-line-dashed m-b-10">
+
+                    <div class="ajaxdiv"></div>
                     <div class="row m-b-0">
                     </div>
                 </div>
@@ -96,3 +188,128 @@
     </div>
 </div>
 <div id="modal_area" class="modal fade" aria-hidden="true" style="display: none;"></div>
+<script type="text/javascript">
+	loadPartnerDashboard('<?= ($status != '') ? $status:''; ?>','<?= ($request != '') ? $request:''; ?>');
+
+	var content = $(".filter-div").html();
+    var variableArray = [];
+    var elementArray = [];
+	function addFilterRow() {
+        var random = Math.floor((Math.random() * 999) + 1);
+        var clone = '<div class="filter-div row m-b-20" id="clone-' + random + '">' + content + '<div class="col-sm-1 text-right p-l-0"><a href="javascript:void(0);" onclick="removeFilterRow(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
+        $('.filter-inner').append(clone);
+        $.each(variableArray, function (key, value) {
+            $("#clone-" + random + " .variable-dropdown option[value='" + value + "']").remove();
+        });
+        $("div.add_filter_div:not(:first)").remove();
+    }
+    function removeFilterRow(random) {
+        var divID = 'clone-' + random;
+        var variableDropdownValue = $("#clone-" + random + " .variable-dropdown option:selected").val();
+        var index = variableArray.indexOf(variableDropdownValue);
+        variableArray.splice(index, 1);
+        $("#" + divID).remove();
+    }
+    function changeVariable(element) {
+        var divID = $(element).parent().parent().attr('id');
+        var variableValue = $(element).children("option:selected").val();
+        var checkElement = elementArray.includes(element);
+        var officeValue = '';
+        if (checkElement == true) {
+            variableArray.pop();
+            variableArray.push(variableValue);
+        } else {
+            elementArray.push(element);
+            variableArray.push(variableValue);
+        }
+        if (variableValue == 4) {
+            var checkOfficeValue = variableArray.includes('3');
+            if (checkOfficeValue == true) {
+                officeValue = $("select[name='criteria_dropdown[office][]']").val();
+            }
+        }
+        $.ajax({
+            type: "POST",
+            data: {
+                variable: variableValue,
+                office: officeValue
+            },
+            url: '<?= base_url(); ?>' + 'partners/filter_dropdown_option_ajax',
+            dataType: "html",
+            success: function (result) {
+                $("#" + divID).find('.criteria-div').html(result);
+                $(".chosen-select").chosen();
+                $("#" + divID).find('.condition-dropdown').val('');
+                $("#" + divID).nextAll(".filter-div").each(function () {
+                    $(this).find('.remove-filter-button').trigger('click');
+                });
+            },
+            beforeSend: function () {
+                openLoading();
+            },
+            complete: function (msg) {
+                closeLoading();
+            }
+        });
+    }
+
+    function changeCondition(element) {
+        var divID = $(element).parent().parent().attr('id');
+        //alert(divID);
+        var conditionValue = $(element).children("option:selected").val();
+        var variableValue = $(element).parent().parent().find(".variable-dropdown option:selected").val();
+        if (variableValue == 5 || variableValue == 6) {
+            if (conditionValue == 2 || conditionValue == 4) {
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        condition: conditionValue,
+                        variable: variableValue
+                    },
+                    url: '<?= base_url(); ?>' + 'partners/filter_dropdown_option_ajax',
+                    dataType: "html",
+                    success: function (result) {
+                        $("#" + divID).find('.criteria-div').html(result);
+                    },
+                    beforeSend: function () {
+                        openLoading();
+                    },
+                    complete: function (msg) {
+                        closeLoading();
+                    }
+                });
+            } else {
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        variable: variableValue
+                    },
+                    url: '<?= base_url(); ?>' + 'partners/filter_dropdown_option_ajax',
+                    dataType: "html",
+                    success: function (result) {
+                        $("#" + divID).find('.criteria-div').html(result);
+                    },
+                    beforeSend: function () {
+                        openLoading();
+                    },
+                    complete: function (msg) {
+                        closeLoading();
+                    }
+                });
+            }
+        } else {
+            if (conditionValue == 2 || conditionValue == 4) {
+                $("#" + divID).find(".criteria-dropdown").chosen("destroy");
+                $("#" + divID).find(".criteria-dropdown").attr("multiple", "");
+                $("#" + divID).find(".criteria-dropdown").chosen();
+                $("#" + divID).find(".search-choice-close").trigger('click');
+            } else {
+                $("#" + divID).find(".criteria-dropdown").removeAttr('multiple');
+                $("#" + divID).find(".criteria-dropdown").chosen("destroy");
+                $("#" + divID).find(".criteria-dropdown").val('');
+                $("#" + divID).find(".criteria-dropdown").chosen();
+                $("#" + divID).find(".search-choice-close").trigger('click');
+            }
+        }
+    }
+</script>

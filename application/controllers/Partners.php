@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Partners extends CI_Controller
 {
-
+    private $filter_element;
     function __construct()
     {
         parent::__construct();
@@ -13,17 +13,59 @@ class Partners extends CI_Controller
         if (!$this->session->userdata('user_id') && $this->session->userdata('user_id') == '') {
             redirect(base_url());
         }
+        $this->filter_element = [
+            1 => "Type",
+            2 => "Tracking",
+            4 => "Requested By",
+            7 => "Requested To",
+            6 => "Submission Date"
+        ];
     }
-    function index(){
+    public function index($status = "",$request = ""){
         $this->load->layout = 'dashboard';
         $title = "Dashboard";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'referral_partners';
+        $render_data['main_menu'] = "referral_partners'_leads";
         $render_data['menu'] = 'partner';
         $render_data['header_title'] = $title;
-        $lead_agents = $this->lm->get_lead_agents();
-        $render_data['leads_list'] = $this->lm->get_leads_referred_by_to_him();
+        $render_data['filter_element_list'] = $this->filter_element;
+        
+        if (empty($status) && $status != '0') { 
+            $render_data['status'] = '';
+        }
+        if ($request == '0') { 
+            $render_data['request'] = '';
+        }
+        $render_data['status'] = $status;
+        $render_data['request'] = $request;
+        
         $this->load->template('partners/dashboard', $render_data);    
+    }
+    public function ajax_dashboard() {
+        $status = post("status");
+        $request = post("request");
+        $lead_agents = $this->lm->get_lead_agents();
+        $render_data['leads_list'] = $this->lm->get_leads_referred_by_to_him($status,$request);
+        $this->load->view('partners/ajax_dashboard', $render_data);
+    }
+
+    public function filter_dropdown_option_ajax() {
+        $result['element_key'] = $element_key = post('variable');
+        $result['condition'] = '';
+        if (post('condition')) {
+            $result['condition'] = post('condition');
+        }
+        $office = '';
+        if (post('office')) {
+            $office = post('office');
+        }
+        $result['element_array'] = $this->filter_element;
+        $result['element_value_list'] = $this->lm->get_partner_filter_element_value($element_key, $office);
+        $this->load->view('action/filter_dropdown_option_ajax', $result);
+    }
+    public function partner_filter() {
+        $render_data['leads_list'] = $this->lm->get_leads_referred_by_to_him('','', post());
+        $this->load->view('partners/ajax_dashboard', $render_data);
     }
     public function create_referral_agent()
     {

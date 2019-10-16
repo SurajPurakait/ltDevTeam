@@ -765,6 +765,7 @@
 </div>
 
 <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
+<div id="employee-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script>
     $(function () {
         var serviceShortName = $('#service_shortname').val();

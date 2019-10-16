@@ -225,7 +225,7 @@ if ($section == 'action') {
                                 <?php
                                 //echo ($priority == 'important') ? 'style="display:none;"':''
                                 ?>
-                                    ><a class="label bg-green p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('action/home/index/6/' . $priority_index . '/' . $rtl['request'] . '/' . (($office_id != '') ? '/' . $office_id : '0') . '/' . (($department_id != '') ? '/' . $department_id : '0')); ?>" title="Start"><?= $action[$rtl['request']][$priority]['resolved']; ?></a></td>
+                                    ><a class="label bg-green p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('action/home/index/6/' . $priority_index . '/' . $rtl['request'] . '/' . (($office_id != '') ? '/' . $office_id : '0') . '/' . (($department_id != '') ? '/' . $department_id : '0')); ?>" title="Resolved"><?= $action[$rtl['request']][$priority]['resolved']; ?></a></td>
                                     <!-- <td class="text-center v-align-middle"><a class="label bg-green p-l-10 p-r-10 p-t-5 p-b-5" href="<?//= base_url('action/home/index/2/' . $priority_index . '/' . $rtl['request'] . '/' . (($office_id != '') ? '/' . $office_id : '0') . '/' . (($department_id != '') ? '/' . $department_id : '0')); ?>" title="Complete"><?//= $action[$rtl['request']][$priority]['complete']; ?></a></td> -->
                                 <td class="text-center v-align p-t-2 p-b-2"
                                 <?php
@@ -296,32 +296,47 @@ if ($section == 'lead') {
     <?php
 }
 if ($section == 'partner') {
-?>
+?>  
+    <p class="p-10 text-success p-b-0" data-toggle="collapse" data-target="#referralPartner"><strong>Referral Partners</strong></p>
+    <div class="table-responsive collapse in" id="referralPartner">
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <td class="v-align-middle">Referred By Me</td>
+                    <td class="text-center v-align-middle p-t-2 p-b-2"><a href="<?= base_url('referral_partner/referral_partners/partners/1'); ?>" class="label bg-blue-new p-l-10 p-r-10 p-t-5 p-b-5" ><?= $partner_list['referred_by_me']; ?></a></td> </tr>
+                <tr>
+                    <td class="v-align-middle">Referred By Others</td>
+                    <td class="text-center v-align-middle p-t-2 p-b-2"><a href="<?= base_url('referral_partner/referral_partners/partners/2'); ?>" class="label bg-yellow p-l-10 p-r-10 p-t-5 p-b-5" ><?= $partner_list['referred_by_other']; ?></a></td>
+                </tr>
+            </tbody>
+        </table>        
+    </div>
+    <p class="p-10 text-success p-b-0" data-toggle="collapse" data-target="#leadPartner"><strong>Partners' Lead</strong></p>
     <div class="table-responsive collapse in" id="leadPartner">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th width="20%" class="v-align-middle"></th>
-                    <th class="text-center v-align-middle" width="15%">Total</th>
-                    <th class="text-center v-align-middle" width="15%">New</th>
-                    <th class="text-center v-align-middle" width="15%">Active</th>
-                    <th class="text-center v-align-middle" width="15%">Inactive</th>
-                    <th width="20%" class="text-center v-align-middle">&nbsp;</th>
+                    <th width="25%" class="v-align-middle"></th>
+                    <th class="text-center v-align-middle" width="20%">New</th>
+                    <th class="text-center v-align-middle" width="20%">Active</th>
+                    <th class="text-center v-align-middle" width="20%">Inactive</th>
+                    <th width="15%" class="text-center v-align-middle">&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
 
-                <?php foreach ($partner as $partner_index => $partner_array) { ?>
+                <?php foreach ($partner as $partner_index => $partner_array) { 
+                    $partner_index_param = str_replace('_', '', $partner_index);
+                    ?>
                     <tr>
                         <td class="v-align-middle"><?= ucwords(str_replace('_', ' ', $partner_index)); ?></td>
-                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-dark-grey p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('referral_partner/referral_partners/leads_ref_by_refpartner_dashboard/4/' . (($partner_index == 'referred_to_me') ? '1' : '2') . (($lead_type_id != '') ? '/' . $lead_type_id : '')); ?>" title="Total"><?= $partner_array['total']; ?></a></td>
-                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-blue-new p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('referral_partner/referral_partners/leads_ref_by_refpartner_dashboard/0/' . (($partner_index == 'referred_to_me') ? '1' : '2') . (($lead_type_id != '') ? '/' . $lead_type_id : '')); ?>" title="New"><?= $partner_array['new']; ?></a></td>
-                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-yellow p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('referral_partner/referral_partners/leads_ref_by_refpartner_dashboard/3/' . (($partner_index == 'referred_to_me') ? '1' : '2') . (($lead_type_id != '') ? '/' . $lead_type_id : '')); ?>" title="Active"><?= $partner_array['active']; ?></a></td>
-                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-light-grey p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('referral_partner/referral_partners/leads_ref_by_refpartner_dashboard/2/' . (($partner_index == 'referred_to_me') ? '1' : '2') . (($lead_type_id != '') ? '/' . $lead_type_id : '')); ?>" title="Inactive"><?= $partner_array['inactive']; ?></a></td>
+                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-blue-new p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('partners/index/0/' . (($partner_index_param != '') ? $partner_index_param : '0')); ?>" title="New"><?= $partner_array['new']; ?></a></td>
+                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-yellow p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('partners/index/3/' . (($partner_index_param != '') ? $partner_index_param : '0')); ?>" title="Active"><?= $partner_array['active']; ?></a></td>
+                        <td class="text-center v-align-middle p-t-2 p-b-2"><a class="label bg-light-grey p-l-10 p-r-10 p-t-5 p-b-5" href="<?= base_url('partners/index/2/' . (($partner_index_param != '') ? $partner_index_param : '0')); ?>" title="Inactive"><?= $partner_array['inactive']; ?></a></td>
                         <td class="text-center v-align p-t-2 p-b-2">
-                            <div class="lead-campaigns-donut" data-size="50" id="lead_donut_<?= $partner_index; ?>" data-json="lead_data_<?= $partner_index; ?>"></div>
+                            <div class="partner-campaigns-donut" data-size="50" id="lead_donut_<?= $partner_index; ?>" data-json="partner_data_<?= $partner_index; ?>"></div>
                             <script>
-                                var lead_data_<?= $partner_index; ?> = [{'section_label': 'Inactive', 'value': <?= $partner_array['inactive']; ?>, 'color': '#d2d2d280'}, {'section_label': 'Active', 'value': <?= $partner_array['active']; ?>, 'color': '#FFB046'}, {'section_label': 'New', 'value': <?= $partner_array['new']; ?>, 'color': '#06a0d6'}];
+                                var partner_data_<?= $partner_index; ?> = [{'section_label': 'Inactive', 'value': <?= $partner_array['inactive']; ?>, 'color': '#d2d2d280'}, {'section_label': 'Active', 'value': <?= $partner_array['active']; ?>, 'color': '#FFB046'}, {'section_label': 'New', 'value': <?= $partner_array['new']; ?>, 'color': '#06a0d6'}];
                             </script>
                         </td>
                     </tr>
@@ -332,7 +347,7 @@ if ($section == 'partner') {
         </table>
     </div>
     <script type="text/javascript">
-        // pieChart('lead-campaigns-donut');
+        pieChart('partner-campaigns-donut');
     </script>    
 <?php    
 }
@@ -404,6 +419,7 @@ if ($section == 'notification') {
         <?php
         if (!empty($general_notification_list)) {
             foreach ($general_notification_list as $notification_index => $gnl) {
+
                 $diff_days = $gnl['how_old_days'];
                 $diff_text = 'more30';
                 if ($diff_days == 0) {
@@ -415,6 +431,13 @@ if ($section == 'notification') {
                 } elseif ($diff_days > 7 && $diff_days <= 30) {
                     $diff_text = 'last30';
                 }
+
+                // if (strpos($gnl['notification_text'], 'YOU') !== false) {
+                //     $ref_by = "byme";
+                // } else {
+                //     $ref_by = "byothers";
+                // }
+
                 if ($gnl['reference'] == 'invoice') {
                     $reference_type = "Billing";
                     $class = 'invoice';
@@ -431,8 +454,9 @@ if ($section == 'notification') {
                     $class1 = 'bg-yellow';
                     $view_url = base_url() . 'services/home/view/' . $gnl['reference_id'];
                 }
+
                 ?>
-                <div class="feed-element notification-item notification-<?= $gnl['reference']; ?> notification-<?= ($notification_index > 4) ? 'hide' : 'show'; ?> notification-<?= $diff_text; ?>" <?= ($notification_index > 4) ? 'style="display: none;"' : ''; ?> id="notification-div-<?= $gnl['id']; ?>">
+                <div class="feed-element notification-item notification-<?= $gnl['reference']; ?>  notification-<?= ($notification_index > 4) ? 'hide' : 'show'; ?> notification-<?= $diff_text; ?>" <?= ($notification_index > 4) ? 'style="display: none;"' : ''; ?> id="notification-div-<?= $gnl['id']; ?>">
                     <?php //if ($gnl['added_by'] != sess('user_id')):   ?>
                     <a href="javascript:void(0);" onclick="readNotification('<?= $gnl['id']; ?>');document.getElementById('notification-div-<?= $gnl['id']; ?>').remove();" class="pull-right text-muted p-5 p-t-0"><i class="fa fa-times"></i></a>
                     <?php //endif;   ?>
@@ -450,10 +474,11 @@ if ($section == 'notification') {
             <p class="text-danger notification-empty" <?= $notification_counts != 0 ? 'style="display: none;"' : ''; ?>>Notification not found</p>
         <?php } ?>
     </div>
-    <?php if ($notification_counts != 0) { ?>
-                                                                                                                <!--<button onclick="displayNotificationItems('item');" class="btn btn-primary btn-block m-t notification-see-more-btn"><i class="fa fa-arrow-down"></i> Show More</button>-->
+    <?php if ($notification_counts != 0) { ?>                                               
+        <!--<button onclick="displayNotificationItems('item');" class="btn btn-primary btn-block m-t notification-see-more-btn"><i class="fa fa-arrow-down"></i> Show More</button>-->
         <input type="hidden" name="start_val" id="start_val" value="<?= $notification_count ?>">
-        <button onclick="loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '<?= $notification_count ?>');" class="btn btn-primary btn-block m-t notification-see-more-btn"><i class="fa fa-arrow-down"></i> Load More</button>
+        <!-- <input type="hidden" name="request_type" id="request_type" value="<?= $request_type ?>"> -->
+        <button onclick="loadHomeDashboard('notification', '<?= sess('user_id') ?>', '', '', '', '', '<?= $notification_count ?>', '', '', '<?= $request_type ?>');" class="btn btn-primary btn-block m-t notification-see-more-btn"><i class="fa fa-arrow-down"></i> Load More</button>
         <?php
     }
 }
@@ -519,7 +544,8 @@ if ($section == 'news_update') {
                             }
                         }
                         ?>
-                        <a id="text-link-<?= $news_update['id'] ?>" class="media-body <?= $class ?>" href="javascript:void(0)" onclick="getNewsDetailsModal('<?= $news_update['id'] ?>', '<?= $staff_info['type'] ?>', '<?= $staff_info['id'] ?>');">
+                        <!-- <a id="text-link-<?//= $news_update['id'] ?>" class="media-body <?= $class ?>" href="javascript:void(0)" onclick="getNewsDetailsModal('<?//= $news_update['id'] ?>', '<?//= $staff_info['type'] ?>', '<?//= $staff_info['id'] ?>');"> -->
+                        <a id="text-link-<?= $news_update['id'] ?>" class="media-body <?= $class ?>" href="<?= base_url().'news'; ?>">    
                             <span class="label d-inline <?= $class1 ?>"><?= $news_update['news_type'] ?></span>&nbsp;<strong><?php echo ((strlen($news_update['subject']) > 25) ? (substr_replace($news_update['subject'], '...', 25)) : $news_update['subject']) ?></strong><br>
                             <small class="text-muted"><?= ($diff_days == 0 ? date('h:i A', strtotime($news_update['created_type'])) . ', Today' : date('h:i A - m/d/Y', strtotime($news_update['created_type']))) ?><?php if ($staff_info['type'] == 1 || $user_department == 14) { ?> |&nbsp;<?php
                                     $get_name = get_assigned_dept_news($news_update['id'], $news_update['office_type']);

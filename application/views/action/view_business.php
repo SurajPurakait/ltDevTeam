@@ -1,20 +1,21 @@
-<?php 
-    $user_info = staff_info();
-    $user_dept = $user_info['department'];
-    $usertype = $user_info['type'];
-$style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;"'; ?>
+<?php
+$user_info = staff_info();
+$user_dept = $user_info['department'];
+$usertype = $user_info['type'];
+$style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;"';
+?>
 <div class="wrapper wrapper-content">
     <div class="text-right">
         <button class="btn btn-primary" type="button" onclick="go('action/home/business_dashboard');">Go Back To List</button>
-        <?php if($usertype==1 || $usertype==2){ ?>
-        <a class="btn btn-primary" href="<?php echo base_url(); ?>billing/invoice/index/<?php echo base64_encode($company_name_option_data["id"]); ?>/<?= base64_encode(1); ?>" style="width: 170px">+ Create Invoice</a>
-        <a class="btn btn-success" href="<?php echo base_url(); ?>action/home/edit_business/<?php echo $company_name_option_data['id'] ?>/<?php echo $company_name_option_data['company_id'] ?>">Edit Client Info</a>
-        <?php if($usertype==1 || $user_dept==14){ ?>
-        <a title="DELETE" class="btn btn-warning" href="javascript:void(0);" onclick="delete_business('<?php echo $company_name_option_data["id"]; ?>','<?php echo $company_name_option_data["company_id"]; ?>','view-page');">Delete</a>
-        <a title="INACTIVE" class="btn btn-danger" href="javascript:void(0);" onclick="inactive_business('<?php echo $company_name_option_data["id"]; ?>','<?php echo $company_name_option_data["company_id"]; ?>');">Inactive</a>
-      <?php } ?>
-    <?php } ?>
-        
+<?php if ($usertype == 1 || $usertype == 2) { ?>
+            <a class="btn btn-primary" href="<?php echo base_url(); ?>billing/invoice/index/<?php echo base64_encode($company_name_option_data["id"]); ?>/<?= base64_encode(1); ?>" style="width: 170px">+ Create Invoice</a>
+            <a class="btn btn-success" href="<?php echo base_url(); ?>action/home/edit_business/<?php echo $company_name_option_data['id'] ?>/<?php echo $company_name_option_data['company_id'] ?>">Edit Client Info</a>
+    <?php if ($usertype == 1 || $user_dept == 14) { ?>
+                <a title="DELETE" class="btn btn-warning" href="javascript:void(0);" onclick="delete_business('<?php echo $company_name_option_data["id"]; ?>', '<?php echo $company_name_option_data["company_id"]; ?>', 'view-page');">Delete</a>
+                <a title="INACTIVE" class="btn btn-danger" href="javascript:void(0);" onclick="inactive_business('<?php echo $company_name_option_data["id"]; ?>', '<?php echo $company_name_option_data["company_id"]; ?>');">Inactive</a>
+            <?php } ?>
+<?php } ?>
+
     </div>
     <div class="tabs-container">
         <!-- Nav tabs -->
@@ -52,7 +53,7 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                                 <b style="font-size: 15px;">Practice Id :</b>
                             </td>
                             <td <?= $style; ?>>
-                                <?= $company_internal_data[0]['practice_id'] ?>
+<?= $company_internal_data[0]['practice_id'] ?>
                             </td>
                         </tr>
 
@@ -61,7 +62,7 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                                 <b style="font-size: 15px;">Company Name :</b>
                             </td>
                             <td <?= $style; ?>>
-                                <?= $company_name_option_data['name']; ?>
+<?= $company_name_option_data['name']; ?>
                             </td>
                         </tr>
                         <tr>
@@ -69,7 +70,7 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                                 <b style="font-size: 15px;">Type of Company :</b>
                             </td>
                             <td <?= $style; ?>>
-                                <?= $company_type['type']; ?>                                
+<?= $company_type['type']; ?>                                
                             </td>
                         </tr>
                         <tr>
@@ -77,7 +78,7 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                                 <b style="font-size: 15px;">Federal Id :</b>
                             </td>
                             <td>
-                                <?= $company_name_option_data['fein']; ?>
+<?= $company_name_option_data['fein']; ?>
                             </td>
                         </tr>
                         <tr>
@@ -85,7 +86,7 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                                 <b style="font-size: 15px;">State of Incorporation :</b>
                             </td>
                             <td>
-                                <?= $state_data['state_name']; ?>
+<?= $state_data['state_name']; ?>
                             </td>
                         </tr>
                         <tr>
@@ -93,7 +94,7 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                                 <b style="font-size: 15px;">DBA :</b>
                             </td>
                             <td>
-                                <?= $company_name_option_data['dba']; ?>                                
+<?= $company_name_option_data['dba']; ?>                                
                             </td>
                         </tr>
                         <tr>
@@ -101,7 +102,7 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                                 <b style="font-size: 15px;">Business Description :</b>
                             </td>
                             <td>
-                                <?= $company_name_option_data['business_description']; ?>                                
+<?= $company_name_option_data['business_description']; ?>                                
                             </td>
                         </tr>
                         <tr>
@@ -113,7 +114,7 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                                     <tr>
                                         <th width="250" class="text-left no-top-border" style="font-size: 15px; padding-left: 60px;">Office :</th>
                                         <td class="no-top-border">
-                                            <?= $office['name'] ?>
+<?= $office['name'] ?>
                                         </td>
                                     </tr>
                                     <tr>
@@ -174,19 +175,19 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                             <td <?= $style; ?>>
                                 <?php foreach ($contact_info as $info) { ?>                        
                                     <b>Contact Type:</b>
-                                    <?= ($info->type != '') ? $info->type:'N/A'; ?><br>
+                                    <?= ($info->type != '') ? $info->type : 'N/A'; ?><br>
                                     <b>Contact Name:</b>
                                     <?= ($info->first_name != '' && $info->last_name != '') ? $info->last_name . ', ' . $info->first_name . ' ' . $info->middle_name : 'N/A'; ?><br>
                                     <b>Phone:</b>
-                                    <?= ($info->phone1 != '') ? $info->phone1:'N/A'; ?><br>
+    <?= ($info->phone1 != '') ? $info->phone1 : 'N/A'; ?><br>
                                     <b>Email:</b>
                                     <a href="mailto:<?php echo $info->email1 ?>"><?= ($info->email1 != '') ? $info->email1 : 'N/A'; ?></a><br>
                                     <b>Address:</b>
                                     <?= $info->address1 . ', ' . $info->city . ', ' . $info->state_name . ', ' . $info->country_name ?><br>
                                     <b>Zip:</b>
-                                    <?= ($info->zip != '') ? $info->zip:'N/A'; ?><br>
+                                    <?= ($info->zip != '') ? $info->zip : 'N/A'; ?><br>
                                     <hr>
-                                <?php } ?>
+<?php } ?>
                             </td>
                         </tr>
                     </tbody>
@@ -199,38 +200,38 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                     <tbody>
                         <tr>
 
-                            <?php if (!empty($get_individual_data)) { ?>
+<?php if (!empty($get_individual_data)) { ?>
                                 <td <?= $style; ?>>
                                     Owners
                                 </td>
                                 <td <?= $style; ?>>
                                     <div class="row">
                                         <div class="col-lg-10" style="padding-top:8px">
-                                            <?php foreach ($get_individual_data as $individual) { ?>
+    <?php foreach ($get_individual_data as $individual) { ?>
                                                 <b><?= $individual['title'] ?></b><br>
                                                 <b>Name:</b>
                                                 <?= $individual['last_name'] . ', ' . '' . $individual['first_name'] . ' ' . $individual['middle_name']; ?><br>
                                                 <b>Percentage</b>
-                                                <?= $individual['percentage'] . '%' ?>  
+        <?= $individual['percentage'] . '%' ?>  
                                                 <p>
                                                 <hr>
-                                            <?php } ?>
+    <?php } ?>
                                         </div>
                                     </div>
                                 </td>
-                            <?php } else { ?>
+<?php } else { ?>
                                 <td <?= $style; ?>>
                                     Owners
                                 </td>
                                 <td <?= $style; ?>>
-                                    <?= 'N/A' ?>
+                                <?= 'N/A' ?>
                                 </td>
-                            <?php } ?>
+<?php } ?>
 
                         </tr>
                         <tr>
 
-                            <?php if (!empty($owner_contact)) { ?>
+<?php if (!empty($owner_contact)) { ?>
                                 <td <?= $style; ?>>
                                     Owner Contact Info
                                 </td>
@@ -245,7 +246,7 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                                             <b>Contact Name:</b>
                                             <?= $info->last_name . ', ' . $info->first_name . ' ' . $info->middle_name; ?><br>
                                             <b>Phone:</b>
-                                            <?= $info->phone1 ?><br>
+            <?= $info->phone1 ?><br>
                                             <b>Email:</b>
                                             <a href="mailto:<?php echo $info->email1 ?>"><?= $info->email1 ?></a><br>
                                             <b>Address:</b>
@@ -253,14 +254,14 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                                             <hr>
                                         <?php } ?>
                                     <?php } ?>
-                                <?php } else { ?>
+<?php } else { ?>
                                 <td <?= $style; ?>>
                                     Owner Contact Info
                                 </td>
                                 <td <?= $style; ?>>
-                                    <?= 'N/A' ?>
+                                <?= 'N/A' ?>
                                 </td>
-                            <?php } ?>
+<?php } ?>
                         </tr>
                     </tbody>
                 </table>
@@ -271,40 +272,40 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                 <table class="table table-striped table-bordered" style="width:100%;">
                     <tbody>
                         <tr>
-                            <?php if (!empty($notes)) { ?>
+<?php if (!empty($notes)) { ?>
                                 <td <?= $style; ?>>
                                     Notes
                                 </td>
                                 <td <?= $style; ?>>
                                     <?php foreach ($notes as $note) { ?>
                                         <?php echo $note['note'] ?>
-                                    <?php } ?>
+                                <?php } ?>
                                 </td>
-                            <?php } else { ?>
+<?php } else { ?>
                                 <td <?= $style; ?>>
                                     Notes
                                 </td>
                                 <td <?= $style; ?>>
-                                    <?php echo 'N/A'; ?>
+                                <?php echo 'N/A'; ?>
                                 </td>
-                            <?php } ?>
+<?php } ?>
                         </tr>
                         <tr>
-                            <?php if ($company_data[0]['file_name'] != "") { ?>
+<?php if ($company_data[0]['file_name'] != "") { ?>
                                 <td <?= $style; ?>>
                                     Attachments
                                 </td>
                                 <td <?= $style; ?>>
-                                    <?php echo $company_data[0]['file_name']; ?>
+                                <?php echo $company_data[0]['file_name']; ?>
                                 </td>
-                            <?php } else { ?>
+<?php } else { ?>
                                 <td <?= $style; ?>>
                                     Attachments
                                 </td>
                                 <td <?= $style; ?>>
-                                    <?php echo 'N/A'; ?>
+                                <?php echo 'N/A'; ?>
                                 </td>
-                            <?php } ?>
+<?php } ?>
                         </tr>
                     </tbody>
                 </table>
@@ -313,28 +314,36 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                 <table class="table table-striped table-bordered" style="width:100%;">
                     <tbody>
                         <tr>
-                            <?php if (!empty($account_details)) { ?>
+<?php if (!empty($account_details)) { ?>
                                 <td <?= $style; ?>>
                                     Account Info
                                 </td>
-                                <td <?= $style; ?>>
-                                    <?php foreach ($account_details as $ad) { ?>
+                                <td <?= $style; ?> >
+                        <tr>
+                            <?php foreach ($account_details as $ad) { ?>
+                            <td>
+                               
                                         <b>Bank Name:</b>
                                         <?php echo $ad['bank_name'] ?><br>
                                         <b>Bank Account Number:</b>
                                         <?php echo $ad['ban_account_number'] ?><br>
                                         <b>Bank Routing Number:</b>
                                         <?php echo $ad['bank_routing_number'] ?>
-                                    </td>
-                                <?php } ?>
-                            <?php } else { ?>
+    
+                            </td>
+                            <?php } ?> 
+                        </tr>
+                                    
+                                </td>
+
+<?php } else { ?>
                                 <td <?= $style; ?>>
                                     Account Info
                                 </td>
                                 <td <?= $style; ?>>
-                                    <?php echo 'N/A'; ?>
+                                <?php echo 'N/A'; ?>
                                 </td>
-                            <?php } ?>
+<?php } ?>
                         </tr>
                     </tbody>
                 </table>
@@ -349,7 +358,7 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                 </table>
             </div>
             <div role="tabpanel" class="tab-pane" id="project">
-                
+
                 <table class="table table-striped table-bordered" style="width:100%;">
                     <tbody>
                     <div class="ajaxdiv" id="action_dashboard_div"></div>
@@ -361,6 +370,6 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
     </div>
 
     <script>
-        loadBillingDashboard('', '', '', '', '<?= $reference_id.'-company'; ?>');
-        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '1', '<?php echo $company_name_option_data["id"] ?>','clients');
+        loadBillingDashboard('', '', '', '', '<?= $reference_id . '-company'; ?>');
+        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '1', '<?php echo $company_name_option_data["id"] ?>', 'clients');
     </script>

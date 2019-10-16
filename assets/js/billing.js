@@ -334,7 +334,7 @@ function printOrder() {
     doPrint.print();
     doPrint.close();
 }
-function loadBillingDashboard(status = '', by = '', office = '', payment_status = '', reference_id = '') {
+function loadBillingDashboard(status = '', by = '', office = '', payment_status = '', reference_id = '', pageNumber = 0) {
     $.ajax({
         type: "POST",
         url: base_url + 'billing/home/dashboard_ajax',
@@ -343,24 +343,33 @@ function loadBillingDashboard(status = '', by = '', office = '', payment_status 
             by: by,
             office: office,
             payment_status: payment_status,
-            reference_id: reference_id
+            reference_id: reference_id,
+            page_number: pageNumber
         },
         dataType: "html",
         success: function (result) {
             if (result != '0') {
-                $('#dashboard_result_div').html(result);
-                $('.dropdown-menu li.active').removeClass('active');
-                $(".sort_type_div #sort-desc").hide();
-                $(".sort_type_div #sort-asc").css({display: 'inline-block'});
-                $("#sort-by-dropdown").html('Sort By <span class="caret"></span>');
-                $('.sort_type_div').css('display', 'none');
-                $(".variable-dropdown").val('');
-                $(".condition-dropdown").val('');
-                $(".criteria-dropdown").val('');
-                $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>'); 
-                $(".criteria-dropdown").trigger("chosen:updated");
-                $('#btn_clear_filter').css('display', 'none');
-                $("a.filter-button span:contains('-')").html(0);
+                if (pageNumber == 1 || pageNumber == 0) {
+                    $('#dashboard_result_div').html(result);
+                    $('.dropdown-menu li.active').removeClass('active');
+                    $(".sort_type_div #sort-desc").hide();
+                    $(".sort_type_div #sort-asc").css({display: 'inline-block'});
+                    $("#sort-by-dropdown").html('Sort By <span class="caret"></span>');
+                    $('.sort_type_div').css('display', 'none');
+                    $(".variable-dropdown").val('');
+                    $(".condition-dropdown").val('');
+                    $(".criteria-dropdown").val('');
+                    $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>');
+                    $(".criteria-dropdown").trigger("chosen:updated");
+                    $('#btn_clear_filter').css('display', 'none');
+                    $("a.filter-button span:contains('-')").html(0);
+                } else {
+                    $(".ajaxdiv").append(result);
+                    $('.result-header').not(':first').remove();
+                }
+                if (pageNumber != 0) {
+                    $('.load-more-btn').not(':last').remove();
+                }
             }
         },
         beforeSend: function () {
@@ -369,41 +378,6 @@ function loadBillingDashboard(status = '', by = '', office = '', payment_status 
         complete: function (msg) {
             closeLoading();
             jumpDiv();
-        }
-    });
-}
-
-//var processing;
-//$(document).scroll(function (e) {
-//    if (processing) {
-//        return false;
-//    }
-//    if ($(window).scrollTop() >= ($(document).height() - $(window).height()) * 0.7) {
-//        processing = true;
-//        $.post('/echo/html/', 'html=<div class="loadedcontent">new div</div>', function (data) {
-//            $('#container').append(data);
-//            processing = false;
-//        });
-//    }
-//});
-function getInvoiceServiceList(invoiceID) {
-    $.ajax({
-        type: "POST",
-        url: base_url + 'billing/home/invoice_service_list_ajax',
-        data: {
-            invoice_id: invoiceID
-        },
-        dataType: "html",
-        success: function (result) {
-            if (result != '0') {
-                $('#dashboard_result_div').html(result);
-            }
-        },
-        beforeSend: function () {
-            openLoading();
-        },
-        complete: function (msg) {
-            closeLoading();
         }
     });
 }
@@ -765,6 +739,21 @@ function savePayment()
         swal("ERROR!", "payment amount can't exceed the due amount", "error");
         return false;
     }
+    var cardType = "";
+    var cardNumber = $("input#card_number").val();
+    if (cardNumber != '') {
+        if (cardNumber.length != 16) {
+            $("input#card_number").next('div.errorMessage').html('Card Number Not Valid');
+            return false;
+        }
+        cardType = GetCardType(cardNumber);
+        if (cardType == "") {
+            $("input#card_number").next('div.errorMessage').html('Card Number Not Valid');
+            return false;
+        }
+    }
+    form_data.append('card_type', cardType);
+
     var invoice_id = $("#invoice_id").val();
     $.ajax({
         type: "POST",
@@ -779,11 +768,13 @@ function savePayment()
 //            alert(result);
 //            return false;
 //            console.log("Result: " + result);
-            if (result != 0) {
+            if (result == 1) {
 //                swal("Success!", "Successfully saved!", "success");
                 goURL(base_url + 'billing/payments/details/' + btoa(invoice_id));
-            } else {
+            } else if (result == 0) {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+            } else {
+                swal("ERROR!", result, "error");
             }
         },
         beforeSend: function () {
@@ -1086,10 +1077,11 @@ function invoiceFilter() {
 }
 
 var changeAlternateFields = function (PaymentTypeID) {
-    $(".alternate-field-div").hide();
+    $(".alternate-field-div, div.pay-now-div").hide();
     $(".alternate-field-div input").prop('required', false);
     $('#ref_no').prev().html('Reference');
     $('#ref_no').prop({'title': 'Reference', 'placeholder': 'Reference'});
+    $('div.pay-now-div').find('input').prop('required', false);
     switch (parseInt(PaymentTypeID)) {
         case 1:     //Cash
             $('#ref_no').parent().show();
@@ -1118,6 +1110,10 @@ var changeAlternateFields = function (PaymentTypeID) {
             $('#ref_no').prop({'title': 'Authorized By', 'placeholder': 'Authorized By'});
             $('#payment_file').parent().show();
             $('#payment_file').prop('required', false);
+            break;
+        case 9:     //Pay NOW
+            $('div.pay-now-div').show();
+            $('div.pay-now-div').find('input').prop('required', true);
             break;
         default:
             $("#payment_note").parent().show();
@@ -1235,4 +1231,25 @@ function saveInvoiceNotes() {
             closeLoading();
         }
     });
+}
+
+var invoiceServiceListAjax = function (invoiceID) {
+    if (!$('#collapse' + invoiceID).hasClass('in')) {
+        $('#collapse' + invoiceID).html('<div class="text-center"><div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div>');
+        $.ajax({
+            type: "POST",
+            data: {
+                invoice_id: invoiceID
+            },
+            url: base_url + 'billing/home/invoice_service_list_ajax',
+            dataType: "html",
+            success: function (result) {
+                if (result != 0) {
+                    $('#collapse' + invoiceID).html(result);
+                } else {
+                    swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+                }
+            }
+        });
+    }
 }

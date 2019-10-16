@@ -10,20 +10,23 @@ class Project extends CI_Controller {
 //        $this->load->model('action_model');
 //        $this->load->model("administration");
         $this->load->model('Project_Template_model');
+        $this->load->model('billing_model');
         $user_info = staff_info();
         if (!$this->session->userdata('user_id') && $this->session->userdata('user_id') == '') {
             redirect(base_url());
         }
         $this->filter_element = [
             1 => "ID",
-            2 => "Template Id",
+            2 => "Template",
             3 => "Pattern",
             4 => "Client Type",
-            5 => "Client Id",
+//            5 => "Client Id",
             6 => "Responsible",
             7 => "Assigned To",
-            8 => "Status",
-            9 => "Created At"
+            8 => "Tracking",
+            9 => "Creation Date",
+            10 => "Requested By",
+            11 => "Due Date"
         ];
     }
     function index($status = '', $priority = '', $request_type = '', $office_id = '', $department_id = ''){
@@ -247,9 +250,9 @@ class Project extends CI_Controller {
         $sort_type = post("sort_type");
         $client_type = post("client_type");
         $client_id = post("client_id");
+        $render_data['page_number'] = post('page_number');
         $render_data["project_list"] = $this->Project_Template_model->get_project_list($request, $status, $priority, $office_id, $department_id, $filter_assign, $filter_data, $sos_value, $sort_criteria, $sort_type, $client_type, $client_id);
-        $return["result"] = $this->load->view("projects/project_dashboard", $render_data, true);
-        echo json_encode($return);
+        $this->load->view("projects/project_dashboard", $render_data);
     }
     public function project_filter_dropdown_option_ajax() {
         $result['element_key'] = $element_key = post('variable');
@@ -279,5 +282,16 @@ class Project extends CI_Controller {
             echo "-1";
         }
         
+    }
+
+    public function load_project_tasks(){
+        $id = post('id');
+        $created_at = post('created_at');
+        $dueDate = post('dueDate');
+        $render_data['id'] = $id;
+        $render_data['created_at'] = $created_at;
+        $render_data['dueDate'] = $dueDate;
+        $render_data['task_list'] = getProjectTaskList($id);
+        $this->load->view('projects/project_dashboard_collapse', $render_data);
     }
 }

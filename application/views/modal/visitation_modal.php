@@ -99,7 +99,7 @@
                     <div class="form-group">                    
                         <label class="col-lg-2 control-label">Notes:</label>
                         <div class="col-lg-10">
-                            <div class="form-group" id="add_note_div">
+                            <div id="add_note_div">
                                 <div class="note-textarea">
                                     <textarea class="form-control" name="visit_note[]"  title="Visitation Note"></textarea>
                                 </div>
@@ -327,7 +327,7 @@
                      
             $('.clockpicker').clockpicker();
 
-            $(".datepicker_mdy_due").datepicker({format: 'mm/dd/yyyy', autoHide: true, startDate: new Date()});
+            $(".datepicker_mdy_due").datepicker({format: 'mm/dd/yyyy', autoHide: true});
 
             $('.add-note').click(function () {
 

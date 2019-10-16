@@ -148,5 +148,15 @@ class Home extends CI_Controller {
     public function assign_lead_as_client(){
         echo $this->lead_management->assign_lead_as_client(post('id'),post('partner_id'));
     }
+    public function sort_lead_dashboard() {
+        $formdata = post();
+        $sort_criteria = $formdata['sort_criteria'];
+        $sort_type = $formdata["sort_type"];
+        unset($formdata['sort_criteria']);
+        unset($formdata['sort_type']);
+        $filter_assign = $formdata;
+        $render_data["lead_list"] = $this->lead_management->get_lead_list('','','','',$filter_assign,'',$sort_criteria,$sort_type);
+        $this->load->view("lead_management/ajax_dashboard", $render_data);
+    }
 
 }

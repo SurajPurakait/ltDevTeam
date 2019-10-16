@@ -77,7 +77,7 @@ $stat = ($stat == 'all') ? "" : $stat;
                                             <th>LEADS</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-0">
-                                                    <span class="label label-warning" id="lead_new" onclick="loadLeadDashboard(1, 0)"><?= count(lead_list(1, '0')); ?></span>
+                                                    <span class="label label-success" id="lead_new" onclick="loadLeadDashboard(1, 0)"><?= count(lead_list(1, '0')); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
@@ -87,12 +87,12 @@ $stat = ($stat == 'all') ? "" : $stat;
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-2">
-                                                    <span class="label label-warning" id="lead_inactive" onclick="loadLeadDashboard(1, 2)"><?= count(lead_list(1, 2)); ?></span>
+                                                    <span class="label label-danger" id="lead_inactive" onclick="loadLeadDashboard(1, 2)"><?= count(lead_list(1, 2)); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-1">
-                                                    <span class="label label-warning" id="lead_complete" onclick="loadLeadDashboard(1, 1)"><?= count(lead_list(1, 1)); ?></span>
+                                                    <span class="label label-primary" id="lead_complete" onclick="loadLeadDashboard(1, 1)"><?= count(lead_list(1, 1)); ?></span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -123,6 +123,11 @@ $stat = ($stat == 'all') ? "" : $stat;
                                 </table>
                             </div>
                         </div>
+<!--                         <div class="row m-r-20">
+                            <div class="col-sm-4 col-xs-12">
+                                <a class="btn notification-btn" id="notifcation-toggle" value='' href="javascript:void(0);" title="Leads Notifications">Notifications <span class="label label-danger">1</span></a>
+                            </div>
+                        </div> -->
                     </div>
                     <hr class="hr-line-dashed m-b-10">
                     <div class="row m-b-0">

@@ -1,11 +1,14 @@
 <?php
-$user_info = staff_info();
+$user_info =  $this->session->userdata('staff_info');
 $user_department = $user_info['department'];
 $user_type = $user_info['type'];
 $role = $user_info['role'];
 ?>
-<div class="clearfix">
-    <h2 class="text-primary pull-left"><?php echo (!empty($task_list)) ? count($task_list) : ''; ?> Results found</h2><div class="pull-right text-right p-t-5">
+<div class="clearfix result-header">
+    <?php if (count($task_list) != 0): ?>
+    <h2 class="text-primary pull-left result-count-h2"><?= isset($page_number) ? ($page_number * 20) : count($task_list) ?> Results found <?= isset($page_number) ? 'of ' . count($task_list) : '' ?></h2>
+    <?php endif; ?>
+    <div class="pull-right text-right p-t-5">
         <div class="dropdown" style="display: inline-block;">
             <a href="javascript:void(0);" id="sort-by-dropdown" data-toggle="dropdown" class="dropdown-toggle btn btn-success">Sort By <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -29,9 +32,21 @@ $role = $user_info['role'];
     </div>
 </div>
 <?php
+$row_number = 0;
 if (!empty($task_list)) {
-    foreach ($task_list as $task) {
+    foreach ($task_list as $row_count => $task) {
 //                                                            print_r($task);die;
+
+        if(isset($page_number)){
+            if($page_number != 1){
+                if($row_count < (($page_number - 1) * 20)){
+                    continue;
+                }
+            }
+            if($row_count == ($page_number * 20)){
+                break;
+            }
+        }
         $task_staff = ProjectTaskStaffList($task['id']);
         $stf = array_column($task_staff, 'staff_id');
         $new_staffs = implode(',', $stf);
@@ -63,7 +78,7 @@ if (!empty($task_list)) {
 //                                                             start date and complete date calculation
 
         $created_at = strtotime(date('Y-m-d', strtotime($task['created_at'])));
-//                            $due_date = strtotime($dueDate);
+        $due_date = strtotime($dueDate);
         $start_date = $task['target_start_date'] . 'days';
         $complete_date = $task['target_complete_date'] . 'days';
         if ($task['target_start_day'] == 1) {
@@ -91,11 +106,11 @@ if (!empty($task_list)) {
                             ?>
                             <tr>
                                 <th style='width:8%;  text-align: center;'>ID</th>
-                                <th style='width:8%;  text-align: center;'>Task ID</th>
+                                <th style='width:8%;  text-align: center;'>Project ID</th>
                                 <th style='width:8%;  text-align: center;'>Description</th>
                                 <th style='width:8%;  text-align: center;'>Assign To</th>
                                 <th style='width:8%;  text-align: center;'>Start Date</th>
-                                <th style='width:8%;  text-align: center;'>Completed Date</th>
+                                <th style='width:8%;  text-align: center;'>Complete Date</th>
                                 <th style='width:8%;  text-align: center;'>Tracking Description</th>
                                 <th style="width:8%;  text-align: center;">SOS</th>
                                 <th style="width:8%;  text-align: center;">Note</th>
@@ -103,7 +118,7 @@ if (!empty($task_list)) {
 
                             <tr>
                                 <td title="ID" class="text-center"><?= $task['id'] ?></td>
-                                <td title="Order" class="text-center"><?= $task['task_order']; ?></td>
+                                <td title="Order" class="text-center"><?= $task['project_id']; ?></td>
                                 <td title="Description" class="text-center"><?= $task['description']; ?></td>
                                 <!--<td title="Order" class="text-center"><?//= date('Y-m-d', strtotime($task->created_at)); ?></td>-->
         <!--                                                                <td title="Target Start Date" class="text-center"><?= $task->target_start_date; ?></td>
@@ -111,21 +126,36 @@ if (!empty($task_list)) {
                                 <!--<td title="assign to"></td>-->
                                 <?php if ($task['department_id'] == 2) { ?>
                                     <td title="Assign To" class="text-center"><?php
-                                        $resp_value = get_assigned_office_staff_project_main($task['project_id']);
-//                                        echo get_p_m_ca_name($resp_value, $list['id'],$list['client_type']);
-                                        if (trim($resp_value) == 'Partner' || trim($resp_value) == 'Manager' || trim($resp_value) == 'Client Association') {
-                                            echo get_p_m_ca_name($resp_value, $task['project_id'], 1) . "<br><span class='text-info'>" . get_p_m_ca_ofc_name($resp_value, $task['project_id'], 1) . "</span></td>";
-                                        } else {
-                                            $office_details = get_project_officeID_by_project_id($task['project_id']);
-                                            //print_r($office_details);
-                                            echo $resp_value . "<br><span class='text-info'> ".$office_details['office_name']." </span></td>";
+                                        $resp_value = get_assigned_office_staff_project_main($task['project_id'],$task['client_id']);
+
+                                        if(is_numeric($resp_value['name'])){
+                                            $resp_name = get_assigned_by_staff_name($resp_value['name']);
+                                        }else{
+                                            $resp_name = $resp_value['name'];
                                         }
+
+                                        if($resp_value['office']!=0){
+                                            $office_name = get_office_id($resp_value['office']);
+                                        }else{
+                                            if(isset($task_list['project_office_id'])){
+                                                if($task_list['project_office_id']==1){
+                                                 $office_name = 'Admin';
+                                                }elseif($task_list['project_office_id']==2){
+                                                    $office_name = 'Corporate';
+                                                }else{
+                                                    $office_name = 'Franchise';
+                                                }
+                                            }else{
+                                                 $office_name = 'Franchise';
+                                             }                                            
+                                        }
+                                        echo $resp_name."<br><span class='text-info'>".$office_name." </span></td>";
                                         ?> </td> <?php } else { ?> 
                                     <td title="Assign To" class="text-center"><span class="text-success"><?php echo get_assigned_project_task_staff($task['id']); ?></span><br><?php echo get_assigned_project_task_department($task['id']); ?></td>                                                     
                                 <?php } ?>
                         <!--<td title="Assign To" class="text-center"><span class="text-success"><?php // echo get_assigned_project_task_staff($task['id']); ?></span><br><?php // echo get_assigned_project_task_department($task['id']); ?></td>-->                                                     
-                                <td title="Start Date" class="text-center"><?= $targetSstartDate ?></td>
-                                <td title="Complete Date" class="text-center"><?= $targetCompleteDate ?></td>
+                                <td title="Start Date" class="text-center">T: <?= $targetSstartDate ?></td>
+                                <td title="Complete Date" class="text-center">T: <?= $targetCompleteDate ?></td>
                                 <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task['id']; ?>,<?= $status; ?>, <?= $task['id'] ?>);'><span class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                                 <td title="SOS" style="text-align: center;">
                                     <span>
@@ -170,8 +200,22 @@ if (!empty($task_list)) {
             </div>
         </div>
         <?php
+        $row_number = $row_count + 1;
     }
-} else {
+    if(isset($page_number) && $row_number < count($task_list)): ?>
+        <div class="text-center p-0 load-more-btn">
+            <a href="javascript:void(0);" onclick="loadTaskDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', <?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more results</a>
+        </div>
+    <?php endif; ?>
+        <script>
+            $(function () {
+                $('h2.result-count-h2').html('<?= $row_number . ' Results found of ' . count($task_list) ?>');
+                 <?php if(isset($page_number) && $row_number === count($task_list)): ?>
+                 $('.load-more-btn').remove();
+                <?php endif; ?>
+            });
+        </script>
+<?php } else {
     ?>
     <div class = "text-center m-t-30">
         <div class = "alert alert-danger">

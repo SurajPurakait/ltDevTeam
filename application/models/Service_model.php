@@ -41,7 +41,7 @@ class Service_model extends CI_Model {
         $this->order_select[] = 'cpn.start_month_year AS start_month_year';
         $this->order_select[] = 'ord.status AS status';
         $this->order_select[] = 'inv.id AS invoiced_id';
-//        $this->order_select[] = '(SELECT department.name FROM department WHERE department.id = srv.dept) AS service_department_name';
+        $this->order_select[] = '(SELECT department.name FROM department WHERE department.id = srv.dept) AS service_department_name';
         $this->load->model('notes');
         $this->load->model('billing_model');
     }
@@ -170,12 +170,6 @@ class Service_model extends CI_Model {
         $this->db->where(["tit.company_id" => $company_id, "tit.status" => 1]);
         $this->db->group_by('ind.id');
         return $this->db->get()->result();
-//        $sql = "select t.id, t.title, t.percentage, t.company_id,
-//                concat(i.last_name, ', ',i.first_name) as name, t.existing_reference_id
-//                from title t
-//                inner join individual i on i.id = t.individual_id
-//                where t.company_id = $id and t.status=1 group by t.individual_id";
-//        return $this->db->query($sql)->result();
     }
 
     public function get_service_category() {
@@ -183,16 +177,11 @@ class Service_model extends CI_Model {
     }
 
     public function get_recurring_data($id) {
-//        echo $id;die;
-//        return $this->db->select('sales_tax_recurring',['order_id'=>$id])->row();
         return $this->db->query("select * from sales_tax_recurring where order_id=" . $id . "")->row();
     }
 
     public function get_processing_data($id) {
         return $this->db->query("select * from sales_tax_processing where order_id=" . $id . "")->row();
-
-//        $data=$this->db->select('sales_tax_processing',['order_id'=>$id]);
-//        print_r($data);
     }
 
     public function get_recurring_data_by_order_id($order_id) {
@@ -215,7 +204,7 @@ class Service_model extends CI_Model {
         return $this->db->get('states')->result_array();
     }
 
-    public function ajax_services_dashboard_filter($status, $request_type, $category_id, $request_by = "", $department = "", $office = "", $staff_type = "", $sort = "", $form_data = "", $sos_value = "", $sort_criteria = "", $sort_type = "") {
+    public function ajax_services_dashboard_filter1($status, $request_type, $category_id, $request_by = "", $department = "", $office = "", $staff_type = "", $sort = "", $form_data = "", $sos_value = "", $sort_criteria = "", $sort_type = "") {
         //print_r($form_data);
         $staff_id = sess('user_id');
         $user_info = staff_info();
@@ -223,88 +212,117 @@ class Service_model extends CI_Model {
         $usertype = $user_info['type'];
         $userrole = $user_info['role'];
         $useroffice = $user_info['office'];
-        $sql = "SELECT st.first_name AS requested_staff,o.staff_requested_service, o.assign_user, st.department AS dept,o.staff_office,
-                o.id, o.order_serial_id, o.order_date, o.start_date, o.complete_date, o.target_start_date, o.target_complete_date, o.total_of_order, o.tracking,
-                (CASE WHEN `o`.`reference` = 'company' THEN company.name ELSE CONCAT(ind.last_name,', ',ind.first_name) END) AS client_name,o.reference_id,o.reference,o.status,o.late_status,o.start_date,o.complete_date,o.category_id,o.service_id,indt.office AS office_id,
-                (SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as office,services.description AS service_name,services.ideas AS service_shortname,
-                CONCAT(',', (SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = services.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = o.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),''), ',') AS all_staffs
-                FROM `order` AS o LEFT OUTER JOIN company ON o.reference_id=company.id 
-                LEFT OUTER JOIN `title` AS `tl` ON `tl`.`company_id` = `o`.`reference_id` AND `tl`.`status` = 1 
-                LEFT OUTER JOIN `individual` AS `ind` ON `ind`.`id` = `tl`.`individual_id` 
-                INNER JOIN internal_data indt ON indt.reference_id = `o`.`reference_id` AND indt.reference = `o`.`reference` 
-                INNER JOIN services ON services.id=o.service_id
-                INNER JOIN staff st ON st.id=o.staff_requested_service";
+        $select[] = 'st.first_name AS requested_staff';
+        $select[] = 'ord.staff_requested_service';
+        $select[] = 'ord.assign_user';
+        $select[] = 'st.department AS dept';
+        $select[] = 'ord.staff_office';
+        $select[] = 'ord.id';
+        $select[] = 'ord.order_serial_id';
+        $select[] = 'ord.order_date';
+        $select[] = 'ord.start_date';
+        $select[] = 'ord.complete_date';
+        $select[] = 'ord.target_start_date';
+        $select[] = 'ord.target_complete_date';
+        $select[] = 'ord.total_of_order';
+        $select[] = 'ord.tracking';
+        $select[] = 'company.name AS client_name';
+        $select[] = 'ord.reference_id';
+        $select[] = 'ord.reference';
+        $select[] = 'ord.status';
+        $select[] = 'ord.late_status';
+        $select[] = 'ord.start_date';
+        $select[] = 'ord.complete_date';
+        $select[] = 'ord.category_id';
+        $select[] = 'ord.service_id';
+        $select[] = 'indt.office AS office_id';
+        $select[] = '(SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as office';
+        $select[] = 'services.description AS service_name';
+        $select[] = 'services.ideas AS service_shortname';
+        $select[] = '(CASE WHEN ord.staff_requested_service = ' . sess('user_id') . ' THEN CONCAT(\'byme-\', ord.status) WHEN (SELECT COUNT(service_request.id) FROM service_request WHERE service_request.order_id = ord.id AND service_request.services_id IN (SELECT services.id FROM services WHERE services.dept IN(' . $user_dept . '))) >= 1 THEN CONCAT(\'tome-\', ord.status) ELSE CONCAT(\'byothers-\', ord.status) END) as filter_value';
+        $select[] = '(CASE WHEN ord.late_status = 1 THEN (CASE WHEN ord.staff_requested_service = ' . sess('user_id') . ' THEN \'byme-3\' WHEN (SELECT COUNT(service_request.id) FROM service_request WHERE service_request.order_id = ord.id AND service_request.services_id IN (SELECT services.id FROM services WHERE services.dept IN(' . $user_dept . '))) >= 1 THEN \'tome-3\' ELSE \'byothers-3\' END) ELSE \'not-late\' END) as late_filter_value';
+        $select[] = '(CASE WHEN ord.assign_user = 0 THEN \'unassigned\' ELSE \'assigned\' END) as assign_status';
+        $select[] = "CONCAT(',', (SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = services.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = ord.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),''), ',') AS all_staffs";
+        $sql = "SELECT " . implode(', ', $select) . "
+                FROM `order` AS ord INNER JOIN company ON ord.reference_id = company.id 
+                INNER JOIN internal_data indt ON indt.reference_id = `ord`.`reference_id` AND indt.reference = `ord`.`reference` 
+                INNER JOIN services ON services.id=ord.service_id
+                INNER JOIN staff st ON st.id=ord.staff_requested_service";
+//                FROM `order` AS ord LEFT OUTER JOIN company ON ord.reference_id=company.id 
+//                LEFT OUTER JOIN `title` AS `tl` ON `tl`.`company_id` = `ord`.`reference_id` AND `tl`.`status` = 1 
+//                LEFT OUTER JOIN `individual` AS `ind` ON `ind`.`id` = `tl`.`individual_id` 
         if (isset($form_data)) {
             if (isset($form_data['variable_dropdown'])) {
                 if (in_array('9', $form_data['variable_dropdown'])) {
-                    $sql .= " INNER JOIN invoice_info inv ON inv.order_id=o.id";
+                    $sql .= " INNER JOIN invoice_info inv ON inv.order_id=ord.id";
                 }
             }
         }
 
         if (isset($sos_value) && $sos_value != '') {
-            $sql .= " INNER JOIN sos_notification AS sos ON sos.reference_id=o.id INNER JOIN sos_notification_staff sns ON sns.sos_notification_id=sos.id";
+            $sql .= " INNER JOIN sos_notification AS sos ON sos.reference_id=ord.id INNER JOIN sos_notification_staff sns ON sns.sos_notification_id=sos.id";
         }
         $where = $having = [];
 
         if ($department != '') {
             $where[] = 'services.dept = "' . $department . '"';
         }
-        $where[] = "o.reference != 'invoice'";
+        $where[] = "ord.reference != 'invoice'";
         if ($category_id != '') {
-            $where[] = 'o.category_id="' . $category_id . '"';
+            $where[] = 'ord.category_id="' . $category_id . '"';
         }
 
         if ($usertype == 1) {
             if ($request_type == "byme") {
-                $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
-            }
-            elseif ($request_type == 'byothers') {
-                $where[] = 'o.staff_requested_service != "' . $staff_id . '"';
+                $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
+            } elseif ($request_type == 'byothers') {
+                $where[] = 'ord.staff_requested_service != "' . $staff_id . '"';
+            } elseif ($request_type == 'tome') {
+                $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND ord.staff_requested_service != "' . $staff_id . '")';
             }
         } elseif ($usertype == 2) {
             if (in_array(6, explode(',', $user_dept))) {
                 if ($request_type == "byme") {
-                    $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                    $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                 } elseif ($request_type == 'tome') {
-                    $where[] = 'o.staff_requested_service != "' . $staff_id . '"';
+                    $where[] = 'ord.staff_requested_service != "' . $staff_id . '"';
                 }
             } elseif (in_array(14, explode(',', $user_dept))) {
                 if ($request_type == "byme") {
-                    $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                    $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                 } elseif ($request_type == 'tome') {
-                    $where[] = 'o.staff_requested_service != "' . $staff_id . '"';
+                    $where[] = 'ord.staff_requested_service != "' . $staff_id . '"';
                 }
             } else {
                 if ($userrole == 4) {
                     $req_by_oth = array_column($this->get_deptmngr_staffs($staff_id), 'staff_id');
                     if ($request_type == "byme") {
-                        $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                        $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                     }
 //                    elseif ($request_type == 'tome') {
-//                        $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND o.staff_requested_service != "' . $staff_id . '")';
+//                        $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND ord.staff_requested_service != "' . $staff_id . '")';
 //                    } 
                     elseif ($request_type == 'byothers') {
-                        $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND o.staff_requested_service != "' . $staff_id . '")';
+                        $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND ord.staff_requested_service != "' . $staff_id . '")';
                         if (!empty($req_by_oth)) {
-                            $having[] = 'o.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
+                            $having[] = 'ord.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
                         }
                     } else {
                         $having[] = 'all_staffs LIKE "%,' . $staff_id . ',%"';
-                        //$having[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                        //$having[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                         $req_by_oth = array_unique($req_by_oth);
                         if (!empty($req_by_oth)) {
-                            $having[] = 'o.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
+                            $having[] = 'ord.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
                         }
                     }
                 } else {
                     if ($request_type == "byme") {
-                        $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                        $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                     } elseif ($request_type == 'tome') {
-                        $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND o.staff_requested_service != "' . $staff_id . '")';
+                        $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND ord.staff_requested_service != "' . $staff_id . '")';
                     } else {
                         $having[] = 'all_staffs LIKE "%,' . $staff_id . ',%"';
-                        $having[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                        $having[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                     }
                 }
             }
@@ -313,29 +331,29 @@ class Service_model extends CI_Model {
             $req_by_oth = $this->get_ofcmngr_staffs($staff_id);
 //                print_r($req_by_oth);
             if ($request_type == "byme") {
-                $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
             } elseif ($request_type == 'byothers') {
-                $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND o.staff_requested_service != "' . $staff_id . '")';
+                $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND ord.staff_requested_service != "' . $staff_id . '")';
                 if (!empty($req_by_oth)) {
-                    $having[] = 'o.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
+                    $having[] = 'ord.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
                 }
             } else {
                 $having[] = 'all_staffs LIKE "%,' . $staff_id . ',%"';
-                $having[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                $having[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                 if (!empty($req_by_oth)) {
-                    $having[] = 'o.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
+                    $having[] = 'ord.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
                 }
             }
             // } else {
-            //     $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+            //     $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
             // }
         }
         if ($request_by != '') {
-            $where[] = 'o.staff_requested_service IN (' . $request_by . ')';
+            $where[] = 'ord.staff_requested_service IN (' . $request_by . ')';
         }
 
         if ($request_type == 'unassigned') {
-            $where[] = 'o.assign_user = 0';
+            $where[] = 'ord.assign_user = 0';
         }
 
         if (isset($form_data)) {
@@ -360,21 +378,21 @@ class Service_model extends CI_Model {
 
         if ($status != '') {
             if ($status == 'u') {
-                $where[] = 'o.status not in ("0","7")';
+                $where[] = 'ord.status not in ("0","7")';
             } elseif ($status == '3') {
-                $where[] = 'o.status = "1" and o.late_status = "1"';
+                $where[] = 'ord.status not in ("0","7") and ord.late_status = "1"';
             } elseif ($status == '4') {
-                $where[] = 'o.status not in ("0","7")';
+                $where[] = 'ord.status not in ("0","7")';
             } else {
-                $where[] = 'o.status = "' . $status . '"';
+                $where[] = 'ord.status = "' . $status . '"';
             }
         } else {
-            if (in_array('o.status = 0', $where)) {
-                $where[] = 'o.status not in ("7")';
-            } elseif (in_array('o.status = 7', $where)) {
-                $where[] = 'o.status not in ("0")';
+            if (in_array('ord.status = 0', $where)) {
+                $where[] = 'ord.status not in ("7")';
+            } elseif (in_array('ord.status = 7', $where)) {
+                $where[] = 'ord.status not in ("0")';
             } else {
-                $where[] = 'o.status not in ("0","7")';
+                $where[] = 'ord.status not in ("0","7")';
             }
         }
 
@@ -382,7 +400,7 @@ class Service_model extends CI_Model {
             $where[] = 'indt.office = ' . $office;
         } else {
             if ($usertype == 3) {
-                $where[] = 'o.staff_office in (' . $useroffice . ')';
+                $where[] = 'ord.staff_office in (' . $useroffice . ')';
             }
         }
 
@@ -394,15 +412,15 @@ class Service_model extends CI_Model {
             }
         }
 
-        $where[] = "o.status NOT IN (10)";
+        $where[] = "ord.status NOT IN (10)";
 
         $sql .= " WHERE " . implode(' AND ', $where);
         if (isset($sos_value) && $sos_value != '') {
             //if($sos_value=='byme'){
-            $sql .= ' GROUP BY o.id';
+            $sql .= ' GROUP BY ord.id';
             // }                
         } else {
-            $sql .= ' GROUP BY o.id';
+            $sql .= ' GROUP BY ord.id';
         }
         if (count($having) != 0) {
             $sql .= " HAVING " . implode(' OR ', $having);
@@ -412,16 +430,186 @@ class Service_model extends CI_Model {
             $sql .= " ORDER BY " . $sort_criteria . " " . $sort_type;
             // echo $sql;exit; 
         } else {
-            $sql .= " ORDER BY o.id DESC";
+            $sql .= " ORDER BY ord.id DESC";
         }
         // echo "<pre>";
         // echo $sql;exit;
         $this->db->query('SET SQL_BIG_SELECTS=1');
         $result = $this->db->query($sql)->result();
-//        echo $this->db->last_query();die;
+        echo count($result);
+        echo $this->db->last_query();
+        die;
 //        echo'<pre>';
 //        print_r($result);
 //        die;
+        return $result;
+    }
+
+    public function ajax_services_dashboard_filter($status = '', $request_type = '', $category_id = '', $request_by = "", $department_id = "", $office_id = "", $staff_type = "", $sort = "", $form_data = "", $sos_value = "", $sort_criteria = "", $sort_type = "") {
+        $staff_id = sess('user_id');
+        $staff_info = staff_info();
+        $select[] = 'ord.id AS id';
+        $select[] = 'CONCAT(st.first_name, \' \', st.last_name) AS requested_staff_name';
+        $select[] = 'ord.staff_requested_service AS staff_id';
+        $select[] = 'ord.assign_user AS assign_user_id';
+        $select[] = 'services.dept AS department_id';
+        $select[] = 'ord.staff_office AS request_staff_office_id';
+        $select[] = 'ord.order_serial_id AS order_serial_id';
+        $select[] = 'ord.order_date AS order_date';
+        $select[] = 'ord.start_date AS start_date';
+        $select[] = 'ord.complete_date AS complete_date';
+        $select[] = 'ord.target_start_date AS target_start_date';
+        $select[] = 'ord.target_complete_date AS target_complete_date';
+        $select[] = 'ord.total_of_order AS total_of_order';
+        $select[] = 'ord.tracking AS tracking';
+        $select[] = 'company.name AS client_name';
+        $select[] = 'ord.reference_id AS reference_id';
+        $select[] = 'ord.reference AS reference';
+        $select[] = 'ord.status AS status';
+        $select[] = 'ord.late_status AS late_status';
+        $select[] = 'services.category_id AS category_id';
+        $select[] = 'services.id AS service_id';
+        $select[] = 'indt.office AS office_id';
+        $select[] = '(SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as office';
+        $select[] = 'services.description AS service_name';
+        $select[] = 'services.ideas AS service_shortname';
+        if ($staff_info['type'] == 3) {      #Franchise
+            $select[] = '(CASE WHEN ((SELECT COUNT(internal_data.id) FROM internal_data WHERE internal_data.reference_id = ord.reference_id AND internal_data.reference = ord.reference AND internal_data.office IN (' . $staff_info['office'] . ')) != 0 AND ord.staff_requested_service != ' . sess('user_id') . ') THEN CONCAT(\'byothers-\', ord.status) ELSE \'non-filter\' END) as byothers_filter_value';
+            $select[] = '(CASE WHEN ord.late_status = 1 THEN (CASE WHEN ((SELECT COUNT(internal_data.id) FROM internal_data WHERE internal_data.reference_id = ord.reference_id AND internal_data.reference = ord.reference AND internal_data.office IN (' . $staff_info['office'] . ')) != 0 AND ord.staff_requested_service != ' . sess('user_id') . ') THEN \'byothers-3\' ELSE \'not-late\' END) ELSE \'not-late\' END) AS byothers_late_filter_value';
+        } else {    #Admin & Corporate
+            $select[] = '(CASE WHEN (SELECT COUNT(service_request.id) FROM service_request WHERE service_request.order_id = ord.id AND service_request.responsible_department IN (' . $staff_info['department'] . ')) != 0 THEN CONCAT(\'tome-\', ord.status) ELSE \'non-filter\' END) as tome_filter_value';
+            $select[] = '(CASE WHEN ((SELECT COUNT(service_request.id) FROM service_request WHERE service_request.order_id = ord.id AND service_request.responsible_department NOT IN (' . $staff_info['department'] . ')) != 0 AND ord.staff_requested_service != ' . sess('user_id') . ') THEN CONCAT(\'byothers-\', ord.status) ELSE \'non-filter\' END) as byothers_filter_value';
+            $select[] = '(CASE WHEN ord.late_status = 1 THEN (CASE WHEN (SELECT COUNT(service_request.id) FROM service_request WHERE service_request.order_id = ord.id AND service_request.responsible_department IN (' . $staff_info['department'] . ')) != 0 THEN \'tome-3\' ELSE \'not-late\' END) ELSE \'not-late\' END) AS tome_late_filter_value';
+            $select[] = '(CASE WHEN ord.late_status = 1 THEN (CASE WHEN ((SELECT COUNT(service_request.id) FROM service_request WHERE service_request.order_id = ord.id AND service_request.responsible_department NOT IN (' . $staff_info['department'] . ')) != 0 AND ord.staff_requested_service != ' . sess('user_id') . ') THEN \'byothers-3\' ELSE \'not-late\' END) ELSE \'not-late\' END) AS byothers_late_filter_value';
+        }
+        $select[] = '(CASE WHEN ord.staff_requested_service = ' . sess('user_id') . ' THEN CONCAT(\'byme-\', ord.status) ELSE \'non-filter\' END) AS byme_filter_value';
+        $select[] = '(CASE WHEN ord.late_status = 1 THEN (CASE WHEN ord.staff_requested_service = ' . sess('user_id') . ' THEN \'byme-3\' ELSE \'not-late\' END) ELSE \'not-late\' END) AS byme_late_filter_value';
+        $select[] = '(CASE WHEN ord.assign_user = 0 THEN \'unassigned\' ELSE \'assigned\' END) as assign_status';
+        $select[] = "CONCAT(',', (SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = services.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = ord.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),''), ',') AS all_staffs";
+        $sql = "SELECT " . implode(', ', $select) . "
+                FROM `order` AS ord INNER JOIN company ON ord.reference_id = company.id 
+                INNER JOIN internal_data indt ON indt.reference_id = `ord`.`reference_id` AND indt.reference = `ord`.`reference` 
+                INNER JOIN services ON services.id = ord.service_id
+                LEFT OUTER JOIN service_request AS srv_rq ON srv_rq.order_id = ord.id
+                INNER JOIN staff st ON st.id = ord.staff_requested_service";
+        if (isset($form_data)) {
+            if (isset($form_data['variable_dropdown'])) {
+                if (in_array('9', $form_data['variable_dropdown'])) {
+                    $sql .= " INNER JOIN invoice_info inv ON inv.order_id=ord.id";
+                }
+            }
+        }
+        if (isset($sos_value) && $sos_value != '') {
+            $sql .= " INNER JOIN sos_notification AS sos ON sos.reference_id=ord.id INNER JOIN sos_notification_staff sns ON sns.sos_notification_id=sos.id";
+        }
+        $where = $having = [];
+
+        if ($department_id != '') {
+            $where[] = 'services.dept = "' . $department_id . '"';
+        }
+        $where[] = "ord.reference != 'invoice'";
+        if ($category_id != '') {
+            $where[] = 'ord.category_id="' . $category_id . '"';
+        }
+
+        if ($request_type == '') {
+            if ($staff_info['type'] == 2 && !in_array(14, explode(',', $staff_info['department']))) {   #Corporate
+                $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" OR ord.staff_requested_service IN (' . $staff_info['department_staff'] . '))';
+            } else if ($staff_info['type'] == 3) {      #Franchise
+                $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" OR ord.staff_requested_service IN (' . $staff_info['office_staff'] . '))';
+            }
+        } else {
+            if ($request_type == "byme") {
+                $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
+            } elseif ($request_type == 'byothers') {
+                if ($staff_info['type'] == 1 || ($staff_info['type'] == 2 && $staff_info['role'] == 4)) {   #Admin & Corporate(Manager)
+                    $where[] = '(srv_rq.responsible_department NOT IN (' . $staff_info['department'] . ') AND ord.staff_requested_service != "' . $staff_id . '")';
+                } else if ($staff_info['type'] == 3 && $staff_info['role'] == 2) {      #Franchise(Manager)
+                    $where[] = '(indt.office IN (' . $staff_info['office'] . ') AND ord.staff_requested_service != "' . $staff_id . '")';
+                }
+            } elseif ($request_type == 'tome' && $staff_info['type'] != 3) {    #Corporate & Admin
+                $where[] = 'srv_rq.responsible_department IN (' . $staff_info['department'] . ')';
+            }
+        }
+
+        if ($request_by != '') {
+            $where[] = 'ord.staff_requested_service IN (' . $request_by . ')';
+        }
+
+        if ($request_type == 'unassigned') {
+            $where[] = 'ord.assign_user = 0';
+        }
+
+        if (isset($form_data)) {
+            if (isset($form_data['variable_dropdown'])) {
+                foreach ($form_data['variable_dropdown'] as $key => $variable_val) {
+                    if (isset($variable_val) && $variable_val != '') {
+                        $condition_val = $form_data['condition_dropdown'][$key];
+                        if (isset($condition_val) && $condition_val != '') {
+                            $column_name = $this->get_column_name($variable_val);
+                            if ($variable_val == 3) {
+                                $having[] = $this->build_query($variable_val, $condition_val, $form_data['criteria_dropdown'], $column_name);
+                            } else {
+                                $where[] = $this->build_query($variable_val, $condition_val, $form_data['criteria_dropdown'], $column_name);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($status != '') {
+            if ($status == 'u') {
+                $where[] = 'ord.status not in ("0","7")';
+            } elseif ($status == '3') {
+                $where[] = 'ord.status not in ("0","7") and ord.late_status = "1"';
+            } elseif ($status == '4') {
+                $where[] = 'ord.status not in ("0","7")';
+            } else {
+                $where[] = 'ord.status = "' . $status . '"';
+            }
+        } else {
+            if (in_array('ord.status = 0', $where)) {
+                $where[] = 'ord.status not in ("7")';
+            } elseif (in_array('ord.status = 7', $where)) {
+                $where[] = 'ord.status not in ("0")';
+            } else {
+                $where[] = 'ord.status not in ("0","7")';
+            }
+        }
+
+        if ($office_id != '') {
+            $where[] = 'indt.office = ' . $office_id;
+        } else {
+            if ($staff_info['type'] == 3) {
+                $where[] = 'ord.staff_office in (' . $staff_info['office'] . ')';
+            }
+        }
+
+        if (isset($sos_value) && $sos_value != '') {
+            if ($sos_value == 'tome') {
+                $where[] = 'sns.staff_id = "' . sess('user_id') . '" and sns.read_status = 0 and sos.added_by_user!= "' . sess('user_id') . '"';
+            } else {
+                $where[] = 'sns.staff_id = "' . sess('user_id') . '" and sns.read_status = 0 and sos.added_by_user= "' . sess('user_id') . '"';
+            }
+        }
+
+        $where[] = "ord.status NOT IN (10)";
+        $sql .= " WHERE " . implode(' AND ', $where) . ' GROUP BY ord.id';
+
+        if (count($having) != 0) {
+            $sql .= " HAVING " . implode(' OR ', $having);
+        }
+        if ($sort_criteria != '') {
+            $sql .= " ORDER BY " . $sort_criteria . " " . $sort_type;
+        } else {
+            $sql .= " ORDER BY ord.id DESC";
+        }
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        $result = $this->db->query($sql)->result();
+//        echo count($result);
+//        echo $this->db->last_query();
+//        echo'<pre>';print_r($result);die;
         return $result;
     }
 
@@ -444,92 +632,98 @@ class Service_model extends CI_Model {
         return $render_data;
     }
 
-    public function count_service_filter($status, $request_type, $category_id, $request_by = "", $department = "", $office = "", $staff_type = "", $sort = "", $form_data = "", $sos_value = "") {
+    public function count_service_filter($status, $request_type, $category_id, $request_by = "", $department = "", $office = "", $staff_type = "", $sort = "", $form_data = "", $sos_value = "", $sort_criteria = "", $sort_type = "") {
+        //print_r($form_data);
         $staff_id = sess('user_id');
         $user_info = staff_info();
         $user_dept = $user_info['department'];
         $usertype = $user_info['type'];
         $userrole = $user_info['role'];
         $useroffice = $user_info['office'];
-        $sql = "SELECT st.first_name AS requested_staff,o.staff_requested_service, o.assign_user, st.department AS dept,o.staff_office,
-              o.id, o.order_serial_id, o.order_date, o.start_date, o.complete_date, o.target_start_date, o.target_complete_date, o.total_of_order, o.tracking,
-               company.name AS client_name,o.reference_id,o.reference,o.status,o.late_status,o.start_date,o.complete_date,o.category_id,o.service_id,indt.office AS office_id,
-               (SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as office,services.description AS service_name,services.ideas AS service_shortname,
-               CONCAT(',', (SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = services.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = o.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),''), ',') AS all_staffs
-           FROM `order` AS o INNER JOIN company ON o.reference_id=company.id 
-               INNER JOIN internal_data indt ON indt.reference_id = company.id
-           INNER JOIN services ON services.id=o.service_id
-               INNER JOIN staff st ON st.id=o.staff_requested_service";
+        $sql = "SELECT st.first_name AS requested_staff,ord.staff_requested_service, ord.assign_user, st.department AS dept,ord.staff_office,
+                ord.id, ord.order_serial_id, ord.order_date, ord.start_date, ord.complete_date, ord.target_start_date, ord.target_complete_date, ord.total_of_order, ord.tracking,
+                ord.reference_id,ord.reference,ord.status,ord.late_status,ord.start_date,ord.complete_date,ord.category_id,ord.service_id,indt.office AS office_id,
+                services.description AS service_name,services.ideas AS service_shortname,
+                CONCAT(',', (SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = services.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = ord.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),''), ',') AS all_staffs
+                FROM `order` AS ord INNER JOIN company ON ord.reference_id = company.id 
+                INNER JOIN internal_data indt ON indt.reference_id = `ord`.`reference_id` AND indt.reference = `ord`.`reference` 
+                INNER JOIN services ON services.id=ord.service_id
+                INNER JOIN staff st ON st.id=ord.staff_requested_service";
+//                FROM `order` AS ord LEFT OUTER JOIN company ON ord.reference_id=company.id 
+//                LEFT OUTER JOIN `title` AS `tl` ON `tl`.`company_id` = `ord`.`reference_id` AND `tl`.`status` = 1 
+//                LEFT OUTER JOIN `individual` AS `ind` ON `ind`.`id` = `tl`.`individual_id` 
         if (isset($form_data)) {
             if (isset($form_data['variable_dropdown'])) {
                 if (in_array('9', $form_data['variable_dropdown'])) {
-                    $sql .= " INNER JOIN invoice_info inv ON inv.order_id=o.id";
+                    $sql .= " INNER JOIN invoice_info inv ON inv.order_id=ord.id";
                 }
             }
         }
 
         if (isset($sos_value) && $sos_value != '') {
-            $sql .= " INNER JOIN sos_notification AS sos ON sos.reference_id=o.id INNER JOIN sos_notification_staff sns ON sns.sos_notification_id=sos.id";
+            $sql .= " INNER JOIN sos_notification AS sos ON sos.reference_id=ord.id INNER JOIN sos_notification_staff sns ON sns.sos_notification_id=sos.id";
         }
         $where = $having = [];
 
         if ($department != '') {
             $where[] = 'services.dept = "' . $department . '"';
         }
-        $where[] = "o.reference = 'company'";
+        $where[] = "ord.reference != 'invoice'";
         if ($category_id != '') {
-            $where[] = 'o.category_id="' . $category_id . '"';
+            $where[] = 'ord.category_id="' . $category_id . '"';
         }
 
         if ($usertype == 1) {
             if ($request_type == "byme") {
-                $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
             } elseif ($request_type == 'byothers') {
-                $where[] = 'o.staff_requested_service != "' . $staff_id . '"';
+                $where[] = 'ord.staff_requested_service != "' . $staff_id . '"';
+            } elseif ($request_type == 'tome') {
+                $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND ord.staff_requested_service != "' . $staff_id . '")';
             }
         } elseif ($usertype == 2) {
             if (in_array(6, explode(',', $user_dept))) {
                 if ($request_type == "byme") {
-                    $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                    $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                 } elseif ($request_type == 'tome') {
-                    $where[] = 'o.staff_requested_service != "' . $staff_id . '"';
+                    $where[] = 'ord.staff_requested_service != "' . $staff_id . '"';
                 }
             } elseif (in_array(14, explode(',', $user_dept))) {
                 if ($request_type == "byme") {
-                    $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                    $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                 } elseif ($request_type == 'tome') {
-                    $where[] = 'o.staff_requested_service != "' . $staff_id . '"';
+                    $where[] = 'ord.staff_requested_service != "' . $staff_id . '"';
                 }
             } else {
                 if ($userrole == 4) {
                     $req_by_oth = array_column($this->get_deptmngr_staffs($staff_id), 'staff_id');
                     if ($request_type == "byme") {
-                        $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                        $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                     }
 //                    elseif ($request_type == 'tome') {
-//                        $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND o.staff_requested_service != "' . $staff_id . '")';
+//                        $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND ord.staff_requested_service != "' . $staff_id . '")';
 //                    } 
                     elseif ($request_type == 'byothers') {
-                        $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND o.staff_requested_service != "' . $staff_id . '")';
+                        $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND ord.staff_requested_service != "' . $staff_id . '")';
                         if (!empty($req_by_oth)) {
-                            $having[] = 'o.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
+                            $having[] = 'ord.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
                         }
                     } else {
                         $having[] = 'all_staffs LIKE "%,' . $staff_id . ',%"';
-                        //$having[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                        //$having[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                         $req_by_oth = array_unique($req_by_oth);
                         if (!empty($req_by_oth)) {
-                            $having[] = 'o.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
+                            $having[] = 'ord.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
                         }
                     }
                 } else {
                     if ($request_type == "byme") {
-                        $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                        $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                     } elseif ($request_type == 'tome') {
-                        $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND o.staff_requested_service != "' . $staff_id . '")';
+                        $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND ord.staff_requested_service != "' . $staff_id . '")';
                     } else {
                         $having[] = 'all_staffs LIKE "%,' . $staff_id . ',%"';
-                        $having[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                        $having[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                     }
                 }
             }
@@ -538,29 +732,29 @@ class Service_model extends CI_Model {
             $req_by_oth = $this->get_ofcmngr_staffs($staff_id);
 //                print_r($req_by_oth);
             if ($request_type == "byme") {
-                $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
             } elseif ($request_type == 'byothers') {
-                $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND o.staff_requested_service != "' . $staff_id . '")';
+                $having[] = '(all_staffs LIKE "%,' . $staff_id . ',%" AND ord.staff_requested_service != "' . $staff_id . '")';
                 if (!empty($req_by_oth)) {
-                    $having[] = 'o.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
+                    $having[] = 'ord.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
                 }
             } else {
                 $having[] = 'all_staffs LIKE "%,' . $staff_id . ',%"';
-                $having[] = 'o.staff_requested_service = "' . $staff_id . '"';
+                $having[] = 'ord.staff_requested_service = "' . $staff_id . '"';
                 if (!empty($req_by_oth)) {
-                    $having[] = 'o.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
+                    $having[] = 'ord.staff_requested_service IN (' . implode(',', $req_by_oth) . ')';
                 }
             }
             // } else {
-            //     $where[] = 'o.staff_requested_service = "' . $staff_id . '"';
+            //     $where[] = 'ord.staff_requested_service = "' . $staff_id . '"';
             // }
         }
         if ($request_by != '') {
-            $where[] = 'o.staff_requested_service IN (' . $request_by . ')';
+            $where[] = 'ord.staff_requested_service IN (' . $request_by . ')';
         }
 
         if ($request_type == 'unassigned') {
-            $where[] = 'o.assign_user = 0';
+            $where[] = 'ord.assign_user = 0';
         }
 
         if (isset($form_data)) {
@@ -585,21 +779,21 @@ class Service_model extends CI_Model {
 
         if ($status != '') {
             if ($status == 'u') {
-                $where[] = 'o.status not in ("0","7")';
+                $where[] = 'ord.status not in ("0","7")';
             } elseif ($status == '3') {
-                $where[] = 'o.status = "1" and o.late_status = "1"';
+                $where[] = 'ord.status not in ("0","7") and ord.late_status = "1"';
             } elseif ($status == '4') {
-                $where[] = 'o.status not in ("0","7")';
+                $where[] = 'ord.status not in ("0","7")';
             } else {
-                $where[] = 'o.status = "' . $status . '"';
+                $where[] = 'ord.status = "' . $status . '"';
             }
         } else {
-            if (in_array('o.status = 0', $where)) {
-                $where[] = 'o.status not in ("7")';
-            } elseif (in_array('o.status = 7', $where)) {
-                $where[] = 'o.status not in ("0")';
+            if (in_array('ord.status = 0', $where)) {
+                $where[] = 'ord.status not in ("7")';
+            } elseif (in_array('ord.status = 7', $where)) {
+                $where[] = 'ord.status not in ("0")';
             } else {
-                $where[] = 'o.status not in ("0","7")';
+                $where[] = 'ord.status not in ("0","7")';
             }
         }
 
@@ -607,7 +801,7 @@ class Service_model extends CI_Model {
             $where[] = 'indt.office = ' . $office;
         } else {
             if ($usertype == 3) {
-                $where[] = 'o.staff_office in (' . $useroffice . ')';
+                $where[] = 'ord.staff_office in (' . $useroffice . ')';
             }
         }
 
@@ -619,24 +813,31 @@ class Service_model extends CI_Model {
             }
         }
 
-        $where[] = "o.status NOT IN (10)";
+        $where[] = "ord.status NOT IN (10)";
 
         $sql .= " WHERE " . implode(' AND ', $where);
         if (isset($sos_value) && $sos_value != '') {
             //if($sos_value=='byme'){
-            $sql .= ' GROUP BY o.id';
+            $sql .= ' GROUP BY ord.id';
             // }                
         } else {
-            $sql .= ' GROUP BY o.id';
+            $sql .= ' GROUP BY ord.id';
         }
         if (count($having) != 0) {
             $sql .= " HAVING " . implode(' OR ', $having);
         }
-
-        $sql .= " ORDER BY o.id ASC";
+        if ($sort_criteria != '') {
+            // $this->db->order_by($sort_criteria, $sort_type);
+            $sql .= " ORDER BY " . $sort_criteria . " " . $sort_type;
+            // echo $sql;exit; 
+        } else {
+            $sql .= " ORDER BY ord.id DESC";
+        }
+        // echo "<pre>";
+        // echo $sql;exit;
         $this->db->query('SET SQL_BIG_SELECTS=1');
         $result = $this->db->query($sql)->result();
-        //echo $this->db->last_query();
+//        echo $this->db->last_query();die;
 //        echo'<pre>';
 //        print_r($result);
 //        die;
@@ -801,14 +1002,14 @@ class Service_model extends CI_Model {
     }
 
     public function get_edit_data($id) {
-        $sql = "select o.*, c.*, c.type as company_type, st.*, sr.*, indt.*, o.id as id from `order` o inner join company c on c.id = o.reference_id inner join staff st on st.id = o.staff_requested_service inner join service_request sr on sr.order_id = o.id inner join internal_data indt on indt.reference_id = o.reference_id where o.id='$id'";
+        $sql = "select ord.*, c.*, c.type as company_type, st.*, sr.*, indt.*, ord.id as id from `order` ord inner join company c on c.id = ord.reference_id inner join staff st on st.id = ord.staff_requested_service inner join service_request sr on sr.order_id = ord.id inner join internal_data indt on indt.reference_id = ord.reference_id where ord.id='$id'";
         $query = $this->db->query($sql);
         $result = $query->result_array();
         return $result;
     }
 
     public function completed_orders() {
-        $sql = "select o.*,c.*,o.id as id from `order` o inner join company c on c.id = o.reference_id group by c.name";
+        $sql = "select ord.*,c.*,ord.id as id from `order` ord inner join company c on c.id = ord.reference_id group by c.name";
         $query = $this->db->query($sql);
         $result = $query->result_array();
         return $result;
@@ -1100,7 +1301,7 @@ class Service_model extends CI_Model {
 
     public function check_if_contact_with_same_ph_email_exists($fname, $lname, $phone, $email) {
         //$query = "select * from contact_info where (TRIM(LOWER(first_name))='" . trim(strtolower($fname)) . "' and TRIM(LOWER(last_name))='" . trim(strtolower($lname)) . "' and phone1='" . $phone . "' and reference='individual' and status='1') or (TRIM(LOWER(first_name))='" . trim(strtolower($fname)) . "' and TRIM(LOWER(last_name))='" . trim(strtolower($lname)) . "' and email1='" . $email . "' and reference='individual' and status='1')";
-        $query = "select * from contact_info where TRIM(LOWER(first_name))='" . trim(strtolower($fname)) . "' and TRIM(LOWER(last_name))='" . trim(strtolower($lname)) . "' and phone1='" . $phone . "' and email1='" . $email . "' and reference='individual' and status='1'";
+        $query = "select * from contact_info where TRIM(LOWER(first_name))='" . trim(strtolower($fname)) . "' and TRIM(LOWER(last_name))='" . trim(strtolower($lname)) . "' and phone1='" . trim($phone) . "' and email1='" . trim($email) . "' and reference='individual' and status='1'";
 
         return $this->db->query($query)->row_array();
     }
@@ -1133,6 +1334,7 @@ class Service_model extends CI_Model {
     public function get_tracking_log($id, $table_name) {
         return $this->db->query("SELECT concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id, (SELECT name from department where id=(SELECT department_id from department_staff where staff_id=s.id )) as department, case when tracking_logs.status_value = '0' then 'Completed' when tracking_logs.status_value = '1' then 'Started' when tracking_logs.status_value = '2' then 'Not Started' when tracking_logs.status_value = '3' then 'Late' when tracking_logs.status_value = '7' then 'Canceled'  else tracking_logs.status_value end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
     }
+
     // public function get_tracking_log($id, $table_name) {
     //     return $this->db->query("SELECT sns.read_status1,concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id, (SELECT name from department where id=(SELECT department_id from department_staff where staff_id=s.id )) as department, case when tracking_logs.status_value = '0' then 'Completed' when tracking_logs.status_value = '1' then 'Started' when tracking_logs.status_value = '2' then 'Not Started' when tracking_logs.status_value = '3' then 'Late' when tracking_logs.status_value = '7' then 'Canceled'  else tracking_logs.status_value end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id left join sos_notification as sn on sn.reference_id = tracking_logs.section_id left join sos_notification_staff as sns on sns.sos_notification_id = sn.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
     // }
@@ -1503,6 +1705,7 @@ class Service_model extends CI_Model {
     }
 
     public function save_order($data) {
+//        print_r($data['related_services']);die;
         $user_info = staff_info();
         $user_department = $user_info['department'];
         $tracking = time();
@@ -1600,58 +1803,63 @@ class Service_model extends CI_Model {
             $order_id = $data['editval'];
             $srv_id = $data['service_id'];
 
-            if(isset($data['retail_price'])){
+            if (isset($data['retail_price'])) {
                 $price = $data['retail_price'];
-            }else{
-                if(isset($data['related_service'][$order_id][$srv_id]['override_price'])){
+            } else {
+                if (isset($data['related_service'][$order_id][$srv_id]['override_price'])) {
                     $price = $data['related_service'][$order_id][$srv_id]['override_price'];
-                }elseif(isset($data['related_service'][$order_id][$srv_id]['retail_price'])){
+                } elseif (isset($data['related_service'][$order_id][$srv_id]['retail_price'])) {
                     $price = $data['related_service'][$order_id][$srv_id]['retail_price'];
                 }
-            }            
-            
+            }
+
             $this->db->where(['order_id' => $data['editval'], 'services_id' => $data['service_id']]);
             $this->db->update('service_request', ['price_charged' => $price]);
+//            print_r($data['related_service']);
             if (isset($data['related_service']) && count($data['related_service']) > 0) {
-                $related_services = $data['related_service'];
+                $related_services = $data['related_services'];
+                $this->db->where(['order_id' => $order_id, 'services_id!=' => $data['service_id']]);
+                $this->db->delete('service_request');
                 foreach ($related_services as $service_order_id => $order_data) {
-                    $this->db->where(['order_id' => $service_order_id, 'services_id!=' => $data['service_id']]);
-                    $this->db->delete('service_request');
-                    foreach ($order_data as $service_id => $service_data) {
-                        $service = $this->get_service_by_id($service_id);
-                        if (isset($service_data['override_price']) && $service_data['override_price'] != '') {
-                            $service_request_data['price_charged'] = $service_data['override_price'];
+//                    print_r($order_data['related_service']);
+//                    $this->db->where(['order_id' => $order_id, 'services_id!=' => $data['service_id']]);
+//                    $this->db->delete('service_request');
+//                    foreach ($order_data as $service_id => $service_data) {
+//                        echo $service_id;die;
+                        $service = $this->get_service_by_id($srv_id);
+                        if (isset($data['override_price']) && $data['override_price'] != '') {
+                            $service_request_data['price_charged'] = $data['override_price'];
                         } else {
                             $service_request_data['price_charged'] = $service['retail_price'];
                         }
                         $service_request_data['tracking'] = $tracking;
-                        if ($service_id == $data['service_id']) {
-                            $this->db->where(['order_id' => $service_order_id, 'services_id' => $data['service_id']]);
-                            $this->db->update('service_request', $service_request_data);
-                        } 
-                        elseif ($service_id ==  $data['related_service'][$order_id][$service_id]['service_id']) 
-                        {
-                            if (isset($service_data['override_price']) && $service_data['override_price'] != '') {
-                                $price_charged = $service_data['override_price'];
+//                        if ($srv_id == $data['service_id']) {
+//                            echo 'a';die;
+//                            $this->db->where(['order_id' => $order_id, 'services_id' => $data['service_id']]);
+//                            $this->db->update('service_request', $service_request_data);
+//                        } else {
+//                            echo 'b';die;
+                            if (isset($data['override_price']) && $data['override_price'] != '') {
+                                $price_charged = $data['override_price'];
                             } else {
                                 $price_charged = $service['retail_price'];
                             }
-                            $target = $this->get_date_form_target_days($service_id);
+                            $target = $this->get_date_form_target_days($srv_id);
                             $service_request_data = [
                                 'order_id' => $order_id,
-                                'services_id' => $service_id,
-                                'price_charged' => $price_charged,
+                                'services_id' => $order_data,
+                                'price_charged' => $service['retail_price'],
                                 'tracking' => $tracking,
                                 'date_started' => $target['start_date'],
                                 'date_completed' => $target['end_date'],
-                                'responsible_department' => $user_department,
+                                'responsible_department' => $service['service_department'],
                                 'responsible_staff' => sess('user_id'),
                                 'status' => '2'
                             ];
 
                             $this->db->insert('service_request', $service_request_data);
-                        }
-                    } // inner foreach
+//                        }
+//                    } // inner foreach
                 } //outer foreach
             }
             $this->db->select('SUM(price_charged) AS total_price');
@@ -1671,26 +1879,26 @@ class Service_model extends CI_Model {
 
     public function get_column_name($variable_val) {
         if ($variable_val == 1) {
-            $column_name = 'o.category_id';
+            $column_name = 'ord.category_id';
         } elseif ($variable_val == 2) {
-            $column_name = 'o.service_id';
+            $column_name = 'ord.service_id';
         } elseif ($variable_val == 3) {
             $column_name = 'office_id';
         } elseif ($variable_val == 4) {
-            $column_name = 'o.status';
+            $column_name = 'ord.status';
         } elseif ($variable_val == 5) {
-            $column_name = 'o.staff_requested_service';
+            $column_name = 'ord.staff_requested_service';
         } elseif ($variable_val == 6) {
-            $column_name = 'o.start_date';
+            $column_name = 'ord.start_date';
         } elseif ($variable_val == 7) {
-            $column_name = 'o.complete_date';
+            $column_name = 'ord.complete_date';
         } elseif ($variable_val == 8) {
-            $column_name = 'o.order_serial_id';
+            $column_name = 'ord.order_serial_id';
         } elseif ($variable_val == 9) {
             $column_name = 'inv.id';
         } elseif ($variable_val == 10) {
-            $column_name = 'o.reference_id';
-        }elseif ($variable_val == 14) {
+            $column_name = 'ord.reference_id';
+        } elseif ($variable_val == 14) {
             $column_name = 'services.dept';
         }
         return $column_name;
@@ -1718,7 +1926,7 @@ class Service_model extends CI_Model {
             $criteria_val = $criteria_dd['invoiceno'];
         } elseif ($variable_val == 10) {
             $criteria_val = $criteria_dd['clientname'];
-        }elseif ($variable_val == 14) {
+        } elseif ($variable_val == 14) {
             $criteria_val = $criteria_dd['office'];
         }
 
@@ -1752,9 +1960,9 @@ class Service_model extends CI_Model {
                     $query = $column_name . (($condition_val == 1) ? ' = ' : ' != ') . $criteria_val[0];
                 } else {
                     if ($condition_val == 1) {
-                        $query = $column_name . ' = 1 and o.late_status = 1';
+                        $query = 'ord.status not in ("0","7") and ord.late_status = 1';
                     } else {
-                        $query = $column_name . ' != 1 and o.late_status != 1';
+                        $query = 'ord.status not in ("0","7") and ord.late_status != 1';
                     }
                 }
             } elseif ($condition_val == 2 || $condition_val == 4) {
@@ -1769,9 +1977,9 @@ class Service_model extends CI_Model {
                         if ($i == 0) {
                             if ($cv == 3) {
                                 if ($condition_val == 2) {
-                                    $q .= '(' . $column_name . ' = 1 and o.late_status = 1';
+                                    $q .= '(ord.status not in ("0","7") and ord.late_status = 1';
                                 } else {
-                                    $q .= '(' . $column_name . ' != 1 and o.late_status != 1';
+                                    $q .= '(ord.status not in ("0","7") and ord.late_status != 1';
                                 }
                             } else {
                                 $q .= '(' . $column_name . (($condition_val == 2) ? ' = ' : ' != ') . $cv;
@@ -1779,9 +1987,9 @@ class Service_model extends CI_Model {
                         } else if ($i == $len - 1) {
                             if ($cv == 3) {
                                 if ($condition_val == 2) {
-                                    $q .= ' AND ' . $column_name . ' = 1 and o.late_status = 1)';
+                                    $q .= ' AND ord.status not in ("0","7") and ord.late_status = 1)';
                                 } else {
-                                    $q .= ' AND ' . $column_name . ' != 1 and o.late_status != 1)';
+                                    $q .= ' AND ord.status not in ("0","7") and ord.late_status != 1)';
                                 }
                             } else {
                                 $q .= ' AND ' . $column_name . (($condition_val == 2) ? ' = ' : ' != ') . $cv . ')';
@@ -1789,9 +1997,9 @@ class Service_model extends CI_Model {
                         } else {
                             if ($cv == 3) {
                                 if ($condition_val == 2) {
-                                    $q .= ' AND ' . $column_name . ' = 1 and o.late_status = 1';
+                                    $q .= ' AND ord.status not in ("0","7") and ord.late_status = 1';
                                 } else {
-                                    $q .= ' AND ' . $column_name . ' != 1 and o.late_status != 1';
+                                    $q .= ' AND ord.status not in ("0","7") and ord.late_status != 1';
                                 }
                             } else {
                                 $q .= ' AND ' . $column_name . (($condition_val == 2) ? ' = ' : ' != ') . $cv;
@@ -1886,16 +2094,16 @@ class Service_model extends CI_Model {
     }
 
     public function get_order_staff_by_order_id($order_id) {
-        $sql = "SELECT CONCAT(st.last_name,', ', st.first_name, ' ', st.middle_name) AS requested_staff,o.staff_requested_service, o.assign_user, st.department AS dept,
-               o.id, o.order_serial_id, o.order_date, o.start_date, o.complete_date, o.target_start_date, o.target_complete_date, o.total_of_order, o.tracking,
-               company.name AS client_name,o.reference_id,o.reference,o.status,o.late_status,o.start_date,o.complete_date,o.category_id,o.service_id,indt.office AS office_id,
+        $sql = "SELECT CONCAT(st.last_name,', ', st.first_name, ' ', st.middle_name) AS requested_staff,ord.staff_requested_service, ord.assign_user, st.department AS dept,
+               ord.id, ord.order_serial_id, ord.order_date, ord.start_date, ord.complete_date, ord.target_start_date, ord.target_complete_date, ord.total_of_order, ord.tracking,
+               company.name AS client_name,ord.reference_id,ord.reference,ord.status,ord.late_status,ord.start_date,ord.complete_date,ord.category_id,ord.service_id,indt.office AS office_id,
                (SELECT ofc.name FROM office as ofc WHERE ofc.id = indt.office) as office,services.description AS service_name,services.ideas AS service_shortname,
-               CONCAT((SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = services.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = o.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),'')) AS all_staffs
-	       FROM `order` AS o INNER JOIN company ON o.reference_id=company.id 
+               CONCAT((SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = services.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = ord.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),'')) AS all_staffs
+	       FROM `order` AS ord INNER JOIN company ON ord.reference_id=company.id 
                INNER JOIN internal_data indt ON indt.reference_id = company.id
-	       INNER JOIN services ON services.id=o.service_id
-               INNER JOIN staff AS st ON st.id=o.staff_requested_service
-               WHERE o.id = '{$order_id}'";
+	       INNER JOIN services ON services.id=ord.service_id
+               INNER JOIN staff AS st ON st.id=ord.staff_requested_service
+               WHERE ord.id = '{$order_id}'";
         return $this->db->query($sql)->row_array();
     }
 
@@ -1944,12 +2152,12 @@ class Service_model extends CI_Model {
         return $this->db->get_where('title', array('id' => $title_id))->row_array();
     }
 
-    public function update_title_data($data,$id) {
-         $this->db->where(['id' => $id]);
+    public function update_title_data($data, $id) {
+        $this->db->where(['id' => $id]);
         return $this->db->update("title", $data);
     }
 
-    public function delete_old_individual($id){
+    public function delete_old_individual($id) {
         $this->db->where('id', $id);
         return $this->db->delete("individual");
     }

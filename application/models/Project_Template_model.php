@@ -12,17 +12,23 @@ class Project_Template_model extends CI_Model {
             3 => "pattern",
             4 => "client_type",
             5 => "client_id",
-            6 => "responsible",
-            7 => "assigned_to",
+            6 => "all_project_staffs",
+            7 => "all_project_staffs",
             8 => "status",
-            9 => "created_at"
+            9 => "created_at",
+            10=> "added_by_user",
+            11 => "due_date"
         ];
 
+        // $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id),(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts left join project_task AS pt on pt.id=pts.task_id WHERE pt.project_id = pro.id),","), " ", "") AS all_project_staffs';
         $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id),","), " ", "") AS all_project_staffs';
-//        $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts WHERE pts.task_id = pt.id),","), " ", "") AS assign_staff';
+       $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts WHERE pts.task_id = pt.id),","), " ", "") AS all_task_staffs';
+         $this->project_select[] = 'pro.*,pm.office_id as project_office_id,pm.department_id as project_department_id';
         $this->project_select[] = 'pm.added_by_user AS added_by_user';
         $this->project_select[] = 'pm.added_by_user AS staff_id';
         $this->project_select[] = 'pm.department_id as department_id';
+        $this->project_select[] = 'prm.due_date as due_date';
+
 //        $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT case when (pm.office_id=1 then GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id )),",")," "," ") AS responsible_staff';
     }
 
@@ -218,7 +224,7 @@ class Project_Template_model extends CI_Model {
             $task_data['responsible_task_staff'] = $post['task']['responsible_task_staff'];
         }
         $task_staff_list = $this->get_department_staff_by_department_id($post['task']['department']);
-//        print_r($task_data);die;
+//        print_r($task_staff_list);die;
         $this->db->insert('project_template_task', $task_data);
         $insert_id = $this->db->insert_id();
         if ($post['task']['department'] != 2) {
@@ -231,7 +237,7 @@ class Project_Template_model extends CI_Model {
 //                echo "a";die;
                 foreach ($task_staff_list as $ins_staff_id) {
                     $staffId = $ins_staff_id['id'];
-                    $this->db->insert('project_task_staff', ['task_id' => $insert_id, 'staff_id' => $staffId]);
+                    $this->db->insert('project_template_task_staff', ['task_id' => $insert_id, 'staff_id' => $staffId]);
                 }
 //                echo $this->db->last_query();
             }
@@ -311,7 +317,7 @@ class Project_Template_model extends CI_Model {
                     . 'where project_id=' . $id . ' and type=1';
             $data2 = $this->db->query($query)->row_array();
 
-            $query = 'select CONCAT(last_name, ", ",first_name,", ",middle_name) as full_name '
+            $query = 'select CONCAT(last_name, ", ",first_name) as full_name '
                     . 'from staff '
                     . 'where id=' . $data2['staff_id'] . '';
             $data3 = $this->db->query($query)->row_array();
@@ -355,22 +361,36 @@ class Project_Template_model extends CI_Model {
         }
     }
 
-    public function get_assigned_office_staff_project_main($id) {
-//echo "hi";die;
-        $query = 'select ofc_is_all,office_id from project_main where project_id=' . $id . '';
+    public function get_assigned_office_staff_project_main($id,$client_id='') {
+        $array = [];
+        $query = 'select * from project_main where project_id=' . $id . '';
         $data1 = $this->db->query($query)->row_array();
-        if ($data1['office_id'] == 3) {
-            $val = $this->db->query("SELECT responsible_staff from project_main WHERE project_id='$id'")->row();
-            if ($val->responsible_staff == 1) {
-                return "Partner";
-            } elseif ($val->responsible_staff == 2) {
-                return "Manager";
+        if($client_id==''){
+            $qs = 'select * from projects where id=' . $id . '';
+            $res = $this->db->query($qs)->row_array();
+            $client_id = $res['client_id'];
+        }
+        if ($data1['office_id'] == 3) {          
+            $query1 = 'select * from internal_data where reference_id=' . $client_id . '';
+            $result1 = $this->db->query($query1)->row_array();
+            if ($data1['responsible_staff'] == 1) {
+                $array['name'] = $result1['partner'];
+                $array['office'] = $result1['office'];
+            } elseif ($data1['responsible_staff'] == 2) {
+                $array['name'] = $result1['manager'];
+                $array['office'] = $result1['office'];
             } else {
-                return "Client Association";
+                if(isset($result1['client_association']) && $result1['client_association']!=''){
+                        $array['name'] = $result1['client_association'];
+                        $array['office'] = $result1['client_association'];
+                }else{
+                        $array['name'] = 'N/A'; 
+                        $array['office'] = 'N/A';
+                }
             }
         } else {
             if ($data1['ofc_is_all'] == 1) {
-                return "All Staff";
+                $array['name'] = 'All Staff'; 
             } else {
 
                 $query = 'select staff_id '
@@ -378,15 +398,16 @@ class Project_Template_model extends CI_Model {
                         . 'where project_id=' . $id . ' and type=2';
                 $data2 = $this->db->query($query)->row_array();
 
-                $query = 'select CONCAT(last_name, ", ",first_name,", ",middle_name) as full_name '
+                $query = 'select CONCAT(last_name, ", ",first_name) as full_name '
                         . 'from staff '
                         . 'where id=' . $data2['staff_id'] . '';
                 $data3 = $this->db->query($query)->row_array();
 
-
-                return $data3['full_name'];
+                $array['name'] = $data3['full_name']; 
             }
+            $array['office'] = '0';
         }
+        return $array;
     }
 
     public function getTemplateStaffList($template_id) {
@@ -853,10 +874,15 @@ class Project_Template_model extends CI_Model {
     function requestCreateProject($post) {
         $this->db->trans_begin();
 //        print_r($post);die;
+        $project_client_ids = $post['project']['client_id'];
+        if(!empty($project_client_ids)){
+        foreach($project_client_ids as $pcid){
+
         $project = $post['project'];
         if (isset($project['office_id']) && $project['office_id'] != '') {
             $post['project']['office_id'] = $project['office_id'];
         }
+        $post['project']['client_id'] = $pcid;
         $this->db->insert('projects', $post['project']);
         $insert_id = $this->db->insert_id();
         $notedata = $this->input->post('project_note');
@@ -984,6 +1010,37 @@ class Project_Template_model extends CI_Model {
                 }
             }            
             unset($project_recurrence_main_data['id']);
+            $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+            
+            if($project_recurrence_main_data['generation_month']==''){
+                $project_recurrence_main_data['generation_month'] = '0';
+            }
+
+            if($project_recurrence_main_data['generation_day']==''){
+                $project_recurrence_main_data['generation_day'] = '0';
+            }
+            $generation_days = ((int)$project_recurrence_main_data['generation_month']*30) + (int)$project_recurrence_main_data['generation_day'];
+
+            $project_recurrence_main_data['due_date'] = $due_date;
+
+            if($project_recurrence_main_data['pattern']=='monthly'){
+                $next_due_date = date("Y-m-d", strtotime("+1 month", strtotime($due_date)));
+                $project_recurrence_main_data['next_due_date'] = $next_due_date;
+            }elseif($project_recurrence_main_data['pattern']=='annually'){
+                $next_due_date = date("Y-m-d", strtotime("+1 year", strtotime($due_date)));
+                $project_recurrence_main_data['next_due_date'] = $next_due_date;
+            }elseif($project_recurrence_main_data['pattern']=='weekly'){
+                $next_due_date = date("Y-m-d", strtotime("+7 days", strtotime($due_date)));
+                $project_recurrence_main_data['next_due_date'] = $next_due_date;
+            }elseif($project_recurrence_main_data['pattern']=='quarterly'){
+                $next_due_date = date("Y-m-d", strtotime("+3 months", strtotime($due_date)));
+                $project_recurrence_main_data['next_due_date'] = $next_due_date;
+            }else{
+                $project_recurrence_main_data['next_due_date'] = '0000-00-00';
+            }
+
+            $generation_date = date('Y-m-d', strtotime('-'.$generation_days.' days', strtotime($project_recurrence_main_data['next_due_date'])));         
+            $project_recurrence_main_data['generation_date'] = $generation_date;
             $project_recurrence_main_data['project_id'] = $insert_id;
             $this->db->set($project_recurrence_main_data);
             $this->db->insert('project_recurrence_main', $project_recurrence_main_data);
@@ -1010,6 +1067,17 @@ class Project_Template_model extends CI_Model {
                         unset($nd['read_status']);
                         unset($nd['added_by_user']);
                         $this->insert_task_note(11, $nd, "task_id", $project_task_id, 'task');
+                    }
+                }
+                if (isset($project_task_staff_data) && !empty($project_task_staff_data)) {
+                    if($this->db->get_where('project_task_staff',['task_id'=>$project_task_id])->num_rows()<1){
+                        foreach ($project_task_staff_data as $key => $val) {
+                            unset($val['id']);
+                            unset($val['task_id']);
+                            $val['task_id'] = $project_task_id;
+                            $this->db->set($val);
+                            $this->db->insert('project_task_staff', $val);
+                        }
                     }
                 }
             }
@@ -1066,20 +1134,12 @@ class Project_Template_model extends CI_Model {
                 $this->db->insert('project_staff_main', $val);
             }
         }
-        if (isset($project_task_staff_data) && !empty($project_task_staff_data)) {
-            foreach ($project_task_staff_data as $key => $val) {
-                unset($val['id']);
-                unset($val['task_id']);
-                $val['task_id'] = $tid[$key];
-                $this->db->set($val);
-                $this->db->insert('project_task_staff', $val);
-            }
-        }
+        
 //        echo $tid[$key];
 //        print_r($project_task_notes);
 //        die;
-
-
+          } //end project_client_id forach
+        }  //end project_client_id empty checking
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return "-1";
@@ -1110,11 +1170,6 @@ class Project_Template_model extends CI_Model {
     }
 
     public function getProjectClientName($client_id, $client_type, $office_id = '') {
-        if ($client_type == 1) {
-            $clientType = 'company';
-        } else {
-            $clientType = 'individual';
-        }
         if ($client_type == 1) {
             $this->db->select('name');
             $data = $this->db->get_where('company', ['id' => $client_id])->row();
@@ -1369,7 +1424,7 @@ class Project_Template_model extends CI_Model {
 //                echo "a";die;
                 foreach ($task_staff_list as $ins_staff_id) {
                     $staffId = $ins_staff_id['id'];
-                    $this->db->insert('project_task_staff', ['task_id' => $task_id, 'staff_id' => $staffId]);
+                    $this->db->insert('project_template_task_staff', ['task_id' => $task_id, 'staff_id' => $staffId]);
                 }
 //                echo $this->db->last_query();
             }
@@ -1583,7 +1638,36 @@ class Project_Template_model extends CI_Model {
                 if($cur_day<=$ins_recurrence['actual_due_day']){
                     $ins_recurrence['actual_due_month'] = date('m');
                 }
-            } 
+            }
+            $due_date = $ins_recurrence['actual_due_year'] . '-' . $ins_recurrence['actual_due_month'] . '-' . $ins_recurrence['actual_due_day'];
+
+            if($ins_recurrence['generation_month']==''){
+                $ins_recurrence['generation_month'] = '0';
+            }
+
+            if($ins_recurrence['generation_day']==''){
+                $ins_recurrence['generation_day'] = '0';
+            }
+            $generation_days = ((int)$ins_recurrence['generation_month']*30) + (int)$ins_recurrence['generation_day'];
+
+            $ins_recurrence['due_date'] = $due_date;
+            if($ins_recurrence['pattern']=='monthly'){
+                $next_due_date = date("Y-m-d", strtotime("+1 month", strtotime($due_date)));
+                $ins_recurrence['next_due_date'] = $next_due_date;
+            }elseif($ins_recurrence['pattern']=='annually'){
+                $next_due_date = date("Y-m-d", strtotime("+1 year", strtotime($due_date)));
+                $ins_recurrence['next_due_date'] = $next_due_date;
+            }elseif($ins_recurrence['pattern']=='weekly'){
+                $next_due_date = date("Y-m-d", strtotime("+7 days", strtotime($due_date)));
+                $ins_recurrence['next_due_date'] = $next_due_date;
+            }elseif($ins_recurrence['pattern']=='quarterly'){
+                $next_due_date = date("Y-m-d", strtotime("+3 months", strtotime($due_date)));
+                $ins_recurrence['next_due_date'] = $next_due_date;
+            }else{
+                $ins_recurrence['next_due_date'] = '0000-00-00';
+            }
+            $generation_date = date('Y-m-d', strtotime('-'.$generation_days.' days', strtotime($ins_recurrence['next_due_date'])));
+            $ins_recurrence['generation_date'] = $generation_date;
             $this->db->insert('project_recurrence_main', $ins_recurrence);
         }
 
@@ -1860,7 +1944,8 @@ class Project_Template_model extends CI_Model {
 
     public function get_project_list($request = '', $status = '', $priority = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '') {
 //        echo 'kkk'.$sos_value;die;
-        $user_info = staff_info();
+//        print_r($filter_data);die;
+        $user_info =  $this->session->userdata('staff_info');
         $user_department = $user_info['department'];
         $user_type = $user_info['type'];
         $staff_id = sess('user_id');
@@ -1868,28 +1953,25 @@ class Project_Template_model extends CI_Model {
         $user_office = $user_info['office'];
         $office_staff = $department_staff = $departments = $action_id = [];
         if ($user_type == 3 && $role == 2) {
-            $office_staff = array_column($this->administration->get_all_office_staff($staff_id), 'staff_id');
+            $office_staff = explode(",",$user_info['office_staff']);
             $office_staff = array_unique($office_staff);
         }
         if ($user_type == 2 && $role == 4) {
             if ($user_department != '14') {
-                $dept_ids = $this->db->get_where('department_staff', ['staff_id' => $staff_id])->result_array();
-                $departments = array_column($dept_ids, 'department_id');
-                $this->db->where_in('department_id', array_column($dept_ids, 'department_id'));
-                $department_staffs = $this->db->get('department_staff')->result_array();
-                $department_staff = array_column($department_staffs, 'staff_id');
+                $departments = $user_department;
+                $department_staff = explode(",",$user_info['department_staff']);
                 $department_staff = array_unique($department_staff);
                 //$action_id = $this->get_request_to_others_action_by_staff_id($staff_id);
             }
         }
         $select = implode(', ', $this->project_select);
         $this->db->select($select);
-        $this->db->select('pro.*');
+        //$this->db->select('pro.*,pm.office_id as project_office_id,pm.department_id as project_department_id');
         // $this->db->select('id');
         $this->db->from('projects AS pro');
         $this->db->join('project_main AS pm', 'pm.project_id = pro.id', 'left');
         $this->db->join('project_recurrence_main AS prm', 'prm.project_id = pro.id', 'left');
-//        $this->db->join('project_task AS pt', 'pt.project_id = pro.id','left');
+        $this->db->join('project_task AS pt', 'pt.project_id = pro.id','left');
 //        $this->db->join('staff AS st', 'st.id = act.added_by_user');
         if (isset($sos_value) && $sos_value != '') {
             $this->db->join('sos_notification AS sos', 'sos.reference_id = pro.id');
@@ -1904,7 +1986,7 @@ class Project_Template_model extends CI_Model {
             if ($request == 'byme') {
                 $this->db->where(['pm.added_by_user' => $staff_id]);
             } elseif ($request == 'tome') {
-                $having[] = 'all_project_staffs LIKE "%,' . $staff_id . ',%" AND added_by_user != "' . $staff_id . '"';
+                $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%") AND added_by_user != "' . $staff_id . '"';
             }
 
 //            elseif ($request == 'byother') {
@@ -1938,11 +2020,14 @@ class Project_Template_model extends CI_Model {
                 if ($user_type == 3 && $role == 2) {
                     unset($office_staff[array_search(sess('user_id'), $office_staff)]);
                     $like_staffs = [];
+                    $like_staffs_task = [];
                     foreach ($office_staff as $staffID) {
                         $like_staffs[] = 'all_project_staffs LIKE "%,' . $staffID . ',%"';
+                        $like_staffs_task[] = 'all_task_staffs LIKE "%,' . $staffID . ',%"';
                     }
                     if (!empty($like_staffs)) {
-                        $having[] = 'all_project_staffs NOT LIKE "%,' . $staff_id . ',%" AND (' . implode(' OR ', $like_staffs) . ') AND added_by_user != "' . $staff_id . '"';
+                        // $having[] = 'all_project_staffs NOT LIKE "%,' . $staff_id . ',%" AND (' . implode(' OR ', $like_staffs) . ') AND added_by_user != "' . $staff_id . '"';
+                        $having[] = '(all_project_staffs NOT LIKE "%,' . $staff_id . ',%" AND (' . implode(' OR ', $like_staffs) . ') OR all_task_staffs NOT LIKE "%,' . $staff_id . ',%" AND (' . implode(' OR ', $like_staffs_task) . ')) AND added_by_user != "' . $staff_id . '"';
                     } else {
                         $having[] = 'added_by_user != "' . $staff_id . '"';
 //                        $having[] = 'added_by_user != "' . $staff_id . '" OR assign_staff LIKE "%,' . $staff_id . ',%"';
@@ -1950,8 +2035,8 @@ class Project_Template_model extends CI_Model {
                 }
                 if ($user_type == 2 && $role == 4) {
                     if ($user_department != 14) {
-                        if (!empty($departments)) {
-                            $having[] = 'all_project_staffs NOT LIKE "%,' . $staff_id . ',%" AND department_id IN (' . implode(',', $departments) . ') AND added_by_user != "' . $staff_id . '"';
+                        if (isset($departments)) {
+                            $having[] = '(all_project_staffs NOT LIKE "%,' . $staff_id . ',%" OR all_task_staffs NOT LIKE "%,' . $staff_id . ',%") AND department_id IN (' . $departments . ') AND added_by_user != "' . $staff_id . '"';
                         } else {
                             $having[] = 'added_by_user != "' . $staff_id . '"';
                         }
@@ -1991,35 +2076,38 @@ class Project_Template_model extends CI_Model {
             } else if ($user_type == 3 && $role == 2) {
 //                echo 'b2';die;
                 if (!empty($office_staff)) {
-                    $having_or[] = 'all_project_staffs LIKE "%,' . $staff_id . ',%"';
+                    $having_or[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%")';
                     $having_or[] = 'added_by_user IN (' . implode(',', $office_staff) . ')';
 //                    $having_or[] = 'my_task = "' . $staff_id . '"';
                     unset($office_staff[array_search(sess('user_id'), $office_staff)]);
                     foreach ($office_staff as $staffID) {
-                        $having_or[] = 'all_project_staffs LIKE "%,' . $staffID . ',%"';
+                        $having_or[] = '(all_project_staffs LIKE "%,' . $staffID . ',%" OR all_task_staffs LIKE "%,' . $staffID . ',%")';
                     }
                     $having[] = '(' . implode(' OR ', $having_or) . ')';
                 } else {
-                    $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" )';
+                    $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%" )';
                 }
             } else if ($user_type == 2 && $role == 4) {
 //                echo 'b3';die;
                 if ($user_department != 14) {
-                    if (!empty($departments)) {
-                        $having_or[] = 'all_project_staffs LIKE "%,' . $staff_id . ',%"';
+                    if (isset($departments)) {
+                        $having_or[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%")';
                         if (!empty($department_staff)) {
                             $having_or[] = 'added_by_user IN (' . implode(',', $department_staff) . ')';
+                            foreach($department_staff as $ds){
+                                $having_or[] = '(all_project_staffs LIKE "%,' . $ds . ',%" OR all_task_staffs LIKE "%,' . $ds . ',%")';
+                            }
                         }
 //                    $having_or[] = 'my_task = "' . $staff_id . '"';
-                        $having_or[] = 'department_id IN (' . implode(',', $departments) . ')';
+                        $having_or[] = 'department_id IN (' . $departments . ')';
                         $having[] = '(' . implode(' OR ', $having_or) . ')';
                     } else {
-                        $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%")';
+                        $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%")';
                     }
                 }
             } else {
 //                echo 'b4';die;
-                $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR added_by_user = "' . $staff_id . '")';
+                $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%" OR added_by_user = "' . $staff_id . '")';
             }
         }
 
@@ -2086,6 +2174,8 @@ class Project_Template_model extends CI_Model {
 //            echo "b";die;
             $this->db->order_by("pro.id", "DESC");
         }
+        //$this->db->limit(10,0);
+        $this->db->query('SET SQL_BIG_SELECTS=1');
         $result = $this->db->get()->result_array();
 //        print_r($result);die;
 //        echo $this->db->last_query();die;
@@ -2144,9 +2234,19 @@ class Project_Template_model extends CI_Model {
 //                break;
             case 5:
             case 9:
-            case 6:
+            case 11:
             case 8: {
                     return $tracking_array;
+                }
+                break;
+            case 6: {
+                    $this->db->select("st.id AS id, CONCAT(st.last_name, ', ',st.first_name,' ',st.middle_name) AS name");
+                    $this->db->from('staff AS st');
+                    if ($office != ''):
+                        $this->db->join('office_staff os', 'os.staff_id = st.id');
+                        $this->db->where(['os.office_id' => $office]);
+                    endif;
+                    return $this->db->get()->result_array();
                 }
                 break;
             case 7: {
@@ -2159,6 +2259,16 @@ class Project_Template_model extends CI_Model {
                     return $this->db->get()->result_array();
                 }
                 break;
+            case 10:{
+                $this->db->select("st.id AS id, CONCAT(st.last_name, ', ',st.first_name,' ',st.middle_name) AS name");
+                    $this->db->from('staff AS st');
+                    if ($office != ''):
+                        $this->db->join('office_staff os', 'os.staff_id = st.id');
+                        $this->db->where(['os.office_id' => $office]);
+                    endif;
+                    return $this->db->get()->result_array();
+            }
+            break;
             default: {
                     return [];
                 }
@@ -2172,12 +2282,12 @@ class Project_Template_model extends CI_Model {
     }
 
     public function build_filter_query($variable_value, $condition_value, $criteria, $column_name) {
-//        echo $variable_value;die;
+//        print_r($criteria);die;
         $query = '';
         if ($variable_value == 1) {
             $criteria_value = $criteria['id'];
         } elseif ($variable_value == 2) {
-            $criteria_value = $criteria['template_id'];
+            $criteria_value = $criteria['template'];
         } elseif ($variable_value == 3) {
             $criteria_value = $criteria['pattern'];
         } elseif ($variable_value == 4) {
@@ -2189,10 +2299,15 @@ class Project_Template_model extends CI_Model {
         } elseif ($variable_value == 7) {
             $criteria_value = $criteria['assigned_to'];
         } elseif ($variable_value == 8) {
-            $criteria_value = $criteria['status'];
+            $criteria_value = $criteria['tracking'];
         } elseif ($variable_value == 9) {
             $criteria_value = $criteria['created_at'];
+        }elseif ($variable_value == 10) {
+            $criteria_value = $criteria['requested_by'];
+        }elseif ($variable_value == 11) {
+            $criteria_value = $criteria['due_date'];
         }
+        
 //        elseif ($variable_value == 10) {
 //            $criteria_value = $criteria['client_id'];
 //        }elseif ($variable_value == 11) {
@@ -2202,14 +2317,14 @@ class Project_Template_model extends CI_Model {
 //        }
 //        echo 'uuu'.$variable_value.', '.$condition_value.', '.$column_name.', '.$criteria_value[0].', ';
 //            echo 'd';die;
-        if ($variable_value == 9) { // dates
+        if ($variable_value == 9 || $variable_value == 11) { // dates
 //            echo 'a';die;
 //            print_r($criteria_value);die;
 //            echo 'uuu'.$variable_value.', '.$condition_value.', '.$column_name.', '.$criteria_value[0].', ';
 //            echo 'd';die;
             if ($condition_value == 1 || $condition_value == 3) {
                 $date_value = date("Y-m-d", strtotime($criteria_value[0]));
-                $query = $column_name . (($condition_value == 1) ? ' like ' : ' not like ') . '"' . $date_value . ' %"';
+                $query = $column_name . (($condition_value == 1) ? ' like ' : ' not like ') . '"%' . $date_value . '%"';
             } elseif ($condition_value == 2 || $condition_value == 4) {
 //             
                 $criterias = explode(" - ", $criteria_value[0]);
@@ -2226,17 +2341,16 @@ class Project_Template_model extends CI_Model {
                 $query = 'Date(' . $column_name . ')' . (($condition_value == 2) ? ' between ' : ' not between ') . implode(' AND ', $criterias);
             }
         }
-//        elseif($variable_value == 9){
-//            echo 'c';die;
-//            if ($condition_value == 1 || $condition_value == 3) {
-//                $query = $column_name . (($condition_value == 1) ? ' like' : ' not like ') . '",' . $criteria_value[0] . ',"'; 
-//            } elseif ($condition_value == 2 || $condition_value == 4) {
-//                foreach($criteria_value as $k => $c){
-//                    $criterias[$k] = $column_name . (($condition_value == 2) ? ' like ' : ' not like ') . '",' .$c . ',"';
-//                }
-//                $query = implode(' OR ', $criterias);               
-//            }
-//        }
+        elseif($variable_value == 7 || $variable_value == 6){
+            if ($condition_value == 1 || $condition_value == 3) {
+                $query = $column_name . (($condition_value == 1) ? ' like ' : ' not like ') . '"%' . $criteria_value[0] . '%"'; 
+            } elseif ($condition_value == 2 || $condition_value == 4) {
+                foreach($criteria_value as $k => $c){
+                    $criterias[$k] = $column_name . (($condition_value == 2) ? ' like ' : ' not like ') . '",' .$c . ',"';
+                }
+                $query = implode(' OR ', $criterias);               
+            }
+        }
         else {
 
 //            print_r($criteria_value);die;
@@ -2265,6 +2379,9 @@ class Project_Template_model extends CI_Model {
                 } elseif ($variable_value == 7) {
                     $criterias = implode(",", $criteria_value);
                 } elseif ($variable_value == 8) {
+                    $criterias = implode(",", $criteria_value);
+                }
+                elseif ($variable_value == 10) {
                     $criterias = implode(",", $criteria_value);
                 }
 //                elseif ($variable_value == 9) {

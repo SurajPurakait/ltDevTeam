@@ -1,7 +1,7 @@
 var base_url = document.getElementById('base_url').value;
 
 function get_action_office(select_office = "", select_staffs = "", assign_myself = "", disabled = "") {
-//    alert(disabled);return false;
+//    alert('dfdf'+disabled);return false;
     var department_id = $("#department option:selected").val();
     if (department_id != '') {
         var staff_type = $("#staff_type").val();
@@ -144,8 +144,8 @@ function get_action_staff(select_staffs, assign_myself, disabled) {
                 $("#staff_div").html(result);
                 $("#staff_div").show();
                 if (disable_field == "y") {
-                    $(".is_all").attr("disabled", "disabled");
-                    $("#staff").attr("disabled", "disabled");
+//                    $(".is_all").attr("disabled", "");
+//                    $("#staff").attr("disabled", "");
                     $("#staff-hidden").val(1);
                     $("#staff").removeAttr('required');
                 } else {
@@ -440,9 +440,9 @@ function request_create_business() {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//            alert(result);
-//            return false;
-            console.log("Result: " + result);
+           // alert(result);
+           // return false;
+            // console.log("Result: " + result);
             if (result != 0) {
                 swal({
                     title: "Success!",
@@ -1547,11 +1547,11 @@ function add_project_task_notes(){
                 success: function (result) {
                    swal({title: "Success!", text: "Successfully Saved!", type: "success"}, function () {
                        if(result!='0'){
-                            var prevnotecount = $("#notecount-"+taskid).text();
+                            var prevnotecount = $("#notecountinner-"+taskid).text();
                            var notecount = parseInt(prevnotecount)+parseInt(result);
-                           $("#notecount-"+taskid).text(notecount);
+                           $("#notecountinner-"+taskid).text(notecount);
                        }
-                       $("#notecount-"+taskid).removeClass('label label-warning').addClass('label label-danger');
+                       $("#notecountinner-"+taskid).removeClass('label label-warning').addClass('label label-danger');
                         document.getElementById("project_task_modal_note_form").reset(); 
                         $(".removenoteselector").trigger('click');
                         $('#showProjectTaskNotes').modal('hide');

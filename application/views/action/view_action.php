@@ -1,9 +1,7 @@
 <?php
-// $data11 = $data['department'];
-// $data1 = get_department_info_by_id($data11);
-// print_r($data1);
-// echo $data1['name'];
-// die;
+$user_info = staff_info();
+$user_department = $user_info['department'];
+$user_type = $user_info['type'];
 $office_name = get_office_name_by_office_id($data['office']);
 foreach ($data['staffs'] as $staff) {
     $staffinfo[] = staff_info_by_id($staff);
@@ -301,7 +299,7 @@ if ($data["status"] == 0) {
                         <td <?= $style; ?>>
                             <b style="white-space: nowrap;">Message:</b>
                         </td>
-                        <td><?= "<p>" . $data['message'] . "</p>"; ?></td>
+                        <td><?= "<p  style='white-space: normal;'>" . $data['message'] . "</p>"; ?></td>
                     </tr>
 
                     <?php if ($data['due_date'] != '0000-00-00') { ?>

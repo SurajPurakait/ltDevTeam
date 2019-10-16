@@ -44,7 +44,9 @@ class Home extends CI_Controller {
     }
 
     public function edit($order_id = '') {
+
         $this->load->layout = 'dashboard';
+        $order_id = base64_decode($order_id);
         $edit_data = $this->service_model->get_order_info_by_id($order_id);
 // echo "<pre>";
 // print_r($edit_data);exit;
@@ -65,7 +67,7 @@ class Home extends CI_Controller {
         $render_data['reference_id'] = $edit_data['company_id'];
         $render_data['service_id'] = $edit_data['service_id'];
         $render_data['company_id'] = $edit_data['company_id'];
-       // echo '<pre>';print_r($render_data['edit_data']);exit;
+        // echo '<pre>';print_r($render_data['edit_data']);exit;
         switch ($edit_data['service_shortname']):
             case 'inc_n_c_f':
             case 'inc_n_c_d':
@@ -177,6 +179,7 @@ class Home extends CI_Controller {
 
     public function view($order_id = '') {
         $this->load->layout = 'dashboard';
+        $order_id = base64_decode($order_id);
         $order_info = $this->service_model->get_order_info_by_id($order_id);
         $title = (($order_info['service_shortname'] == 'inc_n_c_f' || $order_info['service_shortname'] == 'inc_n_c_d') ? 'New Company' : $order_info['service_name']);
         $render_data['title'] = $title . ' | Tax Leaf';
@@ -471,7 +474,12 @@ class Home extends CI_Controller {
     }
 
     public function service_dashboard_filter() {
-        $request_type = request('request_type');
+        if (post('request_type') == 'on_load') {
+            $render_data['load_type'] = 'on_load';
+            $request_type = '';
+        } else {
+            $request_type = post('request_type');
+        }
         $category_id = request('category_id');
         $status = request('status');
         $request_by = request('request_by');
@@ -479,9 +487,8 @@ class Home extends CI_Controller {
         $office = request('office_id');
         $staff_type = request('staff_type');
         $sort = request('sort');
+        $render_data['page_number'] = request('page_number');
         $render_data['result'] = $this->service_model->ajax_services_dashboard_filter($status, $request_type, $category_id, $request_by, $department, $office, $staff_type, $sort);
-// echo '<pre>';
-// print_r($render_data['result']);//exit;
         $render_data['serviceid'] = $this->service_model->getServiceId();
         $this->load->view('services/ajax_dashboard', $render_data);
     }
@@ -969,14 +976,17 @@ class Home extends CI_Controller {
                 }
             }
         } else {
-            if (isset($service_id) && $service_id != "") {
+            // if (isset($service_id) && $service_id != "") {
+            if ($id != $order_id) {
                 if (!empty($data['modal_notes'][0])) {
                     $this->notes->insert_note(1, $notes, 'reference_id', $id, 'service');
                     echo count($notes);
                 } else {
                     echo '0';
                 }
-            } else {
+            }
+            // }
+            else {
                 if (!empty($data['modal_notes'][0])) {
                     $this->notes->insert_note(1, $notes, 'reference_id', $id, 'order');
                     echo count($notes);
@@ -1540,88 +1550,6 @@ class Home extends CI_Controller {
                 break;
         endswitch;
         $this->load->template('services/related_services', $render_data);
-
-//        $serv_name = strtolower(preg_replace('/\s+/', '_', trim($service_name)));
-//        if ($service_shortcode == 'acc_b_b_d') {
-//            $render_data['override_price'] = $this->system->check_if_related_service_exists($service_id, $order_id)['price_charged'];
-//        } elseif ($service_shortcode == 'acc_r_b') {
-//            $render_data['override_price'] = $this->system->check_if_related_service_exists($service_id, $order_id)['price_charged'];
-//            $render_data['bookkeeping_data'] = $this->bookkeeping_model->get_bookkeeping_by_order_id($order_id);
-//        } elseif ($service_shortcode == 'acc_p') {
-//            $render_data['rt6_data'] = $this->service_model->get_service_by_shortcode('acc_r');
-//            $render_data['payroll_account_numbers'] = $this->payroll_model->get_payroll_account_numbers_by_order_id($order_id);
-//            $render_data['payroll_data'] = $this->payroll->payroll_data($render_data['reference_id']);
-//            $render_data['company_data'] = $this->payroll->get_company_by_id($render_data['reference_id']);
-//            $render_data['payroll_approver'] = $this->payroll->get_payroll_approver_by_reference_id($render_data['reference_id']);
-//            $render_data['company_principal'] = $this->payroll->get_company_principal_by_reference_id($render_data['reference_id']);
-//            $render_data['all_driver_license'] = $this->payroll->get_payroll_driver_license_data_by_reference_id($render_data['reference_id']);
-//            $render_data['employee_details'] = $this->payroll->get_payroll_employee_details_by_reference_id($render_data['reference_id']);
-//            $render_data['payroll_data_for_new_existing'] = $this->payroll->get_payroll_data($render_data['reference_id']);
-//            $render_data['get_override_price'] = $this->payroll->get_override_price($render_data['rt6_data']['id'], $order_id);
-//            $render_data['signer_data'] = $this->payroll->get_signer_data($render_data['reference_id']);
-//            $render_data['company_data'] = $this->payroll_model->get_company_by_id($render_data['reference_id']);
-//            $render_data['payroll_company_data'] = $this->payroll_model->get_payroll_company_data_by_order_id($order_id);
-//            $render_data['owner_list'] = $this->service_model->get_owner_list($render_data['reference_id']);
-//            $render_data['biweekly_xls_list'] = $this->payroll_model->uploaded_xls_list($render_data['reference_id'], 1);
-//            $render_data['weekly_xls_list'] = $this->payroll_model->uploaded_xls_list($render_data['reference_id'], 2);
-//        } elseif ($service_shortcode == 'acc_s_t_a') {
-//            $render_data['rt6_data'] = $this->service_model->get_service_by_shortcode('acc_r');
-//            $render_data['all_driver_license'] = $this->salestax_model->get_salestax_driver_license_data_by_order_id($order_id);
-//            $render_data['get_override_price'] = $this->salestax_model->get_override_price($render_data['rt6_data']['id'], $order_id);
-//            $render_data['sales_tax_data'] = $this->salestax_model->get_salestax_data($order_id)[0];
-//            $state = $render_data['sales_tax_data']['state_recurring'];
-//            $render_data['state_list'] = $this->service_model->get_states();
-//            $render_data['state'] = $this->service->get_state_name($state);
-//            $county = $render_data['state']->id;
-//            $render_data['county'] = $this->service->get_county_by_state_name($county);
-//        } elseif ($service_shortcode == 'acc_s_t_r') {
-//            $render_data['recurring_data'] = $this->service_model->get_recurring_data($order_id);
-//            $render_data['edit_data'] = $this->Service->get_edit_data($order_id);
-//            if (isset($render_data['recurring_data'])) {
-//                $state = $render_data['recurring_data']->state;
-//                $render_data['state'] = $this->service->get_state_name($state);
-//                $county = $render_data['state']->id;
-//                $render_data['county'] = $this->service->get_county_by_state_name($county);
-//            }
-//            $render_data['state_list'] = $this->service_model->get_states();
-//            $edit_data = $this->salestax_model->get_sales_by_id($order_id);
-//            $render_data['override_price'] = $this->salestax_model->get_override_price($service_id, $order_id)[0];
-//            $render_data['company_id'] = $edit_data['reference_id'];
-//            $render_data['edit_data'] = $edit_data;
-//            $render_data['staffInfo'] = staff_info();
-//        } elseif ($service_shortcode == 'acc_s_t_p') {
-//            $render_data['service'] = $this->service_model->get_service_by_id($service_id);
-//            $render_data['processing_data'] = $this->service_model->get_processing_data($order_id);
-//            $render_data['edit_data'] = $this->Service->get_edit_data($order_id);
-//            if (isset($render_data['processing_data'])) {
-//                $state = $render_data['processing_data']->state;
-//                $render_data['state'] = $this->service->get_state_name($state);
-//                $county = $render_data['state']->id;
-//                $render_data['county'] = $this->service->get_county_by_state_name($county);
-//            }
-//            $render_data['state_list'] = $this->service_model->get_states();
-//            $edit_data = $this->salestax_model->get_sales_by_id($order_id);
-//            $render_data['company_id'] = $edit_data['reference_id'];
-//            $render_data['edit_data'] = $edit_data;
-//            $render_data['staffInfo'] = staff_info();
-//            $reference_id = $this->salestax_model->get_sales_by_id($order_id)['reference_id'];
-//            $render_data['override_price'] = $this->salestax_model->get_override_price($service_id, $order_id)[0];
-//        } elseif ($service_shortcode == 'acc_r_u_a') {
-//            $edit_data = $this->rt6_model->get_sales_by_id($order_id);
-//            $render_data['company_id'] = $edit_data['reference_id'];
-//            $render_data['edit_data'] = $edit_data;
-//            $render_data['staffInfo'] = staff_info();
-//            $reference_id = $this->rt6_model->get_sales_by_id($order_id)['reference_id'];
-//            $render_data['all_driver_license'] = $this->rt6_model->get_salestax_driver_license_data_by_order_id($order_id);
-//            $render_data['get_override_price'] = $this->rt6_model->get_override_price($service_id, $edit_data['id']);
-//            $render_data["reference_id"] = $reference_id;
-//            $render_data['sales_tax_data'] = $this->rt6_model->get_rt6_data($order_id);
-//            if (!empty($render_data['sales_tax_data'])) {
-//                $render_data['sales_tax_data'] = $render_data['sales_tax_data'][0];
-//            }
-//            $render_data['rt6_data'] = $this->service_model->get_service_by_shortcode('acc_r');
-//        }
-//        $this->load->template('services/related_services_form_' . $serv_name, $render_data);
     }
 
     public function request_save_related_service() {
@@ -1642,6 +1570,27 @@ class Home extends CI_Controller {
 
     public function get_existing_client_list() {
         load_ddl_option("existing_client_list");
+    }
+
+    public function service_list_ajax() {
+        $render_data = post();
+        $render_data['order_info'] = $order_info = $this->service_model->get_order_info_by_id($render_data['order_id']);
+        $render_data['services_list'] = $this->service_model->get_service_list_by_order_id($render_data['order_id']);
+        $render_data['reference_id'] = $order_info['company_id'];
+        $render_data['service_id'] = $order_info['service_id'];
+        $render_data['invoiced_id'] = $order_info['invoiced_id'];
+        $render_data['requested_staff_id'] = $order_info['staff_requested_service'];
+        $all_staff_id_list = explode(',', $render_data['all_staffs']);
+        $all_staff_id_list = array_merge($all_staff_id_list, [$render_data['requested_staff_id']]);
+        $all_staff_id_list = array_unique($all_staff_id_list);
+        $render_data['all_staff_id_list'] = implode(',', $all_staff_id_list);
+        $this->load->view('services/order_service_inner_content', $render_data);
+    }
+
+    public function get_payroll_account_list() {
+        $reference_id = post('reference_id');
+        $data['account_details'] = $this->company_model->get_account_details($reference_id);
+        $this->load->view('services/show_payroll_account_list', $data);
     }
 
 }

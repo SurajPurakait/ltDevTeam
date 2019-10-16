@@ -5,9 +5,14 @@
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-lg-7">
+                            <div class="row m-l-2 m-b-10">
+                                <a href="<?= base_url(); ?>referral_partner/referral_partners/new_referral_agent?q=partner" class="btn btn-lg btn-primary p-l-20 p-r-20  m-r-10" style="font-size:12px"><i class="fa fa-plus"></i> Add New Partner</a>
+                                <a href="<?= base_url(); ?>partners" class="btn btn-lg btn-success p-l-20 p-r-20 m-r-10" style="font-size:12px">Partner Dashboard</a>
+                                <a href="<?= base_url(); ?>lead_management/home" class="btn btn-lg btn-warning p-l-20 p-r-20" style="font-size:12px">Lead Dashboard</a>
+                            </div>
                             <div class="filter-outer">
                                 <form name="filter_form" id="filter-form"  method="post" onsubmit="service_filter_form()">
-                                    <div class="form-group filter-inner m-b-0">
+                                    <div class="form-group filter-inner m-b-5">
                                         <div class="filter-div row" id="original-filter">
                                             <div class="col-md-3 m-t-5">
                                                 <select class="form-control variable-dropdown" name="variable_dropdown[]" onchange="change_variable_dd(this)">
@@ -54,10 +59,41 @@
                                 <input id="hiddenflag" value="" type="hidden">
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-5 text-center m-t-8">
-                            <a href="<?= base_url(); ?>referral_partner/referral_partners/new_referral_agent?q=partner" class="btn btn-primary p-l-4 p-r-4" style="font-size:12px"><i class="fa fa-plus"></i> Add New Partner</a>
-                            <a href="<?= base_url(); ?>partners" class="btn btn-success p-l-4 p-r-4" style="font-size:12px">Partner Dashboard</a>
-                            <a href="<?= base_url(); ?>lead_management/home" class="btn btn-warning p-l-4 p-r-4" style="font-size:12px">Lead Dashboard</a>
+                        <div class="col-md-12 col-lg-4 col-lg-offset-1 text-center m-t-8">
+                            <div class="bg-aqua table-responsive">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr id="byme" class="action-row-border-top">
+                                            <th>Added By Me</th>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-0">
+                                                    <span class="label label-success" id="requested_by_me_new" onclick="load_partners_dashboard('','',1); "><?= get_partner_count(1); ?></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php 
+                                            $staff_info = staff_info();
+                                            if($staff_info['type'] == 1) { 
+                                        ?>
+                                        <tr id="tome" class="action-row-border-bottom">
+                                            <th>Added By Others</th>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-tome-0">
+                                                    <!-- 2 : used for byother -->
+                                                    <span class="label label-success" id="requested_to_me_new" onclick="load_partners_dashboard('','',2);"><?= get_partner_count(2); ?></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php 
+                                            } else {
+                                        ?>
+                                        <tr class="action-row-border-top"></tr>
+                                        <?php        
+                                            }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <hr class="hr-line-dashed">
@@ -197,7 +233,7 @@
     var variable_dd_array = [];
     var element_array = [];
     $(function () {
-        load_partners_dashboard('<?= $type; ?>', '<?= $stat; ?>', '', '<?= $lead_type; ?>');
+        load_partners_dashboard('<?= $type; ?>', '<?= $stat; ?>', '<?= ($req_by != '') ? $req_by:''; ?>', '<?= $lead_type; ?>');
         $(".filter-dropdown").change(function () {
             var filterval = $(".filter-dropdown option:selected").val();
             load_partners_dashboard('', '', filterval);
@@ -230,43 +266,6 @@
         var index = variable_dd_array.indexOf(variable_dropdown_val);
         variable_dd_array.splice(index, 1);
         $("#" + divid).remove();
-    }
-
-    function load_partners_dashboard(type = '', status = '', req_by = '') {
-        $.ajax({
-            type: "POST",
-            url: base_url + 'referral_partner/referral_partners/load_partner_dashboard',
-            data: {
-                type: type,
-                status: status,
-                req_by: req_by
-            },
-            success: function (data) {
-                //alert(data);
-                $("#load_data").html(data);
-                if (req_by != '') {
-                    //alert(status);
-                    if (req_by == 1) {
-                        var byval = 'Added By Me';
-                    } else if (req_by == 2) {
-                        var byval = 'Added By Others';
-                    }
-                    $("#clear_filter span").html('');
-                    $("#clear_filter span").html(byval);
-                    $("#clear_filter").show();
-                } else {
-                    //alert(status);
-                    $("#clear_filter span").html('');
-                    $("#clear_filter").hide();
-                }
-            },
-            beforeSend: function () {
-                openLoading();
-            },
-            complete: function (msg) {
-                closeLoading();
-            }
-        });
     }
 
     function change_variable_dd(element) {

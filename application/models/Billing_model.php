@@ -204,6 +204,8 @@ class Billing_model extends CI_Model {
                     $this->service_model->updateCompany($data);
                 } else {
                     if ($this->service_model->insertCompany($data)) {
+
+                        $data['practice_id'] = $data['internal_data']['practice_id'];
                         if (!$this->internal->saveInternalData($data)) {
                             return false;
                         }
@@ -260,6 +262,8 @@ class Billing_model extends CI_Model {
                     $this->db->insert('title', $title_insert_data);
                     $internal_data = $data;
                     $internal_data['reference_id'] = $individual_id;
+                    $internal_data['practice_id'] = $data['internal_data']['practice_id'];
+
                     if (!$this->internal->saveInternalData($internal_data)) {
                         return false;
                     }
@@ -305,6 +309,7 @@ class Billing_model extends CI_Model {
                         return false;
                     }
                     // Save company internal data
+                    $data['practice_id'] = $data['internal_data']['practice_id'];
                     if (!$this->internal->saveInternalData($data)) {
                         return false;
                     }
@@ -340,6 +345,7 @@ class Billing_model extends CI_Model {
                     // Save company internal data
                     $internal_data = $data;
                     $internal_data['reference_id'] = $data['individual_id'];
+                    $internal_data['practice_id'] = $data['internal_data']['practice_id'];
                     if (!$this->internal->saveInternalData($internal_data)) {
                         return false;
                     }
@@ -1010,12 +1016,13 @@ class Billing_model extends CI_Model {
                 }
                 break;
             case 8: {
-                    $this->db->select("st.id AS id, CONCAT(st.last_name, ', ',st.first_name,' ',st.middle_name) AS name");
+                    $this->db->select("st.id AS id,CONCAT(st.last_name, ', ',st.first_name,' ',st.middle_name) AS name");
                     $this->db->from('staff AS st');
                     if ($office != ''):
                         $this->db->join('office_staff os', 'os.staff_id = st.id');
                         $this->db->where(['os.office_id' => $office]);
                     endif;
+                    $this->db->where(['st.type!=' => 4]);
                     return $this->db->get()->result_array();
                 }
                 break;
@@ -1050,6 +1057,11 @@ class Billing_model extends CI_Model {
         if ($invoice_info['is_order'] == 'n') {
             return true;
         }
+        if ($invoice_info['type'] == 2) {
+            $this->db->where('id', $invoice_id);
+            $this->db->update('invoice_info', ['is_order' => 'n']);
+            return true; 
+        }
         $this->db->trans_begin();
         $service_request_columns = $this->db->list_fields('service_request');
         unset($service_request_columns[0]);
@@ -1058,10 +1070,19 @@ class Billing_model extends CI_Model {
         $order_id_list = $this->db->get_where('order', ['invoice_id' => $invoice_id])->result_array();
         $order_ids = array_column($order_id_list, 'id');
 
-        $this->db->select(implode(', ', $service_request_columns));
+        $this->db->select('service_request.' . implode(', service_request.', $service_request_columns));
+        $this->db->from('service_request');
+        $this->db->join('target_days', 'target_days.service_id = service_request.services_id');
         $this->db->order_by('service_request.id');
+        $this->db->where(['target_days.input_form' => 'y']);
         $this->db->where_in('order_id', $order_ids);
-        $service_request_info = $this->db->get('service_request')->result_array();
+        $service_request_info = $this->db->get()->result_array();
+
+        if (empty($service_request_info)) {  //check input-form exist or not 
+            $this->db->where('id', $invoice_id);
+            $this->db->update('invoice_info', ['is_order' => 'n']);
+            return true;
+        }
 
         $this->db->order_by('id');
         $order_data = $this->db->get_where('order', ['invoice_id' => $invoice_id])->row_array();
@@ -1164,7 +1185,7 @@ class Billing_model extends CI_Model {
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = indt.manager) as manager',
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = inv.created_by) as created_by_name',
             '(SELECT CONCAT(",", GROUP_CONCAT(`service_id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services',
-            '(CAST((SELECT sr.price_charged FROM service_request sr WHERE sr.order_id = ord.id AND sr.services_id = ord.service_id) AS Decimal(10,2)) * ord.quantity) as sub_total',
+//            '(CAST((SELECT sr.price_charged FROM service_request sr WHERE sr.order_id = ord.id AND sr.services_id = ord.service_id) AS Decimal(10,2)) * ord.quantity) as sub_total',
             '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
         ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
@@ -1227,25 +1248,28 @@ class Billing_model extends CI_Model {
         }
 
         if (!empty($filter_data)) {
+            $key = 0;
             if (isset($filter_data['criteria_dropdown'])) {
                 foreach ($filter_data['criteria_dropdown'] as $filter_key => $filter) {
                     unset($where_or);
+                    $condition = $filter_data['condition_dropdown'][$key];
                     if ($filter_key == "creation_date") {
                         if (strlen($filter[0]) == 10) {
                             $date_value = date("Y-m-d", strtotime($filter[0]));
-                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' IN ("' . $date_value . '") ';
+                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . $date_value . '") ';
                         } elseif (strlen($filter[0]) == 23) {
                             $date_value = explode(" - ", $filter[0]);
                             foreach ($date_value as $date_key => $date) {
                                 $date_value[$date_key] = "'" . date("Y-m-d", strtotime($date)) . "'";
                             }
-                            $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') BETWEEN ' . implode(' AND ', $date_value) . ') ';
+                            $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'BETWEEN ' . implode(' AND ', $date_value) . ') ';
                         }
                     } else {
                         if (!empty($filter)) {
-                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' IN ("' . implode('", "', $filter) . '") ';
+                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . implode('", "', $filter) . '") ';
                         }
                     }
+                    $key++;
                 }
             }
         }
@@ -1257,14 +1281,20 @@ class Billing_model extends CI_Model {
 
         if ($office != '') {
             unset($where_or);
-            $where['indt.office'] = 'AND `indt`.`office` = ' . $office . ' ';
+            if (strpos($office, ',') !== false) {
+                $where['indt.office'] = 'AND `indt`.`office` IN (' . $office . ') ';
+            } else {
+                $where['indt.office'] = 'AND `indt`.`office` = ' . $office . ' ';
+            }
         }
 
         if ($reference_id != '') {
             unset($where_or);
+            unset($where['inv.payment_status']);
             $reference = explode("-", $reference_id);
             $where['indt.reference_id'] = 'AND `indt`.`reference_id` = ' . $reference[0] . ' ';
             $where['indt.reference'] = 'AND `indt`.`reference` = "' . $reference[1] . '" ';
+            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 7) ';
         }
 
         $table = '`invoice_info` AS `inv` ' .

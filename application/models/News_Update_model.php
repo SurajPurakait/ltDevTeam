@@ -841,26 +841,22 @@ class News_Update_model extends CI_Model {
     }
     
     public function count_unread_news_update_by_userId($user_id,$type,$dept_str) {
-        
         if($type == '2'){
             $query = 'select id '
                     . 'from news_and_update_department '
                     . 'where department in(' . $dept_str .') group by news_and_update_id';
-            $data2 = $this->db->query($query)->row_array();
-            
-            
+            $data2 = $this->db->query($query)->result_array();
         }elseif($type == '3'){
             $query = 'select id '
                     . 'from news_and_update_office '
                     . 'where office in(' . $dept_str .') group by news_and_update_id';
-            $data2 = $this->db->query($query)->row_array();
-            
-            
+            $data2 = $this->db->query($query)->result_array();    
         }
 
         $query = 'select id from news_and_update_management_for_user where user_id=' . $user_id . ' and (is_read=1 or is_delete=1) group by news_and_update_id';
-        $data1 = $this->db->query($query)->row_array();        
-        
+
+        $data1 = $this->db->query($query)->result_array();
+        // return count($data1)."/".count($data2);        
         if(!empty($data2)){
             $data2count = count($data2);
         }else{
@@ -880,7 +876,7 @@ class News_Update_model extends CI_Model {
         }
     }
     function clearNews_updateList($userid){
-        $this->db->query("UPDATE news_and_update_management_for_user SET is_delete=1 WHERE user_id='$userid'");
+        $this->db->query("UPDATE news_and_update_management_for_user SET is_notification_deleted=1 WHERE user_id='$userid'");
     }
     function clearNews_updateListAdmin($userid){
         $this->db->query("UPDATE news_and_updates SET is_notification_deleted=1 WHERE created_by='$userid'");

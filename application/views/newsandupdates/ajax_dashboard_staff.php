@@ -3,9 +3,6 @@
         <?php
 
         if (!empty($news_update_list)) {
-            // echo "<pre>";
-            // print_r($news_update_list);
-            // exit;
             foreach ($news_update_list as $data) {
 
                 $class = 'regular-msg-box';
@@ -27,33 +24,33 @@
                     <?php echo $img ?>
                     <div class="ibox-title collapse-link" onclick="read_news_or_update(<?= sess('user_id'); ?>,<?= $data['id']; ?>)" id="collapse-id">
                         <div class="row">
-                            <div class="col-xs-6 col-sm-2 text-overflow-ellipsis text-center">
+                            <div class="col-xs-6 col-sm-3 text-overflow-ellipsis text-center">
                                 <p class=""><b class="text-muted">Subject</b></p>
                                 <p> <?php echo $data['subject']; ?></p>
                             </div>
-                            <div class="col-xs-6 col-sm-2 text-center">
-                                <p class=""><b class="text-muted"><?= ($data['office_type'] == 1) ? 'Department' : 'Office' ?></b></p>
+                            <!-- <div class="col-xs-6 col-sm-2 text-center">
+                                <p class=""><b class="text-muted"><?//= ($data['office_type'] == 1) ? 'Department' : 'Office' ?></b></p>
                                 <p>
-                                    <?php
-                                    $get_name = get_assigned_dept_news($data['id'], $data['office_type']);
-                                    $str = implode(', ', $get_name);
+                                    <?php 
+                                    // $get_name = get_assigned_dept_news($data['id'], $data['office_type']);
+                                    // $str = implode(', ', $get_name);
                                     ?>
                                     <a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $str ?>" data-trigger="hover" title="">
                                         <?php
-                                        echo substr($str, 0, 30) . '...';
+                                        // echo substr($str, 0, 30) . '...';
                                         ?>
                                     </a>
                                 </p>
-                            </div>
-                            <div class="col-xs-6 col-sm-2 text-center">
+                            </div> -->
+<!--                             <div class="col-xs-6 col-sm-2 text-center">
                                 <p class=""><b class="text-muted">Assign To</b></p>
-                                <p><?php echo get_assigned_staff_news($data['id']); ?></p>
-                            </div>
-                            <div class="col-xs-6 col-sm-2 text-center">
+                                <p><?php // echo get_assigned_staff_news($data['id']); ?></p>
+                            </div> -->
+                            <div class="col-xs-6 col-sm-3 text-center">
                                 <p class=""><b class="text-muted">Date</b></p>
                                 <p><?php echo date('m/d/Y H:i', strtotime($data['created_type'])) ?></p>          
                             </div>
-                            <div class="col-xs-6 col-sm-2 text-center m-t-20">
+                            <div class="col-xs-6 col-sm-3 text-center m-t-20">
                                 <?php 
                                     if ($data['is_read'] != '1') {
                                 ?>
@@ -66,7 +63,7 @@
                                     }
                                 ?>
                             </div>
-                            <div class="col-xs-6 col-sm-2 text-center m-t-20 del del<?= $data['id']; ?>">
+                            <div class="col-xs-6 col-sm-3 text-center m-t-20 del del<?= $data['id']; ?>">
                                 <a href="javascript:void(0)" onclick="delNews(<?= sess('user_id'); ?>,<?= $data['id']; ?>)" style="font-size: 22px; color:#ed5565"><span class="fa fa-times-circle"></span></a>
                             </div>
                         </div>                       

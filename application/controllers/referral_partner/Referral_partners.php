@@ -15,7 +15,7 @@ class Referral_partners extends CI_Controller {
         }
     }
 
-    function partners($stat = '', $type = '', $lead_type = '') {
+    function partners($req_by = '', $stat = '', $type = '', $lead_type = '') {
         $this->load->layout = 'dashboard';
         $title = "Referral Partners";
         $render_data['title'] = $title . ' | Tax Leaf';
@@ -23,6 +23,7 @@ class Referral_partners extends CI_Controller {
         $render_data['menu'] = 'partners';
         $render_data['stat'] = $stat;
         $render_data['type'] = $type;
+        $render_data['req_by'] = $req_by;
         $render_data['lead_type'] = $lead_type;
         $render_data['header_title'] = $title;
         $this->load->template('referral_partner/partner_dashboard', $render_data);
@@ -94,7 +95,8 @@ class Referral_partners extends CI_Controller {
     function load_referral_partners_dashboard() {
         $type = post('type');
         $status = post('status');
-        $render_data['referral_partner_data'] = $this->referral_partner->load_referral_partners_dashboard_data($type, $status);
+        // $render_data['referral_partner_data'] = $this->referral_partner->load_referral_partners_dashboard_data($type, $status);
+        $render_data['referral_partner_data'] = $this->referral_partner->load_referral_partners_dashboard_data('',post());
         $this->load->view('referral_partner/load_referral_partners_dashboard_data', $render_data);
     }
 
@@ -360,6 +362,10 @@ class Referral_partners extends CI_Controller {
         } else {
             echo "0";
         }
+    }
+
+    public function is_staff() {
+        echo $this->referral_partner->is_staff_check(post());
     }
 
 }

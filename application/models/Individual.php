@@ -1,16 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Individual
- *
- * @author rafael
- */
 class Individual extends CI_Model {
 
     public $id;
@@ -274,10 +263,10 @@ class Individual extends CI_Model {
         return $this->db->get()->result_array();
     }
 
-    public function get_individual_name_by_reference_id($reference_id) {
-        $this->db->select('CONCAT(ind.last_name,", ",ind.first_name," ",ind.middle_name) as individual_name');
+    public function get_individual_by_id($individual_id) {
+        $this->db->select('ind.*, CONCAT(ind.last_name,", ",ind.first_name) as individual_name');
         $this->db->from('individual ind');
-        $this->db->where(['ind.id' => $reference_id]);
+        $this->db->where(['ind.id' => $individual_id]);
         return $this->db->get()->row_array();
     }
 
@@ -325,16 +314,16 @@ class Individual extends CI_Model {
         return $query->num_rows();
     }
 
-    public function check_if_duplicate_exists($data){
+    public function check_if_duplicate_exists($data) {
         $data['first_name'] = trim($data['first_name']);
         $data['middle_name'] = trim($data['middle_name']);
         $data['last_name'] = trim($data['last_name']);
         $sql = "select * from individual where LOWER(`first_name`) = '" . strtolower($data['first_name']) . "' and LOWER(`middle_name`) = '" . strtolower($data['middle_name']) . "' and LOWER(`last_name`) = '" . strtolower($data['last_name']) . "' and status=1";
         $query = $this->db->query($sql);
-        $res =  $query->row_array();
-        if($res==''){
+        $res = $query->row_array();
+        if ($res == '') {
             return array();
-        }else{
+        } else {
             return $res;
         }
     }

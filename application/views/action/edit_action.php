@@ -1,15 +1,10 @@
 <?php
 $staff_info = staff_info();
-// echo "<pre>";
-// print_r($data);
-if ($staff_info['type'] == 1) {
+if ($data["added_by_user"] == sess("user_id")) {
     $disabled = '';
-} else {
-    if ($data["added_by_user"] == sess("user_id")) {
-        $disabled = '';
-    } else {
-        $disabled = 'disabled';
-    }
+}
+else {
+    $disabled = 'disabled';
 }
 if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $staff_info['department'] == 14)) {
     $disable = '';
@@ -18,10 +13,10 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
 }
 ?>
 <style type="text/css">
-#not-active{
-    pointer-events: none; 
-    cursor: default; 
-}
+    #not-active{
+        pointer-events: none; 
+        cursor: default; 
+    }
 
 </style>
 
@@ -37,7 +32,7 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                             <div class="col-lg-10">
                                 <select class="form-control" name="created_office" id="created_office" title="Office" required="" disabled="true">
                                     <option value="">Select Office</option>
-<?php load_ddl_option("staff_office_list", $data['created_office'], "staff_office"); ?>
+                                    <?php load_ddl_option("staff_office_list", $data['created_office'], "staff_office"); ?>
 
                                 </select>
                                 <div class="errorMessage text-danger"></div>
@@ -46,7 +41,7 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                         <div class="form-group">
                             <label class="col-lg-2 control-label">My Department<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="created_department" id="created_department" title="Department" required="" disabled="true">
+                                <select class="form-control" name="created_department" id="created_department" title="Department" required="" <?= $disabled ?> >
                                     <?php
                                     $searchString = ',';
 
@@ -72,7 +67,7 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Priority<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select required class="form-control" title="Priority" name="priority" id="priority" required="" disabled="true">
+                                <select required class="form-control" title="Priority" name="priority" id="priority" required="" <?= $disable ?>>
                                     <option value="">Select an option</option>
                                     <option value="1" <?= ($data["priority"] == 1) ? "selected" : ""; ?>>Urgent</option>
                                     <option value="2" <?= ($data["priority"] == 2) ? "selected" : ""; ?>>Important</option>
@@ -85,13 +80,13 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Assign Myself</label>
                             <div class="col-lg-10 checkbox">
-                                <label><input type="checkbox" <?php echo $disabled; ?> <?php echo ($data['my_task'] != 0) ? 'checked' : ''; ?> id="assign_to_myself" name="assign_to_myself" title="Assign Myself"  disabled="true"></label>
+                                <label><input type="checkbox" <?php echo ($data['my_task'] != 0) ? 'checked' : ''; ?> id="assign_to_myself" name="assign_to_myself" title="Assign Myself" <?= $disable ?> ></label>
                             </div>
                         </div>  
                         <div class="form-group dept_div">
                             <label class="col-lg-2 control-label">Assign to Department<span class="spanclass text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select required class="form-control" disabled="true" title="Department" name="department" id="department" onchange="get_action_office();" <?php echo $disabled; ?>>
+                                <select required class="form-control" title="Department" name="department" id="department" onchange="get_action_office();">
                                     <?php
                                     foreach ($departments as $value):
 //                                        if ($value['name'] != "Franchise" || ($value['name'] == "Franchise" && $staff_info['type'] != 3)): 
@@ -113,25 +108,25 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Client ID</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" name="client_id" title="Cient ID" value="<?= $data["client_id"]; ?>" disabled>
+                                <input placeholder="" class="form-control" type="text" name="client_id" title="Cient ID" value="<?= $data["client_id"]; ?>">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 col-md-2 control-label">Subject<span class="spanclass text-danger">*</span></label>
                             <div class="col-sm-9 col-md-10">
-                                <input placeholder="" class="form-control" value="<?php echo $data['subject']; ?>" type="text" name="subject" title="Subject">
+                                <input placeholder="" class="form-control" value="<?php echo $data['subject']; ?>" type="text" name="subject" title="Subject" <?= $disable ?>>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Message<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <textarea class="form-control" id="message" required name="message" title="Message"><?= $data["message"]; ?></textarea>
+                                <textarea class="form-control" id="message" required name="message" title="Message" <?= $disable ?>><?= $data["message"]; ?></textarea>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
-                            <?php if (!empty($data["files"][0])): ?>
+                        <?php if (!empty($data["files"][0])): ?>
                             <ul class="uploaded-file-list">
                                 <?php
                                 foreach ($data['files'] as $file) :
@@ -149,7 +144,7 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                                             <p class="text-overflow-e" title="<?= $value; ?>"><?= $filename[2]; ?></p>
                                             <a class='text-danger text-right show m-t-5 p-5' href="javascript:void(0)" onclick="deleteActionFile(<?= $file_id; ?>)"><i class='fa fa-times-circle'></i> Remove</a>
                                         </li>
-        <?php else: ?>
+                                    <?php else: ?>
                                         <li id="file_show_<?= $file_id; ?>">
                                             <div class="preview preview-file">
                                                 <a target="_blank" href="<?php echo base_url(); ?>uploads/<?= $value; ?>" title="<?= $value; ?>"><i class="fa fa-download"></i></a>
@@ -163,7 +158,7 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                                 endforeach;
                                 ?>
                             </ul>
-<?php endif; ?>
+                        <?php endif; ?>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Upload File</label>
                             <div class="col-lg-10">
@@ -188,7 +183,7 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                         <input type="hidden" name="old_department_id" id="old_dept_id" value="<?= $data["department"]; ?>">
                         <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
-                                <input type="hidden" id="disable_field" value="<?= $data["added_by_user"] != sess("user_id") ? "y" : "n"; ?>">
+                                <input type="hidden" id="disable_field" value="<?= ($data["added_by_user"] != sess("user_id"))? "y" : "n"; ?>">
                                 <input type="hidden" id="staff_type" value="<?= $staff_info['type']; ?>">
                                 <input type="hidden" id="edit_val" value="<?= $data["id"] ?>">
                                 <input type="hidden" id="ismyself" class="ismyself" value="<?= $data["my_task"] ?>">
@@ -204,7 +199,7 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
 </div>
 
 <script>
-    get_action_office("<?= $data["office"]; ?>", "<?= implode(",", $data["staffs"]) ?>", "<?= $data['my_task']; ?>", "disabled");
+    get_action_office("<?= $data["office"]; ?>", "<?= implode(",", $data["staffs"]) ?>", "<?= $data['my_task']; ?>","");
     $(function () {
         $(".datepicker_mdy_due").datepicker({format: 'mm/dd/yyyy', autoHide: true, startDate: new Date()});
         $('.add-upload-file').on("click", function () {

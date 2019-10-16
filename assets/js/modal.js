@@ -313,14 +313,19 @@ function show_action_notes(id) {
     });
 }
 
-function show_action_files(id) {
+function show_action_files(id,staff) {
     $.ajax({
         type: 'POST',
         url: base_url + 'modal/show_action_files',
         data: {
-            id: id
+            id: id,
+            staff : staff
         },
         success: function (result) {
+            if($("#actionfilespan" + id).find("a").hasClass('label-danger')) {
+                $("#actionfilespan" + id).find("a").removeClass('label-danger');
+                $("#actionfilespan" + id).find("a").addClass('label-success');
+            }
             $('#showFiles #files-modal-body').html(result);
             openModal('showFiles');
         }
@@ -410,6 +415,7 @@ function show_document_modal(modal_type, reference, reference_id, id) {
 
 function account_modal(modal_type, id, section) {
     var reference_id = $("#reference_id").val();
+    var exist_client_id=$("#exist_client_id").val();
     if ($("#editval").val() == '') {
         reference_id = $("#new_reference_id").val();
     }
@@ -421,15 +427,47 @@ function account_modal(modal_type, id, section) {
             id: id,
             reference_id: reference_id,
             order_id: $("#editval").val(),
-            section: section
+            section: section,
+            client_id:exist_client_id
         },
         success: function (result) {
-            $('#accounts-form').html(result).modal({
-                backdrop: 'static',
-                keyboard: false
-            });
+            if(result){
+                $('#accounts-form').html(result).modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $("#bookkeeping_account_list").show();
+            }else{
+                $("#bookkeeping_account_list").hide();
+                $("#acc_type").val('');
+                $("#bank_name").val('');
+                $("#acc_no").val('');
+                $("#routing_no").val('');
+                $("#website").val('');
+                $("#user_id").val('');
+                $("#password").val('');
+            }
         }
     });
+}
+function set_exist_bookkeeping_value(account_type,bank_name,account_no,routing_no,bank_url,user,password){
+    if(bank_name!='' && account_no!=''){
+        $("#acc_type").val(account_type);
+        $("#bank_name").val(bank_name);
+        $("#acc_no").val(account_no);
+        $("#routing_no").val(routing_no);
+        $("#website").val(bank_url)
+        $("#user_id").val(user);
+        $("#password").val(password);
+    }else{
+        $("#acc_type").val('');
+        $("#bank_name").val('');
+        $("#acc_no").val('');
+        $("#routing_no").val('');
+        $("#website").val('');
+        $("#user_id").val('');
+        $("#password").val('');
+    }
 }
 
 function open_owner_modal(modal_type, service_id, reference_id, reference, id) {
@@ -896,7 +934,7 @@ function clear_sos_notifications(sosids, reference, reference_id, service_id = '
         confirmButtonText: "Yes, clear it!",
         cancelButtonText: "No, cancel plz!",
         closeOnConfirm: true,
-        closeOnCancel: false
+        closeOnCancel: true
     },
     function (isConfirm) {
         if (isConfirm) {
@@ -939,8 +977,6 @@ function clear_sos_notifications(sosids, reference, reference_id, service_id = '
                     closeLoading();
                 }
             });
-        } else {
-            swal("Cancelled", "Your imaginary file is safe :)", "error");
         }
     });    
 }
@@ -1051,13 +1087,11 @@ function show_project_notes(id) {
 }
 
 var file_upload_action = () => {
-    // alert("Hello");return false;
     if (!requiredValidation('file_upload_action_modal')) {
         return false;
     }
     var form_data = new FormData(document.getElementById("file_upload_action_modal"));
     var action_id = $("#action_id").val();
-    // console.log(form_data);return false;
     $.ajax({
         type: "POST",
         data: form_data,
@@ -1068,14 +1102,16 @@ var file_upload_action = () => {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-            if (result.trim() == 0) {
-                swal("ERROR!", "Unable To Add File", "error");
+            // console.log(result);return false;
+            var oldactionfilecount = $("#actionfile" + action_id).attr('count');
+            if (result.trim() == oldactionfilecount) {
+                swal("ERROR!", "Unable To Add Empty File", "error");
             } else {
                 swal({title: "Success!", text: "Successfully Saved!", type: "success"}, function () {
-                    var oldactionfilecount = $("#actionfile" + action_id).attr('count');
-                    var newactionfilecount = parseInt(oldactionfilecount) + parseInt(result.trim());
+                    // var oldactionfilecount = $("#actionfile" + action_id).attr('count');
+                    // var newactionfilecount = parseInt(oldactionfilecount) + parseInt(result.trim());
                     //alert(newactionfilecount);
-                    $("#actionfilespan" + action_id).html('<a class="label label-danger" href="javascript:void(0)" onclick="show_action_files(' + action_id + ')"><b>' + newactionfilecount + '</b></a>');
+                    $("#actionfilespan" + action_id).html('<a class="label label-danger" href="javascript:void(0)" onclick="show_action_files(' + action_id + ')"><b>' + result + '</b></a>');
                 });
             }
             document.getElementById("file_upload_action_modal").reset();
@@ -1259,7 +1295,7 @@ function clearActionNotificationList(userid) {
         confirmButtonText: "Yes, clear it!",
         cancelButtonText: "No, cancel plz!",
         closeOnConfirm: false,
-        closeOnCancel: false
+        closeOnCancel: true
     },
     function (isConfirm) {
         if (isConfirm) {
@@ -1284,8 +1320,6 @@ function clearActionNotificationList(userid) {
                     closeLoading();
                 }
             });
-        } else {
-            swal("Cancelled", "Your imaginary file is safe :)", "error");
         }
     });
 }
@@ -1299,7 +1333,7 @@ function clearServiceNotificationList(userid) {
         confirmButtonText: "Yes, clear it!",
         cancelButtonText: "No, cancel plz!",
         closeOnConfirm: false,
-        closeOnCancel: false
+        closeOnCancel: true
     },
     function (isConfirm) {
         if (isConfirm) {
@@ -1324,8 +1358,6 @@ function clearServiceNotificationList(userid) {
                     closeLoading();
                 }
             });
-        } else {
-            swal("Cancelled", "Your imaginary file is safe :)", "error");
         }
     });
 

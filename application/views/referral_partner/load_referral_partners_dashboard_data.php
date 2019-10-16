@@ -7,20 +7,23 @@
         $staff_data = staff_info_by_id($value["staff_requested_by"]);
         if($value["status"]==0){
             $status = 'New';
+            $trk_class = 'label-success';
         }elseif ($value["status"]==1) {
-             $status = 'Complete';
+            $status = 'Completed';
+            $trk_class = 'label-primary';
         }elseif ($value["status"]==2) {
              $status = 'Inactive';
+             $trk_class = 'label-danger';
         }elseif ($value["status"]==3) {
-             $status = 'Active';
+            $status = 'Active';
+            $trk_class = 'label-yellow';
         }
-        
-         if($value["type"]==1){
+        if($value["type"]==1){
             $type = get_type_of_contact_name($value['type_of_contact'],1)['name'];
-         }else{
+        }else{
             $type = get_type_of_contact_name($value['type_of_contact'],2)['name'];
-         }
-         $notes = get_notes_ref_partner($value['partner_id']);  
+        }
+        $notes = get_notes_ref_partner($value['lead_id']);  
 
      ?>
         <div class="panel panel-default service-panel type2 filter-active">
@@ -54,8 +57,8 @@
                                 <td title="Name"><?= $value["last_name"].', '.$value["first_name"]; ?></td>
                                 <td align='left' title="Tracking Description"><a
                                             href='javascript:void(0);'
-                                            onclick='show_ref_partner_tracking_modal("<?= $value["id"]; ?>")'><span
-                                                class='label label-primary'><?= $status; ?></span></a></td>
+                                            onclick='show_ref_partner_tracking_modal("<?= $value["id"]; ?>")'><span style="width: 80px; display: inline-block; text-align: center;"
+                                                class=<?= $trk_class; ?>><?= $status; ?></span></a></td>
                                 <td title="Requested By"><?= $staff_data["last_name"].', '.$staff_data["first_name"]; ?></td>
                                 <td title="Submission Date"><?= ($value["submission_date"] != "0000-00-00") ? date('m/d/Y',strtotime($value["submission_date"])) : "-"; ?></td>
                                 <td title="Active Date"><?= ($value["active_date"] != "0000-00-00") ? date('m/d/Y',strtotime($value["active_date"])) : "-"; ?></td>

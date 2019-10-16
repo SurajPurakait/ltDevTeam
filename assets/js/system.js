@@ -227,7 +227,7 @@ function requiredValidation(form_id) {
                 } else {
                     $(".checkbox-inline").next('div.errorMessage').html('');
                 }
-            }else if (form.elements[i].hasAttribute("clock")) {
+            } else if (form.elements[i].hasAttribute("clock")) {
                 if (msg != "") {
                     $("#" + form.elements[i].id).parent().next('div.errorMessage').html(msg);
                 } else {
@@ -496,12 +496,12 @@ function jumpDiv() {
 }
 
 var allAjaxRequest = [];
-function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID, limit = '10',start='',refresh='',is_clear='') {
+function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID, limit = '10', start = '', refresh = '', is_clear = '', requestType = '') {
     var start_val;
-    if(refresh!=''){
-        start_val='0';
-    }else{
-        start_val=$('#start_val').val();
+    if (refresh != '') {
+        start_val = '0';
+    } else {
+        start_val = $('#start_val').val();
     }
     if (section == 'stop') {
         allAjaxRequest.forEach(function (ajaxRequest) {
@@ -532,19 +532,23 @@ function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID,
             department_id: departmentID,
             lead_type_id: leadTypeID,
             limit: limit,
-            is_clear:is_clear
+            is_clear: is_clear
         };
     }
     if (section == 'notification') {
+        // if(requestType == '' || requestType == 'undefined') {
+        //     requestType = $('#request_type').val();
+        //     alert(requestType);
+        // }
         data = {
-            
             section: section,
             staff_id: staffID,
             office_id: officeID,
             department_id: departmentID,
             lead_type_id: leadTypeID,
             start: start,
-            start_val:start_val
+            start_val: start_val,
+            request_type: requestType
         };
     }
     var thisAjaxRequest = $.ajax({
@@ -580,7 +584,7 @@ function readNotification(notificationID) {
 //                $('.notification-count-label').html(parseInt($('.notification-count-label').html().trim()) - 1);
                 if ($("#notification-action-button").length == 0) {
                     return true;
-              } else {
+                } else {
                     $("#notification-action-button").html('Notifications <span class="label label-success label-byme">' + (parseInt($('#notification-action-button').html().trim()) - 1) + '</span>');
                 }
             }
@@ -643,4 +647,48 @@ function clearNotificationList(userid) {
             closeLoading();
         }
     });
+}
+
+function GetCardType(number) {
+    // visa
+    var re = new RegExp("^4");
+    if (number.match(re) != null)
+        return "Visa";
+
+    // Mastercard 
+    // Updated for Mastercard 2017 BINs expansion
+    if (/^(5[1-5][0-9]{14}|2(22[1-9][0-9]{12}|2[3-9][0-9]{13}|[3-6][0-9]{14}|7[0-1][0-9]{13}|720[0-9]{12}))$/.test(number))
+        return "Mastercard";
+
+    // AMEX
+    re = new RegExp("^3[47]");
+    if (number.match(re) != null)
+        return "AMEX";
+
+    // Discover
+    re = new RegExp("^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)");
+    if (number.match(re) != null)
+        return "Discover";
+
+    // Diners
+    re = new RegExp("^36");
+    if (number.match(re) != null)
+        return "Diners";
+
+    // Diners - Carte Blanche
+    re = new RegExp("^30[0-5]");
+    if (number.match(re) != null)
+        return "Diners - Carte Blanche";
+
+    // JCB
+    re = new RegExp("^35(2[89]|[3-8][0-9])");
+    if (number.match(re) != null)
+        return "JCB";
+
+    // Visa Electron
+    re = new RegExp("^(4026|417500|4508|4844|491(3|7))");
+    if (number.match(re) != null)
+        return "Visa Electron";
+
+    return "";
 }

@@ -359,11 +359,13 @@ function delete_document(reference, reference_id, id, file_name) {
 function employee_modal(modal_type, employee_id) {
     if (modal_type == "add") {
         var employee_count = $("#employee_info").val();
-        var max_employee = $("#payroll_employee_people_total option:selected").val().split("-");
-        max_employee = max_employee[1];
-        if (parseInt(employee_count) > parseInt(max_employee)) {
-            swal("ERROR!", "Can not add employee more than " + max_employee, "error");
-            return false;
+        if (typeof $("#payroll_employee_people_total option:selected").val() !== 'undefined') {
+            var max_employee = $("#payroll_employee_people_total option:selected").val().split("-");
+            max_employee = max_employee[1];
+            if (parseInt(employee_count) > parseInt(max_employee)) {
+                swal("ERROR!", "Can not add employee more than " + max_employee, "error");
+                return false;
+            }
         }
     }
     $.ajax({

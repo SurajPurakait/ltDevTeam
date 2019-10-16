@@ -45,6 +45,7 @@ class Accounting_services extends CI_Controller {
         $render_data['menu'] = 'accounting_services';
         $render_data['header_title'] = $title;
 
+        $id = base64_decode($id);
         $render_data['rt6_data'] = $this->service_model->get_service_by_id(42);
         $edit_data = $this->payroll_model->get_payroll_by_id($id);
         $render_data['company_id'] = $edit_data['reference_id'];
@@ -98,6 +99,8 @@ class Accounting_services extends CI_Controller {
         $this->load->model('Documents');
         $this->load->model('Staff');
         $this->load->model('Service');
+
+        $edit_id = base64_decode($edit_id);
         $edit_data = $this->Service->get_edit_data($edit_id);
         $this->load->layout = 'dashboard';
         $title = "Edit Bookkeeping By Date";
@@ -132,6 +135,8 @@ class Accounting_services extends CI_Controller {
         $this->load->model('Staff');
         $this->load->model('Service');
         $this->load->model('service_model');
+
+        $edit_id = base64_decode($edit_id);
         $edit_data = $this->Service->get_edit_data($edit_id);
         $this->load->layout = 'dashboard';
         $title = "Edit Bookkeeping";
@@ -689,6 +694,7 @@ class Accounting_services extends CI_Controller {
         $render_data['menu'] = 'accounting_services';
         $render_data['header_title'] = $title;
 
+        $id = base64_decode($id);
         $serviceid = $this->service_model->getService();
         $render_data['service_id'] = $serviceid;
         $render_data['service'] = $this->service_model->get_service_by_id($serviceid);
@@ -744,6 +750,7 @@ class Accounting_services extends CI_Controller {
         $this->load->model('company_model');
         $this->load->model('service_model');
 
+        $id = base64_decode($id);
         $this->load->layout = 'dashboard';
         $title = "Edit Annual Report";
         $render_data['title'] = $title . ' | Tax Leaf';
@@ -785,6 +792,7 @@ class Accounting_services extends CI_Controller {
         $render_data['menu'] = 'accounting_services';
         $render_data['header_title'] = $title;
 
+        $id = base64_decode($id);
         $render_data['recurring_data'] = $this->service_model->get_recurring_data($id);
 //            print_r($render_data['recurring_data']);die;
         $render_data['edit_data'] = $this->Service->get_edit_data($id);
@@ -958,7 +966,7 @@ class Accounting_services extends CI_Controller {
         $render_data['menu'] = 'accounting_services';
         $render_data['header_title'] = $title;
 
-
+        $id = base64_decode($id);
         $edit_data = $this->salestax_model->get_sales_by_id($id);
         $render_data['company_id'] = $edit_data['reference_id'];
         $render_data['edit_data'] = $edit_data;
@@ -1021,7 +1029,7 @@ class Accounting_services extends CI_Controller {
         $render_data['menu'] = 'accounting_services';
         $render_data['header_title'] = $title;
 
-
+        $id = base64_decode($id);
         $edit_data = $this->rt6_model->get_sales_by_id($id);
         $render_data['company_id'] = $edit_data['reference_id'];
         $render_data['edit_data'] = $edit_data;

@@ -295,6 +295,7 @@ function add_lead_prospect(added_by,event_lead ="") {
     }
     var form_data = new FormData(document.getElementById('form_add_new_prospect'));
     form_data.append('added_by', added_by);
+    
     $.ajax({
         type: "POST",
         data: form_data,
@@ -305,7 +306,7 @@ function add_lead_prospect(added_by,event_lead ="") {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-            //console.log(result); return false;
+            // console.log(result); return false;
             if (result.trim() == "0") {
                 swal("ERROR!", "Lead Prospect Already Exists", "error");
             } else if (result.trim() == "-1") {
@@ -321,7 +322,7 @@ function add_lead_prospect(added_by,event_lead ="") {
                         goURL(base_url + 'lead_management/home');
                     }
                 });
-                window.open((($('#mail_campaign_status').val() != 0) ? base_url + 'lead_management/home/mail_campaign/y/' + result.trim() : base_url + 'lead_management/home/mail_campaign/n/' + result.trim()), 'Mail Campaign Popup', "width=1080, height=480, top=100, left=170, scrollbars=no");
+                // window.open((($('#mail_campaign_status').val() != 0) ? base_url + 'lead_management/home/mail_campaign/y/' + result.trim() : base_url + 'lead_management/home/mail_campaign/n/' + result.trim()), 'Mail Campaign Popup', "width=1080, height=480, top=100, left=170, scrollbars=no");
             }
         },
         beforeSend: function () {
@@ -886,8 +887,64 @@ function update_event(id){
               }
           });
 }
+function sort_lead_dashboard(sort_criteria = '', sort_type = '') {
+    var form_data = new FormData(document.getElementById('filter-form'));
+    if (sort_criteria == '') {
+        var sc = $('.dropdown-menu li.active').find('a').attr('id');
+        var ex = sc.split('-');
 
+        if (ex[0] == 'office_id' || ex[0] == 'client_name') {
+            var sort_criteria = ex[0];
+        } else {
+            var sort_criteria = 'lm.' + ex[0];
+        }
+    }
+    if (sort_type == '') {
+        var sort_type = 'ASC';
+    }
+    if (sort_criteria.indexOf('.') > -1) {
+        var sp = sort_criteria.split(".");
+        var activehyperlink = sp[1] + '-val';
+    } else {
+        var activehyperlink = sort_criteria + '-val';
+    }
+    form_data.append('sort_criteria', sort_criteria);
+    form_data.append('sort_type', sort_type);
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'lead_management/home/sort_lead_dashboard',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (lead_result) {
+            if (lead_result.trim() != '') {
+                $("#lead_dashboard_div").html(lead_result);
+                $(".dropdown-menu li").removeClass('active');
+                $("#" + activehyperlink).parent('li').addClass('active');
+                if (sort_type == 'ASC') {
+                    $(".sort_type_div #sort-desc").hide();
+                    $(".sort_type_div #sort-asc").css({display: 'inline-block'});
+                } else {
+                    $(".sort_type_div #sort-asc").hide();
+                    $(".sort_type_div #sort-desc").css({display: 'inline-block'});
+                }
+                $(".sort_type_div").css({display: 'inline-block'});
+                var text = $('.dropdown-menu li.active').find('a').text();
+                var textval = 'Sort By : ' + text + ' <span class="caret"></span>';
+                $("#sort-by-dropdown").html(textval);
+                $("[data-toggle=popover]").popover();
+            }
 
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
 
-
-
+}

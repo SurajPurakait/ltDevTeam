@@ -19,11 +19,11 @@ $role = $user_info['role'];
                                             <div class="col-xs-12">
                                                 <button type="button" class="btn btn-primary"  onclick="CreateProjectModal('add', '');" ><i class="fa fa-plus"></i> &nbsp;Create Project</button>
                                                 <button type="button" class="btn btn-success"  onclick="taskDashboard();" >&nbsp;Task Dahsboard</button>
-                                                <a title="Recurrence Cron" href="<?php echo base_url(); ?>project_recurrence_cron.php" target="_blank"><i class="fa fa-crosshairs fa-2x"></i></a>
                                             </div>
                                         </div>
                                         <div class="filter-div m-b-20 row" id="original-filter">                                           
                                             <div class="col-sm-3 m-t-10">
+                                                <?php asort($filter_element_list); ?>
                                                 <select class="form-control variable-dropdown" name="variable_dropdown[]" onchange="changeVariableProject(this)">
                                                     <option value="">All Variable</option>
                                                     <?php foreach ($filter_element_list as $key => $fel): ?>
@@ -62,13 +62,14 @@ $role = $user_info['role'];
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <h4 class="m-t-5 m-r-5"><span class="text-success" style="display: none;" id="clear_filter">By Me - Started &nbsp; </span><a href="javascript:void(0);" onclick="loadProjectDashboard('', '', '', '', '', '');" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></h4>
+                                            <h4 class="m-t-5 m-r-5"><span class="text-success" style="display: none;" id="clear_filter">By Me - Started &nbsp; </span><a href="javascript:void(0);" onclick="loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1);" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></h4>
                                         </div>
                                     </div>
                                 </form>
 
                             </div>
                         </div>
+                        <!-- summary box section -->
                         <div class="col-lg-5">
                             <div class="bg-aqua table-responsive">
                                 <table class="table table-borderless">
@@ -87,17 +88,17 @@ $role = $user_info['role'];
                                             <th>By Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-0">
-                                                    <span class="label label-warning" id="requested_by_me_new" onclick="loadProjectDashboard(0, 'byme', '', '', '', '');"><?= project_list('byme', 0); ?></span>
+                                                    <span class="label label-warning" id="requested_by_me_new" onclick="loadProjectDashboard(0, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('byme', 0); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-1">
-                                                    <span class="label label-warning" id="requested_by_me_started" onclick="loadProjectDashboard(1, 'byme', '', '', '', '');"><?= project_list('byme', 1); ?></span>
+                                                    <span class="label label-warning" id="requested_by_me_started" onclick="loadProjectDashboard(1, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('byme', 1); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-2">
-                                                    <span class="label label-warning" id="requested_by_me_completed" onclick="loadProjectDashboard(2, 'byme', '', '', '', '');"><?= project_list('byme', 2); ?></span>
+                                                    <span class="label label-warning" id="requested_by_me_completed" onclick="loadProjectDashboard(2, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('byme', 2); ?></span>
                                                 </a>
                                             </td> 
                                             <!-- <td class="text-center">
@@ -113,17 +114,17 @@ $role = $user_info['role'];
                                             <th>To Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-0">
-                                                    <span class="label label-warning" id="requested_to_me_new" onclick="loadProjectDashboard(0, 'tome', '', '', '', '');"><?= project_list('tome', 0); ?></span>
+                                                    <span class="label label-warning" id="requested_to_me_new" onclick="loadProjectDashboard(0, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('tome', 0); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-1">
-                                                    <span class="label label-warning" id="requested_to_me_started" onclick="loadProjectDashboard(1, 'tome', '', '', '', '');"><?= project_list('tome', 1); ?></span>
+                                                    <span class="label label-warning" id="requested_to_me_started" onclick="loadProjectDashboard(1, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('tome', 1); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-2">
-                                                    <span class="label label-warning" id="requested_to_me_completed" onclick="loadProjectDashboard(2, 'tome', '', '', '', '');"><?= project_list('tome', 2); ?></span>
+                                                    <span class="label label-warning" id="requested_to_me_completed" onclick="loadProjectDashboard(2, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('tome', 2); ?></span>
                                                 </a>
                                             </td>
                                             <!-- <td class="text-center">
@@ -170,17 +171,17 @@ $role = $user_info['role'];
                                                 <th>Others</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-0">
-                                                        <span class="label label-warning" id="requested_to_other_new" onclick="loadProjectDashboard(0, 'toother', '', '', '', '');"><?= project_list('toother', 0); ?></span>
+                                                        <span class="label label-warning" id="requested_to_other_new" onclick="loadProjectDashboard(0, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('toother', 0); ?></span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-1">
-                                                        <span class="label label-warning" id="requested_to_other_started" onclick="loadProjectDashboard(1, 'toother', '', '', '', '');"><?= project_list('toother', 1); ?></span>
+                                                        <span class="label label-warning" id="requested_to_other_started" onclick="loadProjectDashboard(1, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('toother', 1); ?></span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-2">
-                                                        <span class="label label-warning" id="requested_to_other_completed" onclick="loadProjectDashboard(2, 'toother', '', '', '', '');"><?= project_list('toother', 2); ?></span>
+                                                        <span class="label label-warning" id="requested_to_other_completed" onclick="loadProjectDashboard(2, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= project_list('toother', 2); ?></span>
                                                     </a>
                                                 </td> 
     <!--                                                 <td class="text-center">
@@ -247,6 +248,7 @@ $role = $user_info['role'];
                                 <div class="col-sm-4 col-xs-12">
                                     <a class="btn notification-btn" id="notification-project-button" onclick="openProjectNotificationModal();" href="javascript:void(0);" title="Project Notifications">Notifications <span class="label label-danger"><?= get_project_notifications_count(); ?></span></a>
                                 </div>
+                                <a class="pull-right" style="opacity:0.3;" title="Recurrence Cron" href="<?php echo base_url(); ?>project_recurrence_cron.php" target="_blank"><i class="fa fa-crosshairs fa-1x"></i></a>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 p-t-5">
@@ -268,6 +270,7 @@ $role = $user_info['role'];
                                 </div>
                             </div>
                         </div>
+                        <!-- end summary box section -->
                     </div>
                     <div class="clearfix">
 
@@ -473,7 +476,7 @@ $role = $user_info['role'];
             </div>
             <div class="modal-footer text-center">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="updateProjectStatusinner()">Save changes</button>
+                <button type="button" id="project-tracking-save" class="btn btn-primary" onclick="updateProjectStatusinner()">Save changes</button>
             </div>
             <div class="modal-body" style="display: none;" id="log_modal">
                 <div style="height:200px; overflow-y: scroll">
@@ -494,7 +497,7 @@ $role = $user_info['role'];
     </div>
 </div>
 <script>
-    loadProjectDashboard('<?= $status; ?>', '<?= $request_type; ?>', '<?= $priority; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '');
+    loadProjectDashboard('<?= $status; ?>', '<?= $request_type; ?>', '<?= $priority; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '', '', '', '', '', '', '', '', 1);
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
@@ -566,8 +569,33 @@ $role = $user_info['role'];
 //                    $("#changeStatusinner").modal('hide');
 //                    return false;
                     //swal("Success!", "Successfully updated!", "success");
-                    goURL(base_url + 'project');
+                    if(statusval==0){
+                        var tracking = 'Not Started';
+                        var trk_class = 'label label-success';
+                    }else if(statusval==1){
+                        var tracking = 'Started';
+                        var trk_class = 'label label-yellow';
+                    }else if(statusval==2){
+                        var tracking = 'Completed';
+                        var trk_class = 'label label-primary';
+                    }
+                    $("#trackinner-"+prosubid).removeClass().addClass(trk_class);
+                    $("#trackinner-"+prosubid).parent('a').removeAttr('onclick');
+                    $("#trackinner-"+prosubid).parent('a').attr('onclick','change_project_status_inner('+prosubid+','+statusval+', '+prosubid+');');
+                    $("#trackinner-"+prosubid).html(tracking);
+                    var projectid = $("#trackinner-"+prosubid).attr('projectid');
+                    $("#trackouter-"+projectid).removeClass().addClass(trk_class);
+                    $("#trackouter-"+projectid).html(tracking);
+                    $('#changeStatusinner').modal('hide');
                 }
+            },
+            beforeSend: function () {
+                $("#project-tracking-save").prop('disabled', true).html('Processing...');
+                openLoading();
+            },
+            complete: function (msg) {
+                $("#project-tracking-save").removeAttr('disabled').html('Save Changes');
+                closeLoading();
             }
         });
     }

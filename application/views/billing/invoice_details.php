@@ -9,8 +9,8 @@ if ($export_type == 'email') {
                     <table width="100%">
                         <tr>
                             <td width="50%" class="p-r-5">
-                                <h4 style="margin-bottom: 0;">Invoice No.</h4>
-                                <h4 class="text-navy m-b-20">#<?= str_pad($order_summary['invoice_id'], 10, 0, STR_PAD_LEFT); ?></h4>
+                                <h4 style="margin-bottom: 0;">ORDER ID:</h4>
+                                <h4 class="text-navy m-b-20"><?= $order_summary['invoice_id']; ?></h4>
                             </td>
                             <td align="right" class="p-l-5">
                                 <h5 style="margin-bottom: 0;">Invoice Date:</h5>
@@ -137,7 +137,7 @@ if ($export_type == 'email') {
         <table width="100%">
             <tr>
                 <td width="50%">
-                    <h4 style="margin-bottom: 0;"><b>Invoice No. :</b> #<?= str_pad($order_summary['invoice_id'], 10, 0, STR_PAD_LEFT); ?></h4>
+                    <h4 style="margin-bottom: 0;"><b>ORDER ID:</b> <?= $order_summary['invoice_id']; ?></h4>
                 </td>
                 <td align="right">
                     <p style="margin-bottom: 0;"><b>Invoice Date:</b> <?php echo date("m/d/Y", strtotime($order_summary["created_time"])); ?></p>
@@ -250,7 +250,7 @@ if ($export_type == 'email') {
                 <table width="100%">
                     <tr>
                         <td width="50%">
-                            <h4 style="margin-bottom: 0;">Invoice No.: <span class="text-navy m-b-20">#<?= str_pad($order_summary['invoice_id'], 10, 0, STR_PAD_LEFT); ?></span></h4>  
+                            <h4 style="margin-bottom: 0;">ORDER ID: <span class="text-navy m-b-20"><?= $order_summary['invoice_id']; ?></span></h4>  
                         </td>
                         <td align="right">
                             <h5 style="margin-bottom: 0;"><b>Invoice Date:</b> <span><?php echo date("m/d/Y", strtotime($order_summary["created_time"])); ?></span></h5>
@@ -377,7 +377,7 @@ if ($export_type == 'email') {
                 <table width="100%">
                     <tr>
                         <td width="50%">
-                            <h4 style="margin-bottom: 0;">Invoice No. : #<?= str_pad($order_summary['invoice_id'], 10, 0, STR_PAD_LEFT); ?></h4>
+                            <h4 style="margin-bottom: 0;">ORDER ID: <?= $order_summary['invoice_id']; ?></h4>
                         </td>
                         <td align="right">
                             <p style="margin-bottom: 0;"><b>Invoice Date:</b> <?php echo date("m/d/Y", strtotime($order_summary["created_time"])); ?></p>
@@ -500,6 +500,6 @@ if ($export_type == 'email') {
 
 
 <!-- Email modal -->
- <div id="emailsending" class="modal fade" role="dialog" aria-hidden="true" style="display: none;">
- </div>
- <!-- End of email modal -->
+<div id="emailsending" class="modal fade" role="dialog" aria-hidden="true" style="display: none;">
+</div>
+<!-- End of email modal -->

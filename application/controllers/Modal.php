@@ -228,6 +228,8 @@ class Modal extends CI_Controller {
     public function show_action_files() {
         $render_data['files_data'] = $this->action->getFilesContent($this->input->post("id"));
         $render_data['id'] = $this->input->post("id");
+        $render_data['staff_list'] = post('staff');
+        $this->action->updateFileReadStatus(post("id"));
         $this->load->view('action/file_list_modal', $render_data);
     }
 
@@ -283,6 +285,8 @@ class Modal extends CI_Controller {
         $render_data['reference_id'] = post('reference_id');
         $render_data['order_id'] = post('order_id');
         $section = post('section');
+        $render_data['account_details']=$this->company_model->get_account_details_bookkeeping(post('client_id'));
+//        $this->load->view('modal/financial_account',$data);
         if ($render_data['modal_type'] == "edit") {
             $render_data["id"] = post("id");
             $render_data["data"] = $this->service_model->get_financial_account_info(post("id"));
@@ -606,7 +610,8 @@ class Modal extends CI_Controller {
     }
 
     public function file_upload_actions() {
-        echo $this->action_model->file_upload_actions($this->input->post('action_id'), $_FILES["upload_file"]);
+        echo $this->action_model->file_upload_actions(post(), $_FILES["upload_file"]);
+        // print_r($this->action_model->file_upload_actions(post(), $_FILES["upload_file"]));
     }
 
     public function edit_project_task_modal() {

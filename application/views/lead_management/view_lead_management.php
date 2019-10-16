@@ -59,7 +59,7 @@
                                                 <b style="font-size: 14px;">City:</b>
                                             </td>
                                             <td>
-                                                <?= $data['city']; ?>
+                                                <?= ($data['city'] != '') ? $data['city'] : 'N/A'; ?>
                                             </td>
                                         </tr>
                                         <tr>
@@ -75,7 +75,7 @@
                                                 <b style="font-size: 14px;">Zip Code:</b>
                                             </td>
                                             <td>
-                                                <?= $data['zip'] ?>
+                                                <?= ($data['zip'] != '') ? $data['zip'] : 'N/A'; ?>
                                             </td>
                                         </tr>
                                         <tr>

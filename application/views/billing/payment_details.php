@@ -13,7 +13,7 @@ if ($payment_details['due_amount'] != 0) {
         <div class="invoice-payments">
             <div class="row">
                 <div class="col-md-6">
-                    <p><b>INVOICE #</b> <?= $payment_details['invoice_id'] ?></p>
+                    <p><b>ORDER ID: <?= $payment_details['invoice_id'] ?></b></p>
                     <p><b>DATE :</b><?= date('m/d/Y', strtotime($payment_details['created_time'])) ?></p>
                 </div>
                 <div class="col-md-6">

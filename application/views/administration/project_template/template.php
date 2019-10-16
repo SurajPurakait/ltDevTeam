@@ -224,9 +224,9 @@
                                                                     <div class="form-group">
                                                                         <div class="form-inline due-div">
                                                                             <label class="control-label m-r-5"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> Due on day</label>&nbsp;
-                                                                            <input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day">
+                                                                            <input class="form-control m-r-5" type="number" name="recurrence[due_day]" value="1" min="1" max="31" style="width: 100px" id="r_day">
                                                                             <label class="control-label m-r-5">of every</label>&nbsp;
-                                                                            <input class="form-control m-r-5" type="number" name="recurrence[due_month]" min="1" max="12" style="width: 100px" id="r_month">&nbsp;
+                                                                            <input class="form-control m-r-5" type="number" name="recurrence[due_month]" value="1" min="1" max="12" style="width: 100px" id="r_month">&nbsp;
                                                                             <label class="control-label m-r-5" id="control-label">month(s)</label>
                                                                         </div>
                                                                     </div> 
@@ -278,7 +278,7 @@
                                                                 <h3 class="m-0 p-b-20">Generation :</h3>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
-                                                                        <label class="control-label"><input type="radio" name="recurrence[generation_type]" value="0" onclick="//check_generation_type(this.value)">&nbsp; When the current Schedule Item is Complete</label>
+                                                                        <label class="control-label"><input type="radio" disabled name="recurrence[generation_type]" value="0" onclick="//check_generation_type(this.value)">&nbsp; When the current Schedule Item is Complete</label>
                                                                     </div>
                                                                     <div class="col-md-12">
                                                                         <div class="form-inline">

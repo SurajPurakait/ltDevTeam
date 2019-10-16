@@ -1,5 +1,5 @@
 <?php
-$user_info = staff_info();
+$user_info =  $this->session->userdata('staff_info');
 $user_department = $user_info['department'];
 $user_type = $user_info['type'];
 $role = $user_info['role'];
@@ -63,7 +63,7 @@ $role = $user_info['role'];
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <h4 class="m-t-5 m-r-5"><span class="text-success" style="display: none;" id="clear_filter">By Me - Started &nbsp; </span><a href="javascript:void(0);" onclick="loadTaskDashboard('', '', '', '', '', '');" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></h4>
+                                            <h4 class="m-t-5 m-r-5"><span class="text-success" style="display: none;" id="clear_filter">By Me - Started &nbsp; </span><a href="javascript:void(0);" onclick="loadTaskDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1);" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></h4>
                                         </div>
                                     </div>
                                 </form>
@@ -88,17 +88,17 @@ $role = $user_info['role'];
                                             <th>Requested By Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-0">
-                                                    <span class="label label-warning" id="requested_by_me_new" onclick="loadTaskDashboard(0, 'byme', '', '', '', '');"><?= task_list('byme', '0'); ?></span>
+                                                    <span class="label label-warning" id="requested_by_me_new" onclick="loadTaskDashboard(0, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('byme', '0'); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-1">
-                                                    <span class="label label-warning" id="requested_by_me_started" onclick="loadTaskDashboard(1, 'byme', '', '', '', '');"><?= task_list('byme', '1'); ?></span>
+                                                    <span class="label label-warning" id="requested_by_me_started" onclick="loadTaskDashboard(1, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('byme', '1'); ?></span>
                                                 </a>
                                             </td>
                                              <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-2">
-                                                    <span class="label label-warning" id="requested_by_me_completed" onclick="loadTaskDashboard(2, 'byme', '', '', '', '');"><?= task_list('byme', '2'); ?></span>
+                                                    <span class="label label-warning" id="requested_by_me_completed" onclick="loadTaskDashboard(2, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('byme', '2'); ?></span>
                                                 </a>
                                             </td> 
                                             <!-- <td class="text-center">
@@ -114,17 +114,17 @@ $role = $user_info['role'];
                                             <th>Requested To Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-0">
-                                                    <span class="label label-warning" id="requested_to_me_new" onclick="loadTaskDashboard(0, 'tome', '', '', '', '');"><?= task_list('tome', '0'); ?></span>
+                                                    <span class="label label-warning" id="requested_to_me_new" onclick="loadTaskDashboard(0, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('tome', '0'); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-1">
-                                                    <span class="label label-warning" id="requested_to_me_started" onclick="loadTaskDashboard(1, 'tome', '', '', '', '');"><?= task_list('tome', '1'); ?></span>
+                                                    <span class="label label-warning" id="requested_to_me_started" onclick="loadTaskDashboard(1, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('tome', '1'); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-2">
-                                                    <span class="label label-warning" id="requested_to_me_completed" onclick="loadTaskDashboard(2, 'tome', '', '', '', '');"><?= task_list('tome', '2'); ?></span>
+                                                    <span class="label label-warning" id="requested_to_me_completed" onclick="loadTaskDashboard(2, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('tome', '2'); ?></span>
                                                 </a>
                                             </td>
                                             <!-- <td class="text-center">
@@ -141,17 +141,17 @@ $role = $user_info['role'];
                                                 <th>Requested By Other</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byother-0">
-                                                        <span class="label label-warning" id="requested_by_other_new" onclick="loadTaskDashboard(0, 'byother', '', '', '', '');"><?= task_list('byother', '0'); ?></span>
+                                                        <span class="label label-warning" id="requested_by_other_new" onclick="loadTaskDashboard(0, 'byother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('byother', '0'); ?></span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byother-1">
-                                                        <span class="label label-warning" id="requested_by_other_started" onclick="loadTaskDashboard(1, 'byother', '', '', '', '');"><?= task_list('byother', '1'); ?></span>
+                                                        <span class="label label-warning" id="requested_by_other_started" onclick="loadTaskDashboard(1, 'byother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('byother', '1'); ?></span>
                                                     </a>
                                                 </td>
                                                  <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byother-2">
-                                                        <span class="label label-warning" id="requested_by_other_completed" onclick="loadTaskDashboard(2, 'byother', '', '', '', '');"><?= task_list('byother', '2'); ?></span>
+                                                        <span class="label label-warning" id="requested_by_other_completed" onclick="loadTaskDashboard(2, 'byother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('byother', '2'); ?></span>
                                                     </a>
                                                 </td> 
 <!--                                                 <td class="text-center">
@@ -171,17 +171,17 @@ $role = $user_info['role'];
                                                 <th>Requested To Other</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-0">
-                                                        <span class="label label-warning" id="requested_to_other_new" onclick="loadTaskDashboard(0, 'toother', '', '', '', '');"><?= task_list('toother', '0'); ?></span>
+                                                        <span class="label label-warning" id="requested_to_other_new" onclick="loadTaskDashboard(0, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('toother', '0'); ?></span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-1">
-                                                        <span class="label label-warning" id="requested_to_other_started" onclick="loadTaskDashboard(1, 'toother', '', '', '', '');"><?= task_list('toother', '1'); ?></span>
+                                                        <span class="label label-warning" id="requested_to_other_started" onclick="loadTaskDashboard(1, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('toother', '1'); ?></span>
                                                     </a>
                                                 </td>
                                                  <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-2">
-                                                        <span class="label label-warning" id="requested_to_other_completed" onclick="loadTaskDashboard(2, 'toother', '', '', '', '');"><?= task_list('toother', '2'); ?></span>
+                                                        <span class="label label-warning" id="requested_to_other_completed" onclick="loadTaskDashboard(2, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('toother', '2'); ?></span>
                                                     </a>
                                                 </td> 
 <!--                                                 <td class="text-center">
@@ -495,7 +495,7 @@ $role = $user_info['role'];
     </div>
 </div>
 <script>
-    loadTaskDashboard('<?= $status; ?>', '<?= $request_type; ?>', '<?= $priority; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '');
+    loadTaskDashboard('<?= $status; ?>', '<?= $request_type; ?>', '<?= $priority; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '', '', '', '', '', '', '', '', 1);
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
