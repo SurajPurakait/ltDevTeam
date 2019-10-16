@@ -160,6 +160,7 @@ class Modal extends CI_Controller {
     public function show_lead_tracking_modal() {
         $render_data["current_status"] = $this->action->get_current_status("lead_management", $this->input->post("id"));
         $render_data["id"] = $this->input->post("id");
+        $render_data["lead_type"] = $this->lead_management->get_types_of_lead(post("id"));
         $render_data["tracking_logs"] = $this->lead_management->get_tracking_log($this->input->post("id"), "lead_management");
         $this->load->view('modal/lead_tracking_modal', $render_data);
     }

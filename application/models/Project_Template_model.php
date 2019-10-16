@@ -2246,6 +2246,7 @@ class Project_Template_model extends CI_Model {
                         $this->db->join('office_staff os', 'os.staff_id = st.id');
                         $this->db->where(['os.office_id' => $office]);
                     endif;
+                     $this->db->where(['st.type!=' => 4]);
                     return $this->db->get()->result_array();
                 }
                 break;
@@ -2256,6 +2257,7 @@ class Project_Template_model extends CI_Model {
                         $this->db->join('office_staff os', 'os.staff_id = st.id');
                         $this->db->where(['os.office_id' => $office]);
                     endif;
+                     $this->db->where(['st.type!=' => 4]);
                     return $this->db->get()->result_array();
                 }
                 break;
@@ -2266,6 +2268,7 @@ class Project_Template_model extends CI_Model {
                         $this->db->join('office_staff os', 'os.staff_id = st.id');
                         $this->db->where(['os.office_id' => $office]);
                     endif;
+                     $this->db->where(['st.type!=' => 4]);
                     return $this->db->get()->result_array();
             }
             break;

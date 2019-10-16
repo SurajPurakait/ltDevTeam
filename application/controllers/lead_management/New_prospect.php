@@ -13,7 +13,7 @@ class New_prospect extends CI_Controller {
         }
     }
 
-    public function index() {
+    public function index($type = "") {
         $this->load->layout = 'dashboard';
         // $title = "Create New Prospect";
         $title = "Leads Dashboard / Add New";
@@ -22,6 +22,9 @@ class New_prospect extends CI_Controller {
         // $render_data['main_menu'] = 'lead_management';
         $render_data['menu'] = 'new_lead';
         $render_data['header_title'] = $title;
+        if ($type != '') {
+            $render_data['lead_type'] = $type;
+        }
         $render_data["type_of_contact"] = $this->lm->get_lead_types();
         $render_data["lead_source"] = $this->lm->get_lead_sources();
         $render_data["lead_agents"] = $this->lm->get_lead_agents();
@@ -38,10 +41,10 @@ class New_prospect extends CI_Controller {
             echo 0;
         } else {
             $result = $this->lm->insert_lead_prospect(post());
-            $id=$result;
+            $id = $result;
             $event_id = post("event_id");
-            if(isset($event_id)){
-                $event_lead_data = [ 
+            if (isset($event_id)) {
+                $event_lead_data = [
                     'event_id' => $event_id,
                     'lead_id' => $result
                 ];
@@ -50,28 +53,28 @@ class New_prospect extends CI_Controller {
 
             if (post('mail_campaign_status') == 1) {
                 /* mail section */
-                $user_email = post("email");
+//                $user_email = post("email");
+//                $config = Array(
+//                    'protocol' => 'smtp',
+//                    'smtp_host' => 'ssl://smtp.gmail.com',
+//                    'smtp_port' => 465,
+//                    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+//                    'smtp_pass' => 'codetestml0016@123', // change it to yours
+//                    'mailtype' => 'html',
+//                    'charset' => 'utf-8',
+//                    'wordwrap' => TRUE
+//                );
+
                 $config = Array(
-                    'protocol' => 'smtp',
-                    'smtp_host' => 'ssl://smtp.gmail.com',
+                    //'protocol' => 'smtp',
+                    'smtp_host' => 'mail.leafnet.us',
                     'smtp_port' => 465,
-                    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-                    'smtp_pass' => 'codetestml0016@123', // change it to yours
+                    'smtp_user' => 'developer@leafnet.us', // change it to yours
+                    'smtp_pass' => 'developer@123', // change it to yours
                     'mailtype' => 'html',
                     'charset' => 'utf-8',
                     'wordwrap' => TRUE
                 );
-
-            //     $config = Array(
-            //     //'protocol' => 'smtp',
-            //     'smtp_host' => 'mail.leafnet.us',
-            //     'smtp_port' => 465,
-            //     'smtp_user' => 'developer@leafnet.us', // change it to yours
-            //     'smtp_pass' => 'developer@123', // change it to yours
-            //     'mailtype' => 'html',
-            //     'charset' => 'utf-8',
-            //     'wordwrap' => TRUE
-            // );
                 $lead_result = $this->lm->view_leads_record($id);
                 $mail_data = $this->lm->get_campaign_mail_data(post("type_of_contact"), post("language"), 1);
                 $email_subject = $mail_data['subject'];
@@ -111,18 +114,18 @@ class New_prospect extends CI_Controller {
                 }
 
                 if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
-                  $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
-                }else{
-                  $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
+                    $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
+                } else {
+                    $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
                 }
 
-                if($lead_result['office']==1 || $lead_result['office']==18 || $lead_result['office']==34){
-                  $bgcolor = '#00aec8';
-                  $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
-                }else{
-                  $bgcolor = '#8ab645';
-                  $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
-                } 
+                if ($lead_result['office'] == 1 || $lead_result['office'] == 18 || $lead_result['office'] == 34) {
+                    $bgcolor = '#00aec8';
+                    $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
+                } else {
+                    $bgcolor = '#8ab645';
+                    $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
+                }
 
                 //echo $mail_body; exit;
                 $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -158,16 +161,16 @@ class New_prospect extends CI_Controller {
 
                     <body>
                     <br />
-                    <table width="600" border="0" bgcolor="'.$bgcolor.'" align="center" cellpadding="0" cellspacing="10">
+                    <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
                       <tr>
                         <td><table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
                           <tr>
-                            <td style="background: #fff"><img src="'.$user_logo_fullpath.'" width="300" height="98" /></td>
+                            <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="300" height="98" /></td>
                           </tr>
                         </table>
                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
-                              <td><img src="'.$divider_img.'" width="600" height="30" /></td>
+                              <td><img src="' . $divider_img . '" width="600" height="30" /></td>
                             </tr>
                           </table>
                           <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
@@ -217,10 +220,9 @@ class New_prospect extends CI_Controller {
                 $this->email->message($message);
                 if ($this->email->send()) {
                     //$this->lm->update_mail_campaign($mail_data['id'], ['submission_date' => date('Y-m-d')]);
-                  $this->lm->update_lead_day(0,$id);
+                    $this->lm->update_lead_day(0, $id);
                 }
                 /* mail section */
-            
             }
             echo base64_encode($result);
         }

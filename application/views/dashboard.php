@@ -528,7 +528,7 @@ $staff_department_array = explode(',', $staffInfo['department']);
                     </div>
                 </div>
                 <div class="ibox-content">
-                    <div class="notification-section"></div>
+                    <div class="notification-list-section"></div>
                     <div class="clear-notification"></div>
                 </div>
                 <div class=""></div>

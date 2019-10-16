@@ -507,7 +507,7 @@ $role = $user_info['role'];
     function changeVariable(element) {
         var divID = $(element).parent().parent().attr('id');
         var variableValue = $(element).children("option:selected").val();
-//        alert(variableValue);
+       // alert(variableValue);return false;
         var checkElement = elementArray.includes(element);
         var officeValue = '';
         if (checkElement == true) {
@@ -517,12 +517,18 @@ $role = $user_info['role'];
             elementArray.push(element);
             variableArray.push(variableValue);
         }
-        // if (variableValue == 4) {
-        //     var checkOfficeValue = variableArray.includes('3');
-        //     if (checkOfficeValue == true) {
-        //         officeValue = $("select[name='criteria_dropdown[office][]']").val();
-        //     }
-        // }
+
+        if (variableValue == 8) {
+            var checkOfficeValue = variableArray.includes('3');
+            if (checkOfficeValue == true) {
+               var officeValue = $("select[name='criteria_dropdown[office][]']").val();
+            }else{
+                var officeValue = '';
+            }
+        }else{
+             var officeValue = '';
+        }
+        
         $.ajax({
             type: "POST",
             data: {
@@ -532,6 +538,7 @@ $role = $user_info['role'];
             url: '<?= base_url(); ?>' + 'action/home/filter_dropdown_option_ajax',
             dataType: "html",
             success: function (result) {
+                // alert(result);return false;
                 $("#" + divID).find('.criteria-div').html(result);
                 $(".chosen-select").chosen();
                 $("#" + divID).find('.condition-dropdown').val('');

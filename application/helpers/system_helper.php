@@ -932,34 +932,34 @@ if (!function_exists('compose_mail')) {
 
     function compose_mail($to_mail, $subject = "", $message = "") {
         $ci = &get_instance();
-        $from_name = 'Team taxleaf';
+//        $from_name = 'Team taxleaf';
+//
+//        $from = 'codetestml0016@gmail.com';
+//        $config = Array(
+//            'protocol' => 'smtp',
+//            'smtp_host' => 'ssl://smtp.gmail.com',
+//            'smtp_port' => 465,
+//            'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+//            'smtp_pass' => 'codetestml0016@123', // change it to yours
+//            'mailtype' => 'html',
+//            'charset' => 'utf-8',
+//            'wordwrap' => TRUE
+//        );
 
-        $from = 'codetestml0016@gmail.com';
+        $from = 'developer@leafnet.us';
         $config = Array(
-            'protocol' => 'smtp',
-            'smtp_host' => 'ssl://smtp.gmail.com',
+            //'protocol' => 'smtp',
+            'smtp_host' => 'mail.leafnet.us',
             'smtp_port' => 465,
-            'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-            'smtp_pass' => 'codetestml0016@123', // change it to yours
+            'smtp_user' => 'developer@leafnet.us', // change it to yours
+            'smtp_pass' => 'developer@123', // change it to yours
             'mailtype' => 'html',
             'charset' => 'utf-8',
             'wordwrap' => TRUE
         );
-
-        //$from = 'developer@leafnet.us';
-        // $config = Array(
-        //        //'protocol' => 'smtp',
-        //        'smtp_host' => 'mail.leafnet.us',
-        //        'smtp_port' => 465,
-        //        'smtp_user' => 'developer@leafnet.us', // change it to yours
-        //        'smtp_pass' => 'developer@123', // change it to yours
-        //        'mailtype' => 'html',
-        //        'charset' => 'utf-8',
-        //        'wordwrap' => TRUE
-        //    );
-//        $user_details = staff_info();
-//        $from = $user_details['user'];
-//        $from_name = $user_details['first_name'] . ' ' . $user_details['last_name'];
+        $user_details = staff_info();
+        $from = $user_details['user'];
+        $from_name = $user_details['first_name'] . ' ' . $user_details['last_name'];
 
         $ci->load->library('email', $config);
         $ci->email->set_newline("\r\n");
@@ -3255,3 +3255,12 @@ if (!function_exists('get_partner_count')) {
 
 }
 
+if (!function_exists('get_partnes')) {
+
+    function get_partnes() {
+        $ci = &get_instance();
+        $ci->load->model('referral_partner');
+        return $ci->referral_partner->getPartnerData();
+    }
+
+}

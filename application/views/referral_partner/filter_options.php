@@ -22,6 +22,16 @@ $return = '';
             }
         }elseif($val==3){ //added date
             $return = '<input placeholder="dd/mm/yyyy" class="form-control datepicker_mdy" type="text" title="Added Date" name="criteria_dropdown[added_date][]" value="">';
+        }elseif ($val==4) { //partner name 
+            $options_val_name = get_partnes();
+            if (isset($options_val_name) && count($options_val_name) > 0) {
+                $return .= "<select class='form-control criteria-dropdown chosen-select' placeholder='All Criteria' name='criteria_dropdown[partner_name][]'>";
+                $return .= "<option value=''>All Criteria</option>";
+                foreach ($options_val_name as $ovn):
+                    $return .= "<option value='".$ovn['id']."'>" . $ovn['last_name'].', '.$ovn['first_name'] . "</option>";
+                endforeach;
+                $return .= "</select>"; 
+            }
         }
         // }elseif($val==4){ //tracking
         //         $return .= "<select class='form-control criteria-dropdown chosen-select' placeholder='All Criteria' name='criteria_dropdown[tracking][]'>";

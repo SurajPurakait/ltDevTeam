@@ -439,14 +439,14 @@ Class System extends CI_Model {
             }
         } elseif ($val == 5) {
             if ($ofc_val == '') {
-                $query = "select * from staff where status=1";
+                $query = "select * from staff where status=1 AND type!=4";
             } else {
                 if (is_array($ofc_val)) {
                     $ofc_values = implode(",", $ofc_val);
                 } else {
                     $ofc_values = $ofc_val;
                 }
-                $query = "select s.* from staff s inner join office_staff os on os.staff_id=s.id where s.status=1 and os.office_id in (" . $ofc_values . ")";
+                $query = "select s.* from staff s inner join office_staff os on os.staff_id=s.id where s.status=1 and os.office_id in (" . $ofc_values . ") and s.type!= 4 ";
             }
         } elseif ($val == 8) {
             $query = "select * from `order` where order_serial_id!=0";

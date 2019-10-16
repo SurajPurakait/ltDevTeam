@@ -306,7 +306,6 @@ function add_lead_prospect(added_by,event_lead ="") {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-            // console.log(result); return false;
             if (result.trim() == "0") {
                 swal("ERROR!", "Lead Prospect Already Exists", "error");
             } else if (result.trim() == "-1") {
@@ -856,11 +855,27 @@ function assign_as_client(id,partner_id) {
     });
 }
 
-
+function assign_as_partner(id) {
+    $.ajax({
+        type: "POST",
+        data: { 
+            id : id 
+        },
+        url: base_url + 'lead_management/home/assign_lead_as_partner',
+        dataType: "html",
+        success: function (result) {
+            if(result == 1){
+                $("#assign_as_partner-" + id).replaceWith('<a href="javascript:void(0);" class="btn btn-warning btn-xs btn-assign-client"> Assigned as Partner</a>');
+                // $("#lead-" +id).hide();
+                swal("Success!", "Successfully Assigned as Partner", "success");    
+            }
+        },
+    });
+}
 function update_event(id){
     // alert(id);return false;   
-     var form_data = new FormData(document.getElementById('event_modal_form_submit'));
-           $.ajax({
+    var form_data = new FormData(document.getElementById('event_modal_form_submit'));
+        $.ajax({
               type: 'POST',
               url: base_url + 'lead_management/event/update_event/'+ id,
               data: form_data,

@@ -11,17 +11,17 @@ if (count($referral_data) != 0): ?>
             <div class="panel-heading">
                 <div class="referral-partner-status-btn-list">
                     <a href="javascript:void(0)" onclick="reffer_lead_to_partner_view(<?= $value['id']; ?>,'<?= $value["email"]; ?>',1)" class="btn btn-primary btn-xs btn-service-lead"><i class="fa fa-key" aria-hidden="true"></i>
-                        Refer Lead</a>
+                        Refer New Lead</a>
                     <a href="javascript:void(0)" onclick="assign_ref_partner_password(<?= $value["id"]; ?>,<?= $value["requested_by_id"]; ?>)" class="btn btn-primary btn-xs btn-service-set"><i class="fa fa-key" aria-hidden="true"></i>
-                        Set</a>
+                        Setup</a>
                     <a href="<?= base_url("/referral_partner/referral_partners/view_referral/{$value["id"]}"); ?>" class="btn btn-primary btn-xs btn-service-view"><i class="fa fa-eye" aria-hidden="true"></i>
                         View</a>
 
                     <a href="<?= base_url("/referral_partner/referral_partners/edit_referral_agent/{$value['id']}"); ?>" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i>
                         Edit</a>
                     <a href="javascript:void(0)" onclick="assign_ref_partner_to(<?= $value["id"]; ?>)" class="btn btn-primary btn-xs btn-service-assign"><i class="fa fa-asterisk" aria-hidden="true"></i>
-                        Assign</a>
-                    <a href="javascript:void(0)" onclick="delete_referral_partner(<?= $value["id"]; ?>)" class="btn btn-danger btn-xs btn-service-delete"><i class="fa fa-times" aria-hidden="true"></i>
+                        Assign Client</a>
+                    <a href="javascript:void(0)" onclick="delete_referral_partner(<?= $value["id"]; ?>)" class="btn btn-danger btn-xs btn-service-delete btn-referral-partner-del"><i class="fa fa-times" aria-hidden="true"></i>
                         Delete</a>                                  
                 </div>    
                 <h5 class="panel-title">                                                                             

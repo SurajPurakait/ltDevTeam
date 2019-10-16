@@ -148,6 +148,9 @@ class Home extends CI_Controller {
     public function assign_lead_as_client(){
         echo $this->lead_management->assign_lead_as_client(post('id'),post('partner_id'));
     }
+    public function assign_lead_as_partner(){
+        echo $this->lead_management->assign_lead_as_partner(post('id'));
+    }
     public function sort_lead_dashboard() {
         $formdata = post();
         $sort_criteria = $formdata['sort_criteria'];
