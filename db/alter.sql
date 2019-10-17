@@ -930,4 +930,9 @@ ALTER TABLE `project_recurrence_main` ADD `generated_by_cron` INT(10) NOT NULL D
 
 /* live end */
 /* 15.10.2019 */
-ALTER TABLE `lead_management` CHANGE `type` `type` INT(10) NOT NULL COMMENT '1:Client Lead or Lead, 2 : Partner,  3 : Partner\'s Lead';
+ALTER TABLE `lead_management` CHANGE `type` `type` INT(10) NOT NULL COMMENT '1 for Client Lead or Lead, 2 for Partner,  3 for Partner Lead';
+
+/* 16.10.2019 */
+ALTER TABLE `lead_mail_chain` ADD `lead_type` INT(100) NOT NULL COMMENT '1 for client, 2 for partner' AFTER `id`;
+-- import lead_type.sql
+INSERT INTO `lead_type` (`id`, `type`) VALUES (NULL, 'Client'), (NULL, 'Partner');
