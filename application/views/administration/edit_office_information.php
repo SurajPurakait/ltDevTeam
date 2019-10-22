@@ -15,7 +15,11 @@
                                 
                             </div>
                             <div class="col-md-6 text-right">
-                                <a href="javascript:void(0);" id="savefee" class="btn btn-success" style="width: 100px; display: none;" onclick="save_service_fees()">Update</a>  
+                               
+                                <a href="javascript:void(0);" id="saveinfo" class="btn btn-success" style="width: 120px; " onclick="update_franchise()">Save changes</a> 
+
+                                <a href="javascript:void(0);" id="savefee" class="btn btn-success" style="width: 100px; display: none;" onclick="save_service_fees()">Update</a> 
+
                                 <a href="javascript:void(0);" class="btn btn-warning" style="width: 100px" onclick="cancel_office()">Back</a>                            
                                 <a href="javascript:void(0);" class="btn btn-danger" style="width: 100px" onclick="delete_office('<?= $franchise_info['id']; ?>');">Delete</a>
                             </div>
@@ -186,7 +190,7 @@
                                         <div class="text-right m-r-15">
                                         <div class="form-group">
                                             <input type="hidden" name="id" id="franchise_office_id" value="<?php echo $franchise_info['id']; ?>">
-                                            <button class="btn btn-success" style="float:right;" type="button" onclick="update_franchise()">Save changes</button>&nbsp;&nbsp;&nbsp;
+                                           <!--  <button class="btn btn-success" style="float:right;" type="button" onclick="update_franchise()">Save changes</button>&nbsp;&nbsp;&nbsp; -->
                                             <!-- <button class="btn btn-default" type="button" onclick="cancel_office()">Cancel</button> -->
                                         </div>
                                         </div>
@@ -333,11 +337,18 @@
     }
 
     function fee_update(show,hide){
+         if(show == 'info1'){
+        document.getElementById("saveinfo").style.display = 'inline-block';
+       }else{
+        document.getElementById("saveinfo").style.display = 'none';
+       }
+
        if(show == 'fee1'){
         document.getElementById("savefee").style.display = 'inline-block';
-       }else{
+       }else if(show == 'info1'){
          document.getElementById("savefee").style.display = 'none';
        }
+
     }
 
     function show_default_fee(){

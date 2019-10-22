@@ -275,10 +275,25 @@ $role = $user_info['role'];
                     </div>
                     <div class="clearfix"></div>
                     <div class="row">
-                        <?php foreach ($templateIds as $tempid){ ?>
-                        <a class="btn btn-success" href="javascript:void(0);" onclick="loadProjectDashboard('', '', <?= $tempid['template_id'] ?>);"><?= $tempid['title'] ?></a>
-                        <?php } ?>
-                    </div>
+                      
+                                                          <!-- Nav tabs -->
+  <ul class="nav nav-tabs tab" role="tablist">
+    <li role="presentation" class="active "><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Bookkeeping</a></li>
+    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Tax Returns</a></li>
+    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Sales Tax</a></li>
+    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Annual Peport</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="home">1</div>
+    <div role="tabpanel" class="tab-pane" id="profile">2</div>
+    <div role="tabpanel" class="tab-pane" id="messages">3</div>
+    <div role="tabpanel" class="tab-pane" id="settings">4</div>
+  </div>
+
+
+
                     <hr class="hr-line-dashed  m-t-5 m-b-5">
                     <div id="action_dashboard_div">
                         <!--                        <div class="clearfix">

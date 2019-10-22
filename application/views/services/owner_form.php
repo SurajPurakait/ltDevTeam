@@ -147,19 +147,19 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="first_name" name="first_name" title="First Name" required value="<?= !empty($title_val) ? $title_val->first_name : "" ?>"><div class="errorMessage text-danger"></div>
+                                <input placeholder="" class="form-control" type="text" id="first_name" name="first_name" title="First Name" maxlength="20" required value="<?= !empty($title_val) ? $title_val->first_name : "" ?>"><div class="errorMessage text-danger"></div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Middle Name</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="middle_name" name="middle_name" title="Middle Name" value="<?= !empty($title_val) ? $title_val->middle_name : "" ?>"><div class="errorMessage text-danger"></div>
+                                <input placeholder="" class="form-control" type="text" id="middle_name" name="middle_name" title="Middle Name" maxlength="20" value="<?= !empty($title_val) ? $title_val->middle_name : "" ?>"><div class="errorMessage text-danger"></div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="last_name" name="last_name" title="Last Name" required value="<?= !empty($title_val) ? $title_val->last_name : "" ?>">
+                                <input placeholder="" class="form-control" type="text" id="last_name" name="last_name" title="Last Name" maxlength="20" required value="<?= !empty($title_val) ? $title_val->last_name : "" ?>">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>

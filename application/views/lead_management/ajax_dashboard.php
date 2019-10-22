@@ -47,9 +47,15 @@
                     ?>
                     <?php
                     } else {
+                        if ($lead['assigned_status'] == 'y') {
+                    ?>
+                        <a href="javascript:void(0);" class="btn btn-warning btn-xs btn-assign-client"> Assigned as Partner</a>
+                    <?php        
+                        } else {
                     ?>
                     <a href="javascript:void(0);" onclick="assign_as_partner(<?= $lead['id']; ?>)" class="btn btn-primary btn-xs btn-assign-client" id="assign_as_partner-<?= $lead['id']; ?>"><i class="fa fa-plus" aria-hidden="true"></i> Assign as Partner</a>
-                    <?php    
+                    <?php        
+                        }    
                     }
                 }
                 if ($lead["type_of_contact"] == 1 || $lead["type_of_contact"] == 2) {

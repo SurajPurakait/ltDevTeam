@@ -119,7 +119,7 @@ Class Notes extends CI_Model {
             if (trim($note) != "") {
                 $insert_data[$foreign_column] = $foreign_value;
                 $insert_data['note'] = $note;
-                if($related_table_id==6 || $related_table_id==7 || $related_table_id==8 || $related_table_id==9 || $related_table_id==10){
+                if($related_table_id==6 || $related_table_id==7 || $related_table_id==8 || $related_table_id==9 || $related_table_id==10 || $related_table_id==2){
                    $insert_data['added_by_user'] = $user_id; 
                }                
                 if ($related_table_id == 1) {
@@ -158,7 +158,7 @@ Class Notes extends CI_Model {
     public function delete_note($note_id, $related_table_id) {
         $table = $this->get_related_note_table_by_id($related_table_id);
         if ($this->db->delete($table, ['id' => $note_id])) {
-            return $this->db->delete('notes_log', ['note_id' => $note_id, 'related_table_id' => '2']);
+            return $this->db->delete('notes_log', ['note_id' => $note_id, 'related_table_id' => $related_table_id]);
         } else {
             return false;
         }

@@ -16,25 +16,25 @@ class News extends CI_Controller {
 
         if ($user_info['type'] == 2) {
             $this->filter_element = [
+                5 => "Create Date",
+                3 => "Department",
                 1 => "Priority",
                 2 => "Type",
-                3 => "Department",
-                5 => "Create Date",
             ];
         }elseif($user_info['type'] == 3){
             $this->filter_element = [
+                5 => "Create Date",
+                4 => "Office",
                 1 => "Priority",
                 2 => "Type",
-                4 => "Office",
-                5 => "Create Date",
             ];
         }else{
             $this->filter_element = [
-                1 => "Priority",
-                2 => "Type",
+                5 => "Create Date",
                 3 => "Department",
                 4 => "Office",
-                5 => "Create Date",
+                1 => "Priority",
+                2 => "Type",
             ];
         }
         

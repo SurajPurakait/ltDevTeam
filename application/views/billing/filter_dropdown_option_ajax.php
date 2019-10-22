@@ -4,7 +4,13 @@
 <?php else: ?>
     <select class='form-control criteria-dropdown chosen-select' placeholder='All Criteria' title="<?= $element_array[$element_key]; ?>" name='criteria_dropdown[<?= $element_name; ?>][]'>
         <option value=''>All Criteria</option>
-        <?php if (isset($element_value_list) && count($element_value_list) > 0): ?>
+        <?php if (isset($element_value_list) && count($element_value_list) > 0):
+            $new_sort=array();
+                foreach ($element_value_list as $key => $evl):
+                    $new_sort[$key]= $evl['name'];
+                endforeach;
+                array_multisort($new_sort, SORT_ASC, $element_value_list);
+            ?>
             <?php foreach ($element_value_list as $evl): ?>
                 <option value="<?= is_array($evl) ? (($element_name == 'client') ? $evl['reference_id'] : $evl['id']) : $evl; ?>"><?= is_array($evl) ? $evl['name'] : $evl; ?></option>
             <?php endforeach; ?>

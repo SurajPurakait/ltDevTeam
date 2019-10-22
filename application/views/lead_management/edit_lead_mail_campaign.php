@@ -10,12 +10,14 @@
                         <h3>Mail Content</h3>
                         <div class="ajaxsection">
                             <div class="form-group">
-                                <label class="col-lg-2 control-label">Service<span class="text-danger">*</span></label>
+                                <!-- <label class="col-lg-2 control-label">Service<span class="text-danger">*</span></label> -->
+                                <label class="col-lg-2 control-label">Lead Type<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <select required class="form-control" onchange="changeoptions(1);" title="Service" name="service" id="service">
+                                    <!-- <select required class="form-control" onchange="changeoptions(1);" title="Service" name="service" id="service"> -->
+                                        <select required class="form-control" onchange="changeoptions(1);" title="Lead Type" name="leadtype" id="leadtype">
                                         <option value="">Select</option>
                                         <?php foreach ($type_of_contact as $value): ?>
-                                            <option <?php echo ($edit_lead_mail_chain_content['service'] == $value["id"]) ? 'selected' : ''; ?> value="<?= $value["id"]; ?>"><?= $value["name"]; ?></option>
+                                            <option <?php echo ($edit_lead_mail_chain_content['lead_type'] == $value["id"]) ? 'selected' : ''; ?> value="<?= $value["id"]; ?>"><?= $value["type"]; ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <div class="errorMessage text-danger"></div>
@@ -89,7 +91,8 @@
 <script type="text/javascript">
     // parameter which dropdown 1,2,3
     function changeoptions(ddval) {
-        var service = $("#service option:selected").val();
+        // var service = $("#service option:selected").val();
+        var leadtype = $("#leadtype option:selected").val();
         var language = $("#language option:selected").val();
         var day = $("#day option:selected").val();
         $.ajax({

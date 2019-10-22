@@ -438,7 +438,7 @@ if ($section == 'notification') {
                 // } else {
                 //     $ref_by = "byothers";
                 // }
-
+                $view_url='';
                 if ($gnl['reference'] == 'invoice') {
                     $reference_type = "Billing";
                     $class = 'invoice';
@@ -454,6 +454,18 @@ if ($section == 'notification') {
                     $class = 'order';
                     $class1 = 'bg-yellow';
                     $view_url = base_url() . 'services/home/view/' . $gnl['reference_id'];
+                }
+                if ($gnl['reference'] == 'lead') {
+                    $reference_type = "Lead";
+                    $class = 'lead';
+                    $class1 = 'bg-purpel';
+                    $view_url = base_url() . 'lead_management/home/view/' . $gnl['reference_id'];
+                }
+                if ($gnl['reference'] == 'partner') {
+                    $reference_type = "Partner";
+                    $class = 'partner';
+                    $class1 = 'bg-sucess';
+                    $view_url = $view_url = base_url() . 'referral_partner/referral_partners/view_referral/' . $gnl['reference_id'];
                 }
 
                 ?>

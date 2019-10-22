@@ -222,6 +222,7 @@
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
+                                <input type="hidden" name="type" value="<?= $data['type'] ?>">
                                 <button class="btn btn-success" type="button" onclick="edit_referral_partner()">
                                     Save Changes
                                 </button> &nbsp;&nbsp;&nbsp;

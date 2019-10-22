@@ -10,7 +10,9 @@
                                     <th style='width:8%;  text-align: center;'>Complete Date</th>
                                     <th style='width:8%;  text-align: center;'>Tracking Description</th>
                                     <th style="width:8%;  text-align: center;">SOS</th>
-                                    <th style="width:8%;  text-align: center;">Note</th>
+                                    <th style="width:8%;  text-align: center;">Notes</th>
+                                    <th style="width:8%;  text-align: center;">Files</th>
+                                    <th style="width:8%;  text-align: center;">Input Form</th>
                                 </tr>
                                 <?php
                                 foreach ($task_list as $task) {
@@ -124,7 +126,25 @@
 
                                             ?>
                                         </span></td>
-
+                                        <?php 
+                                            $file_count= getTaskFilesCount($task->id);
+                                            $unread_files_count=getUnreadTaskFileCount($task->id,'task');
+                                        ?>
+                                        <?= '<td title="Files" class="text-center" ><span id="taskfilespan' . $task->id . '">' . (($unread_files_count->unread_files_count > 0) ? '<a class="label label-danger" href="javascript:void(0)" count="' . $file_count->files . '" id="taskfile' . $task->id . '" onclick="show_task_files(\'' . $task->id . '\',\'' . $new_staffs . $task->added_by_user . '\')"><b>' . $file_count->files . '</b></a>' : '<a class="label label-success" href="javascript:void(0)" count="' . $file_count->files . '" id="actionfile' . $task->id . '" onclick="show_task_files(\'' . $task->id . '\',\'' . $new_staffs . $task->added_by_user . '\')"><b>' . $file_count->files . '</b></a>') . '</span></td>'; ?>
+                                        <td style="text-align: center;">
+                                            <?php
+                                                $input_status = 'complete';
+                                                if ($task->input_form_status == 'n') {
+                                                    $input_status = 'incomplete';
+                                                    ?>
+                                                    <span class="label input-form-incomplete">Incomplete <a href="<?= base_url() . 'task/task_input_form/' . $task->id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-plus" aria-hidden="true"></i> </a></span>
+                                                <?php } else { ?>
+                                                    <span class="label input-form-complete">Completed <a href="<?= base_url() . 'task/task_input_form/' . $task->id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
+                                                    <?php
+                                                }
+                                            ?>
+                                            <input type="hidden" class="input-form-status-<?= $task->id; ?>" value="<?= $input_status; ?>" />
+                                        </td>
                                     </tr>
                                     <?php
                                 }
@@ -140,3 +160,15 @@
                         </table>
                     </div>
                 </div>
+<!--task files modal-->
+<div class="modal fade" id="showTaskFiles" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Files</h4>
+            </div>
+            <div id="files-modal-body" class="modal-body"></div>
+        </div>
+    </div>
+</div>

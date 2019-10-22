@@ -2063,6 +2063,8 @@ class Project_Template_model extends CI_Model {
                 } else {
                     if (empty($filter_data)) {
                         $this->db->where_not_in('pm.status', [1, 2]);
+                    }else{
+                        $this->db->where_in('pm.status', [0,1, 2]);
                     }
                 }
             }
@@ -2429,6 +2431,127 @@ class Project_Template_model extends CI_Model {
         $this->db->join('project_template_main ptm','p.template_id=ptm.id','inner');
         $this->db->group_by('p.template_id');
         return $this->db->get()->result_array();
+    }
+    public function getTaskFilesCount($task_id){
+        return $this->db->query("SELECT COUNT(id) as files FROM task_files WHERE task_id = '$task_id'")->row();
+    }
+    public function getUnreadTaskFileCount($task_id,$reference){
+        return $this->db->query('SELECT COUNT(frss.id) as unread_files_count FROM file_read_status_staff AS frss WHERE frss.reference_id = '. "$task_id". ' AND frss.reference = "task" AND frss.read_status = "n"')->row();
+    }
+    public function getTaskFilesContent($id) {
+        $query = $this->db->query("select * from task_files where task_id='" . $id . "'");
+        return $query->result_array();
+    }
+    public function file_upload_tasks($data, $files) {
+        if (!empty($files["name"])) {
+            $filesCount = count($files['name']);
+            for ($i = 0; $i < $filesCount; $i++) {
+                $_FILES['userFile']['name'] = basename(time() . "_" . rand(111111, 99999) . "_" . str_replace(" ", "", $files['name'][$i]));
+                $_FILES['userFile']['type'] = $files['type'][$i];
+                $_FILES['userFile']['tmp_name'] = $files['tmp_name'][$i];
+                $_FILES['userFile']['error'] = $files['error'][$i];
+                $_FILES['userFile']['size'] = $files['size'][$i];
+
+                $uploadPath = FCPATH . 'uploads/';
+                $config['upload_path'] = $uploadPath;
+                $config['allowed_types'] = "*";
+
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+
+                if ($this->upload->do_upload('userFile')) {
+                    $fileData = $this->upload->data();
+                    $uploadData[$i]['file_name'] = $fileData['file_name'];
+                    $uploadData[$i]['added_by_user'] = sess('user_id');
+                    $uploadData[$i]['task_id'] = $data['task_id'];
+                }
+            }
+        }
+
+        if (!empty($uploadData)) {
+            $this->db->insert_batch('task_files', $uploadData);
+        }
+
+        $last_id_arr = [];
+        $last_id = $this->db->insert_id();
+        for($j=0;$j<count($files['name']);$j++) {
+            if (!empty($files['name'][$j])) {    
+                array_push($last_id_arr,$last_id+$j);
+                $variable = explode(',',$data['staff_list']);
+
+                foreach ($variable as $value) {
+                    $staff_array = array(
+                        'file_id' => $last_id_arr[$j],
+                        'reference' => 'task',
+                        'reference_id' => $data['task_id'],
+                        'staff_id' => $value
+                    );
+                    $this->db->insert('file_read_status_staff',$staff_array);
+                }
+            }
+        }
+
+        return $this->db->get_where('task_files',array('task_id'=>$data['task_id']))->num_rows();;
+    }
+    function getTaskFiles($task_id){
+        return $this->db->get_where("task_files",['task_id'=>$task_id])->result_array();
+    }
+    function saveProjectInputForm($data){
+        $this->db->trans_begin();
+        
+        $uploadData = [];
+        $files = $_FILES["project_attachment"];
+        if (!empty($files["name"])) {
+            $filesCount = count($files['name']);
+            for ($i = 0; $i < $filesCount; $i++) {
+                $_FILES['attachment_file']['name'] = basename(time() . "_" . rand(111111, 99999) . "_" . str_replace(" ", "", $files['name'][$i]));
+                $_FILES['attachment_file']['type'] = $files['type'][$i];
+                $_FILES['attachment_file']['tmp_name'] = $files['tmp_name'][$i];
+                $_FILES['attachment_file']['error'] = $files['error'][$i];
+                $_FILES['attachment_file']['size'] = $files['size'][$i];
+
+                $uploadPath = FCPATH . 'uploads/';
+                $config['upload_path'] = $uploadPath;
+                $config['allowed_types'] = "*";
+
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+
+                if ($this->upload->do_upload('attachment_file')) {
+                    $fileData = $this->upload->data();
+                    $uploadData[$i]['file_name'] = $fileData['file_name'];
+                    $uploadData[$i]['added_by_user'] = sess('user_id');
+                    $uploadData[$i]['task_id'] = $data['task_id'];
+                }
+            }
+        }
+        $this->db->where(['id' => $data['task_id']]);
+        $this->db->update('project_task', ['input_form_status' => 'y']);
+        if (!empty($uploadData)) {
+            $this->db->insert_batch('task_files', $uploadData);
+        }
+        
+        $notedata = $this->input->post('task_note');
+        if(!empty($notedata)){
+            $this->insert_task_note(11, $notedata, "task_id", $data['task_id'], 'task');
+        }
+        
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return false;
+        } else {
+            $this->db->trans_commit();
+            return true;
+        }
+    }
+    public function delete_project_input_form_files($file_id) {
+        $file_info = $this->db->get_where('task_files', ['id' => $file_id])->row_array();
+        unlink(FCPATH . 'uploads/' . $file_info['file_name']);
+        $this->db->where(['id' => $file_id]);
+        return $this->db->delete('task_files');
+    }
+    public function getTaskNoteDetails($task_id){
+        
     }
 
 }

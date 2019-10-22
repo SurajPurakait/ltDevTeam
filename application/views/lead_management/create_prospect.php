@@ -3,22 +3,22 @@
         <div class="col-lg-12">
             <form class="form-horizontal" method="post" id="form_add_new_prospect">
                 <div class="ibox-content m-b-20">
-                    <a href="<?= base_url().'lead_management/home'; ?>" class="btn btn-primary m-r-10 m-b-15">Leads Dashboard</a>
-                    <a href="<?= base_url().'referral_partner/referral_partners/partners'; ?>" class="btn btn-success m-b-15">Partner Dashboard</a>
+                    <a href="<?= base_url() . 'lead_management/home'; ?>" class="btn btn-primary m-r-10 m-b-15">Leads Dashboard</a>
+                    <a href="<?= base_url() . 'referral_partner/referral_partners/partners'; ?>" class="btn btn-success m-b-15">Partner Dashboard</a>
                     <h3>Add New Prospect</h3>
                     <div class="form-group" style="display: none;">
                         <label class="col-lg-2 control-label">Event Id</label>
                         <div class="col-lg-10">
                             <?php
-                                if(isset($_GET['id'])){
-                                    $event_id = $_GET['id'];
-                                    $event_lead = "event_lead";
-                            ?>
-                            <input type="text" name="event_id" value="<?php echo $event_id ;?>" class="form-control">
-                            <?php
-                                }else{
-                                    $event_lead = "";
-                                }
+                            if (isset($_GET['id'])) {
+                                $event_id = $_GET['id'];
+                                $event_lead = "event_lead";
+                                ?>
+                                <input type="text" name="event_id" value="<?php echo $event_id; ?>" class="form-control">
+                                <?php
+                            } else {
+                                $event_lead = "";
+                            }
                             ?>
                             <div class="errorMessage text-danger"></div>
                         </div>
@@ -109,7 +109,7 @@
                             <select class="form-control" title="Country" name="country" onchange="change_zip_by_country(this.value)">
                                 <option value="">Select..</option>
                                 <?php
-                                    foreach ($countries as $value):
+                                foreach ($countries as $value):
                                     if ($value['id'] != 0) {
                                         ?>
                                         <option value="<?= $value["id"]; ?>"><?= $value["country_name"]; ?></option>
@@ -139,9 +139,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-2 control-label">Phone 1</label>
+                        <label class="col-lg-2 control-label">Phone 1<span class="text-danger">*</span></label>
                         <div class="col-lg-10">
-                            <input placeholder="" class="form-control" type="text" phoneval="" id="phone1" name="phone1" title="Phone 1">
+                            <input placeholder="" required class="form-control" type="text" phoneval="" id="phone1" name="phone1" title="Phone 1">
                             <div class="errorMessage text-danger"></div>
                         </div>
                     </div>
@@ -225,7 +225,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="mail-campaign-wrap" id="mail_campaign_wrap" style="display: none;">
                         <div class="row">
                             <div class="col-md-2 col-md-offset-2 text-center">
@@ -256,7 +256,8 @@
                             <input type="hidden" name="lead_type" id="lead_type" value="<?= $lead_type; ?>">
                             <input type="hidden" name="partner_section" value="">
                             <input type="hidden" name="referred_status" value="">
-                            <button class="btn btn-success" type="button" onclick="add_lead_prospect('notrefagent','<?= $event_lead ?>')">Save Changes</button> &nbsp;&nbsp;&nbsp;
+                            <!-- <button class="btn btn-success" type="button" onclick="add_lead_prospect('notrefagent','<?= $event_lead ?>')">Save Changes</button> &nbsp;&nbsp;&nbsp; -->
+                            <button class="btn btn-success" type="button" onclick="confirm_sender_email('notrefagent', '<?= $event_lead ?>')">Save Changes</button> &nbsp;&nbsp;&nbsp;
                             <button class="btn btn-default" type="button" onclick="cancel_lead_prospect('notrefagent')">Cancel</button>
                         </div>
                     </div>
@@ -266,6 +267,36 @@
     </div>
 </div>
 <!-- Modal -->
+<div class="modal fade" id="mail-campaign-confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Confirm Sender's Email</h4>
+            </div>
+            <form method="post" onsubmit="return false;">
+                <div id="email-modal-body" class="modal-body">
+                    <div class="form-group">
+                        <label class="radio-inline">
+                            <input type="radio" name="sender_email" checked onchange="document.getElementById('other_email').style.display = 'none';" value="developer@leafnet.us"><b>developer@leafnet.us</b>
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" id="other_email_radio" name="sender_email" onchange="document.getElementById('other_email').style.display = 'block';this.value = document.getElementById('other_email').value;"><b>Other</b>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="other_email" id="other_email" onblur="document.getElementById('other_email_radio').value = this.value;" style="display: none" class="form-control" placeholder="Enter Email">    
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="add_lead_prospect('notrefagent', '<?= $event_lead ?>');">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div id="mail-campaign-template-modal" class="modal fade newsletter-sec" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -319,41 +350,41 @@
                     </tr>
                 </table>-->
                 <table  border="0" align="center" cellpadding="0" cellspacing="10" style="border:10px solid #8ab645;width:100%; background:#8ab645;padding: 15px;border-collapse:collapse; ">
-                      <tr>
+                    <tr>
                         <td>
                             <table  border="0" align="center" cellpadding="0" cellspacing="0" style="width:100%;">
-                          <tr>
-                            <td style="background: #fff">
-                                <img src="http://www.taxleaf.com/Email/header.gif" width="300" height="98" />
-                            </td>
-                          </tr>
-                        </table>
-                         <table  border="0" cellspacing="0" cellpadding="0" style="width:100%;">
-                            <tr>
-                              <td>
-                                  <img src="http://www.taxleaf.com/Email/divider2.gif" width="100%" height="30" />
-                              </td>
-                            </tr>
-                          </table>
-                          <table   border="0" align="center" cellpadding="0" cellspacing="15" style="width:100%; background: #ffffff;margin-top: 5px">
-                            <tr>
-                              <td valign="top" style="color:#000;padding: 15px" class="textoblanco" style="padding: 15px"><p><span class="textonegro"><strong><br />
-                                <br />
-                                </strong><p id="mail-body"></p></span></p>
-                                <p><span class="textonegro">Sincerely,</span></p>
-                                <p><span class="textonegro">Moses Nae<br />
-                                  moses@taxleaf.com<br />
-                                  305-541-3980<br />
-                                  815-550-1294<br />
-                                  </span><br />
-                              </p></td>
-                            </tr>
-                          </table></td>
-                      </tr>
-                        <tr>
+                                <tr>
+                                    <td style="background: #fff">
+                                        <img src="http://www.taxleaf.com/Email/header.gif" width="300" height="98" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <table  border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+                                <tr>
+                                    <td>
+                                        <img src="http://www.taxleaf.com/Email/divider2.gif" width="100%" height="30" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <table   border="0" align="center" cellpadding="0" cellspacing="15" style="width:100%; background: #ffffff;margin-top: 5px">
+                                <tr>
+                                    <td valign="top" style="color:#000;padding: 15px" class="textoblanco" style="padding: 15px"><p><span class="textonegro"><strong><br />
+                                                    <br />
+                                                </strong><p id="mail-body"></p></span></p>
+                                        <p><span class="textonegro">Sincerely,</span></p>
+                                        <p><span class="textonegro">Moses Nae<br />
+                                                moses@taxleaf.com<br />
+                                                305-541-3980<br />
+                                                815-550-1294<br />
+                                            </span><br />
+                                        </p></td>
+                                </tr>
+                            </table></td>
+                    </tr>
+                    <tr>
                         <td height="50" valign="top">&nbsp;</td>
-                      </tr>
-                    </table>
+                    </tr>
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>

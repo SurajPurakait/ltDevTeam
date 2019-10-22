@@ -22,9 +22,8 @@
             $usertype = $user_info['type'];
             $role = $user_info['role'];
             if (!empty($services_list)) {
-                $keysval = 1;
                 foreach ($services_list as $keys => $row_inner) {
-                    $keysval = $keysval + $keys;
+                    $keysval = $keys+1;
                     /* check if rt6 yes or no */
                     if (trim($row_inner->service_name) == 'Rt6') {
                         $check_rt6_status = check_rt6_status($row_inner->order_id);

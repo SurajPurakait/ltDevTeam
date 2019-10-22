@@ -55,7 +55,7 @@ Class System extends CI_Model {
     public function set_user_session($id) {
         $user_post['is_delete'] = 'n';
         $user_post['status'] = '1';
-        $this->db->select('id as user_id, security_level');
+        $this->db->select('staff.id as user_id, staff.security_level');
         $this->db->where('id', $id);
         $this->db->limit(1);
         $query = $this->db->get('staff');
@@ -886,7 +886,8 @@ Class System extends CI_Model {
         return $this->db->get()->result_array();
     }
 
-    public function save_general_notification($reference, $reference_id, $action, $user_id_array = [], $assign_to_user = '') {
+    public function save_general_notification($reference, $reference_id, $action, $user_id_array = [], $assign_to_user = '',$lead_type='') {
+//        echo 'hi'.$lead_type.$reference;die;
         $tracking_status = '';
         if ($reference == 'order') {
             $order_info = $this->service_model->get_order_staff_by_order_id($reference_id);
@@ -944,6 +945,25 @@ Class System extends CI_Model {
                 $tracking_status = $this->tracking_status_array['invoice'][$invoice_info['status']];
             }
             $notification_text = 'INVOICE(#' . $reference_id . ')';
+        }
+        if($reference == 'lead' || $reference == 'partner'){
+            $leadinfo=$this->db->get_where('lead_management',['id'=>$reference_id])->row_array();
+            $user_id_array[]=$leadinfo['staff_requested_by'];
+            if ($action == 'insert' || $action == 'edit' || $action == 'tracking'){
+//                $office_staff = $this->administration->get_all_office_staff($leadinfo['staff_requested_by']);
+//                if(!empty($office_staff)){
+//                    $user_id_array = array_merge($user_id_array, array_column($office_staff, 'staff_id'));
+//                }
+            }
+            if($lead_type==1){
+                $notification_text = 'CLIENT LEAD(#' . $reference_id . ')';
+            }
+            if($lead_type==2){
+                $notification_text = 'PARTNER(#' . $reference_id . ')';
+            }
+            if($lead_type==3){
+                $notification_text = 'PARTNER LEAD(#' . $reference_id . ')';
+            }
         }
         $notification_data = [];
         if ($reference != 'action' && $action != 'clear') {
@@ -1348,12 +1368,12 @@ Class System extends CI_Model {
 
     public function get_user_logo($id) {
         $data = $this->db->get_where('office', array('id' => $id))->row_array();
-        return $data['photo'];
+        return isset($data['photo']) ? $data['photo'] : '';
     }
 
     public function get_office_id($id) {
         $data = $this->db->get_where('office', array('id' => $id))->row_array();
-        return $data['office_id'];
+        return isset($data['office_id']) ? $data['office_id'] : '';
     }
 
     public function task_created_by_staff($task_id) {
@@ -1369,8 +1389,8 @@ Class System extends CI_Model {
             $individual_info = $this->individual->get_individual_by_id($reference_id);
             $client_name = $individual_info['last_name'] . $individual_info['first_name'];
         }
-        $company_name = str_replace(' ', '',$client_name);
-        $c = preg_replace("/[^a-zA-Z0-9]/", "",$company_name);
+        $company_name = str_replace(' ', '', $client_name);
+        $c = preg_replace("/[^a-zA-Z0-9]/", "", $company_name);
         return strtoupper(substr($c, 0, 11));
     }
 

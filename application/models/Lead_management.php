@@ -82,7 +82,8 @@ Class Lead_management extends CI_Model {
     }
 
     public function get_type_of_contact_by_id($id) {
-        return $this->db->get_where("type_of_contact_prospect", ['id' => $id])->row_array();
+        // return $this->db->get_where("type_of_contact_prospect", ['id' => $id])->row_array();
+        return $this->db->get_where("lead_type", ['id' => $id])->row_array();
     }
 
     public function get_type_of_contact_referral_by_id($id) {
@@ -369,6 +370,10 @@ Class Lead_management extends CI_Model {
             $added_by = '';
         }
 
+        if (isset($data["sender_email"])) {
+            unset($data["sender_email"]);
+        }
+
         if (isset($data['ref_partner_id'])) {
             $ref_partner_id = $data["ref_partner_id"];
             unset($data["ref_partner_id"]);
@@ -444,7 +449,7 @@ Class Lead_management extends CI_Model {
         unset($data["fromval"]);
         $lead_management = $data;
         $lead_management = array_merge($lead_management, ["staff_requested_by" => $this->session->userdata("user_id"), "status" => $status, "submission_date" => date('Y-m-d')]);
-
+//        print_r($lead_management);die;
         $this->db->trans_begin();
         $this->db->insert('lead_management', $lead_management);
         $id = $this->db->insert_id();
@@ -468,6 +473,14 @@ Class Lead_management extends CI_Model {
         if (!empty($lead_notes)) {
             $this->notes->insert_note(3, $lead_notes, "lead_id", $id);
         }
+        $lead_type = $lead_management['type'];
+        if ($lead_type == 1 || $lead_type == 3) {
+            $reference = 'lead';
+        }if ($lead_type == 2) {
+            $reference = 'partner';
+        }
+        $staff[0] = sess('user_id');
+        $this->system->save_general_notification($reference, $id, 'insert', $staff, '', $lead_type);
 
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -529,10 +542,25 @@ Class Lead_management extends CI_Model {
             $this->db->where(['lm.type_of_contact' => $lead_contact_type]);
         }
         if ($lead_type != '') {
-            $this->db->group_start();
-            $this->db->where(['lm.type' => $lead_type]);
-            $this->db->or_where(['lm.type' => '3']);
-            $this->db->group_end();
+
+            if ($lead_type == '1') {
+                $this->db->group_start();
+                $this->db->group_start();
+                $this->db->where(['lm.type' => $lead_type]);
+                $this->db->or_where(['lm.type' => '3']);
+                $this->db->group_end();
+
+                $this->db->or_group_start();
+                $this->db->where(['lm.type' => '2']);
+                $this->db->where(['lm.assigned_status' => 'y']);
+                $this->db->group_end();
+                $this->db->group_end();
+            } else {
+                $this->db->group_start();
+                $this->db->where(['lm.type' => $lead_type]);
+                $this->db->or_where(['lm.type' => '3']);
+                $this->db->group_end();
+            }
         } else {
             $this->db->group_start();
             $this->db->where(['lm.type' => '1']);
@@ -809,17 +837,17 @@ Class Lead_management extends CI_Model {
             if (!empty($check)) {
                 //if ($check['day_0_mail_date'] == '0000-00-00') {
                 /* mail section */
-//                    $user_email = $check['email'];
-//                    $config = Array(
-//                        'protocol' => 'smtp',
-//                        'smtp_host' => 'ssl://smtp.gmail.com',
-//                        'smtp_port' => 465,
-//                        'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-//                        'smtp_pass' => 'codetestml0016@123', // change it to yours
-//                        'mailtype' => 'html',
-//                        'charset' => 'utf-8',
-//                        'wordwrap' => TRUE
-//                    );
+                $user_email = $check['email'];
+//                $config = Array(
+//                    'protocol' => 'smtp',
+//                    'smtp_host' => 'ssl://smtp.gmail.com',
+//                    'smtp_port' => 465,
+//                    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+//                    'smtp_pass' => 'codetestml0016@123', // change it to yours
+//                    'mailtype' => 'html',
+//                    'charset' => 'utf-8',
+//                    'wordwrap' => TRUE
+//                );
 
                 $config = Array(
                     //'protocol' => 'smtp',
@@ -841,7 +869,8 @@ Class Lead_management extends CI_Model {
                 $user_name = $check["first_name"] . ', ' . $check["last_name"];
                 $contact_type = $this->get_type_of_contact_by_id($check["type_of_contact"]);
                 $lead_source = $this->get_lead_source_by_id($check["lead_source"]);
-                // Set veriables --- #name, #type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #source_detail
+                $office_info = $this->administration->get_office_by_id($lead_result['office']);
+                // Set veriables --- #name, #type,#lead_type ,#company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #source_detail, #office_name, #office_address, #office_phone_number
                 $veriable_array = [
                     'name' => $lead_result['first_name'],
                     'type_of_contact' => $contact_type['name'],
@@ -854,7 +883,11 @@ Class Lead_management extends CI_Model {
                     'staff_email' => $user_details['user'],
                     'date_first_contact' => ($lead_result['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($lead_result['date_of_first_contact'])) : '',
                     'lead_source' => $lead_source['name'],
-                    'source_detail' => $lead_result['lead_source_detail']
+                    'source_detail' => $lead_result['lead_source_detail'],
+                    'lead_type' => $lead_result['type'],
+                    'office_phone_number' => $office_info['phone'],
+                    'office_address' => $office_info['address'],
+                    'office_name' => $office_info['name']
                 ];
 
                 foreach ($veriable_array as $index => $value) {
@@ -1008,7 +1041,8 @@ Class Lead_management extends CI_Model {
                 //}
             }
         }
-
+        $staff[0] = sess('user_id');
+        $this->system->save_general_notification('lead', $id, 'tracking', $staff, '', 1);
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return false;
@@ -1116,7 +1150,6 @@ Class Lead_management extends CI_Model {
         }
 
         $lead_management = $data;
-
         $this->db->trans_begin();
 
         $this->db->set($lead_management)->where("id", $lead_id)->update('lead_management');
@@ -1128,6 +1161,14 @@ Class Lead_management extends CI_Model {
         if (!empty($edit_lead_notes)) {
             $this->notes->update_note(3, $edit_lead_notes);
         }
+        $lead_type = $lead_management['type'];
+        if ($lead_type == 1 || $lead_type == 3) {
+            $reference = 'lead';
+        }if ($lead_type == 2) {
+            $reference = 'partner';
+        }
+        $staff[0] = sess('user_id');
+        $this->system->save_general_notification($reference, $lead_id, 'edit', $staff, '', $lead_type);
 
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -1214,14 +1255,14 @@ Class Lead_management extends CI_Model {
         return $this->db->query("SELECT * FROM `lead_mail` where id='$id'")->row_array();
     }
 
-    public function lead_campaign_mails($service, $language, $day, $status = '', $group_by = '') {
-        $query = "SELECT lmc.*,(select name from type_of_contact_prospect where id=lmc.service) as service_name,(select language from languages where id=lmc.language) as language_name, CONCAT((select name from type_of_contact_prospect where id=lmc.service) , '-', (select language from languages where id=lmc.language)) AS main_title FROM `lead_mail_chain` lmc";
+    public function lead_campaign_mails($leadtype, $language, $day, $status = '', $group_by = '') {
+        $query = "SELECT lmc.*,(select type from lead_type where id='lmc.lead_type') as lead_name,(select language from languages where id='lmc.language') as language_name, CONCAT((select type from lead_type where id='lmc.lead_type') , '-', (select language from languages where id='lmc.language')) AS main_title FROM `lead_mail_chain` lmc";
         $sql = '';
-        if ($service != '') {
+        if ($leadtype != '') {
             if ($sql == '') {
-                $sql .= ' where lmc.service = "' . $service . '"';
+                $sql .= ' where lmc.lead_type = "' . $leadtype . '" and lmc.lead_type!=0 ';
             } else {
-                $sql .= ' and lmc.service = "' . $service . '"';
+                $sql .= ' and lmc.lead_type = "' . $leadtype . '"';
             }
         }
         if ($language != '') {
@@ -1248,8 +1289,9 @@ Class Lead_management extends CI_Model {
         if ($group_by != '') {
             $sql .= ' GROUP BY main_title';
         }
-        $query_sql = $query . $sql . ' ORDER BY lmc.service';
+        $query_sql = $query . $sql . ' ORDER BY lmc.lead_type';
         return $this->db->query($query_sql)->result_array();
+        // return $this->db->last_query();
     }
 
     public function edit_lead_mail_chain_content($id) {
@@ -1258,10 +1300,10 @@ Class Lead_management extends CI_Model {
 
     public function insert_mail_campaign_content($data) {
 
-        $check = $this->check_if_mail_exists($data['service'], $data['language'], $data['day']);
+        $check = $this->check_if_mail_exists($data['leadtype'], $data['language'], $data['day']);
 
         if (empty($check)) {
-            $update_data = array('service' => $data['service'],
+            $update_data = array('lead_type' => $data['leadtype'],
                 'language' => $data['language'],
                 'type' => $data['day'],
                 'subject' => $data['subject'],
@@ -1287,11 +1329,11 @@ Class Lead_management extends CI_Model {
 
     public function update_mail_campaign_content($data) {
 
-        $check = $this->check_if_mail_exists($data['service'], $data['language'], $data['day']);
+        $check = $this->check_if_mail_exists($data['leadtype'], $data['language'], $data['day']);
 
         if (empty($check)) {
 
-            $update_data = array('service' => $data['service'],
+            $update_data = array('lead_type' => $data['leadtype'],
                 'language' => $data['language'],
                 'type' => $data['day'],
                 'subject' => $data['subject'],
@@ -1688,6 +1730,7 @@ Class Lead_management extends CI_Model {
         $this->db->trans_begin();
 
         $this->db->set('type', '2');
+        $this->db->set('assigned_status', 'y');
         $this->db->where('id', $id);
         $this->db->update('lead_management');
 
@@ -1881,6 +1924,10 @@ Class Lead_management extends CI_Model {
     public function get_types_of_lead($id) {
         $data = $this->db->get_where('lead_management', array('id' => $id))->row_array();
         return $data['type'];
+    }
+
+    public function get_lead_type_for_mail() {
+        return $this->db->get("lead_type")->result_array();
     }
 
 }

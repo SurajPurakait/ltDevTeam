@@ -332,9 +332,6 @@ function show_action_files(id,staff) {
     });
 }
 
-
-
-
 function show_lead_notes(id) {
     $.ajax({
         type: 'POST',
@@ -1636,6 +1633,64 @@ function show_project_task_notes(id) {
             openModal('showProjectTaskNotes');
         },
         beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+function show_task_files(id,staff) {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'modal/show_task_files',
+        data: {
+            id: id,
+            staff : staff
+        },
+        success: function (result) {
+            if($("#taskfilespan" + id).find("a").hasClass('label-danger')) {
+                $("#taskfilespan" + id).find("a").removeClass('label-danger');
+                $("#taskfilespan" + id).find("a").addClass('label-success');
+            }
+            $('#showTaskFiles #files-modal-body').html(result);
+            openModal('showTaskFiles');
+        }
+    });
+}
+var file_upload_task = () => {
+    if (!requiredValidation('file_upload_task_modal')) {
+        return false;
+    }
+    var form_data = new FormData(document.getElementById("file_upload_task_modal"));
+    var task_id = $("#task_id").val();
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'modal/file_upload_task',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            // console.log(result);return false;
+            var oldactionfilecount = $("#taskfile" + task_id).attr('count');
+            if (result.trim() == oldactionfilecount) {
+                swal("ERROR!", "Unable To Add Empty File", "error");
+            } else {
+                swal({title: "Success!", text: "Successfully Saved!", type: "success"}, function () {
+                    // var oldactionfilecount = $("#actionfile" + action_id).attr('count');
+                    // var newactionfilecount = parseInt(oldactionfilecount) + parseInt(result.trim());
+                    //alert(newactionfilecount);
+                    $("#taskfilespan" + task_id).html('<a class="label label-danger" href="javascript:void(0)" onclick="show_task_files(' + task_id + ')"><b>' + result + '</b></a>');
+                });
+            }
+            document.getElementById("file_upload_task_modal").reset();
+            $("#showTaskFiles").modal('hide');
+        },
+        beforeSend: function () {
+            $(".upload-file-butt").prop('disabled', true).html('Processing...');
             openLoading();
         },
         complete: function (msg) {

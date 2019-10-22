@@ -4,7 +4,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <form class="form-horizontal" method="post" id="edit_lead_prospect">
-                        <h3>Add New Prospect</h3>
+                        <h3>Edit Prospect</h3>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
@@ -105,9 +105,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Phone 1</label>
+                            <label class="col-lg-2 control-label">Phone 1<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" phoneval="" id="phone1" name="phone1" title="Phone 1" value="<?= $data["phone1"]; ?>">
+                                <input placeholder="" required class="form-control" type="text" phoneval="" id="phone1" name="phone1" title="Phone 1" value="<?= $data["phone1"]; ?>">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -199,6 +199,7 @@
 
                         <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
+                                <input type="hidden" name="type" value="<?= $data['type'] ?>">
                                 <button class="btn btn-success" type="button" onclick="edit_lead_prospect('<?= $from_menu; ?>')">Save Changes</button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button" onclick="cancel_lead_prospect()">Cancel</button>
                             </div>

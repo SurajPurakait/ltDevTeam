@@ -8,6 +8,7 @@ class New_prospect extends CI_Controller {
         parent::__construct();
         $this->load->model('lead_management', "lm");
         $this->load->model("system");
+        $this->load->model("administration");
         if (!$this->session->userdata('user_id') && $this->session->userdata('user_id') == '') {
             redirect(base_url());
         }
@@ -36,6 +37,7 @@ class New_prospect extends CI_Controller {
     }
 
     public function insert_new_prospect() {
+        // print_r(post());exit;
         $email = post("email");
         if ($this->lm->duplicate_email_check($email)) {
             echo 0;
@@ -53,39 +55,47 @@ class New_prospect extends CI_Controller {
 
             if (post('mail_campaign_status') == 1) {
                 /* mail section */
-//                $user_email = post("email");
-//                $config = Array(
-//                    'protocol' => 'smtp',
-//                    'smtp_host' => 'ssl://smtp.gmail.com',
-//                    'smtp_port' => 465,
-//                    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-//                    'smtp_pass' => 'codetestml0016@123', // change it to yours
-//                    'mailtype' => 'html',
-//                    'charset' => 'utf-8',
-//                    'wordwrap' => TRUE
-//                );
-
+                $user_email = post("email");
                 $config = Array(
-                    //'protocol' => 'smtp',
-                    'smtp_host' => 'mail.leafnet.us',
+                    'protocol' => 'smtp',
+                    'smtp_host' => 'ssl://smtp.gmail.com',
                     'smtp_port' => 465,
-                    'smtp_user' => 'developer@leafnet.us', // change it to yours
-                    'smtp_pass' => 'developer@123', // change it to yours
+                    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+                    'smtp_pass' => 'codetestml0016@123', // change it to yours
                     'mailtype' => 'html',
                     'charset' => 'utf-8',
                     'wordwrap' => TRUE
                 );
+
+//                 $config = Array(
+//                     //'protocol' => 'smtp',
+//                     'smtp_host' => 'mail.leafnet.us',
+//                     'smtp_port' => 465,
+//                     'smtp_user' => 'developer@leafnet.us', // change it to yours
+//                     'smtp_pass' => 'developer@123', // change it to yours
+//                     'mailtype' => 'html',
+//                     'charset' => 'utf-8',
+//                     'wordwrap' => TRUE
+//                 );
                 $lead_result = $this->lm->view_leads_record($id);
                 $mail_data = $this->lm->get_campaign_mail_data(post("type_of_contact"), post("language"), 1);
                 $email_subject = $mail_data['subject'];
                 $mail_body = urldecode($mail_data['body']);
                 $user_details = staff_info();
-                $from = $user_details['user'];
-                $from_name = $user_details['first_name'] . ', ' . $user_details['last_name'];
+                if ($this->input->post('sender_email')) {
+                    $from = $this->input->post('sender_email');
+                    $from_name = $this->input->post('sender_email');
+                } else {
+                    $from = $user_details['user'];
+                    $from_name = $user_details['first_name'] . ', ' . $user_details['last_name'];
+                }
+                // $from = $user_details['user'];
+                // $from_name = $user_details['first_name'] . ', ' . $user_details['last_name'];
                 $user_name = post("first_name") . ', ' . post("last_name");
                 $contact_type = $this->lm->get_type_of_contact_by_id(post("type_of_contact"));
                 $lead_source = $this->lm->get_lead_source_by_id(post("lead_source"));
-                // Set veriables --- #name, #type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #source_detail
+                $office_info = $this->administration->get_office_by_id(post('office'));
+                // Set veriables --- #name, #type, #lead_type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #source_detail, #office_name, #office_address, #office_phone_number
                 $veriable_array = [
                     'name' => $lead_result['first_name'],
                     'type_of_contact' => $contact_type['name'],
@@ -98,7 +108,11 @@ class New_prospect extends CI_Controller {
                     'staff_email' => $user_details['user'],
                     'date_first_contact' => ($lead_result['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($lead_result['date_of_first_contact'])) : '',
                     'lead_source' => $lead_source['name'],
-                    'source_detail' => $lead_result['lead_source_detail']
+                    'source_detail' => $lead_result['lead_source_detail'],
+                    'lead_type' => $lead_result['type'],
+                    'office_phone_number' => $office_info['phone'],
+                    'office_address' => $office_info['address'],
+                    'office_name' => $office_info['name']
                 ];
 
                 foreach ($veriable_array as $index => $value) {
@@ -188,19 +202,6 @@ class New_prospect extends CI_Controller {
                             </tr>
                           </table>          
                           <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
-                            <tr>
-                              <td bgcolor="#ffffff"><table width="100%" border="0" cellspacing="15" cellpadding="0">
-                                <tr>
-                                  <td width="97%" class="textonegro"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                    <tr>
-                                      <td valign="top">TaxLeaf <font color="#e46e04"><strong>Corporate</strong></font><br />
-                                            1549 NE 123 ST<br />
-                                            North Miami, FL 33161<br /></td>
-                                    </tr>
-                                  </table></td>
-                                </tr>
-                              </table></td>
-                            </tr>
                         </table></td>
                       </tr>
                         <tr>

@@ -8,11 +8,13 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <select class="form-control" title="Service" id="service" name="service">
-                                        <option value="">Select Service</option>
+                                    <!-- <select class="form-control" title="Service" id="service" name="service"> -->
+                                        <select class="form-control" title="Lead Type" id="leadtype" name="leadtype">
+                                        <option value="">Select Lead Type</option>
                                         <?php foreach ($type_of_contact as $value): ?>
-                                            <option value="<?= $value["id"]; ?>"><?= $value["name"]; ?></option>
+                                            <option value="<?= $value["id"]; ?>"><?= $value["type"]; ?></option>
                                         <?php endforeach; ?>
+                                        
                                     </select>
                                 </div>
                             </div>
@@ -67,35 +69,35 @@
 <script>
     load_campaign_mails('', '', '', '');
     $(function () {
-        $("#service").change(function () {
-            var service = $("#service option:selected").val();
+        $("#leadtype").change(function () {
+            var leadtype = $("#leadtype option:selected").val();
             var language = $("#language option:selected").val();
             var day = $("#day option:selected").val();
             var status = $("#status option:selected").val();
-            load_campaign_mails(service, language, day, status);
+            load_campaign_mails(leadtype, language, day, status);
         });
 
         $("#language").change(function () {
-            var service = $("#service option:selected").val();
+            var leadtype = $("#leadtype option:selected").val();
             var language = $("#language option:selected").val();
             var day = $("#day option:selected").val();
             var status = $("#status option:selected").val();
-            load_campaign_mails(service, language, day, status);
+            load_campaign_mails(leadtype, language, day, status);
         });
 
         $("#day").change(function () {
-            var service = $("#service option:selected").val();
+            var leadtype = $("#leadtype option:selected").val();
             var language = $("#language option:selected").val();
             var day = $("#day option:selected").val();
             var status = $("#status option:selected").val();
-            load_campaign_mails(service, language, day, status);
+            load_campaign_mails(leadtype, language, day, status);
         });
         $("#status").change(function () {
-            var service = $("#service option:selected").val();
+            var leadtype = $("#leadtype option:selected").val();
             var language = $("#language option:selected").val();
             var day = $("#day option:selected").val();
             var status = $("#status option:selected").val();
-            load_campaign_mails(service, language, day, status);
+            load_campaign_mails(leadtype, language, day, status);
         });
     });
 </script>

@@ -1540,3 +1540,45 @@ function load_project_tasks(id, created_at, dueDate) {
         });
     }
 }
+var saveInputForms = function () {
+    if (!requiredValidation('project_input_form')) {
+        return false;
+    }
+
+    var form_data = new FormData(document.getElementById('project_input_form'));
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'task/save_project_input_form',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            if (result != 0) {
+                swal("Success!", "Successfully saved!", "success");
+                goURL(base_url + 'project');
+            } else {
+                swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+function deleteTaskNote(divID, noteID, relatedTableID) {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'home/delete_note',
+        data: {
+            note_id: noteID,
+            related_table_id: relatedTableID
+        }
+    });
+    $("#" + divID).remove();
+}

@@ -13,12 +13,12 @@ class Home extends CI_Controller {
             redirect(base_url());
         }
         $this->filter_element = [
-            1 => "Type",
-            2 => "Tracking",
+            5 => "Active Date",
+            6 => "Complete Date",
             3 => "Office",
             4 => "Staff",
-            5 => "Active Date",
-            6 => "Complete Date"
+            2 => "Tracking",
+            1 => "Type"
         ];
     }
 
@@ -80,7 +80,7 @@ class Home extends CI_Controller {
     }
 
     public function update_action_status() {
-        echo $this->lead_management->update_lead_status($this->input->post("id"), $this->input->post("status"));
+        echo $this->lead_management->update_lead_status(post("id"), post("status"));
     }
 
     public function load_count_data() {
@@ -120,7 +120,7 @@ class Home extends CI_Controller {
     }
 
     public function change_mail_campaign_status() {
-        echo $this->lead_management->change_mail_campaign_status(post("service"), post("language"), post("status"));
+        echo $this->lead_management->change_mail_campaign_status(post("leadtype"), post("language"), post("status"));
     }
 
     public function filter_dropdown_option_ajax() {
