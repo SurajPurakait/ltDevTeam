@@ -8903,5 +8903,13 @@ a.panel-title {
 .fixed-container .tab-content {
     padding-top: 153px;
 }
-.nav-tabs li a { background:#1c84c6; color: #fff; }
-.tab-content {padding: 20px;}
+.nav-tabs li a { background:#e6e6e6; color: #000; }
+.tab-content {padding:30px 5px 20px 5px;}
+.alert-primar {
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+    padding:5px 0 ;
+    float: left;
+    
+}

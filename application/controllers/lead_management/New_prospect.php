@@ -98,7 +98,7 @@ class New_prospect extends CI_Controller {
                 // Set veriables --- #name, #type, #lead_type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #source_detail, #office_name, #office_address, #office_phone_number
                 $veriable_array = [
                     'name' => $lead_result['first_name'],
-                    'type_of_contact' => $contact_type['name'],
+                    'type_of_contact' => $contact_type['type'],
                     'company_name' => $lead_result['company_name'],
                     'phone' => $lead_result['phone1'],
                     'email' => $lead_result['email'],
