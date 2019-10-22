@@ -68,7 +68,7 @@ class Action_model extends CI_Model {
     }
 
     public function get_action_list($request = '', $status = '', $priority = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '') {
-//        echo 'hiu'.$status;
+//        print_r($filter_data);die;
         $user_info = staff_info();
         $user_department = $user_info['department'];
         $user_type = $user_info['type'];
@@ -301,7 +301,10 @@ class Action_model extends CI_Model {
                     $this->db->where_not_in('act.status', [2, 7]);
                     $this->db->where_in('act.status', [0, 1, 6]);
                 } else {
-                    if (isset($filter_data['criteria_dropdown']['tracking'])) {
+                    if(isset($filter_data['criteria_dropdown']['id']) || isset($filter_data['criteria_dropdown']['created_by'])){
+                        $this->db->where_in('act.status',[0,1,2,6,7]);
+                    }
+                    else if (isset($filter_data['criteria_dropdown']['tracking'])) {
                         $filter_array = $filter_data['criteria_dropdown']['tracking'];
                         if (in_array('2', $filter_array)) {
                             $this->db->where_not_in('act.status', [7]);
@@ -2255,7 +2258,7 @@ class Action_model extends CI_Model {
                         $this->db->join('office_staff os', 'os.staff_id = st.id');
                         $this->db->where(['os.office_id' => $office]);
                     endif;
-                    $this->db->where(['st.type!=' => 4]);
+                    $this->db->where(['st.type!=' => 4,'st.status!=' => 0]);
                     return $this->db->get()->result_array();
                 }
                 break;
@@ -3287,6 +3290,14 @@ class Action_model extends CI_Model {
         return array_column($result, 'read_status');
         // return $result['read_status'];
     }
+
+    public function get_action_notes_read_status($id,$staffid) {
+        $result = $this->db->get_where('action_notes', array('action_id' => $id,'added_by_user'=>$staffid))->result_array();
+        return array_column($result, 'read_status');
+        // return $result['read_status'];
+    }
+
+
 
     public function file_upload_actions($data, $files) {
         if (!empty($files["name"])) {

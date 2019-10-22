@@ -289,13 +289,24 @@ function delete_lead_source(source_id) {
             });
 }
 
-function add_lead_prospect(added_by,event_lead ="") {
+function confirm_sender_email(added_by, event_lead = "") {
     if (!requiredValidation('form_add_new_prospect')) {
         return false;
     }
+    var mail_camapign_status = $("#mail_campaign_status").val();
+    if (mail_camapign_status == '1') {
+        openModal('mail-campaign-confirm');
+    } else {
+        add_lead_prospect(added_by, event_lead);
+}
+}
+
+function add_lead_prospect(added_by, event_lead = "") {
     var form_data = new FormData(document.getElementById('form_add_new_prospect'));
     form_data.append('added_by', added_by);
-    
+    if ($('input[name="sender_email"]:checked').val() != 'undefined') {
+        form_data.append('sender_email', $('input[name="sender_email"]:checked').val());
+    }
     $.ajax({
         type: "POST",
         data: form_data,
@@ -314,10 +325,9 @@ function add_lead_prospect(added_by,event_lead ="") {
                 swal({title: "Success!", text: "Lead Prospect Successfully Added!", type: "success"}, function () {
                     if (added_by == 'refagent') {
                         goURL(base_url + 'referral_partner/referral_partners/referral_partner_dashboard');
-                    }else if(event_lead == "event_lead"){
+                    } else if (event_lead == "event_lead") {
                         goURL(base_url + 'lead_management/event');
-                    }
-                     else {
+                    } else {
                         goURL(base_url + 'lead_management/home');
                     }
                 });
@@ -528,12 +538,12 @@ function delete_mail_campaign(id) {
             });
 }
 
-function load_campaign_mails(service, language, day, status) {
+function load_campaign_mails(leadtype, language, day, status) {
     $.ajax({
         type: 'POST',
         url: base_url + 'lead_management/lead_mail/load_campaign_mails',
         data: {
-            service: service, language: language, day: day, status: status
+            leadtype: leadtype, language: language, day: day, status: status
         },
         success: function (result) {
             $("#load_data").html(result);
@@ -675,7 +685,7 @@ function loadStaffDLLValue(officeID, staffID) {
     });
 }
 
-function changeCampaignStatus(service, language, status) {
+function changeCampaignStatus(leadtype, language, status) {
     swal({
         title: 'Are you sure?',
         text: "You want to " + (status == 0 ? 'In' : '') + "active!",
@@ -689,7 +699,7 @@ function changeCampaignStatus(service, language, status) {
             $.ajax({
                 type: "POST",
                 data: {
-                    service: service,
+                    leadtype: leadtype,
                     language: language,
                     status: status
                 },
@@ -751,36 +761,36 @@ var delete_lead_management = (id) => {
         confirmButtonText: "Yes, delete it!",
         closeOnConfirm: false
     },
-    function () {
-        $.ajax({
-            type: 'POST',
-            url: base_url + 'lead_management/home/delete_lead',
-            data: {
-                id: id
-            },
-            success: function (result) {
-                // alert(result);
-                if (result == "1") {
-                    swal({
-                        title: "Success!",
-                        "text": "Lead Management been deleted successfully!",
-                        "type": "success"
-                    }, function () {
-                        goURL(base_url + 'lead_management/home');
-                    });
-                } else {
-                    swal("ERROR!", "Unable to delete this Lead Management!!", "error");
-                }
-            }
-        });
-    });
+            function () {
+                $.ajax({
+                    type: 'POST',
+                    url: base_url + 'lead_management/home/delete_lead',
+                    data: {
+                        id: id
+                    },
+                    success: function (result) {
+                        // alert(result);
+                        if (result == "1") {
+                            swal({
+                                title: "Success!",
+                                "text": "Lead Management been deleted successfully!",
+                                "type": "success"
+                            }, function () {
+                                goURL(base_url + 'lead_management/home');
+                            });
+                        } else {
+                            swal("ERROR!", "Unable to delete this Lead Management!!", "error");
+                        }
+                    }
+                });
+            });
 }
 
-function add_event (){
+function add_event() {
     if (!requiredValidation('form_add_new_event')) {
         return false;
     }
-    
+
     var form_data = new FormData(document.getElementById('form_add_new_event'));
     // console.log(form_data);return false;
     $.ajax({
@@ -812,20 +822,20 @@ function add_event (){
 
 }
 
-function change_zip_by_country(val){
-    if(val == '230'){
+function change_zip_by_country(val) {
+    if (val == '230') {
         $("#zip_div").show();
-    }else{
+    } else {
         $("#zip_div").hide();
     }
 }
 
-var mail_campaign_status_change = (id,value) => {
+var mail_campaign_status_change = (id, value) => {
     $.ajax({
         type: "POST",
-        data: { 
-            id : id,
-            value : value 
+        data: {
+            id: id,
+            value: value
         },
         url: base_url + 'lead_management/home/change_tracking_status',
         dataType: "html",
@@ -834,22 +844,22 @@ var mail_campaign_status_change = (id,value) => {
                 swal("Success!", "Tracking is Actived Now", "success");
             }
         },
-    });            
+    });
 }
 
-function assign_as_client(id,partner_id) {
+function assign_as_client(id, partner_id) {
     $.ajax({
         type: "POST",
-        data: { 
-            id : id,
-            partner_id : partner_id 
+        data: {
+            id: id,
+            partner_id: partner_id
         },
         url: base_url + 'lead_management/home/assign_lead_as_client',
         dataType: "html",
         success: function (result) {
-            if(result == 1){
+            if (result == 1) {
                 $("#assign_as_client-" + id).replaceWith('<a href="javascript:void(0);" class="btn btn-warning btn-xs btn-assign-client"> Assigned as Client</a>');
-                swal("Success!", "Successfully Assigned as Client", "success");    
+                swal("Success!", "Successfully Assigned as Client", "success");
             }
         },
     });
@@ -858,49 +868,49 @@ function assign_as_client(id,partner_id) {
 function assign_as_partner(id) {
     $.ajax({
         type: "POST",
-        data: { 
-            id : id 
+        data: {
+            id: id
         },
         url: base_url + 'lead_management/home/assign_lead_as_partner',
         dataType: "html",
         success: function (result) {
-            if(result == 1){
+            if (result == 1) {
                 $("#assign_as_partner-" + id).replaceWith('<a href="javascript:void(0);" class="btn btn-warning btn-xs btn-assign-client"> Assigned as Partner</a>');
                 // $("#lead-" +id).hide();
-                swal("Success!", "Successfully Assigned as Partner", "success");    
+                swal("Success!", "Successfully Assigned as Partner", "success");
             }
         },
     });
 }
-function update_event(id){
+function update_event(id) {
     // alert(id);return false;   
     var form_data = new FormData(document.getElementById('event_modal_form_submit'));
-        $.ajax({
-              type: 'POST',
-              url: base_url + 'lead_management/event/update_event/'+ id,
-              data: form_data,
-              processData: false,
-              contentType: false,
-              success: function (result) {
-                   // alert(result);return false;
-                  if(result.trim() == 1 ){
-                      swal("Success!", "Successfully updated event!", "success");
-                      $("#event-form-modal").modal('hide');
-                      goURL(base_url + 'lead_management/event');
-                     
-                   }else{
-                      swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
-                   }
-                 
-              },
-              beforeSend: function () {
-                  $("#eventupdate").prop('disabled', true).html('Processing...');
-                  openLoading();
-              },
-              complete: function (msg) {
-                  closeLoading();
-              }
-          });
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'lead_management/event/update_event/' + id,
+        data: form_data,
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            // alert(result);return false;
+            if (result.trim() == 1) {
+                swal("Success!", "Successfully updated event!", "success");
+                $("#event-form-modal").modal('hide');
+                goURL(base_url + 'lead_management/event');
+
+            } else {
+                swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+            }
+
+        },
+        beforeSend: function () {
+            $("#eventupdate").prop('disabled', true).html('Processing...');
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
 }
 function sort_lead_dashboard(sort_criteria = '', sort_type = '') {
     var form_data = new FormData(document.getElementById('filter-form'));

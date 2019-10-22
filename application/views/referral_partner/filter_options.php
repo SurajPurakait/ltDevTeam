@@ -5,6 +5,11 @@ $return = '';
              if (isset($options_val) && count($options_val) > 0) {
                 $return .= "<select class='form-control criteria-dropdown chosen-select' placeholder='All Criteria' name='criteria_dropdown[type][]'>";
                 $return .= "<option value=''>All Criteria</option>";
+                $new_sort=array();
+                foreach ($options_val as $key => $evl):
+                    $new_sort[$key]= $evl['name'];
+                endforeach;
+                array_multisort($new_sort, SORT_ASC, $options_val);
                 foreach ($options_val as $ov):
                     $return .= "<option value='" . $ov['id'] . "'>" . $ov['name'] . "</option>";
                 endforeach;
@@ -15,6 +20,11 @@ $return = '';
             if (isset($options_val) && count($options_val) > 0) {
                 $return .= "<select class='form-control criteria-dropdown chosen-select' placeholder='All Criteria' name='criteria_dropdown[requested_by][]'>";
                 $return .= "<option value=''>All Criteria</option>";
+                $new_sort=array();
+                foreach ($options_val as $key => $evl):
+                    $new_sort[$key]= $evl['last_name'];
+                endforeach;
+                array_multisort($new_sort, SORT_ASC, $options_val);
                 foreach ($options_val as $ov):
                     $return .= "<option value='" . $ov['id'] . "'>" . $ov['last_name'].', '.$ov['first_name'] . "</option>";
                 endforeach;
@@ -27,6 +37,11 @@ $return = '';
             if (isset($options_val_name) && count($options_val_name) > 0) {
                 $return .= "<select class='form-control criteria-dropdown chosen-select' placeholder='All Criteria' name='criteria_dropdown[partner_name][]'>";
                 $return .= "<option value=''>All Criteria</option>";
+                $new_sort=array();
+                foreach ($options_val_name as $key => $evl):
+                    $new_sort[$key]= $evl['last_name'];
+                endforeach;
+                array_multisort($new_sort, SORT_ASC, $options_val_name);
                 foreach ($options_val_name as $ovn):
                     $return .= "<option value='".$ovn['id']."'>" . $ovn['last_name'].', '.$ovn['first_name'] . "</option>";
                 endforeach;

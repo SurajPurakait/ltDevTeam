@@ -12,8 +12,7 @@
                             <div class="form-group">
                                 <label>Type<span class="text-danger">*</span></label>
                                 <select title="Contact Type" class="form-control" name="contact[type]"
-                                        id="contact_type" required="">
-                                    <option value="">Select an option</option>
+                                        id="contact_type" required="">                                    
                                     <?php load_ddl_option("get_contact_info_type"); ?>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
@@ -21,13 +20,13 @@
                             <div class="form-group">
                                 <label>First Name<span class="text-danger">*</span></label>
                                 <input placeholder="" class="form-control" nameval="" type="text" id="first_name"
-                                       name="contact[first_name]" title="Contact First Name" required>
+                                       name="contact[first_name]" title="Contact First Name" maxlength="20" required>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">
                                 <label>Last Name<span class="text-danger">*</span></label>
                                 <input placeholder="" class="form-control" nameval="" type="text" id="last_name"
-                                       name="contact[last_name]" title="Contact Last Name" required>
+                                       name="contact[last_name]" title="Contact Last Name" maxlength="20" required>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">
@@ -124,7 +123,6 @@
                                 <label>Type<span class="text-danger">*</span></label>
                                 <select title="Contact Type" class="form-control" name="contact[type]"
                                         id="contact_type" required="">
-                                    <option value="">Select an option</option>
                                     <?php load_ddl_option("get_contact_info_type", $data["type"]); ?>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
@@ -133,14 +131,14 @@
                                 <label>First Name<span class="text-danger">*</span></label>
                                 <input placeholder="" class="form-control" nameval="" type="text" id="first_name"
                                        name="contact[first_name]" title="Contact First Name" required
-                                       value="<?= $data["first_name"]; ?>">
+                                       value="<?= $data["first_name"]; ?>" maxlength="20">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">
                                 <label>Last Name<span class="text-danger">*</span></label>
                                 <input placeholder="" class="form-control" nameval="" type="text" id="last_name"
                                        name="contact[last_name]" title="Contact Last Name" required
-                                       value="<?= $data["last_name"]; ?>">
+                                       value="<?= $data["last_name"]; ?>" maxlength="20">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">

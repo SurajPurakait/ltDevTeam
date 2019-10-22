@@ -1060,7 +1060,7 @@ class Billing_model extends CI_Model {
         if ($invoice_info['type'] == 2) {
             $this->db->where('id', $invoice_id);
             $this->db->update('invoice_info', ['is_order' => 'n']);
-            return true; 
+            return true;
         }
         $this->db->trans_begin();
         $service_request_columns = $this->db->list_fields('service_request');
@@ -1295,6 +1295,10 @@ class Billing_model extends CI_Model {
             $where['indt.reference_id'] = 'AND `indt`.`reference_id` = ' . $reference[0] . ' ';
             $where['indt.reference'] = 'AND `indt`.`reference` = "' . $reference[1] . '" ';
             $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 7) ';
+        }
+        if (array_key_exists('inv.id', $where) || array_key_exists('inv.order_id', $where) || array_key_exists('inv.created_by', $where)) {
+            unset($where['inv.payment_status']);
+            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0) ';
         }
 
         $table = '`invoice_info` AS `inv` ' .

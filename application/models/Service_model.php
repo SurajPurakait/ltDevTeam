@@ -205,7 +205,7 @@ class Service_model extends CI_Model {
     }
 
     public function ajax_services_dashboard_filter1($status, $request_type, $category_id, $request_by = "", $department = "", $office = "", $staff_type = "", $sort = "", $form_data = "", $sos_value = "", $sort_criteria = "", $sort_type = "") {
-        //print_r($form_data);
+//        print_r($form_data);die;
         $staff_id = sess('user_id');
         $user_info = staff_info();
         $user_dept = $user_info['department'];
@@ -446,6 +446,7 @@ class Service_model extends CI_Model {
     }
 
     public function ajax_services_dashboard_filter($status = '', $request_type = '', $category_id = '', $request_by = "", $department_id = "", $office_id = "", $staff_type = "", $sort = "", $form_data = "", $sos_value = "", $sort_criteria = "", $sort_type = "") {
+//        print_r($form_data);die;
         $staff_id = sess('user_id');
         $staff_info = staff_info();
         $select[] = 'ord.id AS id';
@@ -569,7 +570,10 @@ class Service_model extends CI_Model {
                 $where[] = 'ord.status = "' . $status . '"';
             }
         } else {
-            if (in_array('ord.status = 0', $where)) {
+            if(isset($form_data['criteria_dropdown']['invoiceno']) || isset($form_data['criteria_dropdown']['staff'])){
+                $where[] = 'ord.status in ("2","1","0","7")';
+            }
+            elseif (in_array('ord.status = 0', $where)) {
                 $where[] = 'ord.status not in ("7")';
             } elseif (in_array('ord.status = 7', $where)) {
                 $where[] = 'ord.status not in ("0")';

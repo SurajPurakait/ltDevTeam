@@ -8903,3 +8903,5 @@ a.panel-title {
 .fixed-container .tab-content {
     padding-top: 153px;
 }
+.nav-tabs li a { background:#1c84c6; color: #fff; }
+.tab-content {padding: 20px;}

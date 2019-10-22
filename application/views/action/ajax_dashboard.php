@@ -198,7 +198,8 @@ if (!empty($action_list)):
                                     <?= '<td title="Files"><span id="actionfilespan' . $action["id"] . '">' . (($action["unread_files_count"] > 0) ? '<a class="label label-danger" href="javascript:void(0)" count="' . $action["files"] . '" id="actionfile' . $action["id"] . '" onclick="show_action_files(\'' . $action["id"] . '\',\'' . ltrim($action["all_action_staffs"], ',') . $action['added_by_user'] . '\')"><b>' . $action["files"] . '</b></a>' : '<a class="label label-success" href="javascript:void(0)" count="' . $action["files"] . '" id="actionfile' . $action["id"] . '" onclick="show_action_files(\'' . $action["id"] . '\',\'' . ltrim($action["all_action_staffs"], ',') . $action['added_by_user'] . '\')"><b>' . $action["files"] . '</b></a>') . '</span></td>'; ?>
                                     <td title="Notes"><span> 
                                             <?php
-                                            $read_status = notes_read_status($action["id"]);
+                                            // $read_status = notes_read_status($action["id"]);
+                                            $read_status = action_notes_read_status($action["id"],$user_info['id']);
                                             // print_r($read_status);
 
                                             if ($action["notes"] > 0 && in_array(0, $read_status)) {

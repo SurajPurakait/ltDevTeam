@@ -125,6 +125,44 @@ class Referral_partners extends CI_Controller {
         $staffrequestedby = post('staffrequestedby');
         $referral_partner_data = $this->referral_partner->getReferralPartnerDatabyid($hiddenid);
         $this->referral_partner->set_password($referral_partner_data, $pwd,$staffrequestedby);
+        
+        // Sending email From Manager to Partner
+        $config = Array(
+           'protocol' => 'smtp',
+           'smtp_host' => 'ssl://smtp.gmail.com',
+           'smtp_port' => 465,
+           'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+           'smtp_pass' => 'codetestml0016@123', // change it to yours
+           'mailtype' => 'html',
+           'charset' => 'utf-8',
+           'wordwrap' => TRUE
+        );
+
+//             $config = Array(
+//                     'protocol' => 'smtp',
+//                     'smtp_host' => 'mail.leafnet.us',
+//                     'smtp_port' => 465,
+//                     'smtp_user' => 'developer@leafnet.us', // change it to yours
+//                     'smtp_pass' => 'developer@123', // change it to yours
+//                     'mailtype' => 'html',
+//                     'charset' => 'utf-8',
+//                     'wordwrap' => TRUE
+//             );
+        $from = staff_info_by_id($staffrequestedby)['user'];
+        $from_name = staff_info_by_id($staffrequestedby)['full_name'];
+        $email_subject = 'Account Setup';
+        $user_email = $referral_partner_data['email'];
+        $message = 'Your Account has been created Successfully <br><br> <b><u>Login Credentials</u> :<b> <br><br> <b>User Name :</b> '.$referral_partner_data['email'].'<br> <b>Password :</b>'.$pwd;
+
+        $this->load->library('email', $config);
+        $this->email->set_newline("\r\n");
+        $this->email->from($from, $from_name); // change it to yours
+        $this->email->reply_to($from, $from_name);
+        $this->email->to($user_email); // change it to yours
+        $this->email->subject($email_subject);
+        $this->email->message($message);
+        $this->email->send();
+
         redirect(base_url() . 'referral_partner/referral_partners/partners');
     }
 

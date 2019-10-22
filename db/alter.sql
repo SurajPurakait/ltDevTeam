@@ -936,3 +936,7 @@ ALTER TABLE `lead_management` CHANGE `type` `type` INT(10) NOT NULL COMMENT '1 f
 ALTER TABLE `lead_mail_chain` ADD `lead_type` INT(100) NOT NULL COMMENT '1 for client, 2 for partner' AFTER `id`;
 -- import lead_type.sql
 INSERT INTO `lead_type` (`id`, `type`) VALUES (NULL, 'Client'), (NULL, 'Partner');
+
+/*17.10.2019*/
+/* inport task_files.sql */
+ALTER TABLE `project_task` ADD `input_form_status` ENUM('n','y') NOT NULL DEFAULT 'n' AFTER `status`; 

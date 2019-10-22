@@ -71,7 +71,8 @@ class Lead_mail extends CI_Controller {
         $render_data['main_menu'] = 'leads';
         $render_data['menu'] = 'lead_mail_campaign';
         $render_data['header_title'] = $title;
-        $render_data["type_of_contact"] = $this->lead_management->get_lead_types();
+        // $render_data["type_of_contact"] = $this->lead_management->get_lead_types();
+        $render_data["type_of_contact"] = $this->lead_management->get_lead_type_for_mail();
         $render_data["languages"] = $this->system->get_languages();
         $this->load->template('lead_management/lead_mail_campaign', $render_data);
     }
@@ -84,17 +85,18 @@ class Lead_mail extends CI_Controller {
         $render_data['main_menu'] = 'leads';
         $render_data['menu'] = 'lead_mail_campaign';
         $render_data['header_title'] = $title;
-        $render_data["type_of_contact"] = $this->lead_management->get_lead_types();
+        // $render_data["type_of_contact"] = $this->lead_management->get_lead_types();
+        $render_data["type_of_contact"] = $this->lead_management->get_lead_type_for_mail();
         $render_data["languages"] = $this->system->get_languages();
         $render_data["edit_lead_mail_chain_content"] = $this->lead_management->edit_lead_mail_chain_content($id);
         $this->load->template('lead_management/edit_lead_mail_campaign', $render_data);
     }
 
     public function insert_mail_campaign_content() {
-        if ($this->input->post('email_id') == '') {
-            echo $this->lead_management->insert_mail_campaign_content($this->input->post());
+        if (post('email_id') == '') {
+            echo $this->lead_management->insert_mail_campaign_content(post());
         } else {
-            echo $this->lead_management->update_mail_campaign_content($this->input->post());
+            echo $this->lead_management->update_mail_campaign_content(post());
         }
     }
 
@@ -116,24 +118,29 @@ class Lead_mail extends CI_Controller {
         $render_data['main_menu'] = 'leads';
         $render_data['menu'] = 'lead_mail_campaign';
         $render_data['header_title'] = $title;
-        $render_data["type_of_contact"] = $this->lead_management->get_lead_types();
+        // $render_data["type_of_contact"] = $this->lead_management->get_lead_types();
+        $render_data["type_of_contact"] = $this->lead_management->get_lead_type_for_mail();
         $render_data["languages"] = $this->system->get_languages();
         $this->load->template('lead_management/add_lead_mail_campaign', $render_data);
     }
 
     public function change_dropdown_options() {
         $this->load->model('system');
-        $service = request('service');
+        // $service = request('service');
+        $leadtype = request('leadtype');
         $language = request('language');
         $day = request('day');
         $ddval = request('ddval');
-        $check_if_mail_exists = $this->lead_management->check_if_mail_exists($service, $language, $day);
+        // $check_if_mail_exists = $this->lead_management->check_if_mail_exists($service, $language, $day);
+        $check_if_mail_exists = $this->lead_management->check_if_mail_exists($leadtype, $language, $day);
         //if(!empty($check_if_mail_exists)){
         $render_data['ddval'] = $ddval;
         $render_data['check_if_mail_exists'] = $check_if_mail_exists;
-        $render_data["type_of_contact"] = $this->lead_management->get_lead_types();
+        // $render_data["type_of_contact"] = $this->lead_management->get_lead_types();
+        $render_data["type_of_contact"] = $this->lead_management->get_lead_type_for_mail();
         $render_data["languages"] = $this->system->get_languages();
-        $render_data["service"] = $service;
+        // $render_data["service"] = $service;
+        $render_data["leadtype"] = $leadtype;
         $render_data["language"] = $language;
         $render_data["day"] = $day;
         $this->load->view('lead_management/dropdown_options_ajax', $render_data);
@@ -153,13 +160,14 @@ class Lead_mail extends CI_Controller {
     }
 
     public function load_campaign_mails() {
-        $service = request('service');
+        // $service = request('service');
+        $leadtype = request('leadtype');
         $language = request('language');
         $day = request('day');
         $status = request('status');
         $render_data = request();
 //        $render_data['lead_campaign_mails'] = $this->lead_management->lead_campaign_mails($service, $language, $day, $status);
-        $render_data['main_title_array'] = $this->lead_management->lead_campaign_mails($service, $language, $day, $status, 'main_title');
+        $render_data['main_title_array'] = $this->lead_management->lead_campaign_mails($leadtype, $language, $day, $status, 'main_title');
         $this->load->view('lead_management/campaign_mails_ajax', $render_data);
     }
 
@@ -167,10 +175,11 @@ class Lead_mail extends CI_Controller {
         if (request('is_campaign') == 'y') {
             $lead_data = $this->lead_management->fetch_data(request('lead_id'));
             $day = request('day');
-            $service = $lead_data['type_of_contact'];
+            // $service = $lead_data['type_of_contact'];
+            $leadtype = $lead_data['type'];
             $language = $lead_data['language'];
-            $contact_type = $this->lead_management->get_type_of_contact_by_id($service);
-            $lead_mail = $this->lead_management->lead_campaign_mails($service, $language, $day);
+            $contact_type = $this->lead_management->get_type_of_contact_by_id($leadtype);
+            $lead_mail = $this->lead_management->lead_campaign_mails($leadtype, $language, $day);
             $added_by = staff_info_by_id($lead_data['staff_requested_by']);
             $user_details = staff_info();
             $lead_source = $this->lead_management->get_lead_source_by_id($lead_data["lead_source"]);
@@ -215,11 +224,14 @@ class Lead_mail extends CI_Controller {
     }
     
     public function show_mail_campaign_template_ajax() {
-        $service = request('service');
+        // $service = request('service');
+        $leadtype = request('leadtype');
         $language = request('language');
         $day = request('day');
-        $contact_type = $this->lead_management->get_type_of_contact_by_id($service);
-        $lead_mail = $this->lead_management->lead_campaign_mails($service, $language, $day);
+        $contact_type = $this->lead_management->get_type_of_contact_by_id($leadtype);
+        $lead_mail = $this->lead_management->lead_campaign_mails($leadtype, $language, $day);
+        // print_r($lead_mail);exit;
+        // echo $lead_mail;exit;
         if (!empty($lead_mail)) {
             $lead_mail = $lead_mail[0];
             $veriable_array = [

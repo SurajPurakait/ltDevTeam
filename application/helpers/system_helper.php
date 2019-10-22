@@ -316,7 +316,8 @@ if (!function_exists('load_ddl_option')) {
                 }
                 break;
             case "staff_office_list":
-                $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : "");
+                // $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : "");
+            $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3) ? sess('user_id') : "");
                 foreach ($item_list as $item) {
                     $select = ($selected != "" && $item['id'] == $selected) ? "selected = 'selected'" : "";
                     echo "<option $select value='" . $item['id'] . "'>" . $item['name'] . "</option>";
@@ -1843,18 +1844,18 @@ if (!function_exists('edit_order_link')) {
         if ($usertype != '3') {
             if ($row->category_id == 1) {
                 if ($row->service_id == '3' || $row->service_id == '39' || $row->service_id == '48') {
-                    $url = 'services/accounting_services/edit_annual_report/' . $row->id;
+                    $url = 'services/accounting_services/edit_annual_report/' . base64_encode($row->id);
                 } elseif ($row->service_id == '2' || $row->service_id == '4' || $row->service_id == '6' || $row->service_id == '53') {
-                    $url = 'services/home/edit/' . $row->id;
+                    $url = 'services/home/edit/' . base64_encode($row->id);
                 } elseif ($row->service_id == '5' || $row->service_id == '54' || $row->service_id == '55') {
-                    $url = 'services/home/edit/' . $row->id;
+                    $url = 'services/home/edit/' . base64_encode($row->id);
                 } elseif ($row->service_id == '7') {
-                    $url = 'services/home/edit/' . $row->id;
+                    $url = 'services/home/edit/' . base64_encode($row->id);
                 } else {
                     if ($service['ideas'] == 'inc_n_c_d' || $service['ideas'] == 'inc_n_c_f') {
-                        $url = 'services/incorporation/edit_company/' . $row->id;
+                        $url = 'services/incorporation/edit_company/' . base64_encode($row->id);
                     } else {
-                        $url = 'services/home/edit/' . $row->id;
+                        $url = 'services/home/edit/' . base64_encode($row->id);
                     }
                 }
             } else {
@@ -1862,44 +1863,44 @@ if (!function_exists('edit_order_link')) {
                     $res = get_bookkeeping_by_order_id($row->id);
                     if (!empty($res)) {
                         if ($res['sub_category'] == 2) {
-                            $url = 'services/accounting_services/edit_bookkeeping_by_date/' . $row->id;
+                            $url = 'services/accounting_services/edit_bookkeeping_by_date/' . base64_encode($row->id);
                         } else {
-                            $url = 'services/accounting_services/edit_bookkeeping/' . $row->id;
+                            $url = 'services/accounting_services/edit_bookkeeping/' . base64_encode($row->id);
                         }
                     } else {
-                        $url = 'services/accounting_services/edit_bookkeeping/' . $row->id;
+                        $url = 'services/accounting_services/edit_bookkeeping/' . base64_encode($row->id);
                     }
                 } elseif ($row->service_id == '11') {
-                    $url = 'services/accounting_services/edit_payroll/' . $row->id;
+                    $url = 'services/accounting_services/edit_payroll/' . base64_encode($row->id);
                 } elseif ($row->service_id == '12') {
-                    $url = 'services/accounting_services/edit_sales_tax_application/' . $row->id;
+                    $url = 'services/accounting_services/edit_sales_tax_application/' . base64_encode($row->id);
                 } elseif ($row->service_id == '14') {
-                    $url = 'services/accounting_services/edit_rt6_unemployment_app/' . $row->id;
+                    $url = 'services/accounting_services/edit_rt6_unemployment_app/' . base64_encode($row->id);
                 } elseif ($row->service_id == $serviceid) {
-                    $url = 'services/accounting_services/edit_sales_tax_recurring/' . $row->id;
+                    $url = 'services/accounting_services/edit_sales_tax_recurring/' . base64_encode($row->id);
                 } elseif ($row->service_id == '13') { //change in live
-                    $url = 'services/accounting_services/edit_sales_tax_processing/' . $row->id;
+                    $url = 'services/accounting_services/edit_sales_tax_processing/' . base64_encode($row->id);
                 } elseif ($row->service_id == '3' || $row->service_id == '48') {
-                    $url = 'services/accounting_services/edit_annual_report/' . $row->id;
+                    $url = 'services/accounting_services/edit_annual_report/' . base64_encode($row->id);
                 } elseif ($row->service_id == '48' || $row->service_id == '39') {
-                    $url = 'services/accounting_services/edit_annual_report/' . $row->id;
+                    $url = 'services/accounting_services/edit_annual_report/' . base64_encode($row->id);
                 } else {
-                    $url = 'services/home/edit/' . $row->id;
+                    $url = 'services/home/edit/' . base64_encode($row->id);
                 }
             }
             if (in_array($service['ideas'], edit_by_shortname_array())) {
-                $url = 'services/home/edit/' . $row->id;
+                $url = 'services/home/edit/' . base64_encode($row->id);
             }
         } else {
             if ($usertype == '3' && $status == 2) {
                 if ($row->category_id == 1) {
                     if ($row->service_id == '3' || $row->service_id == '39' || $row->service_id == '48') {
-                        $url = 'services/accounting_services/edit_annual_report/' . $row->id;
+                        $url = 'services/accounting_services/edit_annual_report/' . base64_encode($row->id);
                     } else {
                         if ($service['ideas'] == 'inc_n_c_d' || $service['ideas'] == 'inc_n_c_f') {
-                            $url = 'services/incorporation/edit_company/' . $row->id;
+                            $url = 'services/incorporation/edit_company/' . base64_encode($row->id);
                         } else {
-                            $url = 'services/home/edit/' . $row->id;
+                            $url = 'services/home/edit/' . base64_encode($row->id);
                         }
                     }
                 } else {
@@ -1907,29 +1908,29 @@ if (!function_exists('edit_order_link')) {
                         $res = get_bookkeeping_by_order_id($row->id);
                         if (!empty($res)) {
                             if ($res['sub_category'] == 2) {
-                                $url = 'services/accounting_services/edit_bookkeeping_by_date/' . $row->id;
+                                $url = 'services/accounting_services/edit_bookkeeping_by_date/' . base64_encode($row->id);
                             } else {
-                                $url = 'services/accounting_services/edit_bookkeeping/' . $row->id;
+                                $url = 'services/accounting_services/edit_bookkeeping/' . base64_encode($row->id);
                             }
                         } else {
-                            $url = 'services/accounting_services/edit_bookkeeping/' . $row->id;
+                            $url = 'services/accounting_services/edit_bookkeeping/' . base64_encode($row->id);
                         }
                     } elseif ($row->service_id == '11') {
-                        $url = 'services/accounting_services/edit_payroll/' . $row->id;
+                        $url = 'services/accounting_services/edit_payroll/' . base64_encode($row->id);
                     } elseif ($row->service_id == '12') {
-                        $url = 'services/accounting_services/edit_sales_tax_application/' . $row->id;
+                        $url = 'services/accounting_services/edit_sales_tax_application/' . base64_encode($row->id);
                     } elseif ($row->service_id == '14') {
-                        $url = 'services/accounting_services/edit_rt6_unemployment_app/' . $row->id;
+                        $url = 'services/accounting_services/edit_rt6_unemployment_app/' . base64_encode($row->id);
                     } elseif ($row->service_id == $serviceid) {
-                        $url = 'services/accounting_services/edit_sales_tax_recurring/' . $row->id;
+                        $url = 'services/accounting_services/edit_sales_tax_recurring/' . base64_encode($row->id);
                     } elseif ($row->service_id == '13') { //change in live
-                        $url = 'services/accounting_services/edit_sales_tax_processing/' . $row->id;
+                        $url = 'services/accounting_services/edit_sales_tax_processing/' . base64_encode($row->id);
                     } else {
-                        $url = 'services/home/edit/' . $row->id;
+                        $url = 'services/home/edit/' . base64_encode($row->id);
                     }
                 }
                 if (in_array($service['ideas'], edit_by_shortname_array())) {
-                    $url = 'services/home/edit/' . $row->id;
+                    $url = 'services/home/edit/' . base64_encode($row->id);
                 }
             }
         }
@@ -2399,10 +2400,10 @@ if (!function_exists('array_multiply')) {
 
 if (!function_exists('mail_campaign_list')) {
 
-    function mail_campaign_list($service, $language, $day, $status = '') {
+    function mail_campaign_list($leadtype, $language, $day, $status = '') {
         $ci = &get_instance();
         $ci->load->model('lead_management');
-        return $ci->lead_management->lead_campaign_mails($service, $language, $day, $status);
+        return $ci->lead_management->lead_campaign_mails($leadtype, $language, $day, $status);
     }
 
 }
@@ -2720,6 +2721,16 @@ if (!function_exists('notes_read_status')) {
         $ci = &get_instance();
         $ci->load->model('Action_model');
         return $ci->Action_model->get_read_status($id);
+    }
+
+}
+
+if (!function_exists('action_notes_read_status')) {
+
+    function action_notes_read_status($id,$staffid) {
+        $ci = &get_instance();
+        $ci->load->model('Action_model');
+        return $ci->Action_model->get_action_notes_read_status($id,$staffid);
     }
 
 }
@@ -3263,4 +3274,18 @@ if (!function_exists('get_partnes')) {
         return $ci->referral_partner->getPartnerData();
     }
 
+}
+if(!function_exists('getTaskFilesCount')){
+    function getTaskFilesCount($task_id){
+       $ci = &get_instance();
+       $ci->load->model('project_template_model');
+       return $ci->project_template_model->getTaskFilesCount($task_id);
+    }
+}
+if(!function_exists('getUnreadTaskFileCount')){
+    function getUnreadTaskFileCount($task_id,$reference){
+        $ci = &get_instance();
+       $ci->load->model('project_template_model');
+       return $ci->project_template_model->getUnreadTaskFileCount($task_id,$reference);
+    }
 }

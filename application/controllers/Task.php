@@ -16,8 +16,8 @@ class Task extends CI_Controller {
             redirect(base_url());
         }
         $this->filter_element = [
-            1 => "ID",
             2 => "Assigned To",
+            1 => "ID",
             3 => "Tracking Description"
         ];
     }
@@ -127,6 +127,38 @@ class Task extends CI_Controller {
             echo '0';
         }
         //redirect(base_url() . 'action/home');
+    }
+    public function task_input_form($task_id,$type='edit'){
+        $this->load->model('notes');
+        $this->load->layout = 'dashboard';
+        $title = "Input Forms";
+        $render_data['title'] = $title . ' | Tax Leaf';
+        $render_data['main_menu'] = 'project dashboard';
+        $render_data['menu'] = 'project_dashboard';
+        $render_data['header_title'] = $title;
+        $render_data['task_id']=$task_id;
+        $render_data['note_title']='Task Note';
+        $render_data['table']='project_task_note';
+        $render_data['multiple']='y';
+        $render_data['related_table_id']=11;
+        $render_data['required']='n';
+        $render_data['related_service_files']=$this->Project_Template_model->getTaskFiles($task_id);
+        $render_data['notes_data'] = $this->notes->note_list_with_log(11, 'task_id', $task_id);
+        $this->load->template('projects/input_form',$render_data);
+    }
+    public function save_project_input_form() {
+        if ($this->Project_Template_model->saveProjectInputForm(post())) {
+            echo 1;
+        } else {
+            echo 0;
+        }
+    }
+    public function delete_project_input_form_file($file_id) {
+        if ($this->Project_Template_model->delete_project_input_form_files($file_id)) {
+            echo 1;
+        } else {
+            echo 0;
+        }
     }
 }
 ?>

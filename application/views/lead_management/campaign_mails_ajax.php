@@ -1,23 +1,25 @@
 <?php
 if (!empty($main_title_array)) {
     foreach ($main_title_array as $lmc) {
-        $lead_campaign_mails = mail_campaign_list($lmc['service'], $lmc['language'], $day, $status);
+        // $lead_campaign_mails = mail_campaign_list($lmc['service'], $lmc['language'], $day, $status);
+        $lead_campaign_mails = mail_campaign_list($lmc['lead_type'], $lmc['language'], $day, $status);
         $status = (array_multiply(array_column($lead_campaign_mails, 'status'))) == 0 ? 0 : 1;
         ?>
         <div class="panel panel-default service-panel">
             <div class="panel-heading">
                 <div class="priority"><img src="<?= base_url('assets/img/' . (($status == 0) ? 'badge_inactive.png' : 'badge_active.png')); ?>" /></div>
-                <a href="javascript:void(0);" onclick="changeCampaignStatus(<?= $lmc['service']; ?>, <?= $lmc['language']; ?>, <?= ($status == 0) ? 1 : 0; ?>);" class="btn btn-<?= ($status == 0) ? 'info' : 'danger'; ?> btn-xs btn-service-edit"><i class="fa fa-<?= ($status == 0) ? 'anchor' : 'remove'; ?>" aria-hidden="true"></i> <?= ($status == 0) ? 'Active' : 'Inactive'; ?></a>
+                <a href="javascript:void(0);" onclick="changeCampaignStatus(<?= $lmc['lead_type']; ?>, <?= $lmc['language']; ?>, <?= ($status == 0) ? 1 : 0; ?>);" class="btn btn-<?= ($status == 0) ? 'info' : 'danger'; ?> btn-xs btn-service-edit"><i class="fa fa-<?= ($status == 0) ? 'anchor' : 'remove'; ?>" aria-hidden="true"></i> <?= ($status == 0) ? 'Active' : 'Inactive'; ?></a>
                 <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $lmc['id']; ?>" aria-expanded="false">
                     <div class="table-responsive">
                         <table class="table table-borderless" style="margin-bottom: 0px;">
                             <tbody>
                                 <tr>
-                                    <th style="width:200px;">Service</th>
+                                    <th style="width:200px;">Lead Type</th>
                                     <th style="width:200px;">Language</th>
                                 </tr>
                                 <tr>
-                                    <td><?= $lmc['service_name']; ?></td>
+                                    <td><?= $lmc['lead_name']; ?></td>
+                                    
                                     <td><?= $lmc['language_name']; ?></td>
                                 </tr>
                             </tbody>

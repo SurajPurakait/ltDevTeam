@@ -757,5 +757,15 @@ class Modal extends CI_Controller {
         $render_data["leaddetails"] = $this->lead_management->get_addlead_details($this->input->post('id'));
         $this->load->view('modal/add_leads_modal',$render_data);
     }
-
+    public function show_task_files() {
+        $render_data['files_data'] = $this->Project_Template_model->getTaskFilesContent($this->input->post("id"));
+        $render_data['id'] = $this->input->post("id");
+        $render_data['staff_list'] = post('staff');
+        $this->action->updateFileReadStatus(post("id"));
+        $this->load->view('projects/task_file_list_modal', $render_data);
+    }
+    public function file_upload_task() {
+        echo $this->Project_Template_model->file_upload_tasks(post(), $_FILES["upload_file"]);
+        // print_r($this->action_model->file_upload_actions(post(), $_FILES["upload_file"]));
+    }
 }

@@ -51,20 +51,18 @@ if ($status == '') {
                                                 <select class="form-control variable-dropdown" name="variable_dropdown[]" onchange="change_variable_dd(this)">
                                                     <option value="">All Variable</option>
                                                     <option value="1">Category</option>
-                                                    <option value="2">Service Name</option>
-                                                    <option value="3">Office</option>
-                                                    <option value="4">Tracking</option>
-                                                    <option value="5">Staff</option>
-                                                    <option value="6">Start Date</option>
-                                                    <option value="7">Complete Date</option>
-                                                    <!--<option value="8">Order#</option>-->
-                                                    <option value="9">ORDER#</option>
                                                     <option value="10">Client Name</option>
-                                                    <option value="11">Target Start Date</option>
-                                                    <option value="12">Target End Date</option>
+                                                    <option value="7">Complete Date</option>
+                                                    <option value="3">Office</option>
+                                                    <option value="9">ORDER#</option>
                                                     <option value="13">Requested Date</option>
                                                     <option value="14">Responsible DEPT</option>
-
+                                                    <option value="2">Service Name</option>
+                                                    <option value="5">Staff</option>
+                                                    <option value="6">Start Date</option>
+                                                    <option value="12">Target End Date</option>
+                                                    <option value="11">Target Start Date</option>
+                                                    <option value="4">Tracking</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-4 m-t-5">
@@ -123,12 +121,12 @@ if ($status == '') {
                                                     </a></td>
                                                 <td class="text-center">                                                    
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byme-1">
-                                                        <span class="label label-warning">-</span>
+                                                        <span class="label label-primary">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byme-3">
-                                                        <span class="label label-warning">-</span>
+                                                        <span class="label label-danger">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
@@ -148,16 +146,16 @@ if ($status == '') {
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-tome-1">
-                                                        <span class="label label-warning">-</span>
+                                                        <span class="label label-primary">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-tome-3">
-                                                        <span class="label label-warning">-</span>
+                                                        <span class="label label-danger">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a class="filter-button" onclick="sos_filter('order', 'tome');" title="To Me"><span class="label label-danger label-tome" id="sos-tome"><?= sos_dashboard_count('order', 'tome'); ?></span></a>
+                                                    <a class="filter-button" onclick="sos_filter('order', 'tome');" title="To Me"><span class="label label-success label-tome" id="sos-tome"><?= sos_dashboard_count('order', 'tome'); ?></span></a>
                                                 </td>
                                             </tr>
                                             <?php
@@ -173,12 +171,12 @@ if ($status == '') {
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byothers-1">
-                                                        <span class="label label-warning">-</span>
+                                                        <span class="label label-primary">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byothers-3">
-                                                        <span class="label label-warning">-</span>
+                                                        <span class="label label-danger">-</span>
                                                     </a>
                                                 </td>
                                             </tr>

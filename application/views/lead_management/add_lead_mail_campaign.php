@@ -8,13 +8,15 @@
                         <h3>Mail Content</h3>
                         <div class="ajaxsection">
                             <div class="form-group">
-                                <label class="col-lg-2 control-label">Service<span class="text-danger">*</span></label>
+                                <label class="col-lg-2 control-label">Lead Type<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <select required class="form-control" title="Service" onchange="changeoptions(1);" id="service" name="service">
+                                   <!--  <select required class="form-control" title="Service" onchange="changeoptions(1);" id="service" name="service"> -->
+                                     <select required class="form-control" title="Lead Type" onchange="changeoptions(1);" id="leadtype" name="leadtype">
                                         <option value="">Select</option>
                                         <?php foreach ($type_of_contact as $value): ?>
-                                            <option value="<?= $value["id"]; ?>"><?= $value["name"]; ?></option>
+                                            <option value="<?= $value["id"]; ?>"><?= $value["type"]; ?></option>
                                         <?php endforeach; ?>
+                                        
                                     </select>
                                     <div class="errorMessage text-danger"></div>
                                 </div>
@@ -80,15 +82,16 @@
 <script type="text/javascript">
     // parameter which dropdown 1,2,3
     function changeoptions(ddval) {
-        var service = $("#service option:selected").val();
+        // var service = $("#service option:selected").val();
+        var leadtype = $("#leadtype option:selected").val();
         var language = $("#language option:selected").val();
         var day = $("#day option:selected").val();
         $.ajax({
             type: "POST",
-            data: {service: service, language: language, day: day, ddval: ddval},
+            data: {leadtype: leadtype, language: language, day: day, ddval: ddval},
             url: base_url + 'lead_management/lead_mail/change_dropdown_options',
             success: function (result) {
-                //alert(result); return false;
+                // alert(result); return false;
                 if (result.trim() != "0") {
                     $(".ajaxsection").html(result);
                 }

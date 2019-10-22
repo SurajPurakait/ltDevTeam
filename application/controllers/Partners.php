@@ -14,11 +14,11 @@ class Partners extends CI_Controller
             redirect(base_url());
         }
         $this->filter_element = [
-            1 => "Type",
-            2 => "Tracking",
             4 => "Requested By",
             7 => "Requested To",
-            6 => "Submission Date"
+            6 => "Submission Date",
+            2 => "Tracking",
+            1 => "Type"
         ];
     }
     public function index($status = "",$request = ""){

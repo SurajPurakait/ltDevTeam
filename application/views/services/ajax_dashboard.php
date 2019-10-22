@@ -220,19 +220,19 @@ if (!empty($result)):
                                 <th style="width:10%; text-align: center;">Requested by</th>
                                 <th style="width:8%; text-align: center; white-space: nowrap;">
                                     <?php if ($row->status == "2" || $row->status == "3"): ?>
-                                        Target Start
+                                        Started
                                     <?php else: ?>
                                         Start Date&nbsp;<span data-toggle="tooltip" data-placement="top" title="<?= "Expected Start Date : " . $target_start_date; ?>"><i class="fa fa-info-circle"></i></span>
                                     <?php endif; ?>
                                 </th>
                                 <th style="width:8%; text-align: center; white-space: nowrap;">
                                     <?php if ($row->status == "2" || $row->status == "3"): ?>
-                                        Target Complete
+                                        Completed
                                     <?php else: ?>
                                         Complete Date&nbsp;<span data-toggle="tooltip" data-placement="top" title="<?= "Expected Complete Date : " . $target_complete_date; ?>"><i class="fa fa-info-circle"></i></span>
                                     <?php endif; ?>
                                 </th>                                
-                                <th style="width:8%; text-align: center;">Amount$$$</th>
+                                <th style="width:8%; text-align: center;">Amount</th>
                                 <th style="width:8%; text-align: center;">Notes</th>
                                 <th style="width:8%; text-align: center;">Services</th>
                                 <th style="width:8%; text-align: center;">Attachments</th>

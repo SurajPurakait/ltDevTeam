@@ -41,7 +41,7 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                         <div class="form-group">
                             <label class="col-lg-2 control-label">My Department<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="created_department" id="created_department" title="Department" required="" <?= $disabled ?> >
+                                <select class="form-control" name="created_department" id="created_department" title="Department" required="" disabled="true" <?= $disabled ?> >
                                     <?php
                                     $searchString = ',';
 
@@ -54,7 +54,7 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                                             <?php
                                         }
                                     } else {
-                                        $dataval = get_department_info_by_id($staff_info['department']);
+                                        $dataval = get_department_info_by_id($data['created_department']);
                                         ?>
                                         <option value="<?= $dataval['id']; ?>" selected><?= $dataval['name']; ?></option>                             
                                         <?php
@@ -67,7 +67,7 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Priority<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select required class="form-control" title="Priority" name="priority" id="priority" required="" <?= $disable ?>>
+                                <select required class="form-control" title="Priority" name="priority" id="priority" required="" <?= $disabled ?> disabled="true">
                                     <option value="">Select an option</option>
                                     <option value="1" <?= ($data["priority"] == 1) ? "selected" : ""; ?>>Urgent</option>
                                     <option value="2" <?= ($data["priority"] == 2) ? "selected" : ""; ?>>Important</option>
@@ -108,7 +108,7 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Client ID</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" name="client_id" title="Cient ID" value="<?= $data["client_id"]; ?>">
+                                <input placeholder="" class="form-control" type="text" name="client_id" title="Cient ID" value="<?= $data["client_id"]; ?>" readonly>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
