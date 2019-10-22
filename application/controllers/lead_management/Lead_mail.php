@@ -195,7 +195,7 @@ class Lead_mail extends CI_Controller {
                 // ];
                 $veriable_array = [
                     'name' => $lead_data['first_name'],
-                    'type_of_contact' => $contact_type['name'],
+                    'type_of_contact' => $contact_type['type'],
                     'company_name' => $lead_data['company_name'],
                     'phone' => $lead_data['phone1'],
                     'email' => $lead_data['email'],

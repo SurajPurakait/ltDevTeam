@@ -570,7 +570,7 @@ class Service_model extends CI_Model {
                 $where[] = 'ord.status = "' . $status . '"';
             }
         } else {
-            if(isset($form_data['criteria_dropdown']['invoiceno']) || isset($form_data['criteria_dropdown']['staff'])){
+            if(isset($form_data) && !empty($form_data)){
                 $where[] = 'ord.status in ("2","1","0","7")';
             }
             elseif (in_array('ord.status = 0', $where)) {

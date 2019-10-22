@@ -301,10 +301,8 @@ class Action_model extends CI_Model {
                     $this->db->where_not_in('act.status', [2, 7]);
                     $this->db->where_in('act.status', [0, 1, 6]);
                 } else {
-                    if(isset($filter_data['criteria_dropdown']['id']) || isset($filter_data['criteria_dropdown']['created_by'])){
-                        $this->db->where_in('act.status',[0,1,2,6,7]);
-                    }
-                    else if (isset($filter_data['criteria_dropdown']['tracking'])) {
+                    if (isset($filter_data['criteria_dropdown']['tracking'])) {
+//                        echo 'a';die;
                         $filter_array = $filter_data['criteria_dropdown']['tracking'];
                         if (in_array('2', $filter_array)) {
                             $this->db->where_not_in('act.status', [7]);
@@ -314,7 +312,8 @@ class Action_model extends CI_Model {
                             $this->db->where_not_in('act.status', [2, 7]);
                         }
                     } else {
-                        $this->db->where_not_in('act.status', [2, 7]);
+//                        echo 'b';die;
+                        $this->db->where_in('act.status', [0,1,2,7,6]);
                     }
                 }
             }
