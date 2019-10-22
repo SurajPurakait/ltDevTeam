@@ -1296,7 +1296,7 @@ class Billing_model extends CI_Model {
             $where['indt.reference'] = 'AND `indt`.`reference` = "' . $reference[1] . '" ';
             $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 7) ';
         }
-        if (array_key_exists('inv.id', $where) || array_key_exists('inv.order_id', $where) || array_key_exists('inv.created_by', $where)) {
+        if (!empty($filter_data)) {
             unset($where['inv.payment_status']);
             $where['inv.status'] = 'AND `inv`.`status` NOT IN (0) ';
         }
