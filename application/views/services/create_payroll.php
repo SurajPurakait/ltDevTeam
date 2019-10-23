@@ -3,18 +3,19 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <form class="form-horizontal" method="post" id="form_create_payroll" onsubmit="request_create_payroll(); return false;">
-                      <div class="ibox-content">
+                    <div class="ibox-content">
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Your Office<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
                                 <select class="form-control" name="staff_office" id="staff_office" title="Office" required="">
                                     <option value="">Select Office</option>
-                                        <?php if (strpos($staff_info['office'], ',') !== false) {
-                                                load_ddl_option("staff_office_list", "", "staff_office");
-                                            }else{
-                                                load_ddl_option("staff_office_list", $staff_info['office'], "staff_office");
-                                            } 
-                                        ?>      
+                                    <?php
+                                    if (strpos($staff_info['office'], ',') !== false) {
+                                        load_ddl_option("staff_office_list", "", "staff_office");
+                                    } else {
+                                        load_ddl_option("staff_office_list", $staff_info['office'], "staff_office");
+                                    }
+                                    ?>      
                                 </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
@@ -364,70 +365,72 @@
                             <div id="owner-list-payroll"></div>                            
                             <div class="link-content m-b-10">
                                 <input type="hidden" id="payroll_approver_quantity" value="0">
-                                <a href="javascript:void(0);" id="copy-contact" ref_id="<?= $reference_id; ?>">Copy Main Contact</a>
-                                <a href="javascript:void(0);" onclick="show_payroll_approver_modal(); return false;">Add Payroll Approver</a>
+                                <button class="btn btn-success btn-xs" id="copy-contact" ref_id="<?= $reference_id; ?>">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Main Contact</button>&nbsp;
+                                <button class="btn btn-success btn-xs" onclick="show_payroll_approver_modal(); return false;">&nbsp;<i class="fa fa-plus"></i>&nbsp;Add Payroll Approver</button>
                             </div>
-                            <div class="form-group" id="payroll_first_name_div">
-                                <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
-                                <div class="col-lg-10">
-                                    <input placeholder="First Name" id="payroll_first_name" class="form-control payroll_copy_field" required="" type="text" name="payroll_first_name" title="First Name">
-                                    <div class="errorMessage text-danger"></div>
+                            <div id="payroll_approver_div">
+                                <div class="form-group" id="payroll_first_name_div">
+                                    <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="First Name" id="payroll_first_name" readonly="" class="form-control payroll_copy_field" required="" type="text" name="payroll_first_name" title="First Name">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group" id="payroll_last_name_div">
-                                <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
-                                <div class="col-lg-10">
-                                    <input placeholder="Last Name" id="payroll_last_name" class="form-control payroll_copy_field" required="" type="text" name="payroll_last_name" title="Last Name">
-                                    <div class="errorMessage text-danger"></div>
+                                <div class="form-group" id="payroll_last_name_div">
+                                    <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="Last Name" id="payroll_last_name" readonly="" class="form-control payroll_copy_field" required="" type="text" name="payroll_last_name" title="Last Name">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group" id="payroll_title_div">
-                                <label class="col-lg-2 control-label">Title<span class="text-danger">*</span></label>
-                                <div class="col-lg-10">
-                                    <input placeholder="Title" id="payroll_title" class="form-control payroll_copy_field" required="" type="text" name="payroll_title" title="Payroll Title">
-                                    <div class="errorMessage text-danger"></div>
+                                <div class="form-group" id="payroll_title_div">
+                                    <label class="col-lg-2 control-label">Title<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="Title" id="payroll_title" class="form-control payroll_copy_field" required="" type="text" name="payroll_title" title="Payroll Title">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group" id="payroll_social_security_div">
-                                <label class="col-lg-2 control-label">Social Security #<span class="text-danger">*</span></label>
-                                <div class="col-lg-10">
-                                    <input placeholder="Social Security" id="payroll_social_security" required="" class="form-control payroll_copy_field" type="text" name="payroll_social_security" title="Payroll Social Security">
-                                    <div class="errorMessage text-danger"></div>
+                                <div class="form-group" id="payroll_social_security_div">
+                                    <label class="col-lg-2 control-label">Social Security #<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="Social Security" id="payroll_social_security" required="" class="form-control payroll_copy_field" type="text" name="payroll_social_security" title="Payroll Social Security">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group" id="payroll_phone_div">
-                                <label class="col-lg-2 control-label">Phone Number</label>
-                                <div class="col-lg-10">
-                                    <input placeholder="Phone Number" phoneval="" id="payroll_phone" class="form-control payroll_copy_field" type="text" name="payroll_phone" title="Phone Number">
-                                    <div class="errorMessage text-danger"></div>
+                                <div class="form-group" id="payroll_phone_div">
+                                    <label class="col-lg-2 control-label">Phone Number</label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="Phone Number" phoneval="" id="payroll_phone" class="form-control payroll_copy_field" type="text" name="payroll_phone" title="Phone Number">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group" id="payroll_ext_div">
-                                <label class="col-lg-2 control-label">Ext</label>
-                                <div class="col-lg-10">
-                                    <input placeholder="Ext" id="payroll_ext" class="form-control payroll_copy_field" type="text" name="payroll_ext" title="Ext">
-                                    <div class="errorMessage text-danger"></div>
+                                <div class="form-group" id="payroll_ext_div">
+                                    <label class="col-lg-2 control-label">Ext</label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="Ext" id="payroll_ext" class="form-control payroll_copy_field" type="text" name="payroll_ext" title="Ext">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group" id="payroll_fax_div">
-                                <label class="col-lg-2 control-label">Fax</label>
-                                <div class="col-lg-10">
-                                    <input placeholder="Fax" id="payroll_fax" class="form-control payroll_copy_field" type="text" name="payroll_fax" title="Fax">
-                                    <div class="errorMessage text-danger"></div>
+                                <div class="form-group" id="payroll_fax_div">
+                                    <label class="col-lg-2 control-label">Fax</label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="Fax" id="payroll_fax" class="form-control payroll_copy_field" type="text" name="payroll_fax" title="Fax">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group" id="payroll_email_div">
-                                <label class="col-lg-2 control-label">Email<span class="text-danger">*</span></label>
-                                <div class="col-lg-10">
-                                    <input placeholder="Email" required="" id="payroll_email" class="form-control payroll_copy_field" type="text" name="payroll_email" title="Email">
-                                    <div class="errorMessage text-danger"></div>
+                                <div class="form-group" id="payroll_email_div">
+                                    <label class="col-lg-2 control-label">Email<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="Email" required="" id="payroll_email" class="form-control payroll_copy_field" type="text" name="payroll_email" title="Email">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -512,13 +515,13 @@
                             <div id="owner-list-payroll2"></div>
                             <div class="link-content m-b-10">
                                 <input type="hidden" id="company_principal_quantity" value="0">
-                                <a href="javascript:void(0);" onclick="copyPrincipal(0);">Copy Main Contact</a>
-                                <a href="javascript:void(0);" onclick="copyPrincipal(1);">Same as Payroll Approver</a>
+                                <button class="btn btn-success btn-xs" onclick="copyPrincipal(0);">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Main Contact</button>&nbsp;
+                                <button class="btn btn-success btn-xs" onclick="copyPrincipal(1);">&nbsp;<i class="fa fa-clipboard"></i>&nbsp;Same as Payroll Approver</button>
                             </div>
                             <div class="form-group" id="company_principal_first_name_div">
                                 <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <input placeholder="First Name" required="" id="company_principal_first_name" class="form-control company_principal_copy_field" type="text" name="company_principal_first_name" title="First Name">
+                                    <input placeholder="First Name" required="" readonly="" id="company_principal_first_name" class="form-control company_principal_copy_field" type="text" name="company_principal_first_name" title="First Name">
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
@@ -526,7 +529,7 @@
                             <div class="form-group" id="company_principal_last_name_div">
                                 <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <input placeholder="Last Name" required="" id="company_principal_last_name" class="form-control company_principal_copy_field" type="text" name="company_principal_last_name" title="Last Name">
+                                    <input placeholder="Last Name" required="" readonly="" id="company_principal_last_name" class="form-control company_principal_copy_field" type="text" name="company_principal_last_name" title="Last Name">
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
@@ -587,14 +590,14 @@
                             <div id="owner-list-payroll3"></div>
                             <div class="link-content m-b-10">
                                 <input type="hidden" id="signer_data_quantity" value="0">
-                                <a href="javascript:void(0);" onclick="copySigner(0);">Copy Main Contact</a>
-                                <a href="javascript:void(0);" onclick="copySigner(1);">Same as Payroll Approver</a>
-                                <a href="javascript:void(0);" onclick="copySigner(2);">Same as Company Principal</a>
+                                <button class="btn btn-success btn-xs" onclick="copySigner(0);">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Main Contact</button>&nbsp;
+                                <button class="btn btn-success btn-xs" onclick="copySigner(1);">&nbsp;<i class="fa fa-clipboard"></i>&nbsp;Same as Payroll Approver</button>&nbsp;
+                                <button class="btn btn-success btn-xs" onclick="copySigner(2);">&nbsp;<i class="fa fa-clipboard"></i>&nbsp;Same as Company Principal</button>
                             </div>
                             <div class="form-group" id="signer_first_name_div">
                                 <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <input placeholder="First Name" required="" id="signer_first_name" class="form-control signer_data_copy_field" type="text" name="signer_first_name" title="First Name">
+                                    <input placeholder="First Name" required="" readonly="" id="signer_first_name" class="form-control signer_data_copy_field" type="text" name="signer_first_name" title="First Name">
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
@@ -602,7 +605,7 @@
                             <div class="form-group" id="signer_last_name_div">
                                 <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <input placeholder="Last Name" required="" id="signer_last_name" class="form-control signer_data_copy_field" type="text" name="signer_last_name" title="Last Name">
+                                    <input placeholder="Last Name" required="" readonly="" id="signer_last_name" class="form-control signer_data_copy_field" type="text" name="signer_last_name" title="Last Name">
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
@@ -854,6 +857,7 @@
                         $("#payroll_last_name").val(res.last_name);
                         $("#payroll_email").val(res.email1);
                         $("#payroll_phone").val(res.phone1);
+                        $("#payroll_approver_div").show();
                     } else {
                         swal("Error", "No Main Contact Added", "error");
                     }

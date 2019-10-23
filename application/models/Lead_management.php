@@ -1258,7 +1258,7 @@ Class Lead_management extends CI_Model {
     }
 
     public function lead_campaign_mails($leadtype, $language, $day, $status = '', $group_by = '') {
-        $query = "SELECT lmc.*,(select type from lead_type where id='lmc.lead_type') as lead_name,(select language from languages where id='lmc.language') as language_name, CONCAT((select type from lead_type where id='lmc.lead_type') , '-', (select language from languages where id='lmc.language')) AS main_title FROM `lead_mail_chain` lmc";
+        $query = "SELECT lmc.*,(select type from lead_type where id=lmc.lead_type) as lead_name,(select language from languages where id=lmc.language) as language_name, CONCAT((select type from lead_type where id=lmc.lead_type) , '-', (select language from languages where id=lmc.language)) AS main_title FROM `lead_mail_chain` lmc";
         $sql = '';
         if ($leadtype != '') {
             if ($sql == '') {
@@ -1415,9 +1415,9 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function change_mail_campaign_status($service, $language, $status) {
+    public function change_mail_campaign_status($leadtype, $language, $status) {
         $this->db->trans_begin();
-        $this->db->where(['service' => $service, 'language' => $language]);
+        $this->db->where(['lead_type' => $leadtype, 'language' => $language]);
         $this->db->update("lead_mail_chain", ['status' => $status]);
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -1988,5 +1988,13 @@ Class Lead_management extends CI_Model {
         $this->db->join('lead_management','lead_management.id=lead_notes.lead_id');
         $this->db->where("lead_management.id", $id);
         return $this->db->get()->result_array();
+    }
+    public function get_office_info_by_partner_id($partner_id) {
+        return $this->db->get_where('office_staff', array('staff_id' => $partner_id))->row_array()['office_id'];        
+    }
+    public function update_lead_assigned_status($lead_id) {
+        $this->db->set('assigned_status', 'y');
+        $this->db->where('id', $lead_id);
+        return $this->db->update('lead_management');
     }
 }

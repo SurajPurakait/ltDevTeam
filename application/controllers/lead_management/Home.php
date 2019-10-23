@@ -199,13 +199,7 @@ class Home extends CI_Controller {
         $render_data['individual_id'] = $individual_id;
         $render_data['title_id'] = $title_id;
         $render_data['lead_info'] = $this->lead_management->get_addlead_details($lead_id);
+        $render_data['office_id'] = $this->lead_management->get_office_info_by_partner_id($partner_id);
         $this->load->view("lead_management/assign_as_individual", $render_data);
     }
-    public function add_business_assign() {
-        $render_data['reference'] = 'company';
-        $render_data['service_id'] = 0;
-        $render_data['reference_id'] = $this->system->create_reference_id();
-        $this->load->view("lead_management/assign_as_business", $render_data);
-    }
-    
 }

@@ -60,7 +60,7 @@ $get_payroll_data = $payroll_data_for_new_existing[0]['new_existing'];
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
-                        <div class="form-group" id="state_other" <?php echo ($other_state == "")? "style='display:none'":"" ;?>>
+                        <div class="form-group" id="state_other" <?php echo ($other_state == "") ? "style='display:none'" : ""; ?>>
                             <div class="col-lg-10 col-lg-offset-2">
                                 <input type="text" name="state_other" class="form-control" value="<?= $other_state; ?>">
                                 <div class="errorMessage text-danger"></div>
@@ -420,8 +420,8 @@ $get_payroll_data = $payroll_data_for_new_existing[0]['new_existing'];
 
                             <div id="owner-list-payroll"></div>
                             <input type="hidden" id="payroll_approver_quantity" value="1">
-                            <h4><a href="javascript:void(0);" id="copy-contact" ref_id="<?= $reference_id; ?>">Copy Main Contact</a></h4>
-                            <h4><a href="javascript:void(0);" onclick="show_payroll_approver_modal(); return false;">Add Payroll Approver</a></h4>
+                            <button class="btn btn-success btn-xs" id="copy-contact" ref_id="<?= $reference_id; ?>">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Main Contact</button>&nbsp;
+                            <button class="btn btn-success btn-xs" onclick="show_payroll_approver_modal(); return false;">&nbsp;<i class="fa fa-plus"></i>&nbsp;Add Payroll Approver</button>
 
                             <div class="form-group" id="payroll_first_name_div">
                                 <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
@@ -568,8 +568,8 @@ $get_payroll_data = $payroll_data_for_new_existing[0]['new_existing'];
                             <h3>Company Principal</h3>
                             <div id="owner-list-payroll2"></div>
                             <input type="hidden" id="company_principal_quantity" value="1">
-                            <h4><a href="javascript:void(0);" onclick="copyPrincipal(0);">Copy Main Contact</a></h4>
-                            <h4><a href="javascript:void(0);" onclick="copyPrincipal(1);">Same as Payroll Approver</a></h4>
+                            <button class="btn btn-success btn-xs" onclick="copyPrincipal(0);">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Main Contact</button>&nbsp;
+                            <button class="btn btn-success btn-xs" onclick="copyPrincipal(1);">&nbsp;<i class="fa fa-clipboard"></i>&nbsp;Same as Payroll Approver</button>
                             <div class="form-group" id="company_principal_first_name_div">
                                 <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
@@ -641,9 +641,9 @@ $get_payroll_data = $payroll_data_for_new_existing[0]['new_existing'];
                             <h3>Signer Data</h3>
                             <div id="owner-list-payroll3"></div>
                             <input type="hidden" id="signer_data_quantity" value="1">
-                            <h4><a href="javascript:void(0);" onclick="copySigner(0);">Copy Main Contact</a></h4>
-                            <h4><a href="javascript:void(0);" onclick="copySigner(1);">Same as Payroll Approver</a></h4>
-                            <h4><a href="javascript:void(0);" onclick="copySigner(2);">Same as Company Principal</a></h4>
+                            <button class="btn btn-success btn-xs" onclick="copySigner(0);">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Main Contact</button>&nbsp;
+                            <button class="btn btn-success btn-xs" onclick="copySigner(1);">&nbsp;<i class="fa fa-clipboard"></i>&nbsp;Same as Payroll Approver</button>&nbsp;
+                            <button class="btn btn-success btn-xs" onclick="copySigner(2);">&nbsp;<i class="fa fa-clipboard"></i>&nbsp;Same as Company Principal</button>
 
                             <div class="form-group" id="signer_first_name_div">
                                 <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>

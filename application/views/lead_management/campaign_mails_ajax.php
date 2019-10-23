@@ -1,9 +1,12 @@
 <?php
 if (!empty($main_title_array)) {
     foreach ($main_title_array as $lmc) {
+
         // $lead_campaign_mails = mail_campaign_list($lmc['service'], $lmc['language'], $day, $status);
-        $lead_campaign_mails = mail_campaign_list($lmc['lead_type'], $lmc['language'], $day, $status);
+        $lead_campaign_mails = mail_campaign_list($lmc['lead_type'], $lmc['language'], $day, '');
         $status = (array_multiply(array_column($lead_campaign_mails, 'status'))) == 0 ? 0 : 1;
+        
+        if($lmc['lead_name'] !=''){
         ?>
         <div class="panel panel-default service-panel">
             <div class="panel-heading">
@@ -14,13 +17,14 @@ if (!empty($main_title_array)) {
                         <table class="table table-borderless" style="margin-bottom: 0px;">
                             <tbody>
                                 <tr>
-                                    <th style="width:200px;">Lead Type</th>
-                                    <th style="width:200px;">Language</th>
+                                    <th class="text-center" width="50%">Lead Type</th>
+                                    <th class="text-center" width="50%">Language</th>
+                                    <!-- <th style="width:200px;">Language</th> -->
                                 </tr>
                                 <tr>
-                                    <td><?= $lmc['lead_name']; ?></td>
+                                    <td class="text-center" width="50%"><?= $lmc['lead_name']; ?></td>
                                     
-                                    <td><?= $lmc['language_name']; ?></td>
+                                    <td class="text-center" width="50%"><?= $lmc['language_name']; ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -32,10 +36,10 @@ if (!empty($main_title_array)) {
                     <div class="table-responsive">
                         <table class="table table-borderless">
                             <tr>
-                                <th style="width:200px;">Day</th>
-                                <th style="width:200px;">Subject</th>
-                                <th>Body</th>
-                                <th>action</th>
+                                <th class="text-center" width="25%">Day</th>
+                                <th class="text-center" width="25%">Subject</th>
+                                <th class="text-center" width="25%">Body</th>
+                                <th class="text-center" width="25%">Action</th>
                             </tr>
                             <?php
                             foreach ($lead_campaign_mails as $inner_lmc) {
@@ -48,10 +52,10 @@ if (!empty($main_title_array)) {
                                 }
                                 ?>
                                 <tr>
-                                    <td><?= $day_name; ?></td>
-                                    <td><?= $inner_lmc['subject']; ?></td>
-                                    <td><?= substr(urldecode($inner_lmc['body']), 0, 30); ?></td>
-                                    <td>
+                                    <td class="text-center" width="25%"><?= $day_name; ?></td>
+                                    <td class="text-center" width="25%"><?= $inner_lmc['subject']; ?></td>
+                                    <td class="text-center" width="25%"><?= substr(urldecode($inner_lmc['body']), 0, 30); ?></td>
+                                    <td class="text-center" width="25%">
                                         <a href="<?= base_url("/lead_management/lead_mail/edit_mail_campaign/" . $inner_lmc['id'] . "") ?>" class="btn btn-primary btn-xs"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
                                         <a href="javascript:void(0);" onclick="delete_mail_campaign('<?= $inner_lmc['id'] ?>');" class="btn btn-danger btn-xs"><i class="fa fa-times" aria-hidden="true"></i> Delete</a>
                                     </td>
@@ -64,6 +68,7 @@ if (!empty($main_title_array)) {
         </div>
         <?php
     }
+  }
 } else {
     echo 'No data found';
 }

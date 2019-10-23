@@ -3,7 +3,7 @@
         <div class="col-lg-12">
             <div class="ibox">
                 <div class="ibox-content">
-                    <form class="form-horizontal" method="post" id="form_title" onsubmit="saveIndividual(); return false;">
+                    <form class="form-horizontal" method="post" id="form_title">
                         <input type="hidden" value="0" id="type" name="type">
                         <h3>Personal Information</h3>
                         <div class="form-group">
@@ -96,7 +96,7 @@
                             <div class="col-lg-10">
                                 <select class="form-control" name="internal_data[office]" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required="">
                                     <option value="">Select an option</option>
-                                    <?php load_ddl_option("staff_office_list"); ?>
+                                    <?php load_ddl_option("staff_office_list",$office_id); ?>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
@@ -164,7 +164,7 @@
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div>
-                            <?= note_func('Notes', 'n', 1, 'reference_id', $reference_id); ?>
+                            <?= note_func('Notes', 'n', 3, 'lead_id', $lead_info['id']); ?>
                         </div>
                         <div class="hr-line-dashed"></div>
                          <div class="form-group">
@@ -186,8 +186,8 @@
                                 <input type="hidden" name="reference_id" id="reference_id" value="<?= $individual_id; ?>">
                                 <input type="hidden" name="action" id="action" value="save_owner">
                                 <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>"/>
-                                <button class="btn btn-success" type="button" onclick="saveIndividual()">Save</button> &nbsp;
-                                <button class="btn btn-default" type="button" onclick="go('action/home/individual_dashboard')">Cancel</button>
+                                <button class="btn btn-success" type="button" onclick="saveIndividual(<?= $lead_info['id']; ?>)">Save As Client</button> &nbsp;
+                                <button class="btn btn-default" type="button" onclick="parent.window.close();">Cancel</button>
                             </div>
                         </div>
                     </form>
@@ -201,6 +201,7 @@
 </div>
 
 <script>
+    load_partner_manager_ddl('<?= $office_id; ?>');
     $('#dob').datepicker({dateFormat: 'mm/dd/yyyy', autoHide: true});
     //get_document_list('<?= $individual_id; ?>', "individual")
     //get_contact_list('<?= $individual_id; ?>', "individual");

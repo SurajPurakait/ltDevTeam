@@ -64,10 +64,11 @@
                                     <table class="table table-borderless text-center">
                                         <tr>                                            
                                             <th class="text-center" width="20%">Name</th>
+                                            <th class="text-center" width="20%">Company</th>
                                             <th class="text-center" width="15%">Email</th>
                                             <th class="text-center" width="15%">Phone</th>
-                                            <th class="text-center" width="20%">Company</th>
-                                            <th class="text-center" width="15%">Language</th>
+                                           
+                                            <!-- <th class="text-center" width="15%">Language</th> -->
                                             <th class="text-center" width="15%">Notes</th>                       
                                         </tr>  
 
@@ -79,14 +80,15 @@
                                         <tr>
                                                
                                             <td title="Name"><?= $leadvalue['last_name'].'<br>'.$leadvalue['first_name'] ?></td>
+                                            <td title="Company">
+                                                <?= ($leadvalue['company_name'] != "") ? $leadvalue['company_name'] : "N/A";  ?>
+                                            </td>
                                             <td title="Email"><?= $leadvalue['email']; ?></td>
                                             <td title="Phone">
                                                 <?= ($leadvalue['phone1'] != "") ? $leadvalue['phone1'] : "N/A";  ?>
                                             </td>
-                                            <td title="Company">
-                                                <?= ($leadvalue['company_name'] != "") ? $leadvalue['company_name'] : "N/A";  ?>
-                                            </td>
-                                            <td title="Language"><?= $leadvalue['language_name']; ?></td>
+                                            
+                                            <!-- <td title="Language"><?//= $leadvalue['language_name']; ?></td> -->
                                             <td title="Notes">
                                                 <?php $note_count = get_lead_note_count($leadvalue['id']);
                                                 echo "<span class='label label-secondary'>".count($note_count)."</span>";
@@ -100,7 +102,12 @@
                                                                  
                                     </table>
                                 <?php }else{
-                                    echo "<b>No data found</b>";
+                                    ?>
+                                    <!-- echo "<b>No data found</b>"; -->
+                                    <div class="text-center">
+                                        <b>No leads found</b>
+                                    </div>
+                                <?php
                                 } ?>
                                 </div>
                             </div>

@@ -345,6 +345,7 @@ function open_owner_popup(service_id, company_id, title_id) {
     } else {
         var e = document.getElementById("type");
         var company_type = e.options[e.selectedIndex].value;
+        alert(company_type);return false;
         if (company_type == '') {
             $("#owners-list-count").next('div.errorMessage').html("You have to select company type first!");
             return false;
@@ -354,7 +355,7 @@ function open_owner_popup(service_id, company_id, title_id) {
             if (parseInt(title_id) > 0) {
                 url = url + '/' + title_id;
             }
-
+            
             url = url + '?q=' + company_type;
             url += '&sid=' + $("#service_id").val();
             url += '&tid=' + title_id;

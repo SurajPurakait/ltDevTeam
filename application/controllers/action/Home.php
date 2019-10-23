@@ -14,6 +14,7 @@ class Home extends CI_Controller {
         $this->load->model('service_model');
         $this->load->model('system');
         $this->load->model('company');
+        $this->load->model('lead_management');
         $this->load->model('individual');
         if (!$this->session->userdata('user_id') && $this->session->userdata('user_id') == '') {
             redirect(base_url());
@@ -301,6 +302,10 @@ class Home extends CI_Controller {
     public function save_individualData() {
         $data = post();
         // print_r($data);exit;
+        if (array_key_exists('lead_id', $data) && !empty($data['lead_id'])) {
+            $this->lead_management->update_lead_assigned_status($data['lead_id']);
+            unset($data['lead_id']);
+        }
         if($data['editval']=='add'){
             $check_if_duplicate_exists = $this->individual->check_if_duplicate_exists($data);
         }else{
