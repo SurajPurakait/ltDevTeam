@@ -172,12 +172,12 @@
     <div class="loader-mini"><div class="loading-text"><i class="fa fa-refresh fa-spin fa-fw"></i> Please wait. Loading...</div></div>
     <div id="wrapper">
         <?php
-        if ($title != 'Owner | Tax Leaf' && $title != 'Mail Campaign Template | Tax Leaf') {
+        if ($title != 'Owner | Tax Leaf' && $title != 'Mail Campaign Template | Tax Leaf' && $title != 'Leads Assign | Tax Leaf') {
             $this->load->view('incl/menu.php', array('menu' => $menu, 'main_menu' => $main_menu));
         }
         ?>
-        <div id="page-wrapper" class="gray-bg <?= ($title == 'Owner | Tax Leaf' || $title == 'Mail Campaign Template | Tax Leaf') ? ' no-margins' : ''; ?>">
-            <div class="row" <?= ($title == 'Owner | Tax Leaf' || $title == 'Mail Campaign Template | Tax Leaf') ? 'style="display:none;"' : ''; ?>>
+        <div id="page-wrapper" class="gray-bg <?= ($title == 'Owner | Tax Leaf' || $title == 'Mail Campaign Template | Tax Leaf' || $title == 'Leads Assign | Tax Leaf') ? ' no-margins' : ''; ?>">
+            <div class="row" <?= ($title == 'Owner | Tax Leaf' || $title == 'Mail Campaign Template | Tax Leaf' || $title == 'Leads Assign | Tax Leaf') ? 'style="display:none;"' : ''; ?>>
                 <div class="taxleaf-small-logo"><img src="<?= base_url(); ?>assets/img/logo-small.png"></div>
                 <nav class="navbar navbar-static-top fixed-nav" role="navigation" style="margin-bottom: 0;">
                     <div class="navbar-header">

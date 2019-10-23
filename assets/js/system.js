@@ -496,16 +496,16 @@ function jumpDiv() {
 }
 
 var allAjaxRequest = [];
-function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID, limit = '10', start = '', refresh = '', is_clear = '', requestType = '',pageNumber=0) {
-    
+function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID, limit = '10', start = '', refresh = '', is_clear = '', requestType = '', pageNumber = 0) {
+
     var start_val;
     if (refresh != '') {
         start_val = '0';
-        start='';
+        start = '';
     } else {
         start_val = $('#start_val').val();
     }
-    
+
 //    alert(pageNumber);
     if (section == 'stop') {
         allAjaxRequest.forEach(function (ajaxRequest) {
@@ -549,7 +549,7 @@ function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID,
             start: start,
             start_val: start_val,
             request_type: requestType,
-            page_number:pageNumber
+            page_number: pageNumber
         };
     }
     $("#load_more").remove();
@@ -564,20 +564,20 @@ function loadHomeDashboard(section, staffID, officeID, departmentID, leadTypeID,
             var jsonData = JSON.parse(result);
             var sectionData = jsonData.section;
             sectionData.forEach(function (data, index) {
-                if(jsonData.section_index[index]=='notification'){
-                    if(refresh!=''){
+                if (jsonData.section_index[index] == 'notification') {
+                    if (refresh != '') {
                         $('.' + jsonData.section_index[index] + '-list-section').html(data);
                         $('#widget_' + jsonData.section_index[index]).removeClass('loading');
-                    }else{
-                        if(requestType!='' && start==''){
+                    } else {
+                        if (requestType != '' && start == '') {
                             $('.' + jsonData.section_index[index] + '-list-section').html(data);
                             $('#widget_' + jsonData.section_index[index]).removeClass('loading');
-                        }else{
+                        } else {
                             $('.' + jsonData.section_index[index] + '-list-section').append(data);
                             $('#widget_' + jsonData.section_index[index]).removeClass('loading');
                         }
                     }
-                }else{
+                } else {
                     $('.' + jsonData.section_index[index] + '-section').html(data);
                     $('#widget_' + jsonData.section_index[index]).removeClass('loading');
                 }
@@ -708,4 +708,14 @@ function GetCardType(number) {
         return "Visa Electron";
 
     return "";
+}
+
+var clearFilter = function () {
+    $(".variable-dropdown").val('');
+    $(".condition-dropdown").val('');
+    $(".criteria-dropdown").val('');
+    $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>');
+    $(".criteria-dropdown").trigger("chosen:updated");
+    $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
+    $('#btn_clear_filter').css('display', 'none');
 }

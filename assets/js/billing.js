@@ -355,13 +355,8 @@ function loadBillingDashboard(status = '', by = '', office = '', payment_status 
                     $(".sort_type_div #sort-desc").hide();
                     $(".sort_type_div #sort-asc").css({display: 'inline-block'});
                     $("#sort-by-dropdown").html('Sort By <span class="caret"></span>');
-                    $('.sort_type_div').css('display', 'none');
-                    $(".variable-dropdown").val('');
-                    $(".condition-dropdown").val('');
-                    $(".criteria-dropdown").val('');
-                    $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>');
-                    $(".criteria-dropdown").trigger("chosen:updated");
-                    $('#btn_clear_filter').css('display', 'none');
+                    $('.sort_type_div').css('display', 'none');      
+                    clearFilter();
                     $("a.filter-button span:contains('-')").html(0);
                 } else {
                     $(".ajaxdiv").append(result);

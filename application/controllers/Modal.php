@@ -178,8 +178,9 @@ class Modal extends CI_Controller {
         $related_table_id = '2';
         $render_data['notes_data'] = $this->Notes->note_list_with_log($related_table_id, 'action_id', $this->input->post("id"));
         $render_data['notes_table'] = 'action_notes';
+        $userid=$this->input->post('user_id');
         // echo $this->input->post("id");die;
-        $change_read_status = $this->Notes->change_read_status_notes($this->input->post("id"));
+        $change_read_status = $this->Notes->change_read_status_notes($this->input->post("id"),$userid);
 
         $this->load->view('action/action_notes_modal', $render_data);
     }
@@ -754,7 +755,9 @@ class Modal extends CI_Controller {
         $render_data['id'] = $this->input->post('id');
         $render_data["languages"] = $this->system->get_languages();
         $render_data["selected_lang"] = $this->lead_management->get_selected_languages($this->input->post('id'));
-        $render_data["leaddetails"] = $this->lead_management->get_addlead_details($this->input->post('id'));
+        // $render_data["leaddetails"] = $this->lead_management->get_addlead_details($this->input->post('id'));
+        $render_data["leaddetails"] = $this->lead_management->fetch_data($this->input->post('id'));
+        $render_data["leaddetails"]["notes"] = explode(",", $render_data["leaddetails"]["notes"]);
         $this->load->view('modal/add_leads_modal',$render_data);
     }
     public function show_task_files() {

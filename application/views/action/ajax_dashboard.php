@@ -204,15 +204,15 @@ if (!empty($action_list)):
 
                                             if ($action["notes"] > 0 && in_array(0, $read_status)) {
                                                 ?>    
-                                                <a id="notecount-<?= $action["id"]; ?>" class="label label-danger" href="javascript:void(0)" onclick="show_action_notes(<?= $action["id"]; ?>)"><b> <?= $action["notes"] ?></b></a>
+                                                <a id="notecount-<?= $action["id"]; ?>" class="label label-danger" href="javascript:void(0)" onclick="show_action_notes(<?= $action["id"]; ?>,<?= sess('user_id') ?>)"><b> <?= $action["notes"] ?></b></a>
                                                 <?php
                                             } elseif ($action["notes"] > 0 && in_array(1, $read_status)) {
                                                 ?>    
-                                                <a id="notecount-<?= $action["id"]; ?>" class="label label-success" href="javascript:void(0)" onclick="show_action_notes(<?= $action["id"]; ?>)"><b> <?= $action["notes"] ?></b></a>
+                                                <a id="notecount-<?= $action["id"]; ?>" class="label label-success" href="javascript:void(0)" onclick="show_action_notes(<?= $action["id"]; ?>,<?= sess('user_id')?>)"><b> <?= $action["notes"] ?></b></a>
                                                 <?php
                                             } else {
                                                 ?>    
-                                                <a id="notecount-<?= $action["id"]; ?>" class="label label-warning" href="javascript:void(0)" onclick="show_action_notes(<?= $action["id"]; ?>)"><b> <?= $action["notes"] ?></b></a>
+                                                <a id="notecount-<?= $action["id"]; ?>" class="label label-warning" href="javascript:void(0)" onclick="show_action_notes(<?= $action["id"]; ?>,<?= sess('user_id') ?>)"><b> <?= $action["notes"] ?></b></a>
                                                 <?php
                                             }
 

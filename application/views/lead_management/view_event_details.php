@@ -3,7 +3,8 @@
         <form>
             <div class="tabs-container">                   
                 <ul class="nav nav-tabs" role="tablist">
-                    <li class="nav-link active"><a href="#lead_general_info" aria-controls="general-info" role="tab" data-toggle="tab">EVENT DETAILS</a></li>               
+                    <li class="nav-link active"><a href="#lead_general_info" aria-controls="general-info" role="tab" data-toggle="tab">EVENT DETAILS</a></li>
+                    <li class="nav-link"><a href="#lead_details" aria-controls="invoice" role="tab" data-toggle="tab">LEAD DETAILS</a></li>               
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" role="tabpanel" id="lead_general_info"> 
@@ -44,7 +45,7 @@
                                                 <b style="font-size: 14px;">Description:</b>
                                             </td>
                                             <td>
-                                                <?= $events_list['description'] ;?>
+                                                <?= ($events_list['description'] != "") ? $events_list['description'] : "N/A";  ?>
                                             </td>
                                         </tr>                                        
                                         <tr>
@@ -69,10 +70,20 @@
                                                     ;?>
                                             </td>
                                         </tr>
+
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="lead_details">
+                        <table class="table table-striped table-bordered" style="width:100%;">
+                            <tbody>
+                            <div class="ajaxdiv" id="lead_dashboard_div">
+                                
+                            </div>
+                            </tbody>
+                        </table>
                     </div>
                     </div>
                 </div>
@@ -80,3 +91,7 @@
         </form>
     </div>
 </div>
+
+<script type="text/javascript">
+     loadLeadDashboard('', '', '', '', '<?= $events_list['id'] ?>');
+</script>

@@ -7,7 +7,7 @@ $return = '';
                 $return .= "<option value=''>All Criteria</option>";
                 $new_sort=array();
                 foreach ($options_val as $key => $evl):
-                    $new_sort[$key]= $evl['name'];
+                    $new_sort[$key]= strtolower($evl['name']);
                 endforeach;
                 array_multisort($new_sort, SORT_ASC, $options_val);
                 foreach ($options_val as $ov):
@@ -22,7 +22,7 @@ $return = '';
                 $return .= "<option value=''>All Criteria</option>";
                 $new_sort=array();
                 foreach ($options_val as $key => $evl):
-                    $new_sort[$key]= $evl['last_name'];
+                    $new_sort[$key]= strtolower($evl['last_name']);
                 endforeach;
                 array_multisort($new_sort, SORT_ASC, $options_val);
                 foreach ($options_val as $ov):
@@ -39,7 +39,7 @@ $return = '';
                 $return .= "<option value=''>All Criteria</option>";
                 $new_sort=array();
                 foreach ($options_val_name as $key => $evl):
-                    $new_sort[$key]= $evl['last_name'];
+                    $new_sort[$key]= strtolower($evl['last_name']);
                 endforeach;
                 array_multisort($new_sort, SORT_ASC, $options_val_name);
                 foreach ($options_val_name as $ovn):

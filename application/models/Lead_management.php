@@ -491,7 +491,7 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_lead_list($lead_type, $status, $request_by = "", $lead_contact_type = "", $filter_data = [], $is_partner = "", $sort_criteria = '', $sort_type = '') {
+    public function get_lead_list($lead_type, $status, $request_by = "", $lead_contact_type = "", $filter_data = [], $is_partner = "", $sort_criteria = '', $sort_type = '', $event_id = '') {
         $staff_info = staff_info();
         $user_department = $staff_info['department'];
         $staff_id = sess('user_id');
@@ -541,8 +541,10 @@ Class Lead_management extends CI_Model {
         if ($lead_contact_type != '') {
             $this->db->where(['lm.type_of_contact' => $lead_contact_type]);
         }
+        if ($event_id != '') {
+            $this->db->where(['lm.event_id' => $event_id]);
+        }
         if ($lead_type != '') {
-
             if ($lead_type == '1') {
                 $this->db->group_start();
                 $this->db->group_start();
@@ -1837,6 +1839,13 @@ Class Lead_management extends CI_Model {
     }
 
     public function save_add_leads_modal($data) {
+
+        if (isset($data["lead_notes"])) {
+            $lead_notes = $data["lead_notes"];
+            unset($data["lead_notes"]);
+        }
+
+       
         $values = array(
             'type_of_contact' => $data['type-of-contact'],
             'lead_source' => $data['lead-source'],
@@ -1848,14 +1857,36 @@ Class Lead_management extends CI_Model {
             'company_name' => $data['company'],
             'language' => $data['language']
         );
-        if ($this->db->insert("lead_management", $values)) {
-            return $this->db->insert_id();
+
+         $this->db->trans_begin();
+         $this->db->insert("lead_management", $values);
+         $id = $this->db->insert_id();
+        
+          if (!empty($lead_notes)) {
+            $this->notes->insert_note(3, $lead_notes, "lead_id", $id);
+        }
+
+
+          if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return "-1";
         } else {
-            return -1;
+            $this->db->trans_commit();
+            return $id;
         }
     }
 
     public function update_addlead_modal($id, $data) {
+
+        if (isset($data["lead_notes"])) {
+            $lead_notes = $data["lead_notes"];
+            unset($data["lead_notes"]);
+        }
+
+        if (isset($data["edit_lead_notes"])) {
+            $edit_lead_notes = $data["edit_lead_notes"];
+            unset($data["edit_lead_notes"]);
+        }
 
         $this->db->trans_begin();
 
@@ -1871,6 +1902,14 @@ Class Lead_management extends CI_Model {
         $this->db->set($values);
         $this->db->where('id', $id);
         $this->db->update('lead_management');
+
+        if (!empty($lead_notes)) {
+            $this->notes->insert_note(3, $lead_notes, "lead_id", $id);
+        }
+
+        if (!empty($edit_lead_notes)) {
+            $this->notes->update_note(3, $edit_lead_notes);
+        }
 
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -1930,4 +1969,24 @@ Class Lead_management extends CI_Model {
         return $this->db->get("lead_type")->result_array();
     }
 
+    public function get_event_lead_by_id($id) {
+        $data = $this->db->get_where('lead_management', array('event_id' => $id))->row_array();
+        return $data['event_id'];
+    }
+
+    public function get_event_lead_details($event_id) {
+        $this->db->select('lead_management.*,languages.language as language_name');
+        $this->db->from('lead_management');
+        $this->db->join('languages','lead_management.language=languages.id');
+        $this->db->where("lead_management.event_id", $event_id);
+        return $this->db->get()->result_array();
+    }
+
+    public function get_lead_note_count($id) {
+        $this->db->select('lead_notes.*');
+        $this->db->from('lead_notes');
+        $this->db->join('lead_management','lead_management.id=lead_notes.lead_id');
+        $this->db->where("lead_management.id", $id);
+        return $this->db->get()->result_array();
+    }
 }

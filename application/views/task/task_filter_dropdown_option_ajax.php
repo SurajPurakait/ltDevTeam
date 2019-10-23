@@ -8,7 +8,7 @@ if ($element_key == 9) : //start date and complete date and creation date and du
         <?php if (isset($element_value_list) && count($element_value_list) > 0): 
             $new_sort=array();
                 foreach ($element_value_list as $key => $evl):
-                    $new_sort[$key]= $evl['name'];
+                    $new_sort[$key]= strtolower($evl['name']);
                 endforeach;
                 array_multisort($new_sort, SORT_ASC, $element_value_list);
             ?>

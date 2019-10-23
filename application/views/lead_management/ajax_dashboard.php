@@ -41,7 +41,8 @@
                         <?php
                     } else {
                         ?>
-                        <a href="javascript:void(0);" onclick="assign_as_client(<?= $lead['id']; ?>,<?= $lead['requested_staff_id']; ?>)" class="btn btn-primary btn-xs btn-assign-client" id="assign_as_client-<?= $lead['id']; ?>"><i class="fa fa-plus" aria-hidden="true"></i> Assign as Client</a>
+                        <!-- <a href="javascript:void(0);" onclick="assign_as_client(<?//= $lead['id']; ?>,<?//= $lead['requested_staff_id']; ?>)" class="btn btn-primary btn-xs btn-assign-client" id="assign_as_client-<?//= $lead['id']; ?>"><i class="fa fa-plus" aria-hidden="true"></i> Assign as Client</a> -->
+                        <a href="javascript:void(0);" onclick="open_client_assign_popup(<?= $lead['id']; ?>,<?= $lead['requested_staff_id']; ?>)" class="btn btn-primary btn-xs btn-assign-client" id="assign_as_client-<?= $lead['id']; ?>"><i class="fa fa-plus" aria-hidden="true"></i> Assign as Client</a>
                         <?php
                     }
                     ?>
@@ -72,7 +73,7 @@
 
                 <a href="javascript:void(0);" onclick="delete_lead_management('<?= $lead["id"] ?>');" class="btn btn-danger btn-xs btn-service-delete manage-delete-btn"><i class="fa fa-remove" aria-hidden="true"></i> Delete</a>
 
-                <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse89" aria-expanded="false">
+                <h5 class="panel-title p-t-15" data-toggle="collapse" data-parent="#accordion" href="#collapse89" aria-expanded="false">
                     <div class="table-responsive">
                         <table class="table table-borderless" style="margin-bottom: 0px;">
                             <tbody>

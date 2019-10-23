@@ -17,6 +17,24 @@
                                     <form method="post" id="save_template_main">
                                         <h3>Identification :</h3>
                                         <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Template Category:<span class="spanclass text-danger">*</span></label>
+                                                    <select class="form-control" id="template_category" name="template_main[template_cat_id]" title="Template Category" required>
+                                                        <option value="">Select Category</option>
+                                                        <?php
+                                                        if (!empty($template_category)) {
+                                                            foreach ($template_category as $category) {
+                                                                ?>
+                                                                <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>>
+                                                                <?php
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                    <div class="errorMessage text-danger"></div>
+                                                </div>
+                                            </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Id:<span class="spanclass text-danger">*</span></label>
@@ -76,7 +94,7 @@
                                                 </div>
                                             </div><!-- ./col-md-6 -->
                                         </div>
-                                            <div class="row">
+                                        <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Tracking:<span class="spanclass text-danger">*</span></label>
@@ -336,7 +354,7 @@
                                                 <div class="panel panel-default service-panel type2 filter-active" id="action<?= $value['id'] ?>">
                                                     <div class="panel-heading">
                                                         <a href="javascript:void(0);" onclick="get_template_task_modal(<?= $value['id'] ?>);" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
-                                                        <a href="javascript:void(0);" onclick="tetmplate_task_edit_modal(<?= $value['id']?>);" class="btn btn-danger btn-xs btn-service-edit btn-prj-template-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
+                                                        <a href="javascript:void(0);" onclick="tetmplate_task_edit_modal(<?= $value['id'] ?>);" class="btn btn-danger btn-xs btn-service-edit btn-prj-template-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
                                                         <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $value['id'] ?>" aria-expanded="false">
                                                             <div class="table-responsive">
                                                                 <table class="table table-borderless text-center" style="margin-bottom: 0px;">
@@ -372,7 +390,7 @@
                                                                         </tr>
                                                                         <tr>
                                                                             <td title="Description" align="center"><span><?= $value['description'] ?></span>
-                                                                                <!--<a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="test description" data-trigger="hover" title="" data-original-title=""><?php //echo $value['description']  ?></a>-->
+                                                                                <!--<a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="test description" data-trigger="hover" title="" data-original-title=""><?php //echo $value['description']   ?></a>-->
                                                                             </td>
 
                                                                         </tr>
@@ -392,7 +410,7 @@
                                                     <h3><strong>Sorry!</strong> no data found</h3>
                                                 </div>
                                             </div>
-<?php } ?>
+                                        <?php } ?>
                                     </div>
                                 </div><!-- ./panel-body -->
                                 <!--<button class="btn btn-danger pull-right" type="button" onclick="go('administration/template');">Back to dashboard</button>-->

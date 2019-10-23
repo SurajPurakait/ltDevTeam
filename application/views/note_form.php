@@ -37,8 +37,8 @@ if (isset($note_list)) {
     ?>
 
     <div class="form-group">
-        <label class="col-lg-2 control-label"><?= count($note_list) > 0 ? '' : $note_title; ?></label>
-        <div class="col-lg-10">
+        <label class="col-lg-3 control-label"><?= count($note_list) > 0 ? '' : $note_title; ?></label>
+        <div class="col-lg-9">
             <div class="note-textarea">
                 <textarea <?= $required == 'y' ? "required='required'" : ""; ?> class="form-control"
                                                                                 name="<?= $table ?>[]"
@@ -51,8 +51,8 @@ if (isset($note_list)) {
 <?php } else { ?>
 
     <div class="form-group">
-        <label class="col-sm-3 col-md-2 control-label"><?= $note_title; ?></label>
-        <div class="col-sm-9 col-md-10">
+        <label class="col-lg-3 control-label"><?= $note_title; ?></label>
+        <div class="col-lg-9">
             <div class="note-textarea">
                 <textarea <?= $required == 'y' ? "required='required'" : ""; ?> class="form-control"
                                                                                 name="<?= $table ?>[]"

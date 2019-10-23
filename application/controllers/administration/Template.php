@@ -37,6 +37,7 @@ class Template extends CI_Controller {
         $render_data["departments"] = $this->action_model->get_departments();
         $render_data['office_list'] = $this->Project_Template_model->getOfficeList(2);
         $render_data['staff_type'] = $this->Project_Template_model->getStaffType();
+        $render_data['template_category']=$this->Project_Template_model->getTemplateCategory();
 //        print_r($render_data['office_list']);die;
 //        $render_data["task_list"]=$this->Project_Template_model->project_template_task_list();
         $this->load->template('administration/project_template/template', $render_data);
@@ -188,6 +189,7 @@ class Template extends CI_Controller {
         $render_data['office_list'] = $this->Project_Template_model->getOfficeList(2);
         $render_data['template_details'] = $this->Project_Template_model->editTemplateMainDetail($template_id);
         $render_data['staff_type'] = $this->Project_Template_model->getStaffType();
+        $render_data['template_category']=$this->Project_Template_model->getTemplateCategory();
 //        echo "<pre>";
 //        print_r($render_data['template_details']);die;
         $render_data["task_list"] = $this->Project_Template_model->project_template_task_list($template_id);

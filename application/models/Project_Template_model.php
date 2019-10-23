@@ -56,6 +56,7 @@ class Project_Template_model extends CI_Model {
             $temp_main_ins['title'] = $post['template_main']['title'];
             $temp_main_ins['description'] = $post['template_main']['description'];
             $temp_main_ins['category_id'] = $post['template_main']['service_category'];
+            $temp_main_ins['template_cat_id']=$post['template_main']['template_cat_id'];
             if (isset($post['template_main']['service']) && $post['template_main']['service'] != '') {
                 $temp_main_ins['service_id'] = $post['template_main']['service'];
             } else {
@@ -2550,8 +2551,8 @@ class Project_Template_model extends CI_Model {
         $this->db->where(['id' => $file_id]);
         return $this->db->delete('task_files');
     }
-    public function getTaskNoteDetails($task_id){
-        
+    public function getTemplateCategory(){
+        return $this->db->get('template_category')->result_array();
     }
 
 }

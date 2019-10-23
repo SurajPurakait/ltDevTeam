@@ -2408,6 +2408,27 @@ if (!function_exists('mail_campaign_list')) {
 
 }
 
+
+if (!function_exists('get_event_lead_details')) {
+
+    function get_event_lead_details($event_id) {
+        $ci = &get_instance();
+        $ci->load->model('lead_management');
+        return $ci->lead_management->get_event_lead_details($event_id);
+    }
+
+}
+
+if (!function_exists('get_event_lead_by_id')) {
+
+    function get_event_lead_by_id($event_id) {
+        $ci = &get_instance();
+        $ci->load->model('lead_management');
+        return $ci->lead_management->get_event_lead_by_id($event_id);
+    }
+
+}
+
 if (!function_exists('operational_file_list')) {
 
     function operational_file_list($operational_manual_id) {
@@ -2721,6 +2742,16 @@ if (!function_exists('notes_read_status')) {
         $ci = &get_instance();
         $ci->load->model('Action_model');
         return $ci->Action_model->get_read_status($id);
+    }
+
+}
+
+if (!function_exists('get_lead_note_count')) {
+
+    function get_lead_note_count($id) {
+        $ci = &get_instance();
+        $ci->load->model('Lead_management');
+        return $ci->Lead_management->get_lead_note_count($id);
     }
 
 }

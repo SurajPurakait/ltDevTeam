@@ -940,3 +940,15 @@ INSERT INTO `lead_type` (`id`, `type`) VALUES (NULL, 'Client'), (NULL, 'Partner'
 /*17.10.2019*/
 /* inport task_files.sql */
 ALTER TABLE `project_task` ADD `input_form_status` ENUM('n','y') NOT NULL DEFAULT 'n' AFTER `status`; 
+
+/* live end */
+
+/*22.10.2019*/
+
+ALTER TABLE `notes_log` ADD `read_status` INT(11) NOT NULL DEFAULT '0' COMMENT '0 for not read, 1 for read' AFTER `date_time`; 
+
+ALTER TABLE `project_template_main` ADD `template_cat_id` INT(11) NOT NULL AFTER `id`; 
+
+/*import template_category.sql*/
+
+ALTER TABLE `project_main` ADD `template_cat_id` INT(11) NOT NULL AFTER `id`; 

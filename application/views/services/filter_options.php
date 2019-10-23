@@ -7,7 +7,7 @@ $return = '';
                 $return .= "<option value=''>All Criteria</option>";
                 $new_sort=array();
                 foreach ($options_val as $key => $ov):
-                    $new_sort[$key]= $ov['name'];
+                    $new_sort[$key]= strtolower($ov['name']);
                 endforeach;
                 array_multisort($new_sort, SORT_ASC, $options_val);
                 foreach ($options_val as $ov):
@@ -22,7 +22,7 @@ $return = '';
                 $return .= "<option value=''>All Criteria</option>";
                 $new_sort=array();
                 foreach ($options_val as $key => $ov):
-                    $new_sort[$key]= $ov['description'];
+                    $new_sort[$key]= strtolower($ov['description']);
                 endforeach;
                 array_multisort($new_sort, SORT_ASC, $options_val);
                 foreach ($options_val as $ov):
@@ -37,7 +37,7 @@ $return = '';
                 $return .= "<option value=''>All Criteria</option>";
                 $new_sort=array();
                 foreach ($options_val as $key => $ov):
-                    $new_sort[$key]= $ov['name'];
+                    $new_sort[$key]= strtolower($ov['name']);
                 endforeach;
                 array_multisort($new_sort, SORT_ASC, $options_val);
                 foreach ($options_val as $ov):
@@ -53,7 +53,7 @@ $return = '';
                 $return .= "<option value=''>All Criteria</option>";
                 $new_sort=array();
                 foreach ($options_val as $key => $ov):
-                    $new_sort[$key]= $ov['name'];
+                    $new_sort[$key]= strtolower($ov['name']);
                 endforeach;
                 array_multisort($new_sort, SORT_ASC, $options_val);
                 foreach ($options_val as $ov):
@@ -66,13 +66,13 @@ $return = '';
         
         elseif($val==4){ //tracking
                 $return .= "<select class='form-control criteria-dropdown chosen-select' placeholder='All Criteria' name='criteria_dropdown[tracking][]'>";
-                $return .= "<option value=''>All Criteria</option>";
-                $return .= '<option value="2">Not Started</option>';
-                $return .= '<option value="1">Started</option>';
+                $return .= "<option value=''>All Criteria</option>"; 
+                $return .= '<option value="7">Cancelled</option>';
                 $return .= '<option value="0">Completed</option>';
                 $return .= '<option value="3">Late</option>';
                 $return .= '<option value="4">Not Completed</option>';
-                $return .= '<option value="7">Cancelled</option>';
+                $return .= '<option value="2">Not Started</option>';
+                $return .= '<option value="1">Started</option>';               
                 $return .= "</select>";
         }elseif($val==5){ //staff
             $options_val = get_filter_dropdown_options($val,$ofc_val);
@@ -81,7 +81,7 @@ $return = '';
                 $return .= "<option value=''>All Criteria</option>";
                 $new_sort=array();
                 foreach ($options_val as $key => $ov):
-                    $new_sort[$key]= $ov['first_name'];
+                    $new_sort[$key]= strtolower($ov['first_name']);
                 endforeach;
                 array_multisort($new_sort, SORT_ASC, $options_val);
                 foreach ($options_val as $ov):
@@ -135,7 +135,7 @@ $return = '';
                 $return .= "<option value=''>All Criteria</option>";
                 $new_sort=array();
                 foreach ($options_val as $key => $ov):
-                    $new_sort[$key]= $ov['name'];
+                    $new_sort[$key]=strtolower($ov['name']);
                 endforeach;
                 array_multisort($new_sort, SORT_ASC, $options_val);
                 foreach ($options_val as $ov):
