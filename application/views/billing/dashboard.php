@@ -326,7 +326,7 @@ $staffrole = $staff_info['role'];
     </div>
 </div> 
 <script>
-//    loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1);
+    loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1);
     var reflactFilterWithSummery = function (status, requestType) {
         clearFilter();
         $("select.variable-dropdown:first").val(6);
