@@ -724,10 +724,10 @@ if (!function_exists('get_started_action_count')) {
 
 if (!function_exists('get_new_lead_count')) {
 
-    function get_new_lead_count($stat) {
+    function get_new_lead_count() {
         $ci = &get_instance();
         $ci->load->model('lead_management');
-        return $ci->lead_management->get_leads_count($stat);
+        return $ci->lead_management->get_leads_count();
     }
 
 }
@@ -736,10 +736,10 @@ if (!function_exists('get_new_lead_count')) {
 
 if (!function_exists('get_active_lead_count')) {
 
-    function get_active_lead_count($stat) {
+    function get_active_lead_count() {
         $ci = &get_instance();
         $ci->load->model('lead_management');
-        return $ci->lead_management->get_active_leads_count($stat);
+        return $ci->lead_management->get_active_leads_count();
     }
 
 }

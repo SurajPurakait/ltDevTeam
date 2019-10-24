@@ -363,8 +363,8 @@ $office_id = get_office_id($staff_info['office']);
                 <!-- Leads -->
                 <li <?= active_menu($main_menu, "leads"); ?> >
                     <div class="dashboard-icons pull-right">
-                        <a href="<?= base_url(); ?>lead_management/home/index/0/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php echo get_new_lead_count(1); ?></a>
-                        <a href="<?= base_url(); ?>lead_management/home/index/3/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php echo get_active_lead_count(1); ?></a>
+                        <a href="<?= base_url(); ?>lead_management/home/index/0/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php echo get_new_lead_count(); ?></a>
+                        <a href="<?= base_url(); ?>lead_management/home/index/3/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php echo get_active_lead_count(); ?></a>
                         <!-- <div class="clearfix"></div> -->
                         <!-- <a href="<?//= base_url(); ?>lead_management/home/index/0/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php// echo get_new_lead_count(2); ?></a>
                         <a href="<?//= base_url(); ?>lead_management/home/index/3/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php //echo get_active_lead_count(2); ?></a> -->

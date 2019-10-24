@@ -56,16 +56,16 @@ class New_prospect extends CI_Controller {
             if (post('mail_campaign_status') == 1) {
                 /* mail section */
                 $user_email = post("email");
-//                $config = Array(
-//                    'protocol' => 'smtp',
-//                    'smtp_host' => 'ssl://smtp.gmail.com',
-//                    'smtp_port' => 465,
-//                    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-//                    'smtp_pass' => 'codetestml0016@123', // change it to yours
-//                    'mailtype' => 'html',
-//                    'charset' => 'utf-8',
-//                    'wordwrap' => TRUE
-//                );
+               // $config = Array(
+               //     'protocol' => 'smtp',
+               //     'smtp_host' => 'ssl://smtp.gmail.com',
+               //     'smtp_port' => 465,
+               //     'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+               //     'smtp_pass' => 'codetestml0016@123', // change it to yours
+               //     'mailtype' => 'html',
+               //     'charset' => 'utf-8',
+               //     'wordwrap' => TRUE
+               // );
 
                 $config = Array(
                     //'protocol' => 'smtp',
@@ -78,7 +78,11 @@ class New_prospect extends CI_Controller {
                     'wordwrap' => TRUE
                 );
                 $lead_result = $this->lm->view_leads_record($id);
-                $mail_data = $this->lm->get_campaign_mail_data(post("type_of_contact"), post("language"), 1);
+                if (post('lead_type') == 'client_lead') {
+                    $mail_data = $this->lm->get_campaign_mail_data(1, post("language"), 1);    
+                } elseif (post('lead_type') == 'partner_lead') {
+                    $mail_data = $this->lm->get_campaign_mail_data(2, post("language"), 1);
+                }
                 $email_subject = $mail_data['subject'];
                 $mail_body = urldecode($mail_data['body']);
                 $user_details = staff_info();

@@ -85,7 +85,9 @@ Class Lead_management extends CI_Model {
         // return $this->db->get_where("type_of_contact_prospect", ['id' => $id])->row_array();
         return $this->db->get_where("lead_type", ['id' => $id])->row_array();
     }
-
+    public function get_type_of_contact_prospect($id) {
+        return $this->db->get_where("type_of_contact_prospect", ['id' => $id])->row_array();
+    }
     public function get_type_of_contact_referral_by_id($id) {
         return $this->db->get_where("type_of_contact_referral", ['id' => $id])->row_array();
     }
@@ -1181,13 +1183,13 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_leads_count($stat) {
+    public function get_leads_count() {
         $user_details = staff_info();
         $usertype = $user_details['type'];
 
         $userid = $user_details['id'];
 
-        $sql = "SELECT * FROM `lead_management` WHERE status ='0' and type=$stat";
+        $sql = "SELECT * FROM `lead_management` WHERE status ='0' and type!='2'";
         if ($usertype != 1) {
             $sql .= " and staff_requested_by='" . $userid . "'";
         }
@@ -1195,12 +1197,12 @@ Class Lead_management extends CI_Model {
         return $this->db->query($sql)->num_rows();
     }
 
-    public function get_active_leads_count($stat) {
+    public function get_active_leads_count() {
         $user_details = staff_info();
         $usertype = $user_details['type'];
         $userid = $user_details['id'];
 
-        $sql = "SELECT * FROM `lead_management` WHERE status = '3' and type=$stat";
+        $sql = "SELECT * FROM `lead_management` WHERE status = '3' and type!='2'";
         if ($usertype != 1) {
             $sql .= " and staff_requested_by='" . $userid . "'";
         }
@@ -1399,8 +1401,8 @@ Class Lead_management extends CI_Model {
         return $this->db->query("SELECT * FROM `lead_mail_chain` where lead_type='" . $leadtype . "' and language='" . $language . "' and type='" . $day . "'")->row_array();
     }
 
-    public function get_campaign_mail_data($service, $language, $day) {
-        return $this->db->query("SELECT * FROM `lead_mail_chain` where service='" . $service . "' and language='" . $language . "' and type='" . $day . "'")->row_array();
+    public function get_campaign_mail_data($lead_type, $language, $day) {
+        return $this->db->query("SELECT * FROM `lead_mail_chain` where lead_type='" . $lead_type . "' and language='" . $language . "' and type='" . $day . "'")->row_array();
     }
 
     public function delete_mail_campaign($id) {
