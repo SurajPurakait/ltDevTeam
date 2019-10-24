@@ -463,9 +463,13 @@ function request_create_business() {
         }
     });
 }
-function saveIndividual() {
+function saveIndividual(lead_id='') {
     if (!requiredValidation('form_title')) {
         return false;
+    }
+    if (lead_id != '') {
+        $('#first_name').removeAttr("disabled");
+        $('#last_name').removeAttr("disabled");
     }
 //    var num = document.getElementById("per_id").value;
 //    if (isNaN(num)) {
@@ -480,6 +484,9 @@ function saveIndividual() {
     var company_id = $("#company_id").val();
     var formData = new FormData(document.getElementById('form_title'));
     var individual_id = $("#individual_id").val();
+    if (lead_id != '') {
+       formData.append('lead_id', lead_id); 
+    }
 
     $.ajax({
         type: 'POST',
@@ -490,18 +497,26 @@ function saveIndividual() {
         contentType: false,
         processData: false,
         success: function (result) {
-
-            //console.log("Result: " + result); return false;
             if (result == 1) {
-//                clearCacheFormFields('form_title');
-                swal({
-                    title: "Success!",
-                    text: "Successfully saved!",
-                    type: "success"
-                }, function () {
-                    goURL(base_url + 'action/home/view_individual/' + individual_id);
-                });
-
+            //clearCacheFormFields('form_title');
+                if (lead_id != '') {
+                    swal({
+                        title: "Success!",
+                        text: "Successfully assigned as Client!",
+                        type: "success"
+                    }, function () {
+                        opener.location.reload();
+                        window.close();
+                    });
+                } else {
+                    swal({
+                        title: "Success!",
+                        text: "Successfully saved!",
+                        type: "success"
+                    }, function () {
+                        goURL(base_url + 'action/home/view_individual/' + individual_id);
+                    });    
+                }
             } else if (result == 2) {
                 swal("ERROR!", "If you choose LLC, total share should be always 100%", "error");
             } else if (result == 0) {

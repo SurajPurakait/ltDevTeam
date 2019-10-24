@@ -376,13 +376,20 @@ $office_id = get_office_id($staff_info['office']);
                     </a>
                     <ul class="nav nav-second-level collapse" style="height: 0px;">
                         <li <?= active_menu($menu, "lead_dashboard"); ?>>
-                            <a href="<?= base_url(); ?>lead_management/home">Dashboard</a>
+                            <a href="<?= base_url(); ?>lead_management/home">Leads Dashboard</a>
                         </li>
                         <li <?= active_menu($menu, "new_lead"); ?>>
                             <a href="<?= base_url(); ?>lead_management/new_prospect/index/client_lead">- Add Client Lead</a>
                         </li>
                         <li <?= active_menu($menu, "new_lead"); ?>>
                             <a href="<?= base_url(); ?>lead_management/new_prospect/index/partner_lead">- Add Partner Lead</a>
+                        </li>
+
+                        <li <?= active_menu($menu, "events_dashboard"); ?>>
+                            <a href="<?= base_url(); ?>lead_management/event">Events Dashboard</a>
+                        </li>
+                        <li <?= active_menu($menu, "new_event"); ?>>
+                            <a href="<?= base_url(); ?>lead_management/new_event">- Add New Event</a>
                         </li>
                         <!-- <li <?//= active_menu($menu, "new_referral_agent"); ?>>
                             <a href="<?//= base_url(); ?>lead_management/new_referral_agent">- New Referral Agent</a>
@@ -416,19 +423,19 @@ $office_id = get_office_id($staff_info['office']);
                     </ul>
                 </li>
                 <!-- Events -->
-                <li id="show-menubadge" <?= active_menu($main_menu, "events"); ?>>
+                <!-- <li id="show-menubadge" <?//= active_menu($main_menu, "events"); ?>>
                     <a href="javascript:void(0);"><i class="fa fa-calendar"></i> <span class="nav-label">Events</span><span class="fa arrow main-cat"></span></a>
                     <ul class="nav nav-second-level collapse" style="height: 0px;">
-                        <li <?= active_menu($menu, "events_dashboard"); ?>>
+                        <li <?//= active_menu($menu, "events_dashboard"); ?>>
                             <div class="dashboard-icons pull-right">
                             </div>
-                            <a href="<?= base_url(); ?>lead_management/event">Dashboard</a>
+                            <a href="<?//= base_url(); ?>lead_management/event">Dashboard</a>
                         </li>
-                        <li <?= active_menu($menu, "new_event"); ?>>
-                            <a href="<?= base_url(); ?>lead_management/new_event">- Add New Event</a>
+                        <li <?//= active_menu($menu, "new_event"); ?>>
+                            <a href="<?//= base_url(); ?>lead_management/new_event">- Add New Event</a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
                 <!-- Training Materials -->
                 <li <?= active_menu($main_menu, "training_materials"); ?> >
                     <a href="javascript:void(0);">

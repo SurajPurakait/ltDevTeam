@@ -9,6 +9,8 @@ class Home extends CI_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model("lead_management");
+        $this->load->model("system");
+        $this->load->model("company");
         if (!$this->session->userdata('user_id') && $this->session->userdata('user_id') == '') {
             redirect(base_url());
         }
@@ -41,7 +43,7 @@ class Home extends CI_Controller {
         $title = "View Lead Management";
         $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['main_menu'] = 'leads';
-        $render_data['menu'] = 'lead_dashboard';
+        $render_data['menu'] = 'lead_assign';
         $render_data['header_title'] = $title;
         $render_data["data"] = $this->lead_management->view_leads_record($id);
 //        print_r($render_data["data"]);die;
@@ -114,7 +116,8 @@ class Home extends CI_Controller {
         $status = post("status");
         $request_by = post("request_by");
         $lead_contact_type = post("lead_contact_type");
-        $render_data["lead_list"] = $this->lead_management->get_lead_list($lead_type, $status, $request_by, $lead_contact_type);
+        $event_id = post("event_id");
+        $render_data["lead_list"] = $this->lead_management->get_lead_list($lead_type, $status, $request_by, $lead_contact_type, [], '', '', '', $event_id);
 //        print_r($render_data["lead_list"]);
         $this->load->view("lead_management/ajax_dashboard", $render_data);
     }
@@ -161,5 +164,42 @@ class Home extends CI_Controller {
         $render_data["lead_list"] = $this->lead_management->get_lead_list('','','','',$filter_assign,'',$sort_criteria,$sort_type);
         $this->load->view("lead_management/ajax_dashboard", $render_data);
     }
+    public function assignment_form($lead_id, $partner_id) { 
+        $this->load->layout = 'dashboard';
+        $title = "Leads Assign";
+        $render_data['title'] = $title . ' | Tax Leaf';
+        $render_data['main_menu'] = 'leads';
+        $render_data['header_title'] = $title;
+        $render_data['menu'] = 'new_lead';
 
+        $render_data['lead_id'] = $lead_id;
+        $render_data['partner_id'] = $partner_id;
+        $this->load->template('lead_management/load_assignment_form', $render_data);
+    }
+    public function add_individual_assign() {
+        $lead_id = post('lead_id');
+        $partner_id = post('partner_id');
+        $type = post('type');
+
+        $title = "Add Individual";
+        $reference_id = $this->system->create_reference_id();
+        $render_data['reference'] = 'company';
+        $title_id = $this->company->createTitleReferenceId($reference_id);
+        if ($title_id) {
+            $title_array = $this->company->getTitle($title_id);
+            $individual_id = $title_array->individual_id;
+        } else {
+            $title_array = false;
+            $title_id = 0;
+            $individual_id = 0;
+        }
+        $render_data['title_val'] = $title_array;
+        $render_data['reference'] = 'individual';
+        $render_data['reference_id'] = $reference_id;
+        $render_data['individual_id'] = $individual_id;
+        $render_data['title_id'] = $title_id;
+        $render_data['lead_info'] = $this->lead_management->get_addlead_details($lead_id);
+        $render_data['office_id'] = $this->lead_management->get_office_info_by_partner_id($partner_id);
+        $this->load->view("lead_management/assign_as_individual", $render_data);
+    }
 }

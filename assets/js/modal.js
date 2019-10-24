@@ -294,13 +294,14 @@ function show_ref_partner_tracking_modal(id) {
     });
 }
 
-function show_action_notes(id) {
-    // alert(id);return false;
+function show_action_notes(id,user_id) {
+//     alert(action_staffs);return false;
     $.ajax({
         type: 'POST',
         url: base_url + 'modal/show_action_notes',
         data: {
-            id: id
+            id: id,
+            user_id:user_id
         },
         success: function (result) {
             // alert(result);return false;

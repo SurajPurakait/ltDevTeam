@@ -607,14 +607,15 @@ function viewMailCampaignTemplate(contactType, language, day, firstName, company
     });
 }
 
-function loadLeadDashboard(leadType, status, requestBy, leadContactType) {
+function loadLeadDashboard(leadType, status, requestBy, leadContactType, eventID = '') {
     $.ajax({
         type: "POST",
         data: {
             lead_type: leadType,
             status: status,
             request_by: requestBy,
-            lead_contact_type: leadContactType
+            lead_contact_type: leadContactType,
+            event_id: eventID
         },
         url: base_url + 'lead_management/home/dashboard_ajax',
         success: function (lead_result) {
@@ -845,6 +846,10 @@ var mail_campaign_status_change = (id, value) => {
             }
         },
     });
+}
+function open_client_assign_popup(id, partner_id) { 
+    var url = base_url + 'lead_management/home/assignment_form/'+ id + '/' + partner_id;
+    window.open(url, 'Assignment Form', "width=1200, height=600, top=100, left=110, scrollbars=yes");
 }
 
 function assign_as_client(id, partner_id) {

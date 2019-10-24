@@ -3291,8 +3291,20 @@ class Action_model extends CI_Model {
     }
 
     public function get_action_notes_read_status($id,$staffid) {
-        $result = $this->db->get_where('action_notes', array('action_id' => $id,'added_by_user'=>$staffid))->result_array();
-        return array_column($result, 'read_status');
+        $result = $this->db->get_where('action_notes', array('action_id' => $id))->result_array();
+        $note_id= array_column($result, 'id');
+//        print_r($note_id);die;
+        if(!empty($note_id)){
+            $this->db->select("*");
+            $this->db->from('notes_log');
+            $this->db->where_in('note_id',$note_id);
+            $this->db->where('user_id',$staffid);
+            $this->db->group_by('user_id');
+            $read_status=$this->db->get()->result_array();
+            return array_column($read_status, 'read_status');
+        }else{
+            return 0;
+        }
         // return $result['read_status'];
     }
 

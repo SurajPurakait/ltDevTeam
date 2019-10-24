@@ -1341,7 +1341,7 @@ function projectFilter() {
         }
     });
 }
-function loadProjectDashboard(status = '', request = '', templateID = '', officeID = '', departmentID = '', filter_assign = '', filter_data = '', sos_value = '', sort_criteria = '', sort_type = '', client_type = '', client_id = '', clients = '', pageNumber = 0) {
+function loadProjectDashboard(status = '', request = '', templateID = '', officeID = '', departmentID = '', filter_assign = '', filter_data = '', sos_value = '', sort_criteria = '', sort_type = '', client_type = '', client_id = '', clients = '', pageNumber = 0,template_cat_id='') {
 //   alert(pageNumber);
 //    if (request != '') {
 //        activeShortColumn(request, short_column);
@@ -1363,7 +1363,8 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
             sort_type: sort_type,
             client_type: client_type,
             client_id: client_id,
-            page_number: pageNumber
+            page_number: pageNumber,
+            template_cat_id:template_cat_id
         },
         url: base_url + 'project/dashboard_ajax',
         success: function (project_result) {

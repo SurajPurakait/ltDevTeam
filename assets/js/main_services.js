@@ -536,6 +536,7 @@ function save_payroll_approver() {
                 $("#payroll_ext").val(res.ext);
                 $("#payroll_fax").val(res.fax);
                 $("#payroll_email").val(res.email);
+                $("#payroll_approver_div").show();
             } else {
                 swal("ERROR!", "You cannot add more than one payroll approver", "error");
             }

@@ -1,6 +1,6 @@
 <?php if($modal_type == 'edit'){  ?>
 
-<div class="modal-dialog">
+<div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
@@ -66,6 +66,8 @@
                     </div>
                 </div>
 
+                <?= note_func('Notes', 'n', 3, 'lead_id', $leaddetails['id']); ?>
+
                 <div class="form-group" style="display: none;">
                     <input type="text" name="type-of-contact" value="13">
                     <input type="text" name="lead-source" value="1">
@@ -81,11 +83,24 @@
              </form>  
         </div>
     </div> 
+    <script type="text/javascript">
+        $('.add-note').click(function () {
 
+            var textnote = $(this).prev('.note-textarea').html();
+            var note_label = $(this).parent().parent().find("label").html();
+            var div_count = Math.floor((Math.random() * 999) + 1);
+            var newHtml = '<div class="form-group" id="note_div' + div_count + '"> ' + '<div class=" col-lg-offset-3 col-lg-9">' +
+                    textnote +
+                    '<a href="javascript:void(0)" onclick="removeNote(\'note_div' + div_count + '\')" class="text-danger removenoteselector"><i class="fa fa-times"></i> Remove Note</a>' + '</div>' +
+                    '</div>';
+            $(newHtml).insertAfter($(this).closest('.form-group'));
+        });
+
+    </script>
 
 <?php }  else { ?>
 
-<div class="modal-dialog">
+<div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
@@ -119,18 +134,18 @@
                 </div>  
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label">Phone<span class="text-danger">*</span></label>
+                    <label class="col-lg-3 control-label">Phone</label>
                     <div class="col-lg-9">
-                        <input placeholder="" class="form-control" type="tel" name="phone" id="phone" title="Phone" value="" required>
-                        <div class="errorMessage text-danger"></div>
+                        <input placeholder="" class="form-control" type="tel" name="phone" id="phone" title="Phone" value="" >
+                        <!-- <div class="errorMessage text-danger"></div> -->
                     </div>
                 </div> 
 
                 <div class="form-group">
-                    <label class="col-lg-3 control-label">Company<span class="text-danger">*</span></label>
+                    <label class="col-lg-3 control-label">Company</label>
                     <div class="col-lg-9">
-                        <input placeholder="" class="form-control" type="text" name="company" id="company" title="Company" value="" required>
-                        <div class="errorMessage text-danger"></div>
+                        <input placeholder="" class="form-control" type="text" name="company" id="company" title="Company" value="" >
+                        <!-- <div class="errorMessage text-danger"></div> -->
                     </div>
                 </div>    
 
@@ -146,6 +161,11 @@
                         <div class="errorMessage text-danger"></div>
                     </div>
                 </div>
+
+        
+                <div class="hr-line-dashed"></div>
+                <?= note_func('Notes', 'n', 3); ?> 
+                   
 
                 <div class="form-group" style="display: none;">
                     <input type="text" name="type-of-contact" value="13">
@@ -163,4 +183,18 @@
         </div>
     </div> 
 
+    <script type="text/javascript">
+        $('.add-note').click(function () {
+
+            var textnote = $(this).prev('.note-textarea').html();
+            var note_label = $(this).parent().parent().find("label").html();
+            var div_count = Math.floor((Math.random() * 999) + 1);
+            var newHtml = '<div class="form-group" id="note_div' + div_count + '"> ' + '<div class=" col-lg-offset-3 col-lg-9">' +
+                    textnote +
+                    '<a href="javascript:void(0)" onclick="removeNote(\'note_div' + div_count + '\')" class="text-danger removenoteselector"><i class="fa fa-times"></i> Remove Note</a>' + '</div>' +
+                    '</div>';
+            $(newHtml).insertAfter($(this).closest('.form-group'));
+        });
+
+    </script>
     <?php } ?>        

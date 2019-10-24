@@ -423,121 +423,121 @@ class Accounting_services extends CI_Controller {
         $err = "";
         if ($data['editval'] == "") {
             unset($data['editval']);
-            if ($this->employee->check_add_employee_email($data["email"]) == 0) {
-                if ($data["payroll_check"] == "Direct Deposit") {
-                    if (empty($_FILES['bank_file']['name'])) {
-                        $err = 2;
-                    } else {
-                        $upload_path = FCPATH . 'uploads/';
-                        if (!file_exists($upload_path)) {
-                            @mkdir($upload_path, 0777);
-                        }
-                        $file_name = basename(time() . "_" . rand(111111, 99999) . "_" . str_replace(" ", "", $_FILES['bank_file']['name']));
-                        $config['upload_path'] = $upload_path;
-                        $config['allowed_types'] = 'pdf';
-                        $config['file_name'] = $file_name;
-                        $this->upload->initialize($config);
-
-                        if (!$this->upload->do_upload('bank_file')) {
-                            $err = 2;
-                        } else {
-                            $data["bank_file"] = $this->upload->data()['file_name'];
-                        }
-                    }
-                }
-                if (empty($_FILES['w4']['name'])) {
+//            if ($this->employee->check_add_employee_email($data["email"]) == 0) {
+            if ($data["payroll_check"] == "Direct Deposit") {
+                if (empty($_FILES['bank_file']['name'])) {
                     $err = 2;
                 } else {
-                    $w4 = $this->uploadPayrollForms($_FILES['w4']);
-                    if ($w4) {
-                        $data['w4_file'] = $w4;
-                    } else {
-                        $err = 2;
+                    $upload_path = FCPATH . 'uploads/';
+                    if (!file_exists($upload_path)) {
+                        @mkdir($upload_path, 0777);
                     }
-                }
+                    $file_name = basename(time() . "_" . rand(111111, 99999) . "_" . str_replace(" ", "", $_FILES['bank_file']['name']));
+                    $config['upload_path'] = $upload_path;
+                    $config['allowed_types'] = 'pdf';
+                    $config['file_name'] = $file_name;
+                    $this->upload->initialize($config);
 
-                if (empty($_FILES['i9']['name'])) {
-                    $err = 2;
-                } else {
-                    $i9 = $this->uploadPayrollForms($_FILES['i9']);
-                    if ($i9) {
-                        $data['i9_file'] = $i9;
-                    } else {
+                    if (!$this->upload->do_upload('bank_file')) {
                         $err = 2;
-                    }
-                }
-                unset($data['action']);
-                if ($err == 2) {
-                    echo 2;
-                } else {
-                    if ($this->employee->add_employee($data)) {
-                        echo 1;
                     } else {
-                        echo 0;
+                        $data["bank_file"] = $this->upload->data()['file_name'];
                     }
                 }
-            } else {
-                echo 3;
             }
+            if (empty($_FILES['w4']['name'])) {
+                $err = 2;
+            } else {
+                $w4 = $this->uploadPayrollForms($_FILES['w4']);
+                if ($w4) {
+                    $data['w4_file'] = $w4;
+                } else {
+                    $err = 2;
+                }
+            }
+
+            if (empty($_FILES['i9']['name'])) {
+                $err = 2;
+            } else {
+                $i9 = $this->uploadPayrollForms($_FILES['i9']);
+                if ($i9) {
+                    $data['i9_file'] = $i9;
+                } else {
+                    $err = 2;
+                }
+            }
+            unset($data['action']);
+            if ($err == 2) {
+                echo 2;
+            } else {
+                if ($this->employee->add_employee($data)) {
+                    echo 1;
+                } else {
+                    echo 0;
+                }
+            }
+//            } else {
+//                echo 3;
+//            }
         } else {
             $employee_id = $data["editval"];
             $employee_details = $this->employee->get_employee_by_id($employee_id);
-            if ($this->employee->check_update_employee_email($employee_id, $data["email"]) == 0) {
-                if ($data["payroll_check"] == "Paper Check") {
-                    if (!empty($_FILES['bank_file']['name'])) {
-                        $upload_path = FCPATH . 'uploads/';
-                        if (!file_exists($upload_path)) {
-                            @mkdir($upload_path, 0777);
-                        }
-                        $file_name = basename(time() . "_" . rand(111111, 99999) . "_" . str_replace(" ", "", $_FILES['bank_file']['name']));
-                        $config['upload_path'] = $upload_path;
-                        $config['allowed_types'] = 'pdf';
-                        $config['file_name'] = $file_name;
-                        $this->upload->initialize($config);
+//            if ($this->employee->check_update_employee_email($employee_id, $data["email"]) == 0) {
+            if ($data["payroll_check"] == "Paper Check") {
+                if (!empty($_FILES['bank_file']['name'])) {
+                    $upload_path = FCPATH . 'uploads/';
+                    if (!file_exists($upload_path)) {
+                        @mkdir($upload_path, 0777);
+                    }
+                    $file_name = basename(time() . "_" . rand(111111, 99999) . "_" . str_replace(" ", "", $_FILES['bank_file']['name']));
+                    $config['upload_path'] = $upload_path;
+                    $config['allowed_types'] = 'pdf';
+                    $config['file_name'] = $file_name;
+                    $this->upload->initialize($config);
 
-                        if (!$this->upload->do_upload('bank_file')) {
-                            $err = 2;
-                        } else {
-                            $data["bank_file"] = $this->upload->data()['file_name'];
-                            $data["bank_account_type"] = "";
-                            $data["bank_routing"] = "";
-                            $data["bank_account"] = "";
-                        }
-                    }
-                } else {
-                    $data["bank_file"] = "";
-                }
-                if (!empty($_FILES['w4']['name'])) {
-                    $w4 = $this->uploadPayrollForms($_FILES['w4']);
-                    if ($w4) {
-                        $data['w4_file'] = $w4;
-                    } else {
+                    if (!$this->upload->do_upload('bank_file')) {
                         $err = 2;
-                    }
-                }
-
-                if (!empty($_FILES['i9']['name'])) {
-                    $i9 = $this->uploadPayrollForms($_FILES['i9']);
-                    if ($i9) {
-                        $data['i9_file'] = $i9;
                     } else {
-                        $err = 2;
-                    }
-                }
-                unset($data['action']);
-                unset($data['editval']);
-                if ($err == 2) {
-                    echo 2;
-                } else {
-                    if ($this->employee->update_employee($employee_id, $data)) {
-                        echo 1;
-                    } else {
-                        echo 0;
+                        $data["bank_file"] = $this->upload->data()['file_name'];
+                        $data["bank_account_type"] = "";
+                        $data["bank_routing"] = "";
+                        $data["bank_account"] = "";
                     }
                 }
             } else {
-                echo 3;
+                $data["bank_file"] = "";
             }
+            if (!empty($_FILES['w4']['name'])) {
+                $w4 = $this->uploadPayrollForms($_FILES['w4']);
+                if ($w4) {
+                    $data['w4_file'] = $w4;
+                } else {
+                    $err = 2;
+                }
+            }
+
+            if (!empty($_FILES['i9']['name'])) {
+                $i9 = $this->uploadPayrollForms($_FILES['i9']);
+                if ($i9) {
+                    $data['i9_file'] = $i9;
+                } else {
+                    $err = 2;
+                }
+            }
+            unset($data['action']);
+            unset($data['editval']);
+            if ($err == 2) {
+                echo 2;
+            } else {
+                if ($this->employee->update_employee($employee_id, $data)) {
+                    echo 1;
+                } else {
+                    echo 0;
+                }
+            }
+//            } else {
+//                echo 3;
+//            }
         }
     }
 

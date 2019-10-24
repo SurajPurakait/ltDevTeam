@@ -56,6 +56,7 @@ class Project_Template_model extends CI_Model {
             $temp_main_ins['title'] = $post['template_main']['title'];
             $temp_main_ins['description'] = $post['template_main']['description'];
             $temp_main_ins['category_id'] = $post['template_main']['service_category'];
+            $temp_main_ins['template_cat_id']=$post['template_main']['template_cat_id'];
             if (isset($post['template_main']['service']) && $post['template_main']['service'] != '') {
                 $temp_main_ins['service_id'] = $post['template_main']['service'];
             } else {
@@ -1942,7 +1943,7 @@ class Project_Template_model extends CI_Model {
         return $this->db->get_where('projects', ['id' => $project_id])->row()->office_id;
     }
 
-    public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '') {
+    public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='') {
 //        echo 'kkk'.$client_id;die;
 //        print_r($filter_data);die;
         $user_info = $this->session->userdata('staff_info');
@@ -2108,7 +2109,17 @@ class Project_Template_model extends CI_Model {
                 $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%" OR added_by_user = "' . $staff_id . '")';
             }
         }
-
+        if ($status != '') {
+                if ($status == 0 || $status == 1 || $status == 2) {
+                    $this->db->where('pm.status', $status);
+                }
+            } else {
+                if (empty($filter_data)) {
+                    $this->db->where_not_in('pm.status', [2]);
+                }else{
+                    $this->db->where_in('pm.status', [0,1, 2]);
+                }
+            }
         if (isset($sos_value) && $sos_value != '') {
             if ($sos_value == 'tome') {
                 $this->db->where(['sns.staff_id' => sess('user_id'), 'sos.reference' => 'projects', 'sns.read_status' => 0, 'sos.added_by_user!=' => sess('user_id')]);
@@ -2156,6 +2167,9 @@ class Project_Template_model extends CI_Model {
 
         if ($template_id != '') {
             $this->db->where('pro.template_id', $template_id);
+        }
+        if($template_cat_id!=''){
+            $this->db->where('pm.template_cat_id',2);
         }
 
         if (count($having) != 0) {
@@ -2550,8 +2564,8 @@ class Project_Template_model extends CI_Model {
         $this->db->where(['id' => $file_id]);
         return $this->db->delete('task_files');
     }
-    public function getTaskNoteDetails($task_id){
-        
+    public function getTemplateCategory(){
+        return $this->db->get('template_category')->result_array();
     }
 
 }

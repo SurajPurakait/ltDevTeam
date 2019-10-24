@@ -354,7 +354,7 @@ function open_owner_popup(service_id, company_id, title_id) {
             if (parseInt(title_id) > 0) {
                 url = url + '/' + title_id;
             }
-
+            
             url = url + '?q=' + company_type;
             url += '&sid=' + $("#service_id").val();
             url += '&tid=' + title_id;

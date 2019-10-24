@@ -16,6 +16,24 @@
                                     <form method="post" id="update_template_main">
                                         <h3>Identification :</h3>
                                         <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Template Category:<span class="spanclass text-danger">*</span></label>
+                                                    <select class="form-control" id="template_category" name="template_main[template_cat_id]" title="Template Category" required>
+                                                        <option value="">Select Category</option>
+                                                        <?php
+                                                        if (!empty($template_category)) {
+                                                            foreach ($template_category as $category) {
+                                                                ?>
+                                                                <option value="<?= $category['id'] ?>" <?= ($category['id'] == $template_details->template_cat_id) ? 'selected' : '' ?>><?= $category['name'] ?></option>>
+                                                                <?php
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                    <div class="errorMessage text-danger"></div>
+                                                </div>
+                                            </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Id:<span class="spanclass text-danger">*</span></label>
