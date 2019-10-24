@@ -99,7 +99,7 @@ Class Lead_management extends CI_Model {
     }
 
     public function get_notes_by_lead_id($lead_id) {
-        return $this->db->get_where("lead_notes", ['lead_id' => $lead_id])->row_array();
+        return $this->db->get_where("lead_notes", ['lead_id' => $lead_id])->result_array();
     }
 
     public function add_lead_type($lead_type_name) {
@@ -1395,8 +1395,8 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function check_if_mail_exists($service, $language, $day) {
-        return $this->db->query("SELECT * FROM `lead_mail_chain` where service='" . $service . "' and language='" . $language . "' and type='" . $day . "'")->row_array();
+    public function check_if_mail_exists($leadtype, $language, $day) {
+        return $this->db->query("SELECT * FROM `lead_mail_chain` where lead_type='" . $leadtype . "' and language='" . $language . "' and type='" . $day . "'")->row_array();
     }
 
     public function get_campaign_mail_data($service, $language, $day) {

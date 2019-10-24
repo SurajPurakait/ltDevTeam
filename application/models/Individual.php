@@ -219,7 +219,6 @@ class Individual extends CI_Model {
         if (isset($data->notes)) {
             $this->notes->insert_note(1, $data->notes, 'reference_id', $data->reference_id, $data->reference);
         }
-
         $ssn = str_replace("-", "", $data->ssn_itin);
         if (isset($data->birth_date) && $data->birth_date != '') {
             $dob = $this->System->invertDate($data->birth_date);

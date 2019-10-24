@@ -345,7 +345,6 @@ function open_owner_popup(service_id, company_id, title_id) {
     } else {
         var e = document.getElementById("type");
         var company_type = e.options[e.selectedIndex].value;
-        alert(company_type);return false;
         if (company_type == '') {
             $("#owners-list-count").next('div.errorMessage').html("You have to select company type first!");
             return false;

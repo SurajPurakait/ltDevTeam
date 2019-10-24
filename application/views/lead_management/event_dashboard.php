@@ -65,11 +65,11 @@
                                         <tr>                                            
                                             <th class="text-center" width="20%">Name</th>
                                             <th class="text-center" width="20%">Company</th>
-                                            <th class="text-center" width="15%">Email</th>
-                                            <th class="text-center" width="15%">Phone</th>
+                                            <th class="text-center" width="20%">Email</th>
+                                            <th class="text-center" width="20%">Phone</th>
                                            
                                             <!-- <th class="text-center" width="15%">Language</th> -->
-                                            <th class="text-center" width="15%">Notes</th>                       
+                                            <th class="text-center" width="20%">Notes</th>                       
                                         </tr>  
 
                                     <?php $res = get_event_lead_details($eventVal['id']);

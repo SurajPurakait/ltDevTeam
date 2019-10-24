@@ -47,9 +47,9 @@ if (!function_exists('common_upload')) {
 if (!function_exists('payeezy_payment')) {
 
     function payeezy_payment($token, $amount, $card_number, $card_holder_name, $card_expiry, $card_cvv, $card_type, $currency_code = 'USD', $merchant_ref = 'Astonishing-Sale') {
-        $service_url = 'https://api-cert.payeezy.com/v1/transactions';
-        $api_key = "WAuTBmfRlNgEzmZVmI7RQstHymUsZKBB";
-        $api_secret = "5e194d480835ab081020c81d86e6e6549411decaf021c4ebc402be96c982c01d";
+        $service_url = 'https://api.payeezy.com/v1/transactions';
+        $api_key = "Tz0ldP1ZjDGSsOO7IiySBsA2yZmm2wHx";
+        $api_secret = "87100cbde7b7d5e4a3a7ff15e13e17856904e0e485182aae3f625b699c7441ea";
 //        $token = "fdoa-94b55270942cbaf8e3d98a86d06edf945292897c5da2fb19";
         $nonce = strval(hexdec(bin2hex(openssl_random_pseudo_bytes(4, $cstrong))));
         $timestamp = strval(time() * 1000);
@@ -3079,7 +3079,7 @@ if (!function_exists('invoice_service_payment_status')) {
 }
 if (!function_exists('project_list')) {
 
-    function project_list($request = '', $status = '', $priority = '', $office_id = '', $department_id = '') {
+    function project_list($request = '', $status = '', $priority = '', $office_id = '', $department_id = '',$template_cat_id='') {
         $ci = &get_instance();
         $ci->load->model('Project_Template_model');
 
@@ -3092,7 +3092,7 @@ if (!function_exists('project_list')) {
                     return $ci->session->userdata('nw_actions');
                 } else {
 
-                    return $_SESSION['nw_actions'] = count($ci->Project_Template_model->get_project_list($request, $status, $priority, $office_id, $department_id));
+                    return $_SESSION['nw_actions'] = count($ci->Project_Template_model->get_project_list($request, $status, $priority, $office_id, $department_id,$template_cat_id));
                 }
             } elseif ($status == 1) {
 
@@ -3100,7 +3100,7 @@ if (!function_exists('project_list')) {
                     return $ci->session->userdata('s_actions');
                 } else {
 
-                    return $_SESSION['s_actions'] = count($ci->Project_Template_model->get_project_list($request, $status, $priority, $office_id, $department_id));
+                    return $_SESSION['s_actions'] = count($ci->Project_Template_model->get_project_list($request, $status, $priority, $office_id, $department_id,$template_cat_id));
                 }
             }
         } else {
@@ -3318,5 +3318,12 @@ if(!function_exists('getUnreadTaskFileCount')){
         $ci = &get_instance();
        $ci->load->model('project_template_model');
        return $ci->project_template_model->getUnreadTaskFileCount($task_id,$reference);
+    }
+}
+if(!function_exists('getTemplateCategoryProjectList')){
+    function getTemplateCategoryProjectList($template_id){
+        $ci=&get_instance();
+        $ci->load->model("project_template_model");
+        return $ci->project_template_model->get_project_list('','',$template_id);
     }
 }

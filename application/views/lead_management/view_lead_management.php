@@ -27,7 +27,7 @@
                                                 <b style="font-size: 14px;">Type of Contact:</b>
                                             </td>
                                             <td>
-                                                <?= ($contact['name'] == '') ? 'N/A':$contact['name'] ?>
+                                                <?= (empty($contact['name'])) ? 'N/A':$contact['name']; ?>
                                             </td>
                                         </tr>
                                         <tr>
@@ -285,13 +285,17 @@
                                             </td>
                                             <td <?= $style; ?>>
                                                 <?php
-                                                if ($notes['note'] == '') {
-                                                    echo 'N/A';
-                                                } else {
-                                                    ?>
-                                                    <?= $notes['note']; ?><br>
-                                                    <?php echo $notes['added_at']; ?>
-                                                <?php } ?>
+                                                foreach($notes as $note){
+                                                    if ($note['note'] == '') {
+                                                        echo 'N/A';
+                                                    } else {
+                                                        ?>
+                                                        <?= $note['note']; ?><br>
+                                                        <?php echo $note['added_at']; ?><br><br>
+                                                    <?php 
+                                                    } 
+                                                }
+                                                ?>
                                             </td>
                                         </tr>
                                     </tbody>

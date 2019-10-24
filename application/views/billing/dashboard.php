@@ -324,14 +324,24 @@ $staffrole = $staff_info['role'];
             </form>
         </div>
     </div>
-</div>
+</div> 
 <script>
-    loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1);
+//    loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1);
+    var reflactFilterWithSummery = function (status, requestType) {
+        clearFilter();
+        $("select.variable-dropdown:first").val(6);
+//        changeVariable($("select.variable-dropdown:first"));
+        var statusArray = status.split('-');
+        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr('readonly', true);
+        $("select.criteria-dropdown:first").trigger("chosen:updated");
+        $("select.condition-dropdown:first").val(1).attr('disabled', true);
+    }
     var content = $(".filter-div").html();
     var variableArray = [];
     var elementArray = [];
     function addFilterRow() {
         var random = Math.floor((Math.random() * 999) + 1);
+        alert(content);
         var clone = '<div class="filter-div row m-b-20" id="clone-' + random + '">' + content + '<div class="col-sm-1 text-right p-l-0"><a href="javascript:void(0);" onclick="removeFilterRow(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
         $('.filter-inner').append(clone);
         $.each(variableArray, function (key, value) {
@@ -377,7 +387,7 @@ $staffrole = $staff_info['role'];
             success: function (result) {
                 $("#" + divID).find('.criteria-div').html(result);
                 $(".chosen-select").chosen();
-                $("#" + divID).find('.condition-dropdown').val('');
+                $("#" + divID).find('.condition-dropdown').removeAttr('disabled').val('');
                 $("#" + divID).nextAll(".filter-div").each(function () {
                     $(this).find('.remove-filter-button').trigger('click');
                 });

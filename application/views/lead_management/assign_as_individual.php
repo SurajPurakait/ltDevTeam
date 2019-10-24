@@ -229,4 +229,7 @@
             });
         });
     });
+    function removeNote(divID) {
+        $("#" + divID).remove();
+    }
 </script>

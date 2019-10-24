@@ -497,8 +497,6 @@ function saveIndividual(lead_id='') {
         contentType: false,
         processData: false,
         success: function (result) {
-
-            //console.log("Result: " + result); return false;
             if (result == 1) {
             //clearCacheFormFields('form_title');
                 if (lead_id != '') {
@@ -507,8 +505,8 @@ function saveIndividual(lead_id='') {
                         text: "Successfully assigned as Client!",
                         type: "success"
                     }, function () {
+                        opener.location.reload();
                         window.close();
-
                     });
                 } else {
                     swal({
