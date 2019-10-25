@@ -279,13 +279,12 @@ $role = $user_info['role'];
                                 <div class="clearfix"></div>
                                 <div class="row">
                                     <?php
-                                    $due_m = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
-                                        $projects_list = getTemplateCategoryProjectList('',1);
                                         foreach($due_m as $key=> $value){
-                                        $status_array = array_count_values(array_column($projects_list, 'status'));
-//                                        print_r($status_array);
+                                            $projects_list = getTemplateCategoryProjectList('',1,$key);
+                                            $status_array = array_count_values(array_column($projects_list, 'status'));
+                                            
                                         ?>
-                                        <div class="col-md-2 m-l-15">
+                                        <div class="col-md-2 m-l-15 m-b-15">
                                             <div class="alert-primar row">
                                                 <h3 class="col-md-3 m-t-15 f-s-14"> <?= $value ?> </h3>
                                                 <div class="col-md-4"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span> </div>
@@ -301,7 +300,7 @@ $role = $user_info['role'];
                                         <script>
                                             pieChart('project-bookkeeping-campaigns-donut-<?= $key ?>');
                                         </script>
-                                    <?php } ?>
+                                        <?php } ?>
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="profile">
@@ -322,7 +321,7 @@ $role = $user_info['role'];
                                         $status_array = array_count_values(array_column($projects_list, 'status'));
 //                                        print_r($status_array);
                                         ?>
-                                        <div class="col-md-2 m-l-15">
+                                        <div class="col-md-2 m-l-15 m-b-15">
                                             <div class="alert-primar row">
                                                 <h3 class="col-md-3 m-t-15 f-s-14"> <?= $value['template_id'] ?> </h3>
                                                 <div class="col-md-4"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span> </div>
@@ -358,7 +357,7 @@ $role = $user_info['role'];
                                         $projects_list1 = getTemplateCategoryProjectList($value['template_id'],3);
                                         $status_array1 = array_count_values(array_column($projects_list1, 'status'));
                                         ?>
-                                        <div class="col-md-2 m-l-15">
+                                        <div class="col-md-2 m-l-15 m-b-15">
                                             <div class="alert-primar row">
                                                 <h3 class="col-md-3 m-t-15 f-s-14"> <?= $value['template_id'] ?> </h3>
                                                 <div class="col-md-4"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array1[1]) ? $status_array1[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?> </span> </div>
@@ -394,7 +393,7 @@ $role = $user_info['role'];
                                         $projects_list1 = getTemplateCategoryProjectList($value['template_id'],4);
                                         $status_array1 = array_count_values(array_column($projects_list1, 'status'));
                                         ?>
-                                        <div class="col-md-2 m-l-15">
+                                        <div class="col-md-2 m-l-15 m-b-15">
                                             <div class="alert-primar row">
                                                 <h3 class="col-md-3 m-t-15 f-s-14"> <?= $value['template_id'] ?> </h3>
                                                 <div class="col-md-4"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array1[1]) ? $status_array1[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?> </span> </div>

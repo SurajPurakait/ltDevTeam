@@ -94,7 +94,8 @@ class Billing_model extends CI_Model {
             "creation_date" => "inv.created_time",
             "requested_by" => "inv.created_by",
             "client_id" => "inv.reference_id",
-            "service_name" => "all_services"
+            "service_name" => "ord.service_id",
+            "request_type" => "request_type"
         ];
 
         $this->sorting_element = [
@@ -1254,32 +1255,40 @@ class Billing_model extends CI_Model {
             $where['inv.payment_status'] = 'AND `inv`.`payment_status` = ' . $payment_status . ' ';
         }
 
+        $is_status = $is_tracking = 'n';
         if (!empty($filter_data)) {
             $key = 0;
             if (isset($filter_data['criteria_dropdown'])) {
                 foreach ($filter_data['criteria_dropdown'] as $filter_key => $filter) {
                     unset($where_or);
-                    $condition = $filter_data['condition_dropdown'][$key];
+                    $condition = isset($filter_data['condition_dropdown'][$key]) ? $filter_data['condition_dropdown'][$key] : 1;
                     if ($filter_key == "creation_date") {
                         if (strlen($filter[0]) == 10) {
                             $date_value = date("Y-m-d", strtotime($filter[0]));
-                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . $date_value . '") ';
+                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 2 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . $date_value . '") ';
                         } elseif (strlen($filter[0]) == 23) {
                             $date_value = explode(" - ", $filter[0]);
                             foreach ($date_value as $date_key => $date) {
                                 $date_value[$date_key] = "'" . date("Y-m-d", strtotime($date)) . "'";
                             }
-                            $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'BETWEEN ' . implode(' AND ', $date_value) . ') ';
+                            $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') ' . (($condition == 2 || $condition == 4) ? 'NOT ' : '') . 'BETWEEN ' . implode(' AND ', $date_value) . ') ';
                         }
                     } else {
+                        if ($filter_key == 'tracking') {
+                            $is_tracking = 'y';
+                        }
+                        if ($filter_key == 'status') {
+                            $is_status = 'y';
+                        }
                         if (!empty($filter)) {
                             $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . implode('", "', $filter) . '") ';
                         }
                     }
-                    $key++;
                 }
+                $key++;
             }
         }
+
 
         $order_by = 'ORDER BY `inv`.`id` DESC ';
         if (!empty($sort) && count($sort) > 0) {
@@ -1304,8 +1313,12 @@ class Billing_model extends CI_Model {
             $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 7) ';
         }
         if (!empty($filter_data)) {
-            unset($where['inv.payment_status']);
-            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0) ';
+            if ($is_tracking == 'n') {
+                $where['inv.status'] = 'AND `inv`.`status` NOT IN (0) ';
+            }
+            if ($is_status == 'n') {
+                unset($where['inv.payment_status']);
+            }
         }
 
         $table = '`invoice_info` AS `inv` ' .

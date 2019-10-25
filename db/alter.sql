@@ -941,7 +941,6 @@ INSERT INTO `lead_type` (`id`, `type`) VALUES (NULL, 'Client'), (NULL, 'Partner'
 /* inport task_files.sql */
 ALTER TABLE `project_task` ADD `input_form_status` ENUM('n','y') NOT NULL DEFAULT 'n' AFTER `status`; 
 
-/* live end */
 
 /*22.10.2019*/
 
@@ -951,4 +950,9 @@ ALTER TABLE `project_template_main` ADD `template_cat_id` INT(11) NOT NULL AFTER
 
 /*import template_category.sql*/
 
+ALTER TABLE `project_main` ADD `template_cat_id` INT(11) NOT NULL AFTER `id`; 
+
+/*25.10.2019*/
+
+/* live end */ 
 ALTER TABLE `project_main` ADD `template_cat_id` INT(11) NOT NULL AFTER `id`; 

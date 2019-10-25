@@ -64,6 +64,7 @@ class Project extends CI_Controller {
         $render_data['template_cat_id']=$template_cat_id;
         $render_data['filter_element_list'] = $this->filter_element;
         $render_data['templateIds']=$this->Project_Template_model->getTemplateIds();
+        $render_data['due_m'] = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
         $this->load->template('projects/project', $render_data);
     }
 

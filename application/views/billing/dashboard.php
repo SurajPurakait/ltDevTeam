@@ -380,6 +380,8 @@ $staffrole = $staff_info['role'];
                 $("#" + divID).find('.condition-dropdown').removeAttr('disabled').val('');
                 if (variableValue == 11) {
                     $("#" + divID).find('.condition-dropdown option:not(:eq(0),:eq(1))').remove();
+                } else {
+                    $("#" + divID).find('.condition-dropdown').html('<option value="">All Condition</option><option value="1">Is</option><option value="2">Is in the list</option><option value="3">Is not</option><option value="4">Is not in the list</option>');
                 }
                 $("#" + divID).nextAll(".filter-div").each(function () {
                     $(this).find('.remove-filter-button').trigger('click');
@@ -456,7 +458,7 @@ $staffrole = $staff_info['role'];
         clearFilter();
         $("select.variable-dropdown:first").val(6);
         var statusArray = status.split('-');
-        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr('readonly', true);
+        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[status][]'});
         $("select.criteria-dropdown:first").trigger("chosen:updated");
         $("select.condition-dropdown:first").val(1).attr('disabled', true);
         elementArray.push($("select.condition-dropdown:first"));
@@ -464,7 +466,7 @@ $staffrole = $staff_info['role'];
         addFilterRow();
         $("select.variable-dropdown:eq(1)").val(11);
         var requestTypeArray = requestType.split('-');
-        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr('readonly', true);
+        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
         $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
         $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
         elementArray.push($("select.condition-dropdown:eq(1)"));
