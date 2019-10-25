@@ -358,7 +358,7 @@ Class Lead_management extends CI_Model {
     }
 
     public function insert_lead_prospect($data) {
-        // print_r($data);die;
+//         print_r($data);die;
         unset($data['event_id']);
         if (isset($data["lead_notes"])) {
             $lead_notes = $data["lead_notes"];
@@ -372,10 +372,13 @@ Class Lead_management extends CI_Model {
             $added_by = '';
         }
 
+        if (isset($data["refer_lead"])) {
+            $referred_lead=$data["refer_lead"];
+            unset($data["refer_lead"]);
+        }
         if (isset($data["sender_email"])) {
             unset($data["sender_email"]);
         }
-
         if (isset($data['ref_partner_id'])) {
             $ref_partner_id = $data["ref_partner_id"];
             unset($data["ref_partner_id"]);
@@ -483,6 +486,11 @@ Class Lead_management extends CI_Model {
         }
         $staff[0] = sess('user_id');
         $this->system->save_general_notification($reference, $id, 'insert', $staff, '', $lead_type);
+        if ($referred_lead != '') {
+            unset($staff);
+            $staff=array();
+            $this->system->save_general_notification($reference, $id, 'refer', $staff, '', $lead_type);
+        }
 
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();

@@ -3321,9 +3321,9 @@ if(!function_exists('getUnreadTaskFileCount')){
     }
 }
 if(!function_exists('getTemplateCategoryProjectList')){
-    function getTemplateCategoryProjectList($template_id){
+    function getTemplateCategoryProjectList($template_id,$template_cat_id=''){
         $ci=&get_instance();
         $ci->load->model("project_template_model");
-        return $ci->project_template_model->get_project_list('','',$template_id);
+        return $ci->project_template_model->get_project_list('','',$template_id,'','','','','','','','','',$template_cat_id);
     }
 }

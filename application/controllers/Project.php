@@ -33,8 +33,8 @@ class Project extends CI_Controller {
         ];
     }
 
-    function index($status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '') {
-
+    function index($status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '',$filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='') {
+//        echo 'kk'.$template_id;die;
         $this->load->layout = 'dashboard';
         $title = "Project Dashboard";
         $render_data['title'] = $title . ' | Tax Leaf';
@@ -61,6 +61,7 @@ class Project extends CI_Controller {
         $render_data['department_id'] = $department_id;
         $render_data['request_type'] = $request_type;
         $render_data['template_id'] = $template_id;
+        $render_data['template_cat_id']=$template_cat_id;
         $render_data['filter_element_list'] = $this->filter_element;
         $render_data['templateIds']=$this->Project_Template_model->getTemplateIds();
         $this->load->template('projects/project', $render_data);

@@ -27,7 +27,7 @@
                         <?= service_note_func('Invoice Notes', 'n', 'invoice', $invoice_id); ?>
                         <div class="hr-line-dashed"></div>
                         <h3>Confirmation</h3>
-                        <div class="form-group">
+                        <div class="form-group" style="display: none">
                             <label class="col-lg-2 control-label">Create order</label>
                             <div class="col-lg-10">
                                 <div class="checkbox">

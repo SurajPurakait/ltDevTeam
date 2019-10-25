@@ -194,15 +194,9 @@ class New_prospect extends CI_Controller {
                           <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
                             <tr>
                               <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong><br />
-                                <br />
+                                <br/>
                                 </strong>' . $mail_body . '</span></p>
-                                <p><span class="textonegro">Sincerely,</span></p>
-                                <p><span class="textonegro">Moses Nae<br />
-                                  moses@taxleaf.com<br />
-                                  305-541-3980<br />
-                                  815-550-1294<br />
-                                  </span><br />
-                              </p></td>
+                              </td>
                             </tr>
                           </table>          
                           <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">

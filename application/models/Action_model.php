@@ -511,8 +511,8 @@ class Action_model extends CI_Model {
     }
 
     public function add_new_action($data, $files) {
-//        echo "<pre>";
-//        print_r($data);
+       // echo "<pre>";
+       // print_r($data);
 //        echo "</pre>";die;
         $staff_info = staff_info();
         $user_id = sess("user_id");
@@ -1136,7 +1136,8 @@ class Action_model extends CI_Model {
             }
             return $this->db->get("office")->result_array();
         } else {
-            return $this->db->get("office")->result_array();
+            return $this->administration->get_office_by_staff_id(sess("user_id"));
+            // return $this->db->get("office")->result_array();
         }
     }
 

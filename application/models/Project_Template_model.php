@@ -23,7 +23,7 @@ class Project_Template_model extends CI_Model {
         // $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id),(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts left join project_task AS pt on pt.id=pts.task_id WHERE pt.project_id = pro.id),","), " ", "") AS all_project_staffs';
         $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id),","), " ", "") AS all_project_staffs';
         $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts WHERE pts.task_id = pt.id),","), " ", "") AS all_task_staffs';
-        $this->project_select[] = 'pro.*,pm.office_id as project_office_id,pm.department_id as project_department_id';
+        $this->project_select[] = 'pro.*,pm.office_id as project_office_id,pm.department_id as project_department_id,pm.status as status';
         $this->project_select[] = 'pm.added_by_user AS added_by_user';
         $this->project_select[] = 'pm.added_by_user AS staff_id';
         $this->project_select[] = 'pm.department_id as department_id';
@@ -1944,7 +1944,7 @@ class Project_Template_model extends CI_Model {
     }
 
     public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='') {
-//        echo 'kkk'.$client_id;die;
+//        echo 'kkk'.$template_cat_id;die;
 //        print_r($filter_data);die;
         $user_info = $this->session->userdata('staff_info');
         $user_department = $user_info['department'];
@@ -2169,7 +2169,7 @@ class Project_Template_model extends CI_Model {
             $this->db->where('pro.template_id', $template_id);
         }
         if($template_cat_id!=''){
-            $this->db->where('pm.template_cat_id',2);
+            $this->db->where('pm.template_cat_id',$template_cat_id);
         }
 
         if (count($having) != 0) {

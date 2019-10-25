@@ -147,12 +147,15 @@ function reffer_lead_to_partner_view(id,email,is_partner) {
     
 }
 
-function reffer_lead_to_partner() {
+function reffer_lead_to_partner(refer_lead="") {
     if (!requiredValidation('form_add_new_prospect')) {
         return false;
     }
 
     var form_data = new FormData(document.getElementById('form_add_new_prospect'));
+    if (refer_lead != "") {
+        form_data.append('refer_lead', refer_lead);
+    }
     $.ajax({
         type: "POST",
         data: form_data,

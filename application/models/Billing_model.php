@@ -1045,6 +1045,13 @@ class Billing_model extends CI_Model {
                     return $this->db->get_where("services", ['status' => 1])->result_array();
                 }
                 break;
+            case 11: {
+                    return [
+                            ["id" => 'byme', "name" => "By ME"],
+                            ["id" => 'tome', "name" => "By Others"]
+                    ];
+                }
+                break;
             default: {
                     return [];
                 }
