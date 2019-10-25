@@ -51,6 +51,7 @@ if (!function_exists('payeezy_payment')) {
         $api_key = "Tz0ldP1ZjDGSsOO7IiySBsA2yZmm2wHx";
         $api_secret = "87100cbde7b7d5e4a3a7ff15e13e17856904e0e485182aae3f625b699c7441ea";
 //        $token = "fdoa-94b55270942cbaf8e3d98a86d06edf945292897c5da2fb19";
+        $amount = $amount * 100;
         $nonce = strval(hexdec(bin2hex(openssl_random_pseudo_bytes(4, $cstrong))));
         $timestamp = strval(time() * 1000);
         $payload_data = [
