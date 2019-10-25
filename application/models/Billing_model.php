@@ -1060,7 +1060,7 @@ class Billing_model extends CI_Model {
         endswitch;
     }
 
-    public function save_order_on_invoice($invoice_id, $save_type = 'create') {
+    public function save_order_on_invoice1($invoice_id, $save_type = 'create') {
         $invoice_info = $this->db->get_where('invoice_info', ['id' => $invoice_id])->row_array();
         if ($invoice_info['is_order'] == 'n') {
             return true;
@@ -1160,6 +1160,108 @@ class Billing_model extends CI_Model {
         }
     }
 
+    
+    public function save_order_on_invoice($invoice_id, $save_type = 'create') {
+        $invoice_info = $this->db->get_where('invoice_info', ['id' => $invoice_id])->row_array();
+        if ($invoice_info['is_order'] == 'n') {
+            return true;
+        }
+        if ($invoice_info['type'] == 2) {
+            $this->db->where('id', $invoice_id);
+            $this->db->update('invoice_info', ['is_order' => 'n']);
+            return true;
+        }
+        $this->db->trans_begin();
+        $service_request_columns = $this->db->list_fields('service_request');
+        unset($service_request_columns[0]);
+
+        $this->db->select('id');
+        $order_id_list = $this->db->get_where('order', ['invoice_id' => $invoice_id])->result_array();
+        $order_ids = array_column($order_id_list, 'id');
+
+        $this->db->select(implode(', ', $service_request_columns));
+        $this->db->order_by('service_request.id');
+        $this->db->where_in('order_id', $order_ids);
+        $service_request_info = $this->db->get('service_request')->result_array();
+
+        $this->db->where_in('service_id', array_column($service_request_info, 'services_id'));
+        $this->db->where(['input_form' => 'y']);
+        $target_days = $this->db->get('target_days')->result_array();
+        if (empty($target_days)) {  //check input-form exist or not 
+            $this->db->where('id', $invoice_id);
+            $this->db->update('invoice_info', ['is_order' => 'n']);
+            return true;
+        }
+
+        $this->db->order_by('id');
+        $order_data = $this->db->get_where('order', ['invoice_id' => $invoice_id])->row_array();
+        unset($order_data['id']);
+        unset($order_data['new_existing']);
+        unset($order_data['invoice_id']);
+
+        $order_data['category_id'] = $this->service_model->get_service_by_id($service_request_info[0]['services_id'])['category_id'];
+        $order_data['service_id'] = $service_request_info[0]['services_id'];
+        $order_data['total_of_order'] = $invoice_info['total_amount'];
+        $order_data['status'] = 2;
+        $order_data['quantity'] = 0;
+        $order_data['reference'] = $invoice_info['type'] == 1 ? 'company' : 'individual';
+
+        $this->db->select('date_started');
+        $this->db->where_in('order_id', $order_ids);
+        $this->db->order_by('date_started', 'ASC');
+        $target_start_date = $this->db->get('service_request')->row_array();
+
+        $this->db->select('date_completed');
+        $this->db->where_in('order_id', $order_ids);
+        $this->db->order_by('date_completed', 'DESC');
+        $target_end_date = $this->db->get('service_request')->row_array();
+
+        if (!empty($target_start_date)) {
+            $order_data['start_date'] = $target_start_date['date_started'];
+            $order_data['target_start_date'] = $target_start_date['date_started'];
+        }
+
+        if (!empty($target_end_date)) {
+            $order_data['complete_date'] = $target_end_date['date_completed'];
+            $order_data['target_complete_date'] = $target_end_date['date_completed'];
+        }
+        if ($save_type == 'create') {
+            $this->db->insert('order', $order_data);
+            $order_id = $this->db->insert_id();
+            $this->system->update_order_serial_id_by_order_id($order_id);
+        } else {
+            $order_update_data['category_id'] = $this->service_model->get_service_by_id($service_request_info[0]['services_id'])['category_id'];
+            $order_update_data['service_id'] = $service_request_info[0]['services_id'];
+            $order_update_data['total_of_order'] = $invoice_info['total_amount'];
+            $order_id = $invoice_info['order_id'];
+            $this->db->where(['id' => $order_id]);
+            $this->db->update('order', $order_update_data);
+            $this->db->where(['order_id' => $order_id]);
+            $this->db->delete('service_request');
+        }
+
+        $service_request_data = $service_request_info;
+        foreach ($service_request_data as $key => $srl) {
+            $service_request_data[$key]['order_id'] = $order_id;
+            $service_request_data[$key]['status'] = 2;
+        }
+        $this->db->insert_batch('service_request', $service_request_data);
+
+        if ($save_type == 'create') {
+            $this->db->where(['id' => $invoice_id]);
+            $this->db->update('invoice_info', ['order_id' => $order_id]);
+        }
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return false;
+        } else {
+            $this->db->trans_commit();
+            return true;
+        }
+    }
+    
+    
     public function billing_list($status = '', $by = '', $office = '', $payment_status = '', $reference_id = '', $filter_data = [], $sort = []) {
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
