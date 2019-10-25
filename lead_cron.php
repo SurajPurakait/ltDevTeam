@@ -1,9 +1,9 @@
 <?php
 
 $servername = "localhost";
-$username = "leafnet_db";
+$username = "leafnet_db_user";
 $password = "leafnet@123";
-$db = 'leafnet_dev2_new';
+$db = 'leafnet_staging';
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $db);
 // Check connection
@@ -16,7 +16,7 @@ if ($result = mysqli_query($conn, $sql)) {
     if (mysqli_num_rows($result) > 0) {
         while ($ld = mysqli_fetch_array($result)) {
             if ($ld['status'] == 3) {
-                $office_info = 'SELECT * from office where id="'.$ld['office'].'"'; 
+                $office_info = 'SELECT * from office where id="' . $ld['office'] . '"';
                 $current_datetime = strtotime(date('Y-m-d'));
                 $submisstion_datetime = strtotime($ld['submission_date']);
                 $datediff = $current_datetime - $submisstion_datetime;
@@ -39,7 +39,7 @@ if ($result = mysqli_query($conn, $sql)) {
                     } elseif ($lead_type == '3') {
                         $email_content_sql = 'SELECT * from lead_mail_chain where lead_type="2" and language="' . $language . '" and type=2';
                     }
-                    
+
                     $email_content_sql_result = mysqli_query($conn, $email_content_sql);
                     if (mysqli_num_rows($email_content_sql_result) > 0) {
                         while ($rowval = mysqli_fetch_array($email_content_sql_result)) {
@@ -87,30 +87,30 @@ if ($result = mysqli_query($conn, $sql)) {
                                 }
                             }
 
-                                $user_logo = "";
-                                if ($ld['office'] != 0) {
-                                    $ofc_sql = 'SELECT * from office where id="' . $ld['office'] . '"';
-                                    $ofc_sql_result = mysqli_query($conn, $ofc_sql);
-                                    if (mysqli_num_rows($ofc_sql_result) > 0) {
-                                        while ($rowofc = mysqli_fetch_array($ofc_sql_result)) {
-                                            $user_logo = $rowofc['photo'];
-                                        }
-                                    }   
+                            $user_logo = "";
+                            if ($ld['office'] != 0) {
+                                $ofc_sql = 'SELECT * from office where id="' . $ld['office'] . '"';
+                                $ofc_sql_result = mysqli_query($conn, $ofc_sql);
+                                if (mysqli_num_rows($ofc_sql_result) > 0) {
+                                    while ($rowofc = mysqli_fetch_array($ofc_sql_result)) {
+                                        $user_logo = $rowofc['photo'];
+                                    }
                                 }
+                            }
 
-                                if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
-                                  $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
-                                }else{
-                                  $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
-                                }
+                            if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
+                                $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
+                            } else {
+                                $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
+                            }
 
-                                if($ld['office']==1 || $ld['office']==18 || $ld['office']==34){
-                                  $bgcolor = '#00aec8';
-                                  $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
-                                }else{
-                                  $bgcolor = '#8ab645';
-                                  $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
-                                } 
+                            if ($ld['office'] == 1 || $ld['office'] == 18 || $ld['office'] == 34) {
+                                $bgcolor = '#00aec8';
+                                $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
+                            } else {
+                                $bgcolor = '#8ab645';
+                                $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
+                            }
                         }
                     }
                     $user_email = $ld['email'];
@@ -148,17 +148,17 @@ if ($result = mysqli_query($conn, $sql)) {
                             </head>
                             <body>
                                 <br />
-                                <table width="600" border="0" bgcolor="'.$bgcolor.'" align="center" cellpadding="0" cellspacing="10">
+                                <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
                                     <tr>
                                         <td>
                                             <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
                                                 <tr>
-                                                    <td><img src="'.$user_logo_fullpath.'" width="300" height="98" /></td>
+                                                    <td><img src="' . $user_logo_fullpath . '" width="300" height="98" /></td>
                                                 </tr>
                                             </table>
                                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                 <tr>
-                                                    <td><img src="'.$divider_img.'" width="600" height="30" /></td>
+                                                    <td><img src="' . $divider_img . '" width="600" height="30" /></td>
                                                 </tr>
                                             </table>
                                             <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
@@ -200,7 +200,7 @@ if ($result = mysqli_query($conn, $sql)) {
                     } elseif ($lead_type == '3') {
                         $email_content_sql = 'SELECT * from lead_mail_chain where lead_type="2" and language="' . $language . '" and type=3';
                     }
-                    
+
                     $email_content_sql_result = mysqli_query($conn, $email_content_sql);
                     if (mysqli_num_rows($email_content_sql_result) > 0) {
                         while ($rowval = mysqli_fetch_array($email_content_sql_result)) {
@@ -248,28 +248,28 @@ if ($result = mysqli_query($conn, $sql)) {
                                 }
                             }
                             $user_logo = "";
-                                if ($ld['office'] != 0) {
-                                    $ofc_sql = 'SELECT * from office where id="' . $ld['office'] . '"';
-                                    $ofc_sql_result = mysqli_query($conn, $ofc_sql);
-                                    if (mysqli_num_rows($ofc_sql_result) > 0) {
-                                        while ($rowofc = mysqli_fetch_array($ofc_sql_result)) {
-                                            $user_logo = $rowofc['photo'];
-                                        }
-                                    }   
+                            if ($ld['office'] != 0) {
+                                $ofc_sql = 'SELECT * from office where id="' . $ld['office'] . '"';
+                                $ofc_sql_result = mysqli_query($conn, $ofc_sql);
+                                if (mysqli_num_rows($ofc_sql_result) > 0) {
+                                    while ($rowofc = mysqli_fetch_array($ofc_sql_result)) {
+                                        $user_logo = $rowofc['photo'];
+                                    }
                                 }
+                            }
 
-                                if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
-                                  $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
-                                }else{
-                                  $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
-                                }
-                                if($ld['office']==1 || $ld['office']==18 || $ld['office']==34){
-                                  $bgcolor = '#00aec8';
-                                  $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
-                                }else{
-                                  $bgcolor = '#8ab645';
-                                  $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
-                                }  
+                            if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
+                                $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
+                            } else {
+                                $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
+                            }
+                            if ($ld['office'] == 1 || $ld['office'] == 18 || $ld['office'] == 34) {
+                                $bgcolor = '#00aec8';
+                                $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
+                            } else {
+                                $bgcolor = '#8ab645';
+                                $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
+                            }
                         }
                     }
                     $user_email = $ld['email'];
@@ -307,17 +307,17 @@ if ($result = mysqli_query($conn, $sql)) {
     </head>
     <body>
         <br />
-        <table width="600" border="0" bgcolor="'.$bgcolor.'" align="center" cellpadding="0" cellspacing="10">
+        <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
             <tr>
                 <td>
                     <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td><img src="'.$user_logo_fullpath.'" width="300" height="98" /></td>
+                            <td><img src="' . $user_logo_fullpath . '" width="300" height="98" /></td>
                         </tr>
                     </table>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td><img src="'.$divider_img.'" width="600" height="30" /></td>
+                            <td><img src="' . $divider_img . '" width="600" height="30" /></td>
                         </tr>
                     </table>
                     <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
