@@ -78,7 +78,7 @@
                         <div class="form-group display_div">
                             <label class="col-lg-2 control-label">Start Date<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="dd/mm/yyyy" id="month" class="form-control datepicker_mdy value_field required_field" type="text" title="Start Date" name="start_year" value="<?= $sales_tax_data['start_month_year']; ?>">
+                                <input placeholder="mm/dd/yyyy" id="month" class="form-control datepicker_mdy required_field" type="text" title="Start Date" name="start_year" value="<?= $sales_tax_data['start_month_year']; ?>">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -228,13 +228,13 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Upload Void Cheque (pdf)<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 control-label">Upload Void Cheque<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
                                 <input type="file" name="void_cheque" id="void_cheque" title="Void cheque" <?= ($sales_tax_data['void_cheque'] == '') ? "required" : ""; ?>>
                                 <div class="errorMessage text-danger"></div>
                                 <?php if ($sales_tax_data['void_cheque'] != '') {
                                     ?>
-                                    <a href="<?= base_url() . "uploads/" . $sales_tax_data['void_cheque']; ?>" target="_blank">Cheque Pdf</a>
+                                    <a href="<?= base_url() . "uploads/" . $sales_tax_data['void_cheque']; ?>" target="_blank">Cheque</a>
                                 <?php }
                                 ?>
                             </div>
@@ -317,7 +317,7 @@
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Non-resident Upload</label>
                                 <div class="col-lg-10">
-                                    <label>Passport (pdf)<span class="text-danger">*</span></label> 
+                                    <label>Passport<span class="text-danger">*</span></label> 
                                     <input class="form-control non_resident_file" type="file" name="passport" id="passport" title="Passport">
                                     <div class="errorMessage text-danger"></div>
                                     <?php if ($sales_tax_data['passport'] != '') {
@@ -328,7 +328,7 @@
                                 </div>
                                 <label class="col-lg-2 control-label"></label>
                                 <div class="col-lg-10">
-                                    <label>Lease (pdf)<span class="text-danger">*</span></label> 
+                                    <label>Lease<span class="text-danger">*</span></label> 
                                     <input class="form-control non_resident_file" type="file" name="lease" id="lease" title="Lease">
                                     <div class="errorMessage text-danger"></div>
                                     <?php if ($sales_tax_data['lease'] != '') { ?>
@@ -426,13 +426,13 @@
                             </div>
                         </div> 
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label class="col-lg-2 control-label">Existing Practice ID</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" name="existing_practice_id" title="Existing Practice ID" value="<?= $sales_tax_data['existing_practice_id']; ?>">
+                                <input placeholder="" class="form-control" type="text" name="existing_practice_id" title="Existing Practice ID" value="<?//= $sales_tax_data['existing_practice_id']; ?>">
                                 <div class="errorMessage text-danger"></div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="hr-line-dashed"></div>
 
                         <div class="form-group">

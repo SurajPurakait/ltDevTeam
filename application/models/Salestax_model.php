@@ -1060,7 +1060,8 @@ class Salestax_model extends CI_Model {
         $upload_file = $upload_dir . basename($save_as);
 
         $max_size = 1024 * 1024 * 5; // 5Mb
-        $allowed_extensios = array('pdf');
+        // $allowed_extensios = array('pdf');
+        $allowed_extensios = array('jpg', 'jpeg', 'gif', 'png', 'pdf','doc', 'docx');
 
         if (!in_array(strtolower($extension), $allowed_extensios)) {
             $this->upload_message = "File extension not allowed";
@@ -1192,7 +1193,7 @@ class Salestax_model extends CI_Model {
         $upload_file = $upload_dir . basename($save_as);
 
         $max_size = 1024 * 1024 * 5; // 5Mb
-        $allowed_extensios = array('pdf');
+        $allowed_extensios = array('jpg', 'jpeg', 'gif', 'png', 'pdf','doc', 'docx');
 
         if (!in_array(strtolower($extension), $allowed_extensios)) {
             $this->upload_message = "File extension not allowed";
@@ -1225,7 +1226,8 @@ class Salestax_model extends CI_Model {
         $upload_file = $upload_dir . basename($save_as);
 
         $max_size = 1024 * 1024 * 5; // 5Mb
-        $allowed_extensios = array('jpg', 'jpeg', 'gif', 'png', 'pdf');
+        // $allowed_extensios = array('jpg', 'jpeg', 'gif', 'png', 'pdf');
+        $allowed_extensios =  array('jpg', 'jpeg', 'gif', 'png', 'pdf','doc', 'docx');
 
         if (!in_array(strtolower($extension), $allowed_extensios)) {
             $this->upload_message = "File extension not allowed";

@@ -80,7 +80,7 @@
                         <div class="form-group display_div">
                             <label class="col-lg-2 control-label">Start Date<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="dd/mm/yyyy" id="month" class="form-control datepicker_mdy value_field required_field" type="text" title="Start Date" name="start_year" value="">
+                                <input placeholder="mm/dd/yyyy" id="month" class="form-control datepicker_mdy value_field required_field" type="text" title="Start Date" name="start_year" value="">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -232,7 +232,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Upload Void Cheque (pdf)<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 control-label">Upload Void Cheque<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
                                 <input type="file" name="void_cheque" id="void_cheque" title="Void cheque" required="">
                                 <div class="errorMessage text-danger"></div>
@@ -288,13 +288,13 @@
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Non-resident Upload</label>
                                 <div class="col-lg-10">
-                                    <label>Passport (pdf)<span class="text-danger">*</span></label> 
+                                    <label>Passport<span class="text-danger">*</span></label> 
                                     <input class="form-control non_resident_file" type="file" name="passport" id="passport">
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                                 <label class="col-lg-2 control-label"></label>
                                 <div class="col-lg-10">
-                                    <label>Lease (pdf)<span class="text-danger">*</span></label> 
+                                    <label>Lease<span class="text-danger">*</span></label> 
                                     <input class="form-control non_resident_file" type="file" name="lease" id="lease">
                                     <div class="errorMessage text-danger"></div>
                                 </div>

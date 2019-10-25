@@ -511,6 +511,9 @@ class Action_model extends CI_Model {
     }
 
     public function add_new_action($data, $files) {
+//        echo "<pre>";
+//        print_r($data);
+//        echo "</pre>";die;
         $staff_info = staff_info();
         $user_id = sess("user_id");
         if (isset($data['assign_to_myself'])) {
@@ -573,7 +576,7 @@ class Action_model extends CI_Model {
         }
         $actions = array_merge($data, ["added_by_user" => $user_id, "status" => 0, "due_date" => $date]);
         
-        
+//        print_r($notes);die;
         $this->db->trans_begin();
         $this->db->insert('actions', $actions);
         $id = $this->db->insert_id();
@@ -594,12 +597,13 @@ class Action_model extends CI_Model {
 //            $this->db->insert('action_assign_to_department_rel', ["action_id" => $id, "department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 1]);
 //        else
 //            $this->db->insert('action_assign_to_department_rel', ["action_id" => $id, "department_id" => $data["department"], "department_type" => $dept_type_arr[0]['type'], "is_all" => 0]);
-
-        if (!empty($notes)) {
-            $this->notes->insert_note(2, $notes, "action_id", $id);
-        }
+        
+        
         foreach ($staffs as $value) {
             $this->db->insert('action_staffs', ["action_id" => $id, "staff_id" => $value]);
+        }
+        if (!empty($notes)) {
+            $this->notes->insert_note(2, $notes, "action_id", $id);
         }
         if (!empty($files["name"])) {
             $filesCount = count($files['name']);
