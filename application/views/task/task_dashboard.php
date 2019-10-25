@@ -1,12 +1,12 @@
 <?php
-$user_info =  $this->session->userdata('staff_info');
+$user_info = $this->session->userdata('staff_info');
 $user_department = $user_info['department'];
 $user_type = $user_info['type'];
 $role = $user_info['role'];
 ?>
 <div class="clearfix result-header">
     <?php if (count($task_list) != 0): ?>
-    <h2 class="text-primary pull-left result-count-h2"><?= isset($page_number) ? ($page_number * 20) : count($task_list) ?> Results found <?= isset($page_number) ? 'of ' . count($task_list) : '' ?></h2>
+        <h2 class="text-primary pull-left result-count-h2"><?= isset($page_number) ? ($page_number * 20) : count($task_list) ?> Results found <?= isset($page_number) ? 'of ' . count($task_list) : '' ?></h2>
     <?php endif; ?>
     <div class="pull-right text-right p-t-5">
         <div class="dropdown" style="display: inline-block;">
@@ -37,13 +37,13 @@ if (!empty($task_list)) {
     foreach ($task_list as $row_count => $task) {
 //                                                            print_r($task);die;
 
-        if(isset($page_number)){
-            if($page_number != 1){
-                if($row_count < (($page_number - 1) * 20)){
+        if (isset($page_number)) {
+            if ($page_number != 1) {
+                if ($row_count < (($page_number - 1) * 20)) {
                     continue;
                 }
             }
-            if($row_count == ($page_number * 20)){
+            if ($row_count == ($page_number * 20)) {
                 break;
             }
         }
@@ -115,6 +115,7 @@ if (!empty($task_list)) {
                                 <th style="width:8%;  text-align: center;">SOS</th>
                                 <th style="width:8%;  text-align: center;">Note</th>
                                 <th style="width:8%;  text-align: center;">Files</th>
+                                <th style="width:8%;  text-align: center;">Input Form</th>
                             </tr>
 
                             <tr>
@@ -127,34 +128,34 @@ if (!empty($task_list)) {
                                 <!--<td title="assign to"></td>-->
                                 <?php if ($task['department_id'] == 2) { ?>
                                     <td title="Assign To" class="text-center"><?php
-                                        $resp_value = get_assigned_office_staff_project_main($task['project_id'],$task['client_id']);
+                                        $resp_value = get_assigned_office_staff_project_main($task['project_id'], $task['client_id']);
 
-                                        if(is_numeric($resp_value['name'])){
+                                        if (is_numeric($resp_value['name'])) {
                                             $resp_name = get_assigned_by_staff_name($resp_value['name']);
-                                        }else{
+                                        } else {
                                             $resp_name = $resp_value['name'];
                                         }
 
-                                        if($resp_value['office']!=0){
+                                        if ($resp_value['office'] != 0) {
                                             $office_name = get_office_id($resp_value['office']);
-                                        }else{
-                                            if(isset($task_list['project_office_id'])){
-                                                if($task_list['project_office_id']==1){
-                                                 $office_name = 'Admin';
-                                                }elseif($task_list['project_office_id']==2){
+                                        } else {
+                                            if (isset($task_list['project_office_id'])) {
+                                                if ($task_list['project_office_id'] == 1) {
+                                                    $office_name = 'Admin';
+                                                } elseif ($task_list['project_office_id'] == 2) {
                                                     $office_name = 'Corporate';
-                                                }else{
+                                                } else {
                                                     $office_name = 'Franchise';
                                                 }
-                                            }else{
-                                                 $office_name = 'Franchise';
-                                             }                                            
+                                            } else {
+                                                $office_name = 'Franchise';
+                                            }
                                         }
-                                        echo $resp_name."<br><span class='text-info'>".$office_name." </span></td>";
+                                        echo $resp_name . "<br><span class='text-info'>" . $office_name . " </span></td>";
                                         ?> </td> <?php } else { ?> 
                                     <td title="Assign To" class="text-center"><span class="text-success"><?php echo get_assigned_project_task_staff($task['id']); ?></span><br><?php echo get_assigned_project_task_department($task['id']); ?></td>                                                     
                                 <?php } ?>
-                        <!--<td title="Assign To" class="text-center"><span class="text-success"><?php // echo get_assigned_project_task_staff($task['id']); ?></span><br><?php // echo get_assigned_project_task_department($task['id']); ?></td>-->                                                     
+                    <!--<td title="Assign To" class="text-center"><span class="text-success"><?php // echo get_assigned_project_task_staff($task['id']);  ?></span><br><?php // echo get_assigned_project_task_department($task['id']);  ?></td>-->                                                     
                                 <td title="Start Date" class="text-center">T: <?= $targetSstartDate ?></td>
                                 <td title="Complete Date" class="text-center">T: <?= $targetCompleteDate ?></td>
                                 <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task['id']; ?>,<?= $status; ?>, <?= $task['id'] ?>);'><span class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
@@ -164,39 +165,52 @@ if (!empty($task_list)) {
                                     </span>
                                 </td>
                                <!--  <td title='Note' class="text-center"><a id="notecount-<?//= $task['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_task_notes(<?//= $task['id']; ?>)"><b> <?//= get_project_task_note_count($task['id']) ?></b></a></td>
- -->
+                                -->
                                 <td title="Notes" class="text-center"><span> 
+                                        <?php
+                                        $read_status = project_task_notes_readstatus($task['id']);
+                                        // print_r($read_status);
+
+                                        if (get_project_task_note_count($task['id']) > 0 && in_array(0, $read_status)) {
+                                            ?> 
+
+                                            <a id="notecount-<?= $task['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task['id']; ?>)"><b> <?= get_project_task_note_count($task['id']) ?></b></a>
+
                                             <?php
-                                            $read_status = project_task_notes_readstatus($task['id']);
-                                            // print_r($read_status);
+                                        } elseif (get_project_task_note_count($task['id']) > 0 && in_array(1, $read_status)) {
+                                            ?> 
 
-                                            if (get_project_task_note_count($task['id']) > 0 && in_array(0, $read_status)) {
-                                                ?> 
+                                            <a id="notecount-<?= $task['id'] ?>" class="label label-success" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task['id']; ?>)"><b> <?= get_project_task_note_count($task['id']) ?></b></a>
 
-                                              <a id="notecount-<?= $task['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task['id']; ?>)"><b> <?= get_project_task_note_count($task['id']) ?></b></a>
-
-                                                <?php
-                                            } elseif (get_project_task_note_count($task['id']) > 0 && in_array(1, $read_status)) {
-                                                ?> 
-
-                                              <a id="notecount-<?= $task['id'] ?>" class="label label-success" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task['id']; ?>)"><b> <?= get_project_task_note_count($task['id']) ?></b></a>
-
-                                                <?php
-                                            } else {
-                                                ?>
-
-                                               <a id="notecount-<?= $task['id'] ?>" class="label label-warning" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task['id']; ?>)"><b> <?= get_project_task_note_count($task['id']) ?></b></a>
-
-                                                <?php
-                                            }
-
+                                            <?php
+                                        } else {
                                             ?>
-                                        </span></td>
-                                        <?php 
-                                            $file_count= getTaskFilesCount($task['id']);
-                                            $unread_files_count=getUnreadTaskFileCount($task['id'],'task');
+
+                                            <a id="notecount-<?= $task['id'] ?>" class="label label-warning" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task['id']; ?>)"><b> <?= get_project_task_note_count($task['id']) ?></b></a>
+
+                                            <?php
+                                        }
                                         ?>
-                                        <?= '<td title="Files" class="text-center" ><span id="taskfilespan' . $task['id']. '">' . (($unread_files_count->unread_files_count > 0) ? '<a class="label label-danger" href="javascript:void(0)" count="' . $file_count->files . '" id="taskfile' . $task['id'] . '" onclick="show_task_files(\'' . $task['id'] . '\',\'' . $new_staffs . $task['added_by_user'] . '\')"><b>' . $file_count->files . '</b></a>' : '<a class="label label-success" href="javascript:void(0)" count="' . $file_count->files . '" id="actionfile' . $task['id'] . '" onclick="show_task_files(\'' . $task['id'] . '\',\'' . $new_staffs . $task['added_by_user'] . '\')"><b>' . $file_count->files . '</b></a>') . '</span></td>'; ?>
+                                    </span></td>
+                                <?php
+                                $file_count = getTaskFilesCount($task['id']);
+                                $unread_files_count = getUnreadTaskFileCount($task['id'], 'task');
+                                ?>
+                                <?= '<td title="Files" class="text-center" ><span id="taskfilespan' . $task['id'] . '">' . (($unread_files_count->unread_files_count > 0) ? '<a class="label label-danger" href="javascript:void(0)" count="' . $file_count->files . '" id="taskfile' . $task['id'] . '" onclick="show_task_files(\'' . $task['id'] . '\',\'' . $new_staffs . $task['added_by_user'] . '\')"><b>' . $file_count->files . '</b></a>' : '<a class="label label-success" href="javascript:void(0)" count="' . $file_count->files . '" id="actionfile' . $task['id'] . '" onclick="show_task_files(\'' . $task['id'] . '\',\'' . $new_staffs . $task['added_by_user'] . '\')"><b>' . $file_count->files . '</b></a>') . '</span></td>'; ?>
+                                <td style="text-align: center;">
+                                    <?php
+                                    $input_status = 'complete';
+                                    if ($task['input_form_status'] == 'n') {
+                                        $input_status = 'incomplete';
+                                        ?>
+                                    <span class="label input-form-incomplete">Incomplete <a href="#" onclick= "window.location.href='<?php echo base_url() . 'task/task_input_form/' . $task['id']; ?>'" class="text-white p-5" target="_blank"><i class="fa fa-plus" aria-hidden="true"></i> </a></span>
+                                    <?php } else { ?>
+                                        <span class="label input-form-complete">Completed <a href="#" onclick= "window.location.href='<?php echo base_url() . 'task/task_input_form/' . $task['id']; ?>'" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
+                                        <?php
+                                    }
+                                    ?>
+                                    <input type="hidden" class="input-form-status-<?= $task['id']; ?>" value="<?= $input_status; ?>" />
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -206,19 +220,20 @@ if (!empty($task_list)) {
         <?php
         $row_number = $row_count + 1;
     }
-    if(isset($page_number) && $row_number < count($task_list)): ?>
+    if (isset($page_number) && $row_number < count($task_list)):
+        ?>
         <div class="text-center p-0 load-more-btn">
             <a href="javascript:void(0);" onclick="loadTaskDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', <?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more results</a>
         </div>
     <?php endif; ?>
-        <script>
-            $(function () {
-                $('h2.result-count-h2').html('<?= $row_number . ' Results found of ' . count($task_list) ?>');
-                 <?php if(isset($page_number) && $row_number === count($task_list)): ?>
-                 $('.load-more-btn').remove();
-                <?php endif; ?>
-            });
-        </script>
+    <script>
+        $(function () {
+            $('h2.result-count-h2').html('<?= $row_number . ' Results found of ' . count($task_list) ?>');
+    <?php if (isset($page_number) && $row_number === count($task_list)): ?>
+                $('.load-more-btn').remove();
+    <?php endif; ?>
+        });
+    </script>
 <?php } else {
     ?>
     <div class = "text-center m-t-30">

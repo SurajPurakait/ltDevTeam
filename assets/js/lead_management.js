@@ -301,11 +301,14 @@ function confirm_sender_email(added_by, event_lead = "") {
 }
 }
 
-function add_lead_prospect(added_by, event_lead = "") {
+function add_lead_prospect(added_by, event_lead = "",refer_lead="") {
     var form_data = new FormData(document.getElementById('form_add_new_prospect'));
     form_data.append('added_by', added_by);
     if ($('input[name="sender_email"]:checked').val() != 'undefined') {
         form_data.append('sender_email', $('input[name="sender_email"]:checked').val());
+    }
+    if (refer_lead != "") {
+        form_data.append('refer_lead', refer_lead);
     }
     $.ajax({
         type: "POST",
@@ -317,6 +320,7 @@ function add_lead_prospect(added_by, event_lead = "") {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
+            // console.log(result);return false;
             if (result.trim() == "0") {
                 swal("ERROR!", "Lead Prospect Already Exists", "error");
             } else if (result.trim() == "-1") {

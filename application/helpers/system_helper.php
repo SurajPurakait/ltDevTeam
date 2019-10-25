@@ -73,7 +73,6 @@ if (!function_exists('payeezy_payment')) {
 
         ### Make sure the HMAC hash is in hex -->
         $header_authorization_hash_data = hash_hmac("sha256", $header_authorization_data, $api_secret, false);
-
         $headers = [
             'Content-Type: application/json',
             'apikey:' . strval($api_key),
@@ -628,7 +627,7 @@ if (!function_exists('get_corp_tax_return_from_bookkeeping')) {
 
 if (!function_exists('staff_info')) {
 
-    function staff_info() {
+    function staff_info() { 
         return $_SESSION['staff_info'];
     }
 

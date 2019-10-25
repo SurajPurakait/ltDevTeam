@@ -999,6 +999,7 @@ Class System extends CI_Model {
     }
 
     public function get_general_notification_by_user_id($user_id, $limit = '', $where = [], $start = '', $request_type = '') {
+        // echo $user_id;die;
         // For fetch all general notifications @sumanta
 //        echo $request_type;die;
         $user_info = staff_info();
@@ -1062,7 +1063,7 @@ Class System extends CI_Model {
             $this->db->limit($limit, $start);
         }
         $result = $this->db->get();
-//        echo $this->db->last_query();die;
+       // echo $this->db->last_query();die;
         return $result->result_array();
     }
 
