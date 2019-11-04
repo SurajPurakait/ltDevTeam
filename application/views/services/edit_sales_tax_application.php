@@ -291,7 +291,9 @@
                                     <?php
                                     foreach ($all_driver_license as $adl):
                                         $extension = pathinfo($adl['file_name'], PATHINFO_EXTENSION);
-                                        $allowed_extension = array('jpg', 'jpeg', 'gif', 'png');
+                                        // $allowed_extension = array('jpg', 'jpeg', 'gif', 'png');
+                                        $allowed_extension = array('jpg', 'jpeg', 'gif', 'png', 'pdf','doc', 'docx','mp4');
+                                        
                                         if (in_array($extension, $allowed_extension)):
                                             ?>
                                             <li>
