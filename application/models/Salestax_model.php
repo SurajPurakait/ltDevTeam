@@ -915,6 +915,10 @@ class Salestax_model extends CI_Model {
             if ($_FILES['passport']['name'] != '') {
                 if ($this->uploadpdffiles($_FILES['passport'])) {
                     $passport_filename = $this->file_uploaded;
+
+                    $this->db->query("DELETE FROM documents WHERE order_id='{$data->editval}' AND reference_id='{$data->reference_id}' AND doc_type='SALES PASSPORT' ");
+
+                    $this->db->query("INSERT INTO documents (reference,reference_id,doc_type,document,status,order_id) VALUES ('company','{$data->reference_id}','SALES PASSPORT','$passport_filename',1,'{$data->editval}') ");
                 } else {
                     $passport_filename = '';
                 }
@@ -925,6 +929,10 @@ class Salestax_model extends CI_Model {
             if ($_FILES['lease']['name'] != '') {
                 if ($this->uploadpdffiles($_FILES['lease'])) {
                     $lease_filename = $this->file_uploaded;
+
+                    $this->db->query("DELETE FROM documents WHERE order_id='{$data->editval}' AND reference_id='{$data->reference_id}' AND doc_type='SALES LEASE'");
+
+                    $this->db->query("INSERT INTO documents (reference,reference_id,doc_type,document,status,order_id) VALUES ('company','{$data->reference_id}','SALES LEASE','$lease_filename',1,'{$data->editval}') ");
                 } else {
                     $lease_filename = '';
                 }
@@ -938,6 +946,9 @@ class Salestax_model extends CI_Model {
             if ($_FILES['void_cheque']['name'] != '') {
                 if ($this->uploadvoidcheque($_FILES['void_cheque'])) {
                     $void_check_filename = $this->file_uploaded;
+
+                    $this->db->query("DELETE FROM documents WHERE order_id='{$data->editval}' AND reference_id='{$data->reference_id}' AND doc_type='SALES VOID CHEQUE'");
+                    $this->db->query("INSERT INTO documents (reference,reference_id,doc_type,document,status,order_id) VALUES ('company','{$data->reference_id}','SALES VOID CHEQUE','$void_check_filename',1,'{$data->editval}') ");
                 } else {
                     $void_check_filename = '';
                 }
@@ -995,15 +1006,15 @@ class Salestax_model extends CI_Model {
                 }
             }
 //            update sales tax rt6 in document
-            $this->db->query("DELETE FROM documents WHERE order_id='{$data->editval}'");
-            $this->db->query("INSERT INTO documents (reference,reference_id,doc_type,document,status,order_id) VALUES ('company','{$data->reference_id}','SALES VOID CHEQUE','$void_check_filename',1,'{$data->editval}') ");
+            // $this->db->query("DELETE FROM documents WHERE order_id='{$data->editval}' AND reference_id='{$data->reference_id}'");
+            // $this->db->query("INSERT INTO documents (reference,reference_id,doc_type,document,status,order_id) VALUES ('company','{$data->reference_id}','SALES VOID CHEQUE','$void_check_filename',1,'{$data->editval}') ");
 
-            if ($passport_filename != '') {
-                $this->db->query("INSERT INTO documents (reference,reference_id,doc_type,document,status,order_id) VALUES ('company','{$data->reference_id}','SALES PASSPORT','$passport_filename',1,'{$data->editval}') ");
-            }
-            if ($lease_filename != '') {
-                $this->db->query("INSERT INTO documents (reference,reference_id,doc_type,document,status,order_id) VALUES ('company','{$data->reference_id}','SALES LEASE','$lease_filename',1,'{$data->editval}') ");
-            }
+            // if ($passport_filename != '') {
+            //     $this->db->query("INSERT INTO documents (reference,reference_id,doc_type,document,status,order_id) VALUES ('company','{$data->reference_id}','SALES PASSPORT','$passport_filename',1,'{$data->editval}') ");
+            // }
+            // if ($lease_filename != '') {
+            //     $this->db->query("INSERT INTO documents (reference,reference_id,doc_type,document,status,order_id) VALUES ('company','{$data->reference_id}','SALES LEASE','$lease_filename',1,'{$data->editval}') ");
+            // }
 
             if (isset($data->edit_payroll_rt6_notes)) {
                 $this->Notes->update_note(5, $data->edit_payroll_rt6_notes);
@@ -1060,7 +1071,8 @@ class Salestax_model extends CI_Model {
         $upload_file = $upload_dir . basename($save_as);
 
         $max_size = 1024 * 1024 * 5; // 5Mb
-        $allowed_extensios = array('pdf');
+        // $allowed_extensios = array('pdf');
+        $allowed_extensios = array('jpg', 'jpeg', 'gif', 'png', 'pdf','doc', 'docx','mp4');
 
         if (!in_array(strtolower($extension), $allowed_extensios)) {
             $this->upload_message = "File extension not allowed";
@@ -1192,7 +1204,7 @@ class Salestax_model extends CI_Model {
         $upload_file = $upload_dir . basename($save_as);
 
         $max_size = 1024 * 1024 * 5; // 5Mb
-        $allowed_extensios = array('pdf');
+        $allowed_extensios = array('jpg', 'jpeg', 'gif', 'png', 'pdf','doc', 'docx','mp4');
 
         if (!in_array(strtolower($extension), $allowed_extensios)) {
             $this->upload_message = "File extension not allowed";
@@ -1225,7 +1237,8 @@ class Salestax_model extends CI_Model {
         $upload_file = $upload_dir . basename($save_as);
 
         $max_size = 1024 * 1024 * 5; // 5Mb
-        $allowed_extensios = array('jpg', 'jpeg', 'gif', 'png', 'pdf');
+        // $allowed_extensios = array('jpg', 'jpeg', 'gif', 'png', 'pdf');
+        $allowed_extensios =  array('jpg', 'jpeg', 'gif', 'png', 'pdf','doc', 'docx');
 
         if (!in_array(strtolower($extension), $allowed_extensios)) {
             $this->upload_message = "File extension not allowed";

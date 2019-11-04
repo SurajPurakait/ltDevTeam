@@ -94,7 +94,8 @@ class Billing_model extends CI_Model {
             "creation_date" => "inv.created_time",
             "requested_by" => "inv.created_by",
             "client_id" => "inv.reference_id",
-            "service_name" => "all_services"
+            "service_name" => "ord.service_id",
+            "request_type" => "request_type"
         ];
 
         $this->sorting_element = [
@@ -975,15 +976,15 @@ class Billing_model extends CI_Model {
 
     public function get_invoice_filter_element_value($element_key, $office) {
         $tracking_array = [
-                ["id" => 1, "name" => "Not Started"],
-                ["id" => 2, "name" => "Started"],
-                ["id" => 3, "name" => "Completed"],
-                ["id" => 7, "name" => "Canceled"]
+            ["id" => 1, "name" => "Not Started"],
+            ["id" => 2, "name" => "Started"],
+            ["id" => 3, "name" => "Completed"],
+            ["id" => 7, "name" => "Canceled"]
         ];
         $status_array = [
-                ["id" => 1, "name" => "Unpaid"],
-                ["id" => 2, "name" => "Partial"],
-                ["id" => 3, "name" => "Paid"]
+            ["id" => 1, "name" => "Unpaid"],
+            ["id" => 2, "name" => "Partial"],
+            ["id" => 3, "name" => "Paid"]
         ];
         switch ($element_key):
             case 1: {
@@ -1006,8 +1007,8 @@ class Billing_model extends CI_Model {
                 break;
             case 5: {
                     return [
-                            ["id" => 1, "name" => "Business Client"],
-                            ["id" => 2, "name" => "Individual"]
+                        ["id" => 1, "name" => "Business Client"],
+                        ["id" => 2, "name" => "Individual"]
                     ];
                 }
                 break;
@@ -1045,6 +1046,13 @@ class Billing_model extends CI_Model {
                     return $this->db->get_where("services", ['status' => 1])->result_array();
                 }
                 break;
+            case 11: {
+                    return [
+                        ["id" => 'byme', "name" => "By ME"],
+                        ["id" => 'tome', "name" => "By Others"]
+                    ];
+                }
+                break;
             default: {
                     return [];
                 }
@@ -1052,7 +1060,7 @@ class Billing_model extends CI_Model {
         endswitch;
     }
 
-    public function save_order_on_invoice($invoice_id, $save_type = 'create') {
+    public function save_order_on_invoice1($invoice_id, $save_type = 'create') {
         $invoice_info = $this->db->get_where('invoice_info', ['id' => $invoice_id])->row_array();
         if ($invoice_info['is_order'] == 'n') {
             return true;
@@ -1079,6 +1087,106 @@ class Billing_model extends CI_Model {
         $service_request_info = $this->db->get()->result_array();
 
         if (empty($service_request_info)) {  //check input-form exist or not 
+            $this->db->where('id', $invoice_id);
+            $this->db->update('invoice_info', ['is_order' => 'n']);
+            return true;
+        }
+
+        $this->db->order_by('id');
+        $order_data = $this->db->get_where('order', ['invoice_id' => $invoice_id])->row_array();
+        unset($order_data['id']);
+        unset($order_data['new_existing']);
+        unset($order_data['invoice_id']);
+
+        $order_data['category_id'] = $this->service_model->get_service_by_id($service_request_info[0]['services_id'])['category_id'];
+        $order_data['service_id'] = $service_request_info[0]['services_id'];
+        $order_data['total_of_order'] = $invoice_info['total_amount'];
+        $order_data['status'] = 2;
+        $order_data['quantity'] = 0;
+        $order_data['reference'] = $invoice_info['type'] == 1 ? 'company' : 'individual';
+
+        $this->db->select('date_started');
+        $this->db->where_in('order_id', $order_ids);
+        $this->db->order_by('date_started', 'ASC');
+        $target_start_date = $this->db->get('service_request')->row_array();
+
+        $this->db->select('date_completed');
+        $this->db->where_in('order_id', $order_ids);
+        $this->db->order_by('date_completed', 'DESC');
+        $target_end_date = $this->db->get('service_request')->row_array();
+
+        if (!empty($target_start_date)) {
+            $order_data['start_date'] = $target_start_date['date_started'];
+            $order_data['target_start_date'] = $target_start_date['date_started'];
+        }
+
+        if (!empty($target_end_date)) {
+            $order_data['complete_date'] = $target_end_date['date_completed'];
+            $order_data['target_complete_date'] = $target_end_date['date_completed'];
+        }
+        if ($save_type == 'create') {
+            $this->db->insert('order', $order_data);
+            $order_id = $this->db->insert_id();
+            $this->system->update_order_serial_id_by_order_id($order_id);
+        } else {
+            $order_update_data['category_id'] = $this->service_model->get_service_by_id($service_request_info[0]['services_id'])['category_id'];
+            $order_update_data['service_id'] = $service_request_info[0]['services_id'];
+            $order_update_data['total_of_order'] = $invoice_info['total_amount'];
+            $order_id = $invoice_info['order_id'];
+            $this->db->where(['id' => $order_id]);
+            $this->db->update('order', $order_update_data);
+            $this->db->where(['order_id' => $order_id]);
+            $this->db->delete('service_request');
+        }
+
+        $service_request_data = $service_request_info;
+        foreach ($service_request_data as $key => $srl) {
+            $service_request_data[$key]['order_id'] = $order_id;
+            $service_request_data[$key]['status'] = 2;
+        }
+        $this->db->insert_batch('service_request', $service_request_data);
+
+        if ($save_type == 'create') {
+            $this->db->where(['id' => $invoice_id]);
+            $this->db->update('invoice_info', ['order_id' => $order_id]);
+        }
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return false;
+        } else {
+            $this->db->trans_commit();
+            return true;
+        }
+    }
+
+    public function save_order_on_invoice($invoice_id, $save_type = 'create') {
+        $invoice_info = $this->db->get_where('invoice_info', ['id' => $invoice_id])->row_array();
+        if ($invoice_info['is_order'] == 'n') {
+            return true;
+        }
+        if ($invoice_info['type'] == 2) {
+            $this->db->where('id', $invoice_id);
+            $this->db->update('invoice_info', ['is_order' => 'n']);
+            return true;
+        }
+        $this->db->trans_begin();
+        $service_request_columns = $this->db->list_fields('service_request');
+        unset($service_request_columns[0]);
+
+        $this->db->select('id');
+        $order_id_list = $this->db->get_where('order', ['invoice_id' => $invoice_id])->result_array();
+        $order_ids = array_column($order_id_list, 'id');
+
+        $this->db->select(implode(', ', $service_request_columns));
+        $this->db->order_by('service_request.id');
+        $this->db->where_in('order_id', $order_ids);
+        $service_request_info = $this->db->get('service_request')->result_array();
+
+        $this->db->where_in('service_id', array_column($service_request_info, 'services_id'));
+        $this->db->where(['input_form' => 'y']);
+        $target_days = $this->db->get('target_days')->result_array();
+        if (empty($target_days)) {  //check input-form exist or not 
             $this->db->where('id', $invoice_id);
             $this->db->update('invoice_info', ['is_order' => 'n']);
             return true;
@@ -1247,32 +1355,66 @@ class Billing_model extends CI_Model {
             $where['inv.payment_status'] = 'AND `inv`.`payment_status` = ' . $payment_status . ' ';
         }
 
+        $is_status = $is_tracking = 'n';
         if (!empty($filter_data)) {
             $key = 0;
             if (isset($filter_data['criteria_dropdown'])) {
                 foreach ($filter_data['criteria_dropdown'] as $filter_key => $filter) {
                     unset($where_or);
-                    $condition = $filter_data['condition_dropdown'][$key];
+                    $condition = isset($filter_data['condition_dropdown'][$key]) ? $filter_data['condition_dropdown'][$key] : 1;
                     if ($filter_key == "creation_date") {
                         if (strlen($filter[0]) == 10) {
                             $date_value = date("Y-m-d", strtotime($filter[0]));
-                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . $date_value . '") ';
+                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 2 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . $date_value . '") ';
                         } elseif (strlen($filter[0]) == 23) {
                             $date_value = explode(" - ", $filter[0]);
                             foreach ($date_value as $date_key => $date) {
                                 $date_value[$date_key] = "'" . date("Y-m-d", strtotime($date)) . "'";
                             }
-                            $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'BETWEEN ' . implode(' AND ', $date_value) . ') ';
+                            $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') ' . (($condition == 2 || $condition == 4) ? 'NOT ' : '') . 'BETWEEN ' . implode(' AND ', $date_value) . ') ';
                         }
                     } else {
+                        if ($filter_key == 'tracking') {
+                            $is_tracking = 'y';
+                        }
+                        if ($filter_key == 'status') {
+                            $is_status = 'y';
+                        }
                         if (!empty($filter)) {
-                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . implode('", "', $filter) . '") ';
+                            if ($filter_key == 'request_type') {
+                                if (implode('", "', $filter) == 'byme') {
+                                    $where['inv.created_by'] = 'AND `inv`.`created_by` = ' . $staff_id . ' ';
+                                } else if (implode('", "', $filter) == 'tome') {
+                                    if (in_array(2, $departments)) {
+                                        if ($staffrole == 2) {      // frinchisee manager
+                                            $where['inv.created_by'] = 'AND `inv`.`created_by` != ' . $staff_id . ' ';
+                                            $where['indt.office'] = 'AND `indt`.`office` IN (' . $staff_office . ') ';
+                                        } else {
+                                            return [];
+                                        }
+                                    } else {  // admin/corporate
+                                        $where['inv.created_by'] = 'AND `inv`.`created_by` != ' . $staff_id . ' ';
+                                    }
+                                } else {
+                                    if (in_array(2, $departments)) {
+                                        $where['inv.created_by'] = 'AND `inv`.`created_by` = ' . $staff_id . ' ';
+                                        if ($staffrole == 2) {      // frinchisee manager
+                                            $where['indt.office'] = 'AND `indt`.`office` IN (' . $staff_office . ') ';
+                                        } else {
+                                            return [];
+                                        }
+                                    }
+                                }
+                            } else {
+                                $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . implode('", "', $filter) . '") ';
+                            }
                         }
                     }
-                    $key++;
                 }
+                $key++;
             }
         }
+
 
         $order_by = 'ORDER BY `inv`.`id` DESC ';
         if (!empty($sort) && count($sort) > 0) {
@@ -1297,8 +1439,12 @@ class Billing_model extends CI_Model {
             $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 7) ';
         }
         if (!empty($filter_data)) {
-            unset($where['inv.payment_status']);
-            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0) ';
+            if ($is_tracking == 'n') {
+                $where['inv.status'] = 'AND `inv`.`status` NOT IN (0) ';
+            }
+            if ($is_status == 'n') {
+                unset($where['inv.payment_status']);
+            }
         }
 
         $table = '`invoice_info` AS `inv` ' .

@@ -62,7 +62,7 @@ if ($modal_type == "edit") {
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Card Expiry<span class="text-danger">*</span></label>
-                                    <input type="text" name="card_expiry" id="card_expiry" required="" class="form-control" data-mask="99/99" title="Card Expiry" placeholder="mm/dd">
+                                    <input type="text" name="card_expiry" id="card_expiry" required="" class="form-control" data-mask="99/99" title="Card Expiry" placeholder="mm/yy">
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>

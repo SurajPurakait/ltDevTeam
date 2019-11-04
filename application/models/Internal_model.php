@@ -11,7 +11,7 @@ Class Internal_model extends CI_Model {
         foreach ($internal_data_columns as $column) {
             if (isset($data[$column])) {
                 if ($column == 'practice_id') {
-                    if (isset($data['practice_id'])) {
+                    if (isset($data['practice_id']) && !empty($data['practice_id'])) {
                         $save_data['practice_id'] = $data['practice_id'] == '' ? $this->system->generete_practice_id($data['reference_id'], $data['reference']) : $data['practice_id'];
                     } else {
                         $save_data['practice_id'] = $this->system->generete_practice_id($data['reference_id'], $data['reference']);

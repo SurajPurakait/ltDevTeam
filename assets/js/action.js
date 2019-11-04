@@ -463,13 +463,16 @@ function request_create_business() {
         }
     });
 }
-function saveIndividual(lead_id='') {
+function saveIndividual(lead_id='',is_admin = '') {
     if (!requiredValidation('form_title')) {
         return false;
     }
     if (lead_id != '') {
         $('#first_name').removeAttr("disabled");
         $('#last_name').removeAttr("disabled");
+    }
+    if (is_admin != '') {
+        $('#practice_id').removeAttr("disabled");
     }
 //    var num = document.getElementById("per_id").value;
 //    if (isNaN(num)) {

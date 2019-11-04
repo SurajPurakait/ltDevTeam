@@ -224,7 +224,8 @@ class Home extends CI_Controller {
             }
             $render_data["action_id"] = $id;
             $render_data["data"]["staffs"] = explode(",", $render_data["data"]["staffs"]);
-            $render_data["departments"] = $this->action_model->get_departments();
+            // $render_data["departments"] = $this->action_model->get_departments();
+            $render_data["departments"] = $this->action_model->get_departments_for_action();
             $render_data["type_of_contact"] = $this->action_model->get_staff_by_department($render_data["data"]["department"]);
             $render_data["data"]["notes"] = explode(",", $render_data["data"]["notes"]);
             $render_data["data"]["files"] = $this->action_model->get_files_by_action_id($id);

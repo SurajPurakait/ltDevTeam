@@ -1,4 +1,4 @@
-<?php $staff_info = staff_info();  
+<?php $staff_info = staff_info(); 
 ?>
 <div class="wrapper wrapper-content">
     <div class="row">
@@ -22,12 +22,19 @@
                                     <option value="">Select Office</option>
                                     <?php 
                                     
-                                        $searchString = ',';
+                                        // $searchString = ',';
+
+                                        // if( strpos($staff_info['office'], $searchString) !== false ) {
+                                        //      load_ddl_option("staff_office_list","", "staff_office");
+                                        // }else{
+                                        //     load_ddl_option("staff_office_list", $staff_info['office'], "staff_office");
+                                        // }
+                                     $searchString = ',';
 
                                         if( strpos($staff_info['office'], $searchString) !== false ) {
-                                             load_ddl_option("staff_office_list","", "staff_office");
+                                             load_ddl_option("staff_office_list_action","", "");
                                         }else{
-                                            load_ddl_option("staff_office_list", $staff_info['office'], "staff_office");
+                                            load_ddl_option("staff_office_list_action", $staff_info['office'], "");
                                         }
                                     ?>
                                 </select>

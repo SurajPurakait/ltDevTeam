@@ -11,8 +11,8 @@ $stat = ($stat == 'all') ? "" : $stat;
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-lg-7">                            
-                            <a href="<?= base_url("/lead_management/new_prospect/index/client_lead") ?>" class="btn btn-primary m-r-10"><i class="fa fa-plus"></i> Add Client Lead</a>
-                            <a href="<?= base_url("/lead_management/new_prospect/index/partner_lead") ?>" class="btn btn-primary m-r-10"><i class="fa fa-plus"></i> Add Partner Lead</a>
+                            <a href="<?= base_url("/lead_management/new_prospect/index/1") ?>" class="btn btn-primary m-r-10"><i class="fa fa-plus"></i> Add Client Lead</a>
+                            <a href="<?= base_url("/lead_management/new_prospect/index/2") ?>" class="btn btn-primary m-r-10"><i class="fa fa-plus"></i> Add Partner Lead</a>
                             <a href="<?= base_url().'partners'; ?>" class="btn btn-success">Partner Dashboard</a>
                             <div class="filter-outer">
                                 <form name="filter_form" id="filter-form"  method="post" onsubmit="leadFilter()">

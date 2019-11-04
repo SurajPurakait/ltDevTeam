@@ -951,4 +951,13 @@ ALTER TABLE `project_template_main` ADD `template_cat_id` INT(11) NOT NULL AFTER
 /*import template_category.sql*/
 
 ALTER TABLE `project_main` ADD `template_cat_id` INT(11) NOT NULL AFTER `id`; 
+
+/*25.10.2019*/
+
+
+ALTER TABLE `project_main` ADD `template_cat_id` INT(11) NOT NULL AFTER `id`; 
+
+/*30.10.2019*/
+/* run patch remove_old_mail_campaign */
+
 /* live end */

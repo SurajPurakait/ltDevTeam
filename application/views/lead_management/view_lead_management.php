@@ -27,7 +27,7 @@
                                                 <b style="font-size: 14px;">Type of Contact:</b>
                                             </td>
                                             <td>
-                                                <?= (empty($contact['name'])) ? 'N/A':$contact['name']; ?>
+                                                <?= ($contact['name'] != '') ? $contact['name'] : 'N/A'; ?>
                                             </td>
                                         </tr>
                                         <tr>

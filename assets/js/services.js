@@ -1036,7 +1036,6 @@ function request_create_bookkeeping() {
         success: function (result) {
             // alert(result);
             // return false;
-            //console.log("Result: " + result); return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
                 goURL(base_url + 'services/home/view/' + result.trim());
@@ -1580,6 +1579,7 @@ function request_create_fien_application() {
 }
 function request_create_sales_tax_application() {
     if (!requiredValidation('form_create_sales_tax_application')) {
+        swal("Form Incompleted!", "Variable field is missing", "error");
         return false;
     }
 
@@ -1590,6 +1590,8 @@ function request_create_sales_tax_application() {
     }
 
     var rt6val = $('input[type=radio][name=Rt6]:checked').val();
+    var editval = $('#editval').val();
+    if(editval==""){
     if (rt6val == 'No') {
         var residenttype = $('input[type=radio][name=residenttype]:checked').length;
         if (residenttype == 0) {
@@ -1623,6 +1625,8 @@ function request_create_sales_tax_application() {
             }
         }
     }
+
+ }
 
     $('#type').prop('disabled', false);
     $("#istate").prop('disabled', false);
@@ -1995,6 +1999,29 @@ function clientTypeChange(client_type, new_reference_id, reference, service_id) 
     $('.disabled_field').prop('disabled', false);
     change_referred_name_status('');
 }
+
+function clientTypeYes(client_type) {
+    if (parseInt(client_type) == 0) {
+    $.ajax({
+                type: 'POST',
+                url: base_url + 'services/home/clientTypeYes',
+                success: function (result) {
+                    $('#county_div').after(result);
+                }
+            });
+    }else if(parseInt(client_type) == 1){
+        $.ajax({
+                type: 'POST',
+                // url: base_url + 'services/home/clientTypeYes',
+                success: function (result) {
+                    $('#existing_client_extra_field').hide();
+                    $('#existing_client_extra_field').remove();
+                }
+            });
+    }
+
+}
+
 function fetchExistingClientData(reference_id, new_reference_id, reference, service_id) {
     clearErrorMessageDiv();
     $('.value_field').val('');

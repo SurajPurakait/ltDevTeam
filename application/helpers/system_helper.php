@@ -51,6 +51,7 @@ if (!function_exists('payeezy_payment')) {
         $api_key = "Tz0ldP1ZjDGSsOO7IiySBsA2yZmm2wHx";
         $api_secret = "87100cbde7b7d5e4a3a7ff15e13e17856904e0e485182aae3f625b699c7441ea";
 //        $token = "fdoa-94b55270942cbaf8e3d98a86d06edf945292897c5da2fb19";
+        $amount = $amount * 100;
         $nonce = strval(hexdec(bin2hex(openssl_random_pseudo_bytes(4, $cstrong))));
         $timestamp = strval(time() * 1000);
         $payload_data = [
@@ -73,7 +74,6 @@ if (!function_exists('payeezy_payment')) {
 
         ### Make sure the HMAC hash is in hex -->
         $header_authorization_hash_data = hash_hmac("sha256", $header_authorization_data, $api_secret, false);
-
         $headers = [
             'Content-Type: application/json',
             'apikey:' . strval($api_key),
@@ -315,14 +315,21 @@ if (!function_exists('load_ddl_option')) {
                     echo "<option $select value='" . $item['id'] . "'>" . $item['state_name'] . "</option>";
                 }
                 break;
-            case "staff_office_list":
+            case "staff_office_list_action":
                 // $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : "");
-            $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3) ? sess('user_id') : "");
+            $item_list = $ci->system->get_staff_office_list((($staff_info['type'] == 1)||($staff_info['type'] == 2)||($staff_info['type'] == 3)) ? sess('user_id') : "");
                 foreach ($item_list as $item) {
                     $select = ($selected != "" && $item['id'] == $selected) ? "selected = 'selected'" : "";
                     echo "<option $select value='" . $item['id'] . "'>" . $item['name'] . "</option>";
                 }
                 break;
+            case "staff_office_list":
+                $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : "");
+                foreach ($item_list as $item) {
+                    $select = ($selected != "" && $item['id'] == $selected) ? "selected = 'selected'" : "";
+                    echo "<option $select value='" . $item['id'] . "'>" . $item['name'] . "</option>";
+                }
+                break;    
             case "staff_office_list_multiple_select":
                 $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : "");
                 foreach ($item_list as $item) {
@@ -628,7 +635,7 @@ if (!function_exists('get_corp_tax_return_from_bookkeeping')) {
 
 if (!function_exists('staff_info')) {
 
-    function staff_info() {
+    function staff_info() { 
         return $_SESSION['staff_info'];
     }
 
@@ -724,10 +731,10 @@ if (!function_exists('get_started_action_count')) {
 
 if (!function_exists('get_new_lead_count')) {
 
-    function get_new_lead_count($stat) {
+    function get_new_lead_count() {
         $ci = &get_instance();
         $ci->load->model('lead_management');
-        return $ci->lead_management->get_leads_count($stat);
+        return $ci->lead_management->get_leads_count();
     }
 
 }
@@ -736,10 +743,10 @@ if (!function_exists('get_new_lead_count')) {
 
 if (!function_exists('get_active_lead_count')) {
 
-    function get_active_lead_count($stat) {
+    function get_active_lead_count() {
         $ci = &get_instance();
         $ci->load->model('lead_management');
-        return $ci->lead_management->get_active_leads_count($stat);
+        return $ci->lead_management->get_active_leads_count();
     }
 
 }
@@ -3321,9 +3328,16 @@ if(!function_exists('getUnreadTaskFileCount')){
     }
 }
 if(!function_exists('getTemplateCategoryProjectList')){
-    function getTemplateCategoryProjectList($template_id){
+    function getTemplateCategoryProjectList($template_id,$template_cat_id='',$month=''){
         $ci=&get_instance();
         $ci->load->model("project_template_model");
-        return $ci->project_template_model->get_project_list('','',$template_id);
+        return $ci->project_template_model->get_project_list('','',$template_id,'','','','','','','','','',$template_cat_id,$month);
+    }
+}
+if(!function_exists('getProjectListAccordingToMonth')){
+    function getProjectListAccordingToMonth($template_cat_id='',$month=''){
+        $ci=&get_instance();
+        $ci->load->model("project_template_model");
+        return $ci->project_template_model->get_project_list('','','','','','','','','','','','',$template_cat_id,$month);
     }
 }

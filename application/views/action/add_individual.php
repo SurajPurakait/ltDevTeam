@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Percentage/Shares<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="Only numbers (%)" id="per_id" class="form-control" type="text" name="percentage" title="Percentage" required value="<?= !empty($title_val) ? $title_val->percentage : "" ?>">
+                                <input placeholder="Only numbers (%)" id="per_id" class="form-control" type="text" name="percentage" title="Percentage" required value="<?//= !empty($title_val) ? $title_val->percentage : "" ?>">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>

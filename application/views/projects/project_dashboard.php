@@ -31,6 +31,7 @@ $role = $user_info['role'];
         </div>
     </div>
 </div>
+
 <?php
 $due_day = array(1, 2, 3, 4, 5, 6, 7);
 $due_m = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'Jun', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
@@ -156,10 +157,10 @@ if (!empty($project_list)) {
                                         ?> </td>   
                                     <td title="Requested By"><?php echo isset(staff_info_by_id($list['added_by_user'])['full_name']) ? staff_info_by_id($list['added_by_user'])['full_name'] : ''; ?></td>
                                     <td title="Assign To"><span class="text-success"><?php echo get_assigned_dept_staff_project_main($list['id']); ?></span><br><?php
-                                        if ($list['project_office_id'] != '2') {
-                                            echo get_department_name_by_id($list['project_department_id']);
+                                        if ($list['office_id'] != '2') {
+                                            echo get_department_name_by_id($list['department_id']);
                                         } else {
-                                            echo get_office_id($list['project_office_id']);
+                                            echo get_office_id($list['office_id']);
                                         }
                                         ?>
                                     </td>                                                  

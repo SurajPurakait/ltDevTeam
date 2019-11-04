@@ -116,7 +116,7 @@
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
-                        <div class="hidden">
+                        <!-- <div class="hidden"> -->
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Practice Id</label>
                             <div class="col-lg-10">
@@ -124,7 +124,7 @@
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
-                        </div>
+                        <!-- </div> -->
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Referred By Source<span class="text-danger">*</span></label>
                             <div class="col-lg-10">

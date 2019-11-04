@@ -545,7 +545,7 @@ class Service_model extends CI_Model {
             if (isset($form_data['variable_dropdown'])) {
                 foreach ($form_data['variable_dropdown'] as $key => $variable_val) {
                     if (isset($variable_val) && $variable_val != '') {
-                        $condition_val = $form_data['condition_dropdown'][$key];
+                        $condition_val = isset($form_data['condition_dropdown'][$key]) ? $form_data['condition_dropdown'][$key] : 1;
                         if (isset($condition_val) && $condition_val != '') {
                             $column_name = $this->get_column_name($variable_val);
                             if ($variable_val == 3) {
@@ -570,10 +570,9 @@ class Service_model extends CI_Model {
                 $where[] = 'ord.status = "' . $status . '"';
             }
         } else {
-            if(isset($form_data) && !empty($form_data)){
+            if (isset($form_data) && !empty($form_data)) {
                 $where[] = 'ord.status in ("2","1","0","7")';
-            }
-            elseif (in_array('ord.status = 0', $where)) {
+            } elseif (in_array('ord.status = 0', $where)) {
                 $where[] = 'ord.status not in ("7")';
             } elseif (in_array('ord.status = 7', $where)) {
                 $where[] = 'ord.status not in ("0")';
@@ -1375,9 +1374,12 @@ class Service_model extends CI_Model {
             } elseif (in_array("1", $status_array_values)) {
                 $this->db->where('id', $suborder_order_id);
                 $this->db->update('order', array('start_date' => date('Y-m-d h:i:s'), 'status' => 1));
-            } elseif (in_array("2", $status_array_values) || in_array("7", $status_array_values)) {
+            } elseif (in_array("2", $status_array_values)) {
                 $this->db->where('id', $suborder_order_id);
-                $this->db->update('order', array('start_date' => date('Y-m-d h:i:s'), 'status' => 2));
+                $this->db->update('order', array('start_date' => date('Y-m-d h:i:s'), 'status' => 1));
+            } elseif (in_array("7", $status_array_values)) {
+                $this->db->where('id', $suborder_order_id);
+                $this->db->update('order', array('start_date' => date('Y-m-d h:i:s'), 'status' => 0));
             }
         } elseif ($statusval == 7) {
             $this->db->where('id', $suborderid);
@@ -1408,7 +1410,7 @@ class Service_model extends CI_Model {
                 $this->db->update('order', array('status' => 1));
             } elseif (in_array("2", $status_array_values)) {
                 $this->db->where('id', $suborder_order_id);
-                $this->db->update('order', array('status' => 2));
+                $this->db->update('order', array('status' => 1));
             } elseif (in_array("0", $status_array_values)) {
                 $this->db->where('id', $suborder_order_id);
                 $this->db->update('order', array('status' => 0));
@@ -1830,38 +1832,38 @@ class Service_model extends CI_Model {
 //                    $this->db->delete('service_request');
 //                    foreach ($order_data as $service_id => $service_data) {
 //                        echo $service_id;die;
-                        $service = $this->get_service_by_id($srv_id);
-                        if (isset($data['override_price']) && $data['override_price'] != '') {
-                            $service_request_data['price_charged'] = $data['override_price'];
-                        } else {
-                            $service_request_data['price_charged'] = $service['retail_price'];
-                        }
-                        $service_request_data['tracking'] = $tracking;
+                    $service = $this->get_service_by_id($srv_id);
+                    if (isset($data['override_price']) && $data['override_price'] != '') {
+                        $service_request_data['price_charged'] = $data['override_price'];
+                    } else {
+                        $service_request_data['price_charged'] = $service['retail_price'];
+                    }
+                    $service_request_data['tracking'] = $tracking;
 //                        if ($srv_id == $data['service_id']) {
 //                            echo 'a';die;
 //                            $this->db->where(['order_id' => $order_id, 'services_id' => $data['service_id']]);
 //                            $this->db->update('service_request', $service_request_data);
 //                        } else {
 //                            echo 'b';die;
-                            if (isset($data['override_price']) && $data['override_price'] != '') {
-                                $price_charged = $data['override_price'];
-                            } else {
-                                $price_charged = $service['retail_price'];
-                            }
-                            $target = $this->get_date_form_target_days($srv_id);
-                            $service_request_data = [
-                                'order_id' => $order_id,
-                                'services_id' => $order_data,
-                                'price_charged' => $service['retail_price'],
-                                'tracking' => $tracking,
-                                'date_started' => $target['start_date'],
-                                'date_completed' => $target['end_date'],
-                                'responsible_department' => $service['service_department'],
-                                'responsible_staff' => sess('user_id'),
-                                'status' => '2'
-                            ];
+                    if (isset($data['override_price']) && $data['override_price'] != '') {
+                        $price_charged = $data['override_price'];
+                    } else {
+                        $price_charged = $service['retail_price'];
+                    }
+                    $target = $this->get_date_form_target_days($srv_id);
+                    $service_request_data = [
+                        'order_id' => $order_id,
+                        'services_id' => $order_data,
+                        'price_charged' => $service['retail_price'],
+                        'tracking' => $tracking,
+                        'date_started' => $target['start_date'],
+                        'date_completed' => $target['end_date'],
+                        'responsible_department' => $service['service_department'],
+                        'responsible_staff' => sess('user_id'),
+                        'status' => '2'
+                    ];
 
-                            $this->db->insert('service_request', $service_request_data);
+                    $this->db->insert('service_request', $service_request_data);
 //                        }
 //                    } // inner foreach
                 } //outer foreach
@@ -1904,6 +1906,8 @@ class Service_model extends CI_Model {
             $column_name = 'ord.reference_id';
         } elseif ($variable_val == 14) {
             $column_name = 'services.dept';
+        } elseif ($variable_val == 15) {
+            $column_name = 'request_type';
         }
         return $column_name;
     }
@@ -1932,6 +1936,8 @@ class Service_model extends CI_Model {
             $criteria_val = $criteria_dd['clientname'];
         } elseif ($variable_val == 14) {
             $criteria_val = $criteria_dd['office'];
+        } elseif ($variable_val == 15) {
+            $criteria_val = $criteria_dd['request_type'];
         }
 
         if ($variable_val == 6 || $variable_val == 7) { // dates
@@ -1957,6 +1963,20 @@ class Service_model extends CI_Model {
                     $criterias = implode(",", $criteria_val);
                 }
                 $query = $column_name . (($condition_val == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
+            }
+        } elseif ($variable_val == 15) {
+            $staff_id = sess('user_id');
+            $staff_info = staff_info();
+            if ($criteria_val[0] == "byme") {
+                $query = 'ord.staff_requested_service = "' . $staff_id . '"';
+            } elseif ($criteria_val[0] == 'byothers') {
+                if ($staff_info['type'] == 1 || ($staff_info['type'] == 2 && $staff_info['role'] == 4)) {   #Admin & Corporate(Manager)
+                    $query = '(srv_rq.responsible_department NOT IN (' . $staff_info['department'] . ') AND ord.staff_requested_service != "' . $staff_id . '")';
+                } else if ($staff_info['type'] == 3 && $staff_info['role'] == 2) {      #Franchise(Manager)
+                    $query = '(indt.office IN (' . $staff_info['office'] . ') AND ord.staff_requested_service != "' . $staff_id . '")';
+                }
+            } elseif ($criteria_val[0] == 'tome' && $staff_info['type'] != 3) {    #Corporate & Admin
+                $query = 'srv_rq.responsible_department IN (' . $staff_info['department'] . ')';
             }
         } elseif ($variable_val == 4) { //tracking
             if ($condition_val == 1 || $condition_val == 3) {

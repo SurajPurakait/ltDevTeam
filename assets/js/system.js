@@ -712,9 +712,9 @@ function GetCardType(number) {
 
 var clearFilter = function () {
     $(".variable-dropdown").val('');
-    $(".condition-dropdown").val('');
+    $(".condition-dropdown").val('').removeAttr('disabled');
     $(".criteria-dropdown").val('');
-    $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>');
+    $('.criteria-dropdown').removeAttr('readonly').empty().append('<option value="">All Criteria</option>');
     $(".criteria-dropdown").trigger("chosen:updated");
     $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
     $('#btn_clear_filter').css('display', 'none');

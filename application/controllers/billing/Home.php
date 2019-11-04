@@ -26,6 +26,7 @@ class Home extends CI_Controller {
             8 => "Requested By",
             9 => "Client ID",
             10 => "Service Name",
+            11 => "Request Type"
         ];
         $this->sorting_element = [
             "invoice_id" => "ID",
