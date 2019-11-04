@@ -363,8 +363,8 @@ $office_id = get_office_id($staff_info['office']);
                 <!-- Leads -->
                 <li <?= active_menu($main_menu, "leads"); ?> >
                     <div class="dashboard-icons pull-right">
-                        <a href="<?= base_url(); ?>lead_management/home/index/0/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php echo get_new_lead_count(1); ?></a>
-                        <a href="<?= base_url(); ?>lead_management/home/index/3/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php echo get_active_lead_count(1); ?></a>
+                        <a href="<?= base_url(); ?>lead_management/home/index/0/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php echo get_new_lead_count(); ?></a>
+                        <a href="<?= base_url(); ?>lead_management/home/index/3/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php echo get_active_lead_count(); ?></a>
                         <!-- <div class="clearfix"></div> -->
                         <!-- <a href="<?//= base_url(); ?>lead_management/home/index/0/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php// echo get_new_lead_count(2); ?></a>
                         <a href="<?//= base_url(); ?>lead_management/home/index/3/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php //echo get_active_lead_count(2); ?></a> -->
@@ -379,10 +379,10 @@ $office_id = get_office_id($staff_info['office']);
                             <a href="<?= base_url(); ?>lead_management/home">Leads Dashboard</a>
                         </li>
                         <li <?= active_menu($menu, "new_lead"); ?>>
-                            <a href="<?= base_url(); ?>lead_management/new_prospect/index/client_lead">- Add Client Lead</a>
+                            <a href="<?= base_url(); ?>lead_management/new_prospect/index/1">- Add Client Lead</a>
                         </li>
                         <li <?= active_menu($menu, "new_lead"); ?>>
-                            <a href="<?= base_url(); ?>lead_management/new_prospect/index/partner_lead">- Add Partner Lead</a>
+                            <a href="<?= base_url(); ?>lead_management/new_prospect/index/2">- Add Partner Lead</a>
                         </li>
 
                         <li <?= active_menu($menu, "events_dashboard"); ?>>

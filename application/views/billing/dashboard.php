@@ -109,22 +109,22 @@ $staffrole = $staff_info['role'];
                                         <tr>
                                             <th>By Me</th>
                                             <td class="text-center">
-                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-1" onclick="loadBillingDashboard('', 'byme', '', 1, '');">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-1" onclick="reflactFilterWithSummery('1-Unpaid', 'byme-By ME');loadBillingDashboard('', 'byme', '', 1, '');">
                                                     <span class="label label-warning filter-byme-1">-</span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
-                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-2" onclick="loadBillingDashboard('', 'byme', '', 2, '');">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-2" onclick="reflactFilterWithSummery('2-Partial', 'byme-By ME');loadBillingDashboard('', 'byme', '', 2, '');">
                                                     <span class="label label-success filter-byme-2">-</span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
-                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-3" onclick="loadBillingDashboard('', 'byme', '', 3, '');">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-3" onclick="reflactFilterWithSummery('3-Paid', 'byme-By ME');loadBillingDashboard('', 'byme', '', 3, '');">
                                                     <span class="label label-primary filter-byme-3">-</span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
-                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-4" onclick="loadBillingDashboard('', 'byme', '', 4, '');">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-byme-4" onclick="reflactFilterWithSummery('4-Late', 'byme-By ME');loadBillingDashboard('', 'byme', '', 4, '');">
                                                     <span class="label label-danger filter-byme-4">-</span>
                                                 </a>
                                             </td>
@@ -133,22 +133,22 @@ $staffrole = $staff_info['role'];
                                             <tr>
                                                 <th>By Others</th>
                                                 <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-1" onclick="loadBillingDashboard('', 'tome', '', 1, '');">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-1" onclick="reflactFilterWithSummery('1-Unpaid', 'tome-By Others');loadBillingDashboard('', 'tome', '', 1, '');">
                                                         <span class="label label-warning filter-byothers-1">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-2" onclick="loadBillingDashboard('', 'tome', '', 2, '');">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-2" onclick="reflactFilterWithSummery('2-Partial', 'tome-By Others');loadBillingDashboard('', 'tome', '', 2, '');">
                                                         <span class="label label-success filter-byothers-2">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-3" onclick="loadBillingDashboard('', 'tome', '', 3, '');">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-3" onclick="reflactFilterWithSummery('3-Paid', 'tome-By Others');loadBillingDashboard('', 'tome', '', 3, '');">
                                                         <span class="label label-primary filter-byothers-3">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-4" onclick="loadBillingDashboard('', 'tome', '', 4, '');">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-4" onclick="reflactFilterWithSummery('4-Late', 'tome-By Others');loadBillingDashboard('', 'tome', '', 4, '');">
                                                         <span class="label label-danger filter-byothers-4">-</span>
                                                     </a>
                                                 </td>
@@ -327,21 +327,11 @@ $staffrole = $staff_info['role'];
 </div> 
 <script>
     loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1);
-    var reflactFilterWithSummery = function (status, requestType) {
-        clearFilter();
-        $("select.variable-dropdown:first").val(6);
-//        changeVariable($("select.variable-dropdown:first"));
-        var statusArray = status.split('-');
-        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr('readonly', true);
-        $("select.criteria-dropdown:first").trigger("chosen:updated");
-        $("select.condition-dropdown:first").val(1).attr('disabled', true);
-    }
     var content = $(".filter-div").html();
     var variableArray = [];
     var elementArray = [];
     function addFilterRow() {
         var random = Math.floor((Math.random() * 999) + 1);
-        alert(content);
         var clone = '<div class="filter-div row m-b-20" id="clone-' + random + '">' + content + '<div class="col-sm-1 text-right p-l-0"><a href="javascript:void(0);" onclick="removeFilterRow(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
         $('.filter-inner').append(clone);
         $.each(variableArray, function (key, value) {
@@ -388,6 +378,11 @@ $staffrole = $staff_info['role'];
                 $("#" + divID).find('.criteria-div').html(result);
                 $(".chosen-select").chosen();
                 $("#" + divID).find('.condition-dropdown').removeAttr('disabled').val('');
+                if (variableValue == 11) {
+                    $("#" + divID).find('.condition-dropdown option:not(:eq(0),:eq(1))').remove();
+                } else {
+                    $("#" + divID).find('.condition-dropdown').html('<option value="">All Condition</option><option value="1">Is</option><option value="2">Is in the list</option><option value="3">Is not</option><option value="4">Is not in the list</option>');
+                }
                 $("#" + divID).nextAll(".filter-div").each(function () {
                     $(this).find('.remove-filter-button').trigger('click');
                 });
@@ -458,5 +453,25 @@ $staffrole = $staff_info['role'];
                 $("#" + divID).find(".search-choice-close").trigger('click');
             }
         }
+    }
+    var reflactFilterWithSummery = function (status, requestType) {
+        clearFilter();
+        variableArray = [];
+        elementArray = [];
+        $("select.variable-dropdown:first").val(6);
+        var statusArray = status.split('-');
+        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[status][]'});
+        $("select.criteria-dropdown:first").trigger("chosen:updated");
+        $("select.condition-dropdown:first").val(1).attr('disabled', true);
+        elementArray.push($("select.condition-dropdown:first"));
+        variableArray.push(6);
+        addFilterRow();
+        $("select.variable-dropdown:eq(1)").val(11);
+        var requestTypeArray = requestType.split('-');
+        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
+        $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
+        $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
+        elementArray.push($("select.condition-dropdown:eq(1)"));
+        variableArray.push(11);
     }
 </script>

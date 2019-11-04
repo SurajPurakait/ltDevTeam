@@ -85,7 +85,9 @@ Class Lead_management extends CI_Model {
         // return $this->db->get_where("type_of_contact_prospect", ['id' => $id])->row_array();
         return $this->db->get_where("lead_type", ['id' => $id])->row_array();
     }
-
+    public function get_type_of_contact_prospect($id) {
+        return $this->db->get_where("type_of_contact_prospect", ['id' => $id])->row_array();
+    }
     public function get_type_of_contact_referral_by_id($id) {
         return $this->db->get_where("type_of_contact_referral", ['id' => $id])->row_array();
     }
@@ -356,7 +358,7 @@ Class Lead_management extends CI_Model {
     }
 
     public function insert_lead_prospect($data) {
-        // print_r($data);die;
+//         print_r($data);die;
         unset($data['event_id']);
         if (isset($data["lead_notes"])) {
             $lead_notes = $data["lead_notes"];
@@ -370,10 +372,15 @@ Class Lead_management extends CI_Model {
             $added_by = '';
         }
 
+        if (isset($data["refer_lead"]) && $data["refer_lead"] != '') {
+            $referred_lead=$data["refer_lead"];
+            unset($data["refer_lead"]);
+        } else {
+            $referred_lead = '';
+        }
         if (isset($data["sender_email"])) {
             unset($data["sender_email"]);
         }
-
         if (isset($data['ref_partner_id'])) {
             $ref_partner_id = $data["ref_partner_id"];
             unset($data["ref_partner_id"]);
@@ -437,9 +444,9 @@ Class Lead_management extends CI_Model {
             $partner_creator = $data['partner_creator'];
         }
         if (isset($data['lead_type'])) {
-            if ($data['lead_type'] == 'client_lead') {
+            if ($data['lead_type'] == '1') {
                 $data['type'] = '1';
-            } elseif ($data['lead_type'] == 'partner_lead') {
+            } elseif ($data['lead_type'] == '2') {
                 $data['type'] = '3';
             }
         }
@@ -481,6 +488,11 @@ Class Lead_management extends CI_Model {
         }
         $staff[0] = sess('user_id');
         $this->system->save_general_notification($reference, $id, 'insert', $staff, '', $lead_type);
+        if ($referred_lead != '') {
+            unset($staff);
+            $staff=array();
+            $this->system->save_general_notification($reference, $id, 'refer', $staff, '', $lead_type);
+        }
 
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -1129,6 +1141,15 @@ Class Lead_management extends CI_Model {
         } else {
             $data['lead_agent'] = '';
         }
+        if (isset($data['lead_type'])) {
+            if ($data['lead_type'] == '1') {
+                $data['type'] = '1';
+            } elseif ($data['lead_type'] == '2') {
+                $data['type'] = '3';
+            }
+        }
+        unset($data['lead_type']);
+
         unset($data['lead_client']);
         unset($data['lead_client_other']);
 
@@ -1169,6 +1190,7 @@ Class Lead_management extends CI_Model {
         }if ($lead_type == 2) {
             $reference = 'partner';
         }
+        $staff = [];
         $staff[0] = sess('user_id');
         $this->system->save_general_notification($reference, $lead_id, 'edit', $staff, '', $lead_type);
 
@@ -1181,26 +1203,25 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_leads_count($stat) {
+    public function get_leads_count() {
         $user_details = staff_info();
         $usertype = $user_details['type'];
 
         $userid = $user_details['id'];
 
-        $sql = "SELECT * FROM `lead_management` WHERE status ='0' and type=$stat";
+        $sql = "SELECT * FROM `lead_management` WHERE status ='0' and type!='2'";
         if ($usertype != 1) {
             $sql .= " and staff_requested_by='" . $userid . "'";
         }
-
         return $this->db->query($sql)->num_rows();
     }
 
-    public function get_active_leads_count($stat) {
+    public function get_active_leads_count() {
         $user_details = staff_info();
         $usertype = $user_details['type'];
         $userid = $user_details['id'];
 
-        $sql = "SELECT * FROM `lead_management` WHERE status = '3' and type=$stat";
+        $sql = "SELECT * FROM `lead_management` WHERE status = '3' and type!='2'";
         if ($usertype != 1) {
             $sql .= " and staff_requested_by='" . $userid . "'";
         }
@@ -1357,7 +1378,7 @@ Class Lead_management extends CI_Model {
             }
         } else {
             if ($check['id'] == $data['email_id']) {
-                $update_data = array('service' => $data['service'],
+                $update_data = array('lead_type' => $data['leadtype'],
                     'language' => $data['language'],
                     'type' => $data['day'],
                     'subject' => $data['subject'],
@@ -1399,8 +1420,8 @@ Class Lead_management extends CI_Model {
         return $this->db->query("SELECT * FROM `lead_mail_chain` where lead_type='" . $leadtype . "' and language='" . $language . "' and type='" . $day . "'")->row_array();
     }
 
-    public function get_campaign_mail_data($service, $language, $day) {
-        return $this->db->query("SELECT * FROM `lead_mail_chain` where service='" . $service . "' and language='" . $language . "' and type='" . $day . "'")->row_array();
+    public function get_campaign_mail_data($lead_type, $language, $day) {
+        return $this->db->query("SELECT * FROM `lead_mail_chain` where lead_type='" . $lead_type . "' and language='" . $language . "' and type='" . $day . "'")->row_array();
     }
 
     public function delete_mail_campaign($id) {

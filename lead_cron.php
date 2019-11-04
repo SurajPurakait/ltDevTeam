@@ -1,9 +1,9 @@
 <?php
 
 $servername = "localhost";
-$username = "leafnet_db";
+$username = "leafnet_db_user";
 $password = "leafnet@123";
-$db = 'leafnet_dev2_new';
+$db = 'leafnet_staging';
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $db);
 // Check connection
@@ -11,12 +11,15 @@ if ($conn === false) {
     die("ERROR: Could not connect. " . mysqli_connect_error());
 }
 //echo "Connected successfully"; 
-$sql = 'SELECT * from lead_management where type="1"';
+$sql = 'SELECT * from lead_management where type="1" OR type="3"';
 if ($result = mysqli_query($conn, $sql)) {
     if (mysqli_num_rows($result) > 0) {
         while ($ld = mysqli_fetch_array($result)) {
             if ($ld['status'] == 3) {
-                $office_info = 'SELECT * from office where id="'.$ld['office'].'"'; 
+                $ofc_deatils_sql = 'SELECT * from office where id="' . $ld['office'] . '"';
+                $office_details = mysqli_query($conn,$ofc_deatils_sql);
+                $office_info = mysqli_fetch_assoc($office_details);
+
                 $current_datetime = strtotime(date('Y-m-d'));
                 $submisstion_datetime = strtotime($ld['submission_date']);
                 $datediff = $current_datetime - $submisstion_datetime;
@@ -32,21 +35,41 @@ if ($result = mysqli_query($conn, $sql)) {
                 }
                 if ($days == 3) {
                     /* mail section */
-                    $service = $ld['type_of_contact'];
+                    $lead_type = $ld['type'];
                     $language = $ld['language'];
-                    $email_content_sql = 'SELECT * from lead_mail_chain where service="' . $service . '" and language="' . $language . '" and type=2';
+                    if ($lead_type == '1') {
+                        $email_content_sql = 'SELECT * from lead_mail_chain where lead_type="1" and language="' . $language . '" and type=2';
+                    } elseif ($lead_type == '3') {
+                        $email_content_sql = 'SELECT * from lead_mail_chain where lead_type="2" and language="' . $language . '" and type=2';
+                    }
+
                     $email_content_sql_result = mysqli_query($conn, $email_content_sql);
                     if (mysqli_num_rows($email_content_sql_result) > 0) {
                         while ($rowval = mysqli_fetch_array($email_content_sql_result)) {
                             $email_subject = $rowval['subject'];
                             $email_body = urldecode($rowval['body']);
-                            // Set veriables --- #name, #type, #lead_type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #lead_source_detail, #office_name, #office_address, #office_phone_number
+                            // Set veriables --- #name, #type, #lead_type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #source_detail, #office_name, #office_address, #office_phone_number
                             $contact_type = 'Unknown';
-                            $contact_type_query = mysqli_query($conn, 'SELECT * FROM ' . ($ld['type'] == 1 ? '`type_of_contact_prospect`' : '`type_of_contact_referral`') . ' WHERE `id` = ' . $ld['type_of_contact']);
+                            $contact_type_query = mysqli_query($conn, 'SELECT * FROM ' . (($ld['type'] == 1) ? '`type_of_contact_prospect`' : '`type_of_contact_referral`') . ' WHERE `id` = ' . $ld['type_of_contact']);
                             if (mysqli_num_rows($contact_type_query) > 0) {
                                 $contact_type_result = mysqli_fetch_array($contact_type_query);
                                 $contact_type = $contact_type_result['name'];
                             }
+                            if ($ld['type'] == '1') {
+                                $lead_type_query = mysqli_query($conn, 'SELECT * FROM lead_type WHERE `id` = "1"');    
+                            } elseif ($ld['type'] == '3') {
+                                $lead_type_query = mysqli_query($conn, 'SELECT * FROM lead_type WHERE `id` = "2"');
+                            }
+                            if (mysqli_num_rows($lead_type_query) > 0) {
+                                $lead_type_result = mysqli_fetch_array($lead_type_query);
+                                $lead_type = $lead_type_result['type'];
+                            }
+                            if ($ld['type'] == '1') {  
+                                $lead_type_name = 'Client Lead';
+                            } elseif ($ld['type'] == '3') {
+                                $lead_type_name = 'Partner Lead';
+                            }
+
                             $lead_source = '';
                             if ($ld['lead_source'] != '') {
                                 $lead_source_query = mysqli_query($conn, 'SELECT * FROM `lead_prospect` WHERE `id` = ' . $ld['lead_source']);
@@ -59,21 +82,22 @@ if ($result = mysqli_query($conn, $sql)) {
                             $staff_result = mysqli_fetch_array($staff_query);
                             $veriable_array = [
                                 'name' => $ld['first_name'],
-                                'type_of_contact' => $contact_type,
-                                'company_name' => $ld['company_name'],
+                                'type' => $lead_type,
+                                'company' => $ld['company_name'],
                                 'phone' => $ld['phone1'],
                                 'email' => $ld['email'],
                                 'staff_name' => $staff_result['last_name'] . ', ' . $staff_result['first_name'] . ' ' . $staff_result['middle_name'],
                                 'staff_office' => $staff_result['staff_office'],
                                 'staff_phone' => $staff_result['phone'],
                                 'staff_email' => $staff_result['user'],
-                                'date_first_contact' => ($lb['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($lb['date_of_first_contact'])) : '',
+                                'first_contact_date' => ($ld['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($ld['date_of_first_contact'])) : '',
                                 'lead_source' => $lead_source,
-                                'lead_source_detail' => $lb['lead_source_detail'],
-                                'lead_type' => $lead_result['type'],
+                                'source_detail' => $ld['lead_source_detail'],
+                                'lead_type' => $lead_type_name,
                                 'office_phone_number' => $office_info['phone'],
                                 'office_address' => $office_info['address'],
-                                'office_name' => $office_info['name']
+                                'office_name' => $office_info['name'],
+                                'requested_by' => $staff_result['last_name'] . ', ' . $staff_result['first_name']
                             ];
                             foreach ($veriable_array as $index => $value) {
                                 if ($value != '') {
@@ -82,30 +106,30 @@ if ($result = mysqli_query($conn, $sql)) {
                                 }
                             }
 
-                                $user_logo = "";
-                                if ($ld['office'] != 0) {
-                                    $ofc_sql = 'SELECT * from office where id="' . $ld['office'] . '"';
-                                    $ofc_sql_result = mysqli_query($conn, $ofc_sql);
-                                    if (mysqli_num_rows($ofc_sql_result) > 0) {
-                                        while ($rowofc = mysqli_fetch_array($ofc_sql_result)) {
-                                            $user_logo = $rowofc['photo'];
-                                        }
-                                    }   
+                            $user_logo = "";
+                            if ($ld['office'] != 0) {
+                                $ofc_sql = 'SELECT * from office where id="' . $ld['office'] . '"';
+                                $ofc_sql_result = mysqli_query($conn, $ofc_sql);
+                                if (mysqli_num_rows($ofc_sql_result) > 0) {
+                                    while ($rowofc = mysqli_fetch_array($ofc_sql_result)) {
+                                        $user_logo = $rowofc['photo'];
+                                    }
                                 }
+                            }
 
-                                if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
-                                  $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
-                                }else{
-                                  $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
-                                }
+                            if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
+                                $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
+                            } else {
+                                $user_logo_fullpath = 'https://leafnet.us/assets/img/logo_mail.png';
+                            }
 
-                                if($ld['office']==1 || $ld['office']==18 || $ld['office']==34){
-                                  $bgcolor = '#00aec8';
-                                  $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
-                                }else{
-                                  $bgcolor = '#8ab645';
-                                  $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
-                                } 
+                            if ($ld['office'] == 1 || $ld['office'] == 18 || $ld['office'] == 34) {
+                                $bgcolor = '#00aec8';
+                                $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
+                            } else {
+                                $bgcolor = '#8ab645';
+                                $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
+                            }
                         }
                     }
                     $user_email = $ld['email'];
@@ -143,17 +167,17 @@ if ($result = mysqli_query($conn, $sql)) {
                             </head>
                             <body>
                                 <br />
-                                <table width="600" border="0" bgcolor="'.$bgcolor.'" align="center" cellpadding="0" cellspacing="10">
+                                <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
                                     <tr>
                                         <td>
                                             <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
                                                 <tr>
-                                                    <td><img src="'.$user_logo_fullpath.'" width="300" height="98" /></td>
+                                                    <td><img src="' . $user_logo_fullpath . '" width="300" height="98" /></td>
                                                 </tr>
                                             </table>
                                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                 <tr>
-                                                    <td><img src="'.$divider_img.'" width="600" height="30" /></td>
+                                                    <td><img src="' . $divider_img . '" width="600" height="30" /></td>
                                                 </tr>
                                             </table>
                                             <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
@@ -162,65 +186,9 @@ if ($result = mysqli_query($conn, $sql)) {
                                                         <p>
                                                             <span class="textonegro"><strong>Dear ' . $user_name . ',<br /><br /></strong>' . $email_body . '</span>
                                                         </p>
-                                                        <p><span class="textonegro">Sincerely,</span></p>
-                                                        <p><span class="textonegro">Moses Nae<br />
-                                                                moses@taxleaf.com<br />
-                                                                305-541-3980<br />
-                                                                815-550-1294<br />
-                                                            </span><br />
-                                                        </p>
                                                     </td>
                                                 </tr>
                                             </table>          
-                                            <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
-                                                <tr>
-                                                    <td bgcolor="#ffffff">
-                                                        <table width="100%" border="0" cellspacing="15" cellpadding="0">
-                                                            <tr>
-                                                                <td width="97%" class="textonegro">
-                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                                        <tr>
-                                                                            <td valign="top">TaxLeaf <font color="#e46e04"><strong>Corporate</strong></font><br />
-                                                                                1549 NE 123 ST<br />
-                                                                                North Miami, FL 33161<br />
-                                                                            </td>
-                                                                            <td valign="top"><p>TaxLeaf <font color="#e46e04"><strong>Coral Springs</strong></font><br />
-                                                                                    3111 N University Ave #105<br />
-                                                                                    Coral Springs, Fl 33065<br />
-                                                                                    Phone: (954) 345-7585
-                                                                                </p>
-                                                                                <p>&nbsp;</p>
-                                                                            </td>
-                                                                            <td valign="top">TaxLeaf <font color="#e46e04"><strong>Doral</strong></font><br /> 
-                                                                                8175 NW 12 ST #130
-                                                                                <br />
-                                                                                Doral, Fl 33129<br />
-                                                                                Phone: (305) 433-7945 
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td valign="top"><br />
-                                                                                Phone: (888) Y-TAXLEAF<br />
-                                                                                Fax: (815) 550-1294<br />
-                                                                                email: <a href="mailto:info@taxleaf.com" target="_blank">info@taxleaf.com</a></td>
-                                                                            <td valign="top">&nbsp;</td>
-                                                                            <td valign="top">&nbsp;</td>
-                                                                        </tr>
-                                                                    </table>                                                
-                                                                </td>
-                                                                <td width="3%" valign="top"><table width="100%" border="0" cellspacing="7" cellpadding="0">
-                                                                        <tr>
-                                                                            <td width="75%"><img src="http://www.taxleaf.com/Email/1380919403_facebook_square.png" width="24" height="24" /></td>
-                                                                            <td width="13%"><img src="http://www.taxleaf.com/Email/1380919424_twitter_square.png" width="24" height="24" /></td>
-                                                                            <td width="12%"><img src="http://www.taxleaf.com/Email/1380919444_skype_square_color.png" width="24" height="24" /></td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
                                         </td>
                                     </tr>
                                     <tr>
@@ -244,22 +212,42 @@ if ($result = mysqli_query($conn, $sql)) {
                 } elseif ($days == 6) {
                     /* mail section */
 
-                    $service = $ld['type_of_contact'];
+                    $lead_type = $ld['type'];
                     $language = $ld['language'];
+                    if ($lead_type == '1') {
+                        $email_content_sql = 'SELECT * from lead_mail_chain where lead_type="1" and language="' . $language . '" and type=3';
+                    } elseif ($lead_type == '3') {
+                        $email_content_sql = 'SELECT * from lead_mail_chain where lead_type="2" and language="' . $language . '" and type=3';
+                    }
 
-                    $email_content_sql = 'SELECT * from lead_mail_chain where service="' . $service . '" and language="' . $language . '" and type=3';
                     $email_content_sql_result = mysqli_query($conn, $email_content_sql);
                     if (mysqli_num_rows($email_content_sql_result) > 0) {
                         while ($rowval = mysqli_fetch_array($email_content_sql_result)) {
                             $email_subject = $rowval['subject'];
                             $email_body = urldecode($rowval['body']);
-                            // Set veriables --- #name, #type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #lead_source_detail
+                            // Set veriables --- #name, #type,, #lead_type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #source_detail,, #office_name, #office_address, #office_phone_number
                             $contact_type = 'Unknown';
                             $contact_type_query = mysqli_query($conn, 'SELECT * FROM ' . ($ld['type'] == 1 ? '`type_of_contact_prospect`' : '`type_of_contact_referral`') . ' WHERE `id` = ' . $ld['type_of_contact']);
                             if (mysqli_num_rows($contact_type_query) > 0) {
                                 $contact_type_result = mysqli_fetch_array($contact_type_query);
                                 $contact_type = $contact_type_result['name'];
                             }
+
+                            if ($ld['type'] == '1') {
+                                $lead_type_query = mysqli_query($conn, 'SELECT * FROM lead_type WHERE `id` = "1"');    
+                            } elseif ($ld['type'] == '3') {
+                                $lead_type_query = mysqli_query($conn, 'SELECT * FROM lead_type WHERE `id` = "2"');
+                            }
+                            if (mysqli_num_rows($lead_type_query) > 0) {
+                                $lead_type_result = mysqli_fetch_array($lead_type_query);
+                                $lead_type = $lead_type_result['type'];
+                            }
+                            if ($ld['type'] == '1') {  
+                                $lead_type_name = 'Client Lead';
+                            } elseif ($ld['type'] == '3') {
+                                $lead_type_name = 'Partner Lead';
+                            }
+
                             $lead_source = '';
                             if ($ld['lead_source'] != '') {
                                 $lead_source_query = mysqli_query($conn, 'SELECT * FROM `lead_prospect` WHERE `id` = ' . $ld['lead_source']);
@@ -272,21 +260,22 @@ if ($result = mysqli_query($conn, $sql)) {
                             $staff_result = mysqli_fetch_array($staff_query);
                             $veriable_array = [
                                 'name' => $ld['first_name'],
-                                'type_of_contact' => $contact_type,
-                                'company_name' => $ld['company_name'],
+                                'type' => $lead_type,
+                                'company' => $ld['company_name'],
                                 'phone' => $ld['phone1'],
                                 'email' => $ld['email'],
                                 'staff_name' => $staff_result['last_name'] . ', ' . $staff_result['first_name'] . ' ' . $staff_result['middle_name'],
                                 'staff_office' => $staff_result['staff_office'],
                                 'staff_phone' => $staff_result['phone'],
                                 'staff_email' => $staff_result['user'],
-                                'date_first_contact' => ($lb['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($lb['date_of_first_contact'])) : '',
+                                'first_contact_date' => ($ld['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($ld['date_of_first_contact'])) : '',
                                 'lead_source' => $lead_source,
-                                'lead_source_detail' => $lb['lead_source_detail'],
-                                'lead_type' => $lead_result['type'],
+                                'source_detail' => $ld['lead_source_detail'],
+                                'lead_type' => $lead_type_name,
                                 'office_phone_number' => $office_info['phone'],
                                 'office_address' => $office_info['address'],
-                                'office_name' => $office_info['name']
+                                'office_name' => $office_info['name'],
+                                'requested_by' => $staff_result['last_name'] . ', ' . $staff_result['first_name']
                             ];
                             foreach ($veriable_array as $index => $value) {
                                 if ($value != '') {
@@ -295,28 +284,28 @@ if ($result = mysqli_query($conn, $sql)) {
                                 }
                             }
                             $user_logo = "";
-                                if ($ld['office'] != 0) {
-                                    $ofc_sql = 'SELECT * from office where id="' . $ld['office'] . '"';
-                                    $ofc_sql_result = mysqli_query($conn, $ofc_sql);
-                                    if (mysqli_num_rows($ofc_sql_result) > 0) {
-                                        while ($rowofc = mysqli_fetch_array($ofc_sql_result)) {
-                                            $user_logo = $rowofc['photo'];
-                                        }
-                                    }   
+                            if ($ld['office'] != 0) {
+                                $ofc_sql = 'SELECT * from office where id="' . $ld['office'] . '"';
+                                $ofc_sql_result = mysqli_query($conn, $ofc_sql);
+                                if (mysqli_num_rows($ofc_sql_result) > 0) {
+                                    while ($rowofc = mysqli_fetch_array($ofc_sql_result)) {
+                                        $user_logo = $rowofc['photo'];
+                                    }
                                 }
+                            }
 
-                                if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
-                                  $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
-                                }else{
-                                  $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
-                                }
-                                if($ld['office']==1 || $ld['office']==18 || $ld['office']==34){
-                                  $bgcolor = '#00aec8';
-                                  $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
-                                }else{
-                                  $bgcolor = '#8ab645';
-                                  $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
-                                }  
+                            if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
+                                $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
+                            } else {
+                                $user_logo_fullpath = 'https://leafnet.us/assets/img/logo_mail.png';
+                            }
+                            if ($ld['office'] == 1 || $ld['office'] == 18 || $ld['office'] == 34) {
+                                $bgcolor = '#00aec8';
+                                $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
+                            } else {
+                                $bgcolor = '#8ab645';
+                                $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
+                            }
                         }
                     }
                     $user_email = $ld['email'];
@@ -354,84 +343,26 @@ if ($result = mysqli_query($conn, $sql)) {
     </head>
     <body>
         <br />
-        <table width="600" border="0" bgcolor="'.$bgcolor.'" align="center" cellpadding="0" cellspacing="10">
+        <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
             <tr>
                 <td>
                     <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td><img src="'.$user_logo_fullpath.'" width="300" height="98" /></td>
+                            <td><img src="' . $user_logo_fullpath . '" width="300" height="98" /></td>
                         </tr>
                     </table>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td><img src="'.$divider_img.'" width="600" height="30" /></td>
+                            <td><img src="' . $divider_img . '" width="600" height="30" /></td>
                         </tr>
                     </table>
                     <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
                         <tr>
                             <td valign="top" style="color:#000;" class="textoblanco">
                                 <p><span class="textonegro"><strong>Dear ' . $user_name . ',<br /><br /></strong>' . $email_body . '</span></p>
-                                <p><span class="textonegro">Sincerely,</span></p>
-                                <p><span class="textonegro">
-                                        Moses Nae<br />
-                                        moses@taxleaf.com<br />
-                                        305-541-3980<br />
-                                        815-550-1294<br />
-                                    </span><br />
-                                </p>
                             </td>
                         </tr>
                     </table>     
-                    <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td bgcolor="#ffffff">
-                                <table width="100%" border="0" cellspacing="15" cellpadding="0">
-                                    <tr>
-                                        <td width="97%" class="textonegro">
-                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                <tr>
-                                                    <td valign="top">TaxLeaf <font color="#e46e04"><strong>Corporate</strong></font><br />
-                                                        1549 NE 123 ST<br />
-                                                        North Miami, FL 33161<br />
-                                                    </td>
-                                                    <td valign="top"><p>TaxLeaf <font color="#e46e04"><strong>Coral Springs</strong></font><br />
-                                                            3111 N University Ave #105<br />
-                                                            Coral Springs, Fl 33065<br />
-                                                            Phone: (954) 345-7585
-                                                        </p>
-                                                        <p>&nbsp;</p>
-                                                    </td>
-                                                    <td valign="top">TaxLeaf <font color="#e46e04"><strong>Doral</strong></font><br /> 
-                                                        8175 NW 12 ST #130
-                                                        <br />
-                                                        Doral, Fl 33129<br />
-                                                        Phone: (305) 433-7945 
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td valign="top"><br />
-                                                        Phone: (888) Y-TAXLEAF<br />
-                                                        Fax: (815) 550-1294<br />
-                                                        email: <a href="mailto:info@taxleaf.com" target="_blank">info@taxleaf.com</a></td>
-                                                    <td valign="top">&nbsp;</td>
-                                                    <td valign="top">&nbsp;</td>
-                                                </tr>
-                                            </table>                                                
-                                        </td>
-                                        <td width="3%" valign="top">
-                                            <table width="100%" border="0" cellspacing="7" cellpadding="0">
-                                                <tr>
-                                                    <td width="75%"><img src="http://www.taxleaf.com/Email/1380919403_facebook_square.png" width="24" height="24" /></td>
-                                                    <td width="13%"><img src="http://www.taxleaf.com/Email/1380919424_twitter_square.png" width="24" height="24" /></td>
-                                                    <td width="12%"><img src="http://www.taxleaf.com/Email/1380919444_skype_square_color.png" width="24" height="24" /></td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
                 </td>
             </tr>
             <tr>

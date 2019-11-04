@@ -93,7 +93,12 @@
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
-                        <div class="hidden">
+                        <!-- <div class="hidden"> -->
+                        <?php
+                            $staff_info = staff_info(sess('user_id'));
+                            // print_r($staff_info);exit;
+                            if ($staff_info['type'] == '1' || ($staff_info['role'] == '4' && $staff_info['type'] == '2')) {
+                        ?>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Practice Id</label>
                             <div class="col-lg-10">
@@ -101,7 +106,21 @@
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
+                        <?php
+                            } else {
+                        ?>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Practice Id</label>
+                            <div class="col-lg-10">
+                                <input placeholder="Practice Id" class="form-control" type="text" name="internal_data[practice_id]" id="practice_id" value="<?= $result['practice_id']; ?>" title="Practice Id" disabled>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
                         </div>
+                        <?php        
+                            }
+                        ?>
+                        
+                        <!-- </div> -->
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Referred By Source<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
@@ -139,7 +158,7 @@
                                 <input type="hidden" name="reference_id" id="reference_id" value="<?= $individual_id; ?>">
                                 <input type="hidden" name="action" id="action" value="save_owner">
                                 <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>"/>
-                                <button class="btn btn-success" type="button" onclick="saveIndividual()">Save</button> &nbsp;
+                                <button class="btn btn-success" type="button" onclick="saveIndividual('','notsystemadmin')">Save</button> &nbsp;
                                 <button class="btn btn-default" type="button" onclick="go('action/home/individual_dashboard')">Cancel</button>
                             </div>
                         </div>

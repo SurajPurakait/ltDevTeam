@@ -2,7 +2,7 @@
 $user_info = staff_info();
 $user_department = $user_info['department'];
 $user_type = $user_info['type'];
-$office_name = get_office_name_by_office_id($data['office']);
+$office_name = get_office_name_by_office_id($user_info['office']);
 foreach ($data['staffs'] as $staff) {
     $staffinfo[] = staff_info_by_id($staff);
 }

@@ -954,6 +954,13 @@ Class System extends CI_Model {
 //                if(!empty($office_staff)){
 //                    $user_id_array = array_merge($user_id_array, array_column($office_staff, 'staff_id'));
 //                }
+                
+            }
+            if($action == 'refer'){
+                $referred_lead=$this->db->get_where('referred_lead',['lead_id'=>$reference_id])->row_array();
+                if(!empty($referred_lead)){
+                    $assign_to_user=$referred_lead['referred_to'];
+                }
             }
             if($lead_type==1){
                 $notification_text = 'CLIENT LEAD(#' . $reference_id . ')';
@@ -992,6 +999,7 @@ Class System extends CI_Model {
     }
 
     public function get_general_notification_by_user_id($user_id, $limit = '', $where = [], $start = '', $request_type = '') {
+        // echo $user_id;die;
         // For fetch all general notifications @sumanta
 //        echo $request_type;die;
         $user_info = staff_info();
@@ -1003,7 +1011,8 @@ Class System extends CI_Model {
             WHEN gn.action = "clear" THEN CONCAT((CASE WHEN gn.added_by != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.added_by) ELSE "<strong>YOU</strong>" END), " has cleared sos from<strong> ", gn.notification_text, "</strong> ")
             WHEN gn.action = "note" THEN CONCAT("<strong> ", gn.notification_text, " </strong>has been added note by ", (CASE WHEN gn.added_by != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.added_by) ELSE "<strong>YOU</strong>" END))
             WHEN gn.action = "reaches" THEN CONCAT("<strong> ", gn.notification_text, " </strong>has passed the due date ")
-            WHEN gn.action = "sos" THEN CONCAT("<strong> ", gn.notification_text, " </strong>has a new SOS notification ")    
+            WHEN gn.action = "sos" THEN CONCAT("<strong> ", gn.notification_text, " </strong>has a new SOS notification ")
+            WHEN gn.action = "refer" THEN CONCAT((CASE WHEN gn.added_by != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.added_by) ELSE "<strong>YOU</strong> have" END), " referred a<strong> ", gn.notification_text, " </strong>to ", (CASE WHEN gn.assign_to_user != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.assign_to_user) ELSE " <strong>YOU</strong>" END))
             ELSE CONCAT("New<strong> ", gn.notification_text, " </strong>has been created by ", (CASE WHEN gn.added_by != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.added_by) ELSE "<strong>YOU</strong>" END)) END) AS notification_text';
         $select[] = '(SELECT GROUP_CONCAT(`office`.`name`) AS `staff_office_name` FROM `office` WHERE `office`.`id` IN (SELECT `office_staff`.`office_id` FROM `office_staff` WHERE `office_staff`.`staff_id` = gn.added_by)) AS added_by_user_office';
         $select[] = 'gn.reference AS reference';
@@ -1054,7 +1063,7 @@ Class System extends CI_Model {
             $this->db->limit($limit, $start);
         }
         $result = $this->db->get();
-//        echo $this->db->last_query();die;
+       // echo $this->db->last_query();die;
         return $result->result_array();
     }
 

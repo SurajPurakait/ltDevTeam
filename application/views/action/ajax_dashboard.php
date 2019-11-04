@@ -153,7 +153,7 @@ if (!empty($action_list)):
                                             <?php
                                             if (count($action_staffs) != 1) {
                                                 echo '<span class="text-success">' . $action["department_name"] . '</span><br>';
-                                                if ($action['department_id'] == 2 || $action['department_id']) {
+                                                if ($action['department_id'] == 2) {
                                                     echo '<span class="text-info">' . get_office_name_by_office_id($action['office_id']) . '</span>';
                                                 } else {
                                                     echo '<span class="text-info">' . get_office_info_by_id('17')['office_id'] . '</span>';
@@ -161,7 +161,7 @@ if (!empty($action_list)):
                                             } else {
                                                 echo '<span class="text-success">' . staff_info_by_id($action_staffs[0]['staff_id'])['full_name'] . '</span><br>' . $action["department_name"] . '<br>';
 
-                                                if ($action['department_id'] == 2 || $action['department_id']) {
+                                                if ($action['department_id'] == 2) {
                                                     echo '<span class="text-info">' . get_office_name_by_office_id($action['office_id']) . '</span>';
                                                 } else {
                                                     echo '<span class="text-info">' . get_office_info_by_id('17')['office_id'] . '</span>';
@@ -194,7 +194,34 @@ if (!empty($action_list)):
                                     <td title="Creation Date"><?= ($action["creation_date"] != "") ? date("m/d/Y", strtotime($action["creation_date"])) : "-"; ?></td>
         <!--                                     <td title="Start Date"><?//= ($action["start_date"] != "0000-00-00") ? date("m/d/Y", strtotime($action["start_date"])) : "-"; ?></td>
                                     <td title="Completed Date" class="text-green"><?//= ($action["complete_date"] != "0000-00-00") ? date("m/d/Y", strtotime($action["complete_date"])) : "-"; ?></td> -->
-                                    <td title="Due Date" class="text-danger"><?= ($action["due_date"] != "0000-00-00") ? date("m/d/Y", strtotime($action["due_date"])) : "-"; ?></td>
+                                    <?php
+                                        if($action["due_date"] != "0000-00-00"){
+                                        $duedate = date("m/d/Y", strtotime($action["due_date"]));
+                                        $today = date("m/d/Y");
+                                        if($today>$duedate){
+                                    ?>
+                                           <td title="Due Date" class="text-danger">
+                                           <?php echo $duedate; ?>
+                                            </td> 
+                                    <?php
+                                        }else{
+                                    ?>
+                                        <td title="Due Date">
+                                           <?php echo $duedate; ?>
+                                            </td> 
+                                    <?php
+                                         } 
+                                        }else{
+                                    ?>
+                                        <td title="Due Date">
+                                        <?php  echo "-"; ?>
+                                           </td>
+                                    <?php
+                                     }
+
+                                    ?>
+                                   <!--  <td title="Due Date"><?//= ($action["due_date"] != "0000-00-00") ? date("m/d/Y", strtotime($action["due_date"])) : "-"; ?></td> -->
+
                                     <?= '<td title="Files"><span id="actionfilespan' . $action["id"] . '">' . (($action["unread_files_count"] > 0) ? '<a class="label label-danger" href="javascript:void(0)" count="' . $action["files"] . '" id="actionfile' . $action["id"] . '" onclick="show_action_files(\'' . $action["id"] . '\',\'' . ltrim($action["all_action_staffs"], ',') . $action['added_by_user'] . '\')"><b>' . $action["files"] . '</b></a>' : '<a class="label label-success" href="javascript:void(0)" count="' . $action["files"] . '" id="actionfile' . $action["id"] . '" onclick="show_action_files(\'' . $action["id"] . '\',\'' . ltrim($action["all_action_staffs"], ',') . $action['added_by_user'] . '\')"><b>' . $action["files"] . '</b></a>') . '</span></td>'; ?>
                                     <td title="Notes"><span> 
                                             <?php

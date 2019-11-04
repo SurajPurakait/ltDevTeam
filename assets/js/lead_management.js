@@ -301,11 +301,14 @@ function confirm_sender_email(added_by, event_lead = "") {
 }
 }
 
-function add_lead_prospect(added_by, event_lead = "") {
+function add_lead_prospect(added_by, event_lead = "",refer_lead="") {
     var form_data = new FormData(document.getElementById('form_add_new_prospect'));
     form_data.append('added_by', added_by);
     if ($('input[name="sender_email"]:checked').val() != 'undefined') {
         form_data.append('sender_email', $('input[name="sender_email"]:checked').val());
+    }
+    if (refer_lead != "") {
+        form_data.append('refer_lead', refer_lead);
     }
     $.ajax({
         type: "POST",
@@ -318,7 +321,7 @@ function add_lead_prospect(added_by, event_lead = "") {
         cache: false,
         success: function (result) {
             if (result.trim() == "0") {
-                swal("ERROR!", "Lead Prospect Already Exists", "error");
+                swal("ERROR!", "Email Id Already Exists!! Please Change the Email", "error");
             } else if (result.trim() == "-1") {
                 swal("ERROR!", "Unable To Add Lead Prospect", "error");
             } else {
@@ -591,6 +594,7 @@ function viewMailCampaignTemplate(contactType, language, day, firstName, company
             email: email
         },
         success: function (result) {
+            // console.log(result);return false;
             if (result != 0) {
                 var mail_campaign = JSON.parse(result);
 //                console.log(mail_campaign);

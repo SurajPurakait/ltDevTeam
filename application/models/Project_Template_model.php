@@ -23,7 +23,7 @@ class Project_Template_model extends CI_Model {
         // $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id),(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts left join project_task AS pt on pt.id=pts.task_id WHERE pt.project_id = pro.id),","), " ", "") AS all_project_staffs';
         $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id),","), " ", "") AS all_project_staffs';
         $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts WHERE pts.task_id = pt.id),","), " ", "") AS all_task_staffs';
-        $this->project_select[] = 'pro.*,pm.office_id as project_office_id,pm.department_id as project_department_id';
+        $this->project_select[] = 'pro.*,pm.office_id as project_office_id,pm.department_id as project_department_id,pm.status as status,prm.actual_due_month';
         $this->project_select[] = 'pm.added_by_user AS added_by_user';
         $this->project_select[] = 'pm.added_by_user AS staff_id';
         $this->project_select[] = 'pm.department_id as department_id';
@@ -1089,8 +1089,10 @@ class Project_Template_model extends CI_Model {
                 $this->db->join('project_task AS pt', 'p.id=pt.project_id', 'inner');
                 $this->db->where('project_id', $insert_id);
                 $manage_result1 = $this->db->get()->result_array();
-                $end_array1 = end($project_task_staff_data);
-                $last_key1 = key($project_task_staff_data);
+                if(isset($project_task_staff_data)){
+                    $end_array1 = end($project_task_staff_data);
+                    $last_key1 = key($project_task_staff_data);
+                }
 //        if($last_key!=''){
 //        $new_key1=(int)$last_key+1;
 //        }else{
@@ -1290,7 +1292,6 @@ class Project_Template_model extends CI_Model {
 
 //        tracking
         if ($status == 0) {
-//            echo "a";die;
             $this->db->where('id', $id);
             $this->db->update('project_task', array('date_completed' => date('Y-m-d h:i:s'), 'tracking_description' => 0));
             if (!empty($get_main_order_query)) {
@@ -1318,23 +1319,24 @@ class Project_Template_model extends CI_Model {
                 $this->db->where('id', $suborder_order_id);
                 $this->db->update('project_main', array('status' => 1));
             } else {
-                $this->db->where('id', $suborder_order_id);
+                $this->db->where('project_id', $suborder_order_id);
                 $this->db->update('project_main', array('status' => 1));
             }
         } elseif ($status == 1) {
+//            echo 'b';die;
             if (!empty($get_main_order_query)) {
                 $suborder_order_id = $get_main_order_query[0]['project_id'];
             }
 //            $get_service_end_days = $this->db->query("select * from target_days where service_id='" . $suborder_service_id . "'")->result_array();
 //            $end_days = $get_service_end_days[0]['end_days'];
+//            echo $suborder_order_id;die;
             $end_date = date('Y-m-d h:i:s');
             $this->db->where('id', $id);
             $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 1));
-            $this->db->where('id', $suborder_order_id);
+            $this->db->where('project_id', $suborder_order_id);
             $this->db->update('project_main', array('status' => 1));
             //$this->assign_order_by_order_id($suborder_order_id, sess('user_id'));
         } else {
-//            echo "b";die;
             $end_date = date('Y-m-d h:i:s');
             $this->db->where('id', $id);
             $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 2));
@@ -1359,7 +1361,7 @@ class Project_Template_model extends CI_Model {
             $status_array_values = explode(",", $status_array);
 //            print_r($status_array_values);die;
             if (count(array_unique($status_array_values)) == 1) {
-                $this->db->where('id', $suborder_order_id);
+                $this->db->where('project_id', $suborder_order_id);
                 $this->db->update('project_main', array('status' => 2));
             }
         }
@@ -1943,8 +1945,8 @@ class Project_Template_model extends CI_Model {
         return $this->db->get_where('projects', ['id' => $project_id])->row()->office_id;
     }
 
-    public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='') {
-//        echo 'kkk'.$client_id;die;
+    public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='',$month='') {
+//        print_r($month);die;
 //        print_r($filter_data);die;
         $user_info = $this->session->userdata('staff_info');
         $user_department = $user_info['department'];
@@ -2114,11 +2116,7 @@ class Project_Template_model extends CI_Model {
                     $this->db->where('pm.status', $status);
                 }
             } else {
-                if (empty($filter_data)) {
-                    $this->db->where_not_in('pm.status', [2]);
-                }else{
-                    $this->db->where_in('pm.status', [0,1, 2]);
-                }
+                $this->db->where_in('pm.status', [0,1, 2]);
             }
         if (isset($sos_value) && $sos_value != '') {
             if ($sos_value == 'tome') {
@@ -2169,9 +2167,12 @@ class Project_Template_model extends CI_Model {
             $this->db->where('pro.template_id', $template_id);
         }
         if($template_cat_id!=''){
-            $this->db->where('pm.template_cat_id',2);
+            $this->db->where('pm.template_cat_id',$template_cat_id);
         }
-
+        if($month!=''){
+            $this->db->where('prm.actual_due_month',$month);
+        }
+        
         if (count($having) != 0) {
             $this->db->having(implode(' AND ', $having));
         }

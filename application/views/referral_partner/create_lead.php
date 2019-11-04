@@ -145,7 +145,7 @@
                                 <input type="hidden" name="fromval" value="partner_section">
                                 <input type="hidden" name="referred_status" value="partnertolead">
                                 <input type="hidden" name="partner_creator" value="<?php echo (isset($partner_creator)) ? $partner_creator : ''; ?>">
-                                <button class="btn btn-success" type="button" onclick="add_lead_prospect('refagent')">
+                                <button class="btn btn-success" type="button" onclick="add_lead_prospect('refagent','','refer_lead')">
                                     Save Changes
                                 </button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button" onclick="cancel_lead_prospect('refagent')">

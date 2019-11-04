@@ -444,14 +444,15 @@ class Administration extends CI_Model {
         );
         $this->db->insert('target_days', $insval);
 
-        foreach ($relatedserv as $val) {
-            $indata = array('id' => '',
-                'services_id' => $insert_id,
-                'related_services_id' => $val
-            );
-            $this->db->insert('related_services', $indata);
+        if (!empty($relatedserv) && count($relatedserv) != 0) {    
+            foreach ($relatedserv as $val) {
+                $indata = array('id' => '',
+                    'services_id' => $insert_id,
+                    'related_services_id' => $val
+                );
+                $this->db->insert('related_services', $indata);
+            }
         }
-
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return "-1";
@@ -486,13 +487,16 @@ class Administration extends CI_Model {
 
         $this->db->where("services_id", $service_id)->delete("related_services");
 
-        foreach ($relatedserv as $val) {
-            $indata = array('id' => '',
-                'services_id' => $service_id,
-                'related_services_id' => $val
-            );
-            $this->db->insert('related_services', $indata);
+        if (!empty($relatedserv) && count($relatedserv) != 0) {    
+            foreach ($relatedserv as $val) {
+                $indata = array('id' => '',
+                    'services_id' => $service_id,
+                    'related_services_id' => $val
+                );
+                $this->db->insert('related_services', $indata);
+            }
         }
+
 
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();

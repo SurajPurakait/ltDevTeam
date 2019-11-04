@@ -1572,6 +1572,10 @@ class Home extends CI_Controller {
         load_ddl_option("existing_client_list");
     }
 
+    public function clientTypeYes() {
+        $this->load->view('services/extra_field_service_existing_client');
+    }
+
     public function service_list_ajax() {
         $render_data = post();
         $render_data['order_info'] = $order_info = $this->service_model->get_order_info_by_id($render_data['order_id']);

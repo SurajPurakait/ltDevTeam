@@ -147,7 +147,7 @@
                                 <input type="hidden" name="partner_section" value="">
                                 <input type="hidden" name="fromval" value="staff_section">
                                 <input type="hidden" name="ref_partner_id" value="<?php echo isset($ref_partner_id) ? $ref_partner_id : ''; ?>">
-                                <button class="btn btn-success" type="button" onclick="reffer_lead_to_partner()">
+                                <button class="btn btn-success" type="button" onclick="reffer_lead_to_partner('refer_lead')">
                                     Save Changes
                                 </button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button" onclick="cancel_lead_to_partner()">

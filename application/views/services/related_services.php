@@ -752,6 +752,7 @@
                                 <input type="hidden" name="service_shortname" id="service_shortname" value="<?= $service_shortname; ?>" />
                                 <input type="hidden" name="editval" id="editval" value="<?= $order_id; ?>">
                                 <input type="hidden" name="order_id" id="order_id" value="<?= $order_id; ?>">
+                                <input type="hidden" name="quant_employee" id="quant_employee" value="0">
                                 <input type="hidden" name="service_request_id" id="service_request_id" value="<?= $service_request_id; ?>">
                                 <button class="btn btn-success" type="button" onclick="saveRelatedService()">Save changes</button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button" onclick="go('services/home')">Cancel</button>

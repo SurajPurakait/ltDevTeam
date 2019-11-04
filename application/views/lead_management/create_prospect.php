@@ -34,7 +34,17 @@
                             <div class="errorMessage text-danger"></div>
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Partner Lead Type<span class="text-danger">*</span></label>
+                        <div class="col-lg-10">
+                            <select required class="form-control" id="lead_type" title="Type of Contact" name="lead_type">
+                                <?php foreach ($type_of_leads as $value): ?>
+                                    <option value="<?= $value["id"]; ?>" <?= ($lead_types == $value["id"]) ? 'selected':''; ?> ><?= $value["type"]; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Type of Contact<span class="text-danger">*</span></label>
                         <div class="col-lg-10">
@@ -46,7 +56,6 @@
                             <div class="errorMessage text-danger"></div>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
                         <div class="col-lg-10">
@@ -91,7 +100,7 @@
                         <label class="col-lg-2 control-label">State</label>
                         <div class="col-lg-10">
                             <select class="form-control" title="State" name="state">
-                                <option value="">Select..</option>
+                                <option value="">Select</option>
                                 <?php
                                 foreach ($states as $value):
                                     if ($value['id'] != 0) {
@@ -107,7 +116,7 @@
                         <label class="col-lg-2 control-label">Country</label>
                         <div class="col-lg-10">
                             <select class="form-control" title="Country" name="country" onchange="change_zip_by_country(this.value)">
-                                <option value="">Select..</option>
+                                <option value="">Select</option>
                                 <?php
                                 foreach ($countries as $value):
                                     if ($value['id'] != 0) {
@@ -229,19 +238,19 @@
                     <div class="mail-campaign-wrap" id="mail_campaign_wrap" style="display: none;">
                         <div class="row">
                             <div class="col-md-2 col-md-offset-2 text-center">
-                                <div class="newsletter-box" onclick="viewMailCampaignTemplate(getIdVal('contact_type'), getIdVal('language'), 1, getIdVal('first_name'), getIdVal('company_name'), getIdVal('phone1'), getIdVal('email'));" data-toggle="modal">
+                                <div class="newsletter-box" onclick="viewMailCampaignTemplate(getIdVal('lead_type'), getIdVal('language'), 1, getIdVal('first_name'), getIdVal('company_name'), getIdVal('phone1'), getIdVal('email'));" data-toggle="modal">
                                     <img src="<?= base_url() . "assets/img/newsletter.jpg"; ?>"/>
                                     <div class="newsletter-overlay overlay-bg1">Day 0</div>
                                 </div> 
                             </div>
                             <div class="col-md-2 text-center">
-                                <div class="newsletter-box" onclick="viewMailCampaignTemplate(getIdVal('contact_type'), getIdVal('language'), 2, getIdVal('first_name'), getIdVal('company_name'), getIdVal('phone1'), getIdVal('email'));" data-toggle="modal">
+                                <div class="newsletter-box" onclick="viewMailCampaignTemplate(getIdVal('lead_type'), getIdVal('language'), 2, getIdVal('first_name'), getIdVal('company_name'), getIdVal('phone1'), getIdVal('email'));" data-toggle="modal">
                                     <img src="<?= base_url() . "assets/img/newsletter.jpg"; ?>"/>
                                     <div class="newsletter-overlay overlay-bg2">Day 3</div>
                                 </div> 
                             </div>
                             <div class="col-md-2 text-center">
-                                <div class="newsletter-box" onclick="viewMailCampaignTemplate(getIdVal('contact_type'), getIdVal('language'), 3, getIdVal('first_name'), getIdVal('company_name'), getIdVal('phone1'), getIdVal('email'));" data-toggle="modal">
+                                <div class="newsletter-box" onclick="viewMailCampaignTemplate(getIdVal('lead_type'), getIdVal('language'), 3, getIdVal('first_name'), getIdVal('company_name'), getIdVal('phone1'), getIdVal('email'));" data-toggle="modal">
                                     <img src="<?= base_url() . "assets/img/newsletter.jpg"; ?>"/>
                                     <div class="newsletter-overlay overlay-bg3">Day 6</div>
                                 </div> 
@@ -253,7 +262,6 @@
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-10">
                             <input type="hidden" name="type" id="type" value="1">
-                            <input type="hidden" name="lead_type" id="lead_type" value="<?= $lead_type; ?>">
                             <input type="hidden" name="partner_section" value="">
                             <input type="hidden" name="referred_status" value="">
                             <!-- <button class="btn btn-success" type="button" onclick="add_lead_prospect('notrefagent','<?= $event_lead ?>')">Save Changes</button> &nbsp;&nbsp;&nbsp; -->

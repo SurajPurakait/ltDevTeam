@@ -55,6 +55,7 @@ if ($status == '') {
                                                     <option value="7">Complete Date</option>
                                                     <option value="3">Office</option>
                                                     <option value="9">ORDER#</option>
+                                                    <option value="15">Request type</option>
                                                     <option value="13">Requested Date</option>
                                                     <option value="14">Responsible DEPT</option>
                                                     <option value="2">Service Name</option>
@@ -62,7 +63,7 @@ if ($status == '') {
                                                     <option value="6">Start Date</option>
                                                     <option value="12">Target End Date</option>
                                                     <option value="11">Target Start Date</option>
-                                                    <option value="4">Tracking</option>
+                                                    <option value="4">Tracking</option>                                                    
                                                 </select>
                                             </div>
                                             <div class="col-md-4 m-t-5">
@@ -621,9 +622,9 @@ if ($status == '') {
             var requestBy = $('.staff-dropdown option:selected').val();
             var filterval = '';
             if (requestType == 'byme') {
-                requestTypeName = 'By Me';
+                requestTypeName = 'By ME';
             } else if (requestType == 'tome') {
-                requestTypeName = 'To Me';
+                requestTypeName = 'To ME';
             } else if (requestType == 'byothers') {
                 requestTypeName = 'By Others';
             }
@@ -663,6 +664,11 @@ if ($status == '') {
                     $(".filter-text").html('<span class="byclass ' + requestType + '">Requested ' + requestTypeName + ' <a href="javascript:void(0);" onclick="removefilter(\'' + requestTypeName + '\',' + status + ')"><i class="fa fa-times" aria-hidden="true"></i></a></span>');
                     $(".status-dropdown").val(status);
                     $("#hiddenflag").val(hiddenflag);
+                    if ((status + requestType) == '') {
+                        clearFilter();
+                    } else {
+                        reflactFilterWithSummery(status + '-' + filterval, requestType + '-' + requestTypeName);
+                    }
                 },
                 beforeSend: function () {
                     openLoading();
@@ -894,8 +900,13 @@ if ($status == '') {
             dataType: "html",
             success: function (result) {
                 $("#" + divid).find('.criteria-div').html(result);
+                $("#" + divid).find('.condition-dropdown').removeAttr('disabled').val('');
+                if (val == 15) {
+                    $("#" + divid).find('.condition-dropdown option:not(:eq(0),:eq(1))').remove();
+                } else {
+                    $("#" + divid).find('.condition-dropdown').html('<option value="">All Condition</option><option value="1">Is</option><option value="2">Is in the list</option><option value="3">Is not</option><option value="4">Is not in the list</option>');
+                }
                 $(".chosen-select").chosen();
-                $("#" + divid).find('.condition-dropdown').val('');
                 $("#" + divid).nextAll(".filter-div").each(function () {
                     $(this).find('.remove-filter-button').trigger('click');
                 });
@@ -907,5 +918,23 @@ if ($status == '') {
                 closeLoading();
             }
         });
+    }
+    var reflactFilterWithSummery = function (status, requestType) {
+        clearFilter();
+        $("select.variable-dropdown:first").val(4);
+        var statusArray = status.split('-');
+        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
+        $("select.criteria-dropdown:first").trigger("chosen:updated");
+        $("select.condition-dropdown:first").val(1).attr('disabled', true);
+        element_array.push($("select.condition-dropdown:first"));
+        variable_dd_array.push(4);
+        add_new_filter_row();
+        $("select.variable-dropdown:eq(1)").val(15);
+        var requestTypeArray = requestType.split('-');
+        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
+        $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
+        $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
+        element_array.push($("select.condition-dropdown:eq(1)"));
+        variable_dd_array.push(15);
     }
 </script>

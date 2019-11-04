@@ -24,7 +24,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Existing Client<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control type_of_client" name="type_of_client" id="type_of_client_ddl" onchange="clientTypeChange(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1);" title="Type Of Client" required>
+                                <select class="form-control type_of_client" name="type_of_client" id="type_of_client_ddl" onchange="clientTypeChange(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1); clientTypeYes(this.value);" title="Type Of Client" required>
                                     <option value="">Select an option</option>
                                     <option value="0">Yes</option>
                                     <option selected value="1">No</option>
@@ -80,7 +80,7 @@
                         <div class="form-group display_div">
                             <label class="col-lg-2 control-label">Start Date<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="dd/mm/yyyy" id="month" class="form-control datepicker_mdy value_field required_field" type="text" title="Start Date" name="start_year" value="">
+                                <input placeholder="mm/dd/yyyy" id="month" class="form-control datepicker_mdy value_field required_field" type="text" title="Start Date" name="start_year" value="">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -179,7 +179,6 @@
                             </div>
                         </div>
 
-
                         <div class="hr-line-dashed"></div>
                         <h3>Account number where Sales Tax will be debited</h3>
 
@@ -232,7 +231,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Upload Void Cheque (pdf)<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 control-label">Upload Void Cheque<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
                                 <input type="file" name="void_cheque" id="void_cheque" title="Void cheque" required="">
                                 <div class="errorMessage text-danger"></div>
@@ -288,13 +287,13 @@
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Non-resident Upload</label>
                                 <div class="col-lg-10">
-                                    <label>Passport (pdf)<span class="text-danger">*</span></label> 
+                                    <label>Passport<span class="text-danger">*</span></label> 
                                     <input class="form-control non_resident_file" type="file" name="passport" id="passport">
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                                 <label class="col-lg-2 control-label"></label>
                                 <div class="col-lg-10">
-                                    <label>Lease (pdf)<span class="text-danger">*</span></label> 
+                                    <label>Lease<span class="text-danger">*</span></label> 
                                     <input class="form-control non_resident_file" type="file" name="lease" id="lease">
                                     <div class="errorMessage text-danger"></div>
                                 </div>

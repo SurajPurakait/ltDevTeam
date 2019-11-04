@@ -425,7 +425,6 @@
                                     </div>
 
                                     <div id="task_list">
-
                                         <?php
                                         if (!empty($task_list)) {
                                             foreach ($task_list as $value) {
@@ -456,7 +455,7 @@
                                                                             <!--<td title="Assign To"><span></span></td>-->
                                                                             <td title="Assign To"><span class="text-success"><?php echo get_assigned_project_task_staff($value['id']); ?></span><br><?php echo get_assigned_project_task_department($value['id']); ?></td>                                                    
                                                                             <!--get_task_note($value['id'])-->
-                                                                            <td title='Note'><a id="notecount-<?= $value['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_task_notes(<?= $value["id"]; ?>)"><b> <?= get_task_note_count($value['id']) ?></b></a></td>
+                                                                            <td title='Note'><a id="notecount-<?= $value['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_task_notes(<?= $value["id"]; ?>)"><b> <?= get_project_task_note_count($value['id']) ?></b></a></td>
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
@@ -536,46 +535,44 @@
 
     </div>
 </div>
-<div class="modal fade" id="showTaskNotes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">Notes</h4>
-            </div>
-            <form method="post" id="modal_note_form_update" onsubmit="update_task_notes();">
-                <div id="notes-modal-body" class="modal-body p-b-0"></div>
-                <div class="modal-body p-t-0 text-right">
-                    <button type="button" id="update_note" onclick="update_task_notes();" class="btn btn-primary">Update Note</button>
+<div class="modal fade" id="showProjectTaskNotes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span> </button>
+                    <h4 class="modal-title" id="myModalLabel">Notes</h4>
                 </div>
-            </form>
-            <hr class="m-0"/>
-           <!--  <form method="post" id="modal_note_form" action="<?//= base_url(); ?>action/home/addNotesmodal"> -->
-            <form method="post" id="modal_note_form" onsubmit="add_task_notes();">
-                <div class="modal-body">
-                    <h4>Add New Note</h4>
-                    <!-- <div class="col-lg-10">
-                        <label class="checkbox-inline">
-                            <input type="checkbox"  name="pending_request" id="pending_request" value="1"><b>Add to SOS Notification</b>
-                        </label>
-                    </div> -->
-                    <div class="form-group" id="add_note_div">
-                        <div class="note-textarea">
-                            <textarea class="form-control" name="task_note[]"  title="Task Note"></textarea>
-                        </div>
-                        <a href="javascript:void(0)" class="text-success add-task-note block m-t-10"><i class="fa fa-plus"></i> Add Notes</a>
+                <form method="post" id="project_task_modal_note_form_update" onsubmit="update_project_task_notes();">
+                    <div id="notes-modal-body" class="modal-body p-b-0"></div>
+                    <div class="modal-body p-t-0 text-right">
+                        <button type="button" id="update_note" onclick="update_project_task_notes();" class="btn btn-primary">Update Note</button>
                     </div>
-                    <input type="hidden" name="taskid" id="taskid">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="save_note" onclick="add_task_notes();" class="btn btn-primary">Save Note</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </form>
+                </form>
+                <hr class="m-0"/>
+                <!--  <form method="post" id="modal_note_form" action="<?//= base_url(); ?>action/home/addNotesmodal"> -->
+                <form method="post" id="project_task_modal_note_form" onsubmit="add_project_task_notes();">
+                    <div class="modal-body">
+                        <h4>Add New Note</h4>
+                        <!-- <div class="col-lg-10">
+                                      <label class="checkbox-inline">
+                                          <input type="checkbox"  name="pending_request" id="pending_request" value="1"><b>Add to SOS Notification</b>
+                                      </label>
+                                  </div> -->
+                        <div class="form-group" id="add_note_div">
+                            <div class="note-textarea">
+                                <textarea class="form-control" name="task_note[]"  title="Task Note"></textarea>
+                            </div>
+                            <a href="javascript:void(0)" class="text-success add-task-note block m-t-10"><i class="fa fa-plus"></i> Add Notes</a> </div>
+                        <input type="hidden" name="taskid" id="taskid">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="save_note" onclick="add_project_task_notes();" class="btn btn-primary">Save Note</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 <?php
 $office_staff = getProjectOfficeStaff($project_id);
 if (!empty($office_staff)) {
