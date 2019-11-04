@@ -700,7 +700,7 @@ class Salestax_model extends CI_Model {
                     if ($val['name'] != '') {
                         if ($this->uploaddocs($val)) {
                             $this->db->insert('sales_driver_license_data', ['reference_id' => $data->reference_id, 'order_id' => $order_id, 'file_name' => $this->file_uploaded]);
-                            $this->db->query("INSERT INTO documents (reference,reference_id,doc_type,document,order_id) VALUES ('','company','{$data->reference_id}','SALES LICENSE','{$this->file_uploaded}','$order_id') ");
+                            $this->db->query("INSERT INTO documents (reference,reference_id,doc_type,document,order_id) VALUES ('company','{$data->reference_id}','SALES LICENSE','{$this->file_uploaded}','$order_id') ");
                         }
                     }
                 }

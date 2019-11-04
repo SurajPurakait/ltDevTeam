@@ -2588,10 +2588,10 @@ if (!function_exists('count_unread_news_update_by_userId')) {
 
 if (!function_exists('get_document_count')) {
 
-    function get_document_count($reference_id, $reference) {
+    function get_document_count($reference_id, $reference,$order_id) {
         $ci = &get_instance();
         $ci->load->model('Service_model');
-        $number_of_docs = $ci->Service_model->get_document_list_by_reference($reference_id, $reference);
+        $number_of_docs = $ci->Service_model->get_document_list_by_reference_id($reference_id, $reference,$order_id);
         return sizeof($number_of_docs);
     }
 
