@@ -2116,11 +2116,7 @@ class Project_Template_model extends CI_Model {
                     $this->db->where('pm.status', $status);
                 }
             } else {
-                if (empty($filter_data)) {
-                    $this->db->where_not_in('pm.status', [2]);
-                }else{
-                    $this->db->where_in('pm.status', [0,1, 2]);
-                }
+                $this->db->where_in('pm.status', [0,1, 2]);
             }
         if (isset($sos_value) && $sos_value != '') {
             if ($sos_value == 'tome') {

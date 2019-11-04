@@ -416,7 +416,7 @@ function save_employee() {
         contentType: false,
         processData: false,
         success: function (result) {
-            console.log("Result: " + result);
+            // console.log("Result: " + result);
             if (result == 2) {
                 swal("ERROR!", "Error to upload file", "error");
             } else if (result == 3) {

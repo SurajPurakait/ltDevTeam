@@ -188,9 +188,11 @@ class Individual extends CI_Model {
         $reference_id = $data['company_id'];
         $data['internal_data']['reference_id'] = $data['reference_id'];
         $data['internal_data']['reference'] = "individual";
-        if (!$this->internal_model->save_internal_data($data['internal_data'])) {
-            return false;
-        }
+        $data['internal_data']['practice_id'] = $data['internal_data']['practice_id'];
+        $data_internal = $data['internal_data'];
+        // if (!$this->internal_model->save_internal_data($data['internal_data'])) {
+        //     return false;
+        // }
         $data = (object) $data; // convert the post array into an object
         $conn = $this->db;
         $this->load->model('System');
@@ -240,6 +242,9 @@ class Individual extends CI_Model {
                 where id={$data->individual_id}";
         if ($conn->query($sql2)) {
             $this->System->log("insert", "individual", $data->individual_id);
+            if (!$this->internal_model->save_internal_data($data_internal)) {
+                return false;
+            }
         } else {
             return false;
         }

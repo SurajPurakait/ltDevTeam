@@ -320,9 +320,8 @@ function add_lead_prospect(added_by, event_lead = "",refer_lead="") {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-            // console.log(result);return false;
             if (result.trim() == "0") {
-                swal("ERROR!", "Lead Prospect Already Exists", "error");
+                swal("ERROR!", "Email Id Already Exists!! Please Change the Email", "error");
             } else if (result.trim() == "-1") {
                 swal("ERROR!", "Unable To Add Lead Prospect", "error");
             } else {
@@ -595,6 +594,7 @@ function viewMailCampaignTemplate(contactType, language, day, firstName, company
             email: email
         },
         success: function (result) {
+            // console.log(result);return false;
             if (result != 0) {
                 var mail_campaign = JSON.parse(result);
 //                console.log(mail_campaign);

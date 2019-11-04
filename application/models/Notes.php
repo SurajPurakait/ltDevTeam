@@ -90,16 +90,19 @@ Class Notes extends CI_Model {
     public function note_list_with_log($related_table_id, $foreign_column, $foreign_value, $foreign_value2 = "") {
         $table = $this->get_related_note_table_by_id($related_table_id);
         if($related_table_id==2){
-            $this->db->select('nt.id note_id, nl.user_id, nt.note note, nl.date_time time, CONCAT(st.last_name, ", ", st.first_name) staff_name, st.department staff_department');
+            $this->db->select('nt.id note_id, nt.added_by_user as user_id, nt.note note, nt.added_at time, CONCAT(st.last_name, ", ", st.first_name) staff_name, st.department staff_department');
             $this->db->from($table . ' nt');
-            $this->db->join('notes_log nl', 'nt.id = nl.note_id');
-            $this->db->join('staff st', 'st.id = nl.user_id');
+            $this->db->join('staff st', 'st.id = nt.added_by_user');
             if ($related_table_id == 1) {
                 $this->db->where(['nt.reference' => $foreign_value2]);
             }
-            $this->db->where(['nt.' . $foreign_column => $foreign_value, 'nl.related_table_id' => $related_table_id]);
-            $this->db->group_by('nl.note_id');
+            $this->db->group_start();
+            $this->db->where(['nt.added_by_user' => $this->session->userdata('user_id')]);
+            $this->db->or_where(['nt.added_by_user!=' => $this->session->userdata('user_id')]);
+            $this->db->group_end();
+            $this->db->where(['nt.' . $foreign_column => $foreign_value]);
             $return1 = $this->db->get()->result_array();
+//            echo $this->db->last_query();die;
             return $return1;
         }else{
             $this->db->select('nt.id note_id, nl.user_id, nt.note note, nl.date_time time, CONCAT(st.last_name, ", ", st.first_name) staff_name, st.department staff_department');

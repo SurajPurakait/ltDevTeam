@@ -67,206 +67,21 @@ $role = $user_info['role'];
                                 </form>
                             </div>
                         </div>
-                        <!-- summary box section -->
-                        <div class="col-lg-5">
-                            <div class="bg-aqua table-responsive">
-                                <table class="table table-borderless">
-                                    <thead>
-                                        <tr>
-                                            <td></td>
-                                            <th class="text-center">Not Started</th>
-                                            <th class="text-center">Started</th>
-                                            <th class="text-center">Completed</th>
-                                            <!-- <th class="text-center">Canceled</th> -->
-                                            <th class="text-center">SOS</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr id="byme">
-                                            <th>By Me</th>
-                                            <td class="text-center"><a href="javascript:void(0)" class="filter-button" id="filter-byme-0"> <span class="label label-success" id="requested_by_me_new" onclick="loadProjectDashboard(0, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);">
-                                                        <?= project_list('byme', 0); ?>
-                                                    </span> </a></td>
-                                            <td class="text-center"><a href="javascript:void(0)" class="filter-button" id="filter-byme-1"> <span class="label label-warning" id="requested_by_me_started" onclick="loadProjectDashboard(1, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);">
-                                                        <?= project_list('byme', 1); ?>
-                                                    </span> </a></td>
-                                            <td class="text-center"><a href="javascript:void(0)" class="filter-button" id="filter-byme-2"> <span class="label bg-purple" id="requested_by_me_completed" onclick="loadProjectDashboard(2, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);">
-                                                        <?= project_list('byme', 2); ?>
-                                                    </span> </a></td>
-                                                  <!-- <td class="text-center">
-                                                                              <a href="javascript:void(0)" class="filter-button" id="filter-byme-7">
-                                                                                  <span class="label label-warning" id="requested_by_me_canceled" onclick="loadProjectDashboard(7, 'byme', '', '', '', '');"><?//= action_list('byme', 7); ?></span>
-                                                                              </a>
-                                                                          </td> -->
-                                            <td class="text-center"><a class="filter-button" onclick="sos_filter_project('projects', 'byme');" title="By Me"><span class="label label-danger label-byme">
-                                                        <?= sos_dashboard_count('projects', 'byme'); ?>
-                                                    </span></a></td>
-                                        </tr>
-                                        <tr id="tome">
-                                            <th>To Me</th>
-                                            <td class="text-center"><a href="javascript:void(0)" class="filter-button" id="filter-tome-0"> <span class="label label-success" id="requested_to_me_new" onclick="loadProjectDashboard(0, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);">
-                                                        <?= project_list('tome', 0); ?>
-                                                    </span> </a></td>
-                                            <td class="text-center"><a href="javascript:void(0)" class="filter-button" id="filter-tome-1"> <span class="label label-warning" id="requested_to_me_started" onclick="loadProjectDashboard(1, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);">
-                                                        <?= project_list('tome', 1); ?>
-                                                    </span> </a></td>
-                                            <td class="text-center"><a href="javascript:void(0)" class="filter-button" id="filter-tome-2"> <span class="label bg-purple" id="requested_to_me_completed" onclick="loadProjectDashboard(2, 'tome', '', '', '', '', '', '', '', '', '', '', '', 1);">
-                                                        <?= project_list('tome', 2); ?>
-                                                    </span> </a></td>
-                                                  <!-- <td class="text-center">
-                                                                              <a href="javascript:void(0)" class="filter-button" id="filter-tome-7">
-                                                                                  <span class="label label-warning" id="requested_to_me_canceled" onclick="loadProjectDashboard(7, 'tome', '', '', '', '');"><?//= action_list('tome', 7); ?></span>
-                                                                              </a>
-                                                                          </td> -->
-                                            <td class="text-center"><a class="filter-button" onclick="sos_filter_project('projects', 'tome');" title="To Me"><span class="label label-danger label-tome">
-                                                        <?= sos_dashboard_count('projects', 'tome'); ?>
-                                                    </span></a></td>
-                                        </tr>
-                                        <?php // if ($user_type == 1 || ($user_type == 2 && $role == 4) || ($user_type == 3 && $role == 2)): ?>
-                                        <!--                                            <tr id="byother">
-                                                                      <th>Requested By Other</th>
-                                                                      <td class="text-center">
-                                                                          <a href="javascript:void(0)" class="filter-button" id="filter-byother-0">
-                                                                              <span class="label label-warning" id="requested_by_other_new" onclick="loadProjectDashboard(0, 'byother', '', '', '', '');"><?//= action_list('byother', 0); ?></span>
-                                                                          </a>
-                                                                      </td>
-                                                                      <td class="text-center">
-                                                                          <a href="javascript:void(0)" class="filter-button" id="filter-byother-1">
-                                                                              <span class="label label-warning" id="requested_by_other_started" onclick="loadProjectDashboard(1, 'byother', '', '', '', '');"><?//= action_list('byother', 1); ?></span>
-                                                                          </a>
-                                                                      </td>
-                                                                       <td class="text-center">
-                                                                          <a href="javascript:void(0)" class="filter-button" id="filter-byother-2">
-                                                                              <span class="label label-warning" id="requested_by_other_completed" onclick="loadProjectDashboard(2, 'byother', '', '', '', '');"><?//= action_list('byother', 2); ?></span>
-                                                                          </a>
-                                                                      </td> 
-                                                                       <td class="text-center">
-                                                                          <a href="javascript:void(0)" class="filter-button" id="filter-byother-7">
-                                                                              <span class="label label-warning" id="requested_by_other_canceled" onclick="loadProjectDashboard(7, 'byother', '', '', '', '');"><?//= action_list('byother', 7); ?></span>
-                                                                          </a>
-                                                                      </td> 
-                                                                       <td class="text-center">
-                                                                         <a class="filter-button" onclick="sos_filter('action', 'byother');" title="By Other"><span class="label label-warning label-byother"><?//= sos_dashboard_count('action', 'byother'); ?></span></a>
-                                                                      </td> 
-                                                                  </tr>-->
-                                        <?php
-//                                        endif;
-                                        if ($user_type == 1 || ($user_type == 2 && $role == 4) || ($user_type == 3 && $role == 2)):
-                                            ?>
-                                            <tr id="toother">
-                                                <th>Others</th>
-                                                <td class="text-center"><a href="javascript:void(0)" class="filter-button" id="filter-toother-0"> <span class="label label-success" id="requested_to_other_new" onclick="loadProjectDashboard(0, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);">
-                                                            <?= project_list('toother', 0); ?>
-                                                        </span> </a></td>
-                                                <td class="text-center"><a href="javascript:void(0)" class="filter-button" id="filter-toother-1"> <span class="label label-warning" id="requested_to_other_started" onclick="loadProjectDashboard(1, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);">
-                                                            <?= project_list('toother', 1); ?>
-                                                        </span> </a></td>
-                                                <td class="text-center"><a href="javascript:void(0)" class="filter-button" id="filter-toother-2"> <span class="label bg-purple" id="requested_to_other_completed" onclick="loadProjectDashboard(2, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);">
-                                                            <?= project_list('toother', 2); ?>
-                                                        </span> </a></td>
-                                                      <!--                                                 <td class="text-center">
-                                                                                      <a href="javascript:void(0)" class="filter-button" id="filter-toother-7">
-                                                                                          <span class="label label-warning" id="requested_to_other_canceled" onclick="loadProjectDashboard(7, 'toother', '', '', '', '');"><?//= action_list('toother', 7); ?></span>
-                                                                                      </a>
-                                                                                  </td> --> 
-                                            </tr>
-                                        <?php endif; ?>
-<!--                                        <tr id="mytask">
-                  <th>My Task</th>
-                  <td class="text-center">
-                      <a href="javascript:void(0)" class="filter-button" id="filter-mytask-0">
-                          <span class="label label-warning" id="requested_mytask_new" onclick="loadProjectDashboard(0, 'mytask', '', '', '', '');"><?= project_list('mytask', 0); ?></span>
-                      </a>
-                  </td>
-                  <td class="text-center">
-                      <a href="javascript:void(0)" class="filter-button" id="filter-mytask-1">
-                          <span class="label label-warning" id="requested_mytask_started" onclick="loadProjectDashboard(1, 'mytask', '', '', '', '');"><?= project_list('mytask', 1); ?></span>
-                      </a>
-                  </td>
-                  <td class="text-center">
-                      <a href="javascript:void(0)" class="filter-button" id="filter-mytask-3">
-                          <span class="label label-warning" id="requested_mytask_completed" onclick="loadProjectDashboard(2, 'mytask', '', '', '', '');"><?= project_list('mytask', 2); ?></span>
-                      </a>
-                  </td>
-                   <td class="text-center">
-                      <a href="javascript:void(0)" class="filter-button" id="filter-mytask-7">
-                          <span class="label label-warning" id="requested_mytask_canceled" onclick="loadProjectDashboard(7, 'mytask', '', '', '', '');"><?//= action_list('mytask', 7); ?></span>
-                      </a>
-                  </td> 
-              </tr>--> 
-<!--                                        <tr id="unassigned">
-                  <th>Unassigned</th>
-                  <td class="text-center">
-                      <a href="javascript:void(0)" class="filter-button" id="filter-unassigned-0">
-                          <span class="label label-warning" id="unassigned_new" onclick="loadProjectDashboard(0, 'unassigned', '', '', '', '');"><?//= action_list('unassigned', 0); ?></span>
-                      </a>
-                  </td>
-                  <td class="text-center">
-                      <a href="javascript:void(0)" class="filter-button" id="filter-unassigned-1">
-                          <span class="label label-warning" id="unassigned_started" onclick="loadProjectDashboard(1, 'unassigned', '', '', '', '');"><?//= action_list('unassigned', 1); ?></span>
-                      </a>
-                  </td>
-                  <td class="text-center">
-                      <a href="javascript:void(0)" class="filter-button" id="filter-unassigned-2">
-                          <span class="label label-warning" id="unassigned_completed" onclick="loadProjectDashboard(2, 'unassigned', '', '', '', '');"><?//= action_list('unassigned', 2); ?></span>
-                      </a>
-                  </td>
-              </tr>-->
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="row m-r-20"> 
-                                <!-- <div class="col-sm-4 col-xs-12">
-                                                      <a class="btn notification-btn" onclick="sos_filter('action', 'tome');" title="To Me">SOS To Me <span class="label label-danger label-tome"><?//= sos_dashboard_count('action', 'tome'); ?></span></a>
-                                                  </div>
-                                                  <div class="col-sm-4 col-xs-12">
-                                                      <a class="btn notification-btn" onclick="sos_filter('action', 'byme');" title="By Me">SOS By Me <span class="label label-success label-byme"><?//= sos_dashboard_count('action', 'byme'); ?></span></a>
-                                                  </div> --> 
-                                <!--                                <div class="col-sm-4 col-xs-12">
-                                                                                      <a class="btn notification-btn" onclick="loadProjectDashboard(0, 'unassigned', '', '', '', '');" title="By Me">Unassigned <span class="label label-success label-byme"><? action_list('unassigned', 0); ?></span></a>
-                                                                                  </div>-->
-                                <div class="col-sm-4 col-xs-12"> <a class="btn notification-btn" id="notification-project-button" onclick="openProjectNotificationModal();" href="javascript:void(0);" title="Project Notifications">Notifications <span class="label label-danger">
-                                            <?= get_project_notifications_count(); ?>
-                                        </span></a> </div>
-                                <a class="pull-right" style="opacity:0.3;" title="Recurrence Cron" href="<?php echo base_url(); ?>project_recurrence_cron.php" target="_blank"><i class="fa fa-crosshairs fa-1x"></i></a> </div>
-                            <div class="row">
-                                <div class="col-sm-12 p-t-5">
-                                    <?php
-                                    $sos_notification_count = sos_dashboard_count_for_reply('projects', 'tome');
-                                    if ($sos_notification_count != 0) {
-                                        ?>
-                                        <span class="label label-danger p-5" style="display: inline-block;padding: 0px 5px;">
-                                            <h4 style="font-size: 12px;"> <i class="fa fa-bell"></i>
-                                                <?php if ($sos_notification_count == 1) { ?>
-                                                    You have received
-                                                    <?= sos_dashboard_count_for_reply('projects', 'tome'); ?>
-                                                    new reply for your sos notification.
-                                                <?php } else { ?>
-                                                    You have received
-                                                    <?= sos_dashboard_count_for_reply('projects', 'tome'); ?>
-                                                    new replies for your sos notification.
-                                                <?php } ?>
-                                            </h4>
-                                        </span> <a href="javascript:void(0);" onclick="this.parentElement.style.display = 'none';" class="m-l-5"><i class="fa fa-times text-danger" aria-hidden="true"></i></a>
-                                    <?php } ?>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end summary box section --> 
+                        
                     </div>
                     <div class="clearfix"></div>
                     <div class="row"> 
 
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs tab" role="tablist">
-                            <li role="presentation" class="active "><a href="#home" aria-controls="home" role="tab" data-toggle="tab" onclick="loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1)">Bookkeeping</a></li>
-                            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" onclick="loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 2)">Tax Returns</a></li>
-                            <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab" onclick="loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 3)">Sales Tax</a></li>
-                            <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab" onclick="loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 4)">Annual Report</a></li>
+                            <li role="presentation" class="active "><a href="#bookkeeping" aria-controls="bookkeeping" role="tab" data-toggle="tab" onclick="loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1)">Bookkeeping</a></li>
+                            <li role="presentation"><a href="#tax_returns" aria-controls="tax_returns" role="tab" data-toggle="tab" onclick="loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 2)">Tax Returns</a></li>
+                            <li role="presentation"><a href="#sales_tax" aria-controls="sales_tax" role="tab" data-toggle="tab" onclick="loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 3)">Sales Tax</a></li>
+                            <li role="presentation"><a href="#annual_report" aria-controls="annual_report" role="tab" data-toggle="tab" onclick="loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 4)">Annual Report</a></li>
                         </ul>
                         <!-- Tab panes -->
                         <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="home">
+                            <div role="tabpanel" class="tab-pane active" id="bookkeeping">
                                 <div class="row">
                                     <div class="form-group col-md-4">
                                         <label class="col-lg-2 m-t-5 control-label">Year:</label>
@@ -282,28 +97,27 @@ $role = $user_info['role'];
                                         foreach($due_m as $key=> $value){
                                             $projects_list = getTemplateCategoryProjectList('',1,$key);
                                             $status_array = array_count_values(array_column($projects_list, 'status'));
-                                            
+                                            if(!empty($projects_list)){
                                         ?>
-                                        <div class="col-md-2 m-l-15 m-b-15">
-                                            <div class="alert-primar row">
+                                        <div class="col-md-3 m-b-15">
+                                            <div class="alert-primar">
                                                 <h3 class="col-md-3 m-t-15 f-s-14"> <?= $value ?> </h3>
-                                                <div class="col-md-4"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span> </div>
-                                                <div class="col-md-5">
-                                                    <div class="project-bookkeeping-campaigns-donut-<?= $key ?>" data-size="50" id="project_bookkeeping_donut_<?= $key ?>" data-json="project_bookkeeping_data_<?= $key ?>"></div>
+                                                <div class="col-md-4 m-t-10"> <span class="label label-primary label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="loadProjectDashboard(2, '', '', '', '', '', '', '', '', '', '', '', '', 1,1,'<?= $key ?>');"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="loadProjectDashboard(1, '', '', '', '', '', '', '', '', '', '', '', '', 1,1,'<?= $key ?>');"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="loadProjectDashboard(0, '', '', '', '', '', '', '', '', '', '', '', '', 1,1,'<?= $key ?>');"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span> </div>
+                                                <div class="col-md-5 m-t-3  p-l-0">
+                                                    <div class="project-bookkeeping-campaigns-donut-<?= $key ?> text-center" data-size="65" id="project_bookkeeping_donut_<?= $key ?>" data-json="project_bookkeeping_data_<?= $key ?>"></div>
                                                     <script>
                                                         var project_bookkeeping_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': 'green'}];
                                                     </script>
                                                 </div>
                                             </div>
                                         </div>
-                                        &nbsp;
                                         <script>
                                             pieChart('project-bookkeeping-campaigns-donut-<?= $key ?>');
                                         </script>
-                                        <?php } ?>
+                                        <?php }} ?>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="profile">
+                            <div role="tabpanel" class="tab-pane" id="tax_returns">
                                 <div class="row">
                                     <div class="form-group col-md-4">
                                         <label class="col-lg-2 m-t-5 control-label">Year:</label>
@@ -317,30 +131,29 @@ $role = $user_info['role'];
                                 <div class="row">
                                     <?php
                                     foreach ($templateIds as $key => $value) {
-                                        $projects_list = getTemplateCategoryProjectList($value['template_id'],2);
-                                        $status_array = array_count_values(array_column($projects_list, 'status'));
-//                                        print_r($status_array);
+                                        $projects_list2 = getTemplateCategoryProjectList($value['template_id'],2);
+                                        $status_array = array_count_values(array_column($projects_list2, 'status'));
+                                        if(!empty($projects_list2)){
                                         ?>
-                                        <div class="col-md-2 m-l-15 m-b-15">
-                                            <div class="alert-primar row">
-                                                <h3 class="col-md-3 m-t-15 f-s-14"> <?= $value['template_id'] ?> </h3>
-                                                <div class="col-md-4"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span> </div>
-                                                <div class="col-md-5">
-                                                    <div class="project-tax-campaigns-donut-<?= $key ?>" data-size="50" id="project_tax_donut_<?= $key ?>" data-json="project_tax_data_<?= $key ?>"></div>
+                                        <div class="col-md-3 m-b-15">
+                                            <div class="alert-primar">
+                                                <h4 class="col-md-4 m-t-10 f-s-14"> <?= (strlen($value['title'])>10 ? substr_replace($value['title'],'..',10):$value['title']) ?> </h4>
+                                                <div class="col-md-3 m-t-5"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1,2);"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1,2);"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1,2);"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span> </div>
+                                                <div class="col-md-5 m-t-3">
+                                                    <div class="project-tax-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_tax_donut_<?= $key ?>" data-json="project_tax_data_<?= $key ?>"></div>
                                                     <script>
                                                         var project_tax_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': 'green'}];
                                                     </script>
                                                 </div>
                                             </div>
                                         </div>
-                                        &nbsp;
                                         <script>
                                             pieChart('project-tax-campaigns-donut-<?= $key ?>');
                                         </script>
-                                    <?php } ?>
+                                    <?php }} ?>
                                 </div>                                
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="messages">
+                            <div role="tabpanel" class="tab-pane" id="sales_tax">
                                 <div class="row">
                                     <div class="form-group col-md-4">
                                         <label class="col-lg-2 m-t-5 control-label">Year:</label>
@@ -354,29 +167,29 @@ $role = $user_info['role'];
                                 <div class="row">
                                     <?php
                                     foreach ($templateIds as $key => $value) {
-                                        $projects_list1 = getTemplateCategoryProjectList($value['template_id'],3);
-                                        $status_array1 = array_count_values(array_column($projects_list1, 'status'));
+                                        $projects_list3 = getTemplateCategoryProjectList($value['template_id'],3);
+                                        $status_array1 = array_count_values(array_column($projects_list3, 'status'));
+                                        if(!empty($projects_list3)){
                                         ?>
-                                        <div class="col-md-2 m-l-15 m-b-15">
-                                            <div class="alert-primar row">
-                                                <h3 class="col-md-3 m-t-15 f-s-14"> <?= $value['template_id'] ?> </h3>
-                                                <div class="col-md-4"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array1[1]) ? $status_array1[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?> </span> </div>
-                                                <div class="col-md-5">
-                                                    <div class="project-sales-campaigns-donut-<?= $key ?>" data-size="50" id="project_sales_donut_<?= $key ?>" data-json="project_sales_data_<?= $key ?>"></div>
+                                        <div class="col-md-3 m-b-15">
+                                            <div class="alert-primar">
+                                                <h4 class="col-md-4 m-t-10 f-s-14"> <?= (strlen($value['title'])>10 ? substr_replace($value['title'],'..',10):$value['title']) ?> </h4>
+                                                <div class="col-md-3"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1,3);"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1,3);"> <?= isset($status_array1[1]) ? $status_array1[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1,3);"> <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?> </span> </div>
+                                                <div class="col-md-4">
+                                                    <div class="project-sales-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_sales_donut_<?= $key ?>" data-json="project_sales_data_<?= $key ?>"></div>
                                                     <script>
                                                         var project_sales_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': 'green'}];
                                                     </script>
                                                 </div>
                                             </div>
                                         </div>
-                                        &nbsp;
                                         <script>
                                             pieChart('project-sales-campaigns-donut-<?= $key ?>');
                                         </script>
-                                    <?php } ?>
+                                    <?php }} ?>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="settings">
+                            <div role="tabpanel" class="tab-pane" id="annual_report">
                                 <div class="row">
                                     <div class="form-group col-md-4">
                                         <label class="col-lg-2 m-t-5 control-label">Year:</label>
@@ -390,26 +203,26 @@ $role = $user_info['role'];
                                 <div class="row">
                                     <?php
                                     foreach ($templateIds as $key => $value) {
-                                        $projects_list1 = getTemplateCategoryProjectList($value['template_id'],4);
-                                        $status_array1 = array_count_values(array_column($projects_list1, 'status'));
+                                        $projects_list4 = getTemplateCategoryProjectList($value['template_id'],4);
+                                        $status_array1 = array_count_values(array_column($projects_list4, 'status'));
+                                        if(!empty($projects_list4)){
                                         ?>
-                                        <div class="col-md-2 m-l-15 m-b-15">
-                                            <div class="alert-primar row">
-                                                <h3 class="col-md-3 m-t-15 f-s-14"> <?= $value['template_id'] ?> </h3>
-                                                <div class="col-md-4"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array1[1]) ? $status_array1[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center;"> <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?> </span> </div>
-                                                <div class="col-md-5">
-                                                    <div class="project-annual-campaigns-donut-<?= $key ?>" data-size="50" id="project_annual_donut_<?= $key ?>" data-json="project_annual_data_<?= $key ?>"></div>
+                                        <div class="col-md-3 m-b-15">
+                                            <div class="alert-primar">
+                                                <h4 class="col-md-4 m-t-10 f-s-14"> <?= (strlen($value['title'])>10 ? substr_replace($value['title'],'..',10):$value['title']) ?> </h4>
+                                                <div class="col-md-3"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1,4);"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1,4);"> <?= isset($status_array1[1]) ? $status_array1[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1,4);"> <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?> </span> </div>
+                                                <div class="col-md-4">
+                                                    <div class="project-annual-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_annual_donut_<?= $key ?>" data-json="project_annual_data_<?= $key ?>"></div>
                                                     <script>
                                                         var project_annual_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': 'green'}];
                                                     </script>
                                                 </div>
                                             </div>
                                         </div>
-                                        &nbsp;
                                         <script>
                                             pieChart('project-annual-campaigns-donut-<?= $key ?>');
                                         </script>
-                                    <?php } ?>
+                                    <?php }} ?>
                                 </div>
                             </div>
                         </div>

@@ -15,7 +15,16 @@
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
-
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Partner Lead Type<span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <select required class="form-control" id="lead_type" title="Type of Contact" name="lead_type">
+                                        <option value="1" <?= ($data['type'] == '1') ? 'selected':''; ?>>Client</option>
+                                        <option value="2" <?= ($data['type'] == '3') ? 'selected':''; ?>>Partner</option>
+                                </select>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Type of Contact
                                 <span class="text-danger">*</span></label>

@@ -261,7 +261,6 @@ function addRelatedservice() {
         return false;
     }
 
-
     var servicecat = $('#add-services-form #servicecat option:selected').val();
     var servicename = $('#add-services-form #servicename').val();
     var retailprice = $('#add-services-form #retailprice').val();
@@ -302,7 +301,7 @@ function addRelatedservice() {
                 });
             } else if (result.trim() == "-1") {
                 swal("ERROR!", "Unable To Add Service", "error");
-            } else {
+            } else if (result.trim() == "0") {
                 swal("ERROR!", "Service Name Exists", "error");
             }
         }
@@ -524,7 +523,6 @@ function updateRelatedservice() {
         url: base_url + '/administration/service_setup/update_related_service',
         dataType: "html",
         success: function (result) {
-            // alert(result);return false;
             if (result.trim() == "1") {
                 swal({title: "Success!", text: "Successfully Updated!", type: "success"}, function () {
                     goURL(base_url + 'administration/service_setup');
@@ -532,7 +530,7 @@ function updateRelatedservice() {
             } else if (result.trim() == "-1") {
                 swal("ERROR!", "Unable To Update Service", "error");
             } else {
-                swal("ERROR!", "Service Already Name Exists", "error");
+                swal("ERROR!", "Service Name Already Exists", "error");
             }
         }
     });

@@ -368,6 +368,17 @@ class Action_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 
+
+    public function get_departments_for_action() {
+        $this->db->select('dp.*');
+        $this->db->from('department AS dp');
+        $this->db->join('department_staff AS dpst', 'dpst.department_id = dp.id');
+        $this->db->group_by('dp.id');
+        // $this->db->where('dp.id !=', 1);
+        $this->db->order_by('name', 'ASC');
+        return $this->db->get()->result_array();
+    }
+
     public function get_corp_departments($dept_str = '') {
 
         $staff_info = staff_info();

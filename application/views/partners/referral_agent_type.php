@@ -1,63 +1,6 @@
 <div class="wrapper wrapper-content">
     <div class="row">
         <div class="col-lg-12">
-            <div class="m-b-40">
-                <form>
-                    <div class="tabs-container">                   
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-link active"><a href="#lead_general_info" aria-controls="general-info" role="tab" data-toggle="tab">LEAD GENERAL INFO</a></li>
-                            <li class="nav-link"><a href="#email_campaign" aria-controls="contact" role="tab" data-toggle="tab">EMAIL CAMPAIGN</a></li>
-                            <li class="nav-link"><a href="#other_info" aria-controls="other" role="tab" data-toggle="tab">OTHER INFO</a></li>                                          
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" role="tabpanel" id="lead_general_info"> 
-                                <div class="panel-body">
-                                    <h3>Lead General Info</h3> 
-
-                                    <div class="form-group">
-                                        <div class="col-lg-offset-2 col-lg-10">
-                                            <input type="hidden" name="type" id="type" value="1">
-                                            <input type="hidden" name="partner_section" value="">
-                                            <button class="btn btn-success" type="button" onclick="add_lead_prospect('notrefagent')">Save Changes</button> &nbsp;&nbsp;&nbsp;
-                                            <button class="btn btn-default" type="button" onclick="cancel_lead_prospect('notrefagent')">Cancel</button>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <div class="tab-pane" role="tabpanel" id="email_campaign">
-                                <div class="panel-body">
-                                    <h3>Email Campaign</h3> 
-
-                                    <div class="form-group">
-                                        <div class="col-lg-offset-2 col-lg-10">
-                                            <input type="hidden" name="type" id="type" value="1">
-                                            <input type="hidden" name="partner_section" value="">
-                                            <button class="btn btn-success" type="button" onclick="add_lead_prospect('notrefagent')">Save Changes</button> &nbsp;&nbsp;&nbsp;
-                                            <button class="btn btn-default" type="button" onclick="cancel_lead_prospect('notrefagent')">Cancel</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" role="tabpanel" id="other_info">
-                                <div class="panel-body">
-                                    <h3>Other Info</h3>                                    
-                                                           
-                                    <div class="form-group">
-                                        <div class="col-lg-offset-2 col-lg-10">
-                                            <input type="hidden" name="type" id="type" value="1">
-                                            <input type="hidden" name="partner_section" value="">
-                                            <button class="btn btn-success" type="button" onclick="add_lead_prospect('notrefagent')">Save Changes</button> &nbsp;&nbsp;&nbsp;
-                                            <button class="btn btn-default" type="button" onclick="cancel_lead_prospect('notrefagent')">Cancel</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
             <div class="ibox float-e-margins">
                 <a class="btn btn-success btn-xs" href="javascript:void(0);"
                    onclick="show_lead_ref_modal('add', '');"><i class="fa fa-plus"></i> Add Type Of Contact Referral</a>

@@ -153,7 +153,7 @@ if (!empty($action_list)):
                                             <?php
                                             if (count($action_staffs) != 1) {
                                                 echo '<span class="text-success">' . $action["department_name"] . '</span><br>';
-                                                if ($action['department_id'] == 2 || $action['department_id']) {
+                                                if ($action['department_id'] == 2) {
                                                     echo '<span class="text-info">' . get_office_name_by_office_id($action['office_id']) . '</span>';
                                                 } else {
                                                     echo '<span class="text-info">' . get_office_info_by_id('17')['office_id'] . '</span>';
@@ -161,7 +161,7 @@ if (!empty($action_list)):
                                             } else {
                                                 echo '<span class="text-success">' . staff_info_by_id($action_staffs[0]['staff_id'])['full_name'] . '</span><br>' . $action["department_name"] . '<br>';
 
-                                                if ($action['department_id'] == 2 || $action['department_id']) {
+                                                if ($action['department_id'] == 2) {
                                                     echo '<span class="text-info">' . get_office_name_by_office_id($action['office_id']) . '</span>';
                                                 } else {
                                                     echo '<span class="text-info">' . get_office_info_by_id('17')['office_id'] . '</span>';

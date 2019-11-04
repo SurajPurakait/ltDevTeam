@@ -16,7 +16,10 @@ if ($result = mysqli_query($conn, $sql)) {
     if (mysqli_num_rows($result) > 0) {
         while ($ld = mysqli_fetch_array($result)) {
             if ($ld['status'] == 3) {
-                $office_info = 'SELECT * from office where id="' . $ld['office'] . '"';
+                $ofc_deatils_sql = 'SELECT * from office where id="' . $ld['office'] . '"';
+                $office_details = mysqli_query($conn,$ofc_deatils_sql);
+                $office_info = mysqli_fetch_assoc($office_details);
+
                 $current_datetime = strtotime(date('Y-m-d'));
                 $submisstion_datetime = strtotime($ld['submission_date']);
                 $datediff = $current_datetime - $submisstion_datetime;
@@ -45,13 +48,28 @@ if ($result = mysqli_query($conn, $sql)) {
                         while ($rowval = mysqli_fetch_array($email_content_sql_result)) {
                             $email_subject = $rowval['subject'];
                             $email_body = urldecode($rowval['body']);
-                            // Set veriables --- #name, #type, #lead_type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #lead_source_detail, #office_name, #office_address, #office_phone_number
+                            // Set veriables --- #name, #type, #lead_type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #source_detail, #office_name, #office_address, #office_phone_number
                             $contact_type = 'Unknown';
-                            $contact_type_query = mysqli_query($conn, 'SELECT * FROM ' . ($ld['type'] == 1 ? '`type_of_contact_prospect`' : '`type_of_contact_referral`') . ' WHERE `id` = ' . $ld['type_of_contact']);
+                            $contact_type_query = mysqli_query($conn, 'SELECT * FROM ' . (($ld['type'] == 1) ? '`type_of_contact_prospect`' : '`type_of_contact_referral`') . ' WHERE `id` = ' . $ld['type_of_contact']);
                             if (mysqli_num_rows($contact_type_query) > 0) {
                                 $contact_type_result = mysqli_fetch_array($contact_type_query);
                                 $contact_type = $contact_type_result['name'];
                             }
+                            if ($ld['type'] == '1') {
+                                $lead_type_query = mysqli_query($conn, 'SELECT * FROM lead_type WHERE `id` = "1"');    
+                            } elseif ($ld['type'] == '3') {
+                                $lead_type_query = mysqli_query($conn, 'SELECT * FROM lead_type WHERE `id` = "2"');
+                            }
+                            if (mysqli_num_rows($lead_type_query) > 0) {
+                                $lead_type_result = mysqli_fetch_array($lead_type_query);
+                                $lead_type = $lead_type_result['type'];
+                            }
+                            if ($ld['type'] == '1') {  
+                                $lead_type_name = 'Client Lead';
+                            } elseif ($ld['type'] == '3') {
+                                $lead_type_name = 'Partner Lead';
+                            }
+
                             $lead_source = '';
                             if ($ld['lead_source'] != '') {
                                 $lead_source_query = mysqli_query($conn, 'SELECT * FROM `lead_prospect` WHERE `id` = ' . $ld['lead_source']);
@@ -64,21 +82,22 @@ if ($result = mysqli_query($conn, $sql)) {
                             $staff_result = mysqli_fetch_array($staff_query);
                             $veriable_array = [
                                 'name' => $ld['first_name'],
-                                'type_of_contact' => $contact_type,
-                                'company_name' => $ld['company_name'],
+                                'type' => $lead_type,
+                                'company' => $ld['company_name'],
                                 'phone' => $ld['phone1'],
                                 'email' => $ld['email'],
                                 'staff_name' => $staff_result['last_name'] . ', ' . $staff_result['first_name'] . ' ' . $staff_result['middle_name'],
                                 'staff_office' => $staff_result['staff_office'],
                                 'staff_phone' => $staff_result['phone'],
                                 'staff_email' => $staff_result['user'],
-                                'date_first_contact' => ($lb['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($lb['date_of_first_contact'])) : '',
+                                'first_contact_date' => ($ld['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($ld['date_of_first_contact'])) : '',
                                 'lead_source' => $lead_source,
-                                'lead_source_detail' => $lb['lead_source_detail'],
-                                'lead_type' => $lead_result['type'],
+                                'source_detail' => $ld['lead_source_detail'],
+                                'lead_type' => $lead_type_name,
                                 'office_phone_number' => $office_info['phone'],
                                 'office_address' => $office_info['address'],
-                                'office_name' => $office_info['name']
+                                'office_name' => $office_info['name'],
+                                'requested_by' => $staff_result['last_name'] . ', ' . $staff_result['first_name']
                             ];
                             foreach ($veriable_array as $index => $value) {
                                 if ($value != '') {
@@ -206,13 +225,29 @@ if ($result = mysqli_query($conn, $sql)) {
                         while ($rowval = mysqli_fetch_array($email_content_sql_result)) {
                             $email_subject = $rowval['subject'];
                             $email_body = urldecode($rowval['body']);
-                            // Set veriables --- #name, #type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #lead_source_detail
+                            // Set veriables --- #name, #type,, #lead_type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #source_detail,, #office_name, #office_address, #office_phone_number
                             $contact_type = 'Unknown';
                             $contact_type_query = mysqli_query($conn, 'SELECT * FROM ' . ($ld['type'] == 1 ? '`type_of_contact_prospect`' : '`type_of_contact_referral`') . ' WHERE `id` = ' . $ld['type_of_contact']);
                             if (mysqli_num_rows($contact_type_query) > 0) {
                                 $contact_type_result = mysqli_fetch_array($contact_type_query);
                                 $contact_type = $contact_type_result['name'];
                             }
+
+                            if ($ld['type'] == '1') {
+                                $lead_type_query = mysqli_query($conn, 'SELECT * FROM lead_type WHERE `id` = "1"');    
+                            } elseif ($ld['type'] == '3') {
+                                $lead_type_query = mysqli_query($conn, 'SELECT * FROM lead_type WHERE `id` = "2"');
+                            }
+                            if (mysqli_num_rows($lead_type_query) > 0) {
+                                $lead_type_result = mysqli_fetch_array($lead_type_query);
+                                $lead_type = $lead_type_result['type'];
+                            }
+                            if ($ld['type'] == '1') {  
+                                $lead_type_name = 'Client Lead';
+                            } elseif ($ld['type'] == '3') {
+                                $lead_type_name = 'Partner Lead';
+                            }
+
                             $lead_source = '';
                             if ($ld['lead_source'] != '') {
                                 $lead_source_query = mysqli_query($conn, 'SELECT * FROM `lead_prospect` WHERE `id` = ' . $ld['lead_source']);
@@ -225,21 +260,22 @@ if ($result = mysqli_query($conn, $sql)) {
                             $staff_result = mysqli_fetch_array($staff_query);
                             $veriable_array = [
                                 'name' => $ld['first_name'],
-                                'type_of_contact' => $contact_type,
-                                'company_name' => $ld['company_name'],
+                                'type' => $lead_type,
+                                'company' => $ld['company_name'],
                                 'phone' => $ld['phone1'],
                                 'email' => $ld['email'],
                                 'staff_name' => $staff_result['last_name'] . ', ' . $staff_result['first_name'] . ' ' . $staff_result['middle_name'],
                                 'staff_office' => $staff_result['staff_office'],
                                 'staff_phone' => $staff_result['phone'],
                                 'staff_email' => $staff_result['user'],
-                                'date_first_contact' => ($lb['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($lb['date_of_first_contact'])) : '',
+                                'first_contact_date' => ($ld['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($ld['date_of_first_contact'])) : '',
                                 'lead_source' => $lead_source,
-                                'lead_source_detail' => $lb['lead_source_detail'],
-                                'lead_type' => $lead_result['type'],
+                                'source_detail' => $ld['lead_source_detail'],
+                                'lead_type' => $lead_type_name,
                                 'office_phone_number' => $office_info['phone'],
                                 'office_address' => $office_info['address'],
-                                'office_name' => $office_info['name']
+                                'office_name' => $office_info['name'],
+                                'requested_by' => $staff_result['last_name'] . ', ' . $staff_result['first_name']
                             ];
                             foreach ($veriable_array as $index => $value) {
                                 if ($value != '') {

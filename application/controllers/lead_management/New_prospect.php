@@ -14,7 +14,7 @@ class New_prospect extends CI_Controller {
         }
     }
 
-    public function index($type = "") {
+    public function index($type="") {
         $this->load->layout = 'dashboard';
         // $title = "Create New Prospect";
         $title = "Leads Dashboard / Add New";
@@ -23,10 +23,9 @@ class New_prospect extends CI_Controller {
         // $render_data['main_menu'] = 'lead_management';
         $render_data['menu'] = 'new_lead';
         $render_data['header_title'] = $title;
-        if ($type != '') {
-            $render_data['lead_type'] = $type;
-        }
+        $render_data['lead_types'] = $type;
         $render_data["type_of_contact"] = $this->lm->get_lead_types();
+        $render_data["type_of_leads"] = $this->lm->get_lead_type_for_mail();
         $render_data["lead_source"] = $this->lm->get_lead_sources();
         $render_data["lead_agents"] = $this->lm->get_lead_agents();
         $render_data["states"] = $this->system->get_all_state();
@@ -37,7 +36,6 @@ class New_prospect extends CI_Controller {
     }
 
     public function insert_new_prospect() {
-        // print_r(post());exit;
         $email = post("email");
         if ($this->lm->duplicate_email_check($email)) {
             echo 0;
@@ -56,16 +54,16 @@ class New_prospect extends CI_Controller {
             if (post('mail_campaign_status') == 1) {
                 /* mail section */
                 $user_email = post("email");
-               // $config = Array(
-               //     'protocol' => 'smtp',
-               //     'smtp_host' => 'ssl://smtp.gmail.com',
-               //     'smtp_port' => 465,
-               //     'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-               //     'smtp_pass' => 'codetestml0016@123', // change it to yours
-               //     'mailtype' => 'html',
-               //     'charset' => 'utf-8',
-               //     'wordwrap' => TRUE
-               // );
+                // $config = Array(
+                //    'protocol' => 'smtp',
+                //    'smtp_host' => 'ssl://smtp.gmail.com',
+                //    'smtp_port' => 465,
+                //    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+                //    'smtp_pass' => 'codetestml0016@123', // change it to yours
+                //    'mailtype' => 'html',
+                //    'charset' => 'utf-8',
+                //    'wordwrap' => TRUE
+                // );
 
                 $config = Array(
                     //'protocol' => 'smtp',
@@ -78,10 +76,10 @@ class New_prospect extends CI_Controller {
                     'wordwrap' => TRUE
                 );
                 $lead_result = $this->lm->view_leads_record($id);
-                if (post('lead_type') == 'client_lead') {
+                if (post('lead_type') == '1') {
                     $mail_data = $this->lm->get_campaign_mail_data(1, post("language"), 1);    
                     $contact_type = $this->lm->get_type_of_contact_by_id(1);
-                } elseif (post('lead_type') == 'partner_lead') {
+                } elseif (post('lead_type') == '2') {
                     $mail_data = $this->lm->get_campaign_mail_data(2, post("language"), 1);
                     $contact_type = $this->lm->get_type_of_contact_by_id(2);
                 }
@@ -102,6 +100,12 @@ class New_prospect extends CI_Controller {
                 $lead_source = $this->lm->get_lead_source_by_id(post("lead_source"));
                 $office_info = $this->administration->get_office_by_id(post('office'));
                 $requested_by = $this->system->get_staff_info($lead_result['staff_requested_by']);
+                if ($lead_result['type'] == '1') {  
+                    $lead_type_name = 'Client Lead';
+                } elseif ($lead_result['type'] == '3') {
+                    $lead_type_name = 'Partner Lead';
+                }
+
                 // Set veriables --- #name, #type, #lead_type, #company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #source_detail, #office_name, #office_address, #office_phone_number
                 $veriable_array = [
                     'name' => $lead_result['first_name'],
@@ -116,11 +120,11 @@ class New_prospect extends CI_Controller {
                     'first_contact_date' => ($lead_result['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($lead_result['date_of_first_contact'])) : '',
                     'lead_source' => $lead_source['name'],
                     'source_detail' => $lead_result['lead_source_detail'],
-                    'lead_type' => $lead_result['type'],
+                    'lead_type' => $lead_type_name,
                     'office_phone_number' => $office_info['phone'],
                     'office_address' => $office_info['address'],
                     'office_name' => $office_info['name'],
-                    'requested_by' =>  $requested_by
+                    'requested_by' =>  $requested_by['first_name'].' '.$requested_by['last_name']
                 ];
 
                 foreach ($veriable_array as $index => $value) {

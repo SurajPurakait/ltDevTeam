@@ -24,7 +24,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Existing Client<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control type_of_client" name="type_of_client" id="type_of_client_ddl" onchange="clientTypeChange(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1);" title="Type Of Client" required>
+                                <select class="form-control type_of_client" name="type_of_client" id="type_of_client_ddl" onchange="clientTypeChange(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1); clientTypeYes(this.value);" title="Type Of Client" required>
                                     <option value="">Select an option</option>
                                     <option value="0">Yes</option>
                                     <option selected value="1">No</option>
@@ -178,7 +178,6 @@
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
-
 
                         <div class="hr-line-dashed"></div>
                         <h3>Account number where Sales Tax will be debited</h3>

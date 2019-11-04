@@ -674,5 +674,14 @@ class Patch extends CI_Controller {
         }
         echo implode(', ', $order_id_array) . ' orders has been canceled';
     }
-
+    public function remove_old_mail_campaign() {
+        $lead_mail_data = $this->db->get('lead_mail_chain')->result_array();
+        foreach ($lead_mail_data as $lmd) {
+            if ($lmd['lead_type'] == '0') {
+                $this->db->where('lead_type', '0');
+                $this->db->delete('lead_mail_chain');
+            }
+        }
+        echo "Old Mail Campaign Data's are Successfully Removed";
+    }
 }

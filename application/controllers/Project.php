@@ -276,10 +276,11 @@ class Project extends CI_Controller {
         $client_type = post("client_type");
         $client_id = post("client_id");
         $template_cat_id=post('template_cat_id');
+        $month=post('month');
         if (post('page_number') != 0) {
             $render_data['page_number'] = post('page_number');
         }
-        $render_data["project_list"] = $this->Project_Template_model->get_project_list($request, $status, $template_id, $office_id, $department_id, $filter_assign, $filter_data, $sos_value, $sort_criteria, $sort_type, $client_type, $client_id,$template_cat_id);
+        $render_data["project_list"] = $this->Project_Template_model->get_project_list($request, $status, $template_id, $office_id, $department_id, $filter_assign, $filter_data, $sos_value, $sort_criteria, $sort_type, $client_type, $client_id,$template_cat_id,$month);
         $this->load->view("projects/project_dashboard", $render_data);
     }
 

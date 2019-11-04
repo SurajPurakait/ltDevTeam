@@ -456,6 +456,8 @@ $staffrole = $staff_info['role'];
     }
     var reflactFilterWithSummery = function (status, requestType) {
         clearFilter();
+        variableArray = [];
+        elementArray = [];
         $("select.variable-dropdown:first").val(6);
         var statusArray = status.split('-');
         $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[status][]'});
@@ -470,6 +472,6 @@ $staffrole = $staff_info['role'];
         $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
         $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
         elementArray.push($("select.condition-dropdown:eq(1)"));
-        variableArray.push(6);
+        variableArray.push(11);
     }
 </script>

@@ -976,15 +976,15 @@ class Billing_model extends CI_Model {
 
     public function get_invoice_filter_element_value($element_key, $office) {
         $tracking_array = [
-                ["id" => 1, "name" => "Not Started"],
-                ["id" => 2, "name" => "Started"],
-                ["id" => 3, "name" => "Completed"],
-                ["id" => 7, "name" => "Canceled"]
+            ["id" => 1, "name" => "Not Started"],
+            ["id" => 2, "name" => "Started"],
+            ["id" => 3, "name" => "Completed"],
+            ["id" => 7, "name" => "Canceled"]
         ];
         $status_array = [
-                ["id" => 1, "name" => "Unpaid"],
-                ["id" => 2, "name" => "Partial"],
-                ["id" => 3, "name" => "Paid"]
+            ["id" => 1, "name" => "Unpaid"],
+            ["id" => 2, "name" => "Partial"],
+            ["id" => 3, "name" => "Paid"]
         ];
         switch ($element_key):
             case 1: {
@@ -1007,8 +1007,8 @@ class Billing_model extends CI_Model {
                 break;
             case 5: {
                     return [
-                            ["id" => 1, "name" => "Business Client"],
-                            ["id" => 2, "name" => "Individual"]
+                        ["id" => 1, "name" => "Business Client"],
+                        ["id" => 2, "name" => "Individual"]
                     ];
                 }
                 break;
@@ -1048,8 +1048,8 @@ class Billing_model extends CI_Model {
                 break;
             case 11: {
                     return [
-                            ["id" => 'byme', "name" => "By ME"],
-                            ["id" => 'tome', "name" => "By Others"]
+                        ["id" => 'byme', "name" => "By ME"],
+                        ["id" => 'tome', "name" => "By Others"]
                     ];
                 }
                 break;
@@ -1160,7 +1160,6 @@ class Billing_model extends CI_Model {
         }
     }
 
-    
     public function save_order_on_invoice($invoice_id, $save_type = 'create') {
         $invoice_info = $this->db->get_where('invoice_info', ['id' => $invoice_id])->row_array();
         if ($invoice_info['is_order'] == 'n') {
@@ -1260,8 +1259,7 @@ class Billing_model extends CI_Model {
             return true;
         }
     }
-    
-    
+
     public function billing_list($status = '', $by = '', $office = '', $payment_status = '', $reference_id = '', $filter_data = [], $sort = []) {
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
@@ -1383,7 +1381,33 @@ class Billing_model extends CI_Model {
                             $is_status = 'y';
                         }
                         if (!empty($filter)) {
-                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . implode('", "', $filter) . '") ';
+                            if ($filter_key == 'request_type') {
+                                if (implode('", "', $filter) == 'byme') {
+                                    $where['inv.created_by'] = 'AND `inv`.`created_by` = ' . $staff_id . ' ';
+                                } else if (implode('", "', $filter) == 'tome') {
+                                    if (in_array(2, $departments)) {
+                                        if ($staffrole == 2) {      // frinchisee manager
+                                            $where['inv.created_by'] = 'AND `inv`.`created_by` != ' . $staff_id . ' ';
+                                            $where['indt.office'] = 'AND `indt`.`office` IN (' . $staff_office . ') ';
+                                        } else {
+                                            return [];
+                                        }
+                                    } else {  // admin/corporate
+                                        $where['inv.created_by'] = 'AND `inv`.`created_by` != ' . $staff_id . ' ';
+                                    }
+                                } else {
+                                    if (in_array(2, $departments)) {
+                                        $where['inv.created_by'] = 'AND `inv`.`created_by` = ' . $staff_id . ' ';
+                                        if ($staffrole == 2) {      // frinchisee manager
+                                            $where['indt.office'] = 'AND `indt`.`office` IN (' . $staff_office . ') ';
+                                        } else {
+                                            return [];
+                                        }
+                                    }
+                                }
+                            } else {
+                                $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . implode('", "', $filter) . '") ';
+                            }
                         }
                     }
                 }

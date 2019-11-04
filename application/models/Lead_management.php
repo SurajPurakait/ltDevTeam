@@ -372,9 +372,11 @@ Class Lead_management extends CI_Model {
             $added_by = '';
         }
 
-        if (isset($data["refer_lead"])) {
+        if (isset($data["refer_lead"]) && $data["refer_lead"] != '') {
             $referred_lead=$data["refer_lead"];
             unset($data["refer_lead"]);
+        } else {
+            $referred_lead = '';
         }
         if (isset($data["sender_email"])) {
             unset($data["sender_email"]);
@@ -442,9 +444,9 @@ Class Lead_management extends CI_Model {
             $partner_creator = $data['partner_creator'];
         }
         if (isset($data['lead_type'])) {
-            if ($data['lead_type'] == 'client_lead') {
+            if ($data['lead_type'] == '1') {
                 $data['type'] = '1';
-            } elseif ($data['lead_type'] == 'partner_lead') {
+            } elseif ($data['lead_type'] == '2') {
                 $data['type'] = '3';
             }
         }
@@ -1139,6 +1141,15 @@ Class Lead_management extends CI_Model {
         } else {
             $data['lead_agent'] = '';
         }
+        if (isset($data['lead_type'])) {
+            if ($data['lead_type'] == '1') {
+                $data['type'] = '1';
+            } elseif ($data['lead_type'] == '2') {
+                $data['type'] = '3';
+            }
+        }
+        unset($data['lead_type']);
+
         unset($data['lead_client']);
         unset($data['lead_client_other']);
 
@@ -1179,6 +1190,7 @@ Class Lead_management extends CI_Model {
         }if ($lead_type == 2) {
             $reference = 'partner';
         }
+        $staff = [];
         $staff[0] = sess('user_id');
         $this->system->save_general_notification($reference, $lead_id, 'edit', $staff, '', $lead_type);
 
@@ -1201,7 +1213,6 @@ Class Lead_management extends CI_Model {
         if ($usertype != 1) {
             $sql .= " and staff_requested_by='" . $userid . "'";
         }
-
         return $this->db->query($sql)->num_rows();
     }
 
@@ -1367,7 +1378,7 @@ Class Lead_management extends CI_Model {
             }
         } else {
             if ($check['id'] == $data['email_id']) {
-                $update_data = array('service' => $data['service'],
+                $update_data = array('lead_type' => $data['leadtype'],
                     'language' => $data['language'],
                     'type' => $data['day'],
                     'subject' => $data['subject'],
