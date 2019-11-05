@@ -85,8 +85,6 @@
             success: function (result) {
                 if (result.trim() == "1") {
                     swal({title: "Success!", text: "Status Successfully Updated!", type: "success"}, function () {
-                        // load_action_dashboard();
-                        // $('#modal_area').modal('toggle');
                         location.reload(true);
                     });
                 } else {
