@@ -25,7 +25,6 @@ class Home extends CI_Controller {
             2 => "Tracking",
             3 => "Office",
             4 => "Department",
-            //4 => "Staff",
             5 => "Start Date",
             6 => "Complete Date",
             7 => "ID",
@@ -33,7 +32,8 @@ class Home extends CI_Controller {
             9 => "Assigned To",
             10 => "Client Id",
             11 => "Creation Date",
-            12 => "Due Date"
+            12 => "Due Date",
+            13 => "Request Type"
         ];
 
         $this->sales_tax_filter_element = [
