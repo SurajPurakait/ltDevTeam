@@ -16,9 +16,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Partner Lead Type<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 control-label">Lead Type<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select required class="form-control" id="lead_type" title="Type of Contact" name="lead_type">
+                                <select required class="form-control" id="lead_type" title="Type of Contact" name="lead_type" onchange="change_type_of_contact(this.value)">
                                         <option value="1" <?= ($data['type'] == '1') ? 'selected':''; ?>>Client</option>
                                         <option value="2" <?= ($data['type'] == '3') ? 'selected':''; ?>>Partner</option>
                                 </select>
@@ -29,10 +29,8 @@
                             <label class="col-lg-2 control-label">Type of Contact
                                 <span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select required class="form-control" title="Type of Contact" name="type_of_contact">
-                                    <?php foreach ($type_of_contact as $value): ?>
-                                        <option value="<?= $value["id"]; ?>" <?= ($value["id"] == $data["type_of_contact"]) ? "selected" : ""; ?>><?= $value["name"]; ?></option>
-                                    <?php endforeach; ?>
+                                <select required class="form-control" title="Type of Contact" id="contact_type" name="type_of_contact">
+                                    
                                 </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
@@ -61,7 +59,13 @@
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
-
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Website</label>
+                            <div class="col-lg-10">
+                                <input placeholder="" class="form-control" type="text" id="website" name="website" title="Website" value="<?= $data["website"]; ?>">
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Address</label>
                             <div class="col-lg-10">
@@ -220,6 +224,7 @@
     </div>
 </div>
 <script>
+    change_type_of_contact(("<?= $data['type'] == '1'; ?>") ? 1:2);
     loadStaffDLLValue(getIdVal('office'), '<?= ($data["lead_staff"] != 0) ? $data["lead_staff"] : ''; ?>');
     function changeLeadSource(lead_source_id) {
         if (parseInt(lead_source_id) == 7) {
