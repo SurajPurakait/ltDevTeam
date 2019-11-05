@@ -83,6 +83,7 @@
                 id: id
             },
             success: function (result) {
+                console.log(result);
                 if (result.trim() == "1") {
                     swal({title: "Success!", text: "Status Successfully Updated!", type: "success"}, function () {
                         location.reload(true);
