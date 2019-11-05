@@ -82,7 +82,6 @@ Class Lead_management extends CI_Model {
     }
 
     public function get_type_of_contact_by_id($id) {
-        // return $this->db->get_where("type_of_contact_prospect", ['id' => $id])->row_array();
         return $this->db->get_where("lead_type", ['id' => $id])->row_array();
     }
     public function get_type_of_contact_prospect($id) {
@@ -2017,5 +2016,12 @@ Class Lead_management extends CI_Model {
         $this->db->set('assigned_status', 'y');
         $this->db->where('id', $lead_id);
         return $this->db->update('lead_management');
+    }
+    public function get_typeof_contact($type) {
+        if ($type == '1') {
+            return $this->db->get('type_of_contact_prospect')->result_array();
+        } elseif ($type == '2') {
+            return $this->db->get('type_of_contact_referral')->result_array();
+        }
     }
 }

@@ -827,13 +827,13 @@ function add_event() {
 
 }
 
-function change_zip_by_country(val) {
-    if (val == '230') {
-        $("#zip_div").show();
-    } else {
-        $("#zip_div").hide();
-    }
-}
+// function change_zip_by_country(val) {
+//     if (val == '230') {
+//         $("#zip_div").show();
+//     } else {
+//         $("#zip_div").hide();
+//     }
+// }
 
 var mail_campaign_status_change = (id, value) => {
     $.ajax({
@@ -981,4 +981,34 @@ function sort_lead_dashboard(sort_criteria = '', sort_type = '') {
         }
     });
 
+}
+
+function change_type_of_contact(lead_type) {
+    $.ajax({
+        type: "POST",
+        data: {
+            lead_type: lead_type
+        },
+        url: base_url + 'lead_management/home/get_typeof_contact',
+        dataType: "html",
+        success: function (result) {
+            var type_contact_list = document.getElementById('contact_type');
+            type_contact_list.innerHTML = "";
+            if (result != 0) {
+                var lead = JSON.parse(result);
+                // type_contact_list.options[type_contact_list.options.length] = new Option("Select an option", "");
+                for (var i = 0; i < lead.length; i++) {
+                    type_contact_list.options[type_contact_list.options.length] = new Option(lead[i].name, lead[i].id);
+                }
+            } else {
+                type_contact_list.options[type_contact_list.options.length] = new Option("Select an option", "");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
 }

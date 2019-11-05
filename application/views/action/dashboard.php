@@ -56,14 +56,13 @@ $role = $user_info['role'];
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-12">                        
-                                            <div class="">
-                                                <button class="btn btn-success" type="button" onclick="actionFilter()">Apply Filter</button>
-                                            </div>
-                                        </div>
                                         <div class="col-md-12">
-                                            <h4 class="m-t-5 m-r-5"><span class="text-success" style="display: none;" id="clear_filter">By Me - Started &nbsp; </span><a href="javascript:void(0);" onclick="loadActionDashboard('', 'byme_tome_task', '', '', '', '');" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></h4>
+                                            <button class="btn btn-success" type="button" onclick="actionFilter()">Apply Filter</button>&nbsp;
+                                            <a href="javascript:void(0);" onclick="loadActionDashboard('', 'byme_tome_task', '', '', '', '');" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
                                         </div>
+                                        <!--                                        <div class="col-md-9">
+                                                                                    <h4 class="m-r-5"><span class="text-success" style="display: none;" id="clear_filter">By Me - Started &nbsp; </span><a href="javascript:void(0);" onclick="loadActionDashboard('', 'byme_tome_task', '', '', '', '');" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></h4>
+                                                                                </div>-->
                                     </div>
                                 </form>
                             </div>
@@ -87,17 +86,17 @@ $role = $user_info['role'];
                                             <th>By Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-0">
-                                                    <span class="label label-success" id="requested_by_me_new" onclick="loadActionDashboard(0, 'byme', '', '', '', '');"><?= action_list('byme', '0'); ?></span>
+                                                    <span class="label label-success" id="requested_by_me_new" onclick="reflactFilterWithSummery('0-New', 'byme-By ME');loadActionDashboard(0, 'byme', '', '', '', '');"><?= action_list('byme', '0'); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-1">
-                                                    <span class="label label-warning" id="requested_by_me_started" onclick="loadActionDashboard(1, 'byme', '', '', '', '');"><?= action_list('byme', '1'); ?></span>
+                                                    <span class="label label-warning" id="requested_by_me_started" onclick="reflactFilterWithSummery('1-Started', 'byme-By ME');loadActionDashboard(1, 'byme', '', '', '', '');"><?= action_list('byme', '1'); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-2">
-                                                    <span class="label label-primary" id="requested_by_me_completed" onclick="loadActionDashboard(6, 'byme', '', '', '', '');"><?= action_list('byme', '6'); ?></span>
+                                                    <span class="label label-primary" id="requested_by_me_completed" onclick="reflactFilterWithSummery('6-Resolved', 'byme-By ME');loadActionDashboard(6, 'byme', '', '', '', '');"><?= action_list('byme', '6'); ?></span>
                                                 </a>
                                             </td>
                                             <!-- <td class="text-center">
@@ -119,17 +118,17 @@ $role = $user_info['role'];
                                             <th>To Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-0">
-                                                    <span class="label label-success" id="requested_to_me_new" onclick="loadActionDashboard(0, 'tome', '', '', '', '');"><?= action_list('tome', '0'); ?></span>
+                                                    <span class="label label-success" id="requested_to_me_new" onclick="reflactFilterWithSummery('0-New', 'tome-To ME');loadActionDashboard(0, 'tome', '', '', '', '');"><?= action_list('tome', '0'); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-1">
-                                                    <span class="label label-warning" id="requested_to_me_started" onclick="loadActionDashboard(1, 'tome', '', '', '', '');"><?= action_list('tome', '1'); ?></span>
+                                                    <span class="label label-warning" id="requested_to_me_started" onclick="reflactFilterWithSummery('1-Started', 'tome-To ME');loadActionDashboard(1, 'tome', '', '', '', '');"><?= action_list('tome', '1'); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-2">
-                                                    <span class="label label-primary" id="requested_to_me_completed" onclick="loadActionDashboard(6, 'tome', '', '', '', '');"><?= action_list('tome', '6'); ?></span>
+                                                    <span class="label label-primary" id="requested_to_me_completed" onclick="reflactFilterWithSummery('6-Resolved', 'tome-To ME');loadActionDashboard(6, 'tome', '', '', '', '');"><?= action_list('tome', '6'); ?></span>
                                                 </a>
                                             </td>
                                             <!-- <td class="text-center">
@@ -153,17 +152,17 @@ $role = $user_info['role'];
                                                 <th>By Others</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byother-0">
-                                                        <span class="label label-success" id="requested_by_other_new" onclick="loadActionDashboard(0, 'byother', '', '', '', '');"><?= action_list('byother', '0'); ?></span>
+                                                        <span class="label label-success" id="requested_by_other_new" onclick="reflactFilterWithSummery('0-New', 'byother-By Others');loadActionDashboard(0, 'byother', '', '', '', '');"><?= action_list('byother', '0'); ?></span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byother-1">
-                                                        <span class="label label-warning" id="requested_by_other_started" onclick="loadActionDashboard(1, 'byother', '', '', '', '');"><?= action_list('byother', '1'); ?></span>
+                                                        <span class="label label-warning" id="requested_by_other_started" onclick="reflactFilterWithSummery('1-Started', 'byother-By Others');loadActionDashboard(1, 'byother', '', '', '', '');"><?= action_list('byother', '1'); ?></span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byother-2">
-                                                        <span class="label label-primary" id="requested_by_other_completed" onclick="loadActionDashboard(6, 'byother', '', '', '', '');"><?= action_list('byother', '6'); ?></span>
+                                                        <span class="label label-primary" id="requested_by_other_completed" onclick="reflactFilterWithSummery('6-Resolved', 'byother-By Others');loadActionDashboard(6, 'byother', '', '', '', '');"><?= action_list('byother', '6'); ?></span>
                                                     </a>
                                                 </td> 
                                                 <!-- <td class="text-center">
@@ -193,17 +192,17 @@ $role = $user_info['role'];
                                                 <th>To Others</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-0">
-                                                        <span class="label label-success" id="requested_to_other_new" onclick="loadActionDashboard(0, 'toother', '', '', '', '');"><?= action_list('toother', '0'); ?></span>
+                                                        <span class="label label-success" id="requested_to_other_new" onclick="reflactFilterWithSummery('0-New', 'toother-To Others');loadActionDashboard(0, 'toother', '', '', '', '');"><?= action_list('toother', '0'); ?></span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-1">
-                                                        <span class="label label-warning" id="requested_to_other_started" onclick="loadActionDashboard(1, 'toother', '', '', '', '');"><?= action_list('toother', '1'); ?></span>
+                                                        <span class="label label-warning" id="requested_to_other_started" onclick="reflactFilterWithSummery('1-Started', 'toother-To Others');loadActionDashboard(1, 'toother', '', '', '', '');"><?= action_list('toother', '1'); ?></span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-2">
-                                                        <span class="label label-primary" id="requested_to_other_completed" onclick="loadActionDashboard(6, 'toother', '', '', '', '');"><?= action_list('toother', '6'); ?></span>
+                                                        <span class="label label-primary" id="requested_to_other_completed" onclick="reflactFilterWithSummery('6-Resolved', 'toother-To Others');loadActionDashboard(6, 'toother', '', '', '', '');"><?= action_list('toother', '6'); ?></span>
                                                     </a>
                                                 </td> 
                                                 <!-- <td class="text-center">
@@ -226,17 +225,17 @@ $role = $user_info['role'];
                                             <th>My Tasks</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-mytask-0">
-                                                    <span class="label label-success" id="requested_mytask_new" onclick="loadActionDashboard(0, 'mytask', '', '', '', '');"><?= action_list('mytask', '0'); ?></span>
+                                                    <span class="label label-success" id="requested_mytask_new" onclick="reflactFilterWithSummery('0-New', 'mytask-My Tasks');loadActionDashboard(0, 'mytask', '', '', '', '');"><?= action_list('mytask', '0'); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-mytask-1">
-                                                    <span class="label label-warning" id="requested_mytask_started" onclick="loadActionDashboard(1, 'mytask', '', '', '', '');"><?= action_list('mytask', '1'); ?></span>
+                                                    <span class="label label-warning" id="requested_mytask_started" onclick="reflactFilterWithSummery('1-Started', 'mytask-My Tasks');loadActionDashboard(1, 'mytask', '', '', '', '');"><?= action_list('mytask', '1'); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-mytask-3">
-                                                    <span class="label label-primary" id="requested_mytask_completed" onclick="loadActionDashboard(6, 'mytask', '', '', '', '');"><?= action_list('mytask', '6'); ?></span>
+                                                    <span class="label label-primary" id="requested_mytask_completed" onclick="reflactFilterWithSummery('6-Resolved', 'mytask-My Tasks');loadActionDashboard(6, 'mytask', '', '', '', '');"><?= action_list('mytask', '6'); ?></span>
                                                 </a>
                                             </td>
                                             <!-- <td class="text-center">
@@ -507,7 +506,7 @@ $role = $user_info['role'];
     function changeVariable(element) {
         var divID = $(element).parent().parent().attr('id');
         var variableValue = $(element).children("option:selected").val();
-       // alert(variableValue);return false;
+        // alert(variableValue);return false;
         var checkElement = elementArray.includes(element);
         var officeValue = '';
         if (checkElement == true) {
@@ -521,14 +520,14 @@ $role = $user_info['role'];
         if (variableValue == 8) {
             var checkOfficeValue = variableArray.includes('3');
             if (checkOfficeValue == true) {
-               var officeValue = $("select[name='criteria_dropdown[office][]']").val();
-            }else{
+                var officeValue = $("select[name='criteria_dropdown[office][]']").val();
+            } else {
                 var officeValue = '';
             }
-        }else{
-             var officeValue = '';
+        } else {
+            var officeValue = '';
         }
-        
+
         $.ajax({
             type: "POST",
             data: {
@@ -541,7 +540,12 @@ $role = $user_info['role'];
                 // alert(result);return false;
                 $("#" + divID).find('.criteria-div').html(result);
                 $(".chosen-select").chosen();
-                $("#" + divID).find('.condition-dropdown').val('');
+                $("#" + divID).find('.condition-dropdown').removeAttr('disabled').val('');
+                if (variableValue == 13) {
+                    $("#" + divID).find('.condition-dropdown option:not(:eq(0),:eq(1))').remove();
+                } else {
+                    $("#" + divID).find('.condition-dropdown').html('<option value="">All Condition</option><option value="1">Is</option><option value="2">Is in the list</option><option value="3">Is not</option><option value="4">Is not in the list</option>');
+                }
                 $("#" + divID).nextAll(".filter-div").each(function () {
                     $(this).find('.remove-filter-button').trigger('click');
                 });
@@ -612,5 +616,26 @@ $role = $user_info['role'];
                 $("#" + divID).find(".search-choice-close").trigger('click');
             }
         }
+    }
+
+    var reflactFilterWithSummery = function (status, requestType) {
+        clearFilter();
+        variableArray = [];
+        elementArray = [];
+        $("select.variable-dropdown:first").val(2);
+        var statusArray = status.split('-');
+        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
+        $("select.criteria-dropdown:first").trigger("chosen:updated");
+        $("select.condition-dropdown:first").val(1).attr('disabled', true);
+        elementArray.push($("select.condition-dropdown:first"));
+        variableArray.push(2);
+        addFilterRow();
+        $("select.variable-dropdown:eq(1)").val(13);
+        var requestTypeArray = requestType.split('-');
+        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
+        $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
+        $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
+        elementArray.push($("select.condition-dropdown:eq(1)"));
+        variableArray.push(13);
     }
 </script>

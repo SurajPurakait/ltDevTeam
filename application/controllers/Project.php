@@ -29,11 +29,12 @@ class Project extends CI_Controller {
             8 => "Tracking",
             9 => "Creation Date",
             10 => "Requested By",
-            11 => "Due Date"
+            11 => "Due Date",
+            12 => "Template Category"
         ];
     }
 
-    function index($status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '',$filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='') {
+    function index($status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '', $template_cat_id = '') {
 //        echo 'kk'.$template_id;die;
         $this->load->layout = 'dashboard';
         $title = "Project Dashboard";
@@ -61,9 +62,9 @@ class Project extends CI_Controller {
         $render_data['department_id'] = $department_id;
         $render_data['request_type'] = $request_type;
         $render_data['template_id'] = $template_id;
-        $render_data['template_cat_id']=$template_cat_id;
+        $render_data['template_cat_id'] = $template_cat_id;
         $render_data['filter_element_list'] = $this->filter_element;
-        $render_data['templateIds']=$this->Project_Template_model->getTemplateIds();
+        $render_data['templateIds'] = $this->Project_Template_model->getTemplateIds();
         $render_data['due_m'] = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
         $this->load->template('projects/project', $render_data);
     }
@@ -250,9 +251,6 @@ class Project extends CI_Controller {
         unset($formdata['sort_type']);
         $filter_assign = $formdata;
         $render_data["project_list"] = $this->Project_Template_model->get_project_list('', '', '', '', '', '', $filter_assign, '', $sort_criteria, $sort_type);
-//        echo "<pre>";
-//        print_r($render_data["project_list"]);
-//        echo '</pre>';die;
         $return["result"] = $this->load->view("projects/project_dashboard", $render_data, true);
         echo json_encode($return);
     }
@@ -275,12 +273,12 @@ class Project extends CI_Controller {
         $sort_type = post("sort_type");
         $client_type = post("client_type");
         $client_id = post("client_id");
-        $template_cat_id=post('template_cat_id');
-        $month=post('month');
+        $template_cat_id = post('template_cat_id');
+        $month = post('month');
         if (post('page_number') != 0) {
             $render_data['page_number'] = post('page_number');
         }
-        $render_data["project_list"] = $this->Project_Template_model->get_project_list($request, $status, $template_id, $office_id, $department_id, $filter_assign, $filter_data, $sos_value, $sort_criteria, $sort_type, $client_type, $client_id,$template_cat_id,$month);
+        $render_data["project_list"] = $this->Project_Template_model->get_project_list($request, $status, $template_id, $office_id, $department_id, $filter_assign, $filter_data, $sos_value, $sort_criteria, $sort_type, $client_type, $client_id, $template_cat_id, $month);
         $this->load->view("projects/project_dashboard", $render_data);
     }
 

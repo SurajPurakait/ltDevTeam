@@ -961,3 +961,5 @@ ALTER TABLE `project_main` ADD `template_cat_id` INT(11) NOT NULL AFTER `id`;
 /* run patch remove_old_mail_campaign */
 
 /* live end */
+/* 05.11.2019 */
+ALTER TABLE `lead_management` ADD `website` VARCHAR(255) NOT NULL AFTER `company_name`;
