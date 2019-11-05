@@ -780,7 +780,7 @@ class Home extends CI_Controller {
         $this->load->model('system');
         $render_data['staffInfo'] = staff_info();
         $render_data['state'] = $this->system->get_all_state();
-        $render_data['completed_orders'] = $this->service->completed_orders(47);
+        $render_data['completed_orders'] = $this->service->completed_orders('',47);
         $render_data['county_details'] = $this->action_model->get_county_name();
         $render_data['sales_tax_process_dtls'] = $this->action_model->getSalesTaxProcessById($id);
         $this->load->template('action/view_sales_tax', $render_data);
@@ -916,7 +916,7 @@ class Home extends CI_Controller {
             $return['summary_count'][] = 'others_sales_tax_completed-' . count($this->action_model->get_sales_tax_process_list(sess('user_id'), $month_year, 'others', 2));
         }
         $month_year_array = explode('/', $month_year);
-        $return['search_month'] = date('F, Y', strtotime(date('Y') . '-' . $month_year_array[0] . '-01'));
+        $return['search_month'] = date('F, Y', strtotime($month_year_array[1] . '-' . $month_year_array[0] . '-01'));
         $data['sales_tax_process'] = $this->action_model->get_sales_tax_process_list(sess('user_id'), $month_year, $request_type, $status, $filter_data);
         $return['sales_tax_data'] = $this->load->view("action/sales_tax_process_dashboard_ajax", $data, true);
         echo json_encode($return);
