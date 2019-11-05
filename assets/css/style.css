@@ -87,6 +87,8 @@ table-1{
 .m-l-30 { margin-left: 30px !important; }
 .m-l-35 { margin-left: 35px !important; }
 .m-l-40 { margin-left: 40px !important; }
+.m-l-45 { margin-left: 45px !important; }
+.m-l-50 { margin-left: 50px !important; }
 
 .p-0 { padding: 0px !important; }
 .p-1 { padding: 1px !important; }
@@ -1374,7 +1376,7 @@ button.dim:active:before {
 .badge-primary {
     background-color: #1ab394;
     color: #FFFFFF;
-    
+
 }
 .label-primary[href]:hover {
     background-color: #09836a;
@@ -3512,19 +3514,19 @@ ol.unstyled {
     font-style: italic;
 }*/ 
 #add_sos_div ::placeholder {
-  color: #d3d3d3;
-  font-size: 18px;
-  font-weight: 600;
+    color: #d3d3d3;
+    font-size: 18px;
+    font-weight: 600;
 }
 #add_sos_div ::-moz-placeholder {
-  color: #d3d3d3;
-  font-size: 18px;
-  font-weight: 600;
+    color: #d3d3d3;
+    font-size: 18px;
+    font-weight: 600;
 }
 #add_sos_div :-ms-input-placeholder {
-  color: #d3d3d3;
-  font-size: 18px;
-  font-weight: 600;
+    color: #d3d3d3;
+    font-size: 18px;
+    font-weight: 600;
 }
 /* FOOTER */
 .footer {
@@ -7389,7 +7391,7 @@ body.skin-3 {
     right: 120px;
 }
 .service-panel .btn-assign-client {
-     position: absolute;
+    position: absolute;
     right: 168px;
     top: 0;
     border-top-left-radius: 0;
@@ -8857,27 +8859,27 @@ a.panel-title {
 }
 @media (max-width: 991px) {
     .welcome-note li {
-       top: 4px;
-   }
-    
+        top: 4px;
+    }
+
     .welcome-note h3 {
-      padding-left: 145px !important;
+        padding-left: 145px !important;
     }
 }
 @media (max-width: 600px) {
     .welcome-note li {
-       position: static;
-       background: #fff;
-   }
+        position: static;
+        background: #fff;
+    }
     .welcome-note li img {
         margin: auto;
         padding: 5px 0;
     } 
     .welcome-note h3 {
-      margin-top: 0;
-      padding: 5px 0 10px !important;
+        margin-top: 0;
+        padding: 5px 0 10px !important;
     }
-    
+
 }
 @media (max-width: 470px) {
     .filter-inner label {
@@ -8899,7 +8901,7 @@ a.panel-title {
     z-index: 99;
     border-top: 20px solid #f3f3f4;
     padding: 15px 20px 0 20px;
-    
+
 }
 .fixed-container .tab-content {
     padding-top: 153px;
@@ -8913,5 +8915,7 @@ a.panel-title {
     padding:5px 0 ;
     float: left;
     min-height:76px;
-    
+
 }
+.clear-project-btn {margin-top:-20px; margin-bottom:13px; }
+.clear-project-btn-one {margin-top:-38px; margin-bottom:13px; }
