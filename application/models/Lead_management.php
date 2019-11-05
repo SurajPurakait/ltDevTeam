@@ -937,64 +937,65 @@ Class Lead_management extends CI_Model {
                     $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
                 }
 
+                $message = "Test message";
                 // echo $email_subject; exit;
-                $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-		                    <html xmlns="http://www.w3.org/1999/xhtml">
-		                    <head>
-		                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		                    <title>TAXLEAF</title>
-		                    <style type="text/css">
-		                    body {
-		                        background-color: #FFFFFF;
-		                        margin-left: 0px;
-		                        margin-top: 0px;
-		                        margin-right: 0px;
-		                        margin-bottom: 0px;
-		                    }
-		                    .textoblanco {
-		                        font-family: Arial, Helvetica, sans-serif;
-		                        font-size: 12px;
-		                        color: #000;
-		                    }
-		                    .textoblanco {
-		                        font-family: Arial, Helvetica, sans-serif;
-		                        font-size: 12px;
-		                        color: #FFF;
-		                    }
-		                    .textonegro {
-		                        font-family: Arial, Helvetica, sans-serif;
-		                        font-size: 12px;
-		                        color: #000;
-		                    }
-		                    </style>
-		                    </head>
+                // $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+		              //       <html xmlns="http://www.w3.org/1999/xhtml">
+		              //       <head>
+		              //       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		              //       <title>TAXLEAF</title>
+		              //       <style type="text/css">
+		              //       body {
+		              //           background-color: #FFFFFF;
+		              //           margin-left: 0px;
+		              //           margin-top: 0px;
+		              //           margin-right: 0px;
+		              //           margin-bottom: 0px;
+		              //       }
+		              //       .textoblanco {
+		              //           font-family: Arial, Helvetica, sans-serif;
+		              //           font-size: 12px;
+		              //           color: #000;
+		              //       }
+		              //       .textoblanco {
+		              //           font-family: Arial, Helvetica, sans-serif;
+		              //           font-size: 12px;
+		              //           color: #FFF;
+		              //       }
+		              //       .textonegro {
+		              //           font-family: Arial, Helvetica, sans-serif;
+		              //           font-size: 12px;
+		              //           color: #000;
+		              //       }
+		              //       </style>
+		              //       </head>
 
-		                    <body>
-		                    <br />
-		                    <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
-		                      <tr>
-		                        <td><table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
-		                          <tr>
-		                            <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="250" /></td>
-		                          </tr>
-		                        </table>
-		                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-		                            <tr>
-		                              <td><img src="' . $divider_img . '" width="600" height="30" /></td>
-		                            </tr>
-		                          </table>
-		                          <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
-		                            <tr>
-		                              <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong>
-		                                </strong>' . $mail_body . '</span></p>
-		                              </td>
-		                            </tr>
-		                          </table>          
-		                          </td>
-		                      </tr>		                        
-		                    </table>
-		                    </body>
-		                    </html>';
+		              //       <body>
+		              //       <br />
+		              //       <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
+		              //         <tr>
+		              //           <td><table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+		              //             <tr>
+		              //               <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="250" /></td>
+		              //             </tr>
+		              //           </table>
+		              //            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		              //               <tr>
+		              //                 <td><img src="' . $divider_img . '" width="600" height="30" /></td>
+		              //               </tr>
+		              //             </table>
+		              //             <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
+		              //               <tr>
+		              //                 <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong>
+		              //                   </strong>' . $mail_body . '</span></p>
+		              //                 </td>
+		              //               </tr>
+		              //             </table>          
+		              //             </td>
+		              //         </tr>		                        
+		              //       </table>
+		              //       </body>
+		              //       </html>';
 
                 $this->load->library('email', $config);
                 $this->email->set_newline("\r\n");
