@@ -35,11 +35,11 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-2 control-label">Partner Lead Type<span class="text-danger">*</span></label>
+                        <label class="col-lg-2 control-label">Lead Type<span class="text-danger">*</span></label>
                         <div class="col-lg-10">
-                            <select required class="form-control" id="lead_type" title="Type of Contact" name="lead_type">
+                            <select required class="form-control" id="lead_type" title="Type of Contact" name="lead_type" onchange="change_type_of_contact(this.value)">
                                 <?php foreach ($type_of_leads as $value): ?>
-                                    <option value="<?= $value["id"]; ?>" <?= ($lead_types == $value["id"]) ? 'selected':''; ?> ><?= $value["type"]; ?></option>
+                                    <option value="<?= $value["id"]; ?>"><?= $value["type"]; ?></option>
                                 <?php endforeach; ?>
                             </select>
                             <div class="errorMessage text-danger"></div>
@@ -48,10 +48,7 @@
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Type of Contact<span class="text-danger">*</span></label>
                         <div class="col-lg-10">
-                            <select required class="form-control" id="contact_type" title="Type of Contact" name="type_of_contact">
-                                <?php foreach ($type_of_contact as $value): ?>
-                                    <option value="<?= $value["id"]; ?>"><?= $value["name"]; ?></option>
-                                <?php endforeach; ?>
+                            <select required class="form-control" id="contact_type" title="Type of Contact" name="type_of_contact">                                
                             </select>
                             <div class="errorMessage text-danger"></div>
                         </div>
@@ -79,7 +76,13 @@
                             <div class="errorMessage text-danger"></div>
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">Website</label>
+                        <div class="col-lg-10">
+                            <input placeholder="" class="form-control" type="text" id="website" name="website" title="Website">
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Address</label>
                         <div class="col-lg-10">
@@ -115,7 +118,8 @@
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Country</label>
                         <div class="col-lg-10">
-                            <select class="form-control" title="Country" name="country" onchange="change_zip_by_country(this.value)">
+                            <select class="form-control" title="Country" name="country"> 
+                                <!-- onchange="change_zip_by_country(this.value)" -->
                                 <option value="">Select</option>
                                 <?php
                                 foreach ($countries as $value):
@@ -128,7 +132,7 @@
                             <div class="errorMessage text-danger"></div>
                         </div>
                     </div>
-                    <div class="form-group" id="zip_div" style="display: none;">
+                    <div class="form-group" id="zip_div">
                         <label class="col-lg-2 control-label">Zip Code</label>
                         <div class="col-lg-10">
                             <input placeholder="" class="form-control" type="text" id="zip" name="zip" zipval="" title="Zip Code">
@@ -285,9 +289,12 @@
             </div>
             <form method="post" onsubmit="return false;">
                 <div id="email-modal-body" class="modal-body">
+                    <?php 
+                        $user_details = staff_info();
+                    ?>
                     <div class="form-group">
                         <label class="radio-inline">
-                            <input type="radio" name="sender_email" checked onchange="document.getElementById('other_email').style.display = 'none';" value="developer@leafnet.us"><b>developer@leafnet.us</b>
+                            <input type="radio" name="sender_email" checked onchange="document.getElementById('other_email').style.display = 'none';" value="<?= $user_details['user']; ?>"><b><?= $user_details['user']; ?></b>
                         </label>
                         <label class="radio-inline">
                             <input type="radio" id="other_email_radio" name="sender_email" onchange="document.getElementById('other_email').style.display = 'block';this.value = document.getElementById('other_email').value;"><b>Other</b>
@@ -376,16 +383,9 @@
                             </table>
                             <table   border="0" align="center" cellpadding="0" cellspacing="15" style="width:100%; background: #ffffff;margin-top: 5px">
                                 <tr>
-                                    <td valign="top" style="color:#000;padding: 15px" class="textoblanco" style="padding: 15px"><p><span class="textonegro"><strong><br />
-                                                    <br />
-                                                </strong><p id="mail-body"></p></span></p>
-                                        <p><span class="textonegro">Sincerely,</span></p>
-                                        <p><span class="textonegro">Moses Nae<br />
-                                                moses@taxleaf.com<br />
-                                                305-541-3980<br />
-                                                815-550-1294<br />
-                                            </span><br />
-                                        </p></td>
+                                    <td valign="top" style="color:#000;padding: 15px" class="textoblanco" style="padding: 15px"><p><span class="textonegro"><strong>
+                                        </strong><p id="mail-body"></p></span></p>    
+                                    </td>
                                 </tr>
                             </table></td>
                     </tr>
@@ -401,6 +401,7 @@
     </div>
 </div>
 <script>
+    change_type_of_contact(1);
     LeadSourceTypeChange(1);
     loadStaffDLLValue(getIdVal('office'), '');
     $(function () {

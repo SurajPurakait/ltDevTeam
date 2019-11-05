@@ -202,4 +202,12 @@ class Home extends CI_Controller {
         $render_data['office_id'] = $this->lead_management->get_office_info_by_partner_id($partner_id);
         $this->load->view("lead_management/assign_as_individual", $render_data);
     }
+    public function get_typeof_contact() {
+        $data = $this->lead_management->get_typeof_contact(post('lead_type'));
+        if (count($data) > 0) {
+            echo json_encode($data);
+        } else {
+            echo 0;
+        }
+    }
 }
