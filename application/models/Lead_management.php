@@ -1001,7 +1001,6 @@ Class Lead_management extends CI_Model {
                 $this->email->from($from, $from_name); // change it to yours
                 $this->email->reply_to($from, $from_name);
                 $this->email->to($user_email); // change it to yours
-                $this->email->cc($from);
                 $this->email->subject($email_subject);
                 $this->email->message($message);
                 if ($this->email->send()) {
