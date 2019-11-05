@@ -64,11 +64,6 @@ if ($result = mysqli_query($conn, $sql)) {
                                 $lead_type_result = mysqli_fetch_array($lead_type_query);
                                 $lead_type = $lead_type_result['type'];
                             }
-                            if ($ld['type'] == '1') {  
-                                $lead_type_name = 'Client Lead';
-                            } elseif ($ld['type'] == '3') {
-                                $lead_type_name = 'Partner Lead';
-                            }
 
                             $lead_source = '';
                             if ($ld['lead_source'] != '') {
@@ -93,7 +88,7 @@ if ($result = mysqli_query($conn, $sql)) {
                                 'first_contact_date' => ($ld['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($ld['date_of_first_contact'])) : '',
                                 'lead_source' => $lead_source,
                                 'source_detail' => $ld['lead_source_detail'],
-                                'lead_type' => $lead_type_name,
+                                'lead_type' => $contact_type,
                                 'office_phone_number' => $office_info['phone'],
                                 'office_address' => $office_info['address'],
                                 'office_name' => $office_info['name'],
@@ -242,11 +237,6 @@ if ($result = mysqli_query($conn, $sql)) {
                                 $lead_type_result = mysqli_fetch_array($lead_type_query);
                                 $lead_type = $lead_type_result['type'];
                             }
-                            if ($ld['type'] == '1') {  
-                                $lead_type_name = 'Client Lead';
-                            } elseif ($ld['type'] == '3') {
-                                $lead_type_name = 'Partner Lead';
-                            }
 
                             $lead_source = '';
                             if ($ld['lead_source'] != '') {
@@ -271,7 +261,7 @@ if ($result = mysqli_query($conn, $sql)) {
                                 'first_contact_date' => ($ld['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($ld['date_of_first_contact'])) : '',
                                 'lead_source' => $lead_source,
                                 'source_detail' => $ld['lead_source_detail'],
-                                'lead_type' => $lead_type_name,
+                                'lead_type' => $contact_type,
                                 'office_phone_number' => $office_info['phone'],
                                 'office_address' => $office_info['address'],
                                 'office_name' => $office_info['name'],
