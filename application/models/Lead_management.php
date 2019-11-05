@@ -883,7 +883,7 @@ Class Lead_management extends CI_Model {
                 $contact_type = $this->get_type_of_contact_by_id($check["type_of_contact"]);
                 $lead_source = $this->get_lead_source_by_id($check["lead_source"]);
                 $office_info = $this->administration->get_office_by_id($lead_result['office']);
-                $requested_by = $this->system->get_staff_info($lead_result['staff_requested_by']);
+                // $requested_by = $this->system->get_staff_info($lead_result['staff_requested_by']);
 
                 if($lead_result['type'] == '1') {
                     $lead_type_name = $this->get_type_of_contact_prospect($lead_result['type_of_contact']);
@@ -908,7 +908,7 @@ Class Lead_management extends CI_Model {
                     'office_phone_number' => $office_info['phone'],
                     'office_address' => $office_info['address'],
                     'office_name' => $office_info['name'],
-                    'requested_by' => $requested_by['first_name'].' '.$requested_by['last_name']
+                    'requested_by' => $user_details['full_name']
                 ];
 
                 foreach ($veriable_array as $index => $value) {
