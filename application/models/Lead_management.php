@@ -851,16 +851,16 @@ Class Lead_management extends CI_Model {
                 //if ($check['day_0_mail_date'] == '0000-00-00') {
                 /* mail section */
                 $user_email = $check['email'];
-//                $config = Array(
-//                    'protocol' => 'smtp',
-//                    'smtp_host' => 'ssl://smtp.gmail.com',
-//                    'smtp_port' => 465,
-//                    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-//                    'smtp_pass' => 'codetestml0016@123', // change it to yours
-//                    'mailtype' => 'html',
-//                    'charset' => 'utf-8',
-//                    'wordwrap' => TRUE
-//                );
+                // $config = Array(
+                //    'protocol' => 'smtp',
+                //    'smtp_host' => 'ssl://smtp.gmail.com',
+                //    'smtp_port' => 465,
+                //    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+                //    'smtp_pass' => 'codetestml0016@123', // change it to yours
+                //    'mailtype' => 'html',
+                //    'charset' => 'utf-8',
+                //    'wordwrap' => TRUE
+                // );
 
                 $config = Array(
                     //'protocol' => 'smtp',
@@ -883,24 +883,32 @@ Class Lead_management extends CI_Model {
                 $contact_type = $this->get_type_of_contact_by_id($check["type_of_contact"]);
                 $lead_source = $this->get_lead_source_by_id($check["lead_source"]);
                 $office_info = $this->administration->get_office_by_id($lead_result['office']);
+                $requested_by = $this->system->get_staff_info($lead_result['staff_requested_by']);
+
+                if($lead_result['type'] == '1') {
+                    $lead_type_name = $this->get_type_of_contact_prospect($lead_result['type_of_contact']);
+                } else {
+                    $lead_type_name = $this->get_type_of_contact_referral_by_id($lead_result['type_of_contact']);
+                }
                 // Set veriables --- #name, #type,#lead_type ,#company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #source_detail, #office_name, #office_address, #office_phone_number
                 $veriable_array = [
                     'name' => $lead_result['first_name'],
-                    'type_of_contact' => $contact_type['name'],
-                    'company_name' => $lead_result['company_name'],
+                    'type' => $contact_type['type'],
+                    'company' => $lead_result['company_name'],
                     'phone' => $lead_result['phone1'],
                     'email' => $lead_result['email'],
                     'staff_name' => $user_details['full_name'],
                     'staff_office' => staff_office_name(sess('user_id')),
                     'staff_phone' => $user_details['phone'],
                     'staff_email' => $user_details['user'],
-                    'date_first_contact' => ($lead_result['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($lead_result['date_of_first_contact'])) : '',
+                    'first_contact_date' => ($lead_result['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($lead_result['date_of_first_contact'])) : '',
                     'lead_source' => $lead_source['name'],
                     'source_detail' => $lead_result['lead_source_detail'],
-                    'lead_type' => $lead_result['type'],
+                    'lead_type' => $lead_type_name['name'],
                     'office_phone_number' => $office_info['phone'],
                     'office_address' => $office_info['address'],
-                    'office_name' => $office_info['name']
+                    'office_name' => $office_info['name'],
+                    'requested_by' => $requested_by['first_name'].' '.$requested_by['last_name']
                 ];
 
                 foreach ($veriable_array as $index => $value) {
@@ -918,7 +926,7 @@ Class Lead_management extends CI_Model {
                 if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
                     $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
                 } else {
-                    $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
+                    $user_logo_fullpath = 'https://leafnet.us/assets/img/logo_mail.png';
                 }
 
                 if ($lead_result['office'] == 1 || $lead_result['office'] == 18 || $lead_result['office'] == 34) {
@@ -929,7 +937,7 @@ Class Lead_management extends CI_Model {
                     $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
                 }
 
-                //echo $mail_body; exit;
+                // echo $email_subject; exit;
                 $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		                    <html xmlns="http://www.w3.org/1999/xhtml">
 		                    <head>
@@ -967,7 +975,7 @@ Class Lead_management extends CI_Model {
 		                      <tr>
 		                        <td><table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
 		                          <tr>
-		                            <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="300" height="98" /></td>
+		                            <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="250" /></td>
 		                          </tr>
 		                        </table>
 		                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -977,65 +985,14 @@ Class Lead_management extends CI_Model {
 		                          </table>
 		                          <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
 		                            <tr>
-		                              <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong><br />
-		                                <br />
+		                              <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong>
 		                                </strong>' . $mail_body . '</span></p>
-		                                <p><span class="textonegro">Sincerely,</span></p>
-		                                <p><span class="textonegro">Moses Nae<br />
-		                                  moses@taxleaf.com<br />
-		                                  305-541-3980<br />
-		                                  815-550-1294<br />
-		                                  </span><br />
-		                              </p></td>
+		                              </td>
 		                            </tr>
 		                          </table>          
-		                          <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
-		                            <tr>
-		                              <td bgcolor="#ffffff"><table width="100%" border="0" cellspacing="15" cellpadding="0">
-		                                <tr>
-		                                  <td width="97%" class="textonegro"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-		                                    <tr>
-		                                      <td valign="top">TaxLeaf <font color="#e46e04"><strong>Corporate</strong></font><br />
-		                    1549 NE 123 ST<br />
-		                    North Miami, FL 33161<br /></td>
-		                                      <td valign="top"><p>TaxLeaf <font color="#e46e04"><strong>Coral Springs</strong></font><br />
-		                                        3111 N University Ave #105<br />
-		                                        Coral Springs, Fl 33065<br />
-		                                        Phone: (954) 345-7585
-		                                      </p>
-		                                        <p>&nbsp;</p></td>
-		                                      <td valign="top">TaxLeaf <font color="#e46e04"><strong>Doral</strong></font><br /> 
-		                                        8175 NW 12 ST #130
-		                    <br />
-		                    Doral, Fl 33129<br />
-		                    Phone: (305) 433-7945 </td>
-		                                    </tr>
-		                                    <tr>
-		                                      <td valign="top"><br />
-		                    Phone: (888) Y-TAXLEAF<br />
-		                    Fax: (815) 550-1294<br />
-		                    email: <a href="mailto:info@taxleaf.com" target="_blank">info@taxleaf.com</a></td>
-		                                      <td valign="top">&nbsp;</td>
-		                                      <td valign="top">&nbsp;</td>
-		                                    </tr>
-		                                  </table></td>
-		                                  <td width="3%" valign="top"><table width="100%" border="0" cellspacing="7" cellpadding="0">
-		                                    <tr>
-		                                      <td width="75%"><img src="http://www.taxleaf.com/Email/1380919403_facebook_square.png" width="24" height="24" /></td>
-		                                      <td width="13%"><img src="http://www.taxleaf.com/Email/1380919424_twitter_square.png" width="24" height="24" /></td>
-		                                      <td width="12%"><img src="http://www.taxleaf.com/Email/1380919444_skype_square_color.png" width="24" height="24" /></td>
-		                                    </tr>
-		                                  </table></td>
-		                                </tr>
-		                              </table></td>
-		                            </tr>
-		                        </table></td>
-		                      </tr>
-		                        <tr>
-		                        <td height="100" valign="top">&nbsp;</td>
-		                      </tr>
+		                          </td>
+		                      </tr>		                        
 		                    </table>
-		                    <br />
 		                    </body>
 		                    </html>';
 
@@ -1044,6 +1001,7 @@ Class Lead_management extends CI_Model {
                 $this->email->from($from, $from_name); // change it to yours
                 $this->email->reply_to($from, $from_name);
                 $this->email->to($user_email); // change it to yours
+                $this->email->cc($from);
                 $this->email->subject($email_subject);
                 $this->email->message($message);
                 if ($this->email->send()) {
