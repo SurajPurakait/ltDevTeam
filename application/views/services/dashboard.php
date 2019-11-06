@@ -51,15 +51,15 @@ if ($status == '') {
                                                 <select class="form-control variable-dropdown" name="variable_dropdown[]" onchange="change_variable_dd(this)">
                                                     <option value="">All Variable</option>
                                                     <option value="1">Category</option>
-                                                    <option value="10">Client Name</option>
+                                                    <option value="10">Client ID</option>
                                                     <option value="7">Complete Date</option>
+                                                    <option value="13">Creation Date</option>
+                                                    <option value="14">Department</option>
                                                     <option value="3">Office</option>
                                                     <option value="9">ORDER#</option>
-                                                    <option value="15">Request type</option>
-                                                    <option value="13">Requested Date</option>
-                                                    <option value="14">Responsible DEPT</option>
-                                                    <option value="2">Service Name</option>
-                                                    <option value="5">Staff</option>
+                                                    <option value="5">Requested By</option>
+                                                    <option value="15">Request Type</option>
+                                                    <option value="2">Service Name</option>                                                    
                                                     <option value="6">Start Date</option>
                                                     <option value="12">Target End Date</option>
                                                     <option value="11">Target Start Date</option>
