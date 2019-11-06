@@ -77,13 +77,12 @@
         var id = $("#id").val();
         $.ajax({
             type: 'POST',
-            url: base_url + 'lead_management/home/update_action_status',
+            url: base_url + 'lead_management/home/update_lead_status',
             data: {
                 status: status,
                 id: id
             },
             success: function (result) {
-                console.log(result);
                 if (result.trim() == "1") {
                     swal({title: "Success!", text: "Status Successfully Updated!", type: "success"}, function () {
                         location.reload(true);

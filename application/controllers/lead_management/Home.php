@@ -81,7 +81,7 @@ class Home extends CI_Controller {
         $this->load->view("lead_management/load_data", $render_data);
     }
 
-    public function update_action_status() {
+    public function update_lead_status() {
         echo $this->lead_management->update_lead_status(post("id"), post("status"));
     }
 
