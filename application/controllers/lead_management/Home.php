@@ -48,7 +48,7 @@ class Home extends CI_Controller {
         $render_data["data"] = $this->lead_management->view_leads_record($id);
 //        print_r($render_data["data"]);die;
         $render_data["client_name"] = $this->lead_management->get_client_name($render_data["data"]["lead_agent"]);
-        if ($render_data["data"]['type'] == 1 || $render_data["data"]['type'] == 3) {
+        if ($render_data["data"]['type'] == 1) {
             $render_data["contact"] = $this->lead_management->get_type_of_contact_prospect($render_data['data']['type_of_contact']);
         } else {
             $render_data["contact"] = $this->lead_management->get_type_of_contact_referral_by_id($render_data['data']['type_of_contact']);
@@ -81,7 +81,7 @@ class Home extends CI_Controller {
         $this->load->view("lead_management/load_data", $render_data);
     }
 
-    public function update_action_status() {
+    public function update_lead_status() {
         echo $this->lead_management->update_lead_status(post("id"), post("status"));
     }
 
