@@ -2381,7 +2381,7 @@ class Action_model extends CI_Model {
         } elseif ($variable_value == 6) {
             $criteria_value = $criteria['complete_date'];
         } elseif ($variable_value == 7) {
-            $criteria_value = $criteria['id'];
+            $criteria_value = $criteria['action_id'];
         } elseif ($variable_value == 8) {
             $criteria_value = $criteria['created_by'];
         } elseif ($variable_value == 9) {
