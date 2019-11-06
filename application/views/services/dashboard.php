@@ -443,11 +443,12 @@ if ($status == '') {
             dataType: 'html'
         });
     }
-    function show_attachments(reference, reference_id) {
+    function show_attachments(reference, reference_id,order_id) {
         var url = '<?= base_url(); ?>services/home/getAttacments';
         var data = {
             reference: reference,
-            reference_id: reference_id
+            reference_id: reference_id,
+            order_id:order_id
         };
         $.ajax({
             url: url,

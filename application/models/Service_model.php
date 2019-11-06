@@ -1140,6 +1140,16 @@ class Service_model extends CI_Model {
         return $this->db->get_where('documents', ['status' => 1, 'reference_id' => $reference_id, 'reference' => $reference])->result_array();
     }
 
+    public function get_document_list_by_reference_id($reference_id, $reference,$order_id) {
+        $this->db->select('*');
+        $this->db->from('documents');
+        $this->db->join('order','order.id=documents.order_id');
+        $this->db->where('documents.reference_id',$reference_id);
+        $this->db->where('documents.reference',$reference);
+        $this->db->where('documents.order_id',$order_id);
+        return $this->db->get()->result_array();
+    }
+
     public function get_document_list_by_reference_view($reference_id, $reference) {
         $i = 0;
         $len = count($reference_id);
