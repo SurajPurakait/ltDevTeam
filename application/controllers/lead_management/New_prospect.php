@@ -219,7 +219,8 @@ class New_prospect extends CI_Controller {
                 $this->email->from($from, $from_name); // change it to yours
                 $this->email->reply_to($from, $from_name);
                 $this->email->to($user_email); // change it to yours
-                $this->email->cc($from);
+                $this->email->cc($requested_by['user']);
+                // $this->email->cc($from);
                 $this->email->subject($email_subject);
                 $this->email->message($message);
                 if ($this->email->send()) {
