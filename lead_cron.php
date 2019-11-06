@@ -115,7 +115,7 @@ if ($result = mysqli_query($conn, $sql)) {
                             if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
                                 $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
                             } else {
-                                $user_logo_fullpath = 'https://leafnet.us/assets/img/logo_mail.png';
+                                $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
                             }
 
                             if ($ld['office'] == 1 || $ld['office'] == 18 || $ld['office'] == 34) {
@@ -288,7 +288,7 @@ if ($result = mysqli_query($conn, $sql)) {
                             if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
                                 $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
                             } else {
-                                $user_logo_fullpath = 'https://leafnet.us/assets/img/logo_mail.png';
+                                $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
                             }
                             if ($ld['office'] == 1 || $ld['office'] == 18 || $ld['office'] == 34) {
                                 $bgcolor = '#00aec8';

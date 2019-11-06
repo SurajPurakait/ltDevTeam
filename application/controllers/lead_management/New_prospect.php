@@ -139,7 +139,7 @@ class New_prospect extends CI_Controller {
                 if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
                     $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
                 } else {
-                    $user_logo_fullpath = 'https://leafnet.us/assets/img/logo_mail.png';
+                    $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
                 }
 
                 if ($lead_result['office'] == 1 || $lead_result['office'] == 18 || $lead_result['office'] == 34) {
