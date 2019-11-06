@@ -585,7 +585,7 @@ function viewMailCampaignTemplate(contactType, language, day, firstName, company
         type: 'POST',
         url: base_url + 'lead_management/lead_mail/show_mail_campaign_template_ajax',
         data: {
-            service: contactType,
+            leadtype: contactType,
             language: language,
             day: day,
             first_name: firstName,
@@ -594,7 +594,6 @@ function viewMailCampaignTemplate(contactType, language, day, firstName, company
             email: email
         },
         success: function (result) {
-            // console.log(result);return false;
             if (result != 0) {
                 var mail_campaign = JSON.parse(result);
 //                console.log(mail_campaign);

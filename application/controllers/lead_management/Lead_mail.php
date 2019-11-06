@@ -224,29 +224,27 @@ class Lead_mail extends CI_Controller {
     }
     
     public function show_mail_campaign_template_ajax() {
-        // $service = request('service');
-        $leadtype = request('leadtype');
+        $leadtype = post('leadtype');
         $language = request('language');
         $day = request('day');
         $contact_type = $this->lead_management->get_type_of_contact_by_id($leadtype);
         $lead_mail = $this->lead_management->lead_campaign_mails($leadtype, $language, $day);
-        // print_r($lead_mail);exit;
         // echo $lead_mail;exit;
         if (!empty($lead_mail)) {
             $lead_mail = $lead_mail[0];
             $veriable_array = [
                 'name' => request('first_name'),
-                'type' => $contact_type['name'],
+                'type' => $contact_type['type'],
                 'company' => request('company_name'),
                 'phone' => request('phone'),
                 'email' => request('email')
             ];
             $lead_mail['body'] = urldecode($lead_mail['body']);
-//            foreach ($veriable_array as $index => $value) {
-//                if ($value != '') {
-//                    $lead_mail['body'] = str_replace('#' . $index, $value, $lead_mail['body']);
-//                }
-//            }
+            // foreach ($veriable_array as $index => $value) {
+            //     if ($value != '') {
+            //        $lead_mail['body'] = str_replace('#' . $index, $value, $lead_mail['body']);
+            //     }
+            // }
             echo json_encode($lead_mail);
         } else {
             echo 0;
