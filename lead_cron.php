@@ -167,7 +167,7 @@ if ($result = mysqli_query($conn, $sql)) {
                                         <td>
                                             <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
                                                 <tr>
-                                                    <td><img src="' . $user_logo_fullpath . '" width="250"/></td>
+                                                    <td style="background:#fff"><img src="' . $user_logo_fullpath . '" width="250"/></td>
                                                 </tr>
                                             </table>
                                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -199,6 +199,7 @@ if ($result = mysqli_query($conn, $sql)) {
 // More headers
                     $headers .= 'From: "' . $from_name . '" <' . $from . '>' . "\r\n";
                     $headers .= 'Reply-To: "' . $from_name . '" <' . $from . '>' . "\r\n";
+                    $headers .= 'CC: "' . $staff_result['user'] . '" <' . $staff_result['user'] . '>' . "\r\n";
                     if (mail($user_email, $email_subject, $message, $headers)) {
                         //mysqli_query($conn, "UPDATE `lead_mail_chain` SET `submission_date` = '" . date('Y-m-d') . "' WHERE `lead_mail_chain`.`id` = '{$rowval['id']}'");
                         mysqli_query($conn, "UPDATE `lead_management` SET `day_3_mail_date` = '" . date('Y-m-d') . "' WHERE `lead_management`.`id` = '{$ld['id']}'");
@@ -338,7 +339,7 @@ if ($result = mysqli_query($conn, $sql)) {
                 <td>
                     <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td><img src="' . $user_logo_fullpath . '" width="250"/></td>
+                            <td style="background:#fff"><img src="' . $user_logo_fullpath . '" width="250"/></td>
                         </tr>
                     </table>
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -368,6 +369,7 @@ if ($result = mysqli_query($conn, $sql)) {
 // More headers
                     $headers .= 'From: "' . $from_name . '" <' . $from . '>' . "\r\n";
                     $headers .= 'Reply-To: "' . $from_name . '" <' . $from . '>' . "\r\n";
+                    $headers .= 'CC: "' . $staff_result['user'] . '" <' . $staff_result['user'] . '>' . "\r\n";
                     if (mail($user_email, $email_subject, $message, $headers)) {
                         //mysqli_query($conn, "UPDATE `lead_mail_chain` SET `submission_date` = '" . date('Y-m-d') . "' WHERE `lead_mail_chain`.`id` = '{$rowval['id']}'");
                         mysqli_query($conn, "UPDATE `lead_management` SET `day_6_mail_date` = '" . date('Y-m-d') . "' WHERE `lead_management`.`id` = '{$ld['id']}'");
