@@ -7,6 +7,7 @@ class Lead_mail extends CI_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('lead_management');
+        $this->load->model('administration');
         if (!$this->session->userdata('user_id') && $this->session->userdata('user_id') == '') {
             redirect(base_url());
         }
@@ -179,10 +180,22 @@ class Lead_mail extends CI_Controller {
             $leadtype = $lead_data['type'];
             $language = $lead_data['language'];
             $contact_type = $this->lead_management->get_type_of_contact_by_id($leadtype);
-            $lead_mail = $this->lead_management->lead_campaign_mails($leadtype, $language, $day);
+            $lead_mail = $this->lead_management->lead_campaign_mails(($leadtype == '1') ? '1':'2', $language, $day);
             $added_by = staff_info_by_id($lead_data['staff_requested_by']);
+
             $user_details = staff_info();
             $lead_source = $this->lead_management->get_lead_source_by_id($lead_data["lead_source"]);
+
+
+
+            $office_info = $this->administration->get_office_by_id($lead_data['office']);
+
+            if($lead_data['type'] == '1') {
+                $lead_type_name = $this->lead_management->get_type_of_contact_prospect($lead_data['type_of_contact']);
+            } else {
+                $lead_type_name = $this->lead_management->get_type_of_contact_referral_by_id($lead_data['type_of_contact']);
+            }
+
             if (!empty($lead_mail)) {
                 $lead_mail = $lead_mail[0];
                 // $veriable_array = [
@@ -193,19 +206,25 @@ class Lead_mail extends CI_Controller {
                 //     'email' => $lead_data['email'],
                 //     'requested_by' => $added_by['full_name']
                 // ];
+
                 $veriable_array = [
                     'name' => $lead_data['first_name'],
-                    'type_of_contact' => $contact_type['type'],
-                    'company_name' => $lead_data['company_name'],
+                    'type' => $contact_type['type'],
+                    'company' => $lead_data['company_name'],
                     'phone' => $lead_data['phone1'],
                     'email' => $lead_data['email'],
                     'staff_name' => $added_by['full_name'],
                     'staff_office' => staff_office_name(sess('user_id')),
                     'staff_phone' => $user_details['phone'],
                     'staff_email' => $user_details['user'],
-                    'date_first_contact' => ($lead_data['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($lead_data['date_of_first_contact'])) : '',
+                    'first_contact_date' => ($lead_data['date_of_first_contact'] != '0000-00-00') ? date('m/d/Y', strtotime($lead_data['date_of_first_contact'])) : '',
                     'lead_source' => $lead_source['name'],
-                    'lead_source_detail' => $lead_data['lead_source_detail']
+                    'source_detail' => $lead_data['lead_source_detail'],
+                    'lead_type' => $lead_type_name['name'],
+                    'office_phone_number' => $office_info['phone'],
+                    'office_address' => $office_info['address'],
+                    'office_name' => $office_info['name'],
+                    'requested_by' =>  $added_by['user']
                 ];
                 $lead_mail['body'] = urldecode($lead_mail['body']);
                 foreach ($veriable_array as $index => $value) {
