@@ -884,7 +884,6 @@ Class Lead_management extends CI_Model {
                 $lead_source = $this->get_lead_source_by_id($check["lead_source"]);
                 $office_info = $this->administration->get_office_by_id($lead_result['office']);
                 $requested_by = $this->system->get_staff_info($lead_result['staff_requested_by']);
-                
                 if($lead_result['type'] == '1') {
                     $lead_type_name = $this->get_type_of_contact_prospect($lead_result['type_of_contact']);
                 } else {
@@ -1000,6 +999,7 @@ Class Lead_management extends CI_Model {
                 $this->email->from($from, $from_name); // change it to yours
                 $this->email->reply_to($from, $from_name);
                 $this->email->to($user_email); // change it to yours
+                $this->email->cc($requested_by['user']);
                 $this->email->subject($email_subject);
                 $this->email->message($message);
                 if ($this->email->send()) {
