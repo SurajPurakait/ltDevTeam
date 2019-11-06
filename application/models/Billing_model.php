@@ -1365,13 +1365,14 @@ class Billing_model extends CI_Model {
                     if ($filter_key == "creation_date") {
                         if (strlen($filter[0]) == 10) {
                             $date_value = date("Y-m-d", strtotime($filter[0]));
-                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 2 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . $date_value . '") ';
+                            // $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 2 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . $date_value . '") ';
+                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 2 || $condition == 4) ? 'not like ' : 'like') . '"' . $date_value . '%"';
                         } elseif (strlen($filter[0]) == 23) {
                             $date_value = explode(" - ", $filter[0]);
                             foreach ($date_value as $date_key => $date) {
                                 $date_value[$date_key] = "'" . date("Y-m-d", strtotime($date)) . "'";
                             }
-                            $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') ' . (($condition == 2 || $condition == 4) ? 'NOT ' : '') . 'BETWEEN ' . implode(' AND ', $date_value) . ') ';
+                            $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'BETWEEN ' . implode(' AND ', $date_value) . ') ';
                         }
                     } else {
                         if ($filter_key == 'tracking') {
