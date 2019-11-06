@@ -873,23 +873,24 @@ Class Lead_management extends CI_Model {
                     'wordwrap' => TRUE
                 );
                 $lead_result = $this->view_leads_record($id);
-                $mail_data = $this->get_campaign_mail_data($check["type_of_contact"], $check["language"], 1);
+                $mail_data = $this->get_campaign_mail_data(($check["type"] == '1') ? '1':'2', $check["language"], 1);
                 $email_subject = $mail_data['subject'];
                 $mail_body = urldecode($mail_data['body']);
                 $user_details = staff_info();
-                $from = $user_details['user'];
+                $from = $user_details['user']; // email of staff
                 $from_name = $user_details['first_name'] . ', ' . $user_details['last_name'];
                 $user_name = $check["first_name"] . ', ' . $check["last_name"];
-                $contact_type = $this->get_type_of_contact_by_id($check["type_of_contact"]);
+                $contact_type = $this->get_type_of_contact_by_id(($check["type"] == '1') ? '1':'2');
                 $lead_source = $this->get_lead_source_by_id($check["lead_source"]);
                 $office_info = $this->administration->get_office_by_id($lead_result['office']);
-                // $requested_by = $this->system->get_staff_info($lead_result['staff_requested_by']);
-
+                $requested_by = $this->system->get_staff_info($lead_result['staff_requested_by']);
+                
                 if($lead_result['type'] == '1') {
                     $lead_type_name = $this->get_type_of_contact_prospect($lead_result['type_of_contact']);
                 } else {
                     $lead_type_name = $this->get_type_of_contact_referral_by_id($lead_result['type_of_contact']);
                 }
+
                 // Set veriables --- #name, #type,#lead_type ,#company, #phone, #email, #requested_by, #staff_office, #staff_phone, #staff_email, #first_contact_date, #lead_source, #source_detail, #office_name, #office_address, #office_phone_number
                 $veriable_array = [
                     'name' => $lead_result['first_name'],
@@ -908,9 +909,9 @@ Class Lead_management extends CI_Model {
                     'office_phone_number' => $office_info['phone'],
                     'office_address' => $office_info['address'],
                     'office_name' => $office_info['name'],
-                    'requested_by' => $user_details['full_name']
+                    'requested_by' => $requested_by['full_name']
                 ];
-
+                // print_r($veriable_array);exit;
                 foreach ($veriable_array as $index => $value) {
                     if ($value != '') {
                         $mail_body = str_replace('#' . $index, $value, $mail_body);
@@ -928,7 +929,7 @@ Class Lead_management extends CI_Model {
                 } else {
                     $user_logo_fullpath = 'https://leafnet.us/assets/img/logo_mail.png';
                 }
-
+                // echo $user_logo_fullpath;exit;
                 if ($lead_result['office'] == 1 || $lead_result['office'] == 18 || $lead_result['office'] == 34) {
                     $bgcolor = '#00aec8';
                     $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
@@ -936,8 +937,6 @@ Class Lead_management extends CI_Model {
                     $bgcolor = '#8ab645';
                     $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
                 }
-
-                // echo $email_subject; exit;
                 $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 		                    <html xmlns="http://www.w3.org/1999/xhtml">
 		                    <head>
@@ -995,7 +994,7 @@ Class Lead_management extends CI_Model {
 		                    </table>
 		                    </body>
 		                    </html>';
-
+                // echo $message;exit;            
                 $this->load->library('email', $config);
                 $this->email->set_newline("\r\n");
                 $this->email->from($from, $from_name); // change it to yours
@@ -1378,6 +1377,7 @@ Class Lead_management extends CI_Model {
 
     public function get_campaign_mail_data($lead_type, $language, $day) {
         return $this->db->query("SELECT * FROM `lead_mail_chain` where lead_type='" . $lead_type . "' and language='" . $language . "' and type='" . $day . "'")->row_array();
+        // return $this->db->last_query();
     }
 
     public function delete_mail_campaign($id) {
