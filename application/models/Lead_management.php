@@ -928,7 +928,6 @@ Class Lead_management extends CI_Model {
                 } else {
                     $user_logo_fullpath = 'https://leafnet.us/assets/img/logo_mail.png';
                 }
-                // echo $user_logo_fullpath;exit;
                 if ($lead_result['office'] == 1 || $lead_result['office'] == 18 || $lead_result['office'] == 34) {
                     $bgcolor = '#00aec8';
                     $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
@@ -993,7 +992,6 @@ Class Lead_management extends CI_Model {
 		                    </table>
 		                    </body>
 		                    </html>';
-                // echo $message;exit;            
                 $this->load->library('email', $config);
                 $this->email->set_newline("\r\n");
                 $this->email->from($from, $from_name); // change it to yours
