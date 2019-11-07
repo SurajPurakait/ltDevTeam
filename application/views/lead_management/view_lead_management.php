@@ -210,12 +210,31 @@
                                                 </td>   
                                             </tr>
                                         <?php else: ?>
+                                            <?php 
+                                                switch ($data["status"])
+                                                {
+                                                    case 1: {
+                                                        $tracking_status = 'Completed';    
+                                                    }                                                        
+                                                    break;
+                                                    case 2: {
+                                                        $tracking_status = 'Inactive';
+                                                    }
+                                                    break;
+                                                    case 3: {
+                                                        $tracking_status = 'Active';
+                                                    }
+                                                    break;
+                                                    default: 
+                                                        $tracking_status = 'New';
+                                                }
+                                            ?>
                                             <tr>
                                                 <td width="20%" <?= $style; ?>>
                                                     <b style="font-size: 14px;">Tracking</b>
                                                 </td>
                                                 <td>
-                                                    New
+                                                    <?= $tracking_status; ?>
                                                 </td>
                                             </tr>
                                         <?php endif; ?>

@@ -8919,3 +8919,8 @@ a.panel-title {
 }
 .clear-project-btn {margin-top:-20px; margin-bottom:13px; }
 .clear-project-btn-one {margin-top:-38px; margin-bottom:13px; }
+
+.lead-warning {
+    background-color: #f8ac59;
+    color: #FFFFFF;
+}

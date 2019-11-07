@@ -246,24 +246,30 @@ class Lead_mail extends CI_Controller {
         $leadtype = post('leadtype');
         $language = request('language');
         $day = request('day');
-        $contact_type = $this->lead_management->get_type_of_contact_by_id($leadtype);
+        $lead_type = $this->lead_management->get_type_of_contact_by_id($leadtype);
+        if ($lead_type == 1) {
+            $contact_type = $this->lead_management->get_type_of_contact_prospect(request('type_of_contact'));
+        } else {
+            $contact_type = $this->lead_management->get_type_of_contact_referral_by_id(request('type_of_contact'));
+        }
         $lead_mail = $this->lead_management->lead_campaign_mails($leadtype, $language, $day);
-        // echo $lead_mail;exit;
         if (!empty($lead_mail)) {
             $lead_mail = $lead_mail[0];
             $veriable_array = [
                 'name' => request('first_name'),
-                'type' => $contact_type['type'],
+                'type' => $lead_type['type'],
                 'company' => request('company_name'),
                 'phone' => request('phone'),
-                'email' => request('email')
+                'email' => request('email'),
+                'requested_by' => staff_info()['full_name'],
+                'lead_type' => $contact_type['name']
             ];
             $lead_mail['body'] = urldecode($lead_mail['body']);
-            // foreach ($veriable_array as $index => $value) {
-            //     if ($value != '') {
-            //        $lead_mail['body'] = str_replace('#' . $index, $value, $lead_mail['body']);
-            //     }
-            // }
+            foreach ($veriable_array as $index => $value) {
+                if ($value != '') {
+                   $lead_mail['body'] = str_replace('#' . $index, $value, $lead_mail['body']);
+                }
+            }
             echo json_encode($lead_mail);
         } else {
             echo 0;
