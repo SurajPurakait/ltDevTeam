@@ -3048,6 +3048,16 @@ if (!function_exists('get_service_notifications_count')) {
 
 }
 
+if (!function_exists('get_lead_notifications_count')) {
+
+    function get_lead_notifications_count() {
+        $ci = &get_instance();
+        $ci->load->model('system');
+        return $ci->system->get_lead_notifications_count();
+    }
+
+}
+
 if (!function_exists('get_invoice_notifications_count')) {
 
     function get_invoice_notifications_count() {
