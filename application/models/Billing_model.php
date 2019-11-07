@@ -1407,7 +1407,7 @@ class Billing_model extends CI_Model {
                                     }
                                 }
                             } else {
-                                $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 2 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . implode('", "', $filter) . '") ';
+                                $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . implode('", "', $filter) . '") ';
                             }
                         }
                     }
