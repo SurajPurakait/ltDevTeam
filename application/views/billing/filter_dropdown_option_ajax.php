@@ -1,5 +1,5 @@
 <?php $element_name = $element_key != '' ? str_replace(" ", "_", strtolower($element_array[$element_key])) : ''; ?>
-<?php if ($element_key == 7) : //creation date       ?>
+<?php if ($element_key == 7 || $element_key == 12) : //creation date and due date ?>
     <input placeholder="dd/mm/yyyy" class="form-control <?= ($condition == 2 || $condition == 4) ? 'datepicker_range_mdy' : 'datepicker_mdy'; ?>" type="text" title="<?= $element_array[$element_key]; ?>" name="criteria_dropdown[<?= $element_name; ?>][]">
 <?php else: ?>
     <select class='form-control criteria-dropdown chosen-select' placeholder='All Criteria' title="<?= $element_array[$element_key]; ?>" name='criteria_dropdown[<?= $element_name; ?>][]'>
