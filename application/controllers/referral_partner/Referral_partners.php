@@ -139,7 +139,7 @@ class Referral_partners extends CI_Controller {
         // );
 
         $config = Array(
-                'protocol' => 'smtp',
+                //'protocol' => 'smtp',
                 'smtp_host' => 'mail.leafnet.us',
                 'smtp_port' => 465,
                 'smtp_user' => 'developer@leafnet.us', // change it to yours
