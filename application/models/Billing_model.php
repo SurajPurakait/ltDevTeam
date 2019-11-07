@@ -1297,6 +1297,7 @@ class Billing_model extends CI_Model {
             '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
         ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
+        $where['status'] = 'AND `inv`.`status` != 0 ';
         if ($by != '') {
             if ($by == 'byme') {
                 $where['inv.created_by'] = 'AND `inv`.`created_by` = ' . $staff_id . ' ';
@@ -1329,13 +1330,13 @@ class Billing_model extends CI_Model {
                     $where['inv.created_by'] = 'AND `inv`.`created_by` = "' . $staff_id . '" ';
                 }
             } else {
-                $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (0,7)) ';
+                $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (7)) ';
             }
         }
 
         if ($status == '') {
             $where['inv.payment_status'] = 'AND (CASE WHEN `inv`.`status` = 3 THEN `inv`.`payment_status` IN (1, 2) ELSE `inv`.`payment_status` IN (1, 2, 3) END) ';
-            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 7) ';
+            $where['inv.status'] = 'AND `inv`.`status` NOT IN (7) ';
         } else {
             unset($where_or);
             if ($status == 3) {
@@ -1349,7 +1350,7 @@ class Billing_model extends CI_Model {
         } else if ($payment_status == 3) {
             unset($where_or);
             $where['inv.payment_status'] = 'AND `inv`.`payment_status` = ' . $payment_status . ' ';
-            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 3, 7) ';
+            $where['inv.status'] = 'AND `inv`.`status` NOT IN (3, 7) ';
         } else {
             unset($where_or);
             $where['inv.payment_status'] = 'AND `inv`.`payment_status` = ' . $payment_status . ' ';
@@ -1437,11 +1438,11 @@ class Billing_model extends CI_Model {
             $reference = explode("-", $reference_id);
             $where['indt.reference_id'] = 'AND `indt`.`reference_id` = ' . $reference[0] . ' ';
             $where['indt.reference'] = 'AND `indt`.`reference` = "' . $reference[1] . '" ';
-            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 7) ';
+            $where['inv.status'] = 'AND `inv`.`status` NOT IN (7) ';
         }
         if (!empty($filter_data)) {
             if ($is_tracking == 'n') {
-                $where['inv.status'] = 'AND `inv`.`status` NOT IN (0) ';
+                unset($where['inv.status']);                
             }
             if ($is_status == 'n') {
                 unset($where['inv.payment_status']);
