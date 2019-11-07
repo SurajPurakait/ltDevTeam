@@ -26,9 +26,11 @@ function get_action_office(select_office = "", select_staffs = "", assign_myself
                 } else if (parseInt(department_id) != 2 && parseInt(staff_type) == 3) {
                     $("#office_div").hide();
                     //$("#office").attr("disabled", "disabled");
-                } else if (disable_field == "y") {
-                    $("#office").attr("disabled", "disabled");
-                } else {
+                } 
+//                else if (disable_field == "y") {
+//                    $("#office").attr("disabled", "disabled");
+//                } 
+                else {
                     $("#office_div").show();
                     // if ($("#office").attr("disabled")) {
                     //     $("#office").removeAttr("disabled");
