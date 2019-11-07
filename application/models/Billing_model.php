@@ -95,7 +95,8 @@ class Billing_model extends CI_Model {
             "requested_by" => "inv.created_by",
             "client_id" => "inv.reference_id",
             "service_name" => "ord.service_id",
-            "request_type" => "request_type"
+            "request_type" => "request_type",
+            "due_date" => "due_date"
         ];
 
         $this->sorting_element = [
@@ -1374,7 +1375,24 @@ class Billing_model extends CI_Model {
                             }
                             $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'BETWEEN ' . implode(' AND ', $date_value) . ') ';
                         }
-                    } else {
+                    }elseif ($filter_key == "due_date") {
+                     
+                         if (strlen($filter[0]) == 10) {
+                    $date_value = date('Y-m-d', strtotime('-30 days', strtotime($filter[0])));
+                   
+                    $where['inv.created_time'] = 'AND inv.created_time' . ' ' . (($condition == 3) ? 'not like ' : 'like') . '"' . $date_value . '%"';
+                           
+                        } elseif (strlen($filter[0]) == 23) {                          
+                            $date_value = explode(" - ", $filter[0]);
+                            
+                          foreach ($date_value as $date_key => $date) {
+                                $date_value[$date_key] = "'" .date("Y-m-d", strtotime('-30 days', strtotime($date))) . "'";
+                            }
+                            $where['inv.created_time'] = 'AND (Date(inv.created_time) ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . ' BETWEEN ' . implode(' AND ', $date_value) . ') ';
+                        }
+                    }
+
+                    else {
                         if ($filter_key == 'tracking') {
                             $is_tracking = 'y';
                         }
@@ -1452,7 +1470,7 @@ class Billing_model extends CI_Model {
                 'INNER JOIN `order` AS `ord` ON `ord`.`invoice_id` = `inv`.`id` ' .
                 'INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END) ';
         $this->db->query('SET SQL_BIG_SELECTS=1');
-        return $this->db->query('SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . 'GROUP BY `ord`.`invoice_id` ' . $order_by . ' ')->result_array();
+        return $this->db->query('SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id` ' . $order_by . ' ')->result_array();
     }
 
     public function update_payment_status_by_invoice_id($invoice_id) {
