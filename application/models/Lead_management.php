@@ -1979,4 +1979,22 @@ Class Lead_management extends CI_Model {
             return $this->db->get('type_of_contact_referral')->result_array();
         }
     }
+    public function get_updated_lead_status($id) {
+        $lead_status = $this->db->get_where('lead_management',array('id'=>$id))->row_array();
+        switch ($lead_status['status']) {
+            case '1':
+                return 'Completed';
+                break;
+            case '2':
+                return 'Inactive';
+                break;
+            case '3':
+                return 'Active';
+                break;    
+            default:
+                return 'New';
+                break;
+        }
+
+    }
 }
