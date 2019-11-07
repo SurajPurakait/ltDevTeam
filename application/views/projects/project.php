@@ -646,12 +646,15 @@ $role = $user_info['role'];
         var random = Math.floor((Math.random() * 999) + 1);
         var clone = '<div class="filter-div row m-b-20" id="clone-' + random + '">' + content + '<div class="col-sm-1 text-center p-l-0"><a href="javascript:void(0);" onclick="removeProjectFilterRow(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
         $('.filter-inner').append(clone);
+        
         $.each(variableArray, function (key, value) {
             $("#clone-" + random + " .variable-dropdown option[value='" + value + "']").remove();
         });
         $("div.add_filter_div:not(:first)").remove();
-        $(".condition-dropdown:first").val(1).removeAttr('disabled');
-        $(".condition-dropdown:eq(1)").val('').removeAttr('disabled');
+        $("#clone-" + random).find(".variable-dropdown").removeAttr('readonly');
+        $("#clone-" + random).find(".condition-dropdown").removeAttr('disabled');
+        $("#clone-" + random).find(".criteria-dropdown").html("<option value=''>All Criteria</option>");
+        $("#clone-" + random).find(".criteria-dropdown").removeAttr('readonly');
     }
     function removeProjectFilterRow(random) {
         var divID = 'clone-' + random;
@@ -660,11 +663,11 @@ $role = $user_info['role'];
         variableArray.splice(index, 1);
         $("#" + divID).remove();
     }
-    function reflactProjectFilterWithCategory(category, requestType = '', filter = '') {
+    function reflactProjectFilterWithCategory(category, requestType = '') {
         clearProjectFilter();
         variableArray = [];
         elementArray = [];
-        $("select.variable-dropdown:first").val(12);
+        $("select.variable-dropdown:first").val(12).attr('readonly','readonly');
         var statusArray = category.split('-');
         $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[template_cat_id][]'});
         $("select.criteria-dropdown:first").trigger("chosen:updated");
@@ -677,7 +680,7 @@ $role = $user_info['role'];
             var requestTypeArray = requestType.split('-');
             $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
             $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
-            $("select.condition-dropdown:eq(1)").val(1).attr('disabled', false);
+            $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
             elementArray.push($("select.condition-dropdown:eq(1)"));
             variableArray.push(8);
         }
@@ -689,7 +692,7 @@ $role = $user_info['role'];
             $('#sales_btn_clear_filter').show();
         } else if (statusArray[1] == 'annual_report') {
             $('#annual_btn_clear_filter').show();
-    }
+        }
     }
     function clearProjectFilter() {
         $(".criteria-dropdown").trigger("chosen:updated");
