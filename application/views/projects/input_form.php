@@ -113,7 +113,6 @@
                                                     </div>
                                                 </div>-->
                         <div class="hr-line-dashed"></div>
-                        <?/= service_note_func('Sales Tax Process Notes', 'n', 'sales_tax_process'); ?>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Confirmation Number</label>
                             <div class="col-lg-10">
