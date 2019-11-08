@@ -108,7 +108,7 @@
                                             $lead["status_name"] = "Completed";
                                         }
                                         ?>
-                                        <a href='javascript:void(0);' onclick='show_lead_tracking_modal("<?= $lead["id"]; ?>")'><span class="<?= $trk_class; ?>"><?= $lead["status_name"]; ?></span></a>
+                                        <a href='javascript:void(0);' onclick='show_lead_tracking_modal("<?= $lead["id"]; ?>")'><span class="<?= $trk_class; ?>" id="lead_status_<?= $lead["id"]; ?>"><?= $lead["status_name"]; ?></span></a>
                                     </td>
                                     <td title="Requested By" class="text-center" width="9%"><?= $lead["requested_staff_name"] . (($lead['office'] != '0') ? '<br><b>' . get_office_info_by_id($lead['office'])['office_id'] . '</b>' : ''); ?><?= "<br>" . $lead['request_staff_office_name']; ?></td>
                                     <td title="Submission Date" class="text-center" width="9%"><?= ($lead["submission_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["submission_date"])) : "-"; ?></td>

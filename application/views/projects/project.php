@@ -4,6 +4,14 @@ $user_department = $user_info['department'];
 $user_type = $user_info['type'];
 $role = $user_info['role'];
 ?>
+<style>
+    .project-clear-filter{
+        position: relative;
+        top: -53px;
+        left: 110px;
+        width: 150px;
+    }
+</style>
 <script src="<?= base_url(); ?>assets/js/dashboard.js"></script>
 <div class="wrapper wrapper-content">
     <div class="row">
@@ -20,6 +28,7 @@ $role = $user_info['role'];
                     </div>
                     <div class="clearfix"></div>
                     <div class="row"> 
+
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs tab" role="tablist">
                             <li role="presentation" class="active "><a href="#bookkeeping" aria-controls="bookkeeping" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '', );loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1)">Bookkeeping</a></li>
@@ -30,11 +39,21 @@ $role = $user_info['role'];
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <div class="row">
-                                <div class="col-lg-7">
+                                <div class="col-md-12">
+                                    <div class="pull-right">
+                                        <label class="col-lg-2 m-t-5 control-label">Year:</label>
+                                        <div class="col-lg-10">
+                                            <input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">
+                                            <div class="errorMessage text-danger"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
                                     <div class="filter-outer">
                                         <form name="filter_form" id="filter-form"  method="post" onsubmit="projectFilter()">
                                             <div class="form-group filter-inner">
-                                                <div class="filter-div m-b-20 row" id="original-filter">
+
+                                                <div class="filter-div m-b-10 row" id="original-filter">
                                                     <div class="col-sm-4 m-t-10">
                                                         <?php asort($filter_element_list); ?>
                                                         <select class="form-control variable-dropdown" name="variable_dropdown[]" onchange="changeVariableProject(this)">
@@ -61,29 +80,31 @@ $role = $user_info['role'];
                                                         </select>
                                                     </div>
                                                     <div class="col-sm-1 m-t-10 p-l-0">
-                                                        <div class="add_filter_div text-right"> <a href="javascript:void(0);" onclick="addProjectFilterRow()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Filter"> <i class="fa fa-plus" aria-hidden="true"></i> </a> </div>
+                                                        <div class="add_filter_div text-center"> <a href="javascript:void(0);" onclick="addProjectFilterRow()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Filter"> <i class="fa fa-plus" aria-hidden="true"></i> </a> </div>
                                                     </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 m-b-10">
+                                                    <div class="" style="display: inline-block;">
+                                                        <button class="btn btn-success" type="button" onclick="projectFilter()">Apply Filter</button>
+                                                    </div>
+                                                    <!--                                                    <div class="" style="display: inline-block;"> col-lg-1 row clear-project-btn-one 
+                                                                                                            <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1);" class="btn btn-ghost" id="bookkeeping_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
+                                                                                                        </div>-->
+                                                </div>
+                                                <div class="col-sm-2">
+
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
-                                <div class="col-lg-1">
-                                    <div class="m-t-10">
-                                        <button class="btn btn-success" type="button" onclick="projectFilter()">Apply Filter</button>
-                                    </div>
-                                </div>
-                                <div class="form-group col-lg-3 m-l-50 m-t-10">
-                                    <label class="col-lg-2 m-t-5 control-label">Year:</label>
-                                    <div class="col-lg-10">
-                                        <input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
                             </div>
                             <div role="tabpanel" class="tab-pane active" id="bookkeeping">
-                                <div class="col-lg-1 clear-project-btn-one row">
-                                    <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 1);" class="btn btn-ghost" id="bookkeeping_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
+                                <div class="project-clear-filter"><!-- col-lg-1 row clear-project-btn-one -->
+                                    <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 1);" class="btn btn-ghost" id="bookkeeping_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="row">
@@ -96,7 +117,7 @@ $role = $user_info['role'];
                                             <div class="col-md-3 m-b-15">
                                                 <div class="alert-primar">
                                                     <h3 class="col-md-3 m-t-15 f-s-14"> <?= $value ?> </h3>
-                                                    <div class="col-md-4 m-t-10"> <span class="label label-primary label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '2-Sompleted');loadProjectDashboard(2, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '1-Started');loadProjectDashboard(1, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '0-Not Started');loadProjectDashboard(0, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span> </div>
+                                                    <div class="col-md-4 m-t-10"> <span class="label label-primary label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '2-Completed');loadProjectDashboard(2, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '1-Started');loadProjectDashboard(1, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '0-Not Started');loadProjectDashboard(0, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span> </div>
                                                     <div class="col-md-5 m-t-3  p-l-0">
                                                         <div class="project-bookkeeping-campaigns-donut-<?= $key ?> text-center" data-size="65" id="project_bookkeeping_donut_<?= $key ?>" data-json="project_bookkeeping_data_<?= $key ?>"></div>
                                                         <script>
@@ -115,8 +136,8 @@ $role = $user_info['role'];
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="tax_returns">
-                                <div class="col-lg-1 clear-project-btn row">
-                                    <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 2);" class="btn btn-ghost" id="tax_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
+                                <div class="project-clear-filter">
+                                    <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 2);" class="btn btn-ghost" id="tax_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="row">
@@ -148,8 +169,8 @@ $role = $user_info['role'];
                                 </div>                                
                             </div>
                             <div role="tabpanel" class="tab-pane" id="sales_tax">
-                                <div class="col-lg-1 clear-project-btn row">
-                                    <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 3);" class="btn btn-ghost" id="sales_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
+                                <div class="project-clear-filter">
+                                    <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 3);" class="btn btn-ghost" id="sales_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="row">
@@ -181,8 +202,8 @@ $role = $user_info['role'];
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="annual_report">
-                                <div class="col-lg-1 clear-project-btn row">
-                                    <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 4);" class="btn btn-ghost" id="annual_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
+                                <div class="project-clear-filter">
+                                    <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 4);" class="btn btn-ghost" id="annual_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="row">
@@ -214,10 +235,12 @@ $role = $user_info['role'];
                                 </div>
                             </div>
                         </div>
+
                         <hr class="hr-line-dashed  m-t-5 m-b-5">
                         <div class="ajaxdiv" id="action_dashboard_div"> 
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -369,6 +392,7 @@ $role = $user_info['role'];
                                 <label for="rad2"><strong>Completed</strong></label>
                             </div>
                         </div>
+
                         <!--                        <div class="funkyradio">
                                                                 <div class="funkyradio-success">
                                                                     <input type="radio" name="radio" id="rad7" value="7"/>
@@ -395,7 +419,8 @@ $role = $user_info['role'];
                                 <th>time</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -619,14 +644,17 @@ $role = $user_info['role'];
     }
     function addProjectFilterRow() {
         var random = Math.floor((Math.random() * 999) + 1);
-        var clone = '<div class="filter-div row m-b-20" id="clone-' + random + '">' + content + '<div class="col-sm-1 text-right p-l-0"><a href="javascript:void(0);" onclick="removeProjectFilterRow(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
+        var clone = '<div class="filter-div row m-b-20" id="clone-' + random + '">' + content + '<div class="col-sm-1 text-center p-l-0"><a href="javascript:void(0);" onclick="removeProjectFilterRow(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
         $('.filter-inner').append(clone);
+        
         $.each(variableArray, function (key, value) {
             $("#clone-" + random + " .variable-dropdown option[value='" + value + "']").remove();
         });
         $("div.add_filter_div:not(:first)").remove();
-        $(".condition-dropdown:first").val(1).removeAttr('disabled');
-        $(".condition-dropdown:eq(1)").val('').removeAttr('disabled');
+        $("#clone-" + random).find(".variable-dropdown").removeAttr('readonly').attr("style", "pointer-events: block;");;
+        $("#clone-" + random).find(".condition-dropdown").removeAttr('disabled');
+        $("#clone-" + random).find(".criteria-dropdown").html("<option value=''>All Criteria</option>");
+        $("#clone-" + random).find(".criteria-dropdown").removeAttr('readonly');
     }
     function removeProjectFilterRow(random) {
         var divID = 'clone-' + random;
@@ -635,11 +663,11 @@ $role = $user_info['role'];
         variableArray.splice(index, 1);
         $("#" + divID).remove();
     }
-    function reflactProjectFilterWithCategory(category, requestType = '', filter = '') {
-        clearFilter();
+    function reflactProjectFilterWithCategory(category, requestType = '') {
+        clearProjectFilter();
         variableArray = [];
         elementArray = [];
-        $("select.variable-dropdown:first").val(12);
+        $("select.variable-dropdown:first").val(12).attr('readonly','readonly').attr("style", "pointer-events: none;");
         var statusArray = category.split('-');
         $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[template_cat_id][]'});
         $("select.criteria-dropdown:first").trigger("chosen:updated");
@@ -652,7 +680,7 @@ $role = $user_info['role'];
             var requestTypeArray = requestType.split('-');
             $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
             $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
-            $("select.condition-dropdown:eq(1)").val(1).attr('disabled', false);
+            $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
             elementArray.push($("select.condition-dropdown:eq(1)"));
             variableArray.push(8);
         }
@@ -665,5 +693,10 @@ $role = $user_info['role'];
         } else if (statusArray[1] == 'annual_report') {
             $('#annual_btn_clear_filter').show();
         }
+    }
+    function clearProjectFilter() {
+        $(".criteria-dropdown").trigger("chosen:updated");
+        $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
+        $('#btn_clear_filter').css('display', 'none');
     }
 </script> 

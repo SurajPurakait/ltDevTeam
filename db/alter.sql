@@ -963,3 +963,9 @@ ALTER TABLE `project_main` ADD `template_cat_id` INT(11) NOT NULL AFTER `id`;
 /* live end */
 /* 05.11.2019 */
 ALTER TABLE `lead_management` ADD `website` VARCHAR(255) NOT NULL AFTER `company_name`;
+
+/*06.11.2019*/
+
+ALTER TABLE `project_template_task` ADD `is_input_form` ENUM('n','y') NOT NULL DEFAULT 'n' AFTER `status`; 
+
+ALTER TABLE `project_task` ADD `is_input_form` ENUM('n','y') NOT NULL DEFAULT 'n' AFTER `status`; 

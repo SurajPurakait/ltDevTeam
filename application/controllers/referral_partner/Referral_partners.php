@@ -83,7 +83,7 @@ class Referral_partners extends CI_Controller {
         $this->load->template('referral_partner/reffer_lead_to_partner', $render_data);
     }
 
-    function load_partner_dashboard() {
+    function load_partner_dashboard() { // ajax_dashboard_referral
         $lead_type = post("lead_type");
         $request_by = post('req_by');
         $status = post("status");
@@ -127,27 +127,27 @@ class Referral_partners extends CI_Controller {
         $this->referral_partner->set_password($referral_partner_data, $pwd,$staffrequestedby);
         
         // Sending email From Manager to Partner
-        $config = Array(
-           'protocol' => 'smtp',
-           'smtp_host' => 'ssl://smtp.gmail.com',
-           'smtp_port' => 465,
-           'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-           'smtp_pass' => 'codetestml0016@123', // change it to yours
-           'mailtype' => 'html',
-           'charset' => 'utf-8',
-           'wordwrap' => TRUE
-        );
+        // $config = Array(
+        //    'protocol' => 'smtp',
+        //    'smtp_host' => 'ssl://smtp.gmail.com',
+        //    'smtp_port' => 465,
+        //    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+        //    'smtp_pass' => 'codetestml0016@123', // change it to yours
+        //    'mailtype' => 'html',
+        //    'charset' => 'utf-8',
+        //    'wordwrap' => TRUE
+        // );
 
-//             $config = Array(
-//                     'protocol' => 'smtp',
-//                     'smtp_host' => 'mail.leafnet.us',
-//                     'smtp_port' => 465,
-//                     'smtp_user' => 'developer@leafnet.us', // change it to yours
-//                     'smtp_pass' => 'developer@123', // change it to yours
-//                     'mailtype' => 'html',
-//                     'charset' => 'utf-8',
-//                     'wordwrap' => TRUE
-//             );
+        $config = Array(
+                //'protocol' => 'smtp',
+                'smtp_host' => 'mail.leafnet.us',
+                'smtp_port' => 465,
+                'smtp_user' => 'developer@leafnet.us', // change it to yours
+                'smtp_pass' => 'developer@123', // change it to yours
+                'mailtype' => 'html',
+                'charset' => 'utf-8',
+                'wordwrap' => TRUE
+        );
         $from = staff_info_by_id($staffrequestedby)['user'];
         $from_name = staff_info_by_id($staffrequestedby)['full_name'];
         $email_subject = 'Account Setup';

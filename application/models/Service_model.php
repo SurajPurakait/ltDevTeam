@@ -1140,13 +1140,13 @@ class Service_model extends CI_Model {
         return $this->db->get_where('documents', ['status' => 1, 'reference_id' => $reference_id, 'reference' => $reference])->result_array();
     }
 
-    public function get_document_list_by_reference_id($reference_id, $reference,$order_id) {
+    public function get_document_list_by_reference_id($reference_id, $reference, $order_id) {
         $this->db->select('*');
         $this->db->from('documents');
-        $this->db->join('order','order.id=documents.order_id');
-        $this->db->where('documents.reference_id',$reference_id);
-        $this->db->where('documents.reference',$reference);
-        $this->db->where('documents.order_id',$order_id);
+        $this->db->join('order', 'order.id=documents.order_id');
+        $this->db->where('documents.reference_id', $reference_id);
+        $this->db->where('documents.reference', $reference);
+        $this->db->where('documents.order_id', $order_id);
         return $this->db->get()->result_array();
     }
 
@@ -1918,6 +1918,8 @@ class Service_model extends CI_Model {
             $column_name = 'services.dept';
         } elseif ($variable_val == 15) {
             $column_name = 'request_type';
+        } elseif ($variable_val == 13) {
+            $column_name = 'ord.order_date';
         }
         return $column_name;
     }
@@ -1948,9 +1950,11 @@ class Service_model extends CI_Model {
             $criteria_val = $criteria_dd['office'];
         } elseif ($variable_val == 15) {
             $criteria_val = $criteria_dd['request_type'];
+        } elseif ($variable_val == 13) {
+            $criteria_val = $criteria_dd['completedate'];
         }
 
-        if ($variable_val == 6 || $variable_val == 7) { // dates
+        if ($variable_val == 6 || $variable_val == 7 || $variable_val == 13) { // dates
             if ($condition_val == 1 || $condition_val == 3) {
                 $dateval = date("Y-m-d", strtotime($criteria_val[0]));
                 $query = $column_name . (($condition_val == 1) ? ' like ' : ' not like ') . '"' . $dateval . '%"';
@@ -1958,6 +1962,8 @@ class Service_model extends CI_Model {
                 if ($variable_val == 6) {
                     $criterias = explode(" - ", $criteria_val[0]);
                 } elseif ($variable_val == 7) {
+                    $criterias = explode(" - ", $criteria_val[0]);
+                } elseif ($variable_val == 13) {
                     $criterias = explode(" - ", $criteria_val[0]);
                 }
                 foreach ($criterias as $key => $c) {

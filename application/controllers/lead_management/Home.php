@@ -210,4 +210,8 @@ class Home extends CI_Controller {
             echo 0;
         }
     }
+
+    public function get_updated_lead_status() {
+        echo $this->lead_management->get_updated_lead_status(post('lead_id'));
+    }
 }

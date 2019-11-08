@@ -139,7 +139,7 @@ class New_prospect extends CI_Controller {
                 if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
                     $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
                 } else {
-                    $user_logo_fullpath = 'https://leafnet.us/assets/img/logo_mail.png';
+                    $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
                 }
 
                 if ($lead_result['office'] == 1 || $lead_result['office'] == 18 || $lead_result['office'] == 34) {
@@ -219,7 +219,8 @@ class New_prospect extends CI_Controller {
                 $this->email->from($from, $from_name); // change it to yours
                 $this->email->reply_to($from, $from_name);
                 $this->email->to($user_email); // change it to yours
-                $this->email->cc($from);
+                $this->email->cc($requested_by['user']);
+                // $this->email->cc($from);
                 $this->email->subject($email_subject);
                 $this->email->message($message);
                 if ($this->email->send()) {

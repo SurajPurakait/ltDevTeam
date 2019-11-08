@@ -1336,9 +1336,18 @@ Class System extends CI_Model {
     }
 
     public function get_service_notifications_count($forvalue) {
-//        $where['gn.action'] = 'tracking';
         $where['gn.reference'] = 'order';
         $result = $this->get_general_notification_by_user_id(sess('user_id'), '', $where, '', $forvalue);
+        if (!empty($result)) {
+            return count($result);
+        } else {
+            return 0;
+        }
+    }
+
+    public function get_lead_notifications_count() {
+        $where['gn.reference'] = 'lead';
+        $result = $this->get_general_notification_by_user_id(sess('user_id'), '', $where, '');
         if (!empty($result)) {
             return count($result);
         } else {

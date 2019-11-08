@@ -884,7 +884,6 @@ Class Lead_management extends CI_Model {
                 $lead_source = $this->get_lead_source_by_id($check["lead_source"]);
                 $office_info = $this->administration->get_office_by_id($lead_result['office']);
                 $requested_by = $this->system->get_staff_info($lead_result['staff_requested_by']);
-                
                 if($lead_result['type'] == '1') {
                     $lead_type_name = $this->get_type_of_contact_prospect($lead_result['type_of_contact']);
                 } else {
@@ -929,7 +928,6 @@ Class Lead_management extends CI_Model {
                 } else {
                     $user_logo_fullpath = 'https://leafnet.us/assets/img/logo_mail.png';
                 }
-                // echo $user_logo_fullpath;exit;
                 if ($lead_result['office'] == 1 || $lead_result['office'] == 18 || $lead_result['office'] == 34) {
                     $bgcolor = '#00aec8';
                     $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
@@ -994,12 +992,12 @@ Class Lead_management extends CI_Model {
 		                    </table>
 		                    </body>
 		                    </html>';
-                // echo $message;exit;            
                 $this->load->library('email', $config);
                 $this->email->set_newline("\r\n");
                 $this->email->from($from, $from_name); // change it to yours
                 $this->email->reply_to($from, $from_name);
                 $this->email->to($user_email); // change it to yours
+                $this->email->cc($requested_by['user']);
                 $this->email->subject($email_subject);
                 $this->email->message($message);
                 if ($this->email->send()) {
@@ -1980,5 +1978,23 @@ Class Lead_management extends CI_Model {
         } elseif ($type == '2') {
             return $this->db->get('type_of_contact_referral')->result_array();
         }
+    }
+    public function get_updated_lead_status($id) {
+        $lead_status = $this->db->get_where('lead_management',array('id'=>$id))->row_array();
+        switch ($lead_status['status']) {
+            case '1':
+                return 'Completed';
+                break;
+            case '2':
+                return 'Inactive';
+                break;
+            case '3':
+                return 'Active';
+                break;    
+            default:
+                return 'New';
+                break;
+        }
+
     }
 }

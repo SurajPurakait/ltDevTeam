@@ -385,7 +385,7 @@ function add_lead_referral(partner) {
                         goURL(base_url + 'lead_management/home');
                     });
                 }
-                window.open((($('#mail_campaign_status').val() != 0) ? base_url + 'lead_management/home/mail_campaign/y/' + result.trim() : base_url + 'lead_management/home/mail_campaign/n/' + result.trim()), 'Mail Campaign Popup', "width=1080, height=480, top=100, left=170, scrollbars=no");
+                // window.open((($('#mail_campaign_status').val() != 0) ? base_url + 'lead_management/home/mail_campaign/y/' + result.trim() : base_url + 'lead_management/home/mail_campaign/n/' + result.trim()), 'Mail Campaign Popup', "width=1080, height=480, top=100, left=170, scrollbars=no");
             }
         },
         beforeSend: function () {
@@ -580,18 +580,19 @@ function displayMailCampaignTemplate(leadID, day, isCampaign) {
     });
 }
 
-function viewMailCampaignTemplate(contactType, language, day, firstName, companyName, phone, email) {
+function viewMailCampaignTemplate(leadType, language, day, firstName, companyName, phone, email,contactType) {
     $.ajax({
         type: 'POST',
         url: base_url + 'lead_management/lead_mail/show_mail_campaign_template_ajax',
         data: {
-            leadtype: contactType,
+            leadtype: leadType,
             language: language,
             day: day,
             first_name: firstName,
             company_name: companyName,
             phone: phone,
-            email: email
+            email: email,
+            type_of_contact : contactType
         },
         success: function (result) {
             if (result != 0) {

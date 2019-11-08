@@ -64,7 +64,7 @@
                             <div class="bg-aqua table-responsive">
                                 <table class="table table-borderless">
                                     <tbody>
-                                        <tr id="byme" class="action-row-border-top">
+                                        <tr id="byme">
                                             <th>Added By Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-0">
@@ -88,7 +88,7 @@
                                         <?php 
                                             } else {
                                         ?>
-                                        <tr class="action-row-border-top"></tr>
+                                        <tr></tr>
                                         <?php        
                                             }
                                         ?>
@@ -97,7 +97,7 @@
                             </div>
                         </div>
                         <div class="col-md-12 col-lg-4 col-lg-offset-1 m-t-8">
-                            <a class="btn notification-btn" href="javascript:void(0);" title="Action Notifications">Notifications <span class="label label-danger">demo</span></a>
+                            <a class="btn notification-btn" href="javascript:void(0);" title="Lead Notifications">Notifications <span class="label label-danger"><?= get_lead_notifications_count(); ?></span></a>
                         </div>
                     </div>
                     <hr class="hr-line-dashed">
