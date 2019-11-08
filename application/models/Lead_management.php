@@ -191,17 +191,21 @@ Class Lead_management extends CI_Model {
         return $result;
     }
 
-    public function duplicate_email_check($email) {
-        $check = $this->db->get_where("lead_management", ['email' => $email])->num_rows();
-        if ($check != 0) {
-            return true;
-        } else {
-            $check_staff = $this->db->get_where("staff", ['user' => $email])->num_rows();
-            if ($check_staff != 0) {
+    public function duplicate_email_check($email,$lead_type) {
+        $check = $this->db->get_where("lead_management", ['email' => $email,'type'=>3])->num_rows();
+        if ($lead_type != 1) {
+            if ($check != 0) {
                 return true;
             } else {
-                return false;
-            }
+                $check_staff = $this->db->get_where("staff", ['user' => $email])->num_rows();
+                if ($check_staff != 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }    
+        } else {
+            return false;
         }
     }
 

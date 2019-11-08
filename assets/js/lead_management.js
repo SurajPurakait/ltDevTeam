@@ -321,7 +321,7 @@ function add_lead_prospect(added_by, event_lead = "",refer_lead="") {
         cache: false,
         success: function (result) {
             if (result.trim() == "0") {
-                swal("ERROR!", "Email Id Already Exists!! Please Change the Email", "error");
+                swal("ERROR!", "Email Already Exists For This Partner Lead!! Please Change the Email", "error");
             } else if (result.trim() == "-1") {
                 swal("ERROR!", "Unable To Add Lead Prospect", "error");
             } else {

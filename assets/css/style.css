@@ -7471,6 +7471,8 @@ body.skin-3 {
 
 .add-view {margin-right:2px !important; }
 
+.add-view-new {margin-right:0px !important; }
+
 .service-panel .referral-partner-status-btn-list .btn-service-delete {
     right: 309px;
     border-bottom-right-radius: 3px;

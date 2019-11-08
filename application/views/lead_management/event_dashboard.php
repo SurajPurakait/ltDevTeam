@@ -21,9 +21,11 @@
                     <div class="panel panel-default service-panel">
                    
                         <div class="panel-heading">
+
+                            <a href="<?= base_url('lead_management/event/view/' . $eventVal['id']); ?>" class="btn btn-primary btn-xs btn-service-view" target="_blank" ><i class="fa fa-eye" aria-hidden="true"></i> View</a>
+                            
                             <a href="<?= base_url('lead_management/event/show_event_edit_details/' . $eventVal['id']); ?>" class="btn btn-primary btn-xs btn-service-edit" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
                             
-                            <a href="<?= base_url('lead_management/event/view/' . $eventVal['id']); ?>" class="btn btn-primary btn-xs btn-service-view" target="_blank" ><i class="fa fa-eye" aria-hidden="true"></i> View</a>
 
                             <a class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $eventVal['id']; ?>" aria-expanded="false" class="collapsed" style="cursor:default;">
 
