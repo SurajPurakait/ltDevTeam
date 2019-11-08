@@ -108,6 +108,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Allow sales tax processing</label>
+                        <input type="checkbox" name="task[input_form_type]" title="Confirmation" id="confirmation" value="1" required>
+                    </div>
+                </div>
                 <hr class="hr-line-dashed"/>
                 <div class="row">
                     <div class="col-md-12">
