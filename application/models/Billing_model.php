@@ -1163,9 +1163,9 @@ class Billing_model extends CI_Model {
 
     public function save_order_on_invoice($invoice_id, $save_type = 'create') {
         $invoice_info = $this->db->get_where('invoice_info', ['id' => $invoice_id])->row_array();
-        if ($invoice_info['is_order'] == 'n') {
-            return true;
-        }
+//        if ($invoice_info['is_order'] == 'n') {
+//            return true;
+//        }
         if ($invoice_info['type'] == 2) {
             $this->db->where('id', $invoice_id);
             $this->db->update('invoice_info', ['is_order' => 'n']);
