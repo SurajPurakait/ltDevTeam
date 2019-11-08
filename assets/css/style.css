@@ -7375,15 +7375,7 @@ body.skin-3 {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0; 
 }
-.service-panel .btn-service-edit {
-    position: absolute;
-    right: 55px;
-    top: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;    
-    color: #fff;
-    /*display: none;*/
-}
+
 .service-panel .btn-service-edit-project.btn-service-invoice  {
     right: 56px;
 }
@@ -7402,15 +7394,7 @@ body.skin-3 {
     right: 0px;
     border-top-right-radius: 0;
 }
-.service-panel .btn-service-view{
-    position: absolute;
-    right: 0px;
-    top: 0;
-    border-top-left-radius: 0;
-    border-bottom-right-radius: 0;
-    color: #fff;
-    /*display: none;*/
-}
+
 .service-panel .btn-service-view-project{
     position: absolute;
     right: 140px;
@@ -7441,27 +7425,52 @@ body.skin-3 {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     color: #fff;
-    /*display: none;*/
 }
 .service-panel .btn-service-lead{
-    position: absolute;
-    right: 267px;
-    top: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    border-radius:5px; 
     color: #fff;
-    /*display: none;*/
+    float:right;
+    margin-top: -10px;
+    margin-left: 3px;
+    border-radius:3px;
+
+
 }
 .service-panel .btn-service-delete {
-    border-top-left-radius: 0;
-    border-bottom-right-radius: 0;
-    color: #fff;
-    /*display: none;*/
-    position: absolute;
-    top: 0px;
-    right: 48px;
-    border-top-right-radius: 0px;   
+
+ color:#fff;
+    float: right;
+    margin-right: -15px;
+    margin-top: -10px;
+    margin-left: 3px;
+    border-radius:3px;
 }
+    
+
+.service-panel .btn-service-view{
+   border-radius:5px; 
+    color: #fff;
+    float:right;
+    margin-top: -10px;
+    margin-right: -15px;
+    margin-left: 3px;
+    border-radius:3px;
+
+}
+
+.service-panel .btn-service-edit {
+   border-radius:5px; 
+    color: #fff;
+    float:right;
+    margin-top: -10px;
+    margin-left: 3px;
+    border-radius:3px;
+}
+
+.btn-add {margin-top: -29px !important;}
+
+.add-view {margin-right:2px !important; }
+
 .service-panel .referral-partner-status-btn-list .btn-service-delete {
     right: 309px;
     border-bottom-right-radius: 3px;

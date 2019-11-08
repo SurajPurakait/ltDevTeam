@@ -59,6 +59,11 @@
                         }    
                     }
                 }
+                
+                ?>
+                <a href="javascript:void(0);" onclick="delete_lead_management('<?= $lead["id"] ?>');" class="btn btn-danger btn-xs btn-service-delete manage-delete-btn"><i class="fa fa-remove" aria-hidden="true"></i> Delete</a>
+                <a href="<?= base_url("/lead_management/home/view/{$lead["id"]}"); ?>" class="btn btn-primary btn-xs btn-service-view add-view"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
+                <?php
                 if ($lead["type_of_contact"] == 1 || $lead["type_of_contact"] == 2) {
                     ?>
                     <a href="<?= base_url("/lead_management/edit_lead/edit_lead_referral/{$lead["id"]}"); ?>" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i >Edit</a>
@@ -69,9 +74,9 @@
                     <?php
                 }
                 ?>
-                <a href="<?= base_url("/lead_management/home/view/{$lead["id"]}"); ?>" class="btn btn-primary btn-xs btn-service-view"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
+                
 
-                <a href="javascript:void(0);" onclick="delete_lead_management('<?= $lead["id"] ?>');" class="btn btn-danger btn-xs btn-service-delete manage-delete-btn"><i class="fa fa-remove" aria-hidden="true"></i> Delete</a>
+                
 
                 <h5 class="panel-title p-t-15" data-toggle="collapse" data-parent="#accordion" href="#collapse89" aria-expanded="false">
                     <div class="table-responsive">
