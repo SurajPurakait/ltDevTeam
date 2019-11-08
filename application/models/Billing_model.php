@@ -1184,14 +1184,14 @@ class Billing_model extends CI_Model {
         $this->db->where_in('order_id', $order_ids);
         $service_request_info = $this->db->get('service_request')->result_array();
 
-        $this->db->where_in('service_id', array_column($service_request_info, 'services_id'));
-        $this->db->where(['input_form' => 'y']);
-        $target_days = $this->db->get('target_days')->result_array();
-        if (empty($target_days)) {  //check input-form exist or not 
-            $this->db->where('id', $invoice_id);
-            $this->db->update('invoice_info', ['is_order' => 'n']);
-            return true;
-        }
+//        $this->db->where_in('service_id', array_column($service_request_info, 'services_id'));
+//        $this->db->where(['input_form' => 'y']);
+//        $target_days = $this->db->get('target_days')->result_array();
+//        if (empty($target_days)) {  //check input-form exist or not 
+//            $this->db->where('id', $invoice_id);
+//            $this->db->update('invoice_info', ['is_order' => 'n']);
+//            return true;
+//        }
 
         $this->db->order_by('id');
         $order_data = $this->db->get_where('order', ['invoice_id' => $invoice_id])->row_array();
