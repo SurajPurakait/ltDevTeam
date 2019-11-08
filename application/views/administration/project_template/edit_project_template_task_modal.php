@@ -109,12 +109,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <label>Allow sales tax processing</label>
-                        <input type="checkbox" name="task[input_form_type]" title="Allow Sales Tax" id="confirmation" value="1" <?php echo ($task_details->input_form_type == '1') ? 'checked' : ''; ?> required>
-                    </div>
-                </div>
                 <hr class="hr-line-dashed"/>
                 <div class="row">
                     <div class="col-md-12">

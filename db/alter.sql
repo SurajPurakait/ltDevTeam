@@ -969,13 +969,3 @@ ALTER TABLE `lead_management` ADD `website` VARCHAR(255) NOT NULL AFTER `company
 ALTER TABLE `project_template_task` ADD `is_input_form` ENUM('n','y') NOT NULL DEFAULT 'n' AFTER `status`; 
 
 ALTER TABLE `project_task` ADD `is_input_form` ENUM('n','y') NOT NULL DEFAULT 'n' AFTER `status`; 
-
-/*08.11.2019*/
-
-ALTER TABLE `project_task` ADD `input_form_type` INT(2) NOT NULL DEFAULT '0' AFTER `is_input_form`; 
-
-ALTER TABLE `project_template_task` ADD `input_form_type` INT(2) NOT NULL DEFAULT '0' AFTER `is_input_form`; 
-
-CREATE TABLE project_task_sales_tax_process LIKE sales_tax_process 
-
-ALTER TABLE `project_task_sales_tax_process` ADD `task_id` INT(11) NOT NULL AFTER `id`; 

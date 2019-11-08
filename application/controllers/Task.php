@@ -142,24 +142,8 @@ class Task extends CI_Controller {
         $render_data['multiple']='y';
         $render_data['related_table_id']=11;
         $render_data['required']='n';
-        $render_data['input_form_type']=$input_form_type=$this->Project_Template_model->getProjectTaskInputFormType($task_id);
-        
-//        sales_tax section
-        if($input_form_type==1){
-            $this->load->model('service');
-            $this->load->model('system');
-            $render_data['state'] = $this->system->get_all_state();
-            $render_data['staffInfo'] = staff_info();
-            $client_dtls=$this->Project_Template_model->getClientDtlsByTaskId($task_id);
-            $render_data['period_time']=Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
-            $render_data['client_name']=$client_name=$this->Project_Template_model->getProjectClientName($client_dtls->client_id, $client_dtls->client_type);
-    //        $render_data['completed_salestax_orders'] = $this->service->completed_orders_salestax(47); //id will be different for live
-            $render_data['county_details'] = $this->action_model->get_county_name();
-            $render_data['sales_tax_process']=$this->Project_Template_model->getProjectTaskSalesTaxProcess($task_id);
-        }
-            $render_data['related_service_files']=$this->Project_Template_model->getTaskFiles($task_id);
-            $render_data['notes_data'] = $this->notes->note_list_with_log(11, 'task_id', $task_id);
-        
+        $render_data['related_service_files']=$this->Project_Template_model->getTaskFiles($task_id);
+        $render_data['notes_data'] = $this->notes->note_list_with_log(11, 'task_id', $task_id);
         $this->load->template('projects/input_form',$render_data);
     }
     public function save_project_input_form() {
@@ -175,24 +159,6 @@ class Task extends CI_Controller {
         } else {
             echo 0;
         }
-    }
-    public function task_sales_tax_input_form($task_id,$type='edit'){
-        $this->load->layout = 'dashboard';
-        $title = "Add Project Task Sales Tax Processing";
-        $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'project dashboard';
-        $render_data['menu'] = 'project_dashboard';
-        $render_data['header_title'] = $title;
-//        $render_data['reference'] = 'company';
-        $this->load->model('service');
-        $this->load->model('system');
-        $render_data['state'] = $this->system->get_all_state();
-        $render_data['staffInfo'] = staff_info();
-        $client_dtls=$this->Project_Template_model->getClientDtlsByTaskId($task_id);
-        $render_data['client_name']=$client_name=$this->Project_Template_model->getProjectClientName($client_dtls->client_id, $client_dtls->client_type);
-//        $render_data['completed_salestax_orders'] = $this->service->completed_orders_salestax(47); //id will be different for live
-        $render_data['county_details'] = $this->action_model->get_county_name();
-        $this->load->template('projects/project_task_sales_tax', $render_data);
     }
 }
 ?>
