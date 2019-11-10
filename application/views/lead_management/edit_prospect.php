@@ -214,7 +214,7 @@
                             <div class="col-lg-offset-2 col-lg-10">
                                 <input type="hidden" name="type" value="<?= $data['type'] ?>">
                                 <button class="btn btn-success" type="button" onclick="edit_lead_prospect('<?= $from_menu; ?>')">Save Changes</button> &nbsp;&nbsp;&nbsp;
-                                <button class="btn btn-default" type="button" onclick="cancel_lead_prospect()">Cancel</button>
+                                <button class="btn btn-default" type="button" onclick="cancel_lead_prospect('<?= $ref_cancel; ?>')">Cancel</button>
                             </div>
                         </div>
                     </form>
