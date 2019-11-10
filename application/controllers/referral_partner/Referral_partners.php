@@ -399,6 +399,7 @@ class Referral_partners extends CI_Controller {
         $render_data['menu'] = 'reffer_partner_dashboard';
         $render_data['header_title'] = $title;
         $render_data['from_menu'] = 'referral';
+        $render_data['ref_cancel'] = 'ref_cancel';
         $this->load->template("lead_management/edit_prospect", $render_data);
     }
 

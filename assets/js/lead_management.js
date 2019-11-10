@@ -348,7 +348,9 @@ function add_lead_prospect(added_by, event_lead = "",refer_lead="") {
 
 function cancel_lead_prospect(added_by) {
     if (added_by == 'refagent') {
-        goURL(base_url + 'referral_partner/referral_partners/lead_dashboard');
+        goURL(base_url + 'referral_partner/referral_partners/referral_partner_dashboard');
+    } else if(added_by == 'ref_cancel') {
+        goURL(base_url + 'referral_partner/referral_partners/referral_partner_dashboard');
     } else {
         goURL(base_url + 'lead_management/home');
     }
