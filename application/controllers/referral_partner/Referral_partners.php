@@ -152,7 +152,91 @@ class Referral_partners extends CI_Controller {
         $from_name = staff_info_by_id($staffrequestedby)['full_name'];
         $email_subject = 'Account Setup';
         $user_email = $referral_partner_data['email'];
-        $message = 'Your Account has been created Successfully <br><br> <b><u>Login Credentials</u> :<b> <br><br> <b>User Name :</b> '.$referral_partner_data['email'].'<br> <b>Password :</b>'.$pwd;
+        
+        $user_logo = "";
+        if ($referral_partner_data['office'] != 0) {
+            $user_logo = get_user_logo($referral_partner_data['office']);
+        }
+
+        if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
+            $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
+        } else {
+            $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
+        }
+
+        if ($referral_partner_data['office'] == 1 || $referral_partner_data['office'] == 18 || $referral_partner_data['office'] == 34) {
+            $bgcolor = '#00aec8';
+            $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
+        } else {
+            $bgcolor = '#8ab645';
+            $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
+        }
+
+        $mail_body = 'Your Account has been created Successfully <br><br> <b><u>Login Credentials</u> :<b> <br><br> <b>User Name :</b> '.$referral_partner_data['email'].'<br> <b>Password :</b>'.$pwd;
+
+        $message = 
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                    <title>TAXLEAF</title>
+                    <style type="text/css">
+                        body {
+                            background-color: #FFFFFF;
+                            margin-left: 0px;
+                            margin-top: 0px;
+                            margin-right: 0px;
+                            margin-bottom: 0px;
+                        }
+                        .textoblanco {
+                            font-family: Arial, Helvetica, sans-serif;
+                            font-size: 12px;
+                            color: #000;
+                        }
+                        .textoblanco {
+                            font-family: Arial, Helvetica, sans-serif;
+                            font-size: 12px;
+                            color: #FFF;
+                        }
+                        .textonegro {
+                            font-family: Arial, Helvetica, sans-serif;
+                            font-size: 12px;
+                            color: #000;
+                        }
+                        </style>
+                </head>
+                <body>
+                    <br/>
+                    <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
+                        <tr>
+                            <td>
+                                <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="250"/></td>
+                                    </tr>
+                                </table>
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td><img src="' . $divider_img . '" width="600" height="15"/></td>
+                                    </tr>
+                                </table>
+                                <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
+                                    <tr>
+                                        <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong>
+                                            </strong>' . $mail_body . '</span></p>
+                                        </td>
+                                    </tr>
+                                </table>          
+                                <table width="600" border="0" align="center" cellpadding="0" cellspacing="0"></table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="100" valign="top">&nbsp;</td>
+                        </tr>
+                    </table>
+                    <br/>
+                </body>
+            </html>';
 
         $this->load->library('email', $config);
         $this->email->set_newline("\r\n");
@@ -315,6 +399,7 @@ class Referral_partners extends CI_Controller {
         $render_data['menu'] = 'reffer_partner_dashboard';
         $render_data['header_title'] = $title;
         $render_data['from_menu'] = 'referral';
+        $render_data['ref_cancel'] = 'ref_cancel';
         $this->load->template("lead_management/edit_prospect", $render_data);
     }
 

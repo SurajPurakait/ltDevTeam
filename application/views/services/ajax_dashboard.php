@@ -173,7 +173,7 @@ if (!empty($result)):
                 if ($url != ''):
                     if ($tracking == 'Started') {
                         ?>
-                        <a href="<?= base_url($url) ?>" class="btn btn-primary btn-xs btn-service-edit" style="display: none" target="_blank">
+                        <a href="<?= base_url($url) ?>" class="btn btn-primary btn-xs btn-service-lead" style="display: none" target="_blank">
                             <i class="fa fa-pencil" aria-hidden="true"></i> Edit
                         </a>
                         <?php
@@ -182,7 +182,7 @@ if (!empty($result)):
                             $url = 'billing/invoice/edit/' . base64_encode($invoice_info['id']);
                         }
                         ?>
-                        <a href="<?= base_url($url) ?>" class="btn btn-primary btn-xs btn-service-edit" target="_blank">
+                        <a href="<?= base_url($url) ?>" class="btn btn-primary btn-xs btn-service-lead" target="_blank">
                             <i class="fa fa-pencil" aria-hidden="true"></i> Edit
                         </a>
                         <?php

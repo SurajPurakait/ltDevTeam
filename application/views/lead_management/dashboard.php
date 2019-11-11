@@ -124,11 +124,11 @@ $stat = ($stat == 'all') ? "" : $stat;
                                 </table>
                             </div>
                         </div>
-<!--                         <div class="row m-r-20">
+                        <div class="row m-r-20">
                             <div class="col-sm-4 col-xs-12">
-                                <a class="btn notification-btn" id="notifcation-toggle" value='' href="javascript:void(0);" title="Leads Notifications">Notifications <span class="label label-danger">1</span></a>
+                                <a class="btn notification-btn" id="notifcation-toggle" value='' href="javascript:void(0);" title="Leads Notifications">Notifications <span class="label label-danger"><?= get_lead_notifications_count('lead'); ?></span></a>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                     <hr class="hr-line-dashed m-b-10">
                     <div class="row m-b-0">

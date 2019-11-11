@@ -37,7 +37,8 @@ class New_prospect extends CI_Controller {
 
     public function insert_new_prospect() {
         $email = post("email");
-        if ($this->lm->duplicate_email_check($email)) {
+        $lead_type = post('lead_type');
+        if ($this->lm->duplicate_email_check($email,$lead_type)) {
             echo 0;
         } else {
             $result = $this->lm->insert_lead_prospect(post());

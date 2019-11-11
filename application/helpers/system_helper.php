@@ -2628,7 +2628,11 @@ if (!function_exists('getProjectTaskList')) {
     function getProjectTaskList($template_id) {
         $ci = &get_instance();
         $ci->load->model('Project_Template_model');
-        return $ci->db->get_where('project_task', ['project_id' => $template_id])->result();
+        $ci->db->select('pt.*,pm.template_cat_id');
+        $ci->db->from('project_task  pt');
+        $ci->db->join('project_main  pm','pt.project_id=pm.project_id');
+        $ci->db->where('pt.project_id',$template_id);
+        return $ci->db->get()->result();
     }
 
 }
@@ -3038,6 +3042,24 @@ if (!function_exists('get_action_notifications_count')) {
     }
 
 }
+if (!function_exists('get_lead_notifications_count')) {
+
+    function get_lead_notifications_count($forvalue) {
+        $ci = &get_instance();
+        $ci->load->model('system');
+        return $ci->system->get_lead_notifications_count($forvalue);
+    }
+
+}
+if (!function_exists('get_partner_notifications_count')) {
+
+    function get_partner_notifications_count($forvalue) {
+        $ci = &get_instance();
+        $ci->load->model('system');
+        return $ci->system->get_partner_notifications_count($forvalue);
+    }
+
+}
 if (!function_exists('get_service_notifications_count')) {
 
     function get_service_notifications_count($forvalue) {
@@ -3047,17 +3069,6 @@ if (!function_exists('get_service_notifications_count')) {
     }
 
 }
-
-if (!function_exists('get_lead_notifications_count')) {
-
-    function get_lead_notifications_count() {
-        $ci = &get_instance();
-        $ci->load->model('system');
-        return $ci->system->get_lead_notifications_count();
-    }
-
-}
-
 if (!function_exists('get_invoice_notifications_count')) {
 
     function get_invoice_notifications_count() {
