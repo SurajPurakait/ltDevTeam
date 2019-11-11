@@ -53,7 +53,9 @@ class Action_model extends CI_Model {
             10 => "client_id",
             11 => "creation_date",
             12 => "due_date",
-            13 => "request_type"
+            13 => "request_type",
+            14 => "created_department",
+            15 => "created_office"
         ];
 
         $this->sales_tax_filter_element = [
@@ -2313,10 +2315,12 @@ class Action_model extends CI_Model {
                     return $tracking_array;
                 }
                 break;
-            case 3: {
+            case 3:
+            case 15: {
                     return $this->administration->get_all_office();
                 }
                 break;
+            case 14:
             case 4: {
                     return $this->administration->get_all_dept();
                 }
@@ -2369,15 +2373,15 @@ class Action_model extends CI_Model {
         } elseif ($variable_value == 2) {
             $criteria_value = $criteria['tracking'];
         } elseif ($variable_value == 3) {
-            $criteria_value = $criteria['office'];
+            $criteria_value = $criteria['to_office'];
         } elseif ($variable_value == 4) {
-            $criteria_value = $criteria['department'];
+            $criteria_value = $criteria['to_department'];
         } elseif ($variable_value == 5) {
             $criteria_value = $criteria['start_date'];
         } elseif ($variable_value == 6) {
             $criteria_value = $criteria['complete_date'];
         } elseif ($variable_value == 7) {
-            $criteria_value = $criteria['id'];
+            $criteria_value = $criteria['action_id'];
         } elseif ($variable_value == 8) {
             $criteria_value = $criteria['created_by'];
         } elseif ($variable_value == 9) {
@@ -2388,6 +2392,10 @@ class Action_model extends CI_Model {
             $criteria_value = $criteria['creation_date'];
         } elseif ($variable_value == 12) {
             $criteria_value = $criteria['due_date'];
+        } elseif ($variable_value == 14) {
+            $criteria_value = $criteria['by_department'];
+        } elseif ($variable_value == 15) {
+            $criteria_value = $criteria['by_office'];
         }
         if ($variable_value == 5 || $variable_value == 6 || $variable_value == 11 || $variable_value == 12) { // dates
             if ($condition_value == 1 || $condition_value == 3) {

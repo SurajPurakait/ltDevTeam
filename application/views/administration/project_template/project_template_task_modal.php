@@ -87,13 +87,33 @@
                             </select>
                             <div class="errorMessage text-danger"></div>
                         </div>
-                    </div><!-- ./col-md-6 -->
-                    
+                    </div>
+
                     <div id="task_office_div"></div>
-                    
+
                     <div id="task_staff_div"></div>
-                    
+
                 </div><!-- ./row -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Input Form<span class="text-danger">*</span></label>
+                            <label class="checkbox-inline">
+                                <input class="checkclass" value="y" type="radio" id="task_inputform1" name="task[is_input_form]" required title="Input Form"> Yes
+                            </label>
+                            <label class="checkbox-inline">
+                                <input class="checkclass" value="n" type="radio" id="task_inputform2" name="task[is_input_form]" required title="Input Form"> No
+                            </label>
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Allow sales tax processing</label>
+                        <input type="checkbox" name="task[input_form_type]" title="Confirmation" id="confirmation" value="1" required>
+                    </div>
+                </div>
                 <hr class="hr-line-dashed"/>
                 <div class="row">
                     <div class="col-md-12">

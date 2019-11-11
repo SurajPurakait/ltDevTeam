@@ -55,7 +55,7 @@ class Project_Template_model extends CI_Model {
             $temp_main_ins['title'] = $post['template_main']['title'];
             $temp_main_ins['description'] = $post['template_main']['description'];
             $temp_main_ins['category_id'] = $post['template_main']['service_category'];
-            $temp_main_ins['template_cat_id'] = $post['template_main']['template_cat_id'];
+            $temp_main_ins['template_cat_id']=$post['template_main']['template_cat_id'];
             if (isset($post['template_main']['service']) && $post['template_main']['service'] != '') {
                 $temp_main_ins['service_id'] = $post['template_main']['service'];
             } else {
@@ -214,6 +214,8 @@ class Project_Template_model extends CI_Model {
         $task_data['target_complete_date'] = $post['task']['target_complete_date'];
         $task_data['target_complete_day'] = $post['task']['target_complete_day'];
         $task_data['tracking_description'] = $post['task']['tracking_description'];
+        $task_data['is_input_form']=$post['task']['is_input_form'];
+        $task_data['input_form_type']=$post['task']['input_form_type'];
 //        $task_data['is_all'] = $post['task']['is_all'];
         $task_data['department_id'] = $post['task']['department'];
         if ($task_data['department_id'] != 2 && ($post['task']['is_all'] == 1 || $post['task']['is_all'] == 0)) {
@@ -1088,7 +1090,7 @@ class Project_Template_model extends CI_Model {
                 $this->db->join('project_task AS pt', 'p.id=pt.project_id', 'inner');
                 $this->db->where('project_id', $insert_id);
                 $manage_result1 = $this->db->get()->result_array();
-                if (isset($project_task_staff_data)) {
+                if(isset($project_task_staff_data)){
                     $end_array1 = end($project_task_staff_data);
                     $last_key1 = key($project_task_staff_data);
                 }
@@ -1399,6 +1401,8 @@ class Project_Template_model extends CI_Model {
         $task_data['target_complete_date'] = $post['task']['target_complete_date'];
         $task_data['target_complete_day'] = $post['task']['target_complete_day'];
         $task_data['tracking_description'] = $post['task']['tracking_description'];
+        $task_data['is_input_form']= $post['task']['is_input_form'];
+        $task_data['input_form_type']=$post['task']['input_form_type'];
 //        $task_data['is_all'] = $post['task']['is_all'];
         $task_data['department_id'] = $post['task']['department'];
         if ($task_data['department_id'] != 2 && ($post['task']['is_all'] == 1 || $post['task']['is_all'] == 0)) {
@@ -1695,6 +1699,12 @@ class Project_Template_model extends CI_Model {
         $task_data['target_complete_date'] = $post['task']['target_complete_date'];
         $task_data['target_complete_day'] = $post['task']['target_complete_day'];
         $task_data['tracking_description'] = $post['task']['tracking_description'];
+        $task_data['is_input_form']=$post['task']['is_input_form'];
+        if(isset($post['task']['input_form_type']) && $post['task']['input_form_type']!=''){
+            $task_data['input_form_type']=$post['task']['input_form_type'];
+        }else{
+            $task_data['input_form_type']=0;
+        }
 //        $task_data['is_all'] = $post['task']['is_all'];
         $task_data['department_id'] = $post['task']['department'];
         if ($task_data['department_id'] != 2 && ($post['task']['is_all'] == 1 || $post['task']['is_all'] == 0)) {
@@ -1944,7 +1954,7 @@ class Project_Template_model extends CI_Model {
         return $this->db->get_where('projects', ['id' => $project_id])->row()->office_id;
     }
 
-    public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '', $template_cat_id = '', $month = '') {
+    public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='',$month='') {
 //        print_r($month);die;
 //        print_r($filter_data);die;
         $user_info = $this->session->userdata('staff_info');
@@ -2065,8 +2075,8 @@ class Project_Template_model extends CI_Model {
                 } else {
                     if (empty($filter_data)) {
                         $this->db->where_not_in('pm.status', [1, 2]);
-                    } else {
-                        $this->db->where_in('pm.status', [0, 1, 2]);
+                    }else{
+                        $this->db->where_in('pm.status', [0,1, 2]);
                     }
                 }
             }
@@ -2111,12 +2121,12 @@ class Project_Template_model extends CI_Model {
             }
         }
         if ($status != '') {
-            if ($status == 0 || $status == 1 || $status == 2) {
-                $this->db->where('pm.status', $status);
+                if ($status == 0 || $status == 1 || $status == 2) {
+                    $this->db->where('pm.status', $status);
+                }
+            } else {
+                $this->db->where_in('pm.status', [0,1, 2]);
             }
-        } else {
-            $this->db->where_in('pm.status', [0, 1, 2]);
-        }
         if (isset($sos_value) && $sos_value != '') {
             if ($sos_value == 'tome') {
                 $this->db->where(['sns.staff_id' => sess('user_id'), 'sos.reference' => 'projects', 'sns.read_status' => 0, 'sos.added_by_user!=' => sess('user_id')]);
@@ -2150,9 +2160,9 @@ class Project_Template_model extends CI_Model {
             if (isset($filter_data['variable_dropdown'])) {
                 foreach ($filter_data['variable_dropdown'] as $key => $variable_value) {
                     if (isset($variable_value) && $variable_value != '') {
-                        if (!isset($filter_data['condition_dropdown'][$key])) {
-                            $condition_value = 1;
-                        } else {
+                        if(!isset($filter_data['condition_dropdown'][$key])){
+                            $condition_value=1;
+                        }else{
                             $condition_value = $filter_data['condition_dropdown'][$key];
                         }
 //                        echo $condition_value;die;
@@ -2173,13 +2183,13 @@ class Project_Template_model extends CI_Model {
         if ($template_id != '') {
             $this->db->where('pro.template_id', $template_id);
         }
-        if ($template_cat_id != '') {
-            $this->db->where('pm.template_cat_id', $template_cat_id);
+        if($template_cat_id!=''){
+            $this->db->where('pm.template_cat_id',$template_cat_id);
         }
-        if ($month != '') {
-            $this->db->where('prm.actual_due_month', $month);
+        if($month!=''){
+            $this->db->where('prm.actual_due_month',$month);
         }
-
+        
         if (count($having) != 0) {
             $this->db->having(implode(' AND ', $having));
         }
@@ -2290,10 +2300,10 @@ class Project_Template_model extends CI_Model {
                     return $this->db->get()->result_array();
                 }
                 break;
-            case 12: {
-                    return $this->db->get('template_category')->result_array();
-                }
-
+            case 12:{
+                return $this->db->get('template_category')->result_array();
+            }
+                
             default: {
                     return [];
                 }
@@ -2331,7 +2341,8 @@ class Project_Template_model extends CI_Model {
             $criteria_value = $criteria['requested_by'];
         } elseif ($variable_value == 11) {
             $criteria_value = $criteria['due_date'];
-        } elseif ($variable_value == 12) {
+        }
+        elseif ($variable_value == 12) {
             $criteria_value = $criteria['template_cat_id'];
         }
 
@@ -2407,7 +2418,7 @@ class Project_Template_model extends CI_Model {
                     $criterias = implode(",", $criteria_value);
                 } elseif ($variable_value == 10) {
                     $criterias = implode(",", $criteria_value);
-                } elseif ($variable_value == 12) {
+                }elseif ($variable_value == 12) {
                     $criterias = implode(",", $criteria_value);
                 }
 //                elseif ($variable_value == 9) {
@@ -2455,28 +2466,23 @@ class Project_Template_model extends CI_Model {
         return array_column($result, 'read_status');
         // return $result['read_status'];
     }
-
-    public function getTemplateIds() {
+    public function getTemplateIds(){
         $this->db->select('p.template_id,ptm.title');
         $this->db->from('projects p');
-        $this->db->join('project_template_main ptm', 'p.template_id=ptm.id', 'inner');
+        $this->db->join('project_template_main ptm','p.template_id=ptm.id','inner');
         $this->db->group_by('p.template_id');
         return $this->db->get()->result_array();
     }
-
-    public function getTaskFilesCount($task_id) {
+    public function getTaskFilesCount($task_id){
         return $this->db->query("SELECT COUNT(id) as files FROM task_files WHERE task_id = '$task_id'")->row();
     }
-
-    public function getUnreadTaskFileCount($task_id, $reference) {
-        return $this->db->query('SELECT COUNT(frss.id) as unread_files_count FROM file_read_status_staff AS frss WHERE frss.reference_id = ' . "$task_id" . ' AND frss.reference = "task" AND frss.read_status = "n"')->row();
+    public function getUnreadTaskFileCount($task_id,$reference){
+        return $this->db->query('SELECT COUNT(frss.id) as unread_files_count FROM file_read_status_staff AS frss WHERE frss.reference_id = '. "$task_id". ' AND frss.reference = "task" AND frss.read_status = "n"')->row();
     }
-
     public function getTaskFilesContent($id) {
         $query = $this->db->query("select * from task_files where task_id='" . $id . "'");
         return $query->result_array();
     }
-
     public function file_upload_tasks($data, $files) {
         if (!empty($files["name"])) {
             $filesCount = count($files['name']);
@@ -2509,10 +2515,10 @@ class Project_Template_model extends CI_Model {
 
         $last_id_arr = [];
         $last_id = $this->db->insert_id();
-        for ($j = 0; $j < count($files['name']); $j++) {
-            if (!empty($files['name'][$j])) {
-                array_push($last_id_arr, $last_id + $j);
-                $variable = explode(',', $data['staff_list']);
+        for($j=0;$j<count($files['name']);$j++) {
+            if (!empty($files['name'][$j])) {    
+                array_push($last_id_arr,$last_id+$j);
+                $variable = explode(',',$data['staff_list']);
 
                 foreach ($variable as $value) {
                     $staff_array = array(
@@ -2521,22 +2527,49 @@ class Project_Template_model extends CI_Model {
                         'reference_id' => $data['task_id'],
                         'staff_id' => $value
                     );
-                    $this->db->insert('file_read_status_staff', $staff_array);
+                    $this->db->insert('file_read_status_staff',$staff_array);
                 }
             }
         }
 
-        return $this->db->get_where('task_files', array('task_id' => $data['task_id']))->num_rows();
-        ;
+        return $this->db->get_where('task_files',array('task_id'=>$data['task_id']))->num_rows();;
     }
-
-    function getTaskFiles($task_id) {
-        return $this->db->get_where("task_files", ['task_id' => $task_id])->result_array();
+    function getTaskFiles($task_id){
+        return $this->db->get_where("task_files",['task_id'=>$task_id])->result_array();
     }
-
-    function saveProjectInputForm($data) {
-        $this->db->trans_begin();
-
+    function saveProjectInputForm($data){
+        $input_form_type=$data['input_form_type'];
+        if($input_form_type==1){
+            $exist=$this->db->get_where('project_task_sales_tax_process',['task_id'=>$data['task_id']])->row();
+            if(!empty($exist)){
+                $this->db->where('task_id',$data['task_id']);
+                $this->db->delete('project_task_sales_tax_process');
+            }
+            $data_array = array(
+                'task_id'=>$data['task_id'],
+                'client_id' => $data['client_name'],
+                'state_id' => $data['state'],
+                'county_id' => $data['county'],
+                'added_by_user' => sess('user_id'),
+                'user_type' => $data['user_type'],
+                'rate' => $data['rate'],
+                'exempt_sales' => $data['exempt_sales'],
+                'taxable_sales' => $data['taxable_sales'],
+                'gross_sales' => $data['gross_sales'],
+                'sales_tax_collect' => $data['sales_tax_collect'],
+                'collect_allowance' => $data['collection_allowance'],
+                'total_due' => $data['total_due'],
+                'period_of_time' => $data['period_time'],
+                'period_of_time_val' => $data['period_time'],
+                'period_of_time_yearval' => $data['period_time_year'],
+                'confirmation_number' => $data['confirmation_number'],
+                'status' => 0
+            );
+            $this->db->trans_begin();
+            $this->db->insert('project_task_sales_tax_process',$data_array);
+            $insert_id=$this->db->insert_id();
+//            echo $insert_id;die;
+        }
         $uploadData = [];
         $files = $_FILES["project_attachment"];
         if (!empty($files["name"])) {
@@ -2568,12 +2601,12 @@ class Project_Template_model extends CI_Model {
         if (!empty($uploadData)) {
             $this->db->insert_batch('task_files', $uploadData);
         }
-
+        
         $notedata = $this->input->post('task_note');
-        if (!empty($notedata)) {
+        if(!empty($notedata)){
             $this->insert_task_note(11, $notedata, "task_id", $data['task_id'], 'task');
         }
-
+        
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return false;
@@ -2582,18 +2615,28 @@ class Project_Template_model extends CI_Model {
             return true;
         }
     }
-
     public function delete_project_input_form_files($file_id) {
         $file_info = $this->db->get_where('task_files', ['id' => $file_id])->row_array();
         unlink(FCPATH . 'uploads/' . $file_info['file_name']);
         $this->db->where(['id' => $file_id]);
         return $this->db->delete('task_files');
     }
-
-    public function getTemplateCategory() {
+    public function getTemplateCategory(){
         return $this->db->get('template_category')->result_array();
     }
-
+    public function getClientDtlsByTaskId($task_id){
+        $this->db->select('p.client_id,p.client_type,pt.project_id');
+        $this->db->from('project_task pt');
+        $this->db->join('projects p','p.id=pt.project_id','inner');
+        $this->db->where('pt.id',$task_id);
+        return $this->db->get()->row();
+    }
+    public function getProjectTaskInputFormType($task_id){
+        return $this->db->get_where('project_task',['id'=>$task_id])->row()->input_form_type;
+    }
+    public function getProjectTaskSalesTaxProcess($task_id){
+        return $this->db->get_where('project_task_sales_tax_process',['task_id'=>$task_id])->row();
+    }
 }
 
 ?>

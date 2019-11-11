@@ -19,14 +19,15 @@ class Home extends CI_Controller {
             1 => "ID",
             2 => "Order ID",
             3 => "Tracking",
-            4 => "Office ID",
-            5 => "Invoice Type",
+            4 => "Office",
+            5 => "Client Type",
             6 => "Status",
             7 => "Creation Date",
             8 => "Requested By",
             9 => "Client ID",
             10 => "Service Name",
-            11 => "Request Type"
+            11 => "Request Type",
+            12 => "Due Date"
         ];
         $this->sorting_element = [
             "invoice_id" => "ID",

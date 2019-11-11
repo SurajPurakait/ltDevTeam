@@ -88,14 +88,15 @@ class Billing_model extends CI_Model {
             "id" => "inv.id",
             "order_id" => "inv.order_id",
             "tracking" => "inv.status",
-            "office_id" => "indt.office",
-            "invoice_type" => "inv.type",
+            "office" => "indt.office",
+            "client_type" => "inv.type",
             "status" => "inv.payment_status",
             "creation_date" => "inv.created_time",
             "requested_by" => "inv.created_by",
             "client_id" => "inv.reference_id",
             "service_name" => "ord.service_id",
-            "request_type" => "request_type"
+            "request_type" => "request_type",
+            "due_date" => "due_date"
         ];
 
         $this->sorting_element = [
@@ -1162,9 +1163,9 @@ class Billing_model extends CI_Model {
 
     public function save_order_on_invoice($invoice_id, $save_type = 'create') {
         $invoice_info = $this->db->get_where('invoice_info', ['id' => $invoice_id])->row_array();
-        if ($invoice_info['is_order'] == 'n') {
-            return true;
-        }
+//        if ($invoice_info['is_order'] == 'n') {
+//            return true;
+//        }
         if ($invoice_info['type'] == 2) {
             $this->db->where('id', $invoice_id);
             $this->db->update('invoice_info', ['is_order' => 'n']);
@@ -1183,14 +1184,14 @@ class Billing_model extends CI_Model {
         $this->db->where_in('order_id', $order_ids);
         $service_request_info = $this->db->get('service_request')->result_array();
 
-        $this->db->where_in('service_id', array_column($service_request_info, 'services_id'));
-        $this->db->where(['input_form' => 'y']);
-        $target_days = $this->db->get('target_days')->result_array();
-        if (empty($target_days)) {  //check input-form exist or not 
-            $this->db->where('id', $invoice_id);
-            $this->db->update('invoice_info', ['is_order' => 'n']);
-            return true;
-        }
+//        $this->db->where_in('service_id', array_column($service_request_info, 'services_id'));
+//        $this->db->where(['input_form' => 'y']);
+//        $target_days = $this->db->get('target_days')->result_array();
+//        if (empty($target_days)) {  //check input-form exist or not 
+//            $this->db->where('id', $invoice_id);
+//            $this->db->update('invoice_info', ['is_order' => 'n']);
+//            return true;
+//        }
 
         $this->db->order_by('id');
         $order_data = $this->db->get_where('order', ['invoice_id' => $invoice_id])->row_array();
@@ -1297,6 +1298,7 @@ class Billing_model extends CI_Model {
             '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
         ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
+        $where['status'] = 'AND `inv`.`status` != 0 ';
         if ($by != '') {
             if ($by == 'byme') {
                 $where['inv.created_by'] = 'AND `inv`.`created_by` = ' . $staff_id . ' ';
@@ -1329,13 +1331,13 @@ class Billing_model extends CI_Model {
                     $where['inv.created_by'] = 'AND `inv`.`created_by` = "' . $staff_id . '" ';
                 }
             } else {
-                $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (0,7)) ';
+                $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (7)) ';
             }
         }
 
         if ($status == '') {
             $where['inv.payment_status'] = 'AND (CASE WHEN `inv`.`status` = 3 THEN `inv`.`payment_status` IN (1, 2) ELSE `inv`.`payment_status` IN (1, 2, 3) END) ';
-            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 7) ';
+            $where['inv.status'] = 'AND `inv`.`status` NOT IN (7) ';
         } else {
             unset($where_or);
             if ($status == 3) {
@@ -1349,7 +1351,7 @@ class Billing_model extends CI_Model {
         } else if ($payment_status == 3) {
             unset($where_or);
             $where['inv.payment_status'] = 'AND `inv`.`payment_status` = ' . $payment_status . ' ';
-            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 3, 7) ';
+            $where['inv.status'] = 'AND `inv`.`status` NOT IN (3, 7) ';
         } else {
             unset($where_or);
             $where['inv.payment_status'] = 'AND `inv`.`payment_status` = ' . $payment_status . ' ';
@@ -1365,15 +1367,33 @@ class Billing_model extends CI_Model {
                     if ($filter_key == "creation_date") {
                         if (strlen($filter[0]) == 10) {
                             $date_value = date("Y-m-d", strtotime($filter[0]));
-                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 2 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . $date_value . '") ';
+                            // $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 2 || $condition == 4) ? 'NOT ' : '') . 'IN ("' . $date_value . '") ';
+                            $where[$this->filter_element[$filter_key]] = 'AND ' . $this->filter_element[$filter_key] . ' ' . (($condition == 2 || $condition == 4) ? 'not like ' : 'like') . '"' . $date_value . '%"';
                         } elseif (strlen($filter[0]) == 23) {
                             $date_value = explode(" - ", $filter[0]);
                             foreach ($date_value as $date_key => $date) {
                                 $date_value[$date_key] = "'" . date("Y-m-d", strtotime($date)) . "'";
                             }
-                            $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') ' . (($condition == 2 || $condition == 4) ? 'NOT ' : '') . 'BETWEEN ' . implode(' AND ', $date_value) . ') ';
+                            $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'BETWEEN ' . implode(' AND ', $date_value) . ') ';
                         }
-                    } else {
+                    }elseif ($filter_key == "due_date") {
+                     
+                         if (strlen($filter[0]) == 10) {
+                    $date_value = date('Y-m-d', strtotime('-30 days', strtotime($filter[0])));
+                   
+                    $where['inv.created_time'] = 'AND inv.created_time' . ' ' . (($condition == 3) ? 'not like ' : 'like') . '"' . $date_value . '%"';
+                           
+                        } elseif (strlen($filter[0]) == 23) {                          
+                            $date_value = explode(" - ", $filter[0]);
+                            
+                          foreach ($date_value as $date_key => $date) {
+                                $date_value[$date_key] = "'" .date("Y-m-d", strtotime('-30 days', strtotime($date))) . "'";
+                            }
+                            $where['inv.created_time'] = 'AND (Date(inv.created_time) ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . ' BETWEEN ' . implode(' AND ', $date_value) . ') ';
+                        }
+                    }
+
+                    else {
                         if ($filter_key == 'tracking') {
                             $is_tracking = 'y';
                         }
@@ -1436,11 +1456,11 @@ class Billing_model extends CI_Model {
             $reference = explode("-", $reference_id);
             $where['indt.reference_id'] = 'AND `indt`.`reference_id` = ' . $reference[0] . ' ';
             $where['indt.reference'] = 'AND `indt`.`reference` = "' . $reference[1] . '" ';
-            $where['inv.status'] = 'AND `inv`.`status` NOT IN (0, 7) ';
+            $where['inv.status'] = 'AND `inv`.`status` NOT IN (7) ';
         }
         if (!empty($filter_data)) {
             if ($is_tracking == 'n') {
-                $where['inv.status'] = 'AND `inv`.`status` NOT IN (0) ';
+                unset($where['inv.status']);                
             }
             if ($is_status == 'n') {
                 unset($where['inv.payment_status']);
@@ -1451,7 +1471,7 @@ class Billing_model extends CI_Model {
                 'INNER JOIN `order` AS `ord` ON `ord`.`invoice_id` = `inv`.`id` ' .
                 'INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END) ';
         $this->db->query('SET SQL_BIG_SELECTS=1');
-        return $this->db->query('SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . 'GROUP BY `ord`.`invoice_id` ' . $order_by . ' ')->result_array();
+        return $this->db->query('SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id` ' . $order_by . ' ')->result_array();
     }
 
     public function update_payment_status_by_invoice_id($invoice_id) {

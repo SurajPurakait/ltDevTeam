@@ -1344,8 +1344,8 @@ function projectFilter() {
         }
     });
 }
-function loadProjectDashboard(status = '', request = '', templateID = '', officeID = '', departmentID = '', filter_assign = '', filter_data = '', sos_value = '', sort_criteria = '', sort_type = '', client_type = '', client_id = '', clients = '', pageNumber = 0, template_cat_id = '', month = '') {
-//   alert(filter_data);
+function loadProjectDashboard(status = '', request = '', templateID = '', officeID = '', departmentID = '', filter_assign = '', filter_data = '', sos_value = '', sort_criteria = '', sort_type = '', client_type = '', client_id = '', clients = '', pageNumber = 0,template_cat_id='',month='') {
+//   alert(status);
 //    if (request != '') {
 //        activeShortColumn(request, short_column);
 //    } else {
@@ -1367,8 +1367,8 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
             client_type: client_type,
             client_id: client_id,
             page_number: pageNumber,
-            template_cat_id: template_cat_id,
-            month: month
+            template_cat_id:template_cat_id,
+            month:month
         },
         url: base_url + 'project/dashboard_ajax',
         success: function (project_result) {
@@ -1377,7 +1377,7 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
                 if (pageNumber == 1 || pageNumber == 0) {
                     $("#action_dashboard_div").html(project_result);
                     //$("a.filter-button span:contains('-')").html(0);
-
+                    
                 } else {
                     $(".ajaxdiv").append(project_result);
                     $("#action_dashboard_div").append(project_result);
@@ -1390,13 +1390,15 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
                 $(".request-dropdown").val(request);
                 $("[data-toggle=popover]").popover();
             }
-            if (filter_data == '') {
-                $("#clear_filter").html(filter_data + ' &nbsp; ');
-                $("#clear_filter").show();
+            if (status != '' || status == '0') {
+//                $("#clear_filter").html(filter_data + ' &nbsp; ');
+//                $("#clear_filter").show();
                 $('#bookkeeping_btn_clear_filter').show();
-            } else {
-                $("#clear_filter").html('');
-                $("#clear_filter").hide();
+                
+            }
+            else {
+//                $("#clear_filter").html('');
+//                $("#clear_filter").hide();
                 $('#bookkeeping_btn_clear_filter').hide();
                 $('#tax_btn_clear_filter').hide();
                 $('#sales_btn_clear_filter').hide();
@@ -1461,7 +1463,6 @@ function add_project_sos() {
     });
 }
 function tetmplate_task_delete_modal(task_id, template_id) {
-//    alert(task_id);return false;
     $.ajax({
         type: "POST",
         url: base_url + 'administration/template/delete_template_task_modal',
@@ -1545,7 +1546,13 @@ var saveInputForms = function () {
     if (!requiredValidation('project_input_form')) {
         return false;
     }
-
+    $("#gross_sales").attr('disabled', false);
+    $("#sales_tax_collect").attr('disabled', false);
+    $("#collection_allowance").attr('disabled', false);
+    $("#total_due").attr('disabled', false);
+    var userid = $("#user_id").val();
+    var user_type = $("#user_type").val();
+//    var input_form_type=$("#input_form_type").val();
     var form_data = new FormData(document.getElementById('project_input_form'));
     $.ajax({
         type: "POST",
@@ -1557,6 +1564,7 @@ var saveInputForms = function () {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
+//            alert(result);return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
                 goURL(base_url + 'project');
