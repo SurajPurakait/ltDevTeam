@@ -981,3 +981,4 @@ CREATE TABLE project_task_sales_tax_process LIKE sales_tax_process
 ALTER TABLE `project_task_sales_tax_process` ADD `task_id` INT(11) NOT NULL AFTER `id`; 
 
 /*11.11.19*/
+/*leafnet alter test*/
