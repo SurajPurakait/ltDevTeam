@@ -1013,7 +1013,7 @@ Class System extends CI_Model {
             WHEN gn.action = "reaches" THEN CONCAT("<strong> ", gn.notification_text, " </strong>has passed the due date ")
             WHEN gn.action = "sos" THEN CONCAT("<strong> ", gn.notification_text, " </strong>has a new SOS notification ")
             WHEN gn.action = "refer" THEN CONCAT(" A new <strong>", gn.notification_text, " </strong>has been referred to ", (CASE WHEN gn.assign_to_user != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.assign_to_user) ELSE " <strong>YOU</strong>" END))
-            ELSE CONCAT("New<strong> ", gn.notification_text, " </strong> has been created by ", (CASE WHEN gn.added_by != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.added_by) ELSE "<strong>YOU</strong> by" END)) END) AS notification_text';
+            ELSE CONCAT("New<strong> ", gn.notification_text, " </strong> has been created by ", (CASE WHEN gn.added_by != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.added_by) ELSE "<strong>YOU</strong>" END)) END) AS notification_text';
 
 
         $select[] = '(SELECT GROUP_CONCAT(`office`.`name`) AS `staff_office_name` FROM `office` WHERE `office`.`id` IN (SELECT `office_staff`.`office_id` FROM `office_staff` WHERE `office_staff`.`staff_id` = gn.added_by)) AS added_by_user_office';
