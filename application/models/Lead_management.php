@@ -50,6 +50,13 @@ Class Lead_management extends CI_Model {
             "requested_to" => "rl.referred_to",
             "submission_date" => "submission_date"
         ];
+
+        $this->filter_element_event = [
+            "event_name" => "ev.event_name",
+            "office" => "of.name",
+            "date" => "ev.event_date",
+            "location" => "ev.location"
+        ];
     }
 
     public function get_lead_types() {
@@ -1494,6 +1501,34 @@ Class Lead_management extends CI_Model {
         endswitch;
     }
 
+
+    public function get_event_filter_element_value($element_key) {
+        // echo $element_key;exit;
+        switch ($element_key):
+            case 1: {
+                    $this->db->select('event_name');
+                    return $this->db->get('event')->result_array();
+                }
+                break;
+            case 2: {
+                    return $this->administration->get_all_office();
+                }
+                break;
+            case 4: {
+                    $this->db->select('location');
+                    return $this->db->get('event')->result_array();
+                }
+                break;
+
+            default: {
+                    return [];
+                }
+                break;
+        endswitch;
+    }
+
+
+
     public function delete_lead_management($id) {
         return $this->db->where("id", $id)->delete("lead_management");
     }
@@ -1997,4 +2032,80 @@ Class Lead_management extends CI_Model {
         }
 
     }
+
+
+      public function get_event_list($office_id = '',$filter_data = []) {
+        $this->db->select('ev.*,of.*');
+        $this->db->from('event AS ev');
+        $this->db->join('office AS of','ev.office_id=of.id');
+        $filter_where_in = [];
+        $between = '';
+        if (!empty($filter_data)) {
+            $key = 0;
+            if (isset($filter_data['criteria_dropdown'])) {
+                foreach ($filter_data['criteria_dropdown'] as $filter_key => $filter) {
+                    
+                    $filter_key = trim($filter_key);
+                    $condition = isset($filter_data['condition_dropdown'][$key]) ? $filter_data['condition_dropdown'][$key] : 1;
+                   
+                    if ($filter_key == "date") {
+                        if (strlen($filter[0]) == 10) {
+                           
+                            $date_value = date("Y-m-d", strtotime($filter[0]));
+                           
+                            if($condition == 1){
+                             $filter_where_in[$this->filter_element_event[$filter_key]][] = $date_value;
+                            }elseif ($condition == 3) {
+                               
+                                $this->db->where('ev.event_date!=',$date_value);
+                            }
+
+                        } elseif (strlen($filter[0]) == 23) {
+                            $date_value = explode(" - ", $filter[0]);
+                           
+                            foreach ($date_value as $date_key => $date) {
+                                $date_value[$date_key] = "'" . date("Y-m-d", strtotime($date)) . "'";
+                            }
+                            $between = 'Date(' . $this->filter_element_event[$filter_key] . ')'.(($condition == 4) ? 'NOT ' : '') .' BETWEEN ' . implode(' AND ', $date_value);
+                            
+                        }
+                    } else {
+                        foreach ($filter as $key => $filter_value) {
+                            
+                            if ($filter_value != '') {
+
+                                if($condition == 1 || $condition == 2){
+                                $filter_where_in[$this->filter_element_event[$filter_key]][] = $filter_value;
+                                
+                               }elseif ($condition == 3 || $condition == 4) {
+                                  
+                                 $this->db->where('ev.event_name!=',$filter_value);
+                                 $this->db->where('ev.location!=',$filter_value);
+                                 $this->db->where('of.name!=',$filter_value);
+                               }
+                            }
+                        }
+                    }
+                }
+                $key++;
+            }
+        }
+
+        if (!empty($filter_where_in)) {
+            
+            foreach ($filter_where_in as $column => $in) {
+                
+                $this->db->where_in($column, $in);
+            }
+        }
+
+        if ($between != '') {
+            $this->db->where($between);
+        }
+
+        $result = $this->db->get()->result_array();
+//        echo $this->db->last_query();die;
+        return $result;
+    }
+
 }
