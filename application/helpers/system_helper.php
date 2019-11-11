@@ -3044,10 +3044,19 @@ if (!function_exists('get_action_notifications_count')) {
 }
 if (!function_exists('get_lead_notifications_count')) {
 
-    function get_lead_notifications_count() {
+    function get_lead_notifications_count($forvalue) {
         $ci = &get_instance();
         $ci->load->model('system');
-        return $ci->system->get_lead_notifications_count();
+        return $ci->system->get_lead_notifications_count($forvalue);
+    }
+
+}
+if (!function_exists('get_partner_notifications_count')) {
+
+    function get_partner_notifications_count($forvalue) {
+        $ci = &get_instance();
+        $ci->load->model('system');
+        return $ci->system->get_partner_notifications_count($forvalue);
     }
 
 }
