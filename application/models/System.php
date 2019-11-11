@@ -1031,7 +1031,7 @@ Class System extends CI_Model {
             if ($request_type == 'forme') {
                 $this->db->where(['gn.added_by' => $user_id, 'gn.read_status' => 'n']);
             } elseif ($request_type == 'forother') {
-                $this->db->where(['gn.added_by!=' => $user_id, 'gn.read_status' => 'n', 'gn.added_by!=' => $user_id]);
+                $this->db->where(['gn.added_by!=' => $user_id, 'gn.read_status' => 'n', 'gn.added_by!=' => $user_id]);   
             } else {
                 $this->db->where(['gn.user_id' => $user_id, 'gn.read_status' => 'n']);
             }
@@ -1345,9 +1345,18 @@ Class System extends CI_Model {
         }
     }
 
-    public function get_lead_notifications_count() {
+    public function get_lead_notifications_count($forvalue) {
         $where['gn.reference'] = 'lead';
-        $result = $this->get_general_notification_by_user_id(sess('user_id'), '', $where, '');
+        $result = $this->get_general_notification_by_user_id(sess('user_id'), '', $where, '', $forvalue);
+        if (!empty($result)) {
+            return count($result);
+        } else {
+            return 0;
+        }
+    }
+    public function get_partner_notifications_count($forvalue) {
+        $where['gn.reference'] = 'partner';
+        $result = $this->get_general_notification_by_user_id(sess('user_id'), '', $where, '', $forvalue);
         if (!empty($result)) {
             return count($result);
         } else {

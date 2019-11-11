@@ -97,7 +97,7 @@
                             </div>
                         </div>
                         <div class="col-md-12 col-lg-4 col-lg-offset-1 m-t-8">
-                            <a class="btn notification-btn" href="javascript:void(0);" title="Lead Notifications">Notifications <span class="label label-danger"><?= get_lead_notifications_count(); ?></span></a>
+                            <a class="btn notification-btn" href="javascript:void(0);" title="Lead Notifications">Notifications <span class="label label-danger"><?= get_partner_notifications_count('partner'); ?></span></a>
                         </div>
                     </div>
                     <hr class="hr-line-dashed">
