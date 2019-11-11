@@ -661,14 +661,18 @@ if ($status == '') {
                 success: function (result) {
                     //alert(result);
                     $(".ajaxdiv").html(result);
-                    $(".filter-text").addClass('btn btn-ghost');
-                    $(".filter-text").html('<span class="byclass ' + requestType + '">Requested ' + requestTypeName + ' <a href="javascript:void(0);" onclick="removefilter(\'' + requestTypeName + '\',' + status + ')"><i class="fa fa-times" aria-hidden="true"></i></a></span>');
+                    if(requestType != 'unassigned') {
+                        $(".filter-text").addClass('btn btn-ghost');
+                        $(".filter-text").html('<span class="byclass ' + requestType + '">Requested ' + requestTypeName + ' <a href="javascript:void(0);" onclick="removefilter(\'' + requestTypeName + '\',' + status + ')"><i class="fa fa-times" aria-hidden="true"></i></a></span>');
+                    }                    
                     $(".status-dropdown").val(status);
                     $("#hiddenflag").val(hiddenflag);
                     if ((status + requestType) == '') {
                         clearFilter();
                     } else {
-                        reflactFilterWithSummery(status + '-' + filterval, requestType + '-' + requestTypeName);
+                        if(requestType != 'unassigned') {
+                            reflactFilterWithSummery(status + '-' + filterval, requestType + '-' + requestTypeName);
+                        }
                     }
                 },
                 beforeSend: function () {
