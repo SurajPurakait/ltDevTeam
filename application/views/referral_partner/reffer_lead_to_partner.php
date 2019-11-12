@@ -6,6 +6,25 @@
                 <div class="ibox-content">
                     <form class="form-horizontal" method="post" id="form_add_new_prospect">
                         <h3>Add Lead</h3>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Lead Type<span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <select required class="form-control" id="lead_type" title="Type of Contact" name="lead_type" onchange="change_type_of_contact(this.value)">
+                                    <?php foreach ($type_of_leads as $value): ?>
+                                        <option value="<?= $value["id"]; ?>"><?= $value["type"]; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Type of Contact<span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <select required class="form-control" id="contact_type" title="Type of Contact" name="type_of_contact">                                
+                                </select>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
                         <!-- <div class="form-group">
                             <label class="col-lg-2 control-label">Type of Contact
                                 <span class="text-danger">*</span></label>
@@ -164,7 +183,7 @@
 </div>
 
 <script>
-
+    change_type_of_contact(1);
     $(function () {
         $("#lead_source").change(function () {
             var value = $("#lead_source option:selected").text();
