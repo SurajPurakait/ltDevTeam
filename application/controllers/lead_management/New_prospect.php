@@ -16,14 +16,11 @@ class New_prospect extends CI_Controller {
 
     public function index() {
         $this->load->layout = 'dashboard';
-        // $title = "Create New Prospect";
         $title = "Leads Dashboard / Add New";
         $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['main_menu'] = 'leads';
-        // $render_data['main_menu'] = 'lead_management';
         $render_data['menu'] = 'new_lead';
         $render_data['header_title'] = $title;
-        // $render_data['lead_types'] = $type;
         $render_data["type_of_contact"] = $this->lm->get_lead_types();
         $render_data["type_of_leads"] = $this->lm->get_lead_type_for_mail();
         $render_data["lead_source"] = $this->lm->get_lead_sources();
@@ -96,8 +93,6 @@ class New_prospect extends CI_Controller {
                     $from = $user_details['user'];
                     $from_name = $user_details['first_name'] . ', ' . $user_details['last_name'];
                 }
-                // $from = $user_details['user'];
-                // $from_name = $user_details['first_name'] . ', ' . $user_details['last_name'];
                 $user_name = post("first_name") . ', ' . post("last_name");
 
                 $lead_source = $this->lm->get_lead_source_by_id(post("lead_source"));
@@ -221,7 +216,6 @@ class New_prospect extends CI_Controller {
                 $this->email->reply_to($from, $from_name);
                 $this->email->to($user_email); // change it to yours
                 $this->email->cc($requested_by['user']);
-                // $this->email->cc($from);
                 $this->email->subject($email_subject);
                 $this->email->message($message);
                 if ($this->email->send()) {
