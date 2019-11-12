@@ -1313,10 +1313,10 @@ class Project_Template_model extends CI_Model {
                 }
             }
             $status_array_values = explode(",", $status_array);
-            if (!in_array("1", $status_array_values) && !in_array("2", $status_array_values)) {
+            if (!in_array("1", $status_array_values) && !in_array("2", $status_array_values) && !in_array("3", $status_array_values)) {
                 $this->db->where('id', $suborder_order_id);
                 $this->db->update('project_main', array('status' => 0));
-            } else if (!in_array("0", $status_array_values) && !in_array("2", $status_array_values)) {
+            } else if (!in_array("0", $status_array_values) && !in_array("2", $status_array_values) && !in_array("3", $status_array_values)) {
                 $this->db->where('id', $suborder_order_id);
                 $this->db->update('project_main', array('status' => 1));
             } else {
@@ -1324,20 +1324,26 @@ class Project_Template_model extends CI_Model {
                 $this->db->update('project_main', array('status' => 1));
             }
         } elseif ($status == 1) {
-//            echo 'b';die;
             if (!empty($get_main_order_query)) {
                 $suborder_order_id = $get_main_order_query[0]['project_id'];
             }
-//            $get_service_end_days = $this->db->query("select * from target_days where service_id='" . $suborder_service_id . "'")->result_array();
-//            $end_days = $get_service_end_days[0]['end_days'];
-//            echo $suborder_order_id;die;
             $end_date = date('Y-m-d h:i:s');
             $this->db->where('id', $id);
             $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 1));
             $this->db->where('project_id', $suborder_order_id);
             $this->db->update('project_main', array('status' => 1));
-            //$this->assign_order_by_order_id($suborder_order_id, sess('user_id'));
-        } else {
+        }elseif ($status == 3) {
+            if (!empty($get_main_order_query)) {
+                $suborder_order_id = $get_main_order_query[0]['project_id'];
+            }
+            $end_date = date('Y-m-d h:i:s');
+            $this->db->where('id', $id);
+            $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 3));
+            $this->db->where('project_id', $suborder_order_id);
+            $this->db->update('project_main', array('status' => 0));
+        }
+        
+        else {
             $end_date = date('Y-m-d h:i:s');
             $this->db->where('id', $id);
             $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 2));
@@ -1345,6 +1351,11 @@ class Project_Template_model extends CI_Model {
                 $suborder_order_id = $get_main_order_query[0]['project_id'];
             }
             $check_if_all_services_not_started = $this->db->query('select * from project_task where project_id="' . $suborder_order_id . '"')->result_array();
+//            $resolved_result= array_column($check_if_all_services_not_started,'tracking_description');
+//            
+//            if(!empty($resolved_result) && in_array('2', $resolved_result)){
+//                
+//            }
             if (!empty($check_if_all_services_not_started)) {
                 $k = 0;
                 $status_array = '';
@@ -1360,7 +1371,6 @@ class Project_Template_model extends CI_Model {
             }
 
             $status_array_values = explode(",", $status_array);
-//            print_r($status_array_values);die;
             if (count(array_unique($status_array_values)) == 1) {
                 $this->db->where('project_id', $suborder_order_id);
                 $this->db->update('project_main', array('status' => 2));
@@ -1381,7 +1391,7 @@ class Project_Template_model extends CI_Model {
     }
 
     public function get_project_tracking_log($id, $table_name) {
-        return $this->db->query("SELECT concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id, (SELECT name from department where id=(SELECT department_id from department_staff where staff_id=s.id )) as department, case when tracking_logs.status_value = '0' then 'Not Started' when tracking_logs.status_value = '1' then 'Started' when tracking_logs.status_value = '2' then 'Completed' else tracking_logs.status_value end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
+        return $this->db->query("SELECT concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id, (SELECT name from department where id=(SELECT department_id from department_staff where staff_id=s.id )) as department, case when tracking_logs.status_value = '0' then 'New' when tracking_logs.status_value = '1' then 'Started' when tracking_logs.status_value = '2' then 'Resolved' when tracking_logs.status_value = '3' then 'Ready' else tracking_logs.status_value end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
     }
 
     public function getStaffType() {

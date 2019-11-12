@@ -65,10 +65,11 @@
                         <div class="form-group">
                             <label class="control-label">Tracking Description:</label>
                             <select class="form-control" id="description" name="task[tracking_description]">
-                                <option value="0" value="<?= $task_details->tracking_description=='0'?'selected':'' ?>">Not Started</option>
+                                <option value="0" value="<?= $task_details->tracking_description=='0'?'selected':'' ?>">New</option>
                                 <option value="1" value="<?= $task_details->tracking_description=='1'?'selected':'' ?>">Started</option>
-                                <option value="2" value="<?= $task_details->tracking_description=='2'?'selected':'' ?>">Completed</option>
-                            </select>
+                                <option value="3" value="<?= $task_details->tracking_description=='3'?'selected':'' ?>">Ready</option>
+                                <option value="2" value="<?= $task_details->tracking_description=='2'?'selected':'' ?>">Resolved</option>
+                             </select>
                         </div>
                     </div>
                     <div class="col-md-12">
