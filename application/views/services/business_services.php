@@ -33,6 +33,16 @@
                 </h3>
             </a>
         </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <a class="widget p-lg text-center ibox-content link-panel" href="<?= base_url() ."services/business_services/create_legal_translations"; ?>">
+                <img src="<?php echo base_url() ?>assets/img/settings.svg" alt="Legal Translations image" class="svg-icon m-b-md"/>
+                <h3 class="font-bold no-margins">
+                    Legal Translations
+                </h3>
+            </a>
+        </div>
+
     </div>
 
 </div>
