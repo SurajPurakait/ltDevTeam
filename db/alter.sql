@@ -980,3 +980,6 @@ CREATE TABLE project_task_sales_tax_process LIKE sales_tax_process
 
 ALTER TABLE `project_task_sales_tax_process` ADD `task_id` INT(11) NOT NULL AFTER `id`; 
 /*11.11.2019*/
+
+/*12.11.2019*/
+ALTER TABLE `order_extra_data` ADD `translation_to` VARCHAR(255) NOT NULL AFTER `document_date`, ADD `amount_of_pages` INT(100) NOT NULL AFTER `translation_to`, ADD `attach_files` VARCHAR(255) NOT NULL AFTER `amount_of_pages`;
