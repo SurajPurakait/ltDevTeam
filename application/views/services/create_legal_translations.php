@@ -264,7 +264,7 @@
 
                          <div class="form-group">
                              <h3>Translation Files</h3>
-                            <label class="col-lg-2 control-label">Attach Files</label>
+                            <label class="col-lg-2 control-label">Attach Files<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
                                  <input class="form-control" type="file" name="doc_file" id="doc_file" title="Attach Files">
                             </div>
