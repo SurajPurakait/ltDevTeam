@@ -1193,9 +1193,9 @@ Class Lead_management extends CI_Model {
         $userid = $user_details['id'];
 
         $sql = "SELECT * FROM `lead_management` WHERE status = '3' and type!='2'";
-        if ($usertype != 1) {
-            $sql .= " and staff_requested_by='" . $userid . "'";
-        }
+        // if ($usertype != 1) {
+        //     $sql .= " and staff_requested_by='" . $userid . "'";
+        // }
         return $this->db->query($sql)->num_rows();
     }
 
