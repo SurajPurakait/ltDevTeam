@@ -23,14 +23,17 @@
 //                                                            print_r($task);die;
                     $status = $task->tracking_description;
                     if ($status == 2) {
-                        $tracking = 'Completed';
+                        $tracking = 'Resolved';
                         $trk_class = 'label-primary';
                     } elseif ($status == 1) {
                         $tracking = 'Started';
                         $trk_class = 'label-yellow';
                     } elseif ($status == 0) {
-                        $tracking = 'Not Started';
+                        $tracking = 'New';
                         $trk_class = 'label-success';
+                    }elseif ($status == 3) {
+                        $tracking = 'Ready';
+                        $trk_class = 'label-secondary';
                     }
 
                     $pattern_details = get_project_pattern($task->project_id);

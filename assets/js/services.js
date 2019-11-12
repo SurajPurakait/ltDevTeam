@@ -3235,3 +3235,42 @@ function set_exist_account_details(bank_name, bank_number, route_number) {
         $("#bank_routing").val('');
     }
 }
+
+
+function request_create_legal_translations() {
+    if (!requiredValidation('form_create_legal_translations')) {
+        return false;
+    }
+    if ($("#editval").val() != '') {
+        $('.disabled_field, .client_type_field0, .type_of_client').removeAttr('disabled');
+    }
+    $('#type').removeAttr('disabled');
+    var form_data = new FormData(document.getElementById('form_create_legal_translations'));
+//    alert(form_data);return false;
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'services/business_services/request_create_legal_translations',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+           // alert(result);return false;
+            //console.log("Result: " + result); return false;
+            if (result != 0) {
+                swal("Success!", "Successfully saved!", "success");
+                goURL(base_url + 'services/home/view/' + result.trim());
+            } else {
+                swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}

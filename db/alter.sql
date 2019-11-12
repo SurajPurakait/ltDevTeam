@@ -978,4 +978,10 @@ ALTER TABLE `project_template_task` ADD `input_form_type` INT(2) NOT NULL DEFAUL
 
 CREATE TABLE project_task_sales_tax_process LIKE sales_tax_process 
 
-ALTER TABLE `project_task_sales_tax_process` ADD `task_id` INT(11) NOT NULL AFTER `id`; 
+ALTER TABLE `project_task_sales_tax_process` ADD `task_id` INT(11) NOT NULL AFTER `id`;
+
+/* 12.11.19 */
+
+ALTER TABLE `project_template_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for start, 2 for resolve,3 for ready';  
+
+ALTER TABLE `project_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for started, 2 for resolved, 3 for ready'; 
