@@ -630,7 +630,7 @@ Class Lead_management extends CI_Model {
         if ($between != '') {
             $this->db->where($between);
         }
-        $this->db->where(['lm.import_status' => 1]);
+        // $this->db->where(['lm.import_status' => 1]); // removed due to count mismatch issue on 12.11.2019
         if ($is_partner == 1) {
             $this->db->where(['lm.referred_status' => 1]);
         }
