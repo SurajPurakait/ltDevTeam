@@ -83,7 +83,7 @@ $stat = ($stat == 'all') ? "" : $stat;
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-3">
-                                                    <span class="label label-warning" id="lead_active" onclick="loadLeadDashboard(1, 3)"><?= count(lead_list(1, 3)); ?></span>
+                                                    <span class="label label-warning" id="lead_active" onclick="loadLeadDashboard('', 3)"><?= count(lead_list('', 3)); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
