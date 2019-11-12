@@ -2115,7 +2115,6 @@ Class Lead_management extends CI_Model {
         }
 
         $result = $this->db->get()->result_array();
-//        echo $this->db->last_query();die;
         return $result;
     }
 
