@@ -1681,10 +1681,12 @@ class Service_model extends CI_Model {
         $select[] = 'srv_rq.date_started AS date_started';
         $select[] = '(SELECT name from department WHERE department.id = srv.dept) AS responsible_department';
         $select[] = 'srv_rq.status AS service_request_status';
+        $select[] = 'or.amount_of_pages AS amount_of_pages';
         $this->db->select(implode(', ', $select));
         $this->db->from('service_request AS srv_rq');
         $this->db->join('services AS srv', 'srv.id = srv_rq.services_id');
         $this->db->join('category AS ctr', 'ctr.id = srv.category_id');
+        $this->db->join('order_extra_data AS or', 'or.order_id = srv_rq.order_id');
         $this->db->where(['srv_rq.order_id' => $order_id]);
         return $this->db->get()->result_array();
     }
@@ -2617,6 +2619,19 @@ class Service_model extends CI_Model {
         $this->db->join('staff AS st', 'st.id = sr.responsible_staff');
         $this->db->where(['sr.order_id' => $order_id]);
         return $this->db->get()->result();
+    }
+
+
+    public function order_extra_data_fields($data,$order_id){
+        $translation = implode(",",$data['language_new']);
+        $order_extra_data = [
+                'translation_to' => $translation,
+                'amount_of_pages' => $data['pages'],
+                'attach_files' => $data['doc_file'],
+                'order_id' => $order_id
+            ];
+            
+            return $this->db->insert('order_extra_data', $order_extra_data);
     }
 
 }
