@@ -604,6 +604,7 @@ Class Lead_management extends CI_Model {
             if (isset($filter_data['criteria_dropdown'])) {
                 foreach ($filter_data['criteria_dropdown'] as $filter_key => $filter) {
                     $filter_key = trim($filter_key);
+                    // echo $filter_key;exit;
                     if ($filter_key == "active_date" || $filter_key == "complete_date") {
                         if (strlen($filter[0]) == 10) {
                             $date_value = date("Y-m-d", strtotime($filter[0]));
@@ -616,6 +617,19 @@ Class Lead_management extends CI_Model {
                                 $date_value[$date_key] = "'" . date("Y-m-d", strtotime($date)) . "'";
                             }
                             $between = 'Date(' . $this->filter_element[$filter_key] . ') BETWEEN ' . implode(' AND ', $date_value);
+                        }
+                    } elseif ($filter_key == "type") {
+                        foreach ($filter as $key => $filter_value) {
+                            if ($filter_value != '') {
+                                $filter_value = explode(',',$filter_value);
+                                if($filter_value[0] == '1') {
+                                    $filter_where_in[$this->filter_element[$filter_key]][] = $filter_value[1];
+                                    $filter_where_in['type'] = 1;
+                                } else {
+                                    $filter_where_in[$this->filter_element[$filter_key]][] = $filter_value[1];
+                                    $filter_where_in['type'] = 3;
+                                }   
+                            }
                         }
                     } else {
                         foreach ($filter as $key => $filter_value) {
@@ -1480,10 +1494,20 @@ Class Lead_management extends CI_Model {
         //         ["id" => 1, "name" => "LEADS"],
         //         ["id" => 2, "name" => "REFERRAL AGENT"]
         // ];
+        
         switch ($element_key):
             case 1: {
-                    // return $type_array;
-                    return $this->db->get('type_of_contact_prospect')->result_array();
+                    $data = [];
+                    $lead_type_data = $this->db->get('type_of_contact_prospect')->result_array();
+                    $partner_type_data = $this->db->get('type_of_contact_referral')->result_array();
+                    foreach ($lead_type_data as $key => $value) {
+                        array_push($data,["id" => "1,".$value['id'],"name" => $value['name']]);
+                    }
+                    foreach ($partner_type_data as $key => $value) {
+                        array_push($data,["id" => "2,".$value['id'],"name" => $value['name']]);
+                    }
+                    // print_r($data);exit;
+                    return $data;
                 }
                 break;
             case 2: {
