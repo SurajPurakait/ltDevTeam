@@ -630,7 +630,10 @@ Class Lead_management extends CI_Model {
         if ($between != '') {
             $this->db->where($between);
         }
-        // $this->db->where(['lm.import_status' => 1]); // removed due to count mismatch issue on 12.11.2019
+        if ($status == 3) {
+            $this->db->where(['lm.import_status' => 1]); // removed due to count mismatch issue on 12.11.2019
+        }
+        
         if ($is_partner == 1) {
             $this->db->where(['lm.referred_status' => 1]);
         }
@@ -1186,9 +1189,9 @@ Class Lead_management extends CI_Model {
         $userid = $user_details['id'];
 
         $sql = "SELECT * FROM `lead_management` WHERE status = '3' and type!='2'";
-        // if ($usertype != 1) {
-        //     $sql .= " and staff_requested_by='" . $userid . "'";
-        // }
+        if ($usertype != 1) {
+            $sql .= " and staff_requested_by='" . $userid . "'";
+        }
         return $this->db->query($sql)->num_rows();
     }
 
