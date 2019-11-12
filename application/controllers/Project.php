@@ -153,6 +153,11 @@ class Project extends CI_Controller {
         $prosubid = post('prosubid');
         $this->load->model('service_model');
         $comment = '';
+//        $details = $this->service_model->get_suborder_details($prosubid);        
+//        mod_services_count($status_from = $details['status'], $status_to = $statusval, $section_name = str_replace(' ','_',strtolower($details['name'])));  
+        if ($statusval == 1) {
+            $this->service_model->assign_service_by_service_id($prosubid, sess('user_id'));
+        }
         echo $this->Project_Template_model->update_project_task_status($prosubid, $statusval, $comment);
 
         mod_actions_count($prev_status, $this->input->post("status"));

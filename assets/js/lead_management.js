@@ -640,11 +640,15 @@ function loadLeadDashboard(leadType, status, requestBy, leadContactType, eventID
 function loadEventDashboard() {
     $.ajax({
         type: "POST",
-        url: base_url + 'lead_management/event/index',
-        success: function () {
-            $("#event_dashboard_div").hide();
-            $("#event_dashboard_div2").show();
-            $("#btn_clear_filter").hide();
+        // data: {
+        //     lead_type: leadType,
+        //     status: status,
+        //     request_by: requestBy,
+        //     lead_contact_type: leadContactType
+        // },
+        url: base_url + 'lead_management/event/dashboard_ajax',
+        success: function (event_result) {
+            $("#event_dashboard_div").html(event_result);
         },
         beforeSend: function () {
             openLoading();
@@ -1001,37 +1005,6 @@ function change_type_of_contact(lead_type) {
             } else {
                 type_contact_list.options[type_contact_list.options.length] = new Option("Select an option", "");
             }
-        },
-        beforeSend: function () {
-            openLoading();
-        },
-        complete: function (msg) {
-            closeLoading();
-        }
-    });
-}
-
-
-function eventFilter() {
-    var form_data = new FormData(document.getElementById('filter-form'));
-    $.ajax({
-        type: "POST",
-        data: form_data,
-        url: base_url + 'lead_management/event/event_filter',
-        dataType: "html",
-        processData: false,
-        contentType: false,
-        enctype: 'multipart/form-data',
-        cache: false,
-        success: function (result) {
-            // alert(result); return false;
-            $("#event_dashboard_div").show();
-            $("#event_dashboard_div").html(result);
-            $("#event_dashboard_div2").hide();
-            $("[data-toggle=popover]").popover();
-            $("#clear_filter").html('');
-            $("#clear_filter").show();
-            $('#btn_clear_filter').show();
         },
         beforeSend: function () {
             openLoading();

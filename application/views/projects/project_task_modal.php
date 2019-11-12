@@ -64,10 +64,9 @@
                         <div class="form-group">
                             <label class="control-label">Tracking Description:</label>
                             <select class="form-control" id="description" name="task[tracking_description]">
-                                <option value="0">New</option>
+                                <option value="0">Not Started</option>
                                 <option value="1">Started</option>
-                                <option value="3">Ready</option>
-                                <option value="2">Resolved</option>
+                                <option value="2">Completed</option>
                             </select>
                         </div>
                     </div>

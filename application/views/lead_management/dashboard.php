@@ -229,6 +229,7 @@ $stat = ($stat == 'all') ? "" : $stat;
     }
     function changeCondition(element) {
         var divID = $(element).parent().parent().attr('id');
+        //alert(divID);
         var conditionValue = $(element).children("option:selected").val();
         var variableValue = $(element).parent().parent().find(".variable-dropdown option:selected").val();
         if (variableValue == 5 || variableValue == 6) {

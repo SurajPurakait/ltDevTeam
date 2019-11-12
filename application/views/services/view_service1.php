@@ -1358,10 +1358,7 @@ if ($usertype != '3') {
                                                 <b>Target Complete: </b><?= ($rsl['complete_date'] != '' && $rsl['complete_date'] != '0000-00-00') ? date('m/d/Y', strtotime($rsl['complete_date'])) : 'N/A'; ?><br>
                                                 <b>Actual Complete: </b><?= ($rsl['service_request_status'] != '0' && $rsl['complete_date'] != '' && $rsl['complete_date'] != '0000-00-00') ? date('m/d/Y', strtotime($rsl['complete_date'])) : 'N/A'; ?><br>
                                                 <b>Retail Price: </b> <?= $rsl['retail_price']; ?>, 
-                                                <b>Override Price: </b><?= ($rsl['price_charged'] != '') ? $rsl['price_charged'] : 'N/A'; ?><br>
-                                                <b>Amount Of Pages: </b><?= ($rsl['amount_of_pages'] != '') ? $rsl['amount_of_pages'] : 'N/A'; ?><br>
-                                                <!-- <b>Default Language: </b><br> -->
-                                                <!-- <b>Translation language: </b><?//= ($rsl['language'] != '') ? $rsl['language'] : 'N/A'; ?> -->
+                                                <b>Override Price: </b><?= ($rsl['price_charged'] != '') ? $rsl['price_charged'] : 'N/A'; ?>
                                             </p>
 
 

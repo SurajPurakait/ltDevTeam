@@ -64,10 +64,9 @@
                         <div class="form-group">
                             <label class="control-label">Tracking Description:</label>
                             <select class="form-control" id="description" name="task[tracking_description]">
-                                <option value="0">New</option>
+                                <option value="0">Not Started</option>
                                 <option value="1">Started</option>
-                                <option value="3">Ready</option>
-                                <option value="2">Resolved</option>
+                                <option value="2">Completed</option>
                             </select>
                         </div>
                     </div>
@@ -112,7 +111,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <label>Allow sales tax processing</label>
-                        <input type="checkbox" name="task[input_form_type]" title="Confirmation" id="confirmation" value="1">
+                        <input type="checkbox" name="task[input_form_type]" title="Confirmation" id="confirmation" value="1" required>
                     </div>
                 </div>
                 <hr class="hr-line-dashed"/>

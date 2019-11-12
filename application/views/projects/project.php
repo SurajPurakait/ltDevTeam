@@ -377,13 +377,7 @@ $role = $user_info['role'];
                         <div class="funkyradio">
                             <div class="funkyradio-success">
                                 <input type="radio" name="radio" id="rad0" value="0"/>
-                                <label for="rad0"><strong>New</strong></label>
-                            </div>
-                        </div>
-                        <div class="funkyradio">
-                            <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="rad3" value="3"/>
-                                <label for="rad3"><strong>Ready</strong></label>
+                                <label for="rad0"><strong>Not Started</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
@@ -395,9 +389,16 @@ $role = $user_info['role'];
                         <div class="funkyradio">
                             <div class="funkyradio-success">
                                 <input type="radio" name="radio" id="rad2" value="2"/>
-                                <label for="rad2"><strong>Resolved</strong></label>
+                                <label for="rad2"><strong>Completed</strong></label>
                             </div>
                         </div>
+
+                        <!--                        <div class="funkyradio">
+                                                                <div class="funkyradio-success">
+                                                                    <input type="radio" name="radio" id="rad7" value="7"/>
+                                                                    <label for="rad7"><strong>Canceled</strong></label>
+                                                                </div>
+                                                            </div>--> 
                     </div>
                 </div>
                 <input type="hidden" id="prosubid" value="">
@@ -453,24 +454,24 @@ $role = $user_info['role'];
             $("#changeStatusinner #rad0").prop('checked', true);
             $("#changeStatusinner #rad1").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
-            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad7").prop('checked', false);
         } else if (status == 1) {
             $("#changeStatusinner #rad1").prop('checked', true);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad0").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
-            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad7").prop('checked', false);
         } else if (status == 2) {
             $("#changeStatusinner #rad2").prop('checked', true);
-            $("#changeStatusinner #rad1").prop('checked', false)
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
-            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
-        }
-        else if (status == 3) {
-            $("#changeStatusinner #rad3").prop('checked', true);
-            $("#changeStatusinner #rad2").prop('checked', false)
             $("#changeStatusinner #rad1").prop('checked', false);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad0").prop('checked', false);
+            $("#changeStatusinner #rad7").prop('checked', false);
         }
+        //        else if (status == 7) {
+        //            $("#changeStatusinner #rad7").prop('checked', true);
+        //            $("#changeStatusinner #rad2").prop('checked', false);
+        //            $("#changeStatusinner #rad1").prop('checked', false);
+        //            $("#changeStatusinner #rad0").prop('checked', false);
+        //        }
         $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
             $("#status_log > tbody > tr").remove();
             var returnedData = JSON.parse(data);
@@ -501,18 +502,14 @@ $role = $user_info['role'];
                     //                    return false;
                     //swal("Success!", "Successfully updated!", "success");
                     if (statusval == 0) {
-                        var tracking = 'New';
+                        var tracking = 'Not Started';
                         var trk_class = 'label label-success';
                     } else if (statusval == 1) {
                         var tracking = 'Started';
                         var trk_class = 'label label-yellow';
                     } else if (statusval == 2) {
-                        var tracking = 'Resolved';
+                        var tracking = 'Completed';
                         var trk_class = 'label label-primary';
-                    }
-                    else if (statusval == 3) {
-                        var tracking = 'Ready';
-                        var trk_class = 'label label-info';
                     }
                     $("#trackinner-" + prosubid).removeClass().addClass(trk_class);
                     $("#trackinner-" + prosubid).parent('a').removeAttr('onclick');
@@ -649,13 +646,12 @@ $role = $user_info['role'];
         var random = Math.floor((Math.random() * 999) + 1);
         var clone = '<div class="filter-div row m-b-20" id="clone-' + random + '">' + content + '<div class="col-sm-1 text-center p-l-0"><a href="javascript:void(0);" onclick="removeProjectFilterRow(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
         $('.filter-inner').append(clone);
-
+        
         $.each(variableArray, function (key, value) {
             $("#clone-" + random + " .variable-dropdown option[value='" + value + "']").remove();
         });
         $("div.add_filter_div:not(:first)").remove();
-        $("#clone-" + random).find(".variable-dropdown").removeAttr('readonly').attr("style", "pointer-events: block;");
-        ;
+        $("#clone-" + random).find(".variable-dropdown").removeAttr('readonly').attr("style", "pointer-events: block;");;
         $("#clone-" + random).find(".condition-dropdown").removeAttr('disabled');
         $("#clone-" + random).find(".criteria-dropdown").html("<option value=''>All Criteria</option>");
         $("#clone-" + random).find(".criteria-dropdown").removeAttr('readonly');
@@ -671,7 +667,7 @@ $role = $user_info['role'];
         clearProjectFilter();
         variableArray = [];
         elementArray = [];
-        $("select.variable-dropdown:first").val(12).attr('readonly', 'readonly').attr("style", "pointer-events: none;");
+        $("select.variable-dropdown:first").val(12).attr('readonly','readonly').attr("style", "pointer-events: none;");
         var statusArray = category.split('-');
         $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[template_cat_id][]'});
         $("select.criteria-dropdown:first").trigger("chosen:updated");
@@ -696,7 +692,7 @@ $role = $user_info['role'];
             $('#sales_btn_clear_filter').show();
         } else if (statusArray[1] == 'annual_report') {
             $('#annual_btn_clear_filter').show();
-    }
+        }
     }
     function clearProjectFilter() {
         $(".criteria-dropdown").trigger("chosen:updated");

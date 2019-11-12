@@ -10,28 +10,28 @@
                     <div class="funkyradio">
                         <div class="funkyradio-success">
                             <input type="radio" name="radio" id="rad0" class="inactive_msg"
-                                   value="0" <?= ($current_status == "0") ? "checked" : "";?> <?= ($current_status == "2" || $current_status == "1") ? "disabled": ""; ?>>
+                                   value="0" <?= ($current_status == "0") ? "checked" : "";?> <?= ($current_status == "2") ? "disabled": ""; ?>>
                             <label for="rad0"><strong>New</strong></label>
                         </div>
                     </div>
                     <div class="funkyradio">
                         <div class="funkyradio-success">
                             <input type="radio" name="radio" id="rad3"
-                                   class="inactive_msg" value="3" <?= ($current_status == "3") ? "checked" : ""; ?>  <?= ($current_status == "2" || $current_status == "1") ? "disabled": ""; ?>>
+                                   class="inactive_msg" value="3" <?= ($current_status == "3") ? "checked" : ""; ?>  <?= ($current_status == "2") ? "disabled": ""; ?>>
                             <label for="rad3"><strong>Active</strong></label>
                         </div>
                     </div>
                     <div class="funkyradio">
                         <div class="funkyradio-success">
                             <input type="radio" name="radio" id="rad1" class="inactive_msg"
-                                   value="1" <?= ($current_status == "1") ? "checked" : ""; ?> <?= ($current_status == "2" || $current_status == "1") ? "disabled": ""; ?>>
+                                   value="1" <?= ($current_status == "1") ? "checked" : ""; ?> <?= ($current_status == "2") ? "disabled": ""; ?>>
                             <label for="rad1"><strong>Complete</strong></label>
                         </div>
                     </div>
                     <div class="funkyradio">
                         <div class="funkyradio-success">
                             <input type="radio" name="radio" id="rad2" class="inactive_msg"
-                                   value="2" <?= ($current_status == "2") ? "checked" : ""; ?> <?= ($current_status == "2" || $current_status == "1") ? "disabled": ""; ?>>
+                                   value="2" <?= ($current_status == "2") ? "checked" : ""; ?> <?= ($current_status == "2") ? "disabled": ""; ?>>
                             <label for="rad2"><strong>Inactive</strong></label>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
 </div>
 <script type="text/javascript">
     function update_lead_status(status) {
-        if (status == 0 || status == 3) {
+        if (status != 2) {
             var status = $('input[name=radio]:checked').val();
             var id = $("#id").val();
             $.ajax({
@@ -118,10 +118,8 @@
                     closeLoading();
                 }
             });
-        } else if(status == 2) {   
-            swal("ERROR!", "Unable To Update Status of Inactive Lead", "error");
-        }else {
-            swal("ERROR!", "Unable To Update Completed Lead", "error");
-        }
+        } else {
+            swal("ERROR!", "Unable To Update Status of Inactive Lead", "error");    
+        }    
     }
 </script>

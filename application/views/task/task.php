@@ -1,5 +1,5 @@
 <?php
-$user_info = $this->session->userdata('staff_info');
+$user_info =  $this->session->userdata('staff_info');
 $user_department = $user_info['department'];
 $user_type = $user_info['type'];
 $role = $user_info['role'];
@@ -16,12 +16,12 @@ $role = $user_info['role'];
                                 <form name="filter_form" id="filter-form"  method="post" onsubmit="taskFilter()">
                                     <div class="form-group filter-inner">
                                         <div class="row">
-                                            <!--                                            <div class="col-xs-2 col-sm-3 pull-left">
-                                                                                            <button type="button" class="btn btn-primary"  onclick="CreateProjectModal('add', '');" ><i class="fa fa-plus"></i> &nbsp;Create Project</button>
-                                                                                        </div>
-                                                                                        <div class="col-xs-2 col-sm-3 pull-left">
-                                                                                            <button type="button" class="btn btn-success"  onclick="taskDashboard(  );" >&nbsp;Task Dahsboard</button>
-                                                                                        </div>-->
+<!--                                            <div class="col-xs-2 col-sm-3 pull-left">
+                                                <button type="button" class="btn btn-primary"  onclick="CreateProjectModal('add', '');" ><i class="fa fa-plus"></i> &nbsp;Create Project</button>
+                                            </div>
+                                            <div class="col-xs-2 col-sm-3 pull-left">
+                                                <button type="button" class="btn btn-success"  onclick="taskDashboard(  );" >&nbsp;Task Dahsboard</button>
+                                            </div>-->
                                         </div>
                                         <div class="filter-div m-b-20 row" id="original-filter">                                           
                                             <div class="col-sm-3 m-t-10">
@@ -67,7 +67,7 @@ $role = $user_info['role'];
                                         </div>
                                     </div>
                                 </form>
-
+                                
                             </div>
                         </div>
                         <div class="col-lg-5">
@@ -96,7 +96,7 @@ $role = $user_info['role'];
                                                     <span class="label label-warning" id="requested_by_me_started" onclick="loadTaskDashboard(1, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('byme', '1'); ?></span>
                                                 </a>
                                             </td>
-                                            <td class="text-center">
+                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-2">
                                                     <span class="label label-warning" id="requested_by_me_completed" onclick="loadTaskDashboard(2, 'byme', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('byme', '2'); ?></span>
                                                 </a>
@@ -107,7 +107,7 @@ $role = $user_info['role'];
                                                 </a>
                                             </td> -->
                                             <td class="text-center">
-                                                <a class="filter-button" onclick="sos_filter_task('projects', 'byme');" title="By Me"><span class="label label-warning label-byme"><?= sos_dashboard_count('projects', 'byme'); ?></span></a>
+                                               <a class="filter-button" onclick="sos_filter_task('projects', 'byme');" title="By Me"><span class="label label-warning label-byme"><?= sos_dashboard_count('projects', 'byme'); ?></span></a>
                                             </td>
                                         </tr>
                                         <tr id="tome">
@@ -133,7 +133,7 @@ $role = $user_info['role'];
                                                 </a>
                                             </td> -->
                                             <td class="text-center">
-                                                <a class="filter-button" onclick="sos_filter_project('projects', 'tome');" title="To Me"><span class="label label-warning label-tome"><?= sos_dashboard_count('projects', 'tome'); ?></span></a>
+                                               <a class="filter-button" onclick="sos_filter_project('projects', 'tome');" title="To Me"><span class="label label-warning label-tome"><?= sos_dashboard_count('projects', 'tome'); ?></span></a>
                                             </td>
                                         </tr>
                                         <?php if ($user_type == 1 || ($user_type == 2 && $role == 4) || ($user_type == 3 && $role == 2)): ?>
@@ -149,12 +149,12 @@ $role = $user_info['role'];
                                                         <span class="label label-warning" id="requested_by_other_started" onclick="loadTaskDashboard(1, 'byother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('byother', '1'); ?></span>
                                                     </a>
                                                 </td>
-                                                <td class="text-center">
+                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byother-2">
                                                         <span class="label label-warning" id="requested_by_other_completed" onclick="loadTaskDashboard(2, 'byother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('byother', '2'); ?></span>
                                                     </a>
                                                 </td> 
-    <!--                                                 <td class="text-center">
+<!--                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byother-7">
                                                         <span class="label label-warning" id="requested_by_other_canceled" onclick="loadTaskDashboard(7, 'byother', '', '', '', '');"><?//= task_list('byother', 7); ?></span>
                                                     </a>
@@ -179,12 +179,12 @@ $role = $user_info['role'];
                                                         <span class="label label-warning" id="requested_to_other_started" onclick="loadTaskDashboard(1, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('toother', '1'); ?></span>
                                                     </a>
                                                 </td>
-                                                <td class="text-center">
+                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-2">
                                                         <span class="label label-warning" id="requested_to_other_completed" onclick="loadTaskDashboard(2, 'toother', '', '', '', '', '', '', '', '', '', '', '', 1);"><?= task_list('toother', '2'); ?></span>
                                                     </a>
                                                 </td> 
-    <!--                                                 <td class="text-center">
+<!--                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-7">
                                                         <span class="label label-warning" id="requested_to_other_canceled" onclick="loadTaskDashboard(7, 'toother', '', '', '', '');"><?//= action_list('toother', 7); ?></span>
                                                     </a>
@@ -192,46 +192,46 @@ $role = $user_info['role'];
                                             </tr>
                                         <?php endif; ?>
 <!--                                        <tr id="mytask">
-                                        <th>My Task</th>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0)" class="filter-button" id="filter-mytask-0">
-                                                <span class="label label-warning" id="requested_mytask_new" onclick="loadTaskDashboard(0, 'mytask', '', '', '', '');"><?//= task_list('mytask', 0); ?></span>
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0)" class="filter-button" id="filter-mytask-1">
-                                                <span class="label label-warning" id="requested_mytask_started" onclick="loadTaskDashboard(1, 'mytask', '', '', '', '');"><?//= task_list('mytask', 1); ?></span>
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0)" class="filter-button" id="filter-mytask-3">
-                                                <span class="label label-warning" id="requested_mytask_completed" onclick="loadTaskDashboard(2, 'mytask', '', '', '', '');"><?//= task_list('mytask', 2); ?></span>
-                                            </a>
-                                        </td>
-                                         <td class="text-center">
-                                            <a href="javascript:void(0)" class="filter-button" id="filter-mytask-7">
-                                                <span class="label label-warning" id="requested_mytask_canceled" onclick="loadTaskDashboard(7, 'mytask', '', '', '', '');"><?//= action_list('mytask', 7); ?></span>
-                                            </a>
-                                        </td> 
-                                    </tr>-->
+                                            <th>My Task</th>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-mytask-0">
+                                                    <span class="label label-warning" id="requested_mytask_new" onclick="loadTaskDashboard(0, 'mytask', '', '', '', '');"><?//= task_list('mytask', 0); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-mytask-1">
+                                                    <span class="label label-warning" id="requested_mytask_started" onclick="loadTaskDashboard(1, 'mytask', '', '', '', '');"><?//= task_list('mytask', 1); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-mytask-3">
+                                                    <span class="label label-warning" id="requested_mytask_completed" onclick="loadTaskDashboard(2, 'mytask', '', '', '', '');"><?//= task_list('mytask', 2); ?></span>
+                                                </a>
+                                            </td>
+                                             <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-mytask-7">
+                                                    <span class="label label-warning" id="requested_mytask_canceled" onclick="loadTaskDashboard(7, 'mytask', '', '', '', '');"><?//= action_list('mytask', 7); ?></span>
+                                                </a>
+                                            </td> 
+                                        </tr>-->
 <!--                                        <tr id="unassigned">
-                                        <th>Unassigned</th>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0)" class="filter-button" id="filter-unassigned-0">
-                                                <span class="label label-warning" id="unassigned_new" onclick="loadTaskDashboard(0, 'unassigned', '', '', '', '');"><?//= action_list('unassigned', 0); ?></span>
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0)" class="filter-button" id="filter-unassigned-1">
-                                                <span class="label label-warning" id="unassigned_started" onclick="loadTaskDashboard(1, 'unassigned', '', '', '', '');"><?//= action_list('unassigned', 1); ?></span>
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="javascript:void(0)" class="filter-button" id="filter-unassigned-2">
-                                                <span class="label label-warning" id="unassigned_completed" onclick="loadTaskDashboard(2, 'unassigned', '', '', '', '');"><?//= action_list('unassigned', 2); ?></span>
-                                            </a>
-                                        </td>
-                                    </tr>-->
+                                            <th>Unassigned</th>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-unassigned-0">
+                                                    <span class="label label-warning" id="unassigned_new" onclick="loadTaskDashboard(0, 'unassigned', '', '', '', '');"><?//= action_list('unassigned', 0); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-unassigned-1">
+                                                    <span class="label label-warning" id="unassigned_started" onclick="loadTaskDashboard(1, 'unassigned', '', '', '', '');"><?//= action_list('unassigned', 1); ?></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="javascript:void(0)" class="filter-button" id="filter-unassigned-2">
+                                                    <span class="label label-warning" id="unassigned_completed" onclick="loadTaskDashboard(2, 'unassigned', '', '', '', '');"><?//= action_list('unassigned', 2); ?></span>
+                                                </a>
+                                            </td>
+                                        </tr>-->
                                     </tbody>
                                 </table>
                             </div>
@@ -242,13 +242,13 @@ $role = $user_info['role'];
                                 <div class="col-sm-4 col-xs-12">
                                     <a class="btn notification-btn" onclick="sos_filter('action', 'byme');" title="By Me">SOS By Me <span class="label label-success label-byme"><?//= sos_dashboard_count('action', 'byme'); ?></span></a>
                                 </div> -->
-                                <!--                                <div class="col-sm-4 col-xs-12">
-                                                                    <a class="btn notification-btn" onclick="loadTaskDashboard(0, 'unassigned', '', '', '', '');" title="By Me">Unassigned <span class="label label-success label-byme"><? action_list('unassigned', 0); ?></span></a>
-                                                                </div>-->
-                                <!--                                <div class="col-sm-4 col-xs-12">
-                                                                    <a class="btn notification-btn" id="notification-project-button" onclick="openProjectNotificationModal();" href="javascript:void(0);" title="Project Notifications">Notifications <span class="label label-danger"><?= get_project_notifications_count(); ?></span></a>
-                                                                </div>-->
-                            </div>
+<!--                                <div class="col-sm-4 col-xs-12">
+                                    <a class="btn notification-btn" onclick="loadTaskDashboard(0, 'unassigned', '', '', '', '');" title="By Me">Unassigned <span class="label label-success label-byme"><? action_list('unassigned', 0); ?></span></a>
+                                </div>-->
+<!--                                <div class="col-sm-4 col-xs-12">
+                                    <a class="btn notification-btn" id="notification-project-button" onclick="openProjectNotificationModal();" href="javascript:void(0);" title="Project Notifications">Notifications <span class="label label-danger"><?= get_project_notifications_count(); ?></span></a>
+                                </div>-->
+                                </div>
                             <div class="row">
                                 <div class="col-sm-12 p-t-5">
                                     <?php
@@ -271,36 +271,36 @@ $role = $user_info['role'];
                         </div>
                     </div>
                     <div class="clearfix">
-
+                        
                     </div>
 
                     <hr class="hr-line-dashed  m-t-5 m-b-5">
                     <div id="task_dashboard_div">
-                        <!--                        <div class="clearfix">
-                                                <h2 class="text-primary pull-left"><?php // echo (!empty($task_list)) ? count($task_list) : '';  ?> Results found</h2><div class="pull-right text-right p-t-5">
-                                                    <div class="dropdown" style="display: inline-block;">
-                                                        <a href="javascript:void(0);" id="sort-by-dropdown" data-toggle="dropdown" class="dropdown-toggle btn btn-success">Sort By <span class="caret"></span></a>
-                                                        <ul class="dropdown-menu">
-                                                            <li><a id="id-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.id')">Project ID</a></li>
-                                                            <li><a id="project_template-val" href="javascript:void(0);" onclick="sort_project_dashboard('temp.project_template')">Project Template</a></li>
-                                                            <li><a id="pattern-val" href="javascript:void(0);" onclick="sort_project_dashboard('rec.pattern')">Pattern</a></li> 
-                                                            <li><a id="client_type-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.client_type')">Client Type</a></li>
-                                                            <li><a id="client_id-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.client_id')">Client</a></li>
-                                                            <li><a id="responsible-val" href="javascript:void(0);" onclick="sort_project_dashboard('temp.responsible')">Responsible</a></li>
-                                                            <li><a id="assign_to-val" href="javascript:void(0);" onclick="sort_project_dashboard('temp.assign_to')">Assign To</a></li>
-                                                            <li><a id="status-val" href="javascript:void(0);" onclick="sort_project_dashboard('temp.status')">Tracking</a></li>
-                                                            <li><a id="created_at-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.created_at')">Creation Date</a></li>
-                                                            <li><a id="due_date-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.due_date')">Due Date</a></li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="sort_type_div" style="display: none;">
-                                                        <a href="javascript:void(0);" id="sort-asc" onclick="sort_project_dashboard('', 'DESC')" class="btn btn-success" data-toggle="tooltip" title="Ascending Order" data-placement="top"><i class="fa fa-sort-amount-asc"></i></a>
-                                                        <a href="javascript:void(0);" id="sort-desc" onclick="sort_project_dashboard('', 'ASC')" class="btn btn-success" data-toggle="tooltip" title="Descending Order" data-placement="top"><i class="fa fa-sort-amount-desc"></i></a>
-                                                        <a href="javascript:void(0);" onclick="projectFilter();" class="btn btn-white text-danger" data-toggle="tooltip" title="Remove Sorting" data-placement="top"><i class="fa fa-times"></i></a>
-                                                    </div>
-                                                </div>
-                                                </div>-->
-
+<!--                        <div class="clearfix">
+                        <h2 class="text-primary pull-left"><?php // echo (!empty($task_list)) ? count($task_list) : ''; ?> Results found</h2><div class="pull-right text-right p-t-5">
+                            <div class="dropdown" style="display: inline-block;">
+                                <a href="javascript:void(0);" id="sort-by-dropdown" data-toggle="dropdown" class="dropdown-toggle btn btn-success">Sort By <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a id="id-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.id')">Project ID</a></li>
+                                    <li><a id="project_template-val" href="javascript:void(0);" onclick="sort_project_dashboard('temp.project_template')">Project Template</a></li>
+                                    <li><a id="pattern-val" href="javascript:void(0);" onclick="sort_project_dashboard('rec.pattern')">Pattern</a></li> 
+                                    <li><a id="client_type-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.client_type')">Client Type</a></li>
+                                    <li><a id="client_id-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.client_id')">Client</a></li>
+                                    <li><a id="responsible-val" href="javascript:void(0);" onclick="sort_project_dashboard('temp.responsible')">Responsible</a></li>
+                                    <li><a id="assign_to-val" href="javascript:void(0);" onclick="sort_project_dashboard('temp.assign_to')">Assign To</a></li>
+                                    <li><a id="status-val" href="javascript:void(0);" onclick="sort_project_dashboard('temp.status')">Tracking</a></li>
+                                    <li><a id="created_at-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.created_at')">Creation Date</a></li>
+                                    <li><a id="due_date-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.due_date')">Due Date</a></li>
+                                </ul>
+                            </div>
+                            <div class="sort_type_div" style="display: none;">
+                                <a href="javascript:void(0);" id="sort-asc" onclick="sort_project_dashboard('', 'DESC')" class="btn btn-success" data-toggle="tooltip" title="Ascending Order" data-placement="top"><i class="fa fa-sort-amount-asc"></i></a>
+                                <a href="javascript:void(0);" id="sort-desc" onclick="sort_project_dashboard('', 'ASC')" class="btn btn-success" data-toggle="tooltip" title="Descending Order" data-placement="top"><i class="fa fa-sort-amount-desc"></i></a>
+                                <a href="javascript:void(0);" onclick="projectFilter();" class="btn btn-white text-danger" data-toggle="tooltip" title="Remove Sorting" data-placement="top"><i class="fa fa-times"></i></a>
+                            </div>
+                        </div>
+                        </div>-->
+                        
                     </div>
                 </div>
             </div>
@@ -445,13 +445,7 @@ $role = $user_info['role'];
                         <div class="funkyradio">
                             <div class="funkyradio-success">
                                 <input type="radio" name="radio" id="rad0" value="0"/>
-                                <label for="rad0"><strong>New</strong></label>
-                            </div>
-                        </div>
-                        <div class="funkyradio">
-                            <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="rad3" value="3"/>
-                                <label for="rad3"><strong>Ready</strong></label>
+                                <label for="rad0"><strong>Not Started</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
@@ -463,10 +457,16 @@ $role = $user_info['role'];
                         <div class="funkyradio">
                             <div class="funkyradio-success">
                                 <input type="radio" name="radio" id="rad2" value="2"/>
-                                <label for="rad2"><strong>Resolved</strong></label>
+                                <label for="rad2"><strong>Completed</strong></label>
                             </div>
                         </div>
-                        
+
+                        <!--                        <div class="funkyradio">
+                                                    <div class="funkyradio-success">
+                                                        <input type="radio" name="radio" id="rad7" value="7"/>
+                                                        <label for="rad7"><strong>Canceled</strong></label>
+                                                    </div>
+                                                </div>-->
                     </div>
                 </div>
                 <input type="hidden" id="prosubid" value="">
@@ -520,23 +520,24 @@ $role = $user_info['role'];
             $("#changeStatusinner #rad0").prop('checked', true);
             $("#changeStatusinner #rad1").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
-            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad7").prop('checked', false);
         } else if (status == 1) {
             $("#changeStatusinner #rad1").prop('checked', true);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad0").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
-            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad7").prop('checked', false);
         } else if (status == 2) {
             $("#changeStatusinner #rad2").prop('checked', true);
             $("#changeStatusinner #rad1").prop('checked', false);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
-            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
-        } else if (status == 3) {
-            $("#changeStatusinner #rad3").prop('checked', true);
-            $("#changeStatusinner #rad2").prop('checked', false);
-            $("#changeStatusinner #rad1").prop('checked', false);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad0").prop('checked', false);
+            $("#changeStatusinner #rad7").prop('checked', false);
         }
+//        else if (status == 7) {
+//            $("#changeStatusinner #rad7").prop('checked', true);
+//            $("#changeStatusinner #rad2").prop('checked', false);
+//            $("#changeStatusinner #rad1").prop('checked', false);
+//            $("#changeStatusinner #rad0").prop('checked', false);
+//        }
         $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
             $("#status_log > tbody > tr").remove();
             var returnedData = JSON.parse(data);
@@ -550,7 +551,7 @@ $role = $user_info['role'];
         });
         $("#changeStatusinner #prosubid").val(id);
     }
-    function updateProjectStatusinner(type = '') {
+    function updateProjectStatusinner(type='') {
         var statusval = $('#changeStatusinner input:radio[name=radio]:checked').val();
         var prosubid = $('#changeStatusinner #prosubid').val();
 //        alert(prosubid);
@@ -566,9 +567,9 @@ $role = $user_info['role'];
                     $("#changeStatusinner").modal('hide');
 //                    return false;
                     //swal("Success!", "Successfully updated!", "success");
-                    if (type == 'task') {
+                    if(type=='task'){
                         goURL(base_url + 'task');
-                    } else {
+                    }else{   
                         goURL(base_url + 'project');
                     }
                 }
@@ -578,7 +579,7 @@ $role = $user_info['role'];
     var content = $(".filter-div").html();
     var variableArray = [];
     var elementArray = [];
-    function changeVariableTask(element) {
+function changeVariableTask(element) {
         var divID = $(element).parent().parent().attr('id');
         var variableValue = $(element).children("option:selected").val();
 //        alert(variableValue);
