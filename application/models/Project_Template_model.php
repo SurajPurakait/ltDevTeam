@@ -2651,6 +2651,9 @@ class Project_Template_model extends CI_Model {
     public function getProjectTaskSalesTaxProcess($task_id){
         return $this->db->get_where('project_task_sales_tax_process',['task_id'=>$task_id])->row();
     }
+    public function get_project_count_by_client_id($clientid){
+        return count($this->db->get_where('projects',['client_id'=>$clientid])->result_array());
+    }
 }
 
 ?>
