@@ -255,6 +255,7 @@ class Lead_mail extends CI_Controller {
         $lead_mail = $this->lead_management->lead_campaign_mails($leadtype, $language, $day);
         $lead_type = $this->lead_management->get_type_of_contact_by_id($leadtype);
         $user_details = staff_info();
+        // print_r($user_details);exit;
         $office_info = $this->administration->get_office_by_id($office);
 
         if (!empty($lead_mail)) {
@@ -265,7 +266,7 @@ class Lead_mail extends CI_Controller {
                 'company' => request('company_name'),
                 'phone' => request('phone'),
                 'email' => request('email'),
-                'requested_by' => $user_details['full_name'],
+                'requested_by' => $user_details['first_name']." ".$user_details['last_name'],
                 'lead_type' => $contact_type['name'],
                 'staff_phone' => $user_details['phone'],
                 'staff_email' =>  $user_details['user'],
