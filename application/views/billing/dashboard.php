@@ -400,7 +400,7 @@ $staffrole = $staff_info['role'];
         //alert(divID);
         var conditionValue = $(element).children("option:selected").val();
         var variableValue = $(element).parent().parent().find(".variable-dropdown option:selected").val();
-        if (variableValue == 7) {
+        if (variableValue == 7 ||variableValue == 12) {
             if (conditionValue == 2 || conditionValue == 4) {
                 $.ajax({
                     type: "POST",

@@ -961,3 +961,29 @@ ALTER TABLE `project_main` ADD `template_cat_id` INT(11) NOT NULL AFTER `id`;
 /* run patch remove_old_mail_campaign */
 
 /* live end */
+/* 05.11.2019 */
+ALTER TABLE `lead_management` ADD `website` VARCHAR(255) NOT NULL AFTER `company_name`;
+
+/*06.11.2019*/
+
+ALTER TABLE `project_template_task` ADD `is_input_form` ENUM('n','y') NOT NULL DEFAULT 'n' AFTER `status`; 
+
+ALTER TABLE `project_task` ADD `is_input_form` ENUM('n','y') NOT NULL DEFAULT 'n' AFTER `status`; 
+
+/*08.11.2019*/
+
+ALTER TABLE `project_task` ADD `input_form_type` INT(2) NOT NULL DEFAULT '0' AFTER `is_input_form`; 
+
+ALTER TABLE `project_template_task` ADD `input_form_type` INT(2) NOT NULL DEFAULT '0' AFTER `is_input_form`; 
+
+CREATE TABLE project_task_sales_tax_process LIKE sales_tax_process 
+
+ALTER TABLE `project_task_sales_tax_process` ADD `task_id` INT(11) NOT NULL AFTER `id`;
+
+/* 12.11.19 */
+
+ALTER TABLE `project_template_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for start, 2 for resolve,3 for ready';  
+
+ALTER TABLE `project_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for started, 2 for resolved, 3 for ready'; 
+
+ALTER TABLE `order_extra_data` ADD `translation_to` VARCHAR(255) NOT NULL AFTER `document_date`, ADD `amount_of_pages` INT(100) NOT NULL AFTER `translation_to`, ADD `attach_files` VARCHAR(255) NOT NULL AFTER `amount_of_pages`;

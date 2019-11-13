@@ -1331,7 +1331,10 @@ function projectFilter() {
             $("#action_dashboard_div").html(result);
             $("[data-toggle=popover]").popover();
             $("#clear_filter").show();
-            $('#btn_clear_filter').show();
+            $('#bookkeeping_btn_clear_filter').show();
+            $('#tax_btn_clear_filter').show();
+            $('#sales_btn_clear_filter').show();
+            $('#annual_btn_clear_filter').show();
         },
         beforeSend: function () {
             openLoading();
@@ -1342,7 +1345,7 @@ function projectFilter() {
     });
 }
 function loadProjectDashboard(status = '', request = '', templateID = '', officeID = '', departmentID = '', filter_assign = '', filter_data = '', sos_value = '', sort_criteria = '', sort_type = '', client_type = '', client_id = '', clients = '', pageNumber = 0,template_cat_id='',month='') {
-//   alert(template_cat_id);
+//   alert(status);
 //    if (request != '') {
 //        activeShortColumn(request, short_column);
 //    } else {
@@ -1374,7 +1377,9 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
                 if (pageNumber == 1 || pageNumber == 0) {
                     $("#action_dashboard_div").html(project_result);
                     //$("a.filter-button span:contains('-')").html(0);
+                    
                 } else {
+                    $(".ajaxdiv").append(project_result);
                     $("#action_dashboard_div").append(project_result);
                     $('.result-header').not(':first').remove();
                 }
@@ -1385,22 +1390,19 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
                 $(".request-dropdown").val(request);
                 $("[data-toggle=popover]").popover();
             }
-            var filter_result = '';
-            if (filter_result != '') {
-                $("#clear_filter").html(filter_result + ' &nbsp; ');
-                $("#clear_filter").show();
-                $('#btn_clear_filter').show();
+            if (status != '' || status == '0') {
+//                $("#clear_filter").html(filter_data + ' &nbsp; ');
+//                $("#clear_filter").show();
+                $('#bookkeeping_btn_clear_filter').show();
                 
-            } else {
-                $("#clear_filter").html('');
-                $("#clear_filter").hide();
-                $('#btn_clear_filter').hide();
-
-                $(".variable-dropdown").val('');
-                $(".condition-dropdown").val('');
-                $(".criteria-dropdown").val('');
-                $('.criteria-dropdown').empty().append('<option value="">All Criteria</option>');
-                $(".criteria-dropdown").trigger("chosen:updated");
+            }
+            else {
+//                $("#clear_filter").html('');
+//                $("#clear_filter").hide();
+                $('#bookkeeping_btn_clear_filter').hide();
+                $('#tax_btn_clear_filter').hide();
+                $('#sales_btn_clear_filter').hide();
+                $('#annual_btn_clear_filter').hide();
             }
         },
         beforeSend: function () {
@@ -1461,7 +1463,6 @@ function add_project_sos() {
     });
 }
 function tetmplate_task_delete_modal(task_id, template_id) {
-//    alert(task_id);return false;
     $.ajax({
         type: "POST",
         url: base_url + 'administration/template/delete_template_task_modal',
@@ -1492,7 +1493,6 @@ function tetmplate_task_delete_modal(task_id, template_id) {
     });
 }
 function delete_project(project_id, project_template_id) {
-//    alert(project_id);return false;
     $.ajax({
         type: "POST",
         url: base_url + 'project/delete_project/',
@@ -1546,7 +1546,13 @@ var saveInputForms = function () {
     if (!requiredValidation('project_input_form')) {
         return false;
     }
-
+    $("#gross_sales").attr('disabled', false);
+    $("#sales_tax_collect").attr('disabled', false);
+    $("#collection_allowance").attr('disabled', false);
+    $("#total_due").attr('disabled', false);
+    var userid = $("#user_id").val();
+    var user_type = $("#user_type").val();
+//    var input_form_type=$("#input_form_type").val();
     var form_data = new FormData(document.getElementById('project_input_form'));
     $.ajax({
         type: "POST",
@@ -1558,6 +1564,7 @@ var saveInputForms = function () {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
+//            alert(result);return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
                 goURL(base_url + 'project');

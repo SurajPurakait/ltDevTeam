@@ -23,17 +23,19 @@ class Home extends CI_Controller {
         $this->filter_element = [
             1 => "Priority",
             2 => "Tracking",
-            3 => "Office",
-            4 => "Department",
-            //4 => "Staff",
+            3 => "To Office",
+            4 => "To Department",
             5 => "Start Date",
             6 => "Complete Date",
-            7 => "ID",
+            7 => "ACTION ID",
             8 => "Created By",
             9 => "Assigned To",
-            10 => "Client Id",
+            10 => "Client ID",
             11 => "Creation Date",
-            12 => "Due Date"
+            12 => "Due Date",
+            13 => "Request Type",
+            14 => "By Department",
+            15 => "By Office"
         ];
 
         $this->sales_tax_filter_element = [

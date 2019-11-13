@@ -87,6 +87,8 @@ table-1{
 .m-l-30 { margin-left: 30px !important; }
 .m-l-35 { margin-left: 35px !important; }
 .m-l-40 { margin-left: 40px !important; }
+.m-l-45 { margin-left: 45px !important; }
+.m-l-50 { margin-left: 50px !important; }
 
 .p-0 { padding: 0px !important; }
 .p-1 { padding: 1px !important; }
@@ -1374,7 +1376,7 @@ button.dim:active:before {
 .badge-primary {
     background-color: #1ab394;
     color: #FFFFFF;
-    
+
 }
 .label-primary[href]:hover {
     background-color: #09836a;
@@ -3512,19 +3514,19 @@ ol.unstyled {
     font-style: italic;
 }*/ 
 #add_sos_div ::placeholder {
-  color: #d3d3d3;
-  font-size: 18px;
-  font-weight: 600;
+    color: #d3d3d3;
+    font-size: 18px;
+    font-weight: 600;
 }
 #add_sos_div ::-moz-placeholder {
-  color: #d3d3d3;
-  font-size: 18px;
-  font-weight: 600;
+    color: #d3d3d3;
+    font-size: 18px;
+    font-weight: 600;
 }
 #add_sos_div :-ms-input-placeholder {
-  color: #d3d3d3;
-  font-size: 18px;
-  font-weight: 600;
+    color: #d3d3d3;
+    font-size: 18px;
+    font-weight: 600;
 }
 /* FOOTER */
 .footer {
@@ -7373,15 +7375,7 @@ body.skin-3 {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0; 
 }
-.service-panel .btn-service-edit {
-    position: absolute;
-    right: 55px;
-    top: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;    
-    color: #fff;
-    /*display: none;*/
-}
+
 .service-panel .btn-service-edit-project.btn-service-invoice  {
     right: 56px;
 }
@@ -7389,7 +7383,7 @@ body.skin-3 {
     right: 120px;
 }
 .service-panel .btn-assign-client {
-     position: absolute;
+    position: absolute;
     right: 168px;
     top: 0;
     border-top-left-radius: 0;
@@ -7400,15 +7394,7 @@ body.skin-3 {
     right: 0px;
     border-top-right-radius: 0;
 }
-.service-panel .btn-service-view{
-    position: absolute;
-    right: 0px;
-    top: 0;
-    border-top-left-radius: 0;
-    border-bottom-right-radius: 0;
-    color: #fff;
-    /*display: none;*/
-}
+
 .service-panel .btn-service-view-project{
     position: absolute;
     right: 140px;
@@ -7439,27 +7425,54 @@ body.skin-3 {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
     color: #fff;
-    /*display: none;*/
 }
 .service-panel .btn-service-lead{
-    position: absolute;
-    right: 267px;
-    top: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    border-radius:5px; 
     color: #fff;
-    /*display: none;*/
+    float:right;
+    margin-top: -10px;
+    margin-left: 3px;
+    border-radius:3px;
+
+
 }
 .service-panel .btn-service-delete {
-    border-top-left-radius: 0;
-    border-bottom-right-radius: 0;
-    color: #fff;
-    /*display: none;*/
-    position: absolute;
-    top: 0px;
-    right: 48px;
-    border-top-right-radius: 0px;   
+
+ color:#fff;
+    float: right;
+    margin-right: -15px;
+    margin-top: -10px;
+    margin-left: 3px;
+    border-radius:3px;
 }
+    
+
+.service-panel .btn-service-view{
+   border-radius:5px; 
+    color: #fff;
+    float:right;
+    margin-top: -10px;
+    margin-right: -15px;
+    margin-left: 3px;
+    border-radius:3px;
+
+}
+
+.service-panel .btn-service-edit {
+   border-radius:5px; 
+    color: #fff;
+    float:right;
+    margin-top: -10px;
+    margin-left: 3px;
+    border-radius:3px;
+}
+
+.btn-add {margin-top: -29px !important;}
+
+.add-view {margin-right:2px !important; }
+
+.add-view-new {margin-right:0px !important; }
+
 .service-panel .referral-partner-status-btn-list .btn-service-delete {
     right: 309px;
     border-bottom-right-radius: 3px;
@@ -8857,27 +8870,27 @@ a.panel-title {
 }
 @media (max-width: 991px) {
     .welcome-note li {
-       top: 4px;
-   }
-    
+        top: 4px;
+    }
+
     .welcome-note h3 {
-      padding-left: 145px !important;
+        padding-left: 145px !important;
     }
 }
 @media (max-width: 600px) {
     .welcome-note li {
-       position: static;
-       background: #fff;
-   }
+        position: static;
+        background: #fff;
+    }
     .welcome-note li img {
         margin: auto;
         padding: 5px 0;
     } 
     .welcome-note h3 {
-      margin-top: 0;
-      padding: 5px 0 10px !important;
+        margin-top: 0;
+        padding: 5px 0 10px !important;
     }
-    
+
 }
 @media (max-width: 470px) {
     .filter-inner label {
@@ -8899,7 +8912,7 @@ a.panel-title {
     z-index: 99;
     border-top: 20px solid #f3f3f4;
     padding: 15px 20px 0 20px;
-    
+
 }
 .fixed-container .tab-content {
     padding-top: 153px;
@@ -8913,5 +8926,12 @@ a.panel-title {
     padding:5px 0 ;
     float: left;
     min-height:76px;
-    
+
+}
+.clear-project-btn {margin-top:-20px; margin-bottom:13px; }
+.clear-project-btn-one {margin-top:-38px; margin-bottom:13px; }
+
+.lead-warning {
+    background-color: #f8ac59;
+    color: #FFFFFF;
 }

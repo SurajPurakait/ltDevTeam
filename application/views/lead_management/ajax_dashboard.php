@@ -30,49 +30,53 @@
         ?>
         <div class="panel panel-default service-panel type2 filter-active lead-<?= $lead['id']; ?>">
             <div class="panel-heading">
+                 <a href="javascript:void(0);" onclick="delete_lead_management('<?= $lead["id"] ?>');" class="btn btn-danger btn-xs btn-service-delete manage-delete-btn"><i class="fa fa-remove" aria-hidden="true"></i> Delete</a>  
+               
+                <a href="<?= base_url("/lead_management/home/view/{$lead["id"]}"); ?>" class="btn btn-primary btn-xs btn-service-view add-view-new"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
+
                 <?php
-                if ($lead['status'] == 1) {
-                    if($lead['type'] == 1) {
-                    ?>
-                    <?php
-                    if ($lead['assigned_status'] == 'y') {
+                    if ($lead["type_of_contact"] == 1 || $lead["type_of_contact"] == 2) {
                         ?>
-                        <a href="javascript:void(0);" class="btn btn-warning btn-xs btn-assign-client"> Assigned as Client</a>
+                        <a href="<?= base_url("/lead_management/edit_lead/edit_lead_referral/{$lead["id"]}"); ?>" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i >Edit</a>
                         <?php
                     } else {
                         ?>
-                        <!-- <a href="javascript:void(0);" onclick="assign_as_client(<?//= $lead['id']; ?>,<?//= $lead['requested_staff_id']; ?>)" class="btn btn-primary btn-xs btn-assign-client" id="assign_as_client-<?//= $lead['id']; ?>"><i class="fa fa-plus" aria-hidden="true"></i> Assign as Client</a> -->
-                        <a href="javascript:void(0);" onclick="open_client_assign_popup(<?= $lead['id']; ?>,<?= $lead['requested_staff_id']; ?>)" class="btn btn-primary btn-xs btn-assign-client" id="assign_as_client-<?= $lead['id']; ?>"><i class="fa fa-plus" aria-hidden="true"></i> Assign as Client</a>
+                        <a href="<?= base_url("/lead_management/edit_lead/edit_lead_prospect/{$lead["id"]}"); ?>" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
                         <?php
                     }
-                    ?>
-                    <?php
-                    } else {
-                        if ($lead['assigned_status'] == 'y') {
-                    ?>
-                        <a href="javascript:void(0);" class="btn btn-warning btn-xs btn-assign-client"> Assigned as Partner</a>
-                    <?php        
-                        } else {
-                    ?>
-                    <a href="javascript:void(0);" onclick="assign_as_partner(<?= $lead['id']; ?>)" class="btn btn-primary btn-xs btn-assign-client" id="assign_as_partner-<?= $lead['id']; ?>"><i class="fa fa-plus" aria-hidden="true"></i> Assign as Partner</a>
-                    <?php        
-                        }    
-                    }
-                }
-                if ($lead["type_of_contact"] == 1 || $lead["type_of_contact"] == 2) {
-                    ?>
-                    <a href="<?= base_url("/lead_management/edit_lead/edit_lead_referral/{$lead["id"]}"); ?>" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i >Edit</a>
-                    <?php
-                } else {
-                    ?>
-                    <a href="<?= base_url("/lead_management/edit_lead/edit_lead_prospect/{$lead["id"]}"); ?>" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
-                    <?php
-                }
                 ?>
-                <a href="<?= base_url("/lead_management/home/view/{$lead["id"]}"); ?>" class="btn btn-primary btn-xs btn-service-view"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
-
-                <a href="javascript:void(0);" onclick="delete_lead_management('<?= $lead["id"] ?>');" class="btn btn-danger btn-xs btn-service-delete manage-delete-btn"><i class="fa fa-remove" aria-hidden="true"></i> Delete</a>
-
+                
+                <?php
+                    if ($lead['status'] == 1) {
+                        if($lead['type'] == 1) {
+                        ?>
+                        <?php
+                        if ($lead['assigned_status'] == 'y') {
+                            ?>
+                            <a href="javascript:void(0);" class="btn btn-warning btn-xs btn-service-lead"> Assigned as Client</a>
+                            <?php
+                        } else {
+                            ?>
+                            <!-- <a href="javascript:void(0);" onclick="assign_as_client(<?//= $lead['id']; ?>,<?//= $lead['requested_staff_id']; ?>)" class="btn btn-primary btn-xs btn-assign-client" id="assign_as_client-<?//= $lead['id']; ?>"><i class="fa fa-plus" aria-hidden="true"></i> Assign as Client</a> -->
+                            <a href="javascript:void(0);" onclick="open_client_assign_popup(<?= $lead['id']; ?>,<?= $lead['requested_staff_id']; ?>)" class="btn btn-primary btn-xs btn-service-lead" id="assign_as_client-<?= $lead['id']; ?>"><i class="fa fa-plus" aria-hidden="true"></i> Assign as Client</a>
+                            <?php
+                        }
+                        ?>
+                        <?php
+                        } else {
+                            if ($lead['assigned_status'] == 'y') {
+                        ?>
+                            <a href="javascript:void(0);" class="btn btn-warning btn-xs btn-service-lead"> Assigned as Partner</a>
+                        <?php        
+                            } else {
+                        ?>
+                        <a href="javascript:void(0);" onclick="assign_as_partner(<?= $lead['id']; ?>)" class="btn btn-primary btn-xs btn-service-lead" id="assign_as_partner-<?= $lead['id']; ?>"><i class="fa fa-plus" aria-hidden="true"></i> Assign as Partner</a>
+                        <?php        
+                            }    
+                        }
+                    }
+                ?>
+                
                 <h5 class="panel-title p-t-15" data-toggle="collapse" data-parent="#accordion" href="#collapse89" aria-expanded="false">
                     <div class="table-responsive">
                         <table class="table table-borderless" style="margin-bottom: 0px;">
@@ -108,7 +112,7 @@
                                             $lead["status_name"] = "Completed";
                                         }
                                         ?>
-                                        <a href='javascript:void(0);' onclick='show_lead_tracking_modal("<?= $lead["id"]; ?>")'><span class="<?= $trk_class; ?>"><?= $lead["status_name"]; ?></span></a>
+                                        <a href='javascript:void(0);' onclick='show_lead_tracking_modal("<?= $lead["id"]; ?>")'><span class="<?= $trk_class; ?>" id="lead_status_<?= $lead["id"]; ?>"><?= $lead["status_name"]; ?></span></a>
                                     </td>
                                     <td title="Requested By" class="text-center" width="9%"><?= $lead["requested_staff_name"] . (($lead['office'] != '0') ? '<br><b>' . get_office_info_by_id($lead['office'])['office_id'] . '</b>' : ''); ?><?= "<br>" . $lead['request_staff_office_name']; ?></td>
                                     <td title="Submission Date" class="text-center" width="9%"><?= ($lead["submission_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["submission_date"])) : "-"; ?></td>

@@ -85,8 +85,8 @@ class Partners extends CI_Controller
     }
     public function insert_new_referral()
     {
-        $email = $this->input->post("email");
-        if ($this->lm->duplicate_email_check($email)) {
+        $email = $this->input->post("email");        
+        if ($this->lm->duplicate_email_check($email,2)) {
             echo 0;
         } else {
             $result = $this->lm->insert_lead_prospect($this->input->post());

@@ -354,7 +354,7 @@ function open_owner_popup(service_id, company_id, title_id) {
             if (parseInt(title_id) > 0) {
                 url = url + '/' + title_id;
             }
-            
+
             url = url + '?q=' + company_type;
             url += '&sid=' + $("#service_id").val();
             url += '&tid=' + title_id;
@@ -1591,42 +1591,42 @@ function request_create_sales_tax_application() {
 
     var rt6val = $('input[type=radio][name=Rt6]:checked').val();
     var editval = $('#editval').val();
-    if(editval==""){
-    if (rt6val == 'No') {
-        var residenttype = $('input[type=radio][name=residenttype]:checked').length;
-        if (residenttype == 0) {
-            swal("ERROR!", "Please Select Resident or Non-resident", "error");
-            return false;
-        }
-        var residenttypeval = $('input[type=radio][name=residenttype]:checked').val();
-        if (residenttypeval == 'Resident') {
-            if (document.getElementById("license").files.length == 0) {
+    if (editval == "") {
+        if (rt6val == 'No') {
+            var residenttype = $('input[type=radio][name=residenttype]:checked').length;
+            if (residenttype == 0) {
+                swal("ERROR!", "Please Select Resident or Non-resident", "error");
+                return false;
+            }
+            var residenttypeval = $('input[type=radio][name=residenttype]:checked').val();
+            if (residenttypeval == 'Resident') {
+                if (document.getElementById("license").files.length == 0) {
 //                swal("ERROR!", "Please Upload Driver License", "error");
 //                return false;
-            }
-        } else {
-            if (document.getElementById("passport").files.length == 0) {
-                if (document.getElementById("editval").value != "" && document.getElementById("payroll_passport_count").value == "") {
-                    swal("ERROR!", "Please Upload Passport", "error");
-                    return false;
-                } else {
-                    swal("ERROR!", "Please Upload Passport", "error");
-                    return false;
                 }
-            }
-            if (document.getElementById("lease").files.length == 0) {
-                if (document.getElementById("editval").value != "" && document.getElementById("payroll_lease_count").value == "") {
-                    swal("ERROR!", "Please Upload Lease", "error");
-                    return false;
-                } else {
-                    swal("ERROR!", "Please Upload Lease", "error");
-                    return false;
+            } else {
+                if (document.getElementById("passport").files.length == 0) {
+                    if (document.getElementById("editval").value != "" && document.getElementById("payroll_passport_count").value == "") {
+                        swal("ERROR!", "Please Upload Passport", "error");
+                        return false;
+                    } else {
+                        swal("ERROR!", "Please Upload Passport", "error");
+                        return false;
+                    }
+                }
+                if (document.getElementById("lease").files.length == 0) {
+                    if (document.getElementById("editval").value != "" && document.getElementById("payroll_lease_count").value == "") {
+                        swal("ERROR!", "Please Upload Lease", "error");
+                        return false;
+                    } else {
+                        swal("ERROR!", "Please Upload Lease", "error");
+                        return false;
+                    }
                 }
             }
         }
-    }
 
- }
+    }
 
     $('#type').prop('disabled', false);
     $("#istate").prop('disabled', false);
@@ -2002,22 +2002,22 @@ function clientTypeChange(client_type, new_reference_id, reference, service_id) 
 
 function clientTypeYes(client_type) {
     if (parseInt(client_type) == 0) {
-    $.ajax({
-                type: 'POST',
-                url: base_url + 'services/home/clientTypeYes',
-                success: function (result) {
-                    $('#county_div').after(result);
-                }
-            });
-    }else if(parseInt(client_type) == 1){
         $.ajax({
-                type: 'POST',
-                // url: base_url + 'services/home/clientTypeYes',
-                success: function (result) {
-                    $('#existing_client_extra_field').hide();
-                    $('#existing_client_extra_field').remove();
-                }
-            });
+            type: 'POST',
+            url: base_url + 'services/home/clientTypeYes',
+            success: function (result) {
+                $('#county_div').after(result);
+            }
+        });
+    } else if (parseInt(client_type) == 1) {
+        $.ajax({
+            type: 'POST',
+            // url: base_url + 'services/home/clientTypeYes',
+            success: function (result) {
+                $('#existing_client_extra_field').hide();
+                $('#existing_client_extra_field').remove();
+            }
+        });
     }
 
 }
@@ -2525,8 +2525,8 @@ function service_filter_form() {
         success: function (result) {
             //console.log("Result: " + result);
             $(".ajaxdiv").html(result);
-            $(".filter-text").html('');
-            $(".filter-text").removeClass('btn btn-ghost');
+            $(".filter-text").addClass('btn btn-ghost');
+            $(".filter-text").html('<a href="javascript:void(0);" onclick="loadServiceDashboard("", "", "on_load", "", 1);"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>');
             $("#hiddenflag").val('');
         },
         beforeSend: function () {
@@ -2681,20 +2681,20 @@ var add_service_notes = () => {
             swal({title: "Success!", text: "Successfully Saved!", type: "success"}, function () {
                 if (result != '0') {
                     if (ref_id == orderid) {
-                    // if (serviceid == "") {
+                        // if (serviceid == "") {
                         var prevnotecount = $("#notecount-" + orderid).attr('count');
                         // alert(prevnotecount);return false;   
                         var notecount = parseInt(prevnotecount) + parseInt(result);
                         $("#notecount-" + orderid).attr('count', notecount);
                         $("#notecount-" + orderid).find('b').html(notecount);
-                    } 
-                // }
-                else {
-                        var prevnotecount = $("#collapse" + orderid).find("#orderservice-" + serviceid +"-"+ ref_id).attr('count');
+                    }
+                    // }
+                    else {
+                        var prevnotecount = $("#collapse" + orderid).find("#orderservice-" + serviceid + "-" + ref_id).attr('count');
                         var notecount = parseInt(prevnotecount) + parseInt(result);
-                           
-                        $("#collapse" + orderid).find("#orderservice-" + serviceid+"-"+ref_id).attr('count', notecount);
-                        $("#collapse" + orderid).find("#orderservice-" + serviceid+"-"+ref_id).find('b').html(notecount);
+
+                        $("#collapse" + orderid).find("#orderservice-" + serviceid + "-" + ref_id).attr('count', notecount);
+                        $("#collapse" + orderid).find("#orderservice-" + serviceid + "-" + ref_id).find('b').html(notecount);
 
                     }
                 }
@@ -3202,7 +3202,7 @@ var serviceListAjax = function (orderID, allStaffs) {
         });
     }
 }
-function payroll_account_details(reference_id){
+function payroll_account_details(reference_id) {
     $.ajax({
         type: "POST",
         data: {
@@ -3212,10 +3212,10 @@ function payroll_account_details(reference_id){
         dataType: "html",
         success: function (result) {
 //            alert(result);return false;
-            if(result){
+            if (result) {
                 $("#payroll-accounts-details").html(result);
                 $("#payroll-accounts-details").show();
-            }else{
+            } else {
                 $("#payroll-accounts-details").hide();
                 $("#bank_name").val('');
                 $("#bank_account").val('');
@@ -3224,14 +3224,53 @@ function payroll_account_details(reference_id){
         }
     });
 }
-function set_exist_account_details(bank_name,bank_number,route_number){
-    if(bank_name!='' && bank_number!='' && route_number!=''){
+function set_exist_account_details(bank_name, bank_number, route_number) {
+    if (bank_name != '' && bank_number != '' && route_number != '') {
         $("#bank_name").val(bank_name);
         $("#bank_account").val(bank_number);
         $("#bank_routing").val(route_number);
-    }else{
+    } else {
         $("#bank_name").val('');
         $("#bank_account").val('');
         $("#bank_routing").val('');
     }
+}
+
+
+function request_create_legal_translations() {
+    if (!requiredValidation('form_create_legal_translations')) {
+        return false;
+    }
+    if ($("#editval").val() != '') {
+        $('.disabled_field, .client_type_field0, .type_of_client').removeAttr('disabled');
+    }
+    $('#type').removeAttr('disabled');
+    var form_data = new FormData(document.getElementById('form_create_legal_translations'));
+//    alert(form_data);return false;
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'services/business_services/request_create_legal_translations',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+           // alert(result);return false;
+            //console.log("Result: " + result); return false;
+            if (result != 0) {
+                swal("Success!", "Successfully saved!", "success");
+                goURL(base_url + 'services/home/view/' + result.trim());
+            } else {
+                swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
 }

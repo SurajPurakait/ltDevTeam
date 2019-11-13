@@ -11,8 +11,8 @@ $stat = ($stat == 'all') ? "" : $stat;
                 <div class="ibox-content">
                     <div class="row">
                         <div class="col-lg-7">                            
-                            <a href="<?= base_url("/lead_management/new_prospect/index/1") ?>" class="btn btn-primary m-r-10"><i class="fa fa-plus"></i> Add Client Lead</a>
-                            <a href="<?= base_url("/lead_management/new_prospect/index/2") ?>" class="btn btn-primary m-r-10"><i class="fa fa-plus"></i> Add Partner Lead</a>
+                            <a href="<?= base_url("/lead_management/new_prospect/index") ?>" class="btn btn-primary m-r-10"><i class="fa fa-plus"></i> Add Lead</a>
+                            <!-- <a href="<?//= base_url("/lead_management/new_prospect/index") ?>" class="btn btn-primary m-r-10"><i class="fa fa-plus"></i> Add Partner Lead</a> -->
                             <a href="<?= base_url().'partners'; ?>" class="btn btn-success">Partner Dashboard</a>
                             <div class="filter-outer">
                                 <form name="filter_form" id="filter-form"  method="post" onsubmit="leadFilter()">
@@ -78,12 +78,12 @@ $stat = ($stat == 'all') ? "" : $stat;
                                             <th>LEADS</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-0">
-                                                    <span class="label label-success" id="lead_new" onclick="loadLeadDashboard(1, 0)"><?= count(lead_list(1, '0')); ?></span>
+                                                    <span class="label label-success" id="lead_new" onclick="loadLeadDashboard(1, 0)"><?= count(lead_list(1,'0')); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-3">
-                                                    <span class="label label-warning" id="lead_active" onclick="loadLeadDashboard(1, 3)"><?= count(lead_list(1, 3)); ?></span>
+                                                    <span class="label label-warning" id="lead_active" onclick="loadLeadDashboard('', 3)"><?= count(lead_list('', 3)); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
@@ -124,11 +124,11 @@ $stat = ($stat == 'all') ? "" : $stat;
                                 </table>
                             </div>
                         </div>
-<!--                         <div class="row m-r-20">
+                        <div class="row m-r-20">
                             <div class="col-sm-4 col-xs-12">
-                                <a class="btn notification-btn" id="notifcation-toggle" value='' href="javascript:void(0);" title="Leads Notifications">Notifications <span class="label label-danger">1</span></a>
+                                <a class="btn notification-btn" id="notifcation-toggle" value='' href="javascript:void(0);" title="Leads Notifications">Notifications <span class="label label-danger"><?= get_lead_notifications_count('lead'); ?></span></a>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
                     <hr class="hr-line-dashed m-b-10">
                     <div class="row m-b-0">
@@ -229,7 +229,6 @@ $stat = ($stat == 'all') ? "" : $stat;
     }
     function changeCondition(element) {
         var divID = $(element).parent().parent().attr('id');
-        //alert(divID);
         var conditionValue = $(element).children("option:selected").val();
         var variableValue = $(element).parent().parent().find(".variable-dropdown option:selected").val();
         if (variableValue == 5 || variableValue == 6) {

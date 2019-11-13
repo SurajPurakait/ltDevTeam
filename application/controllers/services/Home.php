@@ -652,8 +652,9 @@ class Home extends CI_Controller {
     public function getAttacments() {
         $reference = post('reference');
         $reference_id = post('reference_id');
+        $order_id = post('order_id');
 // $this->load->model('service_model');
-        $render_data['attachments_list'] = $this->service_model->get_document_list_by_reference($reference_id, $reference);
+        $render_data['attachments_list'] = $this->service_model->get_document_list_by_reference_id($reference_id, $reference,$order_id);
 // print_r($render_data['attachments_list']);die;
 // echo $reference_id;die;
         $this->load->view('services/attachments_content', $render_data);

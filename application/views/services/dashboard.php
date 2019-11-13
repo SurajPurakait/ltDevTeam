@@ -51,15 +51,15 @@ if ($status == '') {
                                                 <select class="form-control variable-dropdown" name="variable_dropdown[]" onchange="change_variable_dd(this)">
                                                     <option value="">All Variable</option>
                                                     <option value="1">Category</option>
-                                                    <option value="10">Client Name</option>
+                                                    <option value="10">Client ID</option>
                                                     <option value="7">Complete Date</option>
+                                                    <option value="13">Creation Date</option>
+                                                    <option value="14">Department</option>
                                                     <option value="3">Office</option>
                                                     <option value="9">ORDER#</option>
-                                                    <option value="15">Request type</option>
-                                                    <option value="13">Requested Date</option>
-                                                    <option value="14">Responsible DEPT</option>
-                                                    <option value="2">Service Name</option>
-                                                    <option value="5">Staff</option>
+                                                    <option value="5">Requested By</option>
+                                                    <option value="15">Request Type</option>
+                                                    <option value="2">Service Name</option>                                                    
                                                     <option value="6">Start Date</option>
                                                     <option value="12">Target End Date</option>
                                                     <option value="11">Target Start Date</option>
@@ -443,11 +443,12 @@ if ($status == '') {
             dataType: 'html'
         });
     }
-    function show_attachments(reference, reference_id) {
+    function show_attachments(reference, reference_id,order_id) {
         var url = '<?= base_url(); ?>services/home/getAttacments';
         var data = {
             reference: reference,
-            reference_id: reference_id
+            reference_id: reference_id,
+            order_id:order_id
         };
         $.ajax({
             url: url,
@@ -660,14 +661,18 @@ if ($status == '') {
                 success: function (result) {
                     //alert(result);
                     $(".ajaxdiv").html(result);
-                    $(".filter-text").addClass('btn btn-ghost');
-                    $(".filter-text").html('<span class="byclass ' + requestType + '">Requested ' + requestTypeName + ' <a href="javascript:void(0);" onclick="removefilter(\'' + requestTypeName + '\',' + status + ')"><i class="fa fa-times" aria-hidden="true"></i></a></span>');
+                    if(requestType != 'unassigned') {
+                        $(".filter-text").addClass('btn btn-ghost');
+                        $(".filter-text").html('<span class="byclass ' + requestType + '">Requested ' + requestTypeName + ' <a href="javascript:void(0);" onclick="removefilter(\'' + requestTypeName + '\',' + status + ')"><i class="fa fa-times" aria-hidden="true"></i></a></span>');
+                    }                    
                     $(".status-dropdown").val(status);
                     $("#hiddenflag").val(hiddenflag);
                     if ((status + requestType) == '') {
                         clearFilter();
                     } else {
-                        reflactFilterWithSummery(status + '-' + filterval, requestType + '-' + requestTypeName);
+                        if(requestType != 'unassigned') {
+                            reflactFilterWithSummery(status + '-' + filterval, requestType + '-' + requestTypeName);
+                        }
                     }
                 },
                 beforeSend: function () {

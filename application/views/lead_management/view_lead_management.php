@@ -210,12 +210,31 @@
                                                 </td>   
                                             </tr>
                                         <?php else: ?>
+                                            <?php 
+                                                switch ($data["status"])
+                                                {
+                                                    case 1: {
+                                                        $tracking_status = 'Completed';    
+                                                    }                                                        
+                                                    break;
+                                                    case 2: {
+                                                        $tracking_status = 'Inactive';
+                                                    }
+                                                    break;
+                                                    case 3: {
+                                                        $tracking_status = 'Active';
+                                                    }
+                                                    break;
+                                                    default: 
+                                                        $tracking_status = 'New';
+                                                }
+                                            ?>
                                             <tr>
                                                 <td width="20%" <?= $style; ?>>
                                                     <b style="font-size: 14px;">Tracking</b>
                                                 </td>
                                                 <td>
-                                                    New
+                                                    <?= $tracking_status; ?>
                                                 </td>
                                             </tr>
                                         <?php endif; ?>
@@ -318,7 +337,7 @@
                 <h4 class="modal-title">Mail Campaign Template Review</h4>
             </div>
             <div class="modal-body">
-                <table style="width:100%; border-collapse:collapse; font-size: 15px; font-family: arial; " border="0" cellpadding="0" cellspacing="0">
+                <!--<table style="width:100%; border-collapse:collapse; font-size: 15px; font-family: arial; " border="0" cellpadding="0" cellspacing="0">
                     <tr style="background: #fff">
                         <td style="padding-bottom: 10px">
                             <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
@@ -359,6 +378,35 @@
                                 </tr>
                             </table>
                         </td>
+                    </tr>
+                </table>-->
+                <table  border="0" align="center" cellpadding="0" cellspacing="10" style="border:10px solid #8ab645;width:100%; background:#8ab645;padding: 15px;border-collapse:collapse; ">
+                    <tr>
+                        <td>
+                            <table  border="0" align="center" cellpadding="0" cellspacing="0" style="width:100%;">
+                                <tr>
+                                    <td style="background: #fff">
+                                        <img src="http://www.taxleaf.com/Email/header.gif" width="300" height="98" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <table  border="0" cellspacing="0" cellpadding="0" style="width:100%;">
+                                <tr>
+                                    <td>
+                                        <img src="http://www.taxleaf.com/Email/divider2.gif" width="100%" height="30" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <table   border="0" align="center" cellpadding="0" cellspacing="15" style="width:100%; background: #ffffff;margin-top: 5px">
+                                <tr>
+                                    <td valign="top" style="color:#000;padding: 15px" class="textoblanco" style="padding: 15px"><p><span class="textonegro"><strong>
+                                        </strong><p id="mail-body"></p></span></p>    
+                                    </td>
+                                </tr>
+                            </table></td>
+                    </tr>
+                    <tr>
+                        <td height="50" valign="top">&nbsp;</td>
                     </tr>
                 </table>
             </div>

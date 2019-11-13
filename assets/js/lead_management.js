@@ -321,7 +321,7 @@ function add_lead_prospect(added_by, event_lead = "",refer_lead="") {
         cache: false,
         success: function (result) {
             if (result.trim() == "0") {
-                swal("ERROR!", "Email Id Already Exists!! Please Change the Email", "error");
+                swal("ERROR!", "Email Already Exists For This Partner Lead!! Please Change the Email", "error");
             } else if (result.trim() == "-1") {
                 swal("ERROR!", "Unable To Add Lead Prospect", "error");
             } else {
@@ -348,7 +348,9 @@ function add_lead_prospect(added_by, event_lead = "",refer_lead="") {
 
 function cancel_lead_prospect(added_by) {
     if (added_by == 'refagent') {
-        goURL(base_url + 'referral_partner/referral_partners/lead_dashboard');
+        goURL(base_url + 'referral_partner/referral_partners/referral_partner_dashboard');
+    } else if(added_by == 'ref_cancel') {
+        goURL(base_url + 'referral_partner/referral_partners/referral_partner_dashboard');
     } else {
         goURL(base_url + 'lead_management/home');
     }
@@ -385,7 +387,7 @@ function add_lead_referral(partner) {
                         goURL(base_url + 'lead_management/home');
                     });
                 }
-                window.open((($('#mail_campaign_status').val() != 0) ? base_url + 'lead_management/home/mail_campaign/y/' + result.trim() : base_url + 'lead_management/home/mail_campaign/n/' + result.trim()), 'Mail Campaign Popup', "width=1080, height=480, top=100, left=170, scrollbars=no");
+                // window.open((($('#mail_campaign_status').val() != 0) ? base_url + 'lead_management/home/mail_campaign/y/' + result.trim() : base_url + 'lead_management/home/mail_campaign/n/' + result.trim()), 'Mail Campaign Popup', "width=1080, height=480, top=100, left=170, scrollbars=no");
             }
         },
         beforeSend: function () {
@@ -580,21 +582,21 @@ function displayMailCampaignTemplate(leadID, day, isCampaign) {
     });
 }
 
-function viewMailCampaignTemplate(contactType, language, day, firstName, companyName, phone, email) {
+function viewMailCampaignTemplate(leadType, language, day, firstName, companyName, phone, email,contactType) {
     $.ajax({
         type: 'POST',
         url: base_url + 'lead_management/lead_mail/show_mail_campaign_template_ajax',
         data: {
-            service: contactType,
+            leadtype: leadType,
             language: language,
             day: day,
             first_name: firstName,
             company_name: companyName,
             phone: phone,
-            email: email
+            email: email,
+            type_of_contact : contactType
         },
         success: function (result) {
-            // console.log(result);return false;
             if (result != 0) {
                 var mail_campaign = JSON.parse(result);
 //                console.log(mail_campaign);
@@ -638,15 +640,11 @@ function loadLeadDashboard(leadType, status, requestBy, leadContactType, eventID
 function loadEventDashboard() {
     $.ajax({
         type: "POST",
-        // data: {
-        //     lead_type: leadType,
-        //     status: status,
-        //     request_by: requestBy,
-        //     lead_contact_type: leadContactType
-        // },
-        url: base_url + 'lead_management/event/dashboard_ajax',
-        success: function (event_result) {
-            $("#event_dashboard_div").html(event_result);
+        url: base_url + 'lead_management/event/index',
+        success: function () {
+            $("#event_dashboard_div").hide();
+            $("#event_dashboard_div2").show();
+            $("#btn_clear_filter").hide();
         },
         beforeSend: function () {
             openLoading();
@@ -827,13 +825,13 @@ function add_event() {
 
 }
 
-function change_zip_by_country(val) {
-    if (val == '230') {
-        $("#zip_div").show();
-    } else {
-        $("#zip_div").hide();
-    }
-}
+// function change_zip_by_country(val) {
+//     if (val == '230') {
+//         $("#zip_div").show();
+//     } else {
+//         $("#zip_div").hide();
+//     }
+// }
 
 var mail_campaign_status_change = (id, value) => {
     $.ajax({
@@ -981,4 +979,65 @@ function sort_lead_dashboard(sort_criteria = '', sort_type = '') {
         }
     });
 
+}
+
+function change_type_of_contact(lead_type) {
+    $.ajax({
+        type: "POST",
+        data: {
+            lead_type: lead_type
+        },
+        url: base_url + 'lead_management/home/get_typeof_contact',
+        dataType: "html",
+        success: function (result) {
+            var type_contact_list = document.getElementById('contact_type');
+            type_contact_list.innerHTML = "";
+            if (result != 0) {
+                var lead = JSON.parse(result);
+                // type_contact_list.options[type_contact_list.options.length] = new Option("Select an option", "");
+                for (var i = 0; i < lead.length; i++) {
+                    type_contact_list.options[type_contact_list.options.length] = new Option(lead[i].name, lead[i].id);
+                }
+            } else {
+                type_contact_list.options[type_contact_list.options.length] = new Option("Select an option", "");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+
+function eventFilter() {
+    var form_data = new FormData(document.getElementById('filter-form'));
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'lead_management/event/event_filter',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            // alert(result); return false;
+            $("#event_dashboard_div").show();
+            $("#event_dashboard_div").html(result);
+            $("#event_dashboard_div2").hide();
+            $("[data-toggle=popover]").popover();
+            $("#clear_filter").html('');
+            $("#clear_filter").show();
+            $('#btn_clear_filter').show();
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
 }

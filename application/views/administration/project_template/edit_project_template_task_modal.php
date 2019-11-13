@@ -65,10 +65,11 @@
                         <div class="form-group">
                             <label class="control-label">Tracking Description:</label>
                             <select class="form-control" id="description" name="task[tracking_description]">
-                                <option value="0" value="<?= $task_details->tracking_description=='0'?'selected':'' ?>">Not Started</option>
+                                <option value="0" value="<?= $task_details->tracking_description=='0'?'selected':'' ?>">New</option>
                                 <option value="1" value="<?= $task_details->tracking_description=='1'?'selected':'' ?>">Started</option>
-                                <option value="2" value="<?= $task_details->tracking_description=='2'?'selected':'' ?>">Completed</option>
-                            </select>
+                                <option value="3" value="<?= $task_details->tracking_description=='3'?'selected':'' ?>">Ready</option>
+                                <option value="2" value="<?= $task_details->tracking_description=='2'?'selected':'' ?>">Resolved</option>
+                             </select>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -95,6 +96,26 @@
                     <div id="task_staff_div"></div>
                     
                 </div><!-- ./row -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Input Form<span class="text-danger">*</span></label>
+                            <label class="checkbox-inline">
+                                <input class="checkclass" value="y" type="radio" id="task_inputform1" name="task[is_input_form]" required title="Input Form" <?= ($task_details->is_input_form == 'y') ? 'checked' : ''; ?>> Yes
+                            </label>
+                            <label class="checkbox-inline">
+                                <input class="checkclass" value="n" type="radio" id="task_inputform2" name="task[is_input_form]" required title="Input Form" <?= ($task_details->is_input_form == 'n') ? 'checked' : ''; ?>> No
+                            </label>
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Allow sales tax processing</label>
+                        <input type="checkbox" name="task[input_form_type]" title="Allow Sales Tax" id="confirmation" value="1" <?php echo ($task_details->input_form_type == '1') ? 'checked' : ''; ?>>
+                    </div>
+                </div>
                 <hr class="hr-line-dashed"/>
                 <div class="row">
                     <div class="col-md-12">

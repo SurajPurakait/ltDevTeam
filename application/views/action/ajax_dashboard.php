@@ -98,13 +98,17 @@ if (!empty($action_list)):
                         break;
                 }
                 if (in_array(sess('user_id'), action_edit_permission($action["id"]))) {
+                    ?>
+                    <a href="<?= base_url("/action/home/view_action/{$action["id"]}"); ?>"
+                       class="btn btn-primary btn-xs btn-add btn-service-view"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
+                    <?php
+
                     if ($action['status'] == '0') {
                         ?>
                         <a href="<?= base_url("/action/home/edit_action/{$action["id"]}"); ?>"
-                           class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+                           class="btn btn-primary btn-xs btn-add btn-service-lead"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
                        <?php } ?>
-                    <a href="<?= base_url("/action/home/view_action/{$action["id"]}"); ?>"
-                       class="btn btn-primary btn-xs btn-service-view"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
+
                    <?php } ?>
                 <a class="panel-title" data-toggle="collapse" data-parent="#accordion"
                    href="#collapse89"

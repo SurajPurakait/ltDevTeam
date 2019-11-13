@@ -1012,8 +1012,10 @@ Class System extends CI_Model {
             WHEN gn.action = "note" THEN CONCAT("<strong> ", gn.notification_text, " </strong>has been added note by ", (CASE WHEN gn.added_by != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.added_by) ELSE "<strong>YOU</strong>" END))
             WHEN gn.action = "reaches" THEN CONCAT("<strong> ", gn.notification_text, " </strong>has passed the due date ")
             WHEN gn.action = "sos" THEN CONCAT("<strong> ", gn.notification_text, " </strong>has a new SOS notification ")
-            WHEN gn.action = "refer" THEN CONCAT((CASE WHEN gn.added_by != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.added_by) ELSE "<strong>YOU</strong> have" END), " referred a<strong> ", gn.notification_text, " </strong>to ", (CASE WHEN gn.assign_to_user != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.assign_to_user) ELSE " <strong>YOU</strong>" END))
-            ELSE CONCAT("New<strong> ", gn.notification_text, " </strong>has been created by ", (CASE WHEN gn.added_by != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.added_by) ELSE "<strong>YOU</strong>" END)) END) AS notification_text';
+            WHEN gn.action = "refer" THEN CONCAT(" A new <strong>", gn.notification_text, " </strong>has been referred to ", (CASE WHEN gn.assign_to_user != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.assign_to_user) ELSE " <strong>YOU</strong>" END))
+            ELSE CONCAT("New<strong> ", gn.notification_text, " </strong> has been created by ", (CASE WHEN gn.added_by != "' . $user_id . '" THEN (SELECT CONCAT("<strong>", `staff`.`last_name`, ", ",`staff`.`first_name`, " ", `staff`.`middle_name`, "</strong>") FROM staff WHERE id = gn.added_by) ELSE "<strong>YOU</strong>" END)) END) AS notification_text';
+
+
         $select[] = '(SELECT GROUP_CONCAT(`office`.`name`) AS `staff_office_name` FROM `office` WHERE `office`.`id` IN (SELECT `office_staff`.`office_id` FROM `office_staff` WHERE `office_staff`.`staff_id` = gn.added_by)) AS added_by_user_office';
         $select[] = 'gn.reference AS reference';
         $select[] = 'gn.reference_id AS reference_id';
@@ -1031,7 +1033,7 @@ Class System extends CI_Model {
             if ($request_type == 'forme') {
                 $this->db->where(['gn.added_by' => $user_id, 'gn.read_status' => 'n']);
             } elseif ($request_type == 'forother') {
-                $this->db->where(['gn.added_by!=' => $user_id, 'gn.read_status' => 'n', 'gn.added_by!=' => $user_id]);
+                $this->db->where(['gn.added_by!=' => $user_id, 'gn.read_status' => 'n', 'gn.added_by!=' => $user_id]);   
             } else {
                 $this->db->where(['gn.user_id' => $user_id, 'gn.read_status' => 'n']);
             }
@@ -1336,8 +1338,26 @@ Class System extends CI_Model {
     }
 
     public function get_service_notifications_count($forvalue) {
-//        $where['gn.action'] = 'tracking';
         $where['gn.reference'] = 'order';
+        $result = $this->get_general_notification_by_user_id(sess('user_id'), '', $where, '', $forvalue);
+        if (!empty($result)) {
+            return count($result);
+        } else {
+            return 0;
+        }
+    }
+
+    public function get_lead_notifications_count($forvalue) {
+        $where['gn.reference'] = 'lead';
+        $result = $this->get_general_notification_by_user_id(sess('user_id'), '', $where, '', $forvalue);
+        if (!empty($result)) {
+            return count($result);
+        } else {
+            return 0;
+        }
+    }
+    public function get_partner_notifications_count($forvalue) {
+        $where['gn.reference'] = 'partner';
         $result = $this->get_general_notification_by_user_id(sess('user_id'), '', $where, '', $forvalue);
         if (!empty($result)) {
             return count($result);

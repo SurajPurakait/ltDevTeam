@@ -173,7 +173,7 @@ if (!empty($result)):
                 if ($url != ''):
                     if ($tracking == 'Started') {
                         ?>
-                        <a href="<?= base_url($url) ?>" class="btn btn-primary btn-xs btn-service-edit" style="display: none" target="_blank">
+                        <a href="<?= base_url($url) ?>" class="btn btn-primary btn-xs btn-service-lead" style="display: none" target="_blank">
                             <i class="fa fa-pencil" aria-hidden="true"></i> Edit
                         </a>
                         <?php
@@ -182,7 +182,7 @@ if (!empty($result)):
                             $url = 'billing/invoice/edit/' . base64_encode($invoice_info['id']);
                         }
                         ?>
-                        <a href="<?= base_url($url) ?>" class="btn btn-primary btn-xs btn-service-edit" target="_blank">
+                        <a href="<?= base_url($url) ?>" class="btn btn-primary btn-xs btn-service-lead" target="_blank">
                             <i class="fa fa-pencil" aria-hidden="true"></i> Edit
                         </a>
                         <?php
@@ -296,11 +296,11 @@ if (!empty($result)):
                                 </td>
                                 <td style="font-weight: normal; width:8%; text-align: center;" title="Attachment">
                                     <?php
-                                    $number_of_document = get_document_count($row->reference_id, $row->reference);
+                                    $number_of_document = get_document_count($row->reference_id, $row->reference,$row->id);
                                     if ($number_of_document == 0) {
                                         ?>
                                         <span class="label label-warning">
-                                            <a class="label label-warning" href="javascript:void(0)" onclick="show_attachments('<?= $row->reference; ?>', '<?= $row->reference_id; ?>');" style="padding: 0px;margin:0px;">
+                                            <a class="label label-warning" href="javascript:void(0)" onclick="show_attachments('<?= $row->reference; ?>', '<?= $row->reference_id; ?>','<?= $row->id; ?>');" style="padding: 0px;margin:0px;">
                                                 <?php echo $number_of_document; ?>
                                             </a>
                                         </span>    
@@ -308,7 +308,7 @@ if (!empty($result)):
                                     } else {
                                         ?>
                                         <span class="label label-primary">
-                                            <a class="label label-primary" href="javascript:void(0)" onclick="show_attachments('<?= $row->reference; ?>', '<?= $row->reference_id; ?>');" style="padding: 0px;margin:0px;">
+                                            <a class="label label-primary" href="javascript:void(0)" onclick="show_attachments('<?= $row->reference; ?>', '<?= $row->reference_id; ?>','<?= $row->id; ?>');" style="padding: 0px;margin:0px;">
                                                 <?php echo $number_of_document; ?>
                                             </a>
                                         </span>    

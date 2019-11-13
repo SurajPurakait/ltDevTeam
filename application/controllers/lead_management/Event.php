@@ -9,12 +9,10 @@ class Event extends CI_Controller {
         $this->load->model('lead_management', "lm");
         $this->load->model("system");
         $this->filter_element = [
-            1 => "Type",
-            2 => "Tracking",
-            3 => "Office",
-            4 => "Staff",
-            5 => "Active Date",
-            6 => "Complete Date"
+            1 => "Event Name",
+            2 => "Office",
+            3 => "Date",
+            4 => "Location"
         ];
     }
 
@@ -143,6 +141,28 @@ class Event extends CI_Controller {
         // print_r($render_data['lead_list_details']);exit;
          $this->load->template('lead_management/event_edit_page', $render_data);
 
+    }
+
+    public function filter_dropdown_option_event_dashboard() {
+        $result['element_key'] = $element_key = post('variable');
+        $result['condition'] = '';
+        if (post('condition')) {
+            $result['condition'] = post('condition');
+        }
+        // $office = '';
+        // if (post('office')) {
+        //     $office = post('office');
+        // }
+        $result['element_array'] = $this->filter_element;
+        // $result['element_value_list'] = $this->lead_management->get_lead_filter_element_value($element_key, $office);
+         $result['element_value_list'] = $this->lm->get_event_filter_element_value($element_key);
+        $this->load->view('lead_management/filter_dropdown_option_event_dashboard', $result);
+    }
+
+    public function event_filter() {
+       
+        $render_data["event_details"] = $this->lm->get_event_list('',post());
+        $this->load->view("lead_management/event_ajax_dashboard", $render_data);
     }
 
 }
