@@ -1892,14 +1892,14 @@ class Company_model extends CI_Model {
             if ($data['type_of_client'] == 1) {
                 //insert action on invoice
                 $staff_info = staff_info();
-                $this->db->where_in('department_id', '6');
+                $this->db->where_in('department_id', '14');
                 $department_staffs = $this->db->get('department_staff')->result_array();
                 $department_staff = array_column($department_staffs, 'staff_id');
 
 
                 $action_data['created_office'] = $data['staff_office'];
                 $action_data['priority'] = '3';
-                $action_data['department'] = '6';
+                $action_data['department'] = '14';
                 $action_data['office'] = '17';
                 $action_data['is_all'] = '1';
                 $action_data['staff'] = $department_staff;
@@ -1914,7 +1914,8 @@ class Company_model extends CI_Model {
                 $this->action_model->insert_client_action($action_data);
                 //insert action on invoice
             }
-        } else {
+        } else { // update started
+            // print_r($data['editval']);exit;
             if ($data['type_of_client'] == 1) {
                 if (!$this->company_model->save_company($data)) {
                     return false;
@@ -1925,6 +1926,7 @@ class Company_model extends CI_Model {
             }
             //    Save order
             $data['order_id'] = $order_id = $this->service_model->save_order($data);
+            // print_r($data['order_id']);exit;
             if (isset($data['service_notes'])) {
                 foreach ($data['service_notes'] as $services_id => $note_data) {
                     $reference_id = $this->notes->get_main_service_id($data['editval'], $services_id);
@@ -1951,7 +1953,7 @@ class Company_model extends CI_Model {
             //     $this->db->where_in('id', $doc_array);
             //     $this->db->update('documents', array('order_id' => $order_id));
             // }
-
+            $this->service_model->update_order_extra_data_fields($data,$order_id);
             $this->billing_model->update_invoice_data($data);
             $this->system->save_general_notification('order', $order_id, 'edit');
         }

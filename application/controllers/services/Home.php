@@ -171,6 +171,13 @@ class Home extends CI_Controller {
                     $render_data['delaware'] = $this->service_model->get_service_by_shortname('inc_d_a_r');
                     $this->load->template('services/edit_annual_report', $render_data);
                 }
+
+                case 'bus_l_t':{
+                    $render_data['order_extra_data'] = $this->service_model->get_extra_data($order_id);
+                    // echo "<pre>";
+                    // print_r($render_data['order_extra_data']);exit;
+                    $this->load->template('services/edit_legal_translations', $render_data);
+                }
                 break;
             default :
                 redirect(base_url('services/home'));

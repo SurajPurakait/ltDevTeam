@@ -644,7 +644,14 @@ function loadEventDashboard() {
         success: function () {
             $("#event_dashboard_div").hide();
             $("#event_dashboard_div2").show();
-            $("#btn_clear_filter").hide();
+            // $("#btn_clear_filter").hide();
+            $(".variable-dropdown").val('');
+            $(".condition-dropdown").val('').removeAttr('disabled');
+            $(".criteria-dropdown").val('');
+            $('.criteria-dropdown').removeAttr('readonly').empty().append('<option value="">All Criteria</option>');
+            $(".criteria-dropdown").trigger("chosen:updated");
+            $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
+            $('#btn_clear_filter').css('display', 'none');
         },
         beforeSend: function () {
             openLoading();
