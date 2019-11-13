@@ -698,7 +698,7 @@ class Action_model extends CI_Model {
                 }
             }
         }
-
+        $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => '0', "section_id" => $id, "related_table_name" => "actions", "comment" => ""]);
         if (!empty($uploadData)) {
             $this->db->insert_batch('action_files', $uploadData);
         }
