@@ -246,13 +246,18 @@ class Lead_mail extends CI_Controller {
         $leadtype = post('leadtype');
         $language = request('language');
         $day = request('day');
-        $lead_type = $this->lead_management->get_type_of_contact_by_id($leadtype);
-        if ($lead_type == 1) {
+        $office = post('office');
+        if ($leadtype == 1) {
             $contact_type = $this->lead_management->get_type_of_contact_prospect(request('type_of_contact'));
         } else {
             $contact_type = $this->lead_management->get_type_of_contact_referral_by_id(request('type_of_contact'));
         }
         $lead_mail = $this->lead_management->lead_campaign_mails($leadtype, $language, $day);
+        $lead_type = $this->lead_management->get_type_of_contact_by_id($leadtype);
+        $user_details = staff_info();
+        // print_r($user_details);exit;
+        $office_info = $this->administration->get_office_by_id($office);
+
         if (!empty($lead_mail)) {
             $lead_mail = $lead_mail[0];
             $veriable_array = [
@@ -261,8 +266,14 @@ class Lead_mail extends CI_Controller {
                 'company' => request('company_name'),
                 'phone' => request('phone'),
                 'email' => request('email'),
-                'requested_by' => staff_info()['full_name'],
-                'lead_type' => $contact_type['name']
+                'requested_by' => $user_details['first_name']." ".$user_details['last_name'],
+                'lead_type' => $contact_type['name'],
+                'staff_phone' => $user_details['phone'],
+                'staff_email' =>  $user_details['user'],
+                'staff_office' =>  staff_office_name(sess('user_id')),
+                'office_address' =>  $office_info['address'],
+                'office_phone_number' =>  $office_info['phone']
+
             ];
             $lead_mail['body'] = urldecode($lead_mail['body']);
             foreach ($veriable_array as $index => $value) {

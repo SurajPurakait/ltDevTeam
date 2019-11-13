@@ -242,19 +242,19 @@
                     <div class="mail-campaign-wrap" id="mail_campaign_wrap" style="display: none;">
                         <div class="row">
                             <div class="col-md-2 col-md-offset-2 text-center">
-                                <div class="newsletter-box" onclick="viewMailCampaignTemplate(getIdVal('lead_type'), getIdVal('language'), 1, getIdVal('first_name'), getIdVal('company_name'), getIdVal('phone1'), getIdVal('email'),getIdVal('contact_type'));" data-toggle="modal">
+                                <div class="newsletter-box" onclick="viewMailCampaignTemplate(getIdVal('lead_type'), getIdVal('language'), 1, getIdVal('first_name'), getIdVal('company_name'), getIdVal('phone1'), getIdVal('email'),getIdVal('contact_type'),getIdVal('office'));" data-toggle="modal">
                                     <img src="<?= base_url() . "assets/img/newsletter_day_0.jpg"; ?>"/>
                                     <!-- <div class="newsletter-overlay overlay-bg1">Day 0</div> -->
                                 </div> 
                             </div>
                             <div class="col-md-2 text-center">
-                                <div class="newsletter-box" onclick="viewMailCampaignTemplate(getIdVal('lead_type'), getIdVal('language'), 2, getIdVal('first_name'), getIdVal('company_name'), getIdVal('phone1'), getIdVal('email'),getIdVal('contact_type'));" data-toggle="modal">
+                                <div class="newsletter-box" onclick="viewMailCampaignTemplate(getIdVal('lead_type'), getIdVal('language'), 2, getIdVal('first_name'), getIdVal('company_name'), getIdVal('phone1'), getIdVal('email'),getIdVal('contact_type'),getIdVal('office'));" data-toggle="modal">
                                     <img src="<?= base_url() . "assets/img/newsletter_day_3.jpg"; ?>"/>
                                     <!-- <div class="newsletter-overlay overlay-bg2">Day 3</div> -->
                                 </div> 
                             </div>
                             <div class="col-md-2 text-center">
-                                <div class="newsletter-box" onclick="viewMailCampaignTemplate(getIdVal('lead_type'), getIdVal('language'), 3, getIdVal('first_name'), getIdVal('company_name'), getIdVal('phone1'), getIdVal('email'),getIdVal('contact_type'));" data-toggle="modal">
+                                <div class="newsletter-box" onclick="viewMailCampaignTemplate(getIdVal('lead_type'), getIdVal('language'), 3, getIdVal('first_name'), getIdVal('company_name'), getIdVal('phone1'), getIdVal('email'),getIdVal('contact_type'),getIdVal('office'));" data-toggle="modal">
                                     <img src="<?= base_url() . "assets/img/newsletter_day_6.jpg"; ?>"/>
                                     <!-- <div class="newsletter-overlay overlay-bg3">Day 6</div> -->
                                 </div> 
