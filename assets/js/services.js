@@ -474,7 +474,13 @@ function loadServiceDashboard(status, categoryID, requestType, officeID, pageNum
                 if (pageNumber != 0) {
                     $('.load-more-btn').not(':last').remove();
                 }
+                if(requestType=='on_load'){
+                    $('#btn_service').hide();
+                    clearFilter();
+                }
             }
+            
+            
         },
         beforeSend: function () {
             openLoading();
@@ -2526,7 +2532,7 @@ function service_filter_form() {
             //console.log("Result: " + result);
             $(".ajaxdiv").html(result);
             $(".filter-text").addClass('btn btn-ghost');
-            $(".filter-text").html('<a href="javascript:void(0);" onclick="loadServiceDashboard("", "", "on_load", "", 1);"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>');
+            $(".filter-text").html("<a href='javascript:void(0);' id=btn_service onclick=loadServiceDashboard('','','on_load','',1)><i class='fa fa-times' aria-hidden='true'></i> Clear filter</a>");
             $("#hiddenflag").val('');
         },
         beforeSend: function () {

@@ -431,12 +431,12 @@ Class System extends CI_Model {
             $query = "select * from department";
         } elseif ($val == 2) {
             $query = "select * from services";
-        } elseif ($val == 3) {
-            if ($staff_info['type'] == 1 || $staff_info['department'] == 14) {
+        } elseif ($val == 3) {   // these condition are stoped for client requirment
+//            if ($staff_info['type'] == 1 || $staff_info['department'] == 14) {
                 $query = "select * from office";
-            } else {
-                $query = "select o.* from office o inner join office_staff os on os.office_id = o.id where os.staff_id = '" . $staff_info['id'] . "'";
-            }
+//            } else {
+//                $query = "select o.* from office o inner join office_staff os on os.office_id = o.id where os.staff_id = '" . $staff_info['id'] . "'";
+//            }
         } elseif ($val == 5) {
             if ($ofc_val == '') {
                 $query = "select * from staff where status=1 AND type!=4";

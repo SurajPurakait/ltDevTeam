@@ -189,13 +189,13 @@
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
-    <div class="form-group">
+<!--    <div class="form-group">
         <label class="col-lg-2 control-label">Existing Practice ID</label>
         <div class="col-lg-10">
             <input placeholder="" class="form-control value_field" type="text" name="existing_practice_id" title="Existing Practice ID" value="">
             <div class="errorMessage text-danger"></div>
         </div>
-    </div>
+    </div>-->
 </div>
 
 <div id="documents_div" class="display_div">
