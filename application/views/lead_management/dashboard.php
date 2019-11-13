@@ -78,12 +78,12 @@ $stat = ($stat == 'all') ? "" : $stat;
                                             <th>LEADS</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-0">
-                                                    <span class="label label-success" id="lead_new" onclick="loadLeadDashboard(1, 0)"><?= count(lead_list(1, '0')); ?></span>
+                                                    <span class="label label-success" id="lead_new" onclick="loadLeadDashboard(1, 0)"><?= count(lead_list(1,'0')); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-3">
-                                                    <span class="label label-warning" id="lead_active" onclick="loadLeadDashboard(1, 3)"><?= count(lead_list(1, 3)); ?></span>
+                                                    <span class="label label-warning" id="lead_active" onclick="loadLeadDashboard('', 3)"><?= count(lead_list('', 3)); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
@@ -229,7 +229,6 @@ $stat = ($stat == 'all') ? "" : $stat;
     }
     function changeCondition(element) {
         var divID = $(element).parent().parent().attr('id');
-        //alert(divID);
         var conditionValue = $(element).children("option:selected").val();
         var variableValue = $(element).parent().parent().find(".variable-dropdown option:selected").val();
         if (variableValue == 5 || variableValue == 6) {

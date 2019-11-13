@@ -74,6 +74,7 @@ class Referral_partners extends CI_Controller {
         $render_data['header_title'] = $title;
         $render_data['partner'] = $is_partner;
         $render_data["type_of_contact"] = $this->lm->get_lead_types();
+        $render_data["type_of_leads"] = $this->lm->get_lead_type_for_mail();
         $render_data["lead_source"] = $this->lm->get_lead_sources();
         $render_data["lead_agents"] = $this->lm->get_lead_agents();
         $render_data["states"] = $this->system->get_all_state();
