@@ -353,6 +353,18 @@ if (!function_exists('load_ddl_option')) {
                     echo "<option $select value='" . $item['id'] . "'>" . $item['language'] . "</option>";
                 }
                 break;
+
+            case "language_list_multiple_select":
+                $item_list = $ci->system->get_languages();
+                foreach ($item_list as $item) {
+                    if (in_array($item['id'], $selected)) {
+                        echo "<option selected value='" . $item['id'] . "'>" . $item['language'] . "</option>";
+                    } else {
+                        echo "<option value='" . $item['id'] . "'>" . $item['language'] . "</option>";
+                    }
+                }
+                break;
+
             case "referer_by_source":
                 $item_list = $ci->system->get_refered_by_source();
                 foreach ($item_list as $item) {
