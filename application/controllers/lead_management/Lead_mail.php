@@ -247,6 +247,9 @@ class Lead_mail extends CI_Controller {
         $language = request('language');
         $day = request('day');
         $office = post('office');
+        $first_contact_date = post('first_contact_date');
+        $lead_source = post('lead_source');
+        $source_details = post('source_details');
         if ($leadtype == 1) {
             $contact_type = $this->lead_management->get_type_of_contact_prospect(request('type_of_contact'));
         } else {
@@ -272,7 +275,11 @@ class Lead_mail extends CI_Controller {
                 'staff_email' =>  $user_details['user'],
                 'staff_office' =>  staff_office_name(sess('user_id')),
                 'office_address' =>  $office_info['address'],
-                'office_phone_number' =>  $office_info['phone']
+                'office_name' => $office_info['name'],
+                'office_phone_number' =>  $office_info['phone'],
+                'first_contact_date' => ($first_contact_date != '0000-00-00') ? date('m/d/Y', strtotime($first_contact_date)) : '',
+                'lead_source' => $lead_source,
+                'source_detail' => $source_details
 
             ];
             $lead_mail['body'] = urldecode($lead_mail['body']);

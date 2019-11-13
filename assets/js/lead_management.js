@@ -582,7 +582,7 @@ function displayMailCampaignTemplate(leadID, day, isCampaign) {
     });
 }
 
-function viewMailCampaignTemplate(leadType, language, day, firstName, companyName, phone, email,contactType,office) {
+function viewMailCampaignTemplate(leadType, language, day, firstName, companyName, phone, email,contactType,office,first_contact_date,lead_source,source_details) {
     $.ajax({
         type: 'POST',
         url: base_url + 'lead_management/lead_mail/show_mail_campaign_template_ajax',
@@ -595,7 +595,10 @@ function viewMailCampaignTemplate(leadType, language, day, firstName, companyNam
             phone: phone,
             email: email,
             type_of_contact : contactType,
-            office:office
+            office:office,
+            first_contact_date :first_contact_date,
+            lead_source : lead_source,
+            source_details : source_details 
         },
         success: function (result) {
             if (result != 0) {
