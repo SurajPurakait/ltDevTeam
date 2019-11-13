@@ -27,10 +27,12 @@ $stat = ($stat == 'all') ? "" : $stat;
                                                 </select>
                                             </div>
                                             <div class="col-sm-4 m-t-10">
-                                                <select class="form-control condition-dropdown" name="condition_dr  opdown[]" onchange="changeCondition(this)">
+                                                <select class="form-control condition-dropdown" name="condition_dropdown[]" onchange="changeCondition(this)">
                                                     <option value="">All Condition</option>
                                                     <option value="1">Is</option>
                                                     <option value="2">Is in the list</option>
+                                                    <option value="3">Is not</option>
+                                                    <option value="4">Is not in the list</option>
                                                 </select>
                                             </div>
                                             <div class="col-sm-4 m-t-10 criteria-div">
