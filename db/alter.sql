@@ -985,3 +985,5 @@ ALTER TABLE `project_task_sales_tax_process` ADD `task_id` INT(11) NOT NULL AFTE
 ALTER TABLE `project_template_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for start, 2 for resolve,3 for ready';  
 
 ALTER TABLE `project_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for started, 2 for resolved, 3 for ready'; 
+
+ALTER TABLE `order_extra_data` ADD `translation_to` VARCHAR(255) NOT NULL AFTER `document_date`, ADD `amount_of_pages` INT(100) NOT NULL AFTER `translation_to`, ADD `attach_files` VARCHAR(255) NOT NULL AFTER `amount_of_pages`;
