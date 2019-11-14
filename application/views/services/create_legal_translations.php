@@ -222,25 +222,21 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Retail Price</label>
                             <div class="col-lg-10">
-                                <!-- <input id="retail_price" readonly="" placeholder="" class="form-control" type="text" title="Retail Price" value="<?//= $service_info['retail_price']; ?>">
-                                <input name="retail_price" type="hidden" value="<?//= $service_info['retail_price']; ?>"> -->
                                  <input readonly="" placeholder="" id="employee-retail-price" class="form-control retprice" type="text" title="Retail Price" value="<?= $service_info['retail_price']; ?>">
-                                        <input class="retprice" id="employee-retail-price-hidd" type="hidden" title="Retail Price" value="<?= $service_info['retail_price']; ?>" name="retail_price">
-                                        <div class="errorMessage text-danger"></div>
+                                <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Amount Of Pages</label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="pages" id="pages" onchange="change_referred_name_status(this.value);">
+                                <select class="form-control" name="pages" id="pages" onchange="change_price(<?= $service_info['retail_price']; ?>,this.value);">
                                     <option value="1" selected>1</option>
                                     <?php for($i=2; $i<=10; $i++){
                                         echo "<option value=".$i.">".$i."</option>";
                                     }
-                                      ?> 
-                                    <!--<option name=""> </option>-->   
-                                       </select> 
+                                    ?>    
+                                </select> 
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
@@ -305,15 +301,4 @@
 <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script>
     clientTypeChange(1, <?= $reference_id; ?>, '<?= $reference; ?>', 1);
-
-    function change_referred_name_status(val)
- {
-    var a = (25*val);
-    //alert(a);return false;
-    if(a != 0){
-     document.getElementById("employee-retail-price-hidd").value = a;
-     document.getElementById("employee-retail-price").value = a;
-    }
-
- }
 </script>
