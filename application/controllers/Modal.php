@@ -545,6 +545,7 @@ class Modal extends CI_Controller {
         $render_data = [];
         $render_data['template_id'] = $this->input->post('template_id');
         $render_data["departments"] = $this->action->get_departments();
+        $render_data['template_category_id']=$this->Project_Template_model->getTemplateCategoryByTemplateId($this->input->post('template_id'));
         $this->load->view("administration/project_template/project_template_task_modal", $render_data);
     }
 
@@ -553,9 +554,11 @@ class Modal extends CI_Controller {
         $this->load->model('Project_Template_model');
         $task_id = $this->input->post('task_id');
         $render_data['task_id'] = $task_id;
+        $render_data['template_id']=post('template_id');
         $render_data["departments"] = $this->action->get_departments();
         $render_data['task_details'] = $this->Project_Template_model->getTemplateTaskDetails($task_id);
         $render_data['staff_type'] = $this->Project_Template_model->getStaffType();
+        $render_data['template_category_id']=$this->Project_Template_model->getTemplateCategoryByTemplateId(post('template_id'));
         $this->load->view("administration/project_template/edit_project_template_task_modal", $render_data);
     }
 
