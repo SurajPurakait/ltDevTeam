@@ -675,6 +675,7 @@ if ($status == '') {
                             reflactFilterWithSummery(status + '-' + filterval, requestType + '-' + requestTypeName);
                         }
                     }
+                    $("#btn_service").show();
                 },
                 beforeSend: function () {
                     openLoading();
