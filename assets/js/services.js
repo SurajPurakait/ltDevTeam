@@ -3281,6 +3281,7 @@ function request_create_legal_translations() {
     });
 }
 
+
 function change_price(price,val) {
     var changed_price = (price*val);
     if(changed_price != 0){
