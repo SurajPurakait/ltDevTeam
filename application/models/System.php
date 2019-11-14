@@ -1389,9 +1389,9 @@ Class System extends CI_Model {
             return $this->db->query("UPDATE `sos_notification_staff` SET `read_status` = '1' WHERE staff_id = " . sess('user_id') . "");
         } elseif ($type == 'notification') {
             if ($reference != '') {
-                return $this->db->query("UPDATE general_notifications SET read_status='y' WHERE added_by='$userid' AND reference='$reference'");
+                return $this->db->query("UPDATE general_notifications SET read_status='y' WHERE (added_by='$userid' || user_id='$userid') AND reference='$reference'");
             } else {
-                return $this->db->query("UPDATE general_notifications SET read_status='y' WHERE added_by='$userid'");
+                return $this->db->query("UPDATE general_notifications SET read_status='y' WHERE (added_by='$userid' || user_id='$userid')");
             }
         }
     }
