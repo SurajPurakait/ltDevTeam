@@ -222,7 +222,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Retail Price</label>
                             <div class="col-lg-10">
-                                 <input readonly="" placeholder="" id="employee-retail-price" class="form-control retprice" type="text" title="Retail Price" value="<?= $service_info['retail_price']; ?>">
+                                 <input readonly="" placeholder="" id="employee-retail-price" class="form-control retprice" type="text" title="Retail Price" value="<?= $service_info['retail_price']; ?>" name="retail_price">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
