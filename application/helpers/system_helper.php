@@ -3382,3 +3382,10 @@ if(!function_exists('getProjectCountByClientId')){
         return $ci->Project_Template_model->get_project_count_by_client_id($client_id);
     }
 }
+if(!function_exists('get_service_by_id')){
+    function get_service_by_id($id){
+        $ci =&get_instance();
+        $ci->load->model('service_model');
+        return $ci->service_model->get_service_by_id($id);
+    }
+}

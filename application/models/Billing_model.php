@@ -1536,7 +1536,8 @@ class Billing_model extends CI_Model {
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = indt.partner) as partner',
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = indt.manager) as manager',
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = inv.created_by) as created_by_name',
-            '(SELECT CONCAT(",", GROUP_CONCAT(`service_id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services',
+            '(SELECT CONCAT(",",GROUP_CONCAT(`service_id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services',
+            '(SELECT CONCAT(",",GROUP_CONCAT(`total_of_order`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services_override',
 //            '(CAST((SELECT sr.price_charged FROM service_request sr WHERE sr.order_id = ord.id AND sr.services_id = ord.service_id) AS Decimal(10,2)) * ord.quantity) as sub_total',
             '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
         ];
@@ -1562,7 +1563,7 @@ class Billing_model extends CI_Model {
         $table = '`invoice_info` AS `inv` ' .
                 'INNER JOIN `order` AS `ord` ON `ord`.`invoice_id` = `inv`.`id` ' .
                 'INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END)'.
-                'INNER JOIN `service_request` AS `srv` ON `srv`.`order_id` = `inv`.`order_id` ' ;
+                'INNER JOIN `service_request` AS `srv` ON `srv`.`order_id` = `inv`.`order_id`' ;
 
         $this->db->query('SET SQL_BIG_SELECTS=1');
         return $this->db->query('SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id` ' . $order_by . ' ')->result_array();        

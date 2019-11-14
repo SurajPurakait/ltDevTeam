@@ -1,3 +1,7 @@
+<?php
+    // echo "<pre>";
+    // print_r($royalty_reports_data);exit;
+?>
 <div class="">
 <table id="report-tab" class="table table-bordered table-striped">
     <thead>
@@ -35,15 +39,16 @@
                     } else {
                         $payment_status = 'Late';
                     }
+                    $service_detail = get_service_by_id(explode(',',$rpd['all_services'])[$i]);
                     ?>
                     <tr>
                         <td><?= date('m/d/Y', strtotime($rpd['created_time'])); ?></td> <!-- Date -->
                         <td><?= $rpd['client_id']; ?></td> <!-- Client Id -->
                         <td><?= $rpd['invoice_id'];?></td> <!-- Invoice Id -->
                         <td><?= $rpd['invoice_id']."-".$i; ?></td> <!-- Service Id -->     
-                        <td><?= $rpd['service_id']; ?></td> <!-- Service Name -->
-                        <td><?= $rpd['service_id']; ?></td> <!-- Retail Price -->
-                        <td><?= $rpd['override_price']; ?></td> <!-- Override Price -->
+                        <td><?= $service_detail['description']; ?></td> <!-- Service Name -->
+                        <td><?= $service_detail['retail_price']; ?></td> <!-- Retail Price -->
+                        <td><?= explode(',',$rpd['all_services_override'])[$i]; ?></td> <!-- Override Price -->
                         <td><?= "demo"; ?></td> <!-- Cost -->
                         <td><?= $payment_status; ?></td> <!-- Payment Status -->
                         <td><?= "demo"; ?></td> <!-- Collected -->
