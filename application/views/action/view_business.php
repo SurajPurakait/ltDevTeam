@@ -3,6 +3,7 @@ $user_info = staff_info();
 $user_dept = $user_info['department'];
 $usertype = $user_info['type'];
 $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;"';
+$check_project_exist = getProjectCountByClientId($company_name_option_data["id"]);
 ?>
 <div class="wrapper wrapper-content">
     <div class="text-right">
@@ -35,10 +36,10 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                 <a href="#account" aria-controls="invoice" role="tab" data-toggle="tab">Account Details</a>
             </li>
             <li role="presentation">
-                <a href="#invoice" aria-controls="invoice" role="tab" data-toggle="tab">Invoice</a>
+                <a href="#invoice" aria-controls="invoice" role="tab" data-toggle="tab" onclick="loadbusinesstab('invoice')">Invoice</a>
             </li>
             <li role="presentation">
-                <a href="#project" aria-controls="project" role="tab" data-toggle="tab">Project</a>
+                <a href="#project" aria-controls="project" role="tab" data-toggle="tab" onclick="loadbusinesstab('project', '<?= $check_project_exist ?>')">Project</a>
             </li>
         </ul>
 
@@ -341,6 +342,12 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                 <table class="table table-striped table-bordered" style="width:100%;">
                     <tbody>
                     <div class="ajaxdiv" id="action_dashboard_div"></div>
+                    <div class = "text-center m-t-30" id="project_list_business" style="display: none">
+                        <div class = "alert alert-danger">
+                            <i class = "fa fa-times-circle-o fa-4x"></i>
+                            <h3><strong>Sorry!</strong> no data found</h3>
+                        </div>
+                    </div>
                     </tbody>
                 </table>
             </div>
@@ -348,6 +355,18 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
         </div>
     </div>
     <script>
-        loadBillingDashboard('', '', '', '', '<?= $reference_id . '-company'; ?>');
-        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '<?php echo $company_name_option_data["id"] ?>', 'clients', '-1');
+        function loadbusinesstab(tab_value, projectval = '') {
+            if (tab_value == 'invoice') {
+                loadBillingDashboard('', '', '', '', '<?= $reference_id . '-company'; ?>');
+            }
+            if (tab_value == 'project') {
+                if (projectval != 0) {
+                    loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '<?php echo $company_name_option_data["id"] ?>', 'clients', '-1');
+                } else {
+                    $('#project_list_business').show();
+                }
+            }
+        }
+
+
     </script>

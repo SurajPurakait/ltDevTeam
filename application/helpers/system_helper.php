@@ -324,7 +324,7 @@ if (!function_exists('load_ddl_option')) {
                 }
                 break;
             case "staff_office_list":
-                $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : "");
+                $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3) ? sess('user_id') : ""); // This values are deleted required to client requirment ($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : ""
                 foreach ($item_list as $item) {
                     $select = ($selected != "" && $item['id'] == $selected) ? "selected = 'selected'" : "";
                     echo "<option $select value='" . $item['id'] . "'>" . $item['name'] . "</option>";
@@ -353,6 +353,18 @@ if (!function_exists('load_ddl_option')) {
                     echo "<option $select value='" . $item['id'] . "'>" . $item['language'] . "</option>";
                 }
                 break;
+
+            case "language_list_multiple_select":
+                $item_list = $ci->system->get_languages();
+                foreach ($item_list as $item) {
+                    if (in_array($item['id'], $selected)) {
+                        echo "<option selected value='" . $item['id'] . "'>" . $item['language'] . "</option>";
+                    } else {
+                        echo "<option value='" . $item['id'] . "'>" . $item['language'] . "</option>";
+                    }
+                }
+                break;
+
             case "referer_by_source":
                 $item_list = $ci->system->get_refered_by_source();
                 foreach ($item_list as $item) {
@@ -3334,6 +3346,7 @@ if (!function_exists('get_partnes')) {
     }
 
 }
+
 if(!function_exists('getTaskFilesCount')){
     function getTaskFilesCount($task_id){
        $ci = &get_instance();
@@ -3360,5 +3373,12 @@ if(!function_exists('getProjectListAccordingToMonth')){
         $ci=&get_instance();
         $ci->load->model("project_template_model");
         return $ci->project_template_model->get_project_list('','','','','','','','','','','','',$template_cat_id,$month);
+    }
+}
+if(!function_exists('getProjectCountByClientId')){
+    function getProjectCountByClientId($client_id){
+        $ci =&get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->get_project_count_by_client_id($client_id);
     }
 }

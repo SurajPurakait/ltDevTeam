@@ -1821,16 +1821,16 @@ class Service_model extends CI_Model {
             $order_id = $data['editval'];
             $srv_id = $data['service_id'];
 
-            if (isset($data['retail_price'])) {
-                $price = $data['retail_price'];
-            } else {
+            // if (isset($data['retail_price'])) {
+            //     $price = $data['retail_price'];
+            // } else {
                 if (isset($data['related_service'][$order_id][$srv_id]['override_price'])) {
                     $price = $data['related_service'][$order_id][$srv_id]['override_price'];
                 } elseif (isset($data['related_service'][$order_id][$srv_id]['retail_price'])) {
                     $price = $data['related_service'][$order_id][$srv_id]['retail_price'];
                 }
-            }
-
+            // }
+                // print_r($price);exit;
             $this->db->where(['order_id' => $data['editval'], 'services_id' => $data['service_id']]);
             $this->db->update('service_request', ['price_charged' => $price]);
 //            print_r($data['related_service']);
@@ -2632,6 +2632,35 @@ class Service_model extends CI_Model {
             ];
             
             return $this->db->insert('order_extra_data', $order_extra_data);
+    }
+
+    public function update_order_extra_data_fields($data,$order_id){
+        if($data['doc_file'] != ''){
+            $translation = implode(",",$data['language_new']);
+        $order_extra_data = [
+                'translation_to' => $translation,
+                'amount_of_pages' => $data['pages'],
+                'attach_files' => $data['doc_file']
+                // 'order_id' => $order_id
+            ];
+
+            $this->db->where(['order_id' => $order_id]);
+            $this->db->update('order_extra_data',$order_extra_data);  
+
+        }else{
+        $translation = implode(",",$data['language_new']);
+        $order_extra_data = [
+                'translation_to' => $translation,
+                'amount_of_pages' => $data['pages']
+                // 'attach_files' => $data['doc_file'],
+                // 'order_id' => $order_id
+            ];
+
+            $this->db->where(['order_id' => $order_id]);
+            $this->db->update('order_extra_data',$order_extra_data);
+            
+            // return $this->db->insert('order_extra_data', $order_extra_data);
+        }
     }
 
 }

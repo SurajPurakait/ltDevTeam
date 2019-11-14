@@ -70,7 +70,7 @@
                     <div class="form-group">
                         <label class="col-lg-2 control-label">Location<span class="text-danger">*</span></label>
                         <div class="col-lg-10">
-                            <input placeholder="" class="form-control" type="text" id="location" name="location" title="Location">
+                            <input placeholder="" class="form-control" type="text" id="location" name="location" title="Location" required>
                             <div class="errorMessage text-danger"></div>
                         </div>
                     </div>
