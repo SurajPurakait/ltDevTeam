@@ -653,7 +653,7 @@ function clearNotificationList(userid) {
         },
         success: function (result) {
             if (result) {
-                $('.notification-section').hide();
+                $('.notification-list-section').hide();
                 $(".clear-notification").html("<span class='text-danger'>Notification Not Found</span>");
             }
         },

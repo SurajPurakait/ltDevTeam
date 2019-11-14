@@ -431,8 +431,9 @@ Class System extends CI_Model {
             $query = "select * from department";
         } elseif ($val == 2) {
             $query = "select * from services";
-        } elseif ($val == 3) {
-            if ($staff_info['type'] == 1 || $staff_info['department'] == 14) {
+        } elseif ($val == 3) { 
+            // these condition are stoped for client requirment
+            if ($staff_info['type'] == 1 || $staff_info['department'] == 14 || $staff_info['type'] == 2) {
                 $query = "select * from office";
             } else {
                 $query = "select o.* from office o inner join office_staff os on os.office_id = o.id where os.staff_id = '" . $staff_info['id'] . "'";
@@ -1065,7 +1066,7 @@ Class System extends CI_Model {
             $this->db->limit($limit, $start);
         }
         $result = $this->db->get();
-       // echo $this->db->last_query();die;
+//        echo $this->db->last_query();die;
         return $result->result_array();
     }
 
@@ -1385,12 +1386,12 @@ Class System extends CI_Model {
     public function clear_notification_list($userid, $type, $reference = '') {
         if ($type == 'sos') {
 //        $this->db->query("UPDATE `sos_notification_staff` JOIN sos_notification ON(sos_notification.id=sos_notification_staff.sos_notification_id) SET `read_status` = '1' WHERE sos_notification_staff.staff_id = " . sess('user_id') . " and sos_notification.reference IN "."('action','order')");
-            $this->db->query("UPDATE `sos_notification_staff` SET `read_status` = '1' WHERE staff_id = " . sess('user_id') . "");
+            return $this->db->query("UPDATE `sos_notification_staff` SET `read_status` = '1' WHERE staff_id = " . sess('user_id') . "");
         } elseif ($type == 'notification') {
             if ($reference != '') {
-                $this->db->query("UPDATE general_notifications SET read_status='y' WHERE user_id='$userid' AND reference='$reference'");
+                return $this->db->query("UPDATE general_notifications SET read_status='y' WHERE (added_by='$userid' || user_id='$userid') AND reference='$reference'");
             } else {
-                $this->db->query("UPDATE general_notifications SET read_status='y' WHERE user_id='$userid'");
+                return $this->db->query("UPDATE general_notifications SET read_status='y' WHERE (added_by='$userid' || user_id='$userid')");
             }
         }
     }

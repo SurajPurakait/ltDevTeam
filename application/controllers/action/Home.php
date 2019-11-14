@@ -372,7 +372,7 @@ class Home extends CI_Controller {
         $render_data['header_title'] = $title;
 //        $render_data['staff_office'] = $this->action_model->get_office_staffwise();
         $staff_info = staff_info();
-        if ($staff_info['type'] == 3 || ($staff_info['type'] == 2 && $staff_info['department']!=14)) {
+        if ($staff_info['type'] == 3) {     // this section are closed for client requirment || ($staff_info['type'] == 2 && $staff_info['department']!=14)
             $render_data['staff_office'] = $this->administration->get_office_by_staff_id($staff_info['id']);
         } else {
             $render_data['staff_office'] = $this->administration->get_all_office();
@@ -508,7 +508,7 @@ class Home extends CI_Controller {
         $render_data['header_title'] = $title;
 
         $staff_info = staff_info();
-        if ($staff_info['type'] == 3 || ($staff_info['type'] == 2 && $staff_info['department']!=14)) {
+        if ($staff_info['type'] == 3) {  //this section are closed for client requirement ($staff_info['type'] == 2 && $staff_info['department']!=14)
             $render_data['staff_office'] = $this->administration->get_office_by_staff_id($staff_info['id']);
         } else {
             $render_data['staff_office'] = $this->administration->get_all_office();

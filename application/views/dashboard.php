@@ -523,7 +523,7 @@ $staff_department_array = explode(',', $staffInfo['department']);
                         </div>
                         <div class="dropdown pull-right m-r-5">                            
                             <i class="fa fa-refresh" title="Loading"></i>
-                            <a href="javascript:void(0);" title="Refresh" onclick="loadHomeDashboard('notification', '<?= sess('user_id'); ?>', '', '', '', '', '', 'refresh');"><i class="fa fa-refresh"></i></a>
+                            <a href="javascript:void(0);" title="Refresh" onclick="loadHomeDashboard('notification', '<?= sess('user_id'); ?>', '', '', '', '', '', 'refresh','','forme');"><i class="fa fa-refresh"></i></a>
                         </div>
                     </div>
                 </div>

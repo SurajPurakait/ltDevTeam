@@ -92,7 +92,8 @@ if ($status == '') {
                                         <div class="col-xs-12">  
                                             <div class="m-b-10">
                                                 <button class="btn btn-success" type="button" onclick="service_filter_form()">Apply Filter</button>
-                                                <label class="filter-text"></label>
+                                                <a href='javascript:void(0);' id=btn_service onclick="loadServiceDashboard('','','on_load','',1);" class="btn btn-ghost" style="display: none;"><i class='fa fa-times' aria-hidden='true'></i> Clear filter</a>
+                                                <!--<label class="filter-text"></label>-->
                                             </div>
                                         </div>
                                     </div>
@@ -674,6 +675,7 @@ if ($status == '') {
                             reflactFilterWithSummery(status + '-' + filterval, requestType + '-' + requestTypeName);
                         }
                     }
+                    $("#btn_service").show();
                 },
                 beforeSend: function () {
                     openLoading();
