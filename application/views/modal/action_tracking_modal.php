@@ -162,12 +162,12 @@ $user_type = $user_info['type'];
                         </div>
                     <?php } ?>
 
-                    <div class="form-group">
+<!--                    <div class="form-group">
                         <h5>Add Comment</h5>
                         <div class="note-textarea">
                             <textarea class="form-control" id="tracking_comment" name="tracking_comment" title="Action Tracking Comment"></textarea>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </div>
@@ -187,7 +187,7 @@ $user_type = $user_info['type'];
                             <tr>
                                 <th>Date</th>
                                 <th>User</th>
-                                <th>Department</th>
+                                <!--<th>Department</th>-->
                                 <th>Status</th>
                                 <!-- <th>Comment</th> -->
                             </tr>
@@ -199,7 +199,7 @@ $user_type = $user_info['type'];
                                     date('m/d/Y - h:i A', strtotime($value['created_time']));
                                     ?></td>
                                 <td><?= $value["stuff_id"]; ?></td>
-                                <td><?= staff_department_name($value['id']); ?></td>
+                                <!--<td><?= staff_department_name($value['id']); ?></td>-->
                                 <td><?= $value["status"]; ?></td>
 
                                                                                             <!-- <td> -->
