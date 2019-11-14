@@ -8552,6 +8552,25 @@ a.panel-title {
     border-top: 1px solid #d3d3d3;
 }
 
+/*Royalty Reports*/
+
+#report-tab th {
+    white-space: nowrap;
+}
+table#report-tab thead .sorting_asc{
+    display: inline-block;
+    padding-right: 15px;
+}
+table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::after{
+    float: inherit;
+    display: inline-block;
+    padding-left: 12px;
+}
+#report-tab_wrapper #report-tab_filter input{
+    margin-left: 0.5em;
+}
+
+
 /* Responsive design */
 
 @media (min-width: 1200px) {
