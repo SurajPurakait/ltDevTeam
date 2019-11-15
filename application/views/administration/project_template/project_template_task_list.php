@@ -9,7 +9,7 @@ if (!empty($data)) {
         ?>
         <div class="panel panel-default service-panel type2 filter-active" id="action<?= $value['id'] ?>">
             <div class="panel-heading">
-                <a href="javascript:void(0);" onclick="tetmplate_task_edit_modal(<?= $value['id']?>);" class="btn btn-primary btn-xs btn-service-edit btn-prj-template-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+                <a href="javascript:void(0);" onclick="tetmplate_task_edit_modal(<?= $value['id']?>,'<?= $value['template_main_id']?>');" class="btn btn-primary btn-xs btn-service-edit btn-prj-template-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
                 <a href="javascript:void(0);" onclick="tetmplate_task_delete_modal(<?= $value['id']?>,<?= $value['template_main_id'] ?>);" class="btn btn-danger btn-xs btn-service-edit btn-prj-template-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
                 <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $value['id'] ?>" aria-expanded="false">
                     <div class="table-responsive">

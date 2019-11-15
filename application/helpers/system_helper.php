@@ -324,12 +324,19 @@ if (!function_exists('load_ddl_option')) {
                 }
                 break;
             case "staff_office_list":
-                $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $staff_info['type'] == 1) ? sess('user_id') : ""); // This values are deleted required to client requirment ($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : ""
+                $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3) ? sess('user_id') : ""); // This values are deleted required to client requirment ($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : ""
                 foreach ($item_list as $item) {
                     $select = ($selected != "" && $item['id'] == $selected) ? "selected = 'selected'" : "";
                     echo "<option $select value='" . $item['id'] . "'>" . $item['name'] . "</option>";
                 }
-                break;    
+                break;
+            case "users_office_list":
+                $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : ""); // This values are deleted required to client requirment ($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : ""
+                foreach ($item_list as $item) {
+                    $select = ($selected != "" && $item['id'] == $selected) ? "selected = 'selected'" : "";
+                    echo "<option $select value='" . $item['id'] . "'>" . $item['name'] . "</option>";
+                }
+            break; 
             case "staff_office_list_multiple_select":
                 $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : "");
                 foreach ($item_list as $item) {

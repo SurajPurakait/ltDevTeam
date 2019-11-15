@@ -143,9 +143,9 @@ class Task extends CI_Controller {
         $render_data['related_table_id']=11;
         $render_data['required']='n';
         $render_data['input_form_type']=$input_form_type=$this->Project_Template_model->getProjectTaskInputFormType($task_id);
-        
+//        echo $input_form_type;die;
 //        sales_tax section
-        if($input_form_type==1){
+        if($input_form_type==3){
             $this->load->model('service');
             $this->load->model('system');
             $render_data['state'] = $this->system->get_all_state();
