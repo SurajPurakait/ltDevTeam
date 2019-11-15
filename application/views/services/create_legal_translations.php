@@ -10,9 +10,9 @@
                                 <select class="form-control" name="staff_office" id="staff_office" title="Office" required="">
                                     <option value="">Select Office</option>
                                         <?php if (strpos($staff_info['office'], ',') !== false) {
-                                                load_ddl_option("staff_office_list", "", "staff_office");
+                                                load_ddl_option("users_office_list", "", "staff_office");
                                             }else{
-                                                load_ddl_option("staff_office_list", $staff_info['office'], "staff_office");
+                                                load_ddl_option("users_office_list", $staff_info['office'], "staff_office");
                                             } 
                                         ?>      
                                 </select>
@@ -222,7 +222,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Retail Price</label>
                             <div class="col-lg-10">
-                                 <input readonly="" placeholder="" id="employee-retail-price" class="form-control retprice" type="text" title="Retail Price" value="<?= $service_info['retail_price']; ?>">
+                                 <input readonly="" placeholder="" id="employee-retail-price" class="form-control retprice" type="text" title="Retail Price" value="<?= $service_info['retail_price']; ?>" name="retail_price">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>

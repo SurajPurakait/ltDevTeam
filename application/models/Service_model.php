@@ -1821,21 +1821,21 @@ class Service_model extends CI_Model {
             $order_id = $data['editval'];
             $srv_id = $data['service_id'];
 
-            // if (isset($data['retail_price'])) {
-            //     $price = $data['retail_price'];
-            // } else {
+            if (isset($data['retail_price'])) {
+                $price = $data['retail_price'];
+            } else {
                 if (isset($data['related_service'][$order_id][$srv_id]['override_price'])) {
                     $price = $data['related_service'][$order_id][$srv_id]['override_price'];
                 } elseif (isset($data['related_service'][$order_id][$srv_id]['retail_price'])) {
                     $price = $data['related_service'][$order_id][$srv_id]['retail_price'];
                 }
-            // }
+            }
                 // print_r($price);exit;
             $this->db->where(['order_id' => $data['editval'], 'services_id' => $data['service_id']]);
             $this->db->update('service_request', ['price_charged' => $price]);
 //            print_r($data['related_service']);
             if (isset($data['related_service']) && count($data['related_service']) > 0) {
-                $related_services = $data['related_services'];
+                $related_services = $data['related_service'];
                 $this->db->where(['order_id' => $order_id, 'services_id!=' => $data['service_id']]);
                 $this->db->delete('service_request');
                 foreach ($related_services as $service_order_id => $order_data) {
@@ -1865,7 +1865,7 @@ class Service_model extends CI_Model {
                     $target = $this->get_date_form_target_days($srv_id);
                     $service_request_data = [
                         'order_id' => $order_id,
-                        'services_id' => $order_data,
+                        'services_id' => $srv_id,
                         'price_charged' => $service['retail_price'],
                         'tracking' => $tracking,
                         'date_started' => $target['start_date'],
