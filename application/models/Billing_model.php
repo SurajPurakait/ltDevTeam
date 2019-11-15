@@ -226,7 +226,7 @@ class Billing_model extends CI_Model {
                     $invoice_info_data['existing_reference_id'] = $data['client_list'];
                 }
                 $invoice_info_data['start_month_year'] = $data['start_year'];
-                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
+//                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
                 $invoice_info_data['created_by'] = sess('user_id');
                 $invoice_info_data['created_time'] = $today;
                 if (isset($data['is_create_order']) && $data['is_create_order'] == 'yes') {
@@ -287,7 +287,7 @@ class Billing_model extends CI_Model {
                 $invoice_info_data['client_id'] = $individual_id;
                 $invoice_info_data['new_existing'] = $data['type_of_individual'];
                 $invoice_info_data['existing_reference_id'] = $data['reference_id'];
-                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
+//                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
                 $invoice_info_data['created_by'] = sess('user_id');
                 $invoice_info_data['created_time'] = $today;
                 if (isset($data['is_create_order']) && $data['is_create_order'] == 'yes') {

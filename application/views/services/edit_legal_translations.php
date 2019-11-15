@@ -228,18 +228,19 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Retail Price</label>
                             <div class="col-lg-10">
-                                <input readonly="" placeholder=""  id="retail_price" class="form-control" type="text" title="Retail Price" value="<?= $edit_data['retail_price']; ?>">
-                                <input id="retail_price" name="related_service[<?= $edit_data['id']; ?>][<?= $service_id; ?>][retail_price]" type="hidden" value="<?= $edit_data['retail_price']; ?>">
+                                <input readonly="" placeholder=""  id="employee-retail-price" class="form-control" type="text" title="Retail Price" value="<?= $edit_data['retail_price']; ?>" name="retail_price">
+                                <!-- <input id="retail_price" name="related_service[<?//= $edit_data['id']; ?>][<?= $service_id; ?>][retail_price]" type="hidden" value="<?//= $edit_data['retail_price']; ?>"> -->
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Amount Of Pages</label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="pages" id="pages" onchange="change_referred_name_status(this.value);">
-                                    <option value="1" selected>1</option>
-                                    <?php for($i=2; $i<=10; $i++){
-                                        echo "<option value=".$i.">".$i."</option>";
+                                <select class="form-control" name="pages" id="pages" onchange="change_price(<?= $edit_data['retail_price']; ?>,this.value);">
+                                    <!-- <option value="1" selected>1</option> -->
+                                    <?php for($i=1; $i<=10; $i++){
+                                        // print_r($order_extra_data['amount_of_pages']);exit;
+                                        echo "<option value=".$i.($i == $order_extra_data['amount_of_pages']? ' selected':'').">".$i."</option>";
                                     }
                                       ?> 
                                     <!--<option name=""> </option>-->   
@@ -251,7 +252,8 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Override Price</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="retail_price_override" name="related_service[<?= $edit_data['id']; ?>][<?= $service_id; ?>][override_price]" numeric_valid="" title="Override Price" value="<?= $edit_data['total_of_order']; ?>">
+                               <!--  <input placeholder="" class="form-control" type="text" id="retail_price_override" name="related_service[<?//= $edit_data['id']; ?>][<?= $service_id; ?>][override_price]" numeric_valid="" title="Override Price" value="<?//= $edit_data['total_of_order']; ?>"> -->
+                               <input placeholder="" class="form-control" type="text" id="retail_price_override" name="related_service[<?= $edit_data['id']; ?>][<?= $service_id; ?>][override_price]" numeric_valid="" title="Override Price" value="<?= $edit_data['price_charged']; ?>">
                                 <!-- <div class="errorMessage text-danger"></div>         -->
                             </div>
                         </div>
@@ -315,14 +317,16 @@
 <script>
     clientTypeChange('<?= $edit_data['new_existing']; ?>', '<?= $reference_id; ?>', '<?= $reference; ?>', 1);
 
-    function change_referred_name_status(val)
-  {
-    var a = (25*val);
-    if(a != 0){
-     document.getElementById("retail_price").value = a;
-    }
+    change_price('<?= $edit_data['retail_price']; ?>','<?= $order_extra_data['amount_of_pages']?>');
 
-  }
+  //   function change_referred_name_status(val)
+  // {
+  //   var a = (25*val);
+  //   if(a != 0){
+  //    document.getElementById("retail_price").value = a;
+  //   }
+
+  // }
     $(function () {
         var client_type = $('#type_of_client_ddl').val();
         if (client_type == '0') {

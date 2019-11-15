@@ -10,9 +10,9 @@
                                 <select class="form-control" name="staff_office" id="staff_office" title="Office" required="">
                                     <option value="">Select Office</option>
                                         <?php if (strpos($staff_info['office'], ',') !== false) {
-                                                load_ddl_option("staff_office_list", "", "staff_office");
+                                                load_ddl_option("users_office_list", "", "staff_office");
                                             }else{
-                                                load_ddl_option("staff_office_list", $staff_info['office'], "staff_office");
+                                                load_ddl_option("users_office_list", $staff_info['office'], "staff_office");
                                             } 
                                         ?>      
                                 </select>

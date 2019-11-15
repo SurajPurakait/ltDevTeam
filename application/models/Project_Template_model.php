@@ -215,7 +215,12 @@ class Project_Template_model extends CI_Model {
         $task_data['target_complete_day'] = $post['task']['target_complete_day'];
         $task_data['tracking_description'] = $post['task']['tracking_description'];
         $task_data['is_input_form']=$post['task']['is_input_form'];
-        $task_data['input_form_type']=$post['task']['input_form_type'];
+        
+        if(isset($post['task']['input_form_type']) && $post['task']['input_form_type']!=''){
+            $task_data['input_form_type']=$post['task']['input_form_type'];
+        }else{
+            $task_data['input_form_type']=0;
+        }
 //        $task_data['is_all'] = $post['task']['is_all'];
         $task_data['department_id'] = $post['task']['department'];
         if ($task_data['department_id'] != 2 && ($post['task']['is_all'] == 1 || $post['task']['is_all'] == 0)) {
@@ -2653,6 +2658,9 @@ class Project_Template_model extends CI_Model {
     }
     public function get_project_count_by_client_id($clientid){
         return count($this->db->get_where('projects',['client_id'=>$clientid])->result_array());
+    }
+    public function getTemplateCategoryByTemplateId($project_template_id){
+        return $this->db->get_where('project_template_main',['id'=>$project_template_id])->row()->template_cat_id;
     }
 }
 
