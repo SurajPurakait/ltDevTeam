@@ -7,7 +7,7 @@
                 <div class="ibox-content">
                         <h2>Input Forms</h2>
                         <div class="hr-line-dashed"></div>
-                        <?php if ($input_form_type == 1) { ?>
+                        <?php if ($input_form_type == 3) { ?>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Client Name<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
