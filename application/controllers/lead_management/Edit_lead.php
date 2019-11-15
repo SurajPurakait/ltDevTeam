@@ -66,6 +66,7 @@ class Edit_lead extends CI_Controller {
         $render_data['menu'] = 'lead_dashboard';
         $render_data['header_title'] = $title;
         $render_data['from_menu'] = 'lead';
+        $render_data['ref_cancel'] = '';
         $this->load->template("lead_management/edit_prospect", $render_data);
     }
 

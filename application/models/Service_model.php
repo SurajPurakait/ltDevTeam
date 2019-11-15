@@ -95,7 +95,7 @@ class Service_model extends CI_Model {
     }
 
     public function get_service_by_id($id) {
-        $this->db->select("s.id, s.category_id, c.name as category_name, c.description as category_description, s.description, s.ideas, s.tutorials, s.dept AS service_department, s.retail_price");
+        $this->db->select("s.id, s.category_id, s.fixed_cost as cost, c.name as category_name, c.description as category_description, s.description, s.ideas, s.tutorials, s.dept AS service_department, s.retail_price");
         $this->db->from('services s');
         $this->db->join('category c', 'c.id = s.category_id');
         $this->db->where(['s.id' => $id]);
@@ -2661,6 +2661,12 @@ class Service_model extends CI_Model {
             
             // return $this->db->insert('order_extra_data', $order_extra_data);
         }
+    }
+
+    public function get_office_fees_by_service($service_id,$office_id) {
+        $this->db->where('service_id',$service_id);
+        $this->db->where('office_id',$office_id);
+        return $this->db->get('office_service_fees')->row_array()['percentage'];
     }
 
 }

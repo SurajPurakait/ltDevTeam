@@ -3389,3 +3389,17 @@ if(!function_exists('get_service_by_id')){
         return $ci->service_model->get_service_by_id($id);
     }
 }
+if(!function_exists('get_office_fees_by_service')){
+    function get_office_fees_by_service($service_id,$office_id){
+        $ci =&get_instance();
+        $ci->load->model('service_model');
+        return $ci->service_model->get_office_fees_by_service($service_id,$office_id);
+    }
+}
+if(!function_exists('get_payment_details_service_id')){
+    function get_payment_details_service_id($invoice_id,$order_id) {
+        $ci =&get_instance();
+        $ci->load->model('billing_model');
+        return $ci->billing_model->get_payment_details_service_id($invoice_id,$order_id);
+    }
+}
