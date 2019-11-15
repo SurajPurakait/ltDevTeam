@@ -32,9 +32,9 @@
                                      $searchString = ',';
 
                                         if( strpos($staff_info['office'], $searchString) !== false ) {
-                                             load_ddl_option("staff_office_list_action","", "");
+                                             load_ddl_option("users_office_list","", "");
                                         }else{
-                                            load_ddl_option("staff_office_list_action", $staff_info['office'], "");
+                                            load_ddl_option("users_office_list", $staff_info['office'], "");
                                         }
                                     ?>
                                 </select>
