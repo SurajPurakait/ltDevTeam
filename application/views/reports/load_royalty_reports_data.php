@@ -36,6 +36,8 @@
                     $total_net = (explode(',',$rpd['all_services_override'])[$i] != '') ? explode(',',$rpd['all_services_override'])[$i] - $service_detail['cost'] : $service_detail['retail_price'] - $service_detail['cost'];
                     $override_price = explode(',',$rpd['all_services_override'])[$i];
                     $date = date('m/d/Y', strtotime($rpd['created_time']));
+                    $fee_with_cost = (($total_net * $office_fees)/100);                    
+                    $fee_without_cost = (($override_price * $office_fees)/100);
                     if (($override_price - $collected) == 0) {
                         $payment_status = 'Paid';
                     } elseif (($override_price - $collected) == $override_price) {
@@ -45,6 +47,7 @@
                     } else {
                         $payment_status = 'Late';
                     }
+
                     ?>
                     <tr>
                         <td title="Date"><?= $date; ?></td>
@@ -54,7 +57,7 @@
                         <td title="Service Name"><?= $service_detail['description']; ?></td>
                         <td title="Retail Price"><?= $service_detail['retail_price']; ?></td>
                         <td title="Override Price"><?= $override_price; ?></td>
-                        <td title="Cost"><?= $service_detail['cost']; ?></td>                        
+                        <td title="Cost"><?= $service_detail['cost']; ?></td>
                         <td title="Payment Status"><?= $payment_status; ?></td>
                         <td title="Collected"><?= $collected.".00"; ?></td>
                         <td title="Payment Type"><?= ($payment_type != '') ? $payment_type:"N/A"; ?></td>
@@ -62,8 +65,8 @@
                         <td title="Reference"><?= ($reference != '') ? $reference:"N/A"; ?></td>
                         <td title="Total Net"><?= $total_net.'.00'; ?></td>
                         <td title="Office Fee"><?= ($office_fees != '') ? $office_fees : '00.00'; ?></td>
-                        <td title="Fee With Cost"><?= (($total_net * $office_fees)/100).'.00'; ?></td>
-                        <td title="Fee Without  Cost"><?= (($override_price * $office_fees)/100).'.00'; ?></td>
+                        <td title="Fee With Cost"><?= $fee_with_cost.'.00'; ?></td>
+                        <td title="Fee Without Cost"><?= $fee_without_cost.'.00'; ?></td>
                     </tr>
                     <?php
                     }
