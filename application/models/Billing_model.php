@@ -1561,7 +1561,7 @@ class Billing_model extends CI_Model {
             $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (7)) ';
         }
 
-        $where['inv.payment_status'] = 'AND (CASE WHEN `inv`.`payment_status` = 3 THEN `inv`.`status` NOT IN (3) ELSE `inv`.`status` IN (1, 2, 3) END) ';
+        // $where['inv.payment_status'] = 'AND (CASE WHEN `inv`.`payment_status` = 3 THEN `inv`.`status` NOT IN (3) ELSE `inv`.`status` IN (1, 2, 3) END) ';
 
         $is_status = $is_tracking = 'n';
 
