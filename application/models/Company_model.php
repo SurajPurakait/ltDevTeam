@@ -1939,12 +1939,6 @@ class Company_model extends CI_Model {
             $this->service_model->update_order_extra_data_fields($data,$order_id);
             $this->billing_model->update_invoice_data($data);
             $this->system->save_general_notification('order', $order_id, 'edit');
-        }
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
-            return false;
-        } else {
-            $this->db->trans_commit();
             if (isset($data['service_notes'])) {
                 foreach ($data['service_notes'] as $services_id => $note_data) {
                     $reference_id = $this->notes->get_main_service_id($order_id, $services_id);
@@ -1963,6 +1957,13 @@ class Company_model extends CI_Model {
                     }
                 }
             }
+        }
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return false;
+        } else {
+            $this->db->trans_commit();
+            
             return $order_id;
         }
     }
