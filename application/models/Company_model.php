@@ -1927,24 +1927,7 @@ class Company_model extends CI_Model {
             //    Save order
             $data['order_id'] = $order_id = $this->service_model->save_order($data);
             // print_r($data['order_id']);exit;
-            if (isset($data['service_notes'])) {
-                foreach ($data['service_notes'] as $services_id => $note_data) {
-                    $reference_id = $this->notes->get_main_service_id($data['editval'], $services_id);
-                    if (!empty($reference_id)) {
-                        $reference_id = $reference_id['id'];
-                        $this->notes->insert_note(1, $note_data, 'reference_id', $reference_id, 'service');
-                    }
-                }
-            }
-            if (isset($data['edit_service_notes'])) {
-                foreach ($data['edit_service_notes'] as $services_id => $note_data) {
-                    $reference_id = $this->notes->get_main_service_id($data['editval'], $services_id);
-                    if (!empty($reference_id)) {
-                        $reference_id = $reference_id['id'];
-                        $this->notes->update_note(1, $note_data, $reference_id, 'service');
-                    }
-                }
-            }
+            
             $this->company->update_title_status($data["reference_id"]);
             $this->system->log("insert", "order", $order_id);
 
@@ -1962,6 +1945,24 @@ class Company_model extends CI_Model {
             return false;
         } else {
             $this->db->trans_commit();
+            if (isset($data['service_notes'])) {
+                foreach ($data['service_notes'] as $services_id => $note_data) {
+                    $reference_id = $this->notes->get_main_service_id($order_id, $services_id);
+                    if (!empty($reference_id)) {
+                        $reference_id = $reference_id['id'];
+                        $this->notes->insert_note(1, $note_data, 'reference_id', $reference_id, 'service');
+                    }
+                }
+            }
+            if (isset($data['edit_service_notes'])) {
+                foreach ($data['edit_service_notes'] as $services_id => $note_data) {
+                    $reference_id = $this->notes->get_main_service_id($order_id, $services_id);
+                    if (!empty($reference_id)) {
+                        $reference_id = $reference_id['id'];
+                        $this->notes->update_note(1, $note_data, $reference_id, 'service');
+                    }
+                }
+            }
             return $order_id;
         }
     }
