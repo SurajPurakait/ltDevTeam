@@ -142,6 +142,7 @@
     <script src="<?= base_url(); ?>assets/js/message.js"></script>
     <script src="<?= base_url(); ?>assets/datepicker.js"></script>
     <script src="<?= base_url(); ?>assets/js/visitation.js"></script>
+    <script src="<?= base_url(); ?>assets/js/report.js"></script>
     <!-- include summernote css/js -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote.js"></script>
