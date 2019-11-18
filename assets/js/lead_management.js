@@ -618,6 +618,9 @@ function viewMailCampaignTemplate(leadType, language, day, firstName, companyNam
 }
 
 function loadLeadDashboard(leadType, status, requestBy, leadContactType, eventID = '') {
+    if (leadType == '') {
+        $("#btn_clear_filter").hide();
+    }
     $.ajax({
         type: "POST",
         data: {
@@ -629,7 +632,7 @@ function loadLeadDashboard(leadType, status, requestBy, leadContactType, eventID
         },
         url: base_url + 'lead_management/home/dashboard_ajax',
         success: function (lead_result) {
-//            console.log(action_result);
+            // console.log(action_result);
             $("#lead_dashboard_div").html(lead_result);
         },
         beforeSend: function () {
@@ -754,7 +757,7 @@ function leadFilter() {
             $("#lead_dashboard_div").html(result);
             $("[data-toggle=popover]").popover();
 //            $("#clear_filter").show();
-//            $('#btn_clear_filter').show();
+            $('#btn_clear_filter').show();
         },
         beforeSend: function () {
             openLoading();
