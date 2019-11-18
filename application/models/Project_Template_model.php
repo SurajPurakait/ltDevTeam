@@ -2558,7 +2558,7 @@ class Project_Template_model extends CI_Model {
     }
     function saveProjectInputForm($data){
         $input_form_type=$data['input_form_type'];
-        if($input_form_type==1){
+        if($input_form_type==3){
             $exist=$this->db->get_where('project_task_sales_tax_process',['task_id'=>$data['task_id']])->row();
             if(!empty($exist)){
                 $this->db->where('task_id',$data['task_id']);
@@ -2661,6 +2661,9 @@ class Project_Template_model extends CI_Model {
     }
     public function getTemplateCategoryByTemplateId($project_template_id){
         return $this->db->get_where('project_template_main',['id'=>$project_template_id])->row()->template_cat_id;
+    }
+    public function getTaskListForInputForm($project_id){
+        return $this->db->get_where('project_task',['project_id'=>$project_id])->result_array();
     }
 }
 

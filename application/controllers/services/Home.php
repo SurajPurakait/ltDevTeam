@@ -884,9 +884,9 @@ class Home extends CI_Controller {
         $data['order_id'] = post('order_id');
         $data['list_type'] = post('list_type');
         if ($data['order_id'] == '') {
-            $data['list'] = $this->service_model->get_account_list_by_company_id($data['company_id']);
+            $data['list'] = $this->service_model->get_account_list_by_company_id($data['company_id'],post('list_type'));
         } else {
-            $data['list'] = $this->service_model->get_account_list_by_order_id($data['order_id']);
+            $data['list'] = $this->service_model->get_account_list_by_order_id($data['order_id'],post('list_type'));
         }
         $this->load->view("services/account_list", $data);
     }
