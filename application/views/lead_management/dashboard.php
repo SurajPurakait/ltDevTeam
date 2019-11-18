@@ -57,7 +57,7 @@ $stat = ($stat == 'all') ? "" : $stat;
                                             </div>
                                         </div>
                                         <div class="col-md-8">
-                                            <div class=""><span class="text-success" style="display: none;" id="clear_filter">By Me - Started &nbsp; </span><a href="javascript:void(0);" onclick="loadLeadDashboard('', '', '', '', '', '');" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></div>
+                                            <div class=""><span class="text-success" style="display: none;" id="clear_filter">By Me - Started &nbsp; </span><a href="javascript:void(0);" onclick="loadLeadDashboard('', '2', '', '', '', '');" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></div>
                                         </div>
                                     </div>
                                 </form>

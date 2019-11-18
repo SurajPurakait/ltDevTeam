@@ -29,8 +29,8 @@
                     $service_detail = get_service_by_id(explode(',',$rpd['all_services'])[$i]);
                     $office_fees = get_office_fees_by_service(explode(',',$rpd['all_services'])[$i],$rpd['office_id']);
                     $payment_history = get_payment_details_service_id($rpd['invoice_id'],explode(',',$rpd['all_orders'])[$i]);
-                    $reference = implode(',',array_filter(array_column($payment_history,'reference')));
-                    $authorization_id = implode(',',array_filter(array_column($payment_history,'authorization_id')));
+                    $reference = implode(',',array_column($payment_history,'reference'));
+                    $authorization_id = implode(',',array_column($payment_history,'authorization_id'));
                     $payment_type = implode(',',array_column($payment_history,'payment_type'));
                     $collected = array_sum(array_column($payment_history,'collected'));    
                     $total_net = (explode(',',$rpd['all_services_override'])[$i] != '') ? explode(',',$rpd['all_services_override'])[$i] - $service_detail['cost'] : $service_detail['retail_price'] - $service_detail['cost'];

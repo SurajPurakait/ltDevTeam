@@ -31,8 +31,10 @@ class Reports extends CI_Controller {
         $this->load->template('reports/royalty_reports', $render_data);	
     }
     public function load_royalty_reports_data() {
-    	$render_data['royalty_reports_data'] = $this->billing_model->royalty_reports_data();
-    	$this->load->view('reports/load_royalty_reports_data',$render_data);
+        $result = $this->billing_model->royalty_reports_data();
+        echo json_encode($result);
+    	//$render_data['royalty_reports_data'] = $this->billing_model->royalty_reports_data();
+    	//$this->load->view('reports/load_royalty_reports_data',$render_data);
     }
 
 }
