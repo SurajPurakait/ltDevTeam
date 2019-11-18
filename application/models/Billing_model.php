@@ -1661,7 +1661,7 @@ class Billing_model extends CI_Model {
         return $response;
     }
 
-    public function get_royalty_reports_data($office_id="") {
+    public function get_royalty_reports_data($office_id= "",$date_range= "") {
         ## Read value
         $draw = $_POST['draw'];
         $row = $_POST['start'];
@@ -1687,8 +1687,28 @@ class Billing_model extends CI_Model {
         if ($office_id != "") {
             $this->db->where('office_id',$office_id);
         }
+        if ($date_range != "") {
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            
+            $this->db->where('date >=',$start_date);
+            $this->db->where('date <=',$end_date);
+        }
+        if ($searchValue != '') {
+            $this->db->group_start();
+            $this->db->like('client_id', $searchValue);
+            $this->db->or_like('service_name', $searchValue);
+            $this->db->or_like('service_name', $searchValue);
+            $this->db->or_like('payment_status', $searchValue);
+            $this->db->or_like('payment_type', $searchValue);
+            $this->db->or_like('reference', $searchValue);
+            $this->db->or_like('authorization_id', $searchValue);
+            $this->db->or_like('office_fee', $searchValue);
+            $this->db->group_end();
+        }
         $this->db->query('SET SQL_BIG_SELECTS=1');
-        $res_for_all = $this->db->get('royalty_report')->num_rows();;
+        $res_for_all = $this->db->get('royalty_report')->num_rows();
         $qr = $this->db->last_query();
         $qr .= ' order by ' . $columnName . ' ' . $columnSortOrder;
         $qr .= ' limit ' . $row . ',' . $rowperpage;

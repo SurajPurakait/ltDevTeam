@@ -35,12 +35,18 @@ class Reports extends CI_Controller {
         echo json_encode($result);
     }
     public function get_royalty_reports_data() {
-    	$office_id = post('ofc');
-    	if ($office_id != "") {
-    		$result = $this->billing_model->get_royalty_reports_data($office_id);	
+    	if (post('ofc') != '') {
+    		$office_id = post('ofc');
     	} else {
-			$result = $this->billing_model->get_royalty_reports_data();    		
+    		$office_id = '';
     	}
+    	if (post('daterange') != '') {
+    		$daterange = post('daterange');
+    	} else {
+    		$daterange = '';
+    	}
+    	
+    	$result = $this->billing_model->get_royalty_reports_data($office_id,$daterange);	
         echo json_encode($result);
     }
     

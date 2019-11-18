@@ -8,9 +8,7 @@
                 		load_ddl_option("users_office_list", "","");
                 	?>
                 </select> &nbsp;
-               	<select name="range" id="range" class="form-control">
-                	<option value="">MM-DD-YYYY - MM-DD-YYYY</option>
-                </select> &nbsp;
+               	<input placeholder="dd-mm-yyyy" class="form-control datepicker_range_mdy" type="text" title="" name="daterange" id="date_range"><button type="button" class="btn btn-success" onclick="loadRoyaltyReportsData('',document.getElementById('date_range').value)" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>
                 <div class="ibox-content ajaxdiv-reports m-t-25">
                     <div class="">
                         <table id="reports-tab" class="table table-bordered table-striped">
@@ -43,5 +41,8 @@
     </div>
 </div>
 <script type="text/javascript">
-	loadRoyaltyReportsData();	
+	loadRoyaltyReportsData();
+	$(function () {
+        $('input[name="daterange"]').daterangepicker();
+    });	
 </script>
