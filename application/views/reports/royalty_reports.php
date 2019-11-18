@@ -2,8 +2,11 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins form-inline">
-                <select name="ofc" id="ofc" class="form-control">
-                	<option value="">Select Office</option>   
+                <select name="ofc" id="ofc" class="form-control" onchange="loadRoyaltyReportsData(this.value);">
+                	<option value="">All Office</option>   
+                	<?php
+                		load_ddl_option("users_office_list", "","");
+                	?>
                 </select> &nbsp;
                	<select name="range" id="range" class="form-control">
                 	<option value="">MM-DD-YYYY - MM-DD-YYYY</option>

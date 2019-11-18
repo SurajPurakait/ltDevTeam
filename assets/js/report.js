@@ -1,15 +1,16 @@
 var base_url = document.getElementById('base_url').value;
 
-function loadRoyaltyReportsData() {
-    var ofc = '';
+function loadRoyaltyReportsData(offce_id = '') {
+    $('#reports-tab').DataTable().destroy();
+    
     $('#reports-tab').DataTable({
         'processing': false,
         'serverSide': true,
         'serverMethod': 'post',
         'ajax': {
-            'url': base_url + 'reports/load_royalty_reports_data',
+            'url': base_url + 'reports/get_royalty_reports_data',
             'type': 'POST',
-            'data': {'ofc': ofc},
+            'data': {'ofc': offce_id},
             beforeSend: function () {
                 openLoading();
             },
