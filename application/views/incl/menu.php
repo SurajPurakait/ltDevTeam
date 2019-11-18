@@ -549,6 +549,9 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?= active_menu($menu, "report_4"); ?>>
                             <a href="<?= base_url() ?>reports/index/4">Franchisees</a>
                         </li>
+                        <li <?= active_menu($menu, "royalty_report"); ?>>
+                            <a href="<?= base_url() ?>reports/royalty_reports">Royalty Report</a>
+                        </li>
                     </ul>    
                 </li>
 

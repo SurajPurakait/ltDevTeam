@@ -517,13 +517,13 @@ function get_template_task_modal(template_id) {
     });
 
 }
-function tetmplate_task_edit_modal(task_id) {
-//    alert(task_id);
+function tetmplate_task_edit_modal(task_id,template_id='') {
+    //alert(template_id);
     $.ajax({
         type: "POST",
         url: base_url + 'modal/edit_template_task_modal',
         dataType: "html",
-        data: {task_id: task_id},
+        data: {task_id: task_id,template_id:template_id},
         success: function (result) {
 //            alert(result);
             $('#taskModal').html(result);
