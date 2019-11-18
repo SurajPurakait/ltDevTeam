@@ -143,6 +143,7 @@ class Task extends CI_Controller {
         $render_data['multiple']='y';
         $render_data['related_table_id']=11;
         $render_data['required']='n';
+        $render_data['key']=$key;
         $render_data['input_form_type']=$input_form_type=$this->Project_Template_model->getProjectTaskInputFormType($task_id);
 //      
         $client_dtls=$this->Project_Template_model->getClientDtlsByTaskId($task_id);
@@ -157,9 +158,13 @@ class Task extends CI_Controller {
     //        $render_data['completed_salestax_orders'] = $this->service->completed_orders_salestax(47); //id will be different for live
             $render_data['county_details'] = $this->action_model->get_county_name();
             $render_data['sales_tax_process']=$this->Project_Template_model->getProjectTaskSalesTaxProcess($task_id);
-        }if($input_form_type==1 && $key==0){
+        }if($input_form_type==1){
+            if($key==0){
             $render_data['client_id']=$client_dtls->client_id;
-            $render_data['bookkeeping_details'] = $this->bookkeeping_model->get_bookkeeping_by_order_id($task_id);
+            $render_data['bookkeeping_details'] = $this->bookkeeping_model->get_bookkeeping_by_order_id($task_id,'project');
+            }else if($key==1){
+                $render_data['bookkeeper_details']=$this->Project_Template_model->getProjetBookkeeperDetails($task_id);
+            }
         }
             $render_data['related_service_files']=$this->Project_Template_model->getTaskFiles($task_id);
             $render_data['notes_data'] = $this->notes->note_list_with_log(11, 'task_id', $task_id);

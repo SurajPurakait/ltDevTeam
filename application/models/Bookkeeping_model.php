@@ -87,6 +87,9 @@ class Bookkeeping_model extends CI_Model {
                 $security_answers = $data["security_answer"];
                 unset($data["security_answer"]);
                 $security = [];
+                if($section=='project'){
+                    $data['reference']=$section;
+                }
                 $this->db->delete('security_questions', array('financial_accounts_id' => $edit_id));
 
                 $this->db->set($data)->where("id", $edit_id)->update("financial_accounts");
@@ -962,8 +965,12 @@ class Bookkeeping_model extends CI_Model {
         }
     }
 
-    public function get_bookkeeping_by_order_id($order_id) {
-        return $this->db->get_where('bookkeeping', ['order_id' => $order_id])->row_array();
+    public function get_bookkeeping_by_order_id($order_id,$reference='') {
+        if($reference!='project'){
+            return $this->db->get_where('bookkeeping', ['order_id' => $order_id])->row_array();
+        }else{
+            return $this->db->get_where('bookkeeping', ['order_id' => $order_id,'reference'=>'project'])->row_array();
+        }
     }
 
     public function related_create_bookkeeping_by_date($data) {

@@ -2588,6 +2588,14 @@ class Project_Template_model extends CI_Model {
             $this->db->insert('project_task_sales_tax_process',$data_array);
             $insert_id=$this->db->insert_id();
 //            echo $insert_id;die;
+        }if($input_form_type==1){
+            $bookdata=array(
+               'company_id'=>$data['reference_id'],
+                'order_id'=>$data['task_id'],
+                'frequency'=>$data['frequency'],
+                'reference'=>'project'
+            );
+            $this->db->insert('bookkeeping',$bookdata);
         }
         $uploadData = [];
         $files = $_FILES["project_attachment"];
@@ -2664,6 +2672,9 @@ class Project_Template_model extends CI_Model {
     }
     public function getTaskListForInputForm($project_id){
         return $this->db->get_where('project_task',['project_id'=>$project_id])->result_array();
+    }
+    public function getProjetBookkeeperDetails($task_id){
+        return $this->db->get_where('project_task_bookkeeper_department',['task_id'=>$task_id])->result_array();
     }
 }
 

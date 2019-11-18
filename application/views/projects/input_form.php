@@ -134,7 +134,11 @@
                         <input type="hidden" name="user_type" id="user_type" value="<?= $staffInfo['type']; ?>">
                         <div class="hr-line-dashed"></div>
                     <?php } ?>
-                    <?php if ($input_form_type == 1): ?>
+                    <?php if ($input_form_type == 1):
+                        if($key==0){
+                        ?>
+                        <h3>BANK STATEMENT RETRIEVAL
+LEAFCLOUD DEPARTMEN</h3>
                             <div class="accounts-details">
                                 <h3>Financial Accounts<span class="text-danger">*</span>&nbsp; (<a href="javascript:void(0);" onclick="task_account_modal('add', '', 'project');">Add Financial Account</a>)</h3>
                                 <div id="accounts-list">
@@ -145,7 +149,7 @@
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Frequency<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <select class="form-control frequeny_of_bookkeeping" name="table[bookkeeping][frequency]" id="frequeny_of_bookkeeping" title="Frequency Of Bookkeeping" required>
+                                    <select class="form-control frequeny_of_bookkeeping" name="frequency" id="frequeny_of_bookkeeping" title="Frequency Of Bookkeeping" required>
                                         <option value="">Select an option</option>
                                         <option value="m" <?= $bookkeeping_details['frequency'] == 'm' ? 'selected' : ''; ?>>Monthly</option>
                                         <option value="q" <?= $bookkeeping_details['frequency'] == 'q' ? 'selected' : ''; ?>>Quarterly</option>
@@ -154,7 +158,10 @@
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
-                        <?php endif; ?>
+                        <?php }else if($key==1){
+                            
+                        } ?>
+                            <?php endif; ?>
                     <?php if (!empty($related_service_files)): ?>
                         <ul class="uploaded-file-list">
                             <?php
@@ -249,7 +256,7 @@
                             <!--<button class="btn btn-success" type="button" onclick="saveSalesProcess()">Save</button> &nbsp;-->
                             <!--<button class="btn btn-default" type="button" onclick="go('action/home/sales_tax_process')">Cancel</button>-->
                             <input type="hidden" name="editval" id="editval" value="<?= $task_id; ?>">
-                            <?php if($input_form_type==1){ ?>
+                            <?php if($input_form_type==1 && $key==0){ ?>
                             <input type="hidden" name="reference_id" id="reference_id" value="<?= $client_id; ?>">
                             <?php } ?>
                             <button class="btn btn-success" type="button" onclick="saveInputForms()">Save changes</button> &nbsp;&nbsp;&nbsp;
