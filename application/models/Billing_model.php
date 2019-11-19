@@ -1503,11 +1503,21 @@ class Billing_model extends CI_Model {
     }
 
     public function royalty_reports_data() {
+        ## Read value
+        $draw = $_POST['draw'];
+        $row = $_POST['start'];
+        $rowperpage = $_POST['length']; // Rows display per page
+        $columnIndex = $_POST['order'][0]['column']; // Column index
+        $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+        $searchValue = $_POST['search']['value']; // Search value
+
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
         $staffrole = $staff_info['role'];
         $staff_office = $staff_info['office'];
         $departments = explode(',', $staff_info['department']);
+
         $select = [
             'inv.id as invoice_id',
             'inv.reference_id as reference_id',
@@ -1563,20 +1573,162 @@ class Billing_model extends CI_Model {
 
         // $where['inv.payment_status'] = 'AND (CASE WHEN `inv`.`payment_status` = 3 THEN `inv`.`status` NOT IN (3) ELSE `inv`.`status` IN (1, 2, 3) END) ';
 
-        $is_status = $is_tracking = 'n';
-
-        $order_by = 'ORDER BY `inv`.`id` DESC ';
-
         $table = '`invoice_info` AS `inv` ' .
                 'INNER JOIN `order` AS `ord` ON `ord`.`invoice_id` = `inv`.`id` ' .
                 'INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END)'.
                 'INNER JOIN `service_request` AS `srv` ON `srv`.`order_id` = `inv`.`order_id`'. 
-                'INNER JOIN `payment_history` AS `pyh` ON `pyh`.`invoice_id` = `inv`.`id`' ;
+                'INNER JOIN `payment_history` AS `pyh` ON `pyh`.`invoice_id` = `inv`.`id`';
 
+        // if ($searchValue != '') {
+        //     $this->db->group_start();
+        //     $this->db->like('inv.client_id', $searchValue);
+        //     $this->db->or_like('inv.id', $searchValue);
+        //     $this->db->group_end();
+        // }
+
+        $query = 'SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id`';
+        
+        //return $this->db->query($query)->result_array();
         $this->db->query('SET SQL_BIG_SELECTS=1');
-        return $this->db->query('SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id` ' . $order_by . ' ')->result_array();        
+        $res_for_all = $this->db->query($query)->num_rows();
+        $qr = $this->db->last_query();
+        $qr .= ' order by ' . $columnName . ' ' . $columnSortOrder;
+        $qr .= ' limit ' . $row . ',' . $rowperpage;
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        $royalty_reports_data = $this->db->query($qr)->result_array();
+
+        if (!empty($royalty_reports_data)) {
+            foreach ($royalty_reports_data as $rpd) { 
+                for($i=1; $i <= $rpd['services']; $i++) {
+                    $service_detail = get_service_by_id(explode(',',$rpd['all_services'])[$i]);
+                    $office_fees = get_office_fees_by_service(explode(',',$rpd['all_services'])[$i],$rpd['office_id']);
+                    $payment_history = get_payment_details_service_id($rpd['invoice_id'],explode(',',$rpd['all_orders'])[$i]);
+                    $reference = implode(',',array_column($payment_history,'reference'));
+                    $authorization_id = implode(',',array_column($payment_history,'authorization_id'));
+                    $payment_type = implode(',',array_column($payment_history,'payment_type'));
+                    $collected = array_sum(array_column($payment_history,'collected'));    
+                    $total_net = (explode(',',$rpd['all_services_override'])[$i] != '') ? explode(',',$rpd['all_services_override'])[$i] - $service_detail['cost'] : $service_detail['retail_price'] - $service_detail['cost'];
+                    $override_price = explode(',',$rpd['all_services_override'])[$i];
+                    $date = date('m/d/Y', strtotime($rpd['created_time']));
+                    $fee_with_cost = (($total_net * $office_fees)/100);                    
+                    $fee_without_cost = (($override_price * $office_fees)/100);
+                    if (($override_price - $collected) == 0) {
+                        $payment_status = 'Paid';
+                    } elseif (($override_price - $collected) == $override_price) {
+                        $payment_status = 'Unpaid';
+                    } elseif (($override_price - $collected) > 0 && ($override_price - $collected) < $override_price) {
+                        $payment_status = 'Partial';
+                    } else {
+                        $payment_status = 'Late';
+                    }
+
+                    $data[] = array(
+                        "date" => $date,
+                        "client_id" => $rpd['practice_id'],
+                        "invoice_id" => $rpd['invoice_id'],
+                        "service_id" => $rpd['invoice_id']."-".$i,
+                        "service_name" => $service_detail['description'],
+                        "retail_price" => $service_detail['retail_price'],
+                        "override_price" => $override_price,
+                        "cost" => $service_detail['cost'],
+                        "payment_status" => $payment_status,
+                        "collected" => $collected.".00",
+                        "payment_type" => ($payment_type != '') ? $payment_type:"N/A",
+                        "authorization_id" => ($authorization_id != '') ? $authorization_id: "N/A",
+                        "reference" => ($reference != '') ? $reference : "N/A",
+                        "total_net" => $total_net.'.00',
+                        "office_fee" => ($office_fees != '') ? $office_fees : '00.00',
+                        "fee_with_cost" => $fee_with_cost.'.00',
+                        "fee_without_cost" => $fee_without_cost.'.00'
+                    );
+                } 
+            }
+        } else {
+            $data = array();
+        }
+
+        $totalRecords = $res_for_all;
+        $totalRecordwithFilter = $res_for_all;
+        //echo $this->db->last_query();exit;
+        ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $data
+        );
+
+        return $response;
     }
 
+    public function get_royalty_reports_data($office_id= "",$date_range= "") {
+        ## Read value
+        $draw = $_POST['draw'];
+        $row = $_POST['start'];
+        $rowperpage = $_POST['length']; // Rows display per page
+        $columnIndex = $_POST['order'][0]['column']; // Column index
+        $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+        $searchValue = $_POST['search']['value']; // Search value
+
+        $staff_info = staff_info();
+        $staff_id = $staff_info['id'];
+        $staffrole = $staff_info['role'];
+        $staff_office = $staff_info['office'];
+        $departments = explode(',', $staff_info['department']);
+
+        if (in_array(2, $departments)) {
+            if ($staffrole == 2) {      // frinchisee manager
+                $this->db->where_in('office_id', $staff_office);
+            } else {
+                $this->db->where('created_by',$staff_id);
+            }
+        }
+        if ($office_id != "") {
+            $this->db->where('office_id',$office_id);
+        }
+        if ($date_range != "") {
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            
+            $this->db->where('date >=',$start_date);
+            $this->db->where('date <=',$end_date);
+        }
+        if ($searchValue != '') {
+            $this->db->group_start();
+            $this->db->like('client_id', $searchValue);
+            $this->db->or_like('service_name', $searchValue);
+            $this->db->or_like('service_name', $searchValue);
+            $this->db->or_like('payment_status', $searchValue);
+            $this->db->or_like('payment_type', $searchValue);
+            $this->db->or_like('reference', $searchValue);
+            $this->db->or_like('authorization_id', $searchValue);
+            $this->db->or_like('office_fee', $searchValue);
+            $this->db->group_end();
+        }
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        $res_for_all = $this->db->get('royalty_report')->num_rows();
+        $qr = $this->db->last_query();
+        $qr .= ' order by ' . $columnName . ' ' . $columnSortOrder;
+        $qr .= ' limit ' . $row . ',' . $rowperpage;
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        $royalty_reports_data = $this->db->query($qr)->result_array();
+
+        $totalRecords = $res_for_all;
+        $totalRecordwithFilter = $res_for_all;
+        //echo $this->db->last_query();exit;
+        ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $royalty_reports_data
+        );
+
+        return $response;
+
+    }
     public function get_payment_details_service_id($invoice_id,$order_id) {
         $sql = "pay.reference_no AS reference,pay.authorization_id,typ.name AS payment_type,pay.pay_amount AS collected";
         $this->db->select($sql);
