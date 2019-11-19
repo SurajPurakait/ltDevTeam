@@ -162,7 +162,7 @@ class Task extends CI_Controller {
             if($key==0){
             $render_data['client_id']=$client_dtls->client_id;
             $render_data['bookkeeping_details'] = $this->bookkeeping_model->get_bookkeeping_by_order_id($task_id,'project');
-            }else if($key==1){
+            }else if($key==1|| $key==2){
                 $render_data['bookkeeper_details']=$this->Project_Template_model->getProjetBookkeeperDetails($task_id);
             }
         }

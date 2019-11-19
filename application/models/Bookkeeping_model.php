@@ -111,9 +111,9 @@ class Bookkeeping_model extends CI_Model {
                 unset($data["security_question"]);
                 $security_answers = $data["security_answer"];
                 unset($data["security_answer"]);
-//                if($section=='project'){
-//                    $data['reference']=$section;
-//                }
+                if($section=='project'){
+                    $data['reference']=$section;
+                }
                 $this->db->insert("financial_accounts", $data);
                 $edit_id = $this->db->insert_id();
 

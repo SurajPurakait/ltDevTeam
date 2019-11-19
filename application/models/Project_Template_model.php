@@ -1795,6 +1795,12 @@ class Project_Template_model extends CI_Model {
         $task_data['target_start_day'] = $post['task']['target_start_day'];
         $task_data['target_complete_day'] = $post['task']['target_complete_day'];
         $task_data['tracking_description'] = $post['task']['tracking_description'];
+        $task_data['is_input_form']=$post['task']['is_input_form'];
+        if(isset($post['task']['input_form_type']) && $post['task']['input_form_type']!=''){
+            $task_data['input_form_type']=$post['task']['input_form_type'];
+        }else{
+            $task_data['input_form_type']=0;
+        }
 //        $task_data['is_all'] = $post['task']['is_all'];
         $task_data['department_id'] = $post['task']['department'];
         if ($task_data['department_id'] != 2 && ($post['task']['is_all'] == 1 || $post['task']['is_all'] == 0)) {
@@ -2558,6 +2564,7 @@ class Project_Template_model extends CI_Model {
     }
     function saveProjectInputForm($data){
         $input_form_type=$data['input_form_type'];
+        $key=$data['task_key'];
         if($input_form_type==3){
             $exist=$this->db->get_where('project_task_sales_tax_process',['task_id'=>$data['task_id']])->row();
             if(!empty($exist)){
@@ -2589,13 +2596,30 @@ class Project_Template_model extends CI_Model {
             $insert_id=$this->db->insert_id();
 //            echo $insert_id;die;
         }if($input_form_type==1){
-            $bookdata=array(
-               'company_id'=>$data['reference_id'],
-                'order_id'=>$data['task_id'],
-                'frequency'=>$data['frequency'],
-                'reference'=>'project'
-            );
+            if($key==0){
+                $bookdata=array(
+                   'company_id'=>$data['reference_id'],
+                    'order_id'=>$data['task_id'],
+                    'frequency'=>$data['frequency'],
+                    'reference'=>'project'
+                );
             $this->db->insert('bookkeeping',$bookdata);
+            }else if($key==1){
+                $bookkeeper_data=array(
+                    'task_id'=>$data['task_id'],
+                    'bank_account_no'=>$data['bank_account_no'],
+                    'transaction'=>$data['transaction'],
+                    'item_uncategorize'=>$data['item_uncategorize'],
+                    'reconciled'=>$data['reconciled']
+                );
+                $this->db->insert('project_task_bookkeeper_department',$bookkeeper_data);
+            }else if($key==2){
+                $client_data=array(
+                    'task_id'=>$data['task_id'],
+                    'adjustment'=>$data['need_adjustment']
+                );
+                $this->db->insert('project_task_bookkeeper_department',$client_data);
+            }
         }
         $uploadData = [];
         $files = $_FILES["project_attachment"];
@@ -2674,7 +2698,7 @@ class Project_Template_model extends CI_Model {
         return $this->db->get_where('project_task',['project_id'=>$project_id])->result_array();
     }
     public function getProjetBookkeeperDetails($task_id){
-        return $this->db->get_where('project_task_bookkeeper_department',['task_id'=>$task_id])->result_array();
+        return $this->db->get_where('project_task_bookkeeper_department',['task_id'=>$task_id])->row();
     }
 }
 

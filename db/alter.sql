@@ -993,3 +993,9 @@ ALTER TABLE `order_extra_data` ADD `translation_to` VARCHAR(255) NOT NULL AFTER 
 ALTER TABLE `financial_accounts` ADD `reference` VARCHAR(50) NOT NULL DEFAULT 'order' AFTER `grand_total`; 
 
 ALTER TABLE `bookkeeping` ADD `reference` VARCHAR(50) NOT NULL DEFAULT 'order' AFTER `sub_category`; 
+
+/*19.11.19*/
+
+/*import project_task_bookkeeper_department.sql*/
+
+ALTER TABLE `project_task_bookkeeper_department` ADD `adjustment` ENUM('n','y') NOT NULL COMMENT 'n for no, y for yes' AFTER `reconciled`; 

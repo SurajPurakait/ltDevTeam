@@ -137,8 +137,7 @@
                     <?php if ($input_form_type == 1):
                         if($key==0){
                         ?>
-                        <h3>BANK STATEMENT RETRIEVAL
-LEAFCLOUD DEPARTMEN</h3>
+                        <h3>BANK STATEMENT RETRIEVAL LEAFCLOUD DEPARTMENT</h3>
                             <div class="accounts-details">
                                 <h3>Financial Accounts<span class="text-danger">*</span>&nbsp; (<a href="javascript:void(0);" onclick="task_account_modal('add', '', 'project');">Add Financial Account</a>)</h3>
                                 <div id="accounts-list">
@@ -158,10 +157,49 @@ LEAFCLOUD DEPARTMEN</h3>
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
-                        <?php }else if($key==1){
-                            
-                        } ?>
-                            <?php endif; ?>
+                        <?php }else if($key==1){ ?>
+                        <h3>BOOKKEEPING BOOKKEEPER DEPARTMENT</h3>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Number of Bank Account<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="" class="form-control" type="text" id="bank_acc_no" name="bank_account_no" value="<?= (isset($bookkeeper_details->bank_account_no)?($bookkeeper_details->bank_account_no!=''?$bookkeeper_details->bank_account_no:''):'') ?>" title="Total Due" required ><div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Total Transaction<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="" class="form-control" type="text" id="bank_acc_no" name="transaction" value="<?= (isset($bookkeeper_details->transaction)?($bookkeeper_details->transaction!=''?$bookkeeper_details->transaction:''):'') ?>" title="Total Due" required ><div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Uncategorized Item<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="" class="form-control" type="text" id="bank_acc_no" name="item_uncategorize" value="<?= (isset($bookkeeper_details->item_uncategorize)?($bookkeeper_details->item_uncategorize!=''?$bookkeeper_details->item_uncategorize:''):'') ?>" title="Total Due" required ><div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Reconciled<span class="text-danger">*</span></label>
+                                <label class="checkbox-inline">
+                                    <input class="checkclass" value="1" type="radio" id="reconciled" name="reconciled" required title="Input Form" <?= (isset($bookkeeper_details->reconciled)?($bookkeeper_details->reconciled == 1 ? 'checked' : ''):'') ?>> Yes
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input class="checkclass" value="0" type="radio" id="reconciled2" name="reconciled" required title="Input Form" <?= (isset($bookkeeper_details->reconciled)?($bookkeeper_details->reconciled == 0 ? 'checked' : ''):'')?>> No
+                                </label>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        <?php }else if($key==2){?>
+                        <h3>REVIEW CLIENT MANAGER</h3>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Adjustment Needed<span class="text-danger">*</span></label>
+                                <label class="checkbox-inline">
+                                    <input class="checkclass" value="y" type="radio" id="need_adjustment" name="need_adjustment" required title="Input Form" <?= (isset($bookkeeper_details->adjustment)?($bookkeeper_details->adjustment == 'y' ? 'checked' : ''):'') ?>> Yes
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input class="checkclass" value="n" type="radio" id="need_adjustment2" name="need_adjustment" required title="Input Form" <?= (isset($bookkeeper_details->adjustment)?($bookkeeper_details->adjustment == 'n' ? 'checked' : ''):'')?>> No
+                                </label>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        <?php } endif; ?>
                     <?php if (!empty($related_service_files)): ?>
                         <ul class="uploaded-file-list">
                             <?php
@@ -253,9 +291,8 @@ LEAFCLOUD DEPARTMEN</h3>
                             <!--for sales tax-->
                             <input type="hidden" name="input_form_type" id="input_form_type" value="<?= $input_form_type ?>">
                             <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>"/>
-                            <!--<button class="btn btn-success" type="button" onclick="saveSalesProcess()">Save</button> &nbsp;-->
-                            <!--<button class="btn btn-default" type="button" onclick="go('action/home/sales_tax_process')">Cancel</button>-->
                             <input type="hidden" name="editval" id="editval" value="<?= $task_id; ?>">
+                            <input type="hidden" name="task_key" id="task_key" value=<?= $key ?>>
                             <?php if($input_form_type==1 && $key==0){ ?>
                             <input type="hidden" name="reference_id" id="reference_id" value="<?= $client_id; ?>">
                             <?php } ?>
