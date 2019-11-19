@@ -1708,6 +1708,7 @@ class Billing_model extends CI_Model {
             $this->db->group_end();
         }
         $this->db->query('SET SQL_BIG_SELECTS=1');
+        $this->db->where('id !=',1);
         $res_for_all = $this->db->get('royalty_report')->num_rows();
         $qr = $this->db->last_query();
         $qr .= ' order by ' . $columnName . ' ' . $columnSortOrder;
@@ -1737,5 +1738,8 @@ class Billing_model extends CI_Model {
         $this->db->where("invoice_id",$invoice_id);
         $this->db->where("order_id",$order_id);
         return $this->db->get()->result_array();
+    }
+    public function get_total_price_report() {
+        return $this->db->get_where('royalty_report',array('id'=>1))->row_array();
     }
 }
