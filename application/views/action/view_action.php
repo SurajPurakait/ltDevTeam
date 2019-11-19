@@ -2,7 +2,8 @@
 $user_info = staff_info();
 $user_department = $user_info['department'];
 $user_type = $user_info['type'];
-$office_name = get_office_name_by_office_id($user_info['office']);
+// $office_name = get_office_name_by_office_id($user_info['office']);
+$office_name = get_office_name_for_action_view($data['id']);
 foreach ($data['staffs'] as $staff) {
     $staffinfo[] = staff_info_by_id($staff);
 }
@@ -185,7 +186,7 @@ if ($data["status"] == 0) {
                                 // }else{
                                 //    echo $office_name; 
                                 // }
-                                echo $office_name;
+                                echo $office_name['name'];
                                 ?>
                             </td>
                         </tr>
