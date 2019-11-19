@@ -987,3 +987,19 @@ ALTER TABLE `project_template_task` CHANGE `tracking_description` `tracking_desc
 ALTER TABLE `project_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for started, 2 for resolved, 3 for ready'; 
 
 ALTER TABLE `order_extra_data` ADD `translation_to` VARCHAR(255) NOT NULL AFTER `document_date`, ADD `amount_of_pages` INT(100) NOT NULL AFTER `translation_to`, ADD `attach_files` VARCHAR(255) NOT NULL AFTER `amount_of_pages`;
+
+
+/*15.11.19*/
+
+ALTER TABLE `financial_accounts` ADD `reference` VARCHAR(50) NOT NULL DEFAULT 'order' AFTER `grand_total`; 
+
+ALTER TABLE `bookkeeping` ADD `reference` VARCHAR(50) NOT NULL DEFAULT 'order' AFTER `sub_category`; 
+
+/* 18.11.19 */
+/* import royalty_report.sql */
+/* run patch import_royalty_reports_data */
+/*19.11.19*/
+
+/*import project_task_bookkeeper_department.sql*/
+
+ALTER TABLE `project_task_bookkeeper_department` ADD `adjustment` ENUM('n','y') NOT NULL COMMENT 'n for no, y for yes' AFTER `reconciled`; 

@@ -3410,3 +3410,18 @@ if(!function_exists('get_payment_details_service_id')){
         return $ci->billing_model->get_payment_details_service_id($invoice_id,$order_id);
     }
 }
+
+if(!function_exists('get_office_name_for_action_view')){
+    function get_office_name_for_action_view($id) {
+        $ci =&get_instance();
+        $ci->load->model('action_model');
+        return $ci->action_model->get_office_name_for_action_view($id);
+    }
+}
+if(!function_exists('get_total_price_report')){
+    function get_total_price_report() {
+        $ci =&get_instance();
+        $ci->load->model('billing_model');
+        return $ci->billing_model->get_total_price_report();
+    }
+}

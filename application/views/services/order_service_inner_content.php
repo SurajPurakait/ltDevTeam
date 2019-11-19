@@ -21,6 +21,9 @@
             $user_dept = $user_info['department'];
             $usertype = $user_info['type'];
             $role = $user_info['role'];
+//            echo "<pre>";
+//            print_r($services_list);
+//            echo "</pre>";die;
             if (!empty($services_list)) {
                 foreach ($services_list as $keys => $row_inner) {
                     $keysval = $keys+1;
@@ -200,7 +203,7 @@
                             <td style="text-align: center;">
                                 <?php
                                 $input_status = 'complete';
-                                if ($row_inner->service_id != $service_id) {
+                                if ($row_inner->service_id != $service_id || $is_order=='y') {
                                     if ($row_inner->input_form != 'y') {
                                         echo 'N/A';
                                     } else {

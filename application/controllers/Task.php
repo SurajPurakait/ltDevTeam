@@ -128,8 +128,9 @@ class Task extends CI_Controller {
         }
         //redirect(base_url() . 'action/home');
     }
-    public function task_input_form($task_id,$type='edit'){
+    public function task_input_form($task_id,$key='',$type='edit'){
         $this->load->model('notes');
+        $this->load->model('bookkeeping_model');
         $this->load->layout = 'dashboard';
         $title = "Input Forms";
         $render_data['title'] = $title . ' | Tax Leaf';
@@ -142,20 +143,28 @@ class Task extends CI_Controller {
         $render_data['multiple']='y';
         $render_data['related_table_id']=11;
         $render_data['required']='n';
+        $render_data['key']=$key;
         $render_data['input_form_type']=$input_form_type=$this->Project_Template_model->getProjectTaskInputFormType($task_id);
-//        echo $input_form_type;die;
-//        sales_tax section
+//      
+        $client_dtls=$this->Project_Template_model->getClientDtlsByTaskId($task_id);
         if($input_form_type==3){
             $this->load->model('service');
             $this->load->model('system');
+            
             $render_data['state'] = $this->system->get_all_state();
             $render_data['staffInfo'] = staff_info();
-            $client_dtls=$this->Project_Template_model->getClientDtlsByTaskId($task_id);
             $render_data['period_time']=Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
             $render_data['client_name']=$client_name=$this->Project_Template_model->getProjectClientName($client_dtls->client_id, $client_dtls->client_type);
     //        $render_data['completed_salestax_orders'] = $this->service->completed_orders_salestax(47); //id will be different for live
             $render_data['county_details'] = $this->action_model->get_county_name();
             $render_data['sales_tax_process']=$this->Project_Template_model->getProjectTaskSalesTaxProcess($task_id);
+        }if($input_form_type==1){
+            if($key==0){
+            $render_data['client_id']=$client_dtls->client_id;
+            $render_data['bookkeeping_details'] = $this->bookkeeping_model->get_bookkeeping_by_order_id($task_id,'project');
+            }else if($key==1|| $key==2){
+                $render_data['bookkeeper_details']=$this->Project_Template_model->getProjetBookkeeperDetails($task_id);
+            }
         }
             $render_data['related_service_files']=$this->Project_Template_model->getTaskFiles($task_id);
             $render_data['notes_data'] = $this->notes->note_list_with_log(11, 'task_id', $task_id);

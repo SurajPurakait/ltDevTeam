@@ -684,4 +684,142 @@ class Patch extends CI_Controller {
         }
         echo "Old Mail Campaign Data's are Successfully Removed";
     }
+
+    public function import_royalty_reports_data() {
+        $staff_info = staff_info();
+        $staff_id = $staff_info['id'];
+        $staffrole = $staff_info['role'];
+        $staff_office = $staff_info['office'];
+        $departments = explode(',', $staff_info['department']);
+        $this->db->query('TRUNCATE royalty_report');
+        $select = [
+            'inv.id as invoice_id',
+            'inv.reference_id as reference_id',
+            'inv.order_id as order_id',
+            'inv.new_existing as new_existing',
+            'inv.created_time as created_time',
+            'srv.price_charged as override_price',
+            'srv.services_id as service_id',
+            'inv.existing_reference_id as existing_reference_id',
+            'inv.type as invoice_type',
+            'inv.is_order as is_order',
+            'inv.created_by AS created_by',
+            'inv.payment_status AS payment_status',
+            'inv.total_amount AS sub_total',
+            'inv.client_id as client_id',
+            'indt.practice_id as practice_id',
+            '(CASE WHEN inv.type = 1 THEN (SELECT `company`.`name` FROM `company` WHERE `company`.`id` = `inv`.`client_id`) ELSE (SELECT CONCAT(individual.last_name,", ",individual.first_name) FROM `individual` WHERE `individual`.`id` = `inv`.`client_id`) END) as client_name',
+            '(CASE WHEN inv.created_by = ' . sess('user_id') . ' THEN \'byme\' ELSE \'byothers\' END) as request_type',
+            '(CASE WHEN inv.created_by = ' . sess('user_id') . ' THEN CONCAT(\'byme-\', inv.payment_status) ELSE CONCAT(\'byothers-\', inv.payment_status) END) as filter_value',
+            'inv.start_month_year as start_month_year',
+            'inv.existing_practice_id as existing_practice_ID',
+            'inv.status as invoice_status',
+            '(SELECT COUNT(*) FROM `order` WHERE invoice_id = inv.id AND reference = \'invoice\') as services',
+            'indt.office as office_id',
+            '(SELECT ofc.name FROM office as ofc WHERE ofc.id = indt.office) as office',
+            '(SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as officeid',
+            '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = indt.partner) as partner',
+            '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = indt.manager) as manager',
+            '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = inv.created_by) as created_by_name',
+            '(SELECT CONCAT(",",GROUP_CONCAT(`service_id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services',
+            '(SELECT CONCAT(",",GROUP_CONCAT(`id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_orders',
+            '(SELECT CONCAT(",",GROUP_CONCAT(`total_of_order`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services_override',
+            '(SELECT CONCAT(",",GROUP_CONCAT(`payment_type`), ",") FROM `payment_history` WHERE `invoice_id` = ord.invoice_id AND `order_id` = ord.id) AS payment_types',
+            '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
+        ];
+        $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
+        $where['status'] = 'AND `inv`.`status` != 0 ';
+
+        if (in_array(2, $departments)) {
+            if ($staffrole == 2) {      // frinchisee manager
+                $where['indt.office'] = 'AND `indt`.`office` IN (' . $staff_office . ') ';
+            } else {
+                $where['inv.created_by'] = 'AND `inv`.`created_by` = "' . $staff_id . '" ';
+            }
+        } else {
+            $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (7)) ';
+        }
+
+        $table = '`invoice_info` AS `inv` ' .
+                'INNER JOIN `order` AS `ord` ON `ord`.`invoice_id` = `inv`.`id` ' .
+                'INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END)'.
+                'INNER JOIN `service_request` AS `srv` ON `srv`.`order_id` = `inv`.`order_id`'. 
+                'INNER JOIN `payment_history` AS `pyh` ON `pyh`.`invoice_id` = `inv`.`id`';
+
+        $query = 'SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id`';
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        $royalty_reports_data = $this->db->query($query)->result_array();
+
+        if (!empty($royalty_reports_data)) {
+            $data_invoice = array(
+                'invoice_id'=> 0
+            );
+            $this->db->insert('royalty_report',$data_invoice);
+            foreach ($royalty_reports_data as $rpd) { 
+                for($i=1; $i <= $rpd['services']; $i++) {
+                    $service_detail = get_service_by_id(explode(',',$rpd['all_services'])[$i]);
+                    $office_fees = get_office_fees_by_service(explode(',',$rpd['all_services'])[$i],$rpd['office_id']);
+                    $payment_history = get_payment_details_service_id($rpd['invoice_id'],explode(',',$rpd['all_orders'])[$i]);
+                    $reference = implode(',',array_column($payment_history,'reference'));
+                    $authorization_id = implode(',',array_column($payment_history,'authorization_id'));
+                    $payment_type = implode(',',array_column($payment_history,'payment_type'));
+                    $collected = array_sum(array_column($payment_history,'collected'));    
+                    $total_net = (explode(',',$rpd['all_services_override'])[$i] != '') ? explode(',',$rpd['all_services_override'])[$i] - $service_detail['cost'] : $service_detail['retail_price'] - $service_detail['cost'];
+                    $override_price = explode(',',$rpd['all_services_override'])[$i];
+                    $date_val = date('Y-m-d', strtotime($rpd['created_time']));
+                    $fee_with_cost = (($total_net * $office_fees)/100);                    
+                    $fee_without_cost = (($override_price * $office_fees)/100);
+                    if (($override_price - $collected) == 0) {
+                        $payment_status = 'Paid';
+                    } elseif (($override_price - $collected) == $override_price) {
+                        $payment_status = 'Unpaid';
+                    } elseif (($override_price - $collected) > 0 && ($override_price - $collected) < $override_price) {
+                        $payment_status = 'Partial';
+                    } else {
+                        $payment_status = 'Late';
+                    }
+
+                    $data = array(
+                        "date" => $date_val,
+                        "client_id" => $rpd['practice_id'],
+                        "invoice_id" => $rpd['invoice_id'],
+                        "service_id" => $rpd['invoice_id']."-".$i,
+                        "service_name" => $service_detail['description'],
+                        "retail_price" => $service_detail['retail_price'],
+                        "override_price" => $override_price,
+                        "cost" => $service_detail['cost'],
+                        "payment_status" => $payment_status,
+                        "collected" => $collected.".00",
+                        "payment_type" => ($payment_type != '') ? $payment_type:"N/A",
+                        "authorization_id" => ($authorization_id != '') ? $authorization_id: "N/A",
+                        "reference" => ($reference != '') ? $reference : "N/A",
+                        "total_net" => $total_net.'.00',
+                        "office_fee" => ($office_fees != '') ? '$'.$office_fees : '00.00',
+                        "fee_with_cost" => $fee_with_cost.'.00',
+                        "fee_without_cost" => $fee_without_cost.'.00',
+                        "office_id" => $rpd['office_id'],
+                        "created_by" => $rpd['created_by']
+                    );
+                    $this->db->insert('royalty_report',$data);
+                } 
+            }
+            $total_data = $this->db->get('royalty_report')->result_array();
+            $total_arr = array(
+                "invoice_id" => count($total_data)-1,
+                "retail_price" => "$".array_sum(array_column($total_data,'retail_price')),
+                "cost" => "$".array_sum(array_column($total_data,'cost')),
+                "collected" => "$".array_sum(array_column($total_data,'collected')),
+                "total_net" => "$".array_sum(array_column($total_data,'total_net')),
+                "override_price" => "$".array_sum(array_column($total_data,'override_price')),
+                "fee_with_cost" => "$".array_sum(array_column($total_data,'fee_with_cost')),
+                "fee_without_cost" => "$".array_sum(array_column($total_data,'fee_without_cost'))
+
+            );
+            $this->db->where('id',1);
+            $this->db->update('royalty_report',$total_arr);
+            echo "Successfully Inserted";
+        } else {
+            $data = array();
+        }
+    }
 }

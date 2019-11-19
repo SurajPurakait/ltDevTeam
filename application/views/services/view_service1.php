@@ -104,7 +104,7 @@ if ($usertype != '3') {
                 $url = 'services/accounting_services/edit_sales_tax_application/' . base64_encode($order_info['id']);
             } elseif ($order_info['service_id'] == '14') {
                 $url = 'services/accounting_services/edit_rt6_unemployment_app/' . base64_encode($order_info['id']);
-            } elseif ($order_info['service_id'] == $serviceid) {
+            } elseif ($order_info['service_id'] == $service_id) {
                 $url = 'services/accounting_services/edit_sales_tax_recurring/' . base64_encode($order_info['id']);
             } elseif ($order_info['service_id'] == '13') { //change in live
                 $url = 'services/accounting_services/edit_sales_tax_processing/' . base64_encode($order_info['id']);

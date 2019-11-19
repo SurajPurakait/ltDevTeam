@@ -41,6 +41,7 @@ class Service_model extends CI_Model {
         $this->order_select[] = 'cpn.start_month_year AS start_month_year';
         $this->order_select[] = 'ord.status AS status';
         $this->order_select[] = 'inv.id AS invoiced_id';
+        $this->order_select[] = 'inv.is_order AS is_order';
         $this->order_select[] = '(SELECT department.name FROM department WHERE department.id = srv.dept) AS service_department_name';
         $this->load->model('notes');
         $this->load->model('billing_model');
@@ -1064,9 +1065,14 @@ class Service_model extends CI_Model {
         return $this->db->query("select SUM(percentage) as total from title where company_id = '$reference_id' and status=1")->row_array()["total"];
     }
 
-    public function get_financial_account_info($id) {
-        $sql = "select f.*, group_concat(q.security_question separator '|') as questions, group_concat(q.security_answer separator '|') as answers from financial_accounts as f inner join security_questions as q on q.financial_accounts_id = f.id where f.id='$id'";
-        return $this->db->query($sql)->row_array();
+    public function get_financial_account_info($id,$refernce='') {
+        if($refernce==''){
+            $sql = "select f.*, group_concat(q.security_question separator '|') as questions, group_concat(q.security_answer separator '|') as answers from financial_accounts as f inner join security_questions as q on q.financial_accounts_id = f.id where f.id='$id'";
+            return $this->db->query($sql)->row_array();
+        }else{
+            $sql = "select f.*, group_concat(q.security_question separator '|') as questions, group_concat(q.security_answer separator '|') as answers from financial_accounts as f inner join security_questions as q on q.financial_accounts_id = f.id where f.id='$id' AND f.reference='project'";
+            return $this->db->query($sql)->row_array();
+        }
     }
 
     public function load_financial_accounts_list($company_id) {
@@ -1489,13 +1495,21 @@ class Service_model extends CI_Model {
         return $data;
     }
 
-    public function get_account_list_by_company_id($company_id) {
-        $sql = "select * from financial_accounts where company_id='$company_id'";
+    public function get_account_list_by_company_id($company_id,$reference='') {
+        if($reference=='project'){
+            $sql = "select * from financial_accounts where company_id='$company_id' AND reference='project'";
+        }else{
+            $sql = "select * from financial_accounts where company_id='$company_id'";
+        }
         return $this->db->query($sql)->result();
     }
 
-    public function get_account_list_by_order_id($order_id) {
-        $sql = "select * from financial_accounts where order_id='$order_id'";
+    public function get_account_list_by_order_id($order_id,$reference='') {
+        if($reference=='project'){
+            $sql = "select * from financial_accounts where order_id='$order_id' AND reference='project'";
+        }else{
+            $sql = "select * from financial_accounts where order_id='$order_id'";
+        }
         return $this->db->query($sql)->result();
     }
 
@@ -2668,5 +2682,8 @@ class Service_model extends CI_Model {
         $this->db->where('office_id',$office_id);
         return $this->db->get('office_service_fees')->row_array()['percentage'];
     }
+//    public function get_service_reference($invoice_id){
+//        return $this->db->get_where('order',['invoice_id'=>$invoice_id])->row()->reference;
+//    }
 
 }
