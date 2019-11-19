@@ -1,15 +1,16 @@
 var base_url = document.getElementById('base_url').value;
 
-function loadRoyaltyReportsData() {
-    var ofc = '';
+function loadRoyaltyReportsData(offce_id = '',date_range = '') {
+    $('#reports-tab').DataTable().destroy();
+
     $('#reports-tab').DataTable({
         'processing': false,
         'serverSide': true,
         'serverMethod': 'post',
         'ajax': {
-            'url': base_url + 'reports/load_royalty_reports_data',
+            'url': base_url + 'reports/get_royalty_reports_data',
             'type': 'POST',
-            'data': {'ofc': ofc},
+            'data': {'ofc': offce_id,'daterange':date_range},
             beforeSend: function () {
                 openLoading();
             },
@@ -38,3 +39,12 @@ function loadRoyaltyReportsData() {
         ]
     });
 }
+// function loadRoyaltyReportsData1(offce_id = '',date_range = '') { 
+//     var date = date_range.split('-');
+//     var start_date = date[0].split('/');
+//     start_date.push(start_date[2],start_date[0],start_date[1]);
+
+//     var end_date = date[1].split('/').reverse().join('-');
+//     var date_range = start_date +','+ end_date;
+//     alert(date_range);
+// }
