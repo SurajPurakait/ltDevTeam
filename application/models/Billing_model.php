@@ -1737,6 +1737,7 @@ class Billing_model extends CI_Model {
         $this->db->join('payment_type typ', 'typ.id = pay.payment_type');
         $this->db->where("invoice_id",$invoice_id);
         $this->db->where("order_id",$order_id);
+        $this->db->where('type', 'payment');
         return $this->db->get()->result_array();
     }
     public function get_total_price_report() {

@@ -691,7 +691,7 @@ class Patch extends CI_Controller {
         $staffrole = $staff_info['role'];
         $staff_office = $staff_info['office'];
         $departments = explode(',', $staff_info['department']);
-
+        $this->db->query('TRUNCATE royalty_report');
         $select = [
             'inv.id as invoice_id',
             'inv.reference_id as reference_id',
