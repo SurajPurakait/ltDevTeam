@@ -774,4 +774,21 @@ class Modal extends CI_Controller {
         echo $this->Project_Template_model->file_upload_tasks(post(), $_FILES["upload_file"]);
         // print_r($this->action_model->file_upload_actions(post(), $_FILES["upload_file"]));
     }
+     public function show_task_financial_account() {
+        $render_data['modal_type'] = post('modal_type');
+        $render_data['client_id'] = post('client_id');
+        $render_data['task_id'] = post('task_id');
+        $section = post('section');
+        $render_data['account_details']=$this->company_model->get_account_details_bookkeeping(post('task_id'),'project');
+//        $this->load->view('modal/financial_account',$data);
+        if ($render_data['modal_type'] == "edit") {
+            $render_data["id"] = post("id");
+            $render_data["data"] = $this->service_model->get_financial_account_info(post("id"));
+        }
+        if ($section == "month_diff") {
+            $this->load->view('modal/financial_account_by_date', $render_data);
+        } else {
+            $this->load->view('modal/task_financial_accounts', $render_data);
+        }
+    }
 }

@@ -997,14 +997,18 @@ class Company_model extends CI_Model {
         }
     }
 
-    public function get_account_details_bookkeeping($reference_id) {
-        $order_list = $this->db->get_where('order', ['reference_id' => $reference_id, 'reference' => 'company'])->result_array();
-        if (!empty($order_list)) {
-            $this->db->where_in("order_id", array_column($order_list, 'id'));
-            $this->db->group_by("account_number");
-            return $this->db->get('financial_accounts')->result_array();
-        } else {
-            return [];
+    public function get_account_details_bookkeeping($reference_id,$reference='') {
+        if($reference==''){
+            $order_list = $this->db->get_where('order', ['reference_id' => $reference_id, 'reference' => 'company'])->result_array();
+            if (!empty($order_list)) {
+                $this->db->where_in("order_id", array_column($order_list, 'id'));
+                $this->db->group_by("account_number");
+                return $this->db->get('financial_accounts')->result_array();
+            } else {
+                return [];
+            }
+        }else{
+            return $this->db->get_where('financial_accounts',['order_id'=>$reference_id,'reference'=>'project'])->result_array();
         }
     }
 
