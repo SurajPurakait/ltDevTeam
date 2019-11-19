@@ -1588,6 +1588,7 @@ class Home extends CI_Controller {
         $render_data = post();
         $render_data['order_info'] = $order_info = $this->service_model->get_order_info_by_id($render_data['order_id']);
         $render_data['services_list'] = $this->service_model->get_service_list_by_order_id($render_data['order_id']);
+        $render_data['is_order']=$order_info['is_order'];
         $render_data['reference_id'] = $order_info['company_id'];
         $render_data['service_id'] = $order_info['service_id'];
         $render_data['invoiced_id'] = $order_info['invoiced_id'];
