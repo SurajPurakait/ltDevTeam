@@ -49,6 +49,4 @@ class Reports extends CI_Controller {
     	$result = $this->billing_model->get_royalty_reports_data($office_id,$daterange);	
         echo json_encode($result);
     }
-    
-
 }
