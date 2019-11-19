@@ -41,6 +41,7 @@ class Service_model extends CI_Model {
         $this->order_select[] = 'cpn.start_month_year AS start_month_year';
         $this->order_select[] = 'ord.status AS status';
         $this->order_select[] = 'inv.id AS invoiced_id';
+        $this->order_select[] = 'inv.is_order AS is_order';
         $this->order_select[] = '(SELECT department.name FROM department WHERE department.id = srv.dept) AS service_department_name';
         $this->load->model('notes');
         $this->load->model('billing_model');
@@ -2681,5 +2682,8 @@ class Service_model extends CI_Model {
         $this->db->where('office_id',$office_id);
         return $this->db->get('office_service_fees')->row_array()['percentage'];
     }
+//    public function get_service_reference($invoice_id){
+//        return $this->db->get_where('order',['invoice_id'=>$invoice_id])->row()->reference;
+//    }
 
 }
