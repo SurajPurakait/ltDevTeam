@@ -149,7 +149,8 @@ $role = $user_info['role'];
 
                                         <?php if ($user_type == 1 || ($user_type == 2 && $role == 4) || ($user_type == 3 && $role == 2)): ?>
                                             <tr id="byother" style="background: #596571;">
-                                                <th>By Others</th>
+                                                <!-- <th>By Others</th> -->
+                                                <th>By My Team</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byother-0">
                                                         <span class="label label-success" id="requested_by_other_new" onclick="reflactFilterWithSummery('0-New', 'byother-By Others');loadActionDashboard(0, 'byother', '', '', '', '');"><?= action_list('byother', '0'); ?></span>
@@ -189,7 +190,8 @@ $role = $user_info['role'];
                                         if (($user_type == 2 && $role == 4) || ($user_type == 3 && $role == 2)):
                                             ?>
                                             <tr id="toother" style="background: #596571;">
-                                                <th>To Others</th>
+                                                <!-- <th>To Others</th> -->
+                                                <th>To My Team</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-toother-0">
                                                         <span class="label label-success" id="requested_to_other_new" onclick="reflactFilterWithSummery('0-New', 'toother-To Others');loadActionDashboard(0, 'toother', '', '', '', '');"><?= action_list('toother', '0'); ?></span>
