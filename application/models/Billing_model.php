@@ -1738,6 +1738,7 @@ class Billing_model extends CI_Model {
         $this->db->where("invoice_id",$invoice_id);
         $this->db->where("order_id",$order_id);
         $this->db->where('type', 'payment');
+        $this->db->where('is_cancel !=', 1);
         return $this->db->get()->result_array();
     }
     public function get_total_price_report($office,$date_range) {
