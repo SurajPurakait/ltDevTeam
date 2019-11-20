@@ -1003,3 +1003,9 @@ ALTER TABLE `bookkeeping` ADD `reference` VARCHAR(50) NOT NULL DEFAULT 'order' A
 /*import project_task_bookkeeper_department.sql*/
 
 ALTER TABLE `project_task_bookkeeper_department` ADD `adjustment` ENUM('n','y') NOT NULL COMMENT 'n for no, y for yes' AFTER `reconciled`; 
+
+/*20.11.19*/
+
+ALTER TABLE `project_template_task` ADD `bookkeeping_input_type` INT(4) NOT NULL DEFAULT '0' COMMENT '0 for default input, 1 for bank statement, 2 for bookkeeping bookkeeper, 3 for client manage' AFTER `input_form_type`; 
+
+ALTER TABLE `project_task` ADD `bookkeeping_input_type` INT(4) NOT NULL DEFAULT '0' COMMENT '0 for default input, 1 for bank statement, 2 for bookkeeping bookkeeper, 3 for client manage' AFTER `input_form_type` 
