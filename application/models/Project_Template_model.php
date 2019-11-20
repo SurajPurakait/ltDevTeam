@@ -204,7 +204,7 @@ class Project_Template_model extends CI_Model {
     function project_template_task($post) {
 //        print_r($post);die;
         $this->db->trans_begin();
-//      $template_main_id = $task_data['template_main_id'];
+        $template_cat_id = $post['task']['template_cat_id'];
         $task_data['template_main_id'] = $post['task']['template_main_id'];
         $task_data['added_by_user'] = sess('user_id');
         $task_data['task_order'] = $post['task']['task_order'];
@@ -215,11 +215,23 @@ class Project_Template_model extends CI_Model {
         $task_data['target_complete_day'] = $post['task']['target_complete_day'];
         $task_data['tracking_description'] = $post['task']['tracking_description'];
         $task_data['is_input_form']=$post['task']['is_input_form'];
-        
-        if(isset($post['task']['input_form_type']) && $post['task']['input_form_type']!=''){
-            $task_data['input_form_type']=$post['task']['input_form_type'];
+        if($template_cat_id==1){
+            if($post['task']['is_input_form']=='y'){
+                $task_data['input_form_type']=1;
+                if(isset($post['task']['bookkeeping_input_type']) && $post['task']['bookkeeping_input_type']!=''){
+                    $task_data['bookkeeping_input_type']=$post['task']['bookkeeping_input_type'];
+                }else{
+                    $task_data['bookkeeping_input_type']=0;
+                }
+            }else{
+                $task_data['input_form_type']=0;
+            }
         }else{
-            $task_data['input_form_type']=0;
+            if(isset($post['task']['input_form_type']) && $post['task']['input_form_type']!=''){
+                $task_data['input_form_type']=$post['task']['input_form_type'];
+            }else{
+                $task_data['input_form_type']=0;
+            }
         }
 //        $task_data['is_all'] = $post['task']['is_all'];
         $task_data['department_id'] = $post['task']['department'];
@@ -1406,7 +1418,7 @@ class Project_Template_model extends CI_Model {
     function update_project_template_task($task_id, $template_id, $post) {
 //        print_r($post);die;
         $this->db->trans_begin();
-//      $template_main_id = $task_data['template_main_id'];
+        $template_cat_id = $post['task']['template_cat_id'];
         $task_data['template_main_id'] = $template_id;
         $task_data['added_by_user'] = sess('user_id');
         $task_data['task_order'] = $post['task']['task_order'];
@@ -1417,10 +1429,24 @@ class Project_Template_model extends CI_Model {
         $task_data['target_complete_day'] = $post['task']['target_complete_day'];
         $task_data['tracking_description'] = $post['task']['tracking_description'];
         $task_data['is_input_form']= $post['task']['is_input_form'];
-        if(isset($post['task']['input_form_type']) && $post['task']['input_form_type']!=''){
-            $task_data['input_form_type']=$post['task']['input_form_type'];
+        if($template_cat_id==1){
+            if($post['task']['is_input_form']=='y'){
+                $task_data['input_form_type']=1;
+                if(isset($post['task']['bookkeeping_input_type']) && $post['task']['bookkeeping_input_type']!=''){
+                    $task_data['bookkeeping_input_type']=$post['task']['bookkeeping_input_type'];
+                }else{
+                    $task_data['bookkeeping_input_type']=0;
+                }
+            }else{
+                $task_data['input_form_type']=0;
+                $task_data['bookkeeping_input_type']=0;
+            }
         }else{
-            $task_data['input_form_type']=0;
+            if(isset($post['task']['input_form_type']) && $post['task']['input_form_type']!=''){
+                $task_data['input_form_type']=$post['task']['input_form_type'];
+            }else{
+                $task_data['input_form_type']=0;
+            }
         }
 //        $task_data['is_all'] = $post['task']['is_all'];
         $task_data['department_id'] = $post['task']['department'];
@@ -1708,7 +1734,7 @@ class Project_Template_model extends CI_Model {
     function update_project_task($task_id, $template_id, $post, $project_id) {
 //        print_r($post);die;
         $this->db->trans_begin();
-//      $template_main_id = $task_data['template_main_id'];
+        $template_cat_id = $post['task']['template_cat_id'];
         $task_data['template_main_id'] = $template_id;
         $task_data['added_by_user'] = sess('user_id');
         $task_data['task_order'] = $post['task']['task_order'];
@@ -1719,10 +1745,24 @@ class Project_Template_model extends CI_Model {
         $task_data['target_complete_day'] = $post['task']['target_complete_day'];
         $task_data['tracking_description'] = $post['task']['tracking_description'];
         $task_data['is_input_form']=$post['task']['is_input_form'];
-        if(isset($post['task']['input_form_type']) && $post['task']['input_form_type']!=''){
-            $task_data['input_form_type']=$post['task']['input_form_type'];
+        if($template_cat_id==1){
+            if($post['task']['is_input_form']=='y'){
+                $task_data['input_form_type']=1;
+                if(isset($post['task']['bookkeeping_input_type']) && $post['task']['bookkeeping_input_type']!=''){
+                    $task_data['bookkeeping_input_type']=$post['task']['bookkeeping_input_type'];
+                }else{
+                    $task_data['bookkeeping_input_type']=0;
+                }
+            }else{
+                $task_data['input_form_type']=0;
+                $task_data['bookkeeping_input_type']=0;
+            }
         }else{
-            $task_data['input_form_type']=0;
+            if(isset($post['task']['input_form_type']) && $post['task']['input_form_type']!=''){
+                $task_data['input_form_type']=$post['task']['input_form_type'];
+            }else{
+                $task_data['input_form_type']=0;
+            }
         }
 //        $task_data['is_all'] = $post['task']['is_all'];
         $task_data['department_id'] = $post['task']['department'];
@@ -1784,7 +1824,7 @@ class Project_Template_model extends CI_Model {
     function add_project_task($post) {
 //        print_r($post);die;
         $this->db->trans_begin();
-//      $template_main_id = $task_data['template_main_id'];
+        $template_cat_id = $post['task']['template_cat_id'];
         $task_data['template_main_id'] = $post['task']['template_main_id'];
         $task_data['project_id'] = $post['task']['project_id'];
         $task_data['added_by_user'] = sess('user_id');
@@ -1796,10 +1836,23 @@ class Project_Template_model extends CI_Model {
         $task_data['target_complete_day'] = $post['task']['target_complete_day'];
         $task_data['tracking_description'] = $post['task']['tracking_description'];
         $task_data['is_input_form']=$post['task']['is_input_form'];
-        if(isset($post['task']['input_form_type']) && $post['task']['input_form_type']!=''){
-            $task_data['input_form_type']=$post['task']['input_form_type'];
+        if($template_cat_id==1){
+            if($post['task']['is_input_form']=='y'){
+                $task_data['input_form_type']=1;
+                if(isset($post['task']['bookkeeping_input_type']) && $post['task']['bookkeeping_input_type']!=''){
+                    $task_data['bookkeeping_input_type']=$post['task']['bookkeeping_input_type'];
+                }else{
+                    $task_data['bookkeeping_input_type']=0;
+                }
+            }else{
+                $task_data['input_form_type']=0;
+            }
         }else{
-            $task_data['input_form_type']=0;
+            if(isset($post['task']['input_form_type']) && $post['task']['input_form_type']!=''){
+                $task_data['input_form_type']=$post['task']['input_form_type'];
+            }else{
+                $task_data['input_form_type']=0;
+            }
         }
 //        $task_data['is_all'] = $post['task']['is_all'];
         $task_data['department_id'] = $post['task']['department'];
@@ -2564,7 +2617,7 @@ class Project_Template_model extends CI_Model {
     }
     function saveProjectInputForm($data){
         $input_form_type=$data['input_form_type'];
-        $key=$data['task_key'];
+        $bookkeeping_input_type=$data['bookkeeping_input_type'];
         if($input_form_type==3){
             $exist=$this->db->get_where('project_task_sales_tax_process',['task_id'=>$data['task_id']])->row();
             if(!empty($exist)){
@@ -2596,7 +2649,7 @@ class Project_Template_model extends CI_Model {
             $insert_id=$this->db->insert_id();
 //            echo $insert_id;die;
         }if($input_form_type==1){
-            if($key==0){
+            if($bookkeeping_input_type==1){
                 $bookdata=array(
                    'company_id'=>$data['reference_id'],
                     'order_id'=>$data['task_id'],
@@ -2604,7 +2657,7 @@ class Project_Template_model extends CI_Model {
                     'reference'=>'project'
                 );
             $this->db->insert('bookkeeping',$bookdata);
-            }else if($key==1){
+            }else if($bookkeeping_input_type==2){
                 $bookkeeper_data=array(
                     'task_id'=>$data['task_id'],
                     'bank_account_no'=>$data['bank_account_no'],
@@ -2613,7 +2666,7 @@ class Project_Template_model extends CI_Model {
                     'reconciled'=>$data['reconciled']
                 );
                 $this->db->insert('project_task_bookkeeper_department',$bookkeeper_data);
-            }else if($key==2){
+            }else if($bookkeeping_input_type==3){
                 $client_data=array(
                     'task_id'=>$data['task_id'],
                     'adjustment'=>$data['need_adjustment']
@@ -2702,6 +2755,12 @@ class Project_Template_model extends CI_Model {
     }
     public function getProjectTemplateCategoryd($project_id){
         return $this->db->get_where('project_main',['project_id'=>$project_id])->row()->template_cat_id;
+    }
+    public function getExistBookkeepingInputType($template_id){
+        return $this->db->get_where('project_template_task',['template_main_id'=>$template_id])->result_array();
+    }
+    public function getProjectExistBookkeepingInputType($template_id){
+        return $this->db->get_where('project_task',['template_main_id'=>$template_id])->result_array();
     }
 }
 

@@ -135,7 +135,7 @@
                         <div class="hr-line-dashed"></div>
                     <?php } ?>
                     <?php if ($input_form_type == 1):
-                        if($key==0){
+                        if($bookkeeping_input_type==1){
                         ?>
                         <h3>BANK STATEMENT RETRIEVAL LEAFCLOUD DEPARTMENT</h3>
                             <div class="accounts-details">
@@ -157,7 +157,7 @@
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
-                        <?php }else if($key==1){ ?>
+                        <?php }else if($bookkeeping_input_type==2){ ?>
                         <h3>BOOKKEEPING BOOKKEEPER DEPARTMENT</h3>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Number of Bank Account<span class="text-danger">*</span></label>
@@ -187,7 +187,7 @@
                                 </label>
                                 <div class="errorMessage text-danger"></div>
                             </div>
-                        <?php }else if($key==2){?>
+                        <?php }else if($bookkeeping_input_type==3){?>
                         <h3>REVIEW CLIENT MANAGER</h3>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Adjustment Needed<span class="text-danger">*</span></label>
@@ -292,8 +292,8 @@
                             <input type="hidden" name="input_form_type" id="input_form_type" value="<?= $input_form_type ?>">
                             <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>"/>
                             <input type="hidden" name="editval" id="editval" value="<?= $task_id; ?>">
-                            <input type="hidden" name="task_key" id="task_key" value=<?= $key ?>>
-                            <?php if($input_form_type==1 && $key==0){ ?>
+                            <input type="hidden" name="bookkeeping_input_type" id="task_key" value=<?= $bookkeeping_input_type ?>>
+                            <?php if($input_form_type==1 && $bookkeeping_input_type==1){ ?>
                             <input type="hidden" name="reference_id" id="reference_id" value="<?= $client_id; ?>">
                             <?php } ?>
                             <button class="btn btn-success" type="button" onclick="saveInputForms()">Save changes</button> &nbsp;&nbsp;&nbsp;
