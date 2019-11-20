@@ -306,7 +306,8 @@ h5 {
     border-bottom: 2px solid #a7b1c2;
 }
 .nav > li > a {
-    color: #a7b1c2;
+/*    color: #a7b1c2;*/
+    color: #fff;
     font-weight: 600;
     padding: 14px 20px 14px 25px;
 }
@@ -450,7 +451,7 @@ body.body-small .navbar-top-links li:last-child {
     width: 100%;
 }
 .nav > li.active {
-    border-left: 4px solid #8ab645;
+/*    border-left: 4px solid #8ab645;*/
     background: #293846;
 }
 .nav.nav-second-level > li.active {
@@ -520,7 +521,7 @@ body.body-small .navbar-top-links li:last-child {
     padding-left: 62px;
 }
 .nav-second-level li:last-child {
-    margin-bottom: 10px;
+/*    margin-bottom: 10px;*/
 }
 body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav li:hover > .nav-second-level,
 .mini-navbar .nav li:focus > .nav-second-level {

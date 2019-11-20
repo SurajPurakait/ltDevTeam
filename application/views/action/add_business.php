@@ -3,6 +3,12 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="<?= base_url(); ?>action/home/add_individual" class="btn btn-primary">Add New Individual</a>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
                     <form class="form-horizontal" method="post" id="form_create_new_company">
                         <h3>Business Information</h3>
                         <div class="form-group">
