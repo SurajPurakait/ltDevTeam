@@ -1,6 +1,6 @@
 var base_url = document.getElementById('base_url').value;
 
-function loadRoyaltyReportsData(offce_id = '',date_range = '') {
+function loadRoyaltyReportsData(office = '',date_range = '') {
     $('#reports-tab').DataTable().destroy();
 
     $('#reports-tab').DataTable({
@@ -10,7 +10,6 @@ function loadRoyaltyReportsData(offce_id = '',date_range = '') {
         'dom': '<"html5buttons"B>lTfgitp',
         'buttons': [ 
             {extend: 'excel', title: 'RoyaltyReport'},
-            // {extend: 'pdf', title: 'RoyaltyReport'},
             {extend: 'print',
                 customize: function (win){
                     $(win.document.body).addClass('white-bg');
@@ -27,7 +26,7 @@ function loadRoyaltyReportsData(offce_id = '',date_range = '') {
         'ajax': {
             'url': base_url + 'reports/get_royalty_reports_data',
             'type': 'POST',
-            'data': {'ofc': offce_id,'daterange':date_range},
+            'data': {'ofc': office,'daterange':date_range},
             beforeSend: function () {
                 openLoading();
             },
@@ -59,5 +58,16 @@ function loadRoyaltyReportsData(offce_id = '',date_range = '') {
             {data: 'fee_with_cost',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
             {data: 'fee_without_cost',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )}
         ]
+    });
+}
+
+function get_total_price_report(office = '',date_range = '') {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/royalty_reports_totals',
+        data: {'ofc': office,'daterange':date_range},
+        success: function (result) {
+            $("#total").html(result);
+        },
     });
 }
