@@ -1053,13 +1053,13 @@ function request_edit_project_main() {
         }
     });
 }
-function project_task_edit_modal(task_id) {
-//    alert(task_id);
+function project_task_edit_modal(task_id,project_id='') {
+//    alert(project_id);
     $.ajax({
         type: "POST",
         url: base_url + 'modal/edit_project_task_modal',
         dataType: "html",
-        data: {task_id: task_id},
+        data: {task_id: task_id , project_id:project_id},
         success: function (result) {
 //            alert(result);
             $('#taskModal').html(result);
