@@ -2700,6 +2700,9 @@ class Project_Template_model extends CI_Model {
     public function getProjetBookkeeperDetails($task_id){
         return $this->db->get_where('project_task_bookkeeper_department',['task_id'=>$task_id])->row();
     }
+    public function getProjectTemplateCategoryd($project_id){
+        return $this->db->get_where('project_main',['project_id'=>$project_id])->row()->template_cat_id;
+    }
 }
 
 ?>
