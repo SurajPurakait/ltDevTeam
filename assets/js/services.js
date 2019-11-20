@@ -61,9 +61,11 @@ function change_referred_name_status(referred_source) {
     if (referred_source == '1' || referred_source == '9' || referred_source == '10' || referred_source == '') {
         $("#referred-label").html('Referred By Name');
         $("#referred_by_name").removeAttr('required');
+        $(".chosen-select").chosen();
     } else {
         $("#referred-label").html('Referred By Name<span class="text-danger">*</span>');
         $("#referred_by_name").attr('required', true);
+        $(".chosen-select").chosen();
     }
 }
 

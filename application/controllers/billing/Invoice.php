@@ -376,11 +376,11 @@ class Invoice extends CI_Controller {
                 if (empty($email_list)) {
                     $email_list[] = $staff_info['user'];
                 }
-                foreach ($email_list as $email) {
-                    if (compose_mail($email, $subject, $message)) {
+                // foreach ($email_list as $email) {
+                    if (compose_mail($email_list, $subject, $message)) {
                         $status++;
                     }
-                }
+                // }
                 echo $status;
             } else {
                 $this->load->helper('pdf_helper');

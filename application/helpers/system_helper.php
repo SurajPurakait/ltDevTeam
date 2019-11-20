@@ -2282,7 +2282,8 @@ if (!function_exists('edit_by_shortname_array')) {
             'inc_n_c_d',
             'inc_n_c_n_p_f',
             'inc_n_f_p',
-            'tax_f'
+            'tax_f',
+            'bus_l_t'
         ];
     }
 
