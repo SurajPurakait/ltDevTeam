@@ -16,6 +16,8 @@
     <link href="<?= base_url(); ?>assets/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
     <link href="<?= base_url(); ?>assets/css/plugins/dataTables/dataTables.responsive.css" rel="stylesheet">
     <link href="<?= base_url(); ?>assets/css/plugins/dataTables/dataTables.tableTools.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.0/css/buttons.bootstrap4.min.css">
 
     <!-- Forms plugins -->
     <link href="<?= base_url(); ?>assets/css/plugins/iCheck/custom.css" rel="stylesheet">
@@ -31,6 +33,8 @@
     <link href="<?= base_url(); ?>assets/css/plugins/ionRangeSlider/ion.rangeSlider.css" rel="stylesheet">
     <link href="<?= base_url(); ?>assets/css/plugins/ionRangeSlider/ion.rangeSlider.skinFlat.css"
           rel="stylesheet">
+    
+    
 
     <link href="<?= base_url(); ?>assets/css/animate.css" rel="stylesheet">
     <link href="<?= base_url(); ?>assets/css/style.css" rel="stylesheet">
@@ -58,6 +62,19 @@
     <script src="<?= base_url(); ?>assets/js/plugins/dataTables/dataTables.bootstrap.js"></script>
     <script src="<?= base_url(); ?>assets/js/plugins/dataTables/dataTables.responsive.js"></script>
     <script src="<?= base_url(); ?>assets/js/plugins/dataTables/dataTables.tableTools.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.0/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.colVis.min.js"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> -->
+
+ 
 
     <!-- Custom and plugin javascript -->
     <script src="<?= base_url(); ?>assets/js/inspinia.js"></script>

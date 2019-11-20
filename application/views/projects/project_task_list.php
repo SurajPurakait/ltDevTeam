@@ -9,7 +9,7 @@ if (!empty($data)) {
         ?>
         <div class="panel panel-default service-panel type2 filter-active" id="action<?= $value['id'] ?>">
             <div class="panel-heading">
-                <a href="javascript:void(0);" onclick="project_task_edit_modal(<?= $value['id']?>);" class="btn btn-primary btn-xs btn-service-edit btn-prj-template-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>                                
+                <a href="javascript:void(0);" onclick="project_task_edit_modal(<?= $value['id']?>,<?= $value['project_id'] ?>);" class="btn btn-primary btn-xs btn-service-edit btn-prj-template-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>                                
                 <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $value['id'] ?>" aria-expanded="false">
                     <div class="table-responsive">
                         <table class="table table-borderless text-center" style="margin-bottom: 0px;">

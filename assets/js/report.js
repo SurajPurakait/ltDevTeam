@@ -1,16 +1,32 @@
 var base_url = document.getElementById('base_url').value;
 
-function loadRoyaltyReportsData(offce_id = '',date_range = '') {
+function loadRoyaltyReportsData(office = '',date_range = '') {
     $('#reports-tab').DataTable().destroy();
 
     $('#reports-tab').DataTable({
         'processing': false,
         'serverSide': true,
+        'scrollX':true,
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'RoyaltyReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+            }
+            }
+        ],
+        'serverMethod': 'post',
         'serverMethod': 'post',
         'ajax': {
             'url': base_url + 'reports/get_royalty_reports_data',
             'type': 'POST',
-            'data': {'ofc': offce_id,'daterange':date_range},
+            'data': {'ofc': office,'daterange':date_range},
             beforeSend: function () {
                 openLoading();
             },
@@ -19,32 +35,39 @@ function loadRoyaltyReportsData(offce_id = '',date_range = '') {
             }
         },
         'columns': [
-            {data: 'date'},
+            {
+                data: 'date',
+                render: function ( data, type, row ) {
+                    return data.split('-')[1]+'-'+data.split('-')[2]+'-'+data.split('-')[0];
+                }
+            },
             {data: 'client_id'},
             {data: 'invoice_id'},
             {data: 'service_id'},
             {data: 'service_name'},
-            {data: 'retail_price'},
-            {data: 'override_price'},
-            {data: 'cost'},
+            {data: 'retail_price',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+            {data: 'override_price',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+            {data: 'cost',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
             {data: 'payment_status'},
-            {data: 'collected'},
+            {data: 'collected',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
             {data: 'payment_type'},
             {data: 'authorization_id'},
             {data: 'reference'},
-            {data: 'total_net'},
-            {data: 'office_fee'},
-            {data: 'fee_with_cost'},
-            {data: 'fee_without_cost'}
+            {data: 'total_net',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+            {data: 'office_fee',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+            {data: 'fee_with_cost',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+            {data: 'fee_without_cost',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )}
         ]
     });
 }
-// function loadRoyaltyReportsData1(offce_id = '',date_range = '') { 
-//     var date = date_range.split('-');
-//     var start_date = date[0].split('/');
-//     start_date.push(start_date[2],start_date[0],start_date[1]);
 
-//     var end_date = date[1].split('/').reverse().join('-');
-//     var date_range = start_date +','+ end_date;
-//     alert(date_range);
-// }
+function get_total_price_report(office = '',date_range = '') {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/royalty_reports_totals',
+        data: {'ofc': office,'daterange':date_range},
+        success: function (result) {
+            $("#total").html(result);
+        },
+    });
+}

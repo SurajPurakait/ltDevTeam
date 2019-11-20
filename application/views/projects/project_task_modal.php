@@ -111,8 +111,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <label>Allow sales tax processing</label>
-                        <input type="checkbox" name="task[input_form_type]" title="Allow Sales Tax" id="confirmation" value="1">
+                        <?php if($template_category_id==1){ ?>
+                            <label>Allow bookkeeping </label>
+                            <input type="checkbox" name="task[input_form_type]" title="Confirmation" id="confirmation" value="1">
+                        <?php }elseif($template_category_id==3){ ?>
+                            <label>Allow sales tax processing</label>
+                            <input type="checkbox" name="task[input_form_type]" title="Confirmation" id="confirmation" value="3">
+                        <?php } ?>
                     </div>
                 </div>
                 <hr class="hr-line-dashed"/>

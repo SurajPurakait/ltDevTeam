@@ -49,6 +49,19 @@ class Reports extends CI_Controller {
     	$result = $this->billing_model->get_royalty_reports_data($office_id,$daterange);	
         echo json_encode($result);
     }
-    
+    public function royalty_reports_totals() {
+    	if (post('ofc') != '') {
+    		$office = post('ofc');
+    	} else {
+    		$office = '';
+    	}
+    	if (post('daterange') != '') {
+    		$daterange = post('daterange');
+    	} else {
+    		$daterange = '';
+    	}  
+    	$render_data['total_data'] = $this->billing_model->get_total_price_report($office,$daterange);
+    	$this->load->view('reports/total_data_report',$render_data);
+    }
 
 }

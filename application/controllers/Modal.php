@@ -627,6 +627,7 @@ class Modal extends CI_Controller {
         $render_data["departments"] = $this->action->get_departments();
         $render_data['task_details'] = $this->Project_Template_model->getProjectTaskDetails($task_id);
         $render_data['staff_type'] = $this->Project_Template_model->getStaffType();
+        $render_data['template_category_id']=$this->Project_Template_model->getProjectTemplateCategoryd(post('project_id'));
         $this->load->view("projects/edit_project_task_modal", $render_data);
     }
 
@@ -635,6 +636,7 @@ class Modal extends CI_Controller {
         $render_data['template_id'] = $this->input->post('template_id');
         $render_data['project_id'] = $this->input->post('project_id');
         $render_data["departments"] = $this->action->get_departments();
+        $render_data['template_category_id']=$this->Project_Template_model->getProjectTemplateCategoryd(post('project_id'));
         $this->load->view("projects/project_task_modal", $render_data);
     }
 
@@ -773,5 +775,22 @@ class Modal extends CI_Controller {
     public function file_upload_task() {
         echo $this->Project_Template_model->file_upload_tasks(post(), $_FILES["upload_file"]);
         // print_r($this->action_model->file_upload_actions(post(), $_FILES["upload_file"]));
+    }
+     public function show_task_financial_account() {
+        $render_data['modal_type'] = post('modal_type');
+        $render_data['client_id'] = post('client_id');
+        $render_data['task_id'] = post('task_id');
+        $section = post('section');
+        $render_data['account_details']=$this->company_model->get_account_details_bookkeeping(post('task_id'),'project');
+//        $this->load->view('modal/financial_account',$data);
+        if ($render_data['modal_type'] == "edit") {
+            $render_data["id"] = post("id");
+            $render_data["data"] = $this->service_model->get_financial_account_info(post("id"));
+        }
+        if ($section == "month_diff") {
+            $this->load->view('modal/financial_account_by_date', $render_data);
+        } else {
+            $this->load->view('modal/task_financial_accounts', $render_data);
+        }
     }
 }

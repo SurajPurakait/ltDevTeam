@@ -691,7 +691,7 @@ class Patch extends CI_Controller {
         $staffrole = $staff_info['role'];
         $staff_office = $staff_info['office'];
         $departments = explode(',', $staff_info['department']);
-
+        $this->db->query('TRUNCATE royalty_report');
         $select = [
             'inv.id as invoice_id',
             'inv.reference_id as reference_id',
@@ -747,12 +747,14 @@ class Patch extends CI_Controller {
                 'INNER JOIN `payment_history` AS `pyh` ON `pyh`.`invoice_id` = `inv`.`id`';
 
         $query = 'SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id`';
-        // $query .= ' order by ' . $columnName . ' ' . $columnSortOrder;
-        // $query .= ' limit ' . $row . ',' . $rowperpage;
         $this->db->query('SET SQL_BIG_SELECTS=1');
         $royalty_reports_data = $this->db->query($query)->result_array();
 
         if (!empty($royalty_reports_data)) {
+            $data_invoice = array(
+                'invoice_id'=> 0
+            );
+            $this->db->insert('royalty_report',$data_invoice);
             foreach ($royalty_reports_data as $rpd) { 
                 for($i=1; $i <= $rpd['services']; $i++) {
                     $service_detail = get_service_by_id(explode(',',$rpd['all_services'])[$i]);
@@ -764,7 +766,7 @@ class Patch extends CI_Controller {
                     $collected = array_sum(array_column($payment_history,'collected'));    
                     $total_net = (explode(',',$rpd['all_services_override'])[$i] != '') ? explode(',',$rpd['all_services_override'])[$i] - $service_detail['cost'] : $service_detail['retail_price'] - $service_detail['cost'];
                     $override_price = explode(',',$rpd['all_services_override'])[$i];
-                    $date = date('Y-m-d', strtotime($rpd['created_time']));
+                    $date_val = date('Y-m-d', strtotime($rpd['created_time']));
                     $fee_with_cost = (($total_net * $office_fees)/100);                    
                     $fee_without_cost = (($override_price * $office_fees)/100);
                     if (($override_price - $collected) == 0) {
@@ -778,7 +780,7 @@ class Patch extends CI_Controller {
                     }
 
                     $data = array(
-                        "date" => $date,
+                        "date" => $date_val,
                         "client_id" => $rpd['practice_id'],
                         "invoice_id" => $rpd['invoice_id'],
                         "service_id" => $rpd['invoice_id']."-".$i,
@@ -792,15 +794,29 @@ class Patch extends CI_Controller {
                         "authorization_id" => ($authorization_id != '') ? $authorization_id: "N/A",
                         "reference" => ($reference != '') ? $reference : "N/A",
                         "total_net" => $total_net.'.00',
-                        "office_fee" => ($office_fees != '') ? $office_fees : '00.00',
+                        "office_fee" => ($office_fees != '') ? '$'.$office_fees : '00.00',
                         "fee_with_cost" => $fee_with_cost.'.00',
                         "fee_without_cost" => $fee_without_cost.'.00',
                         "office_id" => $rpd['office_id'],
                         "created_by" => $rpd['created_by']
                     );
-                    $this->db->insert('royalty_report',$data);                    
+                    $this->db->insert('royalty_report',$data);
                 } 
             }
+            $total_data = $this->db->get('royalty_report')->result_array();
+            $total_arr = array(
+                "invoice_id" => count($total_data)-1,
+                "retail_price" => "$".array_sum(array_column($total_data,'retail_price')),
+                "cost" => "$".array_sum(array_column($total_data,'cost')),
+                "collected" => "$".array_sum(array_column($total_data,'collected')),
+                "total_net" => "$".array_sum(array_column($total_data,'total_net')),
+                "override_price" => "$".array_sum(array_column($total_data,'override_price')),
+                "fee_with_cost" => "$".array_sum(array_column($total_data,'fee_with_cost')),
+                "fee_without_cost" => "$".array_sum(array_column($total_data,'fee_without_cost'))
+
+            );
+            $this->db->where('id',1);
+            $this->db->update('royalty_report',$total_arr);
             echo "Successfully Inserted";
         } else {
             $data = array();

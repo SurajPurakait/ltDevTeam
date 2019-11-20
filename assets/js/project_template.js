@@ -1053,13 +1053,13 @@ function request_edit_project_main() {
         }
     });
 }
-function project_task_edit_modal(task_id) {
-//    alert(task_id);
+function project_task_edit_modal(task_id,project_id='') {
+//    alert(project_id);
     $.ajax({
         type: "POST",
         url: base_url + 'modal/edit_project_task_modal',
         dataType: "html",
-        data: {task_id: task_id},
+        data: {task_id: task_id , project_id:project_id},
         success: function (result) {
 //            alert(result);
             $('#taskModal').html(result);
@@ -1590,4 +1590,42 @@ function deleteTaskNote(divID, noteID, relatedTableID) {
         }
     });
     $("#" + divID).remove();
+}
+function save_task_account(section) {
+
+//update_financial_account_by_date
+    if (!requiredValidation('form_accounts')) {
+        return false;
+    }
+    var form_data = new FormData(document.getElementById('form_accounts'));
+    var company_id = $("#company_id").val();
+    var order_id = $("#editval").val();
+    form_data.append('section', section);
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'services/accounting_services/save_account',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+//            alert(result); return false;
+            if (result.trim() == "1") {
+                swal({title: "Success!", text: "Financial account successfully saved!", type: "success"}, function () {
+                    $('#accounts-form').modal('hide');
+                    get_financial_account_list(company_id, section, order_id);
+                });
+            } else if (result.trim() == "-1") {
+                swal("ERROR!", "Unable to save financial account", "error");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
 }
