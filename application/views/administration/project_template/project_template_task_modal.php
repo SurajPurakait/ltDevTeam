@@ -116,7 +116,7 @@
                             <input type="checkbox" name="task[input_form_type]" title="Confirmation" id="confirmation" value="1">
                         <?php }elseif($template_category_id==3){ ?>
                             <label>Allow sales tax processing</label>
-                            <input type="checkbox" name="task[input_form_type]" title="Confirmation" id="confirmation" value="4">
+                            <input type="checkbox" name="task[input_form_type]" title="Confirmation" id="confirmation" value="3">
                         <?php } ?>
                     </div>
                 </div>
