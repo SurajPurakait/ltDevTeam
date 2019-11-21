@@ -495,34 +495,52 @@ $role = $user_info['role'];
             url: base_url + 'project/update_project_task_status',
             dataType: "html",
             success: function (result) {
-                //                alert(result);return false;
-                if (result.trim() != 0) {
-                    //                    $("#changeStatusinner").modal('hide');
-                    //                    return false;
-                    //swal("Success!", "Successfully updated!", "success");
-                    if (statusval == 0) {
+//                                alert(result);return false;
+//                    new status section
+                    var res = JSON.parse(result.trim());
+//                    alert(res.task_status+','+res.project_status);return false;
+                    if (res.task_status == '0') {
                         var tracking = 'New';
                         var trk_class = 'label label-success';
-                    } else if (statusval == 1) {
+                    } else if (res.task_status == 1) {
                         var tracking = 'Started';
                         var trk_class = 'label label-yellow';
-                    } else if (statusval == 2) {
+                    } else if (res.task_status == 2) {
                         var tracking = 'Resolved';
                         var trk_class = 'label label-primary';
-                    }
-                    else if (statusval == 3) {
+                    } else if (res.task_status == 3) {
                         var tracking = 'Ready';
                         var trk_class = 'label label-info';
                     }
+
+                    if (res.project_status == 0) {
+                        var tracking_main = 'Not Started';
+                        var trk_class_main = 'label label-success';
+                    } else if (res.project_status == 1) {
+                        var tracking_main = 'Started';
+                        var trk_class_main = 'label label-yellow';
+                    } else if (res.project_status == 2) {
+                        var tracking_main = 'Completed';
+                        var trk_class_main = 'label label-primary';
+                    } 
+                    
+                    if(res.sub_taskid_status == 3){
+                        var tracking_sub = 'Ready';
+                        var trk_class_sub = 'label label-secondary';
+                        $("#trackinner-" + res.sub_taskid).removeClass().addClass(trk_class_sub);
+                        $("#trackinner-" + res.sub_taskid).html(tracking_sub);
+                    }
+                    
                     $("#trackinner-" + prosubid).removeClass().addClass(trk_class);
                     $("#trackinner-" + prosubid).parent('a').removeAttr('onclick');
                     $("#trackinner-" + prosubid).parent('a').attr('onclick', 'change_project_status_inner(' + prosubid + ',' + statusval + ', ' + prosubid + ');');
                     $("#trackinner-" + prosubid).html(tracking);
                     var projectid = $("#trackinner-" + prosubid).attr('projectid');
-                    $("#trackouter-" + projectid).removeClass().addClass(trk_class);
-                    $("#trackouter-" + projectid).html(tracking);
+                    $("#trackouter-" + projectid).removeClass().addClass(trk_class_main);
+                    $("#trackouter-" + projectid).html(tracking_main);
                     $('#changeStatusinner').modal('hide');
-                }
+                    
+//                }
             },
             beforeSend: function () {
                 $("#project-tracking-save").prop('disabled', true).html('Processing...');

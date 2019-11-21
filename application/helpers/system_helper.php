@@ -3433,3 +3433,10 @@ if(!function_exists('get_project_exist_bookkeeping_input_type')){
         return $ci->Project_Template_model->getProjectExistBookkeepingInputType($template_id);
     }
 }
+if(!function_exists('get_exist_task')){
+    function get_exist_task($template_id){
+        $ci =&get_instance();
+        $ci->load->model('Project_Template_model'); 
+        return $ci->Project_Template_model->getExistTask($template_id);
+    }
+}

@@ -1361,18 +1361,30 @@ class Project_Template_model extends CI_Model {
         }
         
         else {
+            $project_id=$this->db->get_where('project_task',['id'=>$id])->row()->project_id;
+            
             $end_date = date('Y-m-d h:i:s');
             $this->db->where('id', $id);
             $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 2));
+            
+            $this->db->select('id');
+            $this->db->from('project_task');
+            $this->db->where('project_id',$project_id);
+            $this->db->where_not_in('tracking_description',2);
+            $get_task_ids=$this->db->get()->result_array();
+            $a= array_column($get_task_ids,'id');
+            if(isset($a[0])){
+                $task2=$a[0];
+                $end_date = date('Y-m-d h:i:s');
+                $this->db->where('id', $task2);
+                $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 3));
+            }
             if (!empty($get_main_order_query)) {
                 $suborder_order_id = $get_main_order_query[0]['project_id'];
             }
             $check_if_all_services_not_started = $this->db->query('select * from project_task where project_id="' . $suborder_order_id . '"')->result_array();
-//            $resolved_result= array_column($check_if_all_services_not_started,'tracking_description');
-//            
-//            if(!empty($resolved_result) && in_array('2', $resolved_result)){
-//                
-//            }
+//          
+            
             if (!empty($check_if_all_services_not_started)) {
                 $k = 0;
                 $status_array = '';
@@ -1399,7 +1411,7 @@ class Project_Template_model extends CI_Model {
         } else {
             $this->db->trans_commit();
 //            $this->system->save_general_notification('action', $id, 'tracking');
-            return true;
+            return $task2;
         }
     }
 
@@ -2650,6 +2662,11 @@ class Project_Template_model extends CI_Model {
 //            echo $insert_id;die;
         }if($input_form_type==1){
             if($bookkeeping_input_type==1){
+                $exist=$this->db->get_where('bookkeeping',['task_id'=>$data['task_id'],'reference'=>'project'])->row();
+                if(!empty($exist)){
+                    $this->db->where(['task_id'=>$data['task_id'],'reference'=>'project']);
+                    $this->db->delete('bookkeeping');
+                }
                 $bookdata=array(
                    'company_id'=>$data['reference_id'],
                     'order_id'=>$data['task_id'],
@@ -2658,15 +2675,26 @@ class Project_Template_model extends CI_Model {
                 );
             $this->db->insert('bookkeeping',$bookdata);
             }else if($bookkeeping_input_type==2){
+                $exist=$this->db->get_where('project_task_bookkeeper_department',['task_id'=>$data['task_id']])->row();
+                if(!empty($exist)){
+                    $this->db->where('task_id',$data['task_id']);
+                    $this->db->delete('project_task_bookkeeper_department');
+                }
                 $bookkeeper_data=array(
                     'task_id'=>$data['task_id'],
                     'bank_account_no'=>$data['bank_account_no'],
                     'transaction'=>$data['transaction'],
                     'item_uncategorize'=>$data['item_uncategorize'],
-                    'reconciled'=>$data['reconciled']
+                    'reconciled'=>$data['reconciled'],
+                    'total_time'=>$data['total_time']
                 );
                 $this->db->insert('project_task_bookkeeper_department',$bookkeeper_data);
             }else if($bookkeeping_input_type==3){
+                $exist=$this->db->get_where('project_task_bookkeeper_department',['task_id'=>$data['task_id']])->row();
+                if(!empty($exist)){
+                    $this->db->where('task_id',$data['task_id']);
+                    $this->db->delete('project_task_bookkeeper_department');
+                }
                 $client_data=array(
                     'task_id'=>$data['task_id'],
                     'adjustment'=>$data['need_adjustment']
@@ -2761,6 +2789,9 @@ class Project_Template_model extends CI_Model {
     }
     public function getProjectExistBookkeepingInputType($template_id){
         return $this->db->get_where('project_task',['template_main_id'=>$template_id])->result_array();
+    }
+    public function getExistTask($template_id){
+        return count($this->db->get_where('project_template_task',['template_main_id'=>$template_id])->result_array());
     }
 }
 

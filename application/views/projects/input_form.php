@@ -187,6 +187,7 @@
                                 </label>
                                 <div class="errorMessage text-danger"></div>
                             </div>
+                        
                         <?php }else if($bookkeeping_input_type==3){?>
                         <h3>REVIEW CLIENT MANAGER</h3>
                             <div class="form-group">
@@ -283,7 +284,19 @@
                             <a href="javascript:void(0)" class="text-success add-task-note block m-t-10"><i class="fa fa-plus"></i> Add Notes</a>
                         </div>
                     </div>
-
+                    <?php if($bookkeeping_input_type==2){?>
+                    <div class="form-group">
+                            <label class="col-lg-2 control-label">Total Time Spent</label>
+                            <div class="col-lg-10">
+                                <div class="watch">
+                                    <h3 id="total_time" name='total_time'><?= (isset($bookkeeper_details->total_time)?($bookkeeper_details->total_time!='' ? $bookkeeper_details->total_time: ''):'')?></h3>
+                                    <input type='button' class="btn btn-success" id='start' name="start" onclick="add()" value="Start">
+                                    <input type="button" class="btn btn-warning" id='stop' name="stop" value="Stop">
+                                    <input type="button" class="btn btn-danger" id='clear' name="clear" value="Clear">
+                                </div>
+                            </div>
+                    </div>
+                    <?php } ?>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-10">
@@ -362,4 +375,51 @@
     function removeFile(divID) {
         $("#" + divID).remove();
     }
+    
+    var h3 = document.getElementById('total_time'),
+    start = document.getElementById('start'),
+    stop = document.getElementById('stop'),
+    clear = document.getElementById('clear'),
+    seconds = 0, minutes = 0, hours = 0,
+    t;
+    function add() {
+//        alert('hi');
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+        }
+    }
+    
+    h3.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9   ? seconds : "0" + seconds);
+
+    timer();
+    }
+    function timer() {
+//        alert('hi');
+    t = setTimeout(add, 1000);
+    }
+//     timer();
+
+
+    /* Start button */
+    start.onclick = timer;
+
+    /* Stop button */
+    stop.onclick = function() {
+//        alert('hi');
+    clearTimeout(t);
+
+    }
+
+    /* Clear button */
+    clear.onclick = function() {
+//        alert('hi');
+    h3.textContent = "00:00:00";
+    seconds = 0; minutes = 0; hours = 0;
+    }
+
 </script>
