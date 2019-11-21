@@ -1552,8 +1552,10 @@ var saveInputForms = function () {
     $("#total_due").attr('disabled', false);
     var userid = $("#user_id").val();
     var user_type = $("#user_type").val();
+    var total_time=$("#total_time").text();
 //    var input_form_type=$("#input_form_type").val();
     var form_data = new FormData(document.getElementById('project_input_form'));
+    form_data.append('total_time', total_time);
     $.ajax({
         type: "POST",
         data: form_data,

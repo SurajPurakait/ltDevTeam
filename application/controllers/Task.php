@@ -144,6 +144,7 @@ class Task extends CI_Controller {
         $render_data['related_table_id']=11;
         $render_data['required']='n';
         $render_data['bookkeeping_input_type']=$bookkeeping_input_type;
+        $render_data['client_id']='';
         $render_data['input_form_type']=$input_form_type=$this->Project_Template_model->getProjectTaskInputFormType($task_id);
 //      
         $client_dtls=$this->Project_Template_model->getClientDtlsByTaskId($task_id);

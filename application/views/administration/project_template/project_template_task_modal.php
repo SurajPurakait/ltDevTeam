@@ -59,6 +59,9 @@
                 </div><!-- ./row -->
                 <hr class="hr-line-dashed"/>
                 <h3 class="text-success">Task Information :</h3>
+                <?php
+                $tracking_stats=get_exist_task($template_id);
+                ?>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -66,7 +69,7 @@
                             <select class="form-control" id="description" name="task[tracking_description]">
                                 <option value="0">New</option>
                                 <option value="1">Started</option>
-                                <option value="3">Ready</option>
+                                <option value="3" <?= $tracking_stats==0?'selected':'' ?>>Ready</option>
                                 <option value="2">Resolved</option>
                             </select>
                         </div>
