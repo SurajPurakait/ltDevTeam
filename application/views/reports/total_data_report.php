@@ -12,12 +12,12 @@
      </tr>
      <tr>
         <td><?= $total_data['invoice_id']; ?></td>
-	<td><?= $total_data['retail_price']; ?></td>
-	<td><?= $total_data['override_price']; ?></td>
-	<td><?= $total_data['cost']; ?></td>
-	<td><?= $total_data['collected']; ?></td>
-	<td><?= $total_data['total_net']; ?></td>
-	<td><?= $total_data['fee_with_cost']; ?></td>
-	<td><?= $total_data['fee_without_cost']; ?></td>           	
+	<td><?= "$".$total_data['retail_price']; ?></td>
+	<td><?= "$".$total_data['override_price']; ?></td>
+	<td><?= "$".$total_data['cost']; ?></td>
+	<td><?= "$".$total_data['collected']; ?></td>
+	<td><?= "$".$total_data['total_net']; ?></td>
+	<td><?= "$".$total_data['fee_with_cost']; ?></td>
+	<td><?= "$".$total_data['fee_without_cost']; ?></td>           	
      </tr>
 </table>

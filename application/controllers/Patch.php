@@ -795,7 +795,7 @@ class Patch extends CI_Controller {
                         "authorization_id" => ($authorization_id != '') ? $authorization_id: "N/A",
                         "reference" => ($reference != '') ? $reference : "N/A",
                         "total_net" => $total_net.'.00',
-                        "office_fee" => ($office_fees != '') ? '$'.$office_fees : '00.00',
+                        "office_fee" => ($office_fees != '') ? $office_fees : '00.00',
                         "fee_with_cost" => $fee_with_cost.'.00',
                         "fee_without_cost" => $fee_without_cost.'.00',
                         "office_id" => $rpd['office_id'],
@@ -807,13 +807,13 @@ class Patch extends CI_Controller {
             $total_data = $this->db->get('royalty_report')->result_array();
             $total_arr = array(
                 "invoice_id" => count($total_data)-1,
-                "retail_price" => "$".array_sum(array_column($total_data,'retail_price')),
-                "cost" => "$".array_sum(array_column($total_data,'cost')),
-                "collected" => "$".array_sum(array_column($total_data,'collected')),
-                "total_net" => "$".array_sum(array_column($total_data,'total_net')),
-                "override_price" => "$".array_sum(array_column($total_data,'override_price')),
-                "fee_with_cost" => "$".array_sum(array_column($total_data,'fee_with_cost')),
-                "fee_without_cost" => "$".array_sum(array_column($total_data,'fee_without_cost'))
+                "retail_price" => array_sum(array_column($total_data,'retail_price')),
+                "cost" => array_sum(array_column($total_data,'cost')),
+                "collected" => array_sum(array_column($total_data,'collected')),
+                "total_net" => array_sum(array_column($total_data,'total_net')),
+                "override_price" => array_sum(array_column($total_data,'override_price')),
+                "fee_with_cost" => array_sum(array_column($total_data,'fee_with_cost')),
+                "fee_without_cost" => array_sum(array_column($total_data,'fee_without_cost'))
 
             );
             $this->db->where('id',1);
