@@ -318,7 +318,8 @@ h5 {
 }
 .navbar-default .nav > li > a:hover,
 .navbar-default .nav > li > a:focus {
-    background-color: #293846;
+    /*background-color: #293846;*/
+    background-color: #2f4050;
     color: white;
     z-index: 1;
 }
@@ -450,12 +451,23 @@ body.body-small .navbar-top-links li:last-child {
     width: 100%;
 }
 .nav > li.active {
-    border-left: 4px solid #8ab645;
-    background: #293846;
+    border-left: 4px solid #293846;
+    background: #293846;  
 }
 .nav.nav-second-level > li.active {
     border: none;
+    background: #2f4050;
+   /* background: #609dd2;*/
 }
+.active-blue-bg.nav.nav-second-level > li.active a.bg-primary{
+    background: #609dd2 !important;
+}
+.active-blue-bg.nav.nav-second-level > li a.bg-primary:hover{
+    background: #609dd2 !important;
+}
+/*.blue-bg.nav.nav-second-level > li.bg-primary:hover{
+    background: #609dd2 !important;
+}*/
 .nav.nav-second-level.collapse[style] {
     height: auto !important;
 }
@@ -513,14 +525,15 @@ body.body-small .navbar-top-links li:last-child {
     border-bottom: none !important;
 }
 .nav-second-level li a {
-    padding: 7px 10px 7px 10px;
+    padding: 10px 10px 10px 10px;
     padding-left: 52px;
+    color: #fff !important;
 }
 .nav-third-level li a {
     padding-left: 62px;
 }
 .nav-second-level li:last-child {
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
 }
 body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav li:hover > .nav-second-level,
 .mini-navbar .nav li:focus > .nav-second-level {
