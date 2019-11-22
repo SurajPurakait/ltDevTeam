@@ -143,7 +143,6 @@ class Project extends CI_Controller {
     }
 
     public function get_project_tracking_log($id, $table_name) {
-        $this->load->model('service_model');
         echo json_encode($this->Project_Template_model->get_project_tracking_log($id, $table_name));
     }
 
@@ -153,9 +152,13 @@ class Project extends CI_Controller {
         $prosubid = post('prosubid');
         $this->load->model('service_model');
         $comment = '';
-        echo $this->Project_Template_model->update_project_task_status($prosubid, $statusval, $comment);
-
-        mod_actions_count($prev_status, $this->input->post("status"));
+        $sub_taskid=$this->Project_Template_model->update_project_task_status($prosubid, $statusval, $comment);
+        $projectid=$this->db->get_where('project_task',['id'=>$prosubid])->row_array()['project_id'];
+        $ids['task_status']=$this->db->get_where('project_task',['id'=>$prosubid])->row_array()['tracking_description'];
+        $ids['project_status']=$this->db->get_where('project_main',['project_id'=>$projectid])->row_array()['status'];
+        $ids['sub_taskid_status']=$this->db->get_where('project_task',['id'=>$sub_taskid])->row_array()['tracking_description'];
+        $ids['sub_taskid']=$sub_taskid;
+        echo json_encode($ids);
     }
 
     public function request_update_project_main() {
