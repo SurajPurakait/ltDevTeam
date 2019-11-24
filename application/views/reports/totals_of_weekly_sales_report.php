@@ -9,11 +9,11 @@
 		<th>Total Gross Profit</th>
     </tr>
     <tr>
-        <td><?= $sales_total_data['override_price'] ;?></td>           	
-        <td><?= $sales_total_data['cost'] ;?></td>           	
-        <td><?= $sales_total_data['collected'] ;?></td>           	
-        <td><?= $sales_total_data['total_net'] ;?></td>           	
-        <td><?= $sales_total_data['franchisee_fee'] ;?></td>           	
-        <td><?= $sales_total_data['gross_profit'] ;?></td>           	
+        <td><?= "$".$sales_total_data['override_price'] ;?></td>           	
+        <td><?= "$".$sales_total_data['cost'] ;?></td>           	
+        <td><?= "$".$sales_total_data['collected'] ;?></td>           	
+        <td><?= "$".$sales_total_data['total_net'] ;?></td>           	
+        <td><?= "$".$sales_total_data['franchisee_fee'] ;?></td>           	
+        <td><?= "$".$sales_total_data['gross_profit'] ;?></td>           	
     </tr>
 </table>

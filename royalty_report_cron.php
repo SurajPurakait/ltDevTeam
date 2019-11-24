@@ -62,11 +62,6 @@
     if (!empty($royalty_reports_data)) {
     	$insert_total_query = 'INSERT INTO `royalty_report`(`invoice_id`) VALUES ("0")';
     	mysqli_query($conn,$insert_total_query);
-    	if (!empty($royalty_reports_data)) {
-        $data_invoice = array(
-            'invoice_id'=> 0
-        );
-        $this->db->insert('royalty_report',$data_invoice);
         foreach ($royalty_reports_data as $rpd) { 
             for($i=1; $i <= $rpd['services']; $i++) {
 
@@ -124,6 +119,5 @@
         	
         mysqli_query($conn, "UPDATE `royalty_report` SET `invoice_id` = '" . $invoices . "',`retail_price` = '" . $retail_price . "',`cost` = '" . $cost . "',`collected` = '" . $collected . "',`total_net` = '" . $total_net . "',`override_price` = '" . $override_price . "',`fee_with_cost` = '" . $fee_with_cost . "',`fee_without_cost` = '" . $fee_without_cost . "' WHERE `id` = '1'");
     } 
-}
 
 ?>

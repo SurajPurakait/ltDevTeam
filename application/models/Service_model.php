@@ -2745,30 +2745,26 @@ class Service_model extends CI_Model {
     }
 
     public function get_total_of_sales_report($office,$date_range) {
-        if (!empty($office) || $date_range != '') {
-            if (!empty($office)) {
-                $this->db->where_in('office_id',$office);
-            }            
-            if ($date_range != "") {
-                $date_value = explode("-", $date_range);
-                $start_date = date("Y-m-d", strtotime($date_value[0]));
-                $end_date = date("Y-m-d", strtotime($date_value[1]));
-                
-                $this->db->where('date >=',$start_date);
-                $this->db->where('date <=',$end_date);
-            }           
-            $total_data = $this->db->get('weekly_sales_report')->result_array();
-            $total_arr = array(
-                "override_price" => array_sum(array_column($total_data,'override_price')),
-                "cost" => array_sum(array_column($total_data,'cost')),
-                "collected" => array_sum(array_column($total_data,'collected')),
-                "total_net" => array_sum(array_column($total_data,'total_net')),
-                "franchisee_fee" => array_sum(array_column($total_data,'franchisee_fee')),
-                "gross_profit" => array_sum(array_column($total_data,'gross_profit'))
-            );
-            return $total_arr;        
-        } else {
-            return $this->db->get_where('weekly_sales_report',array('id'=>1))->row_array();
-        }
+        if (!empty($office)) {
+            $this->db->where_in('office_id',$office);
+        }            
+        if ($date_range != "") {
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            
+            $this->db->where('date >=',$start_date);
+            $this->db->where('date <=',$end_date);
+        }           
+        $total_data = $this->db->get('weekly_sales_report')->result_array();
+        $total_arr = array(
+            "override_price" => array_sum(array_column($total_data,'override_price')),
+            "cost" => array_sum(array_column($total_data,'cost')),
+            "collected" => array_sum(array_column($total_data,'collected')),
+            "total_net" => array_sum(array_column($total_data,'total_net')),
+            "franchisee_fee" => array_sum(array_column($total_data,'franchisee_fee')),
+            "gross_profit" => array_sum(array_column($total_data,'gross_profit'))
+        );
+        return $total_arr;
     }
 }

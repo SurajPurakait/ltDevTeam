@@ -124,7 +124,7 @@ function loadSalesReportsData(office = '',date_range = '') {
             {data: 'cost',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
             {data: 'collected',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
             {data: 'total_net',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
-            {data: 'franchise_fee',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+            {data: 'franchisee_fee',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
             {data: 'gross_profit',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
             {data: 'notes'}
         ]

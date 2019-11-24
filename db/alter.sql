@@ -1,4 +1,4 @@
-/**
+*
  * Created: 13 Mar, 2018
  */
 
@@ -1003,3 +1003,6 @@ ALTER TABLE `bookkeeping` ADD `reference` VARCHAR(50) NOT NULL DEFAULT 'order' A
 /*import project_task_bookkeeper_department.sql*/
 
 ALTER TABLE `project_task_bookkeeper_department` ADD `adjustment` ENUM('n','y') NOT NULL COMMENT 'n for no, y for yes' AFTER `reconciled`; 
+
+/* 24.11.2019 */
+/* import weekly_sales_report.sql */

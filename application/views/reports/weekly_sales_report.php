@@ -25,7 +25,7 @@
                                     <th style="white-space: nowrap;">Cost</th>
                                     <th style="white-space: nowrap;">Collected</th>
                                     <th style="white-space: nowrap;">Total Net</th>
-                                    <th style="white-space: nowrap;">Franchisee Fee %</th>
+                                    <th style="white-space: nowrap;">Franchisee Fee</th>
                                     <th style="white-space: nowrap;">Gross Profit</th>
                                     <th style="white-space: nowrap;">Notes</th>
                                 </tr>
@@ -41,36 +41,35 @@
 <script type="text/javascript">
     loadSalesReportsData();
     $(function () {
-            $(".chosen-select").chosen();
-            var start = moment().subtract(29, 'days');
-            var end = moment();
-            function cb(start, end) {
-                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        $(".chosen-select").chosen();
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+        function cb(start, end) {
+            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        }
+
+        $('#reportrange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Select' : ['01/01/1970', moment()],
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             }
+        }, cb);
+        cb(start, end);
 
-            $('#reportrange').daterangepicker({
-                startDate: start,
-                endDate: end,
-                ranges: {
-                    'Select' : ['01/01/1970', moment()],
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                }
-            }, cb);
-            cb(start, end);
-
-            $("#btn").click(function(){
-                var report_range = document.getElementById('reportrange').value;
-                var office  = $('#ofc').val();
-                loadSalesReportsData(office,report_range);
-                get_total_sales_report(office,report_range);                
-            });
-
-            get_total_sales_report();
-
+        $("#btn").click(function(){
+            var report_range = document.getElementById('reportrange').value;
+            var office  = $('#ofc').val();
+            loadSalesReportsData(office,report_range);
+            get_total_sales_report(office,report_range);                
         });
+
+        get_total_sales_report('','');
+    });
 </script>
