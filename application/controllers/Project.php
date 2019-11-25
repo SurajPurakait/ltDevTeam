@@ -156,7 +156,12 @@ class Project extends CI_Controller {
         $projectid=$this->db->get_where('project_task',['id'=>$prosubid])->row_array()['project_id'];
         $ids['task_status']=$this->db->get_where('project_task',['id'=>$prosubid])->row_array()['tracking_description'];
         $ids['project_status']=$this->db->get_where('project_main',['project_id'=>$projectid])->row_array()['status'];
-        $ids['sub_taskid_status']=$this->db->get_where('project_task',['id'=>$sub_taskid])->row_array()['tracking_description'];
+        $sub_status=$this->db->get_where('project_task',['id'=>$sub_taskid])->row_array()['tracking_description'];
+        if(!empty($sub_status)){
+        $ids['sub_taskid_status']=$sub_status;
+        }else{
+           $ids['sub_taskid_status']=0;
+        }
         $ids['sub_taskid']=$sub_taskid;
         echo json_encode($ids);
     }
