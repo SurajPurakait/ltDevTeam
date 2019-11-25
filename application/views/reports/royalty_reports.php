@@ -3,7 +3,6 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins form-inline">
                 <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" multiple>
-                	<option value="">All Office</option>   
                 	<?php
                 		load_ddl_option("users_office_list", "","");
                 	?>

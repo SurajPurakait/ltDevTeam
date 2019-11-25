@@ -119,7 +119,7 @@
     <div class="form-group office-internal">
         <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <select class="form-control required_field value_field" name="office" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required="">
+            <select class="form-control chosen-select required_field value_field" name="office" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required="">
                 <option value="">Select an option</option>
                 <?php load_ddl_option("staff_office_list"); ?>
             </select>
@@ -165,7 +165,7 @@
     <div class="form-group">
         <label class="col-lg-2 control-label">Referred By Source<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <select class="form-control required_field value_field" name="referred_by_source" id="referred_by_source" onchange="change_referred_name_status(this.value);" title="Referred By Source" required>
+            <select class="form-control chosen-select required_field value_field" name="referred_by_source" id="referred_by_source" onchange="change_referred_name_status(this.value);" title="Referred By Source" required>
                 <option value="">Select an option</option>
                 <?php load_ddl_option("referer_by_source"); ?>
             </select>
@@ -182,20 +182,22 @@
     <div class="form-group">
         <label class="col-lg-2 control-label">Language<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <select class="form-control required_field value_field" id="language" name="language" title="Language" required="">
+            <select class="form-control chosen-select required_field value_field" id="language" name="language" title="Language" required="">
                 <option value="">Select an option</option>
                 <?php load_ddl_option("language_list"); ?>
             </select>
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
-<!--    <div class="form-group">
+
+    <div class="form-group">
         <label class="col-lg-2 control-label">Existing Practice ID</label>
         <div class="col-lg-10">
-            <input placeholder="" class="form-control value_field" type="text" name="existing_practice_id" title="Existing Practice ID" value="">
-            <div class="errorMessage text-danger"></div>
+            <input placeholder="" class="form-control value_field" type="text" name="existing_practice_id" title="Existing Practice ID" value="" readonly>
+            <!-- <div class="errorMessage text-danger"></div> -->
         </div>
-    </div>-->
+    </div>
+
 </div>
 
 <div id="documents_div" class="display_div">

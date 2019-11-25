@@ -61,13 +61,16 @@
                 <hr class="hr-line-dashed"/>
                 <h3 class="text-success">Task Information :</h3>
                 <div class="row">
+                    <?php
+                        $tracking_stats=get_exist_task($template_id);
+                    ?>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">Tracking Description:</label>
                             <select class="form-control" id="description" name="task[tracking_description]">
                                 <option value="0" value="<?= $task_details->tracking_description=='0'?'selected':'' ?>">New</option>
                                 <option value="1" value="<?= $task_details->tracking_description=='1'?'selected':'' ?>">Started</option>
-                                <option value="3" value="<?= $task_details->tracking_description=='3'?'selected':'' ?>">Ready</option>
+                                <option value="3" value="<?= $task_details->tracking_description=='3'?'selected':'' ?> <?= $tracking_stats==0?'selected':'' ?>">Ready</option>
                                 <option value="2" value="<?= $task_details->tracking_description=='2'?'selected':'' ?>">Resolved</option>
                              </select>
                         </div>
@@ -111,10 +114,18 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <?php if($template_category_id==1){ ?>
-                            <label>Allow bookkeeping </label>
-                            <input type="checkbox" name="task[input_form_type]" title="Confirmation" id="confirmation" value="1" <?php echo ($task_details->input_form_type == '1') ? 'checked' : ''; ?>>
+                    <div class="col-md-12" id="category_div" style="display:none">
+                        <?php if($template_category_id==1){
+                            $get_exist_input=get_exist_bookkeeping_input_type($task_details->template_main_id);
+                            $exist_type= array_column($get_exist_input,'bookkeeping_input_type');
+                            ?>
+                            <label class="control-label">Allow Bookkeeping:</label>
+                            <select class="form-control" id="bookkeeping_input_type" name="task[bookkeeping_input_type]" title='Bookkeeping Input Type'>
+                                <option value="">Select Bookkeeping Input Form</option>
+                                <option value="1" <?= (in_array('1', $exist_type)?'disabled':'') ?> <?= $task_details->bookkeeping_input_type==1?'selected':''  ?> >BANK STATEMENT RETRIEVAL LEAFCLOUD DEPARTMENT</option>
+                                <option value="2" <?= (in_array('2', $exist_type)?'disabled':'') ?> <?= $task_details->bookkeeping_input_type==2?'selected':'' ?> >BOOKKEEPING BOOKKEEPER DEPARTMENT</option>
+                                <option value="3" <?= (in_array('3', $exist_type)?'disabled':'') ?> <?= $task_details->bookkeeping_input_type==3?'selected':'' ?> >REVIEW CLIENT MANAGER</option>
+                            </select>
                         <?php }elseif($template_category_id==3){ ?>
                             <label>Allow sales tax processing</label>
                             <input type="checkbox" name="task[input_form_type]" title="Confirmation" id="confirmation" value="3" <?php echo ($task_details->input_form_type == '3') ? 'checked' : ''; ?>>
@@ -137,6 +148,7 @@
             <div class="modal-footer">
                 <input type="hidden" id="task_disable_field" value="n">
                 <input type="hidden" id="task_staff_type" value="<?= $staff_info['type']; ?>">
+                <input type="hidden" id="template_cat_id" name="task[template_cat_id]" value="<?= $template_category_id ?>">
                 <input type="hidden" id="main_id" name="task[template_main_id]" value="<?= $task_details->template_main_id ?>">
                 <button class="btn btn-success" type="button" onclick="update_task(<?= $task_details->id ?>,<?= $task_details->template_main_id ?>)">Save</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -169,5 +181,18 @@ if(!empty($staff_id)){
                     '</div>';
             $(newHtml).insertAfter($(this).closest('.form-group'));
         });
+        $(".checkclass").click(function(){
+            var input_status=$(".checkclass:checked").val();
+            if(input_status=='y'){
+                $('#category_div').show();
+            }else{
+               $('#category_div').hide(); 
+            }
+        });
+        if($(".checkclass:checked").val()=='y'){
+            $('#category_div').show();
+        }else{
+            $('#category_div').hide(); 
+        }
     });
 </script>

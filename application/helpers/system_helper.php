@@ -2282,7 +2282,8 @@ if (!function_exists('edit_by_shortname_array')) {
             'inc_n_c_d',
             'inc_n_c_n_p_f',
             'inc_n_f_p',
-            'tax_f'
+            'tax_f',
+            'bus_l_t'
         ];
     }
 
@@ -3416,5 +3417,26 @@ if(!function_exists('get_office_name_for_action_view')){
         $ci =&get_instance();
         $ci->load->model('action_model');
         return $ci->action_model->get_office_name_for_action_view($id);
+    }
+}
+if(!function_exists('get_exist_bookkeeping_input_type')){
+    function get_exist_bookkeeping_input_type($template_id){
+        $ci =&get_instance();
+        $ci->load->model('Project_Template_model'); 
+        return $ci->Project_Template_model->getExistBookkeepingInputType($template_id);
+    }
+}
+if(!function_exists('get_project_exist_bookkeeping_input_type')){
+    function get_project_exist_bookkeeping_input_type($template_id){
+        $ci =&get_instance();
+        $ci->load->model('Project_Template_model'); 
+        return $ci->Project_Template_model->getProjectExistBookkeepingInputType($template_id);
+    }
+}
+if(!function_exists('get_exist_task')){
+    function get_exist_task($template_id){
+        $ci =&get_instance();
+        $ci->load->model('Project_Template_model'); 
+        return $ci->Project_Template_model->getExistTask($template_id);
     }
 }
