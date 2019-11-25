@@ -569,7 +569,7 @@ class Patch extends CI_Controller {
     public function update_practice_id() {
         $client_list = $this->db->get('internal_data')->result_array();
         foreach ($client_list as $key => $cl) {
-            if (trim($cl['practice_id']) == '') {
+//            if (trim($cl['practice_id']) == '') {   // this condition is removed for updating all client's practice_id update
                 $reference_id = $cl['reference_id'];
                 if ($cl['reference'] == 'individual') {
                     $details = $this->db->get_where('individual', ['id' => $reference_id])->row_array();
@@ -587,7 +587,7 @@ class Patch extends CI_Controller {
                 $update_data['practice_id'] = $practice_id;
                 $this->db->where('id', $cl['id']);
                 $this->db->update('internal_data', $update_data);
-            }  //end practice_id blank checking   
+//            }  //end practice_id blank checking   
         } //end foreach
     }
 
