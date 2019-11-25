@@ -569,7 +569,7 @@ class Patch extends CI_Controller {
     public function update_practice_id() {
         $client_list = $this->db->get('internal_data')->result_array();
         foreach ($client_list as $key => $cl) {
-            if (trim($cl['practice_id']) == '') {
+//            if (trim($cl['practice_id']) == '') {   // this condition is removed for updating all client's practice_id update
                 $reference_id = $cl['reference_id'];
                 if ($cl['reference'] == 'individual') {
                     $details = $this->db->get_where('individual', ['id' => $reference_id])->row_array();
@@ -587,7 +587,7 @@ class Patch extends CI_Controller {
                 $update_data['practice_id'] = $practice_id;
                 $this->db->where('id', $cl['id']);
                 $this->db->update('internal_data', $update_data);
-            }  //end practice_id blank checking   
+//            }  //end practice_id blank checking   
         } //end foreach
     }
 
@@ -724,6 +724,7 @@ class Patch extends CI_Controller {
             '(SELECT CONCAT(",",GROUP_CONCAT(`service_id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services',
             '(SELECT CONCAT(",",GROUP_CONCAT(`id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_orders',
             '(SELECT CONCAT(",",GROUP_CONCAT(`total_of_order`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services_override',
+            // '(CASE WHEN ord.quantity = 0 THEN (SELECT SUM(srv.price_charged) FROM `order` WHERE `ord`.`id` = `srv`.`order_id`) ELSE (SELECT SUM(srv.price_charged*ord.quantity) FROM `order` WHERE `ord`.`id` = `srv`.`order_id`) END) as all_services_override',
             '(SELECT CONCAT(",",GROUP_CONCAT(`payment_type`), ",") FROM `payment_history` WHERE `invoice_id` = ord.invoice_id AND `order_id` = ord.id) AS payment_types',
             '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
         ];
@@ -794,7 +795,7 @@ class Patch extends CI_Controller {
                         "authorization_id" => ($authorization_id != '') ? $authorization_id: "N/A",
                         "reference" => ($reference != '') ? $reference : "N/A",
                         "total_net" => $total_net.'.00',
-                        "office_fee" => ($office_fees != '') ? '$'.$office_fees : '00.00',
+                        "office_fee" => ($office_fees != '') ? $office_fees : '00.00',
                         "fee_with_cost" => $fee_with_cost.'.00',
                         "fee_without_cost" => $fee_without_cost.'.00',
                         "office_id" => $rpd['office_id'],
@@ -806,13 +807,13 @@ class Patch extends CI_Controller {
             $total_data = $this->db->get('royalty_report')->result_array();
             $total_arr = array(
                 "invoice_id" => count($total_data)-1,
-                "retail_price" => "$".array_sum(array_column($total_data,'retail_price')),
-                "cost" => "$".array_sum(array_column($total_data,'cost')),
-                "collected" => "$".array_sum(array_column($total_data,'collected')),
-                "total_net" => "$".array_sum(array_column($total_data,'total_net')),
-                "override_price" => "$".array_sum(array_column($total_data,'override_price')),
-                "fee_with_cost" => "$".array_sum(array_column($total_data,'fee_with_cost')),
-                "fee_without_cost" => "$".array_sum(array_column($total_data,'fee_without_cost'))
+                "retail_price" => array_sum(array_column($total_data,'retail_price')),
+                "cost" => array_sum(array_column($total_data,'cost')),
+                "collected" => array_sum(array_column($total_data,'collected')),
+                "total_net" => array_sum(array_column($total_data,'total_net')),
+                "override_price" => array_sum(array_column($total_data,'override_price')),
+                "fee_with_cost" => array_sum(array_column($total_data,'fee_with_cost')),
+                "fee_without_cost" => array_sum(array_column($total_data,'fee_without_cost'))
 
             );
             $this->db->where('id',1);

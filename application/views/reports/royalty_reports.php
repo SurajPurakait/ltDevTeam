@@ -8,8 +8,6 @@
                 	?>
                 </select> &nbsp;
                 <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">
-
-               	<!-- <input placeholder="dd-mm-yyyy" class="form-control datepicker_range_mdy" type="text" title="" name="daterange" id="date_range"> -->
                	<button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>
                 <div class="ibox-content ajaxdiv-reports m-t-25">
                     <div class="">
@@ -73,10 +71,10 @@
             	var report_range = document.getElementById('reportrange').value;
             	var office  = $('#ofc').val();
             	loadRoyaltyReportsData(office,report_range);
-				get_total_price_report(office,report_range);            	
+				get_total_royalty_report(office,report_range);            	
             });
 
-            get_total_price_report();
+            get_total_royalty_report();
 
     	});	
 </script>

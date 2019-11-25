@@ -1,4 +1,4 @@
-/**
+*
  * Created: 13 Mar, 2018
  */
 
@@ -1013,3 +1013,6 @@ ALTER TABLE `project_task` ADD `bookkeeping_input_type` INT(4) NOT NULL DEFAULT 
 /*21.11.19*/
 
 ALTER TABLE `project_task_bookkeeper_department` ADD `total_time` VARCHAR(100) NOT NULL AFTER `adjustment`; 
+
+/* 24.11.2019 */
+/* import weekly_sales_report.sql */
