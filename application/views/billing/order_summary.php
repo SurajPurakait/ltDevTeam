@@ -53,12 +53,15 @@
                                                             <br>
                                                             Name: <?= $contact["first_name"]; ?> <?= $contact["middle_name"]; ?> <?= $contact["last_name"]; ?>
                                                             <br>
-                                                            Phones 1: <?= $contact["phone1"]; ?> (<?= $contact["phone1_country_name"]; ?>)
+                                                            Phone: <?= $contact["phone1"]; ?> (<?= $contact["phone1_country_name"]; ?>)
                                                             <br>
                                                             Email: <?= $contact["email1"]; ?>
                                                             <br>
-                                                            <?= $contact["address1"]; ?>, <?= $contact["city"]; ?>, <?= $contact["state"]; ?>,
-                                                            ZIP: <?= $contact["zip"]; ?>, <?= $contact["country_name"]; ?>
+                                                            <?= $contact["address1"]; ?>, <?= $contact["city"]; ?>,
+                                                            <?= $contact["state_name"]; ?>,
+                                                            <!-- ZIP:  -->
+                                                            <?= $contact["zip"]; ?>, 
+                                                            <?= $contact["country_name"]; ?>
                                                         </p>
                                                     </div>
                                                 </div>                                                                                    
@@ -142,12 +145,12 @@
                                                             <div class="row">
                                                                 <div class="col-lg-10" style="padding-top:8px">
                                                                     <p>
-                                                                        <b>Service Category: <?= $services['service_category']; ?></b><br>
+                                                                        <b>Category: <?= $services['service_category']; ?></b><br>
                                                                         <b>Service:</b> <?= $services["service"]; ?><br>
-                                                                        <b>Retail Price:</b> <?= $services["retail_price"]; ?><br>
-                                                                        <b>Override Price:</b> <?= $services["override_price"]; ?><br>
+                                                                        <b>Retail Price:</b> $<?= $services["retail_price"]; ?>.00<br>
+                                                                        <b>Override Price:</b> $<?= $services["override_price"]; ?><br>
                                                                         <b>Quantity:</b> <?= $services["quantity"]; ?><br>
-                                                                        <b>Total:</b><?= number_format((float) $services["override_price"] * $services["quantity"], 2, '.', ''); ?>
+                                                                        <b>Total:</b> $<?= number_format((float) $services["override_price"] * $services["quantity"], 2, '.', ''); ?>
                                                                     </p>
                                                                 </div>
                                                             </div>

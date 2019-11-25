@@ -1116,13 +1116,14 @@ class Service_model extends CI_Model {
                 c1.country_name AS phone1_country_name, 
                 c2.country_name AS phone2_country_name, 
                 ci.phone1, ci.phone2, ci.email1, ci.email2, ci.skype, ci.whatsapp, ci.website, ci.status,
-                ci.address1, ci.address2, ci.city, ci.state, ci.country, c.country_name, ci.zip';
+                ci.address1, ci.address2, ci.city, ci.state, ci.country, c.country_name, ci.zip, st.state_name AS state_name';
         $this->db->select($select);
         $this->db->from('contact_info AS ci');
         $this->db->join('contact_info_type AS ct', 'ct.id = ci.type', 'left');
         $this->db->join('countries AS c', 'c.id = ci.country', 'left');
         $this->db->join('countries AS c1', 'c1.id = ci.phone1_country', 'left');
         $this->db->join('countries AS c2', 'c2.id = ci.phone2_country', 'left');
+        $this->db->join('states AS st', 'st.id = ci.state', 'left');
         $this->db->where(['ci.status' => 1, 'ci.reference_id' => $reference_id, 'ci.reference' => $reference]);
         // $this->db->group_by('ci.reference_id');
         return $this->db->get()->result_array();
