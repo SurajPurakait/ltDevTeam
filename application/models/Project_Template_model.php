@@ -1301,7 +1301,7 @@ class Project_Template_model extends CI_Model {
         $this->db->where('section_id', $id);
         $this->db->where('related_table_name', 'project_task');
         $data_count = $this->db->get('tracking_logs')->row_array();
-
+        $project_id=$this->db->get_where('project_task',['id'=>$id])->row()->project_id;
         if ($data_count['data_count'] == 0) {
             $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => $status, "section_id" => $id, "related_table_name" => "project_task", "comment" => $comment]);
         }
@@ -1349,6 +1349,21 @@ class Project_Template_model extends CI_Model {
             $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 1));
             $this->db->where('project_id', $suborder_order_id);
             $this->db->update('project_main', array('status' => 1));
+//            this section for 2nd task
+            
+            $this->db->select('id');
+            $this->db->from('project_task');
+            $this->db->where('project_id',$project_id);
+            $this->db->where_not_in('tracking_description',1);
+            $get_task_ids=$this->db->get()->result_array();
+            $a= array_column($get_task_ids,'id');
+//            print_r($a);die;
+            if(isset($a[0])){
+                $task2=$a[0];
+                $end_date = date('Y-m-d h:i:s');
+                $this->db->where('id', $task2);
+                $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 0));
+            }
         }elseif ($status == 3) {
             if (!empty($get_main_order_query)) {
                 $suborder_order_id = $get_main_order_query[0]['project_id'];
@@ -1361,8 +1376,6 @@ class Project_Template_model extends CI_Model {
         }
         
         else {
-            $project_id=$this->db->get_where('project_task',['id'=>$id])->row()->project_id;
-            
             $end_date = date('Y-m-d h:i:s');
             $this->db->where('id', $id);
             $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 2));
