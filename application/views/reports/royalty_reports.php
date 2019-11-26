@@ -45,7 +45,7 @@
 	loadRoyaltyReportsData();
 		$(function () {
 			$(".chosen-select").chosen();
-        	var start = moment().subtract(29, 'days');
+        	var start = moment("01/01/1970", "MM-DD-YYYY");
             var end = moment();
             function cb(start, end) {
                 $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -55,7 +55,7 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
-                	'Select' : ['01/01/1970', moment()],
+                	'Select' : [moment("01/01/1970", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],

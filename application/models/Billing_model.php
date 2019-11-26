@@ -1549,7 +1549,6 @@ class Billing_model extends CI_Model {
             $this->db->group_end();
         }
         $this->db->query('SET SQL_BIG_SELECTS=1');
-        $this->db->where('id !=',1);
         $res_for_all = $this->db->get('royalty_report')->num_rows();
         $qr = $this->db->last_query();
         $qr .= ' order by ' . $columnName . ' ' . $columnSortOrder;
@@ -1559,7 +1558,6 @@ class Billing_model extends CI_Model {
 
         $totalRecords = $res_for_all;
         $totalRecordwithFilter = $res_for_all;
-        //echo $this->db->last_query();exit;
         ## Response
         $response = array(
             "draw" => intval($draw),
@@ -1583,34 +1581,29 @@ class Billing_model extends CI_Model {
         return $this->db->get()->result_array();
     }
     public function get_total_price_report($office,$date_range) {
-        if (!empty($office) || $date_range != '') {
-            if (!empty($office)) {
-                $this->db->where_in('office_id',$office);
-            }            
-            if ($date_range != "") {
-                $date_value = explode("-", $date_range);
-                $start_date = date("Y-m-d", strtotime($date_value[0]));
-                $end_date = date("Y-m-d", strtotime($date_value[1]));
-                
-                $this->db->where('date >=',$start_date);
-                $this->db->where('date <=',$end_date);
-            }           
-            $total_data = $this->db->get('royalty_report')->result_array();
-            $total_arr = array(
-                "invoice_id" => count($total_data),
-                "retail_price" => array_sum(array_column($total_data,'retail_price')),
-                "cost" => array_sum(array_column($total_data,'cost')),
-                "collected" => array_sum(array_column($total_data,'collected')),
-                "total_net" => array_sum(array_column($total_data,'total_net')),
-                "override_price" => array_sum(array_column($total_data,'override_price')),
-                "fee_with_cost" => array_sum(array_column($total_data,'fee_with_cost')),
-                "fee_without_cost" => array_sum(array_column($total_data,'fee_without_cost'))
+        if (!empty($office)) {
+            $this->db->where_in('office_id',$office);
+        }            
+        if ($date_range != "") {
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            
+            $this->db->where('date >=',$start_date);
+            $this->db->where('date <=',$end_date);
+        }           
+        $total_data = $this->db->get('royalty_report')->result_array();
+        $total_arr = array(
+            "invoice_id" => count($total_data),
+            "retail_price" => array_sum(array_column($total_data,'retail_price')),
+            "cost" => array_sum(array_column($total_data,'cost')),
+            "collected" => array_sum(array_column($total_data,'collected')),
+            "total_net" => array_sum(array_column($total_data,'total_net')),
+            "override_price" => array_sum(array_column($total_data,'override_price')),
+            "fee_with_cost" => array_sum(array_column($total_data,'fee_with_cost')),
+            "fee_without_cost" => array_sum(array_column($total_data,'fee_without_cost'))
 
-            );
-            return $total_arr;        
-        } else {
-            return $this->db->get_where('royalty_report',array('id'=>1))->row_array();
-        }
-        
+        );
+        return $total_arr;        
     }
 }
