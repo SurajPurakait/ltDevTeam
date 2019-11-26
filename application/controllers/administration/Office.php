@@ -18,7 +18,8 @@ class Office extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Offices";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'administration';
+        // $render_data['main_menu'] = 'administration';
+        $render_data['main_menu'] = 'franchisee_menu';
         $render_data['menu'] = 'franchise';
         $render_data['header_title'] = $title;
         $render_data['get_staff'] = $this->staff->get_staff($this->session->userdata('user_id'));

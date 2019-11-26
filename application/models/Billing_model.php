@@ -417,6 +417,7 @@ class Billing_model extends CI_Model {
 //        $main_order_id = $this->db->query("select * from invoice_info where id=".$invoice_id."")->row_array()['order_id'];
         $select = [
             'inv.id as invoice_id',
+            'inv.status as status',
             'ord.id as order_id',
             'ord.service_id as service_id',
             'sr.category_id as category_id',

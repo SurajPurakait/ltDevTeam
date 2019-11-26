@@ -151,6 +151,9 @@ class Invoice extends CI_Controller {
             $reference_id = $order_summary['reference_id'];
             $render_data['order_summary'] = $order_summary;
             $render_data['order_summary']['invoice_type_id'] = $invoice_type = $order_summary['invoice_type'];
+            $render_data['order_summary']['created_time'] = $created_time = date("m-d-Y h:i", strtotime($order_summary['created_time']));
+            $render_data['order_summary']['date_of_birth'] = $date_of_birth = date("m-d-Y", strtotime($order_summary['date_of_birth']));
+            
             $render_data['order_summary']['invoice_type'] = $this->invoce_type_array[$invoice_type];
             $render_data['order_summary']['contact_info'] = $this->service_model->get_contact_list_by_reference($reference_id, $invoice_type == 1 ? 'company' : "individual");
             if ($invoice_type == 1) {

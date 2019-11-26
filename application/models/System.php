@@ -133,6 +133,13 @@ Class System extends CI_Model {
         return $this->db->where("status", "1")->order_by("language", "asc")->get("languages")->result_array();
     }
 
+    public function get_languages_for_legal_translations() {
+        $this->db->where("status", "1");
+        $this->db->where("language!=", "French");
+        $this->db->order_by("language", "asc");
+        return $this->db->get("languages")->result_array();
+    }
+
     public function count_duplicate_field($table, $where_data) {
         return $this->db->get_where($table, $where_data)->num_rows();
     }
