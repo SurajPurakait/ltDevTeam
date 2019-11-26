@@ -1,8 +1,13 @@
 <?php
+    // $servername = "localhost";
+    // $username = "leafnet_db_user";
+    // $password = "leafnet@123";
+    // $db = 'leafnet_staging';
+
     $servername = "localhost";
-    $username = "leafnet_db_user";
-    $password = "leafnet@123";
-    $db = 'leafnet_staging';
+    $username = "root";
+    $password = "";
+    $db = 'leafnet';
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
 
@@ -21,8 +26,8 @@
         '(SELECT CONCAT(",",GROUP_CONCAT(`price_charged`), ",") FROM `service_request` WHERE `order_id` = ord.id) AS all_override_price',
         '(SELECT CONCAT(",",GROUP_CONCAT(`status`), ",") FROM `service_request` WHERE `order_id` = ord.id) AS all_services_status',
         '(SELECT CONCAT(",",GROUP_CONCAT(`pay_amount`),",") FROM `payment_history` WHERE `order_id` = ord.id AND `type` = "payment" AND `is_cancel`="0") AS all_collection',
-        '(SELECT COUNT(*) FROM `service_request` WHERE order_id = ord.id ) as services_count',
-        '(SELECT id FROM `invoice_info` WHERE order_id = ord.id ) as invoice_id'
+        '(SELECT COUNT(srv.services_id) FROM `service_request` srv inner join `order` ord on (ord.id = srv.order_id) WHERE ord.invoice_id != 0) as services_count',
+        '(SELECT id FROM `invoice_info` WHERE order_id = ord.id) as invoice_id'
     ];
 
     $table = '`order` AS `ord` ' .
@@ -35,7 +40,8 @@
     mysqli_query($conn,'TRUNCATE weekly_sales_report');
     if (!empty($sales_reports_data)) {
         while($srd = mysqli_fetch_assoc($reports_data)) {
-            for ($i=1; $i <= $srd['services_count'] ; $i++) { 
+            for ($i=1; $i <= $srd['services_count'] ; $i++) {
+                echo $srd['invoice_id'];exit;
                 $services_id = explode(',',$srd['all_services'])[$i];
                 /* get service detail */
                 $service_query = mysqli_query($conn,"select fixed_cost as cost ,retail_price, description as service_name from services where id ='".$services_id."'");
@@ -51,11 +57,7 @@
                     $date = date('Y-m-d', strtotime($srd['order_date']));
                 }
                 $client_id = $srd['client_id'];
-                if ($srd['invoice_id'] != '') {
-                    $service_id = $srd['invoice_id']."-".$i;
-                } else {
-                    $service_id = 'N/A';    
-                }
+                $service_id = $srd['invoice_id']."-".$i;
                 
                 $service_name = $service_detail['service_name'];
                 $retail_price = $service_detail['retail_price'];
