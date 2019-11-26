@@ -1301,7 +1301,7 @@ class Project_Template_model extends CI_Model {
         $this->db->where('section_id', $id);
         $this->db->where('related_table_name', 'project_task');
         $data_count = $this->db->get('tracking_logs')->row_array();
-
+        $project_id=$this->db->get_where('project_task',['id'=>$id])->row()->project_id;
         if ($data_count['data_count'] == 0) {
             $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => $status, "section_id" => $id, "related_table_name" => "project_task", "comment" => $comment]);
         }
@@ -1309,6 +1309,7 @@ class Project_Template_model extends CI_Model {
         $get_main_order_query = $this->db->query("SELECT * FROM project_task WHERE id=$id")->result_array();
 
 //        tracking
+        $task2='';
         if ($status == 0) {
             $this->db->where('id', $id);
             $this->db->update('project_task', array('date_completed' => date('Y-m-d h:i:s'), 'tracking_description' => 0));
@@ -1349,6 +1350,29 @@ class Project_Template_model extends CI_Model {
             $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 1));
             $this->db->where('project_id', $suborder_order_id);
             $this->db->update('project_main', array('status' => 1));
+//            this section for 2nd task
+            $this->db->select('id');
+            $this->db->from('project_task');
+            $this->db->where('project_id',$project_id);
+            $this->db->where_in('tracking_description',2);
+            $get_all_task_ids=$this->db->get()->result_array();
+            $old_task_ids= array_column($get_all_task_ids,'id');
+//            print_r($old_task_ids);echo "<br>";
+            $this->db->select('id');
+            $this->db->from('project_task');
+            $this->db->where('project_id',$project_id);
+            $this->db->where_not_in('tracking_description',[1,2]);
+            $get_task_ids=$this->db->get()->result_array();
+            $a= array_column($get_task_ids,'id');
+//            print_r($a);die;
+            if(isset($a[0])){
+                if(!in_array($a[0], $old_task_ids)){
+                    $task2=$a[0];
+                    $end_date = date('Y-m-d h:i:s');
+                    $this->db->where('id', $task2);
+                    $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 0));
+                }
+            }
         }elseif ($status == 3) {
             if (!empty($get_main_order_query)) {
                 $suborder_order_id = $get_main_order_query[0]['project_id'];
@@ -1361,8 +1385,6 @@ class Project_Template_model extends CI_Model {
         }
         
         else {
-            $project_id=$this->db->get_where('project_task',['id'=>$id])->row()->project_id;
-            
             $end_date = date('Y-m-d h:i:s');
             $this->db->where('id', $id);
             $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 2));
@@ -2044,7 +2066,7 @@ class Project_Template_model extends CI_Model {
         return $this->db->get_where('projects', ['id' => $project_id])->row()->office_id;
     }
 
-    public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='',$month='') {
+    public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='',$month='',$year='') {
 //        print_r($month);die;
 //        print_r($filter_data);die;
         $user_info = $this->session->userdata('staff_info');
@@ -2286,6 +2308,14 @@ class Project_Template_model extends CI_Model {
         $this->db->where('pro.is_deleted', 0);
         if ($client_id != '') {
             $this->db->where('pro.client_id', $client_id);
+        }
+        if($template_cat_id==1){
+            if($year==''){
+                $present_year=date('Y');
+                $this->db->where('prm.actual_due_year',$present_year);
+            }else{
+               $this->db->where('prm.actual_due_year',$year); 
+            }
         }
         $this->db->group_by('pro.id');
         if ($sort_criteria != '') {
@@ -2662,9 +2692,9 @@ class Project_Template_model extends CI_Model {
 //            echo $insert_id;die;
         }if($input_form_type==1){
             if($bookkeeping_input_type==1){
-                $exist=$this->db->get_where('bookkeeping',['task_id'=>$data['task_id'],'reference'=>'project'])->row();
+                $exist=$this->db->get_where('bookkeeping',['order_id'=>$data['task_id'],'reference'=>'project'])->row();
                 if(!empty($exist)){
-                    $this->db->where(['task_id'=>$data['task_id'],'reference'=>'project']);
+                    $this->db->where(['order_id'=>$data['task_id'],'reference'=>'project']);
                     $this->db->delete('bookkeeping');
                 }
                 $bookdata=array(
@@ -2792,6 +2822,12 @@ class Project_Template_model extends CI_Model {
     }
     public function getExistTask($template_id){
         return count($this->db->get_where('project_template_task',['template_main_id'=>$template_id])->result_array());
+    }
+    public function getDueYear(){
+        $this->db->select('YEAR(due_date) as due_year');
+        $this->db->from('project_recurrence_main');
+        $this->db->group_by('YEAR(due_date)');
+        return $this->db->get()->result_array();
     }
 }
 

@@ -1116,13 +1116,14 @@ class Service_model extends CI_Model {
                 c1.country_name AS phone1_country_name, 
                 c2.country_name AS phone2_country_name, 
                 ci.phone1, ci.phone2, ci.email1, ci.email2, ci.skype, ci.whatsapp, ci.website, ci.status,
-                ci.address1, ci.address2, ci.city, ci.state, ci.country, c.country_name, ci.zip';
+                ci.address1, ci.address2, ci.city, ci.state, ci.country, c.country_name, ci.zip, st.state_name AS state_name';
         $this->db->select($select);
         $this->db->from('contact_info AS ci');
         $this->db->join('contact_info_type AS ct', 'ct.id = ci.type', 'left');
         $this->db->join('countries AS c', 'c.id = ci.country', 'left');
         $this->db->join('countries AS c1', 'c1.id = ci.phone1_country', 'left');
         $this->db->join('countries AS c2', 'c2.id = ci.phone2_country', 'left');
+        $this->db->join('states AS st', 'st.id = ci.state', 'left');
         $this->db->where(['ci.status' => 1, 'ci.reference_id' => $reference_id, 'ci.reference' => $reference]);
         // $this->db->group_by('ci.reference_id');
         return $this->db->get()->result_array();
@@ -2682,8 +2683,88 @@ class Service_model extends CI_Model {
         $this->db->where('office_id',$office_id);
         return $this->db->get('office_service_fees')->row_array()['percentage'];
     }
-//    public function get_service_reference($invoice_id){
-//        return $this->db->get_where('order',['invoice_id'=>$invoice_id])->row()->reference;
-//    }
+    public function get_weekly_sales_report_data($office= "",$date_range= "") {
+        ## Read value
+        $draw = $_POST['draw'];
+        $row = $_POST['start'];
+        $rowperpage = $_POST['length']; // Rows display per page
+        $columnIndex = $_POST['order'][0]['column']; // Column index
+        $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+        $searchValue = $_POST['search']['value']; // Search value
 
+        $staff_info = staff_info();
+        $staff_id = $staff_info['id'];
+        $staffrole = $staff_info['role'];
+        $staff_office = $staff_info['office'];
+        $departments = explode(',', $staff_info['department']);
+
+        if (in_array(2, $departments)) {
+            if ($staffrole == 2) {      // frinchisee manager
+                $this->db->where_in('office_id', $staff_office);
+            } else {
+                $this->db->where('created_by',$staff_id);
+            }
+        }
+        if ($office != "") {
+            $this->db->where_in('office_id',$office);
+        }
+        if ($date_range != "") {
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            
+            $this->db->where('date >=',$start_date);
+            $this->db->where('date <=',$end_date);
+        }
+        if ($searchValue != '') {
+            $this->db->group_start();
+            $this->db->like('client_id', $searchValue);
+            $this->db->or_like('service_name', $searchValue);
+            $this->db->group_end();
+        }
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        $res_for_all = $this->db->get('weekly_sales_report')->num_rows();
+        $qr = $this->db->last_query();
+        $qr .= ' order by ' . $columnName . ' ' . $columnSortOrder;
+        $qr .= ' limit ' . $row . ',' . $rowperpage;
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        $sales_reports_data = $this->db->query($qr)->result_array();
+
+        $totalRecords = $res_for_all;
+        $totalRecordwithFilter = $res_for_all;
+        ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $sales_reports_data
+        );
+
+        return $response;
+    }
+
+    public function get_total_of_sales_report($office,$date_range) {
+        if (!empty($office)) {
+            $this->db->where_in('office_id',$office);
+        }            
+        if ($date_range != "") {
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            
+            $this->db->where('date >=',$start_date);
+            $this->db->where('date <=',$end_date);
+        }           
+        $total_data = $this->db->get('weekly_sales_report')->result_array();
+        $total_arr = array(
+            "override_price" => array_sum(array_column($total_data,'override_price')),
+            "cost" => array_sum(array_column($total_data,'cost')),
+            "collected" => array_sum(array_column($total_data,'collected')),
+            "total_net" => array_sum(array_column($total_data,'total_net')),
+            "franchisee_fee" => array_sum(array_column($total_data,'franchisee_fee')),
+            "gross_profit" => array_sum(array_column($total_data,'gross_profit'))
+        );
+        return $total_arr;
+    }
 }

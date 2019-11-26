@@ -151,6 +151,9 @@ class Invoice extends CI_Controller {
             $reference_id = $order_summary['reference_id'];
             $render_data['order_summary'] = $order_summary;
             $render_data['order_summary']['invoice_type_id'] = $invoice_type = $order_summary['invoice_type'];
+            $render_data['order_summary']['created_time'] = $created_time = date("m-d-Y h:i", strtotime($order_summary['created_time']));
+            $render_data['order_summary']['date_of_birth'] = $date_of_birth = date("m-d-Y", strtotime($order_summary['date_of_birth']));
+            
             $render_data['order_summary']['invoice_type'] = $this->invoce_type_array[$invoice_type];
             $render_data['order_summary']['contact_info'] = $this->service_model->get_contact_list_by_reference($reference_id, $invoice_type == 1 ? 'company' : "individual");
             if ($invoice_type == 1) {
@@ -279,7 +282,8 @@ class Invoice extends CI_Controller {
             <button class="btn btn-default m-t-10 m-r-5" type="button" onclick="window.location.href = \'' . base_url('billing/home') . '\';">Close</button>
             <button class="btn btn-success m-t-10 m-r-5" type="button" onclick="placeOrder(\'' . $invoice_id . '\', \'' . implode(',', $render_data['contact_email_list']) . '\');"><i class="fa fa-envelope-o"></i> Email</button>
             <button class="btn bg-purple m-t-10 m-r-5" type="button" onclick="printOrder();"><i class="fa fa-print"></i> Print</button>
-            <button class="btn btn-warning m-t-10" type="button" onclick="go(\'billing/invoice/export/' . $invoice_id . '\');"><i class="fa fa-file-pdf-o"></i> Download PDF</button>
+            <button class="btn btn-warning m-t-10 m-r-5" type="button" onclick="go(\'billing/invoice/export/' . $invoice_id . '\');"><i class="fa fa-file-pdf-o"></i> Download PDF</button>
+            <button class="btn btn-primary m-t-10" type="button" onclick="go(\'billing/payments/details/' . base64_encode($invoice_id) . '\')">Pay Invoice</button>
         </div>';
             $render_data['export_type'] = 'view';
             $this->load->template('billing/invoice_details', $render_data);

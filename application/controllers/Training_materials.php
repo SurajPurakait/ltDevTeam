@@ -17,7 +17,8 @@ class Training_materials extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Training Materials Dashboard";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'training_materials';
+        // $render_data['main_menu'] = 'training_materials';
+        $render_data['main_menu'] = 'corporate_menu';
         $render_data['menu'] = 'training_materials_dashboard_' . $visible_by;
         $render_data['header_title'] = $title;
         $render_data['main_cat'] = $this->vm->get_main_cats();
@@ -44,7 +45,8 @@ class Training_materials extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Add Training Materials";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'training_materials';
+        // $render_data['main_menu'] = 'training_materials';
+        $render_data['main_menu'] = 'corporate_menu';
         $render_data['menu'] = 'training_materials_dashboard_' . $visible_by;
         $render_data['header_title'] = $title;
         $render_data['visible_by'] = $visible_by;
@@ -72,7 +74,8 @@ class Training_materials extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Training Materials Main Category";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'training_materials';
+        // $render_data['main_menu'] = 'training_materials';
+        $render_data['main_menu'] = 'corporate_menu';
         $render_data['menu'] = 'training_materials_category';
         $render_data['header_title'] = $title;
         $render_data['main_cat_list'] = $this->vm->get_main_cats();
@@ -129,7 +132,8 @@ class Training_materials extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Training Materials Sub Category";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'training_materials';
+        // $render_data['main_menu'] = 'training_materials';
+        $render_data['main_menu'] = 'corporate_menu';
         $render_data['menu'] = 'training_materials_subcategory';
         $render_data['header_title'] = $title;
         $render_data['sub_cat_list'] = $this->vm->get_sub_cats();
@@ -238,7 +242,8 @@ class Training_materials extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Suggestions";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'training_materials';
+        // $render_data['main_menu'] = 'training_materials';
+        $render_data['main_menu'] = 'corporate_menu';
         $render_data['menu'] = 'training_materials_suggestions';
         $render_data['header_title'] = $title;
         $render_data['suggestions'] = $this->vm->training_materials_suggestions();

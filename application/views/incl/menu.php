@@ -125,19 +125,19 @@ $office_id = get_office_id($staff_info['office']);
                                 <a href="<?//= base_url(); ?>administration/Renewal_dates">Renewal Dates</a>
                             </li> -->
                             <li <?= active_menu($menu, "manage_staff"); ?>>
-                                <a class="bg-primary" href="<?= base_url(); ?>administration/manage_staff">Manage Staff</a>
+                                <a class="bg-primary" href="<?= base_url('admin_panel/manage_staff'); ?>">Manage Staff</a>
                             </li>
                             <li <?= active_menu($menu, "departments"); ?>>
-                                <a class="bg-primary" href="<?= base_url(); ?>administration/departments">Manage Departments</a>
+                                <a class="bg-primary" href="<?= base_url('admin_panel/departments'); ?>">Manage Departments</a>
                             </li>
                             <li <?= active_menu($menu, "franchise"); ?>>
-                                <a class="bg-primary" href="<?= base_url(); ?>administration/office">Manage Offices</a>
+                                <a class="bg-primary" href="<?= base_url('admin_panel/office'); ?>">Manage Offices</a>
                             </li>
                             <li <?= active_menu($menu, "paypal_account_setup"); ?>>
-                                <a class="bg-primary" href="<?= base_url(); ?>administration/paypal_account_setup">Paypal Account Setup</a>
+                                <a class="bg-primary" href="<?= base_url('admin_panel/paypal_account_setup'); ?>">Paypal Account Setup</a>
                             </li>
                             <li <?= active_menu($menu, "manage_log"); ?>>
-                                <a class="bg-primary" href="<?= base_url(); ?>administration/manage_log">Manage Log</a>
+                                <a class="bg-primary" href="<?= base_url('admin_panel/manage_log'); ?>">Manage Log</a>
                             </li>
                         </ul>
                     </li>
@@ -217,11 +217,11 @@ $office_id = get_office_id($staff_info['office']);
                         </li>
                         <?php if ($staff_info['type'] == '1') { ?>
                         <li <?= active_menu($menu, "service_setup"); ?>>
-                                <a class="bg-primary" href="<?= base_url(); ?>administration/service_setup">Service Setup</a>
+                                <a class="bg-primary" href="<?= base_url('services/service_setup'); ?>">Service Setup</a>
                         </li>
 
                         <li <?= active_menu($menu, "business_client"); ?>>
-                                <a class="bg-primary" href="<?= base_url(); ?>administration/Business_client">Sales Tax Rate</a>
+                                <a class="bg-primary" href="<?= base_url('services/business_client'); ?>">Sales Tax Rate</a>
                         </li>
                     <?php } ?>
                     </ul>
@@ -286,7 +286,7 @@ $office_id = get_office_id($staff_info['office']);
                             </li>
                             <?php if ($staff_info['type'] == '1') { ?>
                             <li <?= active_menu($menu, "template"); ?>>
-                                <a class="bg-primary" href="<?= base_url(); ?>administration/template">Project Templates</a>
+                                <a class="bg-primary" href="<?= base_url('projects/template'); ?>">Project Templates</a>
                             </li>
                             <?php } ?>
                         </ul>
@@ -333,34 +333,34 @@ $office_id = get_office_id($staff_info['office']);
                     <a href="javascript:void(0);"><i class="fa fa-address-card"></i> <span class="nav-label">Clients</span><span class="fa arrow"></span></a>
                     <ul class="active-blue-bg nav nav-second-level collapse" style="height: 0px;">
                         <li <?= active_menu($menu, "business_dashboard"); ?> >
-                            <a href="<?= base_url(); ?>action/home/business_dashboard">Business Clients</a>
+                            <a href="<?= base_url('clients/business_dashboard'); ?>">Business Clients</a>
                         </li>
                         <li <?= active_menu($menu, "add_business"); ?> >
-                            <a href="<?= base_url(); ?>action/home/add_business">+ Add New Business</a>
+                            <a href="<?= base_url('clients/add_business'); ?>">+ Add New Business</a>
                         </li>
                         <li <?= active_menu($menu, "individual_dashboard"); ?> >
-                            <a href="<?= base_url(); ?>action/home/individual_dashboard">Individual Clients</a>
+                            <a href="<?= base_url('clients/individual_dashboard'); ?>">Individual Clients</a>
                         </li>
                         <li <?= active_menu($menu, "add_individual"); ?> >
-                            <a href="<?= base_url(); ?>action/home/add_individual">+ Add New Individual</a>
+                            <a href="<?= base_url('clients/add_individual'); ?>">+ Add New Individual</a>
                         </li>
                         <?php if ($staff_info['department'] == '1') { ?>
                             <?php if ($staff_info['type'] == '1') { ?>
                             <li <?= active_menu($menu, "import_clients"); ?> >
-                                <a class="bg-primary" href="<?= base_url(); ?>action/home/import_clients">Import Clients</a>
+                                <a class="bg-primary" href="<?= base_url('clients/import_clients'); ?>">Import Clients</a>
                             </li>
 
                             <li <?= active_menu($menu, "company_type"); ?>>
-                                <a class="bg-primary" href="<?= base_url(); ?>administration/company_type">Company Type</a>
+                                <a class="bg-primary" href="<?= base_url('clients/company_type'); ?>">Company Type</a>
                             </li>
                             <li <?= active_menu($menu, "renewal_dates"); ?>>
-                                <a class="bg-primary" href="<?= base_url(); ?>administration/Renewal_dates">Renewal Dates</a>
+                                <a class="bg-primary" href="<?= base_url('clients/renewal_dates'); ?>">Renewal Dates</a>
                             </li>
                             <li <?= active_menu($menu, "referred_by_source"); ?>>
-                                <a class="bg-primary" href="<?= base_url(); ?>administration/referred_source">Referred by Source</a>
+                                <a class="bg-primary" href="<?= base_url('clients/referred_source'); ?>">Referred by Source</a>
                             </li>
                             <li <?= active_menu($menu, "lead_mail"); ?>>
-                                <a class="bg-primary" href="<?= base_url(); ?>lead_management/lead_mail">Promotion Mails</a>
+                                <a class="bg-primary" href="<?= base_url('clients/lead_mail'); ?>">Promotion Mails</a>
                             </li>
 
                         <?php } } ?>
@@ -486,101 +486,153 @@ $office_id = get_office_id($staff_info['office']);
                 </li> -->
 
 
-                <!-- Training Materials -->
-                <li <?= active_menu($main_menu, "training_materials"); ?> >
+                <!-- Corporate Menu -->
+                <li <?= active_menu($main_menu, "corporate_menu"); ?>>
                     <a href="javascript:void(0);">
                         <i class="fa fa-video-camera"></i>
-                        <span class="nav-label">Training Materials</span>
+                        <span class="nav-label">Corporate</span>
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse" style="height: 0px;">
-                        <?php if ($staff_info['type'] != 3) { ?>
-                            <li <?= active_menu($menu, "training_materials_dashboard_2"); ?>>
-                                <a href="<?= base_url() ?>training_materials/index/2">For Corporate</a>
-                            </li>
-                        <?php } ?>
-                        <li <?= active_menu($menu, "training_materials_dashboard_3"); ?>>
-                            <a href="<?= base_url() ?>training_materials/index/3">For Franchisee</a>
+
+                        <!-- Operational Manuals -->
+                        <li <?= active_menu($main_menu, "operational_manuals"); ?> >
+                            <a href="javascript:void(0);">
+                                <i class="fa fa-question-circle"></i>
+                                <span class="nav-label">Operational Manuals</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse" style="height: 0px;">   
+                                <li <?= active_menu($menu, "operational_manuals_dashboard"); ?>>
+                                    <a href="<?= base_url('corporate/operational_manuals') ?>">Taxleaf Manual</a>
+                                </li>
+                                <li <?= active_menu($menu, "operational_manuals_forms"); ?>>
+                                    <a href="<?= base_url('corporate/operational_manuals/forms') ?>">Forms</a>
+                                </li>
+                                <?php //if ($staff_info['department'] == '1') {  ?>
+                                    <!-- <li <?//= active_menu($menu, "operational_manuals_category"); ?>>
+                                        <a href="<?//= base_url(); ?>operational_manuals/operational_manuals_category">Main Category</a>
+                                    </li>
+                                    <li <?//= active_menu($menu, "operational_manuals_subcategory"); ?>>
+                                        <a href="<?//= base_url(); ?>operational_manuals/operational_manuals_subcategory">Sub Category</a>
+                                    </li> -->
+                                <?php //}  ?>
+                            </ul>    
                         </li>
-                        <?php if ($staff_info['type'] != 3) { ?>
-                            <li <?= active_menu($menu, "training_materials_dashboard_4"); ?>>
-                                <a href="<?= base_url() ?>training_materials/index/4">For Client</a>
-                            </li>
-                            <li <?= active_menu($menu, "training_materials_dashboard_"); ?>>
-                                <a href="<?= base_url() ?>training_materials/add_training_material">- Add Training Material</a>
-                            </li>
-                        <?php } ?>
-                        <?php if ($staff_info['department'] == '1') { ?>
-                            <li <?= active_menu($menu, "training_materials_category"); ?>>
-                                <a href="<?= base_url(); ?>training_materials/training_materials_category">Main Category</a>
-                            </li>
-                            <li <?= active_menu($menu, "training_materials_subcategory"); ?>>
-                                <a href="<?= base_url(); ?>training_materials/training_materials_subcategory">Sub Category</a>
-                            </li>
-                        <?php } ?>
-                        <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '9') { ?>
-                            <li <?= active_menu($menu, "training_materials_suggestions"); ?>>
-                                <a href="<?= base_url(); ?>training_materials/training_materials_suggestions">Suggestions</a>
-                            </li>
-                        <?php } ?>
-                    </ul>
+
+                        <!-- Training Materials -->
+                        <li <?= active_menu($main_menu, "training_materials"); ?>>
+                            <a href="javascript:void(0);">
+                                <i class="fa fa-video-camera"></i>
+                                <span class="nav-label">Training Materials</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse" style="height: 0px;">
+                                <?php if ($staff_info['type'] != 3) { ?>
+                                    <li <?= active_menu($menu, "training_materials_dashboard_2"); ?>>
+                                        <a href="<?= base_url('corporate/training_materials/index/2') ?>">For Corporate</a>
+                                    </li>
+                                <?php } ?>
+                                <li <?= active_menu($menu, "training_materials_dashboard_3"); ?>>
+                                    <a href="<?= base_url('corporate/training_materials/index/3') ?>">For Franchisee</a>
+                                </li>
+                                <?php if ($staff_info['type'] != 3) { ?> 
+                                    <li <?= active_menu($menu, "training_materials_dashboard_4"); ?>>
+                                        <a href="<?= base_url('corporate/training_materials/index/4') ?>">For Client</a>
+                                    </li>
+                                    <li <?= active_menu($menu, "training_materials_dashboard_"); ?>>
+                                        <a href="<?= base_url('corporate/training_materials/add_training_material') ?>">- Add Training Material</a>
+                                    </li>
+                                <?php  } ?>
+                                <?php if ($staff_info['department'] == '1') { ?>
+                                    <li <?= active_menu($menu, "training_materials_category"); ?>>
+                                        <a href="<?= base_url('corporate/training_materials/training_materials_category'); ?>">Main Category</a>
+                                    </li>
+                                    <li <?= active_menu($menu, "training_materials_subcategory"); ?>>
+                                        <a href="<?= base_url('corporate/training_materials/training_materials_subcategory'); ?>">Sub Category</a>
+                                    </li>
+                                <?php } ?>
+                                <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '9') { ?>
+                                    <li <?= active_menu($menu, "training_materials_suggestions"); ?>>
+                                        <a href="<?= base_url('corporate/training_materials/training_materials_suggestions'); ?>">Suggestions</a>
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </li>
+                        
+                        <!-- Marketing Materials -->
+                        <li <?= active_menu($main_menu, "marketing_materials"); ?> >
+                            <a href="javascript:void(0);">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span class="nav-label">Marketing Materials</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level collapse" style="height: 0px;">   
+                                <li <?= active_menu($menu, "marketing_materials_dashboard"); ?>>
+                                    <a href="<?= base_url('corporate/marketing_materials/index') ?>">Dashboard</a>
+                                </li>
+                                <li <?= active_menu($menu, "marketing_materials_purchase_list"); ?>>
+                                    <a href="<?= base_url('corporate/marketing_materials/marketing_materials_purchase_list') ?>">Purchase List</a>
+                                </li>
+                                <?php if ($staff_info['department'] == '1') { ?>
+                                    <li <?= active_menu($menu, "marketing_materials_category"); ?>>
+                                        <a href="<?= base_url('corporate/marketing_materials/marketing_materials_category'); ?>">Main Category</a>
+                                    </li>
+                                    <li <?= active_menu($menu, "marketing_materials_subcategory"); ?>>
+                                        <a href="<?= base_url('corporate/marketing_materials/marketing_materials_subcategory'); ?>">Sub Category</a>
+                                    </li>
+                                <?php } ?>
+                                <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '9') { ?>
+                                    <li <?= active_menu($menu, "marketing_materials_suggestions"); ?>>
+                                        <a href="<?= base_url('corporate/marketing_materials/marketing_materials_suggestions'); ?>">Suggestions</a>
+                                    </li>
+                                <?php } ?>
+                            </ul>
+                        </li>
+                        
+                    <?php if ($staff_info['type'] != 3) { ?> 
+                    <!-- Visitation -->
+                        <li <?= active_menu($main_menu, "visitation"); ?> >
+                            <a href="<?= base_url('corporate/visit_reports'); ?>">
+                                <i class="fa fa-users"></i>
+                                <span class="nav-label">Visit Reports</span>
+                            </a>
+                        </li>
+                        <li <?= active_menu($menu, ""); ?>>
+                                <a href="#">Suggestions</a>
+                        </li>  
+                    <?php } ?>                         
+
+                    </ul>                   
                 </li>
 
 
-                 <!-- Marketing Materials -->
-                <li <?= active_menu($main_menu, "marketing_materials"); ?> >
+                <!-- Franchisee Menu -->
+                <li <?= active_menu($main_menu, "franchisee_menu"); ?> >
                     <a href="javascript:void(0);">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span class="nav-label">Marketing Materials</span>
+                        <i class="fa fa-comment"></i>
+                        <span class="nav-label">Franchisee</span>
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse" style="height: 0px;">   
-                        <li <?= active_menu($menu, "marketing_materials_dashboard"); ?>>
-                            <a href="<?= base_url() ?>marketing_materials/index">Dashboard</a>
+                        <li <?= active_menu($menu, "franchise"); ?>>
+                            <a href="<?= base_url('franchisee/office_info'); ?>">Office Info</a>
                         </li>
-                        <li <?= active_menu($menu, "marketing_materials_purchase_list"); ?>>
-                            <a href="<?= base_url() ?>marketing_materials/marketing_materials_purchase_list">Purchase List</a>
+                        <li <?= active_menu($menu, ""); ?>>
+                            <a href="#">Merchant Account</a>
                         </li>
-                        <?php if ($staff_info['department'] == '1') { ?>
-                            <li <?= active_menu($menu, "marketing_materials_category"); ?>>
-                                <a href="<?= base_url(); ?>marketing_materials/marketing_materials_category">Main Category</a>
-                            </li>
-                            <li <?= active_menu($menu, "marketing_materials_subcategory"); ?>>
-                                <a href="<?= base_url(); ?>marketing_materials/marketing_materials_subcategory">Sub Category</a>
-                            </li>
-                        <?php } ?>
-                        <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '9') { ?>
-                            <li <?= active_menu($menu, "marketing_materials_suggestions"); ?>>
-                                <a href="<?= base_url(); ?>marketing_materials/marketing_materials_suggestions">Suggestions</a>
-                            </li>
-                        <?php } ?>
+                        <li <?= active_menu($menu, ""); ?>>
+                            <a href="#">Network Events</a>
+                        </li>
+                        <li <?= active_menu($menu, ""); ?>>
+                            <a href="#">Seminar Events</a>
+                        </li>
+                        <li <?= active_menu($menu, ""); ?>>
+                            <a href="#">Daily Calls</a>
+                        </li>
                     </ul>
                 </li>
-
-                <!-- Operational Manuals -->
-                <li <?= active_menu($main_menu, "operational_manuals"); ?> >
-                    <a href="javascript:void(0);">
-                        <i class="fa fa-question-circle"></i>
-                        <span class="nav-label">Operational Manuals</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level collapse" style="height: 0px;">   
-                        <li <?= active_menu($menu, "operational_manuals_dashboard"); ?>>
-                            <a href="<?= base_url() ?>operational_manuals/index">Taxleaf Manual</a>
-                        </li>
-                        <li <?= active_menu($menu, "operational_manuals_forms"); ?>>
-                            <a href="<?= base_url() ?>operational_manuals/forms">Forms</a>
-                        </li>
-                        <?php //if ($staff_info['department'] == '1') {  ?>
-                            <!-- <li <?//= active_menu($menu, "operational_manuals_category"); ?>>
-                                <a href="<?//= base_url(); ?>operational_manuals/operational_manuals_category">Main Category</a>
-                            </li>
-                            <li <?//= active_menu($menu, "operational_manuals_subcategory"); ?>>
-                                <a href="<?//= base_url(); ?>operational_manuals/operational_manuals_subcategory">Sub Category</a>
-                            </li> -->
-                        <?php //}  ?>
-                    </ul>    
-                </li>
+            
 
 
                 <!-- News and Updates -->
@@ -647,16 +699,32 @@ $office_id = get_office_id($staff_info['office']);
 
                      <?php if ($staff_info['type'] == '1' || $staff_info['type'] == '3') { ?>
                         <li <?= active_menu($menu, "report_3"); ?>>
-                            <a href="<?= base_url() ?>reports/index/3">Franchisees</a>
+                            <a href="javascript:void(0);">
+                                <i class="fa fa-comment"></i>
+                                <span class="nav-label">Franchisees</span>
+                                <span class="fa arrow"></span>
+                            </a>
+                        <ul class="nav nav-second-level collapse" style="height: 0px;">
+                            <li <?= active_menu($menu, "report_3"); ?>>
+                                <a href="<?= base_url() ?>reports/index/3">Dashboard</a>
+                            </li>
+
+                            <li <?= active_menu($menu, "royalty_report"); ?>>
+                                <a href="<?= base_url() ?>reports/royalty_reports">Royalty Report</a>
+                            </li>
+
+                            <li <?= active_menu($menu, "weekly_sales_report"); ?>>
+                                <a href="<?= base_url() ?>reports/weekly_sales_report">Weekly Sales Report</a>
+                            </li>
+                        </ul>
+                            
                         </li>
-                        <li <?= active_menu($menu, "report_4"); ?>>
-                            <a href="<?= base_url() ?>reports/index/4">Franchisees</a>
-                        </li>
+<!--                        <li <?php // echo active_menu($menu, "report_4"); ?>>
+                            <a href="<?php // echo base_url() ?>reports/index/4">Franchisees</a>
+                        </li>-->
 
                     <?php } ?>
-                        <li <?= active_menu($menu, "royalty_report"); ?>>
-                            <a href="<?= base_url() ?>reports/royalty_reports">Royalty Report</a>
-                        </li>
+                        
                         <li <?= active_menu($menu, ""); ?>>
                             <a href="#">Leafnet</a>
                         </li>
@@ -684,15 +752,6 @@ $office_id = get_office_id($staff_info['office']);
                     </ul>
                 </li>
 
-                <?php if ($staff_info['type'] == 2 || $staff_info['type'] == 1) { ?>
-                    <!-- Visitation -->
-                    <li <?= active_menu($main_menu, "visitation"); ?> >
-                        <a href="<?= base_url(); ?>visitation/visitation_home/index">
-                            <i class="fa fa-users"></i>
-                            <span class="nav-label">Visitation</span>
-                        </a>
-                    </li>
-                <?php } ?>
 
             <?php } else { 
                 $user_who_referred = user_who_referred(sess('user_id'));
@@ -705,6 +764,9 @@ $office_id = get_office_id($staff_info['office']);
                         </li>
                         <li <?= active_menu($menu, "refferred_leads_dashboard"); ?>>
                             <a href="<?= base_url(); ?>referral_partner/referral_partners/add_lead/<?= $user_who_referred['office_manager']; ?>">Refer a Lead</a>
+                        </li>
+                        <li <?= active_menu($menu, "refferred_leads_dashboard"); ?>>
+                            <a href="javascript:void(0)">Tutorial</a>
                         </li>
                     </ul>
                 </li>
@@ -722,7 +784,7 @@ $office_id = get_office_id($staff_info['office']);
                     <?php } else { ?>
                         <img src="<?php echo base_url(); ?>assets/img/user-demo.jpg" alt="" class="img-circle">
                     <?php } ?>
-                    <h5><?php echo $referred_info['last_name'] . ', ' . $referred_info['first_name']; ?> </h5>
+                    <h5><?php echo $referred_info['first_name'] . '  ' . $referred_info['last_name']; ?> </h5>
                     <p><?php echo staff_office_name($referred_info['id']); ?></p>
                     <hr class="m-t-xs m-b-xs">
                     <p><i class="fa fa-envelope" aria-hidden="true"></i> <?php echo $referred_info['user']; ?></p>

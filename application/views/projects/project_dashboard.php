@@ -165,9 +165,9 @@ if (!empty($project_list)) {
                                         ?>
                                     </td>                                                  
                                     <td title="Tracking" class="text-center"><span id="trackouter-<?php echo $list['id']; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></td>
-                                    <td title="Creation Date"><?= date('Y-m-d', strtotime($list['created_at'])) ?></td>
-                                    <td title="Due Date"><?= $dueDate ?></td>
-                                    <td title="Recurrence Date"><?= $pattern_details->generation_date; ?></td>
+                                    <td title="Creation Date"><?= date('m/d/Y', strtotime($list['created_at'])) ?></td>
+                                    <td title="Due Date"><?= date('m/d/Y',strtotime($dueDate)) ?></td>
+                                    <td title="Recurrence Date"><?= date('m/d/Y',strtotime($pattern_details->generation_date)); ?></td>
 
                                             <!-- <td title='Note'><a id="notecount-<?//= $list['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_notes(<?//= $list["id"]; ?>)"><b> <?//= get_project_note_count($list['id']) ?></b></a> -->
 

@@ -41,9 +41,18 @@ $role = $user_info['role'];
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="pull-right">
-                                        <label class="col-lg-2 m-t-5 control-label">Year:</label>
+                                        <label class="col-lg-2 m-t-5 control-label">Year: </label>
                                         <div class="col-lg-10">
-                                            <input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">
+                                            <?php $presenet_year=date('Y'); ?>
+                                            <!--<input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">-->
+                                            <select class="form-control year-dropdown" name="due_year" onchange="change_project_year(this.value)" disabled="">
+                                                <option value="">All Years</option>
+                                                <?php foreach ($due_years as $key => $year): ?>
+                                                    <option value="<?= $year['due_year'] ?>" <?= $presenet_year== $year['due_year']?'selected':'' ?> >
+                                                        <?= $year['due_year'] ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
                                             <div class="errorMessage text-danger"></div>
                                         </div>
                                     </div>
@@ -495,9 +504,8 @@ $role = $user_info['role'];
             url: base_url + 'project/update_project_task_status',
             dataType: "html",
             success: function (result) {
-//                                alert(result);return false;
-//                    new status section
-                    var res = JSON.parse(result.trim());
+//                alert(result.trim());return false;
+                var res=JSON.parse(result.trim());
 //                    alert(res.task_status+','+res.project_status);return false;
                     if (res.task_status == '0') {
                         var tracking = 'New';
@@ -527,6 +535,12 @@ $role = $user_info['role'];
                     if(res.sub_taskid_status == 3){
                         var tracking_sub = 'Ready';
                         var trk_class_sub = 'label label-secondary';
+                        $("#trackinner-" + res.sub_taskid).removeClass().addClass(trk_class_sub);
+                        $("#trackinner-" + res.sub_taskid).html(tracking_sub);
+                    }
+                    if(res.sub_taskid_status == 0){
+                        var tracking_sub = 'New';
+                        var trk_class_sub = 'label label-success';
                         $("#trackinner-" + res.sub_taskid).removeClass().addClass(trk_class_sub);
                         $("#trackinner-" + res.sub_taskid).html(tracking_sub);
                     }
@@ -720,5 +734,8 @@ $role = $user_info['role'];
         $(".criteria-dropdown").trigger("chosen:updated");
         $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
         $('#btn_clear_filter').css('display', 'none');
+    }
+    function change_project_year(year){
+        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1,'',year)
     }
 </script> 

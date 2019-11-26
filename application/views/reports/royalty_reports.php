@@ -8,8 +8,6 @@
                 	?>
                 </select> &nbsp;
                 <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">
-
-               	<!-- <input placeholder="dd-mm-yyyy" class="form-control datepicker_range_mdy" type="text" title="" name="daterange" id="date_range"> -->
                	<button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>
                 <div class="ibox-content ajaxdiv-reports m-t-25">
                     <div class="">
@@ -47,7 +45,7 @@
 	loadRoyaltyReportsData();
 		$(function () {
 			$(".chosen-select").chosen();
-        	var start = moment().subtract(29, 'days');
+        	var start = moment("01/01/1970", "MM-DD-YYYY");
             var end = moment();
             function cb(start, end) {
                 $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -57,7 +55,7 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
-                	'Select' : ['01/01/1970', moment()],
+                	'Select' : [moment("01/01/1970", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -73,10 +71,10 @@
             	var report_range = document.getElementById('reportrange').value;
             	var office  = $('#ofc').val();
             	loadRoyaltyReportsData(office,report_range);
-				get_total_price_report(office,report_range);            	
+				get_total_royalty_report(office,report_range);            	
             });
 
-            get_total_price_report();
+            get_total_royalty_report();
 
     	});	
 </script>

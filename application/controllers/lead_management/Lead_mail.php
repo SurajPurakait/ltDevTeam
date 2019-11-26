@@ -17,7 +17,8 @@ class Lead_mail extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Lead Mail";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'leads';
+        // $render_data['main_menu'] = 'leads';
+        $render_data['main_menu'] = 'clients';
         $render_data['menu'] = 'lead_mail';
         $render_data['header_title'] = $title;
         $render_data["lead_mail_content"] = $this->lead_management->get_lead_mail_content();

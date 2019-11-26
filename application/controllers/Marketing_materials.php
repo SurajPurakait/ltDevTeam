@@ -18,7 +18,8 @@ class Marketing_materials extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Marketing Materials Dashboard";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'marketing_materials';
+        // $render_data['main_menu'] = 'marketing_materials';
+        $render_data['main_menu'] = 'corporate_menu';
         $render_data['menu'] = 'marketing_materials_dashboard';
         $render_data['header_title'] = $title;
         $render_data['main_cat'] = $this->mm->get_main_cats();
@@ -43,7 +44,8 @@ class Marketing_materials extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Marketing Materials Main Category";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'marketing_materials';
+        // $render_data['main_menu'] = 'marketing_materials';
+        $render_data['main_menu'] = 'corporate_menu';
         $render_data['menu'] = 'marketing_materials_category';
         $render_data['header_title'] = $title;
         $render_data['main_cat_list'] = $this->mm->get_main_cats();
@@ -54,7 +56,8 @@ class Marketing_materials extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Marketing Materials Sub Category";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'marketing_materials';
+        // $render_data['main_menu'] = 'marketing_materials';
+        $render_data['main_menu'] = 'corporate_menu';
         $render_data['menu'] = 'marketing_materials_subcategory';
         $render_data['header_title'] = $title;
         $render_data['sub_cat_list'] = $this->mm->get_sub_cats();
@@ -65,7 +68,8 @@ class Marketing_materials extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Marketing Materials Purchase List";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'marketing_materials';
+        // $render_data['main_menu'] = 'marketing_materials';
+        $render_data['main_menu'] = 'corporate_menu';
         $render_data['menu'] = 'marketing_materials_purchase_list';
         $render_data['header_title'] = $title;
         $render_data['staff_office'] = $this->administration->get_all_office();
@@ -343,7 +347,8 @@ class Marketing_materials extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Suggestions";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'marketing_materials';
+        // $render_data['main_menu'] = 'marketing_materials';
+        $render_data['main_menu'] = 'corporate_menu';
         $render_data['menu'] = 'marketing_materials_suggestions';
         $render_data['header_title'] = $title;
         $render_data['suggestions'] = $this->mm->marketing_materials_suggestions();

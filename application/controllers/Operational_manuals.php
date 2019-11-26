@@ -17,7 +17,8 @@ class Operational_manuals extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Operational Manuals Dashboard";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'operational_manuals';
+        // $render_data['main_menu'] = 'operational_manuals';
+        $render_data['main_menu'] = 'corporate_menu';
         $render_data['menu'] = 'operational_manuals_dashboard';
         $render_data['header_title'] = $title;
         $render_data['main_title'] = $this->om->get_main_title();
@@ -56,7 +57,8 @@ class Operational_manuals extends CI_Controller {
        $this->load->layout = 'dashboard';
         $title = "Operational Manuals Forms";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'operational_manuals';
+        // $render_data['main_menu'] = 'operational_manuals';
+        $render_data['main_menu'] = 'corporate_menu';
         $render_data['menu'] = 'operational_manuals_forms';
         $render_data['header_title'] = $title;
         $render_data['forms'] = $this->om->get_forms();
