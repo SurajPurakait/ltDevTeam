@@ -3440,3 +3440,10 @@ if(!function_exists('get_exist_task')){
         return $ci->Project_Template_model->getExistTask($template_id);
     }
 }
+if(!function_exists('get_action_notification_for_view')){
+    function get_action_notification_for_view($action_id){
+        $ci =&get_instance();
+        $ci->load->model('system');
+        return $ci->system->get_general_notification_by_user_id(sess('user_id'),'','','','',$action_id);
+    }
+}

@@ -2724,7 +2724,6 @@ class Service_model extends CI_Model {
             $this->db->group_end();
         }
         $this->db->query('SET SQL_BIG_SELECTS=1');
-        $this->db->where('id !=',1);
         $res_for_all = $this->db->get('weekly_sales_report')->num_rows();
         $qr = $this->db->last_query();
         $qr .= ' order by ' . $columnName . ' ' . $columnSortOrder;

@@ -41,9 +41,18 @@ $role = $user_info['role'];
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="pull-right">
-                                        <label class="col-lg-2 m-t-5 control-label">Year:</label>
+                                        <label class="col-lg-2 m-t-5 control-label">Year: </label>
                                         <div class="col-lg-10">
-                                            <input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">
+                                            <?php $presenet_year=date('Y'); ?>
+                                            <!--<input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">-->
+                                            <select class="form-control year-dropdown" name="due_year" onchange="change_project_year(this.value)" disabled="">
+                                                <option value="">All Years</option>
+                                                <?php foreach ($due_years as $key => $year): ?>
+                                                    <option value="<?= $year['due_year'] ?>" <?= $presenet_year== $year['due_year']?'selected':'' ?> >
+                                                        <?= $year['due_year'] ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
                                             <div class="errorMessage text-danger"></div>
                                         </div>
                                     </div>
@@ -725,5 +734,8 @@ $role = $user_info['role'];
         $(".criteria-dropdown").trigger("chosen:updated");
         $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
         $('#btn_clear_filter').css('display', 'none');
+    }
+    function change_project_year(year){
+        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1,'',year)
     }
 </script> 
