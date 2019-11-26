@@ -567,16 +567,24 @@ class Patch extends CI_Controller {
     }
 
     public function update_practice_id() {
-        $client_list = $this->db->get('internal_data')->result_array();
+        $sql = "SELECT * FROM `internal_data` WHERE `practice_id`=''";
+        $client_list = $this->db->query($sql)->result_array();
         foreach ($client_list as $key => $cl) {
 //            if (trim($cl['practice_id']) == '') {   // this condition is removed for updating all client's practice_id update
                 $reference_id = $cl['reference_id'];
                 if ($cl['reference'] == 'individual') {
                     $details = $this->db->get_where('individual', ['id' => $reference_id])->row_array();
                     $name = trim($details['last_name']) . trim($details['first_name']);
+                    if (empty($name)) {
+                        $details = $this->db->get_where('company', ['company_id' => $reference_id])->row_array();
+                        $name = strtoupper(str_replace(' ', '', trim($details['name'])));
+                        $c = preg_replace("/[^a-zA-Z0-9]/", "", $name);
+                        $practice_id = substr($c, 0, 11);                            
+                    }
                     $name = strtoupper(str_replace(' ', '', $name));
                     $c = preg_replace("/[^a-zA-Z0-9]/", "", $name);
                     $practice_id = substr($c, 0, 11);
+
                 } elseif ($cl['reference'] == 'company') {
                     $details = $this->db->get_where('company', ['id' => $reference_id])->row_array();
                     $name = strtoupper(str_replace(' ', '', trim($details['name'])));
@@ -589,6 +597,7 @@ class Patch extends CI_Controller {
                 $this->db->update('internal_data', $update_data);
 //            }  //end practice_id blank checking   
         } //end foreach
+        echo "success";
     }
 
     public function update_service_request_department() {
@@ -752,10 +761,6 @@ class Patch extends CI_Controller {
         $royalty_reports_data = $this->db->query($query)->result_array();
 
         if (!empty($royalty_reports_data)) {
-            $data_invoice = array(
-                'invoice_id'=> 0
-            );
-            $this->db->insert('royalty_report',$data_invoice);
             foreach ($royalty_reports_data as $rpd) { 
                 for($i=1; $i <= $rpd['services']; $i++) {
                     $service_detail = get_service_by_id(explode(',',$rpd['all_services'])[$i]);
@@ -804,20 +809,20 @@ class Patch extends CI_Controller {
                     $this->db->insert('royalty_report',$data);
                 } 
             }
-            $total_data = $this->db->get('royalty_report')->result_array();
-            $total_arr = array(
-                "invoice_id" => count($total_data)-1,
-                "retail_price" => array_sum(array_column($total_data,'retail_price')),
-                "cost" => array_sum(array_column($total_data,'cost')),
-                "collected" => array_sum(array_column($total_data,'collected')),
-                "total_net" => array_sum(array_column($total_data,'total_net')),
-                "override_price" => array_sum(array_column($total_data,'override_price')),
-                "fee_with_cost" => array_sum(array_column($total_data,'fee_with_cost')),
-                "fee_without_cost" => array_sum(array_column($total_data,'fee_without_cost'))
+            // $total_data = $this->db->get('royalty_report')->result_array();
+            // $total_arr = array(
+            //     "invoice_id" => count($total_data)-1,
+            //     "retail_price" => array_sum(array_column($total_data,'retail_price')),
+            //     "cost" => array_sum(array_column($total_data,'cost')),
+            //     "collected" => array_sum(array_column($total_data,'collected')),
+            //     "total_net" => array_sum(array_column($total_data,'total_net')),
+            //     "override_price" => array_sum(array_column($total_data,'override_price')),
+            //     "fee_with_cost" => array_sum(array_column($total_data,'fee_with_cost')),
+            //     "fee_without_cost" => array_sum(array_column($total_data,'fee_without_cost'))
 
-            );
-            $this->db->where('id',1);
-            $this->db->update('royalty_report',$total_arr);
+            // );
+            // $this->db->where('id',1);
+            // $this->db->update('royalty_report',$total_arr);
             echo "Successfully Inserted";
         } else {
             $data = array();
