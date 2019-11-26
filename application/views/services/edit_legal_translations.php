@@ -217,7 +217,7 @@
                                         $lang_data = explode(",",$order_extra_data['translation_to']);
                             
                                         load_ddl_option("language_list_multiple_select",$lang_data); ?>     
-                                    </select>
+                                </select>
 
                                 <!-- <div class="errorMessage text-danger"></div> -->
                             </div>
@@ -226,26 +226,24 @@
 
                         <h3>Price</h3>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Retail Price</label>
+                            <label class="col-lg-2 control-label">Amount Of Pages</label>
                             <div class="col-lg-10">
-                                <input readonly="" placeholder=""  id="employee-retail-price" class="form-control" type="text" title="Retail Price" value="<?= $edit_data['retail_price']; ?>" name="retail_price">
-                                <!-- <input id="retail_price" name="related_service[<?//= $edit_data['id']; ?>][<?= $service_id; ?>][retail_price]" type="hidden" value="<?//= $edit_data['retail_price']; ?>"> -->
+                                <!-- <select class="form-control" name="pages" id="pages" onchange="change_price(<?//= $edit_data['retail_price']; ?>,this.value);">
+                                    <?php //for($i=1; $i<=10; $i++){
+                                       // echo "<option value=".$i.($i == $order_extra_data['amount_of_pages']? ' selected':'').">".$i."</option>";
+                                    //}
+                                      ?>    
+                                </select>  -->
+                                <input class="form-control" type="number" id="pages" name="pages" title="Amount Of Pages" onchange="change_price(<?= $edit_data['retail_price']; ?>,this.value);" value="<?= $order_extra_data['amount_of_pages'] ?>">
+                                
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Amount Of Pages</label>
+                            <label class="col-lg-2 control-label">Retail Price</label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="pages" id="pages" onchange="change_price(<?= $edit_data['retail_price']; ?>,this.value);">
-                                    <!-- <option value="1" selected>1</option> -->
-                                    <?php for($i=1; $i<=10; $i++){
-                                        // print_r($order_extra_data['amount_of_pages']);exit;
-                                        echo "<option value=".$i.($i == $order_extra_data['amount_of_pages']? ' selected':'').">".$i."</option>";
-                                    }
-                                      ?> 
-                                    <!--<option name=""> </option>-->   
-                                       </select> 
-                                <!-- <div class="errorMessage text-danger"></div>         -->
+                                <input readonly="" placeholder=""  id="employee-retail-price" class="form-control" type="text" title="Retail Price" value="<?= $edit_data['retail_price']; ?>" name="retail_price">
+                                <!-- <input id="retail_price" name="related_service[<?//= $edit_data['id']; ?>][<?= $service_id; ?>][retail_price]" type="hidden" value="<?//= $edit_data['retail_price']; ?>"> -->
                             </div>
                         </div>
 

@@ -19,7 +19,8 @@ class Company_type extends CI_Controller
         $this->load->layout = 'dashboard';
         $title = "Company Type";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'administration';
+        // $render_data['main_menu'] = 'administration';
+        $render_data['main_menu'] = 'clients';
         $render_data['menu'] = 'company_type';
         $render_data['header_title'] = $title;
         $render_data['company_list'] = $this->administration->get_company_list();
