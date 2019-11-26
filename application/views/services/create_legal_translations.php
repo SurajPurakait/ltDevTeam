@@ -226,7 +226,7 @@
                                     <option value="1" selected>1</option>
                                     <?php// for($i=2; $i<=10; $i++){
                                        // echo "<option value=".$i.">".$i."</option>";
-                                    }
+                                    //}
                                     ?>    
                                 </select>  -->
                                 <input class="form-control" type="number" id="pages" name="pages" title="Amount Of Pages" onchange="change_price(<?= $service_info['retail_price']; ?>,this.value);">
