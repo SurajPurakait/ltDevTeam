@@ -392,9 +392,15 @@ if ($export_type == 'email') {
                                 <strong><?= $office_info['name']; ?></strong><br>
                                 <?= $office_info['address']; ?><br>
                                 <?= $office_info['state_name']; ?>, <?= $office_info['city']; ?> <?= $office_info['zip']; ?><br>
-                                <a title="Phone"><strong class="text-danger">P:</strong></a> <?= $office_info['phone']; ?><br/>
-                                <?php if ($office_info['fax'] != '') { ?><a title="Fax"><strong class="text-navy">F:</strong></a> <?php
-                                    echo $office_info['fax'];
+                                <!-- <a title="Phone"> -->
+                                    <strong class="text-danger">P:</strong>
+                                <!-- </a> -->
+                                 <?= $office_info['phone']; ?><br/>
+                                <?php if ($office_info['fax'] != '') { ?>
+                                    <!-- <a title="Fax"> -->
+                                        <strong class="text-navy">F:</strong>
+                                    <!-- </a> -->
+                                    <?php echo $office_info['fax'];
                                 }
                                 ?>
                             </p>

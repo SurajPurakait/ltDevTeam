@@ -495,9 +495,8 @@ $role = $user_info['role'];
             url: base_url + 'project/update_project_task_status',
             dataType: "html",
             success: function (result) {
-//                                alert(result);return false;
-//                    new status section
-                    var res = JSON.parse(result.trim());
+//                alert(result.trim());return false;
+                var res=JSON.parse(result.trim());
 //                    alert(res.task_status+','+res.project_status);return false;
                     if (res.task_status == '0') {
                         var tracking = 'New';
@@ -527,6 +526,12 @@ $role = $user_info['role'];
                     if(res.sub_taskid_status == 3){
                         var tracking_sub = 'Ready';
                         var trk_class_sub = 'label label-secondary';
+                        $("#trackinner-" + res.sub_taskid).removeClass().addClass(trk_class_sub);
+                        $("#trackinner-" + res.sub_taskid).html(tracking_sub);
+                    }
+                    if(res.sub_taskid_status == 0){
+                        var tracking_sub = 'New';
+                        var trk_class_sub = 'label label-success';
                         $("#trackinner-" + res.sub_taskid).removeClass().addClass(trk_class_sub);
                         $("#trackinner-" + res.sub_taskid).html(tracking_sub);
                     }

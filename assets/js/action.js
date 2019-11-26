@@ -296,6 +296,7 @@ function request_edit_action() {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
+            // alert(result);return false;
             if (result.trim() == "1") {
                 swal({
                     title: "Success!",

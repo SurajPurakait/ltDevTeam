@@ -701,9 +701,9 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?= active_menu($menu, "report_3"); ?>>
                             <a href="<?= base_url() ?>reports/index/3">Franchisees</a>
                         </li>
-                        <li <?= active_menu($menu, "report_4"); ?>>
-                            <a href="<?= base_url() ?>reports/index/4">Franchisees</a>
-                        </li>
+<!--                        <li <?php // echo active_menu($menu, "report_4"); ?>>
+                            <a href="<?php // echo base_url() ?>reports/index/4">Franchisees</a>
+                        </li>-->
 
                     <?php } ?>
                         <li <?= active_menu($menu, "royalty_report"); ?>>

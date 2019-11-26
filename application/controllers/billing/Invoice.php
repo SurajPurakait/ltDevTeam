@@ -279,7 +279,8 @@ class Invoice extends CI_Controller {
             <button class="btn btn-default m-t-10 m-r-5" type="button" onclick="window.location.href = \'' . base_url('billing/home') . '\';">Close</button>
             <button class="btn btn-success m-t-10 m-r-5" type="button" onclick="placeOrder(\'' . $invoice_id . '\', \'' . implode(',', $render_data['contact_email_list']) . '\');"><i class="fa fa-envelope-o"></i> Email</button>
             <button class="btn bg-purple m-t-10 m-r-5" type="button" onclick="printOrder();"><i class="fa fa-print"></i> Print</button>
-            <button class="btn btn-warning m-t-10" type="button" onclick="go(\'billing/invoice/export/' . $invoice_id . '\');"><i class="fa fa-file-pdf-o"></i> Download PDF</button>
+            <button class="btn btn-warning m-t-10 m-r-5" type="button" onclick="go(\'billing/invoice/export/' . $invoice_id . '\');"><i class="fa fa-file-pdf-o"></i> Download PDF</button>
+            <button class="btn btn-primary m-t-10" type="button" onclick="go(\'billing/payments/details/' . base64_encode($invoice_id) . '\')">Pay Invoice</button>
         </div>';
             $render_data['export_type'] = 'view';
             $this->load->template('billing/invoice_details', $render_data);
