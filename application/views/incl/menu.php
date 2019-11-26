@@ -765,6 +765,9 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?= active_menu($menu, "refferred_leads_dashboard"); ?>>
                             <a href="<?= base_url(); ?>referral_partner/referral_partners/add_lead/<?= $user_who_referred['office_manager']; ?>">Refer a Lead</a>
                         </li>
+                        <li <?= active_menu($menu, "refferred_leads_dashboard"); ?>>
+                            <a href="javascript:void(0)">Tutorial</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -781,7 +784,7 @@ $office_id = get_office_id($staff_info['office']);
                     <?php } else { ?>
                         <img src="<?php echo base_url(); ?>assets/img/user-demo.jpg" alt="" class="img-circle">
                     <?php } ?>
-                    <h5><?php echo $referred_info['last_name'] . ', ' . $referred_info['first_name']; ?> </h5>
+                    <h5><?php echo $referred_info['first_name'] . '  ' . $referred_info['last_name']; ?> </h5>
                     <p><?php echo staff_office_name($referred_info['id']); ?></p>
                     <hr class="m-t-xs m-b-xs">
                     <p><i class="fa fa-envelope" aria-hidden="true"></i> <?php echo $referred_info['user']; ?></p>
