@@ -138,6 +138,28 @@
                         if($bookkeeping_input_type==1){
                         ?>
                         <h3>BANK STATEMENT RETRIEVAL LEAFCLOUD DEPARTMENT</h3>
+                            <div id="documents_div" class="display_div">
+                                <div class="hr-line-dashed"></div>
+                                <h3>Documents &nbsp; (<a data-toggle="modal"  id="add_document_btn" onclick="document_modal('add', 'project', '<?= $task_id ?>'); return false;" href="javascript:void(0);">Add document</a>)</h3> 
+                                <div id="document-list"></div>
+                            </div>
+                        <?php
+                            if (!empty($list)) {
+                                foreach ($list as $document) {
+                                    ?>
+                                    <div class="row" id='document_id_<?= $document['id']; ?>' >
+                                        <label class="col-lg-2 control-label"><?= $document['doc_type']; ?></label>
+                                        <div class="col-lg-10" style="padding-top:8px">
+                                            <p>
+                                                <a href ='javascript:void(0)' onClick="MyWindow = window.open('<?= base_url("/uploads/" . $document["document"]); ?>', 'Document Preview', width = 600, height = 300); return false;"><?= $document["document"]; ?></a>
+                                                &nbsp;&nbsp;<i class="fa fa-trash" style="cursor:pointer" onclick="delete_document('<?= $document["reference"]; ?>', '<?= $document["reference_id"]; ?>', '<?= $document["id"]; ?>', '<?= $document["document"]; ?>')" title="Remove this document"></i>
+                                            </p>
+                                        </div>
+                                    </div>
+                                <?php
+                                }
+                            }
+                            ?>
                             <div class="accounts-details">
                                 <h3>Financial Accounts<span class="text-danger">*</span>&nbsp; (<a href="javascript:void(0);" onclick="task_account_modal('add', '', 'project');">Add Financial Account</a>)</h3>
                                 <div id="accounts-list">
@@ -321,7 +343,7 @@
     </div>
 </div>
 <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
-
+<div id="document-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script>
     get_financial_account_list('<?= $client_id; ?>', 'project', '<?= $task_id; ?>');
     $(function () {

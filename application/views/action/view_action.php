@@ -96,22 +96,22 @@ if ($data["status"] == 0) {
                             $count = count($staffinfo);
                             if ($count == 1) {
                                 foreach ($staffinfo as $staff):
-                                    if(isset($staff['last_name'])){
+                                    if (isset($staff['last_name'])) {
                                         $last_name = $staff['last_name'];
-                                    }else{
+                                    } else {
                                         $last_name = '';
                                     }
-                                    if(isset($staff['first_name'])){
+                                    if (isset($staff['first_name'])) {
                                         $first_name = $staff['first_name'];
-                                    }else{
+                                    } else {
                                         $first_name = '';
                                     }
-                                    if(isset($staff['middle_name'])){
+                                    if (isset($staff['middle_name'])) {
                                         $middle_name = $staff['middle_name'];
-                                    }else{
+                                    } else {
                                         $middle_name = '';
                                     }
-                                    if($last_name!='' && $first_name!=''){
+                                    if ($last_name != '' && $first_name != '') {
                                         echo $last_name . ', ' . $first_name . ' ' . $middle_name;
                                     }
                                 endforeach;
@@ -391,9 +391,9 @@ if ($data["status"] == 0) {
                                 ?>
                                 <span>
                                     <a id="soscount-<?= $action_id; ?>" class="d-inline p-t-5 p-b-5 p-l-8 p-r-8 label <?php echo (get_sos_count_action('action', '', $action_id) == 0) ? 'label-primary' : 'label-danger'; ?>" title="SOS" href="javascript:void(0)" onclick="show_sos('action', '', '<?= $new_staffs; ?>', '<?= $action_id; ?>', '');">
-                                        <?php 
-                                            // echo (get_sos_count_action('action', '', $action_id) == 0) ? '<i class="fa fa-plus"></i>' : get_sos_count_action('action', '', $action_id);
-                                            echo (get_sos_count('action', '', $action_id) == 0) ? '<i class="fa fa-plus label-green"></i>' : '<i class="fa fa-bell"></i>'; 
+                                        <?php
+                                        // echo (get_sos_count_action('action', '', $action_id) == 0) ? '<i class="fa fa-plus"></i>' : get_sos_count_action('action', '', $action_id);
+                                        echo (get_sos_count('action', '', $action_id) == 0) ? '<i class="fa fa-plus label-green"></i>' : '<i class="fa fa-bell"></i>';
                                         ?>    
                                     </a>
                                 </span>
@@ -462,9 +462,9 @@ if ($data["status"] == 0) {
                                 <span class='text-info'><b>By:&nbsp;</b><?php echo $added_files_username; ?></span> | <span class='text-warning'><b>Time:&nbsp;</b><?php echo ($value['added_on'] != '0000-00-00 00:00:00') ? date('m/d/Y - h:i A', strtotime($value['added_on'])) : ''; ?></span>
                             </li>
 
-                                                                                                                                <!--                                                    <div class="preview preview-image" style="background-image: url('<?= base_url(); ?>uploads/<?= $value['file_name']; ?>');width: 150px; height: 150px;background-size: 100%;">
-                                                                                                                                                                                        <a target = "_blank" href="<?php echo base_url(); ?>uploads/<?= $value['file_name']; ?>" title="<?= $value['file_name']; ?>"><i class="fa fa-search-plus"></i> <?= $value['file_name']; ?></a>
-                                                                                                                                                                                    </div>-->
+                                                                                                                                        <!--                                                    <div class="preview preview-image" style="background-image: url('<?= base_url(); ?>uploads/<?= $value['file_name']; ?>');width: 150px; height: 150px;background-size: 100%;">
+                                                                                                                                                                                                <a target = "_blank" href="<?php echo base_url(); ?>uploads/<?= $value['file_name']; ?>" title="<?= $value['file_name']; ?>"><i class="fa fa-search-plus"></i> <?= $value['file_name']; ?></a>
+                                                                                                                                                                                            </div>-->
                         <?php } else {
                             ?>
                             <li style="list-style-type: none">
@@ -472,7 +472,7 @@ if ($data["status"] == 0) {
                                 <br>
                                 <span class='text-info'><b>By:&nbsp;</b><?php echo $added_files_username; ?></span> | <span class='text-warning'><b>Time:&nbsp;</b><?php echo ($value['added_on'] != '0000-00-00 00:00:00') ? date('m/d/Y - h:i A', strtotime($value['added_on'])) : ''; ?></span>
                             </li>
-                        <!-- <a target = "_blank" href = "<?php //echo base_url();                 ?>uploads/<?//= $value['file_name']; ?>" title = "<?//= $value['file_name']; ?>"><i class = "fa fa-download"></i> <?//= $value['file_name']; ?></a> -->
+                        <!-- <a target = "_blank" href = "<?php //echo base_url();                  ?>uploads/<?//= $value['file_name']; ?>" title = "<?//= $value['file_name']; ?>"><i class = "fa fa-download"></i> <?//= $value['file_name']; ?></a> -->
                             <!--                                    </div>-->
                             <?php
                         }
@@ -481,7 +481,76 @@ if ($data["status"] == 0) {
 
 
                     </td>
-                    <?php // }   ?>
+                    <?php
+                    // } 
+                    $action_notification = get_action_notification_for_view($action_id);
+                    //  
+                    ?>
+                    </tr>
+                    <tr>
+                        <td>Action Notification</td>
+                        <td>
+                            <?php
+                            foreach ($action_notification as $notification_index => $gnl):
+                                $diff_days = $gnl['how_old_days'];
+                                $diff_text = 'more30';
+                                if ($diff_days == 0) {
+                                    $diff_text = 'today';
+                                } elseif ($diff_days == 1) {
+                                    $diff_text = 'yesterday';
+                                } elseif ($diff_days > 1 && $diff_days <= 7) {
+                                    $diff_text = 'last7';
+                                } elseif ($diff_days > 7 && $diff_days <= 30) {
+                                    $diff_text = 'last30';
+                                }
+
+                                // if (strpos($gnl['notification_text'], 'YOU') !== false) {
+                                //     $ref_by = "byme";
+                                // } else {
+                                //     $ref_by = "byothers";
+                                // }
+                                $view_url = '';
+                                if ($gnl['reference'] == 'invoice') {
+                                    $reference_type = "Billing";
+                                    $class = 'invoice';
+                                    $class1 = 'bg-blue-new';
+                                    $view_url = base_url() . 'billing/invoice/details/' . base64_encode($gnl['reference_id']);
+                                }if ($gnl['reference'] == 'action') {
+                                    $reference_type = "Action";
+                                    $class = 'action';
+                                    $class1 = 'bg-green';
+                                    $view_url = base_url() . 'action/home/view_action/' . $gnl['reference_id'];
+                                }if ($gnl['reference'] == 'order') {
+                                    $reference_type = "Service";
+                                    $class = 'order';
+                                    $class1 = 'bg-yellow';
+                                    $view_url = base_url() . 'services/home/view/' . $gnl['reference_id'];
+                                }
+                                if ($gnl['reference'] == 'lead') {
+                                    $reference_type = "Lead";
+                                    $class = 'lead';
+                                    $class1 = 'bg-purpel';
+                                    $view_url = base_url() . 'lead_management/home/view/' . $gnl['reference_id'];
+                                }
+                                if ($gnl['reference'] == 'partner') {
+                                    $reference_type = "Partner";
+                                    $class = 'partner';
+                                    $class1 = 'bg-sucess';
+                                    $view_url = $view_url = base_url() . 'referral_partner/referral_partners/view_referral/' . $gnl['reference_id'];
+                                }
+                                ?>
+                                <div class="feed-element notification-item notification-<?= $gnl['reference']; ?>  notification-<?= ($notification_index > 4) ? 'hide' : 'show'; ?> notification-<?= $diff_text; ?>" <?= ($notification_index > 4) ? 'style="display: none;"' : ''; ?> id="notification-div-<?= $gnl['id']; ?>">
+                                    <?php //if ($gnl['added_by'] != sess('user_id')):   ?>
+                                    <!--<a href="javascript:void(0);" onclick="readNotification('<? $gnl['id']; ?>');document.getElementById('notification-div-<? $gnl['id']; ?>').remove();" class="pull-right text-muted p-5 p-t-0"><i class="fa fa-times"></i></a>-->
+    <?php //endif;    ?>
+                                    <a class="media-body" href="<?php echo $view_url; ?>">
+                                        <span class="label <?= $class1 ?>  d-inline"><?= $reference_type ?></span>&nbsp;<?= $gnl['notification_text']; ?><br>
+                                        <small class="text-muted"><?= ($diff_days == 0 ? date('h:i A', strtotime($gnl['added_on'])) . '|  Today' : date('h:i A | m/d/Y', strtotime($gnl['added_on']))) . ' | <strong>' . $gnl['added_by_user_office'] . '</strong>'; ?></small>
+                                    </a>
+                                </div>
+
+<?php endforeach; ?>
+                        </td>
                     </tr>
 
                 </table>
