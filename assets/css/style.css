@@ -299,6 +299,11 @@ h5 {
 .bg-aqua table {
     margin-bottom: 0;
 }
+/*.nav > li {
+    //border-bottom: 1px solid #4a5a6b;
+}*/
+
+
 /*---------------------------
         Reports Page start
 -----------------------------*/
@@ -321,6 +326,7 @@ h5 {
 .nav > li {
     border-bottom: 1px solid #4a5a6b;
 }
+
 .nav > li.bottom-separator {
     border-bottom: 2px solid #a7b1c2;
 }
@@ -336,11 +342,33 @@ h5 {
     color: #ffffff;
 }
 .navbar-default .nav > li > a:hover,
+.navbar-default .nav > li > a:active,
 .navbar-default .nav > li > a:focus {
-    /*background-color: #293846;*/
-    background-color: #2f4050;
-    color: white;
+    background-color: #495b6b;
+    color: #fff;
     z-index: 1;
+}
+.navbar-default .nav > li > a{
+    background: #2f404f;
+    color: #a7b1c2;
+}
+.navbar-default .nav > li > .nav-second-level li a{
+    background: #4f5861;
+    color: #fff;
+}
+.navbar-default .nav > li > .nav-second-level li a:hover, 
+.navbar-default .nav > li > .nav-second-level li.active a{
+    background: #606971;
+    color: #fff;
+}
+.navbar-default .nav > li > .nav-second-level li a.admin-nav{
+    background: #648645;
+    color: #fff;
+}
+.navbar-default .nav > li > .nav-second-level li a.admin-nav:hover, 
+.navbar-default .nav > li > .nav-second-level li.active a.admin-nav{
+    background: #8ab645;
+    color: #fff;
 }
 .navbar-default .nav > li > a.notification:hover ,.navbar-default .nav > li > a.notification:focus{
     z-index: 99;
@@ -475,7 +503,7 @@ body.body-small .navbar-top-links li:last-child {
 }
 .nav.nav-second-level > li.active {
     border: none;
-    background: #2f4050;
+    background: #606971;
    /* background: #609dd2;*/
 }
 .active-blue-bg.nav.nav-second-level > li.active a.bg-primary{
@@ -546,7 +574,6 @@ body.body-small .navbar-top-links li:last-child {
 .nav-second-level li a {
     padding: 10px 10px 10px 10px;
     padding-left: 52px;
-    color: #fff !important;
 }
 .nav-third-level li a {
     padding-left: 62px;
