@@ -28,6 +28,7 @@ class Billing_model extends CI_Model {
             'inv.is_order as is_order',
             'co.name as name_of_company',
             'co.fein as federal_ID',
+            'ind.birth_date as date_of_birth',
             '(SELECT st.state_name FROM states as st WHERE st.id = co.state_opened) as state_of_incorporation',
             '(SELECT ct.type FROM company_type as ct WHERE ct.id = co.type) as type_of_company',
             'inv.start_month_year as start_month_year',
@@ -231,6 +232,7 @@ class Billing_model extends CI_Model {
                 $invoice_info_data['created_time'] = $today;
                 if (isset($data['is_create_order']) && $data['is_create_order'] == 'yes') {
                     $invoice_info_data['is_order'] = 'y';
+                    $invoice_info_data['status'] = 1;
                 }
                 $this->db->insert('invoice_info', $invoice_info_data);
                 $invoice_id = $this->db->insert_id();
@@ -292,6 +294,7 @@ class Billing_model extends CI_Model {
                 $invoice_info_data['created_time'] = $today;
                 if (isset($data['is_create_order']) && $data['is_create_order'] == 'yes') {
                     $invoice_info_data['is_order'] = 'y';
+                    $invoice_info_data['status'] = 1;
                 }
                 $this->db->insert('invoice_info', $invoice_info_data);
                 $invoice_id = $this->db->insert_id();
@@ -394,6 +397,8 @@ class Billing_model extends CI_Model {
             $this->db->select(implode(', ', $this->select_billing_1));
             $this->db->from('invoice_info inv');
             $this->db->join('company co', 'co.id = inv.reference_id');
+            $this->db->join('title t', 't.company_id = inv.reference_id');            
+            $this->db->join('individual ind', 'ind.id = t.individual_id');
             $this->db->join('internal_data indt', 'indt.reference_id = inv.reference_id and indt.reference = "company"');
         } else {
             $this->db->select(implode(', ', $this->select_billing_2));
@@ -1606,5 +1611,11 @@ class Billing_model extends CI_Model {
 
         );
         return $total_arr;        
+    }
+
+    public function get_start_date_royalty_report() {
+        $sql = 'SELECT MIN(created_time) as created_time FROM `invoice_info` where created_time != "0000-00-00" order by created_time asc';
+        $start_date = $this->db->query($sql)->row_array()['created_time'];
+        return date("m/d/Y", strtotime($start_date));
     }
 }
