@@ -184,9 +184,11 @@
                             <?php
                             if (!empty($department_list)) {
                                 foreach ($department_list as $key => $value) {
+                                    if ($value['id'] != 1 && $value['id'] != 2){
                                     ?>
                                     <option value="<?= $value['id']; ?>" <?= ($service_info["department"] == $value["id"]) ? "selected" : ""; ?>><?= $value['name']; ?></option>
                                     <?php
+                                    }
                                 }
                             }
                             ?>
