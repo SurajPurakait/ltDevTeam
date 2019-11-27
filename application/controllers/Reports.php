@@ -30,6 +30,7 @@ class Reports extends CI_Controller {
         $render_data['main_menu'] = 'reports';
         $render_data['menu'] = 'royalty_report';
         $render_data['header_title'] = $title;
+        $render_data['start_date'] = $this->billing_model->get_start_date_royalty_report();
         $this->load->template('reports/royalty_reports', $render_data);	
     }
     /* fetching royalty_reports data*/
@@ -73,6 +74,7 @@ class Reports extends CI_Controller {
         $render_data['main_menu'] = 'reports';
         $render_data['menu'] = 'weekly_sales_report';
         $render_data['header_title'] = $title;
+        $render_data['start_date'] = $this->service_model->get_start_date_sales_report();
         $this->load->template('reports/weekly_sales_report', $render_data);    
     }
     /* fetching weekly_sales_report data */
