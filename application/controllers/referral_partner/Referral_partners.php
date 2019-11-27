@@ -184,7 +184,7 @@ class Referral_partners extends CI_Controller {
                         <p>Password : <u>'.$pwd.'</u></p><br><br>
                         <p>Login (link to '.$url_link.')</p><br><br>
                         <p>Thank You!</p>
-                     </div>'
+                     </div>';
         $message = 
             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
             <html xmlns="http://www.w3.org/1999/xhtml">
