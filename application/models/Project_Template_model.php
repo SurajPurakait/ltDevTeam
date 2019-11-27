@@ -2066,7 +2066,7 @@ class Project_Template_model extends CI_Model {
         return $this->db->get_where('projects', ['id' => $project_id])->row()->office_id;
     }
 
-    public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='',$month='') {
+    public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='',$month='',$year='') {
 //        print_r($month);die;
 //        print_r($filter_data);die;
         $user_info = $this->session->userdata('staff_info');
@@ -2308,6 +2308,14 @@ class Project_Template_model extends CI_Model {
         $this->db->where('pro.is_deleted', 0);
         if ($client_id != '') {
             $this->db->where('pro.client_id', $client_id);
+        }
+        if($template_cat_id==1){
+            if($year==''){
+                $present_year=date('Y');
+                $this->db->where('prm.actual_due_year',$present_year);
+            }else{
+               $this->db->where('prm.actual_due_year',$year); 
+            }
         }
         $this->db->group_by('pro.id');
         if ($sort_criteria != '') {
@@ -2684,9 +2692,9 @@ class Project_Template_model extends CI_Model {
 //            echo $insert_id;die;
         }if($input_form_type==1){
             if($bookkeeping_input_type==1){
-                $exist=$this->db->get_where('bookkeeping',['task_id'=>$data['task_id'],'reference'=>'project'])->row();
+                $exist=$this->db->get_where('bookkeeping',['order_id'=>$data['task_id'],'reference'=>'project'])->row();
                 if(!empty($exist)){
-                    $this->db->where(['task_id'=>$data['task_id'],'reference'=>'project']);
+                    $this->db->where(['order_id'=>$data['task_id'],'reference'=>'project']);
                     $this->db->delete('bookkeeping');
                 }
                 $bookdata=array(
@@ -2814,6 +2822,27 @@ class Project_Template_model extends CI_Model {
     }
     public function getExistTask($template_id){
         return count($this->db->get_where('project_template_task',['template_main_id'=>$template_id])->result_array());
+    }
+    public function getDueYear(){
+        $this->db->select('YEAR(due_date) as due_year');
+        $this->db->from('project_recurrence_main');
+        $this->db->group_by('YEAR(due_date)');
+        return $this->db->get()->result_array();
+    }
+    public function getProjectClientPracticeId($client_id, $client_type, $office_id = '') {
+        if ($client_type == 1) {
+            $this->db->select('practice_id');
+            $data = $this->db->get_where('internal_data', ['reference_id' => $client_id])->row();
+            return $data->practice_id;
+        } else {
+//            echo $client_id;13859
+            $this->db->select("id.practice_id");
+            $this->db->from('internal_data id');
+            $this->db->join('title t', 't.individual_id=id.reference_id', 'inner');
+            $this->db->where('t.id',$client_id);
+            $data = $this->db->get()->row();
+            return $data->practice_id;
+        }
     }
 }
 

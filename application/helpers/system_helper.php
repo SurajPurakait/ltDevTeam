@@ -361,8 +361,16 @@ if (!function_exists('load_ddl_option')) {
                 }
                 break;
 
+            case "language_list_for_legal_translations":
+                $item_list = $ci->system->get_languages_for_legal_translations();
+                foreach ($item_list as $item) {
+                    $select = ($selected != "" && $item["id"] == $selected) ? "selected = 'selected'" : "";
+                    echo "<option $select value='" . $item['id'] . "'>" . $item['language'] . "</option>";
+                }
+                break;
+                
             case "language_list_multiple_select":
-                $item_list = $ci->system->get_languages();
+                $item_list = $ci->system->get_languages_for_legal_translations();
                 foreach ($item_list as $item) {
                     if (in_array($item['id'], $selected)) {
                         echo "<option selected value='" . $item['id'] . "'>" . $item['language'] . "</option>";
@@ -3439,4 +3447,20 @@ if(!function_exists('get_exist_task')){
         $ci->load->model('Project_Template_model'); 
         return $ci->Project_Template_model->getExistTask($template_id);
     }
+}
+if(!function_exists('get_action_notification_for_view')){
+    function get_action_notification_for_view($action_id){
+        $ci =&get_instance();
+        $ci->load->model('system');
+        return $ci->system->get_general_notification_by_user_id(sess('user_id'),'','','','',$action_id);
+    }
+}
+if (!function_exists('getProjectClientPracticeId')) {
+
+    function getProjectClientPracticeId($client_id, $client_type) {
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getProjectClientPracticeId($client_id, $client_type);
+    }
+
 }

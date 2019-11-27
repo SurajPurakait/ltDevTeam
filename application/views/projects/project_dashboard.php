@@ -116,7 +116,7 @@ if (!empty($project_list)) {
                                     <th style="width:8%; text-align: center">Project ID</th>
                                     <th style="width:8%; text-align: center">Project Template</th>
                                     <th style="width:10%; text-align: center">Pattern</th>
-                                    <th style="width:8%; text-align: center">Client Type</th>
+                                    <!--<th style="width:8%; text-align: center">Client Type</th>-->
                                     <th style="width:8%; text-align: center">Client Id</th>
                                     <th style="width:8%; text-align: center">Responsible</th>
                                     <th style="width:8%; text-align: center">Requested By</th>
@@ -133,8 +133,9 @@ if (!empty($project_list)) {
                                         <span class=""><?= $templatedetails->title ?></span>
                                     </td>
                                     <td title="Pattern"><?= ucfirst($pattern_details->pattern) ?></td>
-                                    <td title="Pattern"><?= ($list['client_type'] == '1') ? 'Business Client' : 'Individual Client' ?></td>
-                                    <td title="Client"><?php echo getProjectClientName($list['client_id'], $list['client_type']); ?><br><span class="text-info"><?php // echo getProjectClient($list['office_id']);      ?> </span></td>                                                 
+                                    <!--<td title="Client Type"><? ($list['client_type'] == '1') ? 'Business Client' : 'Individual Client' ?></td>-->
+                                    <!--<td title="Client"><?php // echo getProjectClientName($list['client_id'], $list['client_type']); ?><br><span class="text-info"><?php // echo getProjectClient($list['office_id']);      ?> </span></td>--> 
+                                    <td title="Client"><?php echo getProjectClientPracticeId($list['client_id'], $list['client_type']); ?><br><span class="text-info"><?php // echo getProjectClient($list['office_id']);      ?> </span></td>                                                 
                                     <td title="Responsible"><?php
                                         $resp_value = get_assigned_office_staff_project_main($list['id'], $list['client_id']);
                                         if (is_numeric($resp_value['name'])) {
@@ -165,9 +166,9 @@ if (!empty($project_list)) {
                                         ?>
                                     </td>                                                  
                                     <td title="Tracking" class="text-center"><span id="trackouter-<?php echo $list['id']; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></td>
-                                    <td title="Creation Date"><?= date('Y-m-d', strtotime($list['created_at'])) ?></td>
-                                    <td title="Due Date"><?= $dueDate ?></td>
-                                    <td title="Recurrence Date"><?= $pattern_details->generation_date; ?></td>
+                                    <td title="Creation Date"><?= date('m/d/Y', strtotime($list['created_at'])) ?></td>
+                                    <td title="Due Date"><?= date('m/d/Y',strtotime($dueDate)) ?></td>
+                                    <td title="Recurrence Date"><?= date('m/d/Y',strtotime($pattern_details->generation_date)); ?></td>
 
                                             <!-- <td title='Note'><a id="notecount-<?//= $list['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_notes(<?//= $list["id"]; ?>)"><b> <?//= get_project_note_count($list['id']) ?></b></a> -->
 

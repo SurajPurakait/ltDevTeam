@@ -16,7 +16,8 @@ class Business_client extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Sales Tax Rate";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'administration';
+        // $render_data['main_menu'] = 'administration';
+        $render_data['main_menu'] = 'services';
         $render_data['menu'] = 'business_client';
         $render_data['header_title'] = $title;
         $render_data['business_client'] = $this->administration->get_business_client();

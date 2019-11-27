@@ -133,6 +133,13 @@ Class System extends CI_Model {
         return $this->db->where("status", "1")->order_by("language", "asc")->get("languages")->result_array();
     }
 
+    public function get_languages_for_legal_translations() {
+        $this->db->where("status", "1");
+        $this->db->where("language!=", "French");
+        $this->db->order_by("language", "asc");
+        return $this->db->get("languages")->result_array();
+    }
+
     public function count_duplicate_field($table, $where_data) {
         return $this->db->get_where($table, $where_data)->num_rows();
     }
@@ -999,7 +1006,7 @@ Class System extends CI_Model {
         }
     }
 
-    public function get_general_notification_by_user_id($user_id, $limit = '', $where = [], $start = '', $request_type = '') {
+    public function get_general_notification_by_user_id($user_id, $limit = '', $where = [], $start = '', $request_type = '',$action_id='') {
         // echo $user_id;die;
         // For fetch all general notifications @sumanta
 //        echo $request_type;die;
@@ -1058,6 +1065,9 @@ Class System extends CI_Model {
 
         if (!empty($where)) {
             $this->db->where($where);
+        }
+        if(!empty($action_id)){
+            $this->db->where(['reference'=>'action','reference_id'=>$action_id]);
         }
 
         $this->db->group_by(array("gn.added_by", "gn.reference_id", "gn.reference", "gn.action"));

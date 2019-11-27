@@ -163,6 +163,8 @@ class Task extends CI_Controller {
             if($bookkeeping_input_type==1){
             $render_data['client_id']=$client_dtls->client_id;
             $render_data['bookkeeping_details'] = $this->bookkeeping_model->get_bookkeeping_by_order_id($task_id,'project');
+            $render_data['list'] = $this->service_model->get_document_list_by_reference($task_id, 'project');
+//            $this->load->view('services/show_document_list', $data);
             }else if($bookkeeping_input_type==2|| $bookkeeping_input_type==3){
                 $render_data['bookkeeper_details']=$this->Project_Template_model->getProjetBookkeeperDetails($task_id);
             }
