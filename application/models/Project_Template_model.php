@@ -2829,6 +2829,21 @@ class Project_Template_model extends CI_Model {
         $this->db->group_by('YEAR(due_date)');
         return $this->db->get()->result_array();
     }
+    public function getProjectClientPracticeId($client_id, $client_type, $office_id = '') {
+        if ($client_type == 1) {
+            $this->db->select('practice_id');
+            $data = $this->db->get_where('internal_data', ['reference_id' => $client_id])->row();
+            return $data->practice_id;
+        } else {
+//            echo $client_id;13859
+            $this->db->select("id.practice_id");
+            $this->db->from('internal_data id');
+            $this->db->join('title t', 't.individual_id=id.reference_id', 'inner');
+            $this->db->where('t.id',$client_id);
+            $data = $this->db->get()->row();
+            return $data->practice_id;
+        }
+    }
 }
 
 ?>

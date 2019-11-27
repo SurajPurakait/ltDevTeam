@@ -1739,7 +1739,7 @@ if (!function_exists('get_assigned_by_staff_name')) {
         $ci = &get_instance();
         $ci->load->model('Referral_partner');
         $ret = $ci->Referral_partner->get_assigned_by_staff_name($staff_id);
-        return $ret['last_name'] . ', ' . $ret['first_name'];
+        return $ret['first_name'] . ' ' . $ret['last_name'];
     }
 
 }
@@ -3454,4 +3454,13 @@ if(!function_exists('get_action_notification_for_view')){
         $ci->load->model('system');
         return $ci->system->get_general_notification_by_user_id(sess('user_id'),'','','','',$action_id);
     }
+}
+if (!function_exists('getProjectClientPracticeId')) {
+
+    function getProjectClientPracticeId($client_id, $client_type) {
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getProjectClientPracticeId($client_id, $client_type);
+    }
+
 }

@@ -93,7 +93,7 @@
                                                 </a>
                                             </td>
                                         </tr>
-                                        <tr id="tome" class="action-row-border-bottom">
+                                        <tr id="tome" class="">
                                             <th>To Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-0">
@@ -121,7 +121,7 @@
                                             if($staff_info['type'] == 1) {
                                         ?>
                                         <!-- byother section-->
-                                        <tr id="byother" class="action-row-border-bottom">
+                                        <tr id="byother" class="">
                                             <th>By Other</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byother-0">
@@ -145,7 +145,7 @@
                                             </td>
                                         </tr>
                                         <!-- toother section -->
-                                        <tr id="toother" class="action-row-border-bottom">
+                                        <tr id="toother" class="">
                                             <th>To Other</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-toother-0">

@@ -54,14 +54,14 @@
                                    </td>
                                     <td title="Requested By" class="text-center" width="15%">
                                         <?php if(isset($staff_data_by) && !empty($staff_data_by)){
-                                            echo $staff_data_by["last_name"].', '.$staff_data_by["first_name"];
+                                            echo $staff_data_by["first_name"].'  '.$staff_data_by["last_name"];
                                         }else{
                                             echo '-';
                                         } ?>
                                     </td>
                                     <td title="Requested To" class="text-center" width="15%">
                                         <?php if(isset($staff_data_to) && !empty($staff_data_to)){
-                                            echo $staff_data_to["last_name"].', '.$staff_data_to["first_name"];
+                                            echo $staff_data_to["first_name"].'  '.$staff_data_to["last_name"];
                                         }else{
                                             echo '-';
                                         } ?>
