@@ -700,7 +700,7 @@ $office_id = get_office_id($staff_info['office']);
                      <?php if ($staff_info['type'] == '1' || $staff_info['type'] == '3') { ?>
                         <li <?= active_menu($menu, "report_3"); ?>>
                             <a href="javascript:void(0);">
-                                <i class="fa fa-comment"></i>
+                                <!--<i class="fa fa-comment"></i>-->
                                 <span class="nav-label">Franchisees</span>
                                 <span class="fa arrow"></span>
                             </a>

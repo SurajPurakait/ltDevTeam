@@ -149,9 +149,11 @@ class Referral_partners extends CI_Controller {
                 'charset' => 'utf-8',
                 'wordwrap' => TRUE
         );
+        $partner_name = $referral_partner_data['first_name'].' '.$referral_partner_data['last_name'];
         $from = staff_info_by_id($staffrequestedby)['user'];
-        $from_name = staff_info_by_id($staffrequestedby)['full_name'];
-        $email_subject = 'Account Setup';
+        $from_name_details = staff_info_by_id($staffrequestedby);
+        $from_name = $from_name_details['first_name'] .'  '.$from_name_details['last_name'];
+        $email_subject = 'Taxleaf Partnership Account';
         $user_email = $referral_partner_data['email'];
         
         $user_logo = "";
@@ -172,9 +174,17 @@ class Referral_partners extends CI_Controller {
             $bgcolor = '#8ab645';
             $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
         }
-
-        $mail_body = 'Your Account has been created Successfully <br><br> <b><u>Login Credentials</u> :<b> <br><br> <b>User Name :</b> '.$referral_partner_data['email'].'<br> <b>Password :</b>'.$pwd;
-
+        $url_link = 'https://leafnet.us/';
+        $mail_body = '<div style="text-align:center;">
+                        <p>Hello '.$partner_name.'</p><br><br>
+                        <p>Welcome to leafnet</p>
+                        <p>You have access to a new portal</p><br><br>
+                        <p>Login Credentials</p>
+                        <p>Username : <u>'.$referral_partner_data['email'].'</u></p>
+                        <p>Password : <u>'.$pwd.'</u></p><br><br>
+                        <p>Login (link to '.$url_link.')</p><br><br>
+                        <p>Thank You!</p>
+                     </div>';
         $message = 
             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
             <html xmlns="http://www.w3.org/1999/xhtml">
