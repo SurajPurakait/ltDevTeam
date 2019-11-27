@@ -302,6 +302,31 @@ h5 {
 /*.nav > li {
     //border-bottom: 1px solid #4a5a6b;
 }*/
+
+
+/*---------------------------
+        Reports Page start
+-----------------------------*/
+.report-wrapper .tab-content{
+    padding: 0;
+}
+.report-wrapper .ibox-title, .report-wrapper .ibox-content {
+    border: 1px solid #e7eaec;
+}
+.table.report-table tr td{
+    vertical-align: middle !important;
+} 
+.table.report-table tr th{
+    text-align: center;
+}
+
+/*---------------------------
+        Reports Page end
+-----------------------------*/
+.nav > li {
+    border-bottom: 1px solid #4a5a6b;
+}
+
 .nav > li.bottom-separator {
     border-bottom: 2px solid #a7b1c2;
 }
