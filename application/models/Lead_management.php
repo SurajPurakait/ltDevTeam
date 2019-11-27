@@ -504,7 +504,9 @@ Class Lead_management extends CI_Model {
             $reference = 'partner';
         }
         $staff[0] = sess('user_id');
-        $this->system->save_general_notification($reference, $id, 'insert', $staff, '', $lead_type);
+        if($referred_lead==''){
+            $this->system->save_general_notification($reference, $id, 'insert', $staff, '', $lead_type);
+        }
         if ($referred_lead != '') {
             unset($staff);
             $staff=array();

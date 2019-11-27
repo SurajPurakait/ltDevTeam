@@ -1607,4 +1607,10 @@ class Billing_model extends CI_Model {
         );
         return $total_arr;        
     }
+
+    public function get_start_date_royalty_report() {
+        $sql = 'SELECT MIN(created_time) as created_time FROM `invoice_info` where created_time != "0000-00-00" order by created_time asc';
+        $start_date = $this->db->query($sql)->row_array()['created_time'];
+        return date("m/d/Y", strtotime($start_date));
+    }
 }

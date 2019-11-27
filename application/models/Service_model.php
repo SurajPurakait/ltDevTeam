@@ -2767,4 +2767,9 @@ class Service_model extends CI_Model {
         );
         return $total_arr;
     }
+    public function get_start_date_sales_report() {
+        $sql = 'SELECT MIN(order_date) as order_date FROM `order` where order_date != "0000-00-00" order by order_date asc';
+        $start_date = $this->db->query($sql)->row_array()['order_date'];
+        return date("m/d/Y", strtotime($start_date));
+    }
 }
