@@ -72,7 +72,7 @@
                                                     <div class="form-group">
                                                         <label class="control-label">Generation:</label>
                                                         <div class="form-inline due-div">
-                                                            <label class="control-label m-r-5"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> Due on day</label>&nbsp;
+                                                            <label class="control-label m-r-5"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> New invoice on day</label>&nbsp;
                                                             <input class="form-control m-r-5" type="number" name="recurrence[due_day]" value="1" min="1" max="31" style="width: 100px" id="r_day">
                                                             <label class="control-label m-r-5">of every</label>&nbsp;
                                                             <input class="form-control m-r-5" type="number" name="recurrence[due_month]" value="1" min="1" max="12" style="width: 100px" id="r_month">&nbsp;
@@ -86,21 +86,32 @@
                                                     <label class="control-label">Duration:</label>
                                                 </div>
                                                 <div class="col-md-12">
-                                                    <label class="control-label"><input type="radio" name="recurrence[generation_type]" value="1">Never</label>&nbsp;
+                                                    <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="1">Never</label>&nbsp;
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-inline">
                                                         <label class="control-label m-r-5">After</label>&nbsp;
-                                                        <input class="form-control" type="text" id="generation_month" name="recurrence[generation_time]" style="width: 100px">&nbsp;
+                                                        <input class="form-control" type="text" id="duration_time" name="recurrence[duration_time]" style="width: 100px">&nbsp;
                                                         <label class="control-label">generations</label>&nbsp;
                                                     </div>
                                                 </div>
-                                                <div>
+                                                <div class="col-md-12 m-t-10">
+                                                    <div class="row">
+                                                        <div class="form-group">
+                                                            <div class='col-md-2'>
+                                                                <label class="control-label m-t-5">Until date</label>
+                                                            </div>
+                                                            <div class='col-md-4'>
+                                                                <input placeholder="mm/dd/yyyy" id="until_date" class="form-control datepicker_mdy_due" type="text" title="Start Date" name="recurrence[until_date]">
+                                                                <div class="errorMessage text-danger"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div><!-- ./modal-body -->
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" onclick="closeRecurrenceModal();">Ok</button>
+                                            <button type="button" class="btn btn-primary" onclick="closeInvoiceRecurrenceModal();">Ok</button>
                                         </div><!-- modal-footer -->
                                     </div><!-- Modal content-->
 
