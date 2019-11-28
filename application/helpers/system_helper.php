@@ -238,6 +238,26 @@ if (!function_exists('get_department_name_by_id')) {
 
 }
 
+if (!function_exists('get_inputform_attachments')) {
+
+    function get_inputform_attachments($service_request_id) {
+        $ci = &get_instance();
+        $ci->load->model('service_model');
+        return $ci->service_model->get_inputform_attachments($service_request_id);
+    }
+
+}
+
+if (!function_exists('get_inputform_notes')) {
+
+    function get_inputform_notes($service_request_id) {
+        $ci = &get_instance();
+        $ci->load->model('service_model');
+        return $ci->service_model->get_inputform_notes($service_request_id);
+    }
+
+}
+
 if (!function_exists('staff_office_name')) {
 
     function staff_office_name($staff_id, $get_manager = '') {

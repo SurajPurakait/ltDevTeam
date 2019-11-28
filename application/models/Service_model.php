@@ -2566,6 +2566,23 @@ class Service_model extends CI_Model {
         }
     }
 
+
+    public function get_inputform_attachments($service_request_id) {
+        $this->db->select('rsf.file_name as file_name');
+        $this->db->from('service_request sr');
+        $this->db->join('related_service_files rsf','sr.id = rsf.related_service_id');
+        $this->db->where('sr.id',$service_request_id);
+        return $this->db->get()->row_array();
+    }
+
+    public function get_inputform_notes($service_request_id) {
+        $this->db->select('n.note as note');
+        $this->db->from('service_request sr');
+        $this->db->join('notes n','sr.id = n.reference_id');
+        $this->db->where('sr.id',$service_request_id);
+        return $this->db->get()->row_array();
+    }
+
     public function save_invoice_on_related_service($related_service_id) {
         $service_request_info = $this->db->get_where('service_request', ['id' => $related_service_id])->row_array();
         $order_id = $service_request_info['order_id'];
