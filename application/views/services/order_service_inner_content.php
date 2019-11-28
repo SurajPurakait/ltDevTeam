@@ -207,10 +207,18 @@
                                     if ($row_inner->input_form != 'y') {
                                         echo 'N/A';
                                     } else {
+
+                                        $inputform_attachments = get_inputform_attachments($row_inner->service_request_id);
+                                        $inputform_notes = get_inputform_notes($row_inner->service_request_id);
+                                        
                                         if ($row_inner->input_form_status == 'n') {
                                             $input_status = 'incomplete';
                                             ?>
                                             <span class="label input-form-incomplete">Incomplete <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-plus" aria-hidden="true"></i> </a></span>
+                                        <?php } elseif ($inputform_attachments == '' || $inputform_notes == '') { ?>
+                                            
+                                            <span class="label input-form-warning">Partial Complete <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
+                                        
                                         <?php } else { ?>
                                             <span class="label input-form-complete">Completed <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
                                             <?php
