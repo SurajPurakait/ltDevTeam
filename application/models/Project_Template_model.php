@@ -667,6 +667,7 @@ class Project_Template_model extends CI_Model {
         $this->db->trans_begin();
         if (isset($post['template_main']) && !empty($post['template_main'])) {
             $temp_main_ins['added_by_user'] = sess('user_id');
+            $temp_main_ins['template_cat_id']=$post['template_main']['template_cat_id'];
             $temp_main_ins['template_id'] = $post['template_main']['Id'];
             $temp_main_ins['title'] = $post['template_main']['title'];
             $temp_main_ins['description'] = $post['template_main']['description'];
