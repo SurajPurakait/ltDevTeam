@@ -1019,6 +1019,7 @@ ALTER TABLE `project_task_bookkeeper_department` ADD `total_time` VARCHAR(100) N
 
 /* live end */
 /*28.11.2019*/
+/* import invoice_recurence.sql*/
 ALTER TABLE `invoice_recurence` ADD `actual_due_day` INT(4) NOT NULL AFTER `due_month`, ADD `actual_due_month` INT(4) NOT NULL AFTER `actual_due_day`, ADD `actual_due_year` INT(4) NOT NULL AFTER `actual_due_month`; 
 
 ALTER TABLE `invoice_recurence` CHANGE `until_date` `until_date` DATE NULL DEFAULT NULL; 
