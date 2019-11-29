@@ -376,8 +376,14 @@ class Billing_model extends CI_Model {
                 if (isset($ins_recurrence['duration_type']) && !empty($ins_recurrence['duration_type'])) {
                     $ins_recurrence['duration_type'] = $ins_recurrence['duration_type'];
                 }else{
-                    $ins_recurrence['duration_type'] ='0';
+                    $ins_recurrence['duration_type'] =null;
                 }
+                if (isset($ins_recurrence['due_type']) && !empty($ins_recurrence['due_type'])) {
+                    $ins_recurrence['due_type'] = $ins_recurrence['due_type'];
+                }else{
+                    $ins_recurrence['due_type'] =null;
+                }
+                
 //            if(isset($ins_recurrence['pattern']))
 //            print_r($ins_recurrence);die;
                 $this->db->insert('invoice_recurence', $ins_recurrence);
