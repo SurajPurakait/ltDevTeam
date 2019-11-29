@@ -1,8 +1,9 @@
 <?php
 	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$db = 'leafnet';
+    $username = "leafnet_db_user";
+    $password = "leafnet@123";
+    $db = 'leafnet_staging';
+
 	// Create connection
 	$conn = mysqli_connect($servername, $username, $password, $db);
 
@@ -54,33 +55,36 @@
             'INNER JOIN `payment_history` AS `pyh` ON `pyh`.`invoice_id` = `inv`.`id`';
 
     $query = 'SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id`';
-        
+    // echo $query;exit;        
     mysqli_query($conn, 'SET SQL_BIG_SELECTS=1');
-    $reports_data = mysqli_query($conn,$query);
-    $royalty_reports_data = mysqli_fetch_assoc($reports_data); 
-
-    if (!empty($royalty_reports_data)) {
-    	$insert_total_query = 'INSERT INTO `royalty_report`(`invoice_id`) VALUES ("0")';
-    	mysqli_query($conn,$insert_total_query);
-        foreach ($royalty_reports_data as $rpd) { 
+    $reports_data = mysqli_query($conn,$query); 
+    mysqli_query($conn,'TRUNCATE royalty_report');
+    if (!empty(mysqli_fetch_assoc($reports_data))) {
+        while ($rpd = mysqli_fetch_assoc($reports_data)) { 
             for($i=1; $i <= $rpd['services']; $i++) {
-
             	$services_id = explode(',',$rpd['all_services'])[$i];
-                $service_detail = mysqli_query($conn,"select s.id, s.category_id, s.fixed_cost as cost, c.name as category_name, c.description as category_description, s.description, s.ideas, s.tutorials, s.dept AS service_department, s.retail_price from services s inner join category c on c.id = s.category_id where s.id ='".$services_id."'");
-
-				$office_fees = mysqli_query($conn,"select percentage from office_service_fees where service_id = '".$services_id"' and office_id = '".$rpd['office_id']"'");           			         
+                $services_query = "select s.id, s.category_id, s.fixed_cost as cost, c.name as category_name, c.description as category_description, s.description, s.ideas, s.tutorials, s.dept AS service_department, s.retail_price from services s inner join category c on c.id = s.category_id where s.id ='".$services_id."'";
+                $services_query_run = mysqli_query($conn,$services_query);
+                $service_detail = mysqli_fetch_assoc($services_query_run);
+                
+                $sql_p = "select percentage from office_service_fees where service_id = '".$services_id." and office_id = '".$rpd['office_id']."'";
+				$office_fees = mysqli_query($conn,$sql_p);           			         
                 $order_id = explode(',',$rpd['all_orders'])[$i];
-                $payment_history = mysqli_query($conn,"select pay.reference_no AS reference,pay.authorization_id,typ.name AS payment_type,pay.pay_amount AS collected from payment_history pay inner join payment_type typ on typ.id = pay.payment_type where type = 'payment' and is_cancel !=, '1' and invoice_id = '".$rpd['invoice_id'] "' and order_id = '".$order_id"'");
-
+                $p_h_sql = "select pay.reference_no AS reference,pay.authorization_id,typ.name AS payment_type,pay.pay_amount AS collected from payment_history pay inner join payment_type typ on typ.id = pay.payment_type where type = 'payment' and is_cancel != '1' and invoice_id = '".$rpd['invoice_id']."' and order_id = '".$order_id."'";
+                $pay_history = mysqli_query($conn,$p_h_sql);
+                $payment_history = [];
+                while ($payment = mysqli_fetch_assoc($pay_history)) {
+                    array_push($payment_history,$payment);
+                }    
                 $reference = implode(',',array_column($payment_history,'reference'));
                 $authorization_id = implode(',',array_column($payment_history,'authorization_id'));
                 $payment_type = implode(',',array_column($payment_history,'payment_type'));
                 $collected = array_sum(array_column($payment_history,'collected'));    
-                $total_net = (explode(',',$rpd['all_services_override'])[$i] != '') ? explode(',',$rpd['all_services_override'])[$i] - $service_detail['cost'] : $service_detail['retail_price'] - $service_detail['cost'];                    
                 $override_price = explode(',',$rpd['all_services_override'])[$i];
+                $total_net = ($override_price != '') ? (int)$override_price - (int)$service_detail['cost'] : (int)$service_detail['retail_price'] - (int)$service_detail['cost'];
                 $date_val = date('Y-m-d', strtotime($rpd['created_time']));
-                $fee_with_cost = (($total_net * $office_fees)/100);                    
-                $fee_without_cost = (($override_price * $office_fees)/100);
+                $fee_with_cost = (((int)$total_net * (int)$office_fees)/100);                    
+                $fee_without_cost = (((int)$override_price * (int)$office_fees)/100);
                 if (($override_price - $collected) == 0) {
                     $payment_status = 'Paid';
                 } elseif (($override_price - $collected) == $override_price) {
@@ -90,34 +94,27 @@
                 } else {
                     $payment_status = 'Late';
                 }
+                $practice_id = $rpd['practice_id'];
+                $invoice_id = $rpd['invoice_id'];
+                $services_ids = $rpd['invoice_id'].'-'.$i;
+                $service_details = $service_detail['description'];
+                $retail_price = $service_detail['retail_price'];
+                $service_cost = $service_detail['cost'];
+                $office_id = $rpd['office_id'];
+                $created_by = $rpd['created_by'];
 
-                
                 $sql_query = "INSERT INTO `royalty_report`(`date`, `client_id`, `invoice_id`, `service_id`, `service_name`, `retail_price`, `override_price`, `cost`, `payment_status`, `collected`, `payment_type`, `authorization_id`, `reference`, `total_net`, `office_fee`, `fee_with_cost`, `fee_without_cost`, `office_id`, `created_by`) VALUES (
-                '" . $date_val . "','" . $rpd['practice_id'] . "','" . $rpd['invoice_id'] . "',
-                '" . $rpd['invoice_id'].'-'.$i . "','" . $service_detail['description'] . "','" . $service_detail['retail_price'] . "',
-                '" . $override_price . "','" . $service_detail['cost'] . "','" . $payment_status . "',
-                '" . $collected . "','" . ($payment_type != '') ? $payment_type:'N/A' . "','" . ($authorization_id != '') ? $authorization_id: 'N/A' . "',
-                '" . ($reference != '') ? $reference : 'N/A' . "','" . $total_net . "','" . ($office_fees != '') ? $office_fees : '00.00' . "',
-                '" . $fee_with_cost . "','" . $fee_without_cost . "','" . $rpd['office_id'] . "',
-                '" . $rpd['created_by'] . "')"
-
-
+                '$date_val', '$practice_id','$invoice_id',
+                '$services_ids','$service_details','$retail_price',
+                '$override_price','$service_cost','$payment_status',
+                '$collected','$payment_type','$authorization_id ',
+                '$reference','$total_net','$office_fees',
+                '$fee_with_cost','$fee_without_cost','$office_id',
+                '$created_by')";
                 mysqli_query($conn,$sql_query);
-            } 
-        }
-        $r_report_data = mysqli_query($conn,'select * from royalty_report');
-        $total_data = mysqli_fetch_assoc($r_report_data);
-
-        $invoices = count($total_data) - 1;
-        $retail_price = array_sum(array_column($total_data,'retail_price'));
-        $cost = array_sum(array_column($total_data,'cost'));
-        $collected = array_sum(array_column($total_data,'collected'));
-        $total_net = array_sum(array_column($total_data,'total_net'));
-        $override_price = array_sum(array_column($total_data,'override_price'));
-        $fee_with_cost = array_sum(array_column($total_data,'fee_with_cost'));
-		$fee_without_cost = array_sum(array_column($total_data,'fee_without_cost'));	            
-        	
-        mysqli_query($conn, "UPDATE `royalty_report` SET `invoice_id` = '" . $invoices . "',`retail_price` = '" . $retail_price . "',`cost` = '" . $cost . "',`collected` = '" . $collected . "',`total_net` = '" . $total_net . "',`override_price` = '" . $override_price . "',`fee_with_cost` = '" . $fee_with_cost . "',`fee_without_cost` = '" . $fee_without_cost . "' WHERE `id` = '1'");
+            }
+        } 
+        echo "Success";
     } 
 
 ?>
