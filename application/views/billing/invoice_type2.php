@@ -13,7 +13,7 @@
 <div class="form-group client_type_div0">
     <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
     <div class="col-lg-10">
-        <select class="form-control client_type_field0" name="staff_office" id="staff_office" onchange="refresh_existing_individual_list(this.value, '');" title="Office" required="">
+        <select class="form-control chosen-select client_type_field0" name="staff_office" id="staff_office" onchange="refresh_existing_individual_list(this.value, '');" title="Office" required="">
             <option value="">Select Office</option>
             <?php load_ddl_option("staff_office_list", $office_id, (staff_info()['type'] != 1) ? "staff_office" : ""); ?>
         </select>
@@ -128,7 +128,7 @@
     <div class="form-group office-internal">
         <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <select class="form-control value_field required_field" name="office" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required="">
+            <select class="form-control chosen-select value_field required_field" name="office" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required="">
                 <option value="">Select an option</option>
                 <?php load_ddl_option("staff_office_list"); ?>
             </select>
@@ -173,7 +173,7 @@
     <div class="form-group">
         <label class="col-lg-2 control-label">Referred By Source<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <select class="form-control value_field required_field" name="referred_by_source" id="referred_by_source" onchange="change_referred_name_status(this.value);" title="Referred By Source" required>
+            <select class="form-control chosen-select value_field required_field" name="referred_by_source" id="referred_by_source" onchange="change_referred_name_status(this.value);" title="Referred By Source" required>
                 <option value="">Select an option</option>
                 <?php load_ddl_option("referer_by_source"); ?>
             </select>
