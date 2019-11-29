@@ -997,14 +997,18 @@ class Company_model extends CI_Model {
         }
     }
 
-    public function get_account_details_bookkeeping($reference_id) {
-        $order_list = $this->db->get_where('order', ['reference_id' => $reference_id, 'reference' => 'company'])->result_array();
-        if (!empty($order_list)) {
-            $this->db->where_in("order_id", array_column($order_list, 'id'));
-            $this->db->group_by("account_number");
-            return $this->db->get('financial_accounts')->result_array();
-        } else {
-            return [];
+    public function get_account_details_bookkeeping($reference_id,$reference='') {
+        if($reference==''){
+            $order_list = $this->db->get_where('order', ['reference_id' => $reference_id, 'reference' => 'company'])->result_array();
+            if (!empty($order_list)) {
+                $this->db->where_in("order_id", array_column($order_list, 'id'));
+                $this->db->group_by("account_number");
+                return $this->db->get('financial_accounts')->result_array();
+            } else {
+                return [];
+            }
+        }else{
+            return $this->db->get_where('financial_accounts',['order_id'=>$reference_id,'reference'=>'project'])->result_array();
         }
     }
 
@@ -1892,14 +1896,14 @@ class Company_model extends CI_Model {
             if ($data['type_of_client'] == 1) {
                 //insert action on invoice
                 $staff_info = staff_info();
-                $this->db->where_in('department_id', '6');
+                $this->db->where_in('department_id', '14');
                 $department_staffs = $this->db->get('department_staff')->result_array();
                 $department_staff = array_column($department_staffs, 'staff_id');
 
 
                 $action_data['created_office'] = $data['staff_office'];
                 $action_data['priority'] = '3';
-                $action_data['department'] = '6';
+                $action_data['department'] = '14';
                 $action_data['office'] = '17';
                 $action_data['is_all'] = '1';
                 $action_data['staff'] = $department_staff;
@@ -1914,7 +1918,8 @@ class Company_model extends CI_Model {
                 $this->action_model->insert_client_action($action_data);
                 //insert action on invoice
             }
-        } else {
+        } else { // update started
+            // print_r($data['editval']);exit;
             if ($data['type_of_client'] == 1) {
                 if (!$this->company_model->save_company($data)) {
                     return false;
@@ -1925,24 +1930,8 @@ class Company_model extends CI_Model {
             }
             //    Save order
             $data['order_id'] = $order_id = $this->service_model->save_order($data);
-            if (isset($data['service_notes'])) {
-                foreach ($data['service_notes'] as $services_id => $note_data) {
-                    $reference_id = $this->notes->get_main_service_id($data['editval'], $services_id);
-                    if (!empty($reference_id)) {
-                        $reference_id = $reference_id['id'];
-                        $this->notes->insert_note(1, $note_data, 'reference_id', $reference_id, 'service');
-                    }
-                }
-            }
-            if (isset($data['edit_service_notes'])) {
-                foreach ($data['edit_service_notes'] as $services_id => $note_data) {
-                    $reference_id = $this->notes->get_main_service_id($data['editval'], $services_id);
-                    if (!empty($reference_id)) {
-                        $reference_id = $reference_id['id'];
-                        $this->notes->update_note(1, $note_data, $reference_id, 'service');
-                    }
-                }
-            }
+            // print_r($data['order_id']);exit;
+            
             $this->company->update_title_status($data["reference_id"]);
             $this->system->log("insert", "order", $order_id);
 
@@ -1951,15 +1940,34 @@ class Company_model extends CI_Model {
             //     $this->db->where_in('id', $doc_array);
             //     $this->db->update('documents', array('order_id' => $order_id));
             // }
-
+            $this->service_model->update_order_extra_data_fields($data,$order_id);
             $this->billing_model->update_invoice_data($data);
             $this->system->save_general_notification('order', $order_id, 'edit');
+            if (isset($data['service_notes'])) {
+                foreach ($data['service_notes'] as $services_id => $note_data) {
+                    $reference_id = $this->notes->get_main_service_id($order_id, $services_id);
+                    if (!empty($reference_id)) {
+                        $reference_id = $reference_id['id'];
+                        $this->notes->insert_note(1, $note_data, 'reference_id', $reference_id, 'service');
+                    }
+                }
+            }
+            if (isset($data['edit_service_notes'])) {
+                foreach ($data['edit_service_notes'] as $services_id => $note_data) {
+                    $reference_id = $this->notes->get_main_service_id($order_id, $services_id);
+                    if (!empty($reference_id)) {
+                        $reference_id = $reference_id['id'];
+                        $this->notes->update_note(1, $note_data, $reference_id, 'service');
+                    }
+                }
+            }
         }
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return false;
         } else {
             $this->db->trans_commit();
+            
             return $order_id;
         }
     }

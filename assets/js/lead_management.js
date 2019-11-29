@@ -582,7 +582,7 @@ function displayMailCampaignTemplate(leadID, day, isCampaign) {
     });
 }
 
-function viewMailCampaignTemplate(leadType, language, day, firstName, companyName, phone, email,contactType) {
+function viewMailCampaignTemplate(leadType, language, day, firstName, companyName, phone, email,contactType,office,first_contact_date,lead_source,source_details) {
     $.ajax({
         type: 'POST',
         url: base_url + 'lead_management/lead_mail/show_mail_campaign_template_ajax',
@@ -594,7 +594,11 @@ function viewMailCampaignTemplate(leadType, language, day, firstName, companyNam
             company_name: companyName,
             phone: phone,
             email: email,
-            type_of_contact : contactType
+            type_of_contact : contactType,
+            office:office,
+            first_contact_date :first_contact_date,
+            lead_source : lead_source,
+            source_details : source_details 
         },
         success: function (result) {
             if (result != 0) {
@@ -614,6 +618,9 @@ function viewMailCampaignTemplate(leadType, language, day, firstName, companyNam
 }
 
 function loadLeadDashboard(leadType, status, requestBy, leadContactType, eventID = '') {
+    if (leadType == '') {
+        $("#btn_clear_filter").hide();
+    }
     $.ajax({
         type: "POST",
         data: {
@@ -625,7 +632,7 @@ function loadLeadDashboard(leadType, status, requestBy, leadContactType, eventID
         },
         url: base_url + 'lead_management/home/dashboard_ajax',
         success: function (lead_result) {
-//            console.log(action_result);
+            // console.log(action_result);
             $("#lead_dashboard_div").html(lead_result);
         },
         beforeSend: function () {
@@ -644,7 +651,14 @@ function loadEventDashboard() {
         success: function () {
             $("#event_dashboard_div").hide();
             $("#event_dashboard_div2").show();
-            $("#btn_clear_filter").hide();
+            // $("#btn_clear_filter").hide();
+            $(".variable-dropdown").val('');
+            $(".condition-dropdown").val('').removeAttr('disabled');
+            $(".criteria-dropdown").val('');
+            $('.criteria-dropdown').removeAttr('readonly').empty().append('<option value="">All Criteria</option>');
+            $(".criteria-dropdown").trigger("chosen:updated");
+            $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
+            $('#btn_clear_filter').css('display', 'none');
         },
         beforeSend: function () {
             openLoading();
@@ -743,7 +757,7 @@ function leadFilter() {
             $("#lead_dashboard_div").html(result);
             $("[data-toggle=popover]").popover();
 //            $("#clear_filter").show();
-//            $('#btn_clear_filter').show();
+            $('#btn_clear_filter').show();
         },
         beforeSend: function () {
             openLoading();

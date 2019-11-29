@@ -28,6 +28,7 @@ class Billing_model extends CI_Model {
             'inv.is_order as is_order',
             'co.name as name_of_company',
             'co.fein as federal_ID',
+            'ind.birth_date as date_of_birth',
             '(SELECT st.state_name FROM states as st WHERE st.id = co.state_opened) as state_of_incorporation',
             '(SELECT ct.type FROM company_type as ct WHERE ct.id = co.type) as type_of_company',
             'inv.start_month_year as start_month_year',
@@ -226,11 +227,12 @@ class Billing_model extends CI_Model {
                     $invoice_info_data['existing_reference_id'] = $data['client_list'];
                 }
                 $invoice_info_data['start_month_year'] = $data['start_year'];
-                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
+//                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
                 $invoice_info_data['created_by'] = sess('user_id');
                 $invoice_info_data['created_time'] = $today;
                 if (isset($data['is_create_order']) && $data['is_create_order'] == 'yes') {
                     $invoice_info_data['is_order'] = 'y';
+                    $invoice_info_data['status'] = 1;
                 }
                 $this->db->insert('invoice_info', $invoice_info_data);
                 $invoice_id = $this->db->insert_id();
@@ -287,11 +289,12 @@ class Billing_model extends CI_Model {
                 $invoice_info_data['client_id'] = $individual_id;
                 $invoice_info_data['new_existing'] = $data['type_of_individual'];
                 $invoice_info_data['existing_reference_id'] = $data['reference_id'];
-                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
+//                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
                 $invoice_info_data['created_by'] = sess('user_id');
                 $invoice_info_data['created_time'] = $today;
                 if (isset($data['is_create_order']) && $data['is_create_order'] == 'yes') {
                     $invoice_info_data['is_order'] = 'y';
+                    $invoice_info_data['status'] = 1;
                 }
                 $this->db->insert('invoice_info', $invoice_info_data);
                 $invoice_id = $this->db->insert_id();
@@ -394,6 +397,8 @@ class Billing_model extends CI_Model {
             $this->db->select(implode(', ', $this->select_billing_1));
             $this->db->from('invoice_info inv');
             $this->db->join('company co', 'co.id = inv.reference_id');
+            $this->db->join('title t', 't.company_id = inv.reference_id');            
+            $this->db->join('individual ind', 'ind.id = t.individual_id');
             $this->db->join('internal_data indt', 'indt.reference_id = inv.reference_id and indt.reference = "company"');
         } else {
             $this->db->select(implode(', ', $this->select_billing_2));
@@ -417,6 +422,7 @@ class Billing_model extends CI_Model {
 //        $main_order_id = $this->db->query("select * from invoice_info where id=".$invoice_id."")->row_array()['order_id'];
         $select = [
             'inv.id as invoice_id',
+            'inv.status as status',
             'ord.id as order_id',
             'ord.service_id as service_id',
             'sr.category_id as category_id',
@@ -1502,4 +1508,114 @@ class Billing_model extends CI_Model {
         return $this->db->get('internal_data')->row_array()['office'];
     }
 
+    public function get_royalty_reports_data($office= "",$date_range= "") {
+        ## Read value
+        $draw = $_POST['draw'];
+        $row = $_POST['start'];
+        $rowperpage = $_POST['length']; // Rows display per page
+        $columnIndex = $_POST['order'][0]['column']; // Column index
+        $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+        $searchValue = $_POST['search']['value']; // Search value
+
+        $staff_info = staff_info();
+        $staff_id = $staff_info['id'];
+        $staffrole = $staff_info['role'];
+        $staff_office = $staff_info['office'];
+        $departments = explode(',', $staff_info['department']);
+
+        if (in_array(2, $departments)) {
+            if ($staffrole == 2) {      // frinchisee manager
+                $this->db->where_in('office_id', $staff_office);
+            } else {
+                $this->db->where('created_by',$staff_id);
+            }
+        }
+        if ($office != "") {
+            $this->db->where_in('office_id',$office);
+        }
+        if ($date_range != "") {
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            
+            $this->db->where('date >=',$start_date);
+            $this->db->where('date <=',$end_date);
+        }
+        if ($searchValue != '') {
+            $this->db->group_start();
+            $this->db->like('client_id', $searchValue);
+            $this->db->or_like('service_name', $searchValue);
+            $this->db->or_like('service_name', $searchValue);
+            $this->db->or_like('payment_status', $searchValue);
+            $this->db->or_like('payment_type', $searchValue);
+            $this->db->or_like('reference', $searchValue);
+            $this->db->or_like('authorization_id', $searchValue);
+            $this->db->or_like('office_fee', $searchValue);
+            $this->db->group_end();
+        }
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        $res_for_all = $this->db->get('royalty_report')->num_rows();
+        $qr = $this->db->last_query();
+        $qr .= ' order by ' . $columnName . ' ' . $columnSortOrder;
+        $qr .= ' limit ' . $row . ',' . $rowperpage;
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        $royalty_reports_data = $this->db->query($qr)->result_array();
+
+        $totalRecords = $res_for_all;
+        $totalRecordwithFilter = $res_for_all;
+        ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $royalty_reports_data
+        );
+
+        return $response;
+
+    }
+    public function get_payment_details_service_id($invoice_id,$order_id) {
+        $sql = "pay.reference_no AS reference,pay.authorization_id,typ.name AS payment_type,pay.pay_amount AS collected";
+        $this->db->select($sql);
+        $this->db->from('payment_history pay');
+        $this->db->join('payment_type typ', 'typ.id = pay.payment_type');
+        $this->db->where("invoice_id",$invoice_id);
+        $this->db->where("order_id",$order_id);
+        $this->db->where('type', 'payment');
+        $this->db->where('is_cancel !=', 1);
+        return $this->db->get()->result_array();
+    }
+    public function get_total_price_report($office,$date_range) {
+        if (!empty($office)) {
+            $this->db->where_in('office_id',$office);
+        }            
+        if ($date_range != "") {
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            
+            $this->db->where('date >=',$start_date);
+            $this->db->where('date <=',$end_date);
+        }           
+        $total_data = $this->db->get('royalty_report')->result_array();
+        $total_arr = array(
+            "invoice_id" => count($total_data),
+            "retail_price" => array_sum(array_column($total_data,'retail_price')),
+            "cost" => array_sum(array_column($total_data,'cost')),
+            "collected" => array_sum(array_column($total_data,'collected')),
+            "total_net" => array_sum(array_column($total_data,'total_net')),
+            "override_price" => array_sum(array_column($total_data,'override_price')),
+            "fee_with_cost" => array_sum(array_column($total_data,'fee_with_cost')),
+            "fee_without_cost" => array_sum(array_column($total_data,'fee_without_cost'))
+
+        );
+        return $total_arr;        
+    }
+
+    public function get_start_date_royalty_report() {
+        $sql = "SELECT MIN(created_time) as created_time FROM `invoice_info` where date_format(created_time,'%Y-%m-%d')!='0000-00-00' order by created_time asc";
+        $start_date = $this->db->query($sql)->row_array()['created_time'];
+        return date("m/d/Y", strtotime($start_date));
+    }
 }

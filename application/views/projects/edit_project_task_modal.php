@@ -110,9 +110,22 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <label>Allow sales tax processing</label>
-                        <input type="checkbox" name="task[input_form_type]" title="Allow Sales Tax" id="confirmation" value="1" <?php echo ($task_details->input_form_type == '1') ? 'checked' : ''; ?>>
+                    <div class="col-md-12" id="category_div" style="display:none">
+                        <?php if($template_category_id==1){
+                            $get_exist_input=get_project_exist_bookkeeping_input_type($task_details->template_main_id);
+                            $exist_type= array_column($get_exist_input,'bookkeeping_input_type');
+                            ?>
+                            <label class="control-label">Allow Bookkeeping:</label>
+                            <select class="form-control" id="bookkeeping_input_type" name="task[bookkeeping_input_type]" title='Bookkeeping Input Type'>
+                                <option value="">Select Bookkeeping Input Form</option>
+                                <option value="1" <?= (in_array('1', $exist_type)?'disabled':'') ?> <?= $task_details->bookkeeping_input_type==1?'selected':''  ?> >BANK STATEMENT RETRIEVAL LEAFCLOUD DEPARTMENT</option>
+                                <option value="2" <?= (in_array('2', $exist_type)?'disabled':'') ?> <?= $task_details->bookkeeping_input_type==2?'selected':'' ?> >BOOKKEEPING BOOKKEEPER DEPARTMENT</option>
+                                <option value="3" <?= (in_array('3', $exist_type)?'disabled':'') ?> <?= $task_details->bookkeeping_input_type==3?'selected':'' ?> >REVIEW CLIENT MANAGER</option>
+                            </select>
+                        <?php }elseif($template_category_id==3){ ?>
+                            <label>Allow sales tax processing</label>
+                            <input type="checkbox" name="task[input_form_type]" title="Confirmation" id="confirmation" value="3" <?php echo ($task_details->input_form_type == '3') ? 'checked' : ''; ?>>
+                        <?php } ?>
                     </div>
                 </div>
                 <hr class="hr-line-dashed"/>
@@ -132,6 +145,7 @@
                 <input type="hidden" id="task_disable_field" value="n">
                 <input type="hidden" id="task_staff_type" value="<?= $staff_info['type']; ?>">
                 <input type="hidden" id="main_id" name="task[template_main_id]" value="<?= $task_details->template_main_id ?>">
+                <input type="hidden" id="template_cat_id" name="task[template_cat_id]" value="<?= $template_category_id ?>">
                 <button class="btn btn-success" type="button" onclick="update_project_task(<?= $task_details->id ?>,<?= $task_details->template_main_id ?>,<?= $task_details->project_id ?>)">Save</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             </div><!-- modal-footer -->
@@ -163,5 +177,18 @@ if(!empty($staff_id)){
                     '</div>';
             $(newHtml).insertAfter($(this).closest('.form-group'));
         });
+        $(".checkclass").click(function(){
+            var input_status=$(".checkclass:checked").val();
+            if(input_status=='y'){
+                $('#category_div').show();
+            }else{
+               $('#category_div').hide(); 
+            }
+        });
+        if($(".checkclass:checked").val()=='y'){
+            $('#category_div').show();
+        }else{
+            $('#category_div').hide(); 
+        }
     });
 </script>

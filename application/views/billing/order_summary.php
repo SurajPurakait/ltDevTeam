@@ -53,12 +53,15 @@
                                                             <br>
                                                             Name: <?= $contact["first_name"]; ?> <?= $contact["middle_name"]; ?> <?= $contact["last_name"]; ?>
                                                             <br>
-                                                            Phones 1: <?= $contact["phone1"]; ?> (<?= $contact["phone1_country_name"]; ?>)
+                                                            Phone: <?= $contact["phone1"]; ?> (<?= $contact["phone1_country_name"]; ?>)
                                                             <br>
                                                             Email: <?= $contact["email1"]; ?>
                                                             <br>
-                                                            <?= $contact["address1"]; ?>, <?= $contact["city"]; ?>, <?= $contact["state"]; ?>,
-                                                            ZIP: <?= $contact["zip"]; ?>, <?= $contact["country_name"]; ?>
+                                                            <?= $contact["address1"]; ?>, <?= $contact["city"]; ?>,
+                                                            <?= $contact["state_name"]; ?>,
+                                                            <!-- ZIP:  -->
+                                                            <?= $contact["zip"]; ?>, 
+                                                            <?= $contact["country_name"]; ?>
                                                         </p>
                                                     </div>
                                                 </div>                                                                                    
@@ -132,7 +135,22 @@
                                             <table style="width:100%;">
                                                 <?php
                                                 $colors = array('bg-light-green', 'bg-blue');
+                                                $tracking = [
+                                                            1 => 'Not Started',
+                                                            2 => 'Started',
+                                                            3 => 'Completed',
+                                                            7 => 'Canceled'
+                                                        ];
                                                 foreach ($os as $key => $services) :
+
+                                                    $tracking_class = 'label-danger';
+                                                if ($services['status'] == 1) {
+                                                    $tracking_class = 'label-success';
+                                                } elseif ($services['status'] == 2) {
+                                                    $tracking_class = 'label-yellow';
+                                                } elseif ($services['status'] == 3) {
+                                                    $tracking_class = 'label-primary';
+                                                }
                                                     $random_keys = ($key % 2 == 0) ? 0 : 1;
                                                     $order_id = $services['order_id'];
                                                     $service_id = $services['service_id'];
@@ -142,12 +160,12 @@
                                                             <div class="row">
                                                                 <div class="col-lg-10" style="padding-top:8px">
                                                                     <p>
-                                                                        <b>Service Category: <?= $services['service_category']; ?></b><br>
+                                                                        <b>Category: <?= $services['service_category']; ?></b><br>
                                                                         <b>Service:</b> <?= $services["service"]; ?><br>
-                                                                        <b>Retail Price:</b> <?= $services["retail_price"]; ?><br>
-                                                                        <b>Override Price:</b> <?= $services["override_price"]; ?><br>
+                                                                        <b>Retail Price:</b> $<?= $services["retail_price"]; ?>.00<br>
+                                                                        <b>Override Price:</b> $<?= $services["override_price"]; ?><br>
                                                                         <b>Quantity:</b> <?= $services["quantity"]; ?><br>
-                                                                        <b>Total:</b><?= number_format((float) $services["override_price"] * $services["quantity"], 2, '.', ''); ?>
+                                                                        <b>Total:</b> $<?= number_format((float) $services["override_price"] * $services["quantity"], 2, '.', ''); ?>
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -155,7 +173,7 @@
                                                         <td style="border: 1px solid #8ab645; padding-left: 8px;">
                                                             <div class="row">
                                                                 <div class="col-lg-12" style="padding-top:8px">
-                                                                    <p>
+                                                                    <p><b>Tracking:</b>&nbsp;&nbsp;&nbsp;<span class="label <?= $tracking_class ?> invoice-tracking-span-<?= $services['invoice_id']; ?>"><b><?= $tracking[$services['status']]; ?></b></span><br>
                                                                         <b>Notes</b><br>
                                                                         <?php
                                                                         $note_list = invoice_notes($order_id, $service_id);

@@ -28,6 +28,7 @@ class Action_model extends CI_Model {
         $this->action_select[] = '(SELECT office.name FROM office WHERE office.id = act.office) AS office_name';
         $this->action_select[] = 'act.my_task AS my_task';
         $this->action_select[] = 'act.status AS status';
+        $this->action_select[] = 'act.is_all AS is_all';
         $this->action_select[] = '(CASE WHEN act.status = 0 THEN \'0\' WHEN act.status = 1 THEN \'1\' WHEN act.status = 2 THEN \'2\' WHEN act.status = 6 THEN \'6\' WHEN act.status = 7 THEN \'7\' ELSE \'Unknown\' END) AS filter_status';
         $this->action_select[] = '(CASE WHEN act.status = 0 THEN \'New\' WHEN act.status = 1 THEN \'Started\' WHEN act.status = 6 THEN \'Resolved\' WHEN act.status = 2 THEN \'Completed\' WHEN act.status = 7 THEN \'Canceled\' ELSE \'Unknown\' END) AS tracking_status';
         $this->action_select[] = 'CONCAT(st.last_name, \', \', st.first_name, \' \', st.middle_name) as user_name';
@@ -147,7 +148,8 @@ class Action_model extends CI_Model {
                         $like_staffs[] = 'all_action_staffs LIKE "%,' . $staffID . ',%"';
                     }
                     if (!empty($like_staffs)) {
-                        $having[] = 'all_action_staffs NOT LIKE "%,' . $staff_id . ',%" AND (' . implode(' OR ', $like_staffs) . ') AND added_by_user != "' . $staff_id . '" AND my_task = "0"';
+                        // this condition is removed for changing the to others logic all_action_staffs NOT LIKE "%,' . $staff_id . ',%" AND 
+                        $having[] = '(' . implode(' OR ', $like_staffs) . ') AND added_by_user != "' . $staff_id . '" AND my_task = "0" AND is_all = "1"';
                     } else {
                         $having[] = 'added_by_user != "' . $staff_id . '" AND my_task = "0" AND act.id = "0"';
                     }
@@ -155,7 +157,9 @@ class Action_model extends CI_Model {
                 if ($user_type == 2 && $role == 4) {
                     if ($user_department != 14) {
                         if (!empty($departments)) {
-                            $having[] = 'all_action_staffs NOT LIKE "%,' . $staff_id . ',%" AND department_id IN (' . implode(',', $departments) . ') AND added_by_user != "' . $staff_id . '" AND my_task = "0"';
+
+                            $having[] = 'all_action_staffs LIKE "%,' . $staff_id . ',%" AND department_id IN (' . implode(',', $departments) . ') AND added_by_user != "' . $staff_id . '" AND my_task = "0" AND is_all = "1"';
+                             // print_r($having);die;
                         } else {
                             $having[] = 'added_by_user != "' . $staff_id . '" AND my_task = "0" AND act.id = "0"';
                         }
@@ -698,7 +702,7 @@ class Action_model extends CI_Model {
                 }
             }
         }
-
+        $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => '0', "section_id" => $id, "related_table_name" => "actions", "comment" => ""]);
         if (!empty($uploadData)) {
             $this->db->insert_batch('action_files', $uploadData);
         }
@@ -3168,7 +3172,7 @@ class Action_model extends CI_Model {
         $manager_id = $this->get_partner_mngr($manager_fname, $manager_lname, $ofc_id);
 
         $lang = $this->get_lang_id($data['owner_language']);
-
+        
         $internal_lang = $this->get_lang_id($data['internal_language']);
 
         $referred_by_source = $this->get_referred_by_source($data['referred_by_source']);
@@ -3240,12 +3244,15 @@ class Action_model extends CI_Model {
         if (isset($data['practice_id']) && $data['practice_id'] != '') {
             $practice_id = $data['practice_id'];
         } else {
-            $comp_name = str_replace(' ', '', $data['company_name']);
-            if (strlen($comp_name) <= 12) {
-                $practice_id = $comp_name;
-            } else {
-                $practice_id = substr($comp_name, 12);
-                ;
+            if($reference=='individual'){
+                $practice_id='';
+            }else{
+                $comp_name = str_replace(' ', '', $data['company_name']);
+                if (strlen($comp_name) <= 12) {
+                    $practice_id = $comp_name;
+                } else {
+                    $practice_id = substr($comp_name, 12);
+                }
             }
         }
         $update_data = array(
@@ -3488,6 +3495,15 @@ class Action_model extends CI_Model {
         } else {
             return 1;
         }
+    }
+
+
+    public function get_office_name_for_action_view($id) {
+        $this->db->select('of.name');
+        $this->db->from('office of');
+        $this->db->join('actions ac','ac.office = of.id');
+        $this->db->where('ac.id',$id);
+        return $this->db->get()->row_array();
     }
 
 }

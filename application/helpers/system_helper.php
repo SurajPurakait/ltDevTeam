@@ -238,6 +238,26 @@ if (!function_exists('get_department_name_by_id')) {
 
 }
 
+if (!function_exists('get_inputform_attachments')) {
+
+    function get_inputform_attachments($service_request_id) {
+        $ci = &get_instance();
+        $ci->load->model('service_model');
+        return $ci->service_model->get_inputform_attachments($service_request_id);
+    }
+
+}
+
+if (!function_exists('get_inputform_notes')) {
+
+    function get_inputform_notes($service_request_id) {
+        $ci = &get_instance();
+        $ci->load->model('service_model');
+        return $ci->service_model->get_inputform_notes($service_request_id);
+    }
+
+}
+
 if (!function_exists('staff_office_name')) {
 
     function staff_office_name($staff_id, $get_manager = '') {
@@ -324,12 +344,19 @@ if (!function_exists('load_ddl_option')) {
                 }
                 break;
             case "staff_office_list":
-                $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : "");
+                $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3) ? sess('user_id') : ""); // This values are deleted required to client requirment ($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : ""
                 foreach ($item_list as $item) {
                     $select = ($selected != "" && $item['id'] == $selected) ? "selected = 'selected'" : "";
                     echo "<option $select value='" . $item['id'] . "'>" . $item['name'] . "</option>";
                 }
-                break;    
+                break;
+            case "users_office_list":
+                $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : ""); // This values are deleted required to client requirment ($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : ""
+                foreach ($item_list as $item) {
+                    $select = ($selected != "" && $item['id'] == $selected) ? "selected = 'selected'" : "";
+                    echo "<option $select value='" . $item['id'] . "'>" . $item['name'] . "</option>";
+                }
+            break; 
             case "staff_office_list_multiple_select":
                 $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : "");
                 foreach ($item_list as $item) {
@@ -353,6 +380,26 @@ if (!function_exists('load_ddl_option')) {
                     echo "<option $select value='" . $item['id'] . "'>" . $item['language'] . "</option>";
                 }
                 break;
+
+            case "language_list_for_legal_translations":
+                $item_list = $ci->system->get_languages_for_legal_translations();
+                foreach ($item_list as $item) {
+                    $select = ($selected != "" && $item["id"] == $selected) ? "selected = 'selected'" : "";
+                    echo "<option $select value='" . $item['id'] . "'>" . $item['language'] . "</option>";
+                }
+                break;
+                
+            case "language_list_multiple_select":
+                $item_list = $ci->system->get_languages_for_legal_translations();
+                foreach ($item_list as $item) {
+                    if (in_array($item['id'], $selected)) {
+                        echo "<option selected value='" . $item['id'] . "'>" . $item['language'] . "</option>";
+                    } else {
+                        echo "<option value='" . $item['id'] . "'>" . $item['language'] . "</option>";
+                    }
+                }
+                break;
+
             case "referer_by_source":
                 $item_list = $ci->system->get_refered_by_source();
                 foreach ($item_list as $item) {
@@ -1712,7 +1759,7 @@ if (!function_exists('get_assigned_by_staff_name')) {
         $ci = &get_instance();
         $ci->load->model('Referral_partner');
         $ret = $ci->Referral_partner->get_assigned_by_staff_name($staff_id);
-        return $ret['last_name'] . ', ' . $ret['first_name'];
+        return $ret['first_name'] . ' ' . $ret['last_name'];
     }
 
 }
@@ -2263,7 +2310,8 @@ if (!function_exists('edit_by_shortname_array')) {
             'inc_n_c_d',
             'inc_n_c_n_p_f',
             'inc_n_f_p',
-            'tax_f'
+            'tax_f',
+            'bus_l_t'
         ];
     }
 
@@ -3334,6 +3382,7 @@ if (!function_exists('get_partnes')) {
     }
 
 }
+
 if(!function_exists('getTaskFilesCount')){
     function getTaskFilesCount($task_id){
        $ci = &get_instance();
@@ -3361,4 +3410,77 @@ if(!function_exists('getProjectListAccordingToMonth')){
         $ci->load->model("project_template_model");
         return $ci->project_template_model->get_project_list('','','','','','','','','','','','',$template_cat_id,$month);
     }
+}
+if(!function_exists('getProjectCountByClientId')){
+    function getProjectCountByClientId($client_id){
+        $ci =&get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->get_project_count_by_client_id($client_id);
+    }
+}
+if(!function_exists('get_service_by_id')){
+    function get_service_by_id($id){
+        $ci =&get_instance();
+        $ci->load->model('service_model');
+        return $ci->service_model->get_service_by_id($id);
+    }
+}
+if(!function_exists('get_office_fees_by_service')){
+    function get_office_fees_by_service($service_id,$office_id){
+        $ci =&get_instance();
+        $ci->load->model('service_model');
+        return $ci->service_model->get_office_fees_by_service($service_id,$office_id);
+    }
+}
+if(!function_exists('get_payment_details_service_id')){
+    function get_payment_details_service_id($invoice_id,$order_id) {
+        $ci =&get_instance();
+        $ci->load->model('billing_model');
+        return $ci->billing_model->get_payment_details_service_id($invoice_id,$order_id);
+    }
+}
+
+if(!function_exists('get_office_name_for_action_view')){
+    function get_office_name_for_action_view($id) {
+        $ci =&get_instance();
+        $ci->load->model('action_model');
+        return $ci->action_model->get_office_name_for_action_view($id);
+    }
+}
+if(!function_exists('get_exist_bookkeeping_input_type')){
+    function get_exist_bookkeeping_input_type($template_id){
+        $ci =&get_instance();
+        $ci->load->model('Project_Template_model'); 
+        return $ci->Project_Template_model->getExistBookkeepingInputType($template_id);
+    }
+}
+if(!function_exists('get_project_exist_bookkeeping_input_type')){
+    function get_project_exist_bookkeeping_input_type($template_id){
+        $ci =&get_instance();
+        $ci->load->model('Project_Template_model'); 
+        return $ci->Project_Template_model->getProjectExistBookkeepingInputType($template_id);
+    }
+}
+if(!function_exists('get_exist_task')){
+    function get_exist_task($template_id){
+        $ci =&get_instance();
+        $ci->load->model('Project_Template_model'); 
+        return $ci->Project_Template_model->getExistTask($template_id);
+    }
+}
+if(!function_exists('get_action_notification_for_view')){
+    function get_action_notification_for_view($action_id){
+        $ci =&get_instance();
+        $ci->load->model('system');
+        return $ci->system->get_general_notification_by_user_id(sess('user_id'),'','','','',$action_id);
+    }
+}
+if (!function_exists('getProjectClientPracticeId')) {
+
+    function getProjectClientPracticeId($client_id, $client_type) {
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getProjectClientPracticeId($client_id, $client_type);
+    }
+
 }

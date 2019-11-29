@@ -66,6 +66,7 @@ class Project extends CI_Controller {
         $render_data['filter_element_list'] = $this->filter_element;
         $render_data['templateIds'] = $this->Project_Template_model->getTemplateIds();
         $render_data['due_m'] = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
+        $render_data['due_years']=$this->Project_Template_model->getDueYear();
         $this->load->template('projects/project', $render_data);
     }
 
@@ -143,7 +144,6 @@ class Project extends CI_Controller {
     }
 
     public function get_project_tracking_log($id, $table_name) {
-        $this->load->model('service_model');
         echo json_encode($this->Project_Template_model->get_project_tracking_log($id, $table_name));
     }
 
@@ -153,9 +153,18 @@ class Project extends CI_Controller {
         $prosubid = post('prosubid');
         $this->load->model('service_model');
         $comment = '';
-        echo $this->Project_Template_model->update_project_task_status($prosubid, $statusval, $comment);
-
-        mod_actions_count($prev_status, $this->input->post("status"));
+        $sub_taskid=$this->Project_Template_model->update_project_task_status($prosubid, $statusval, $comment);
+        $projectid=$this->db->get_where('project_task',['id'=>$prosubid])->row_array()['project_id'];
+        $ids['task_status']=$this->db->get_where('project_task',['id'=>$prosubid])->row_array()['tracking_description'];
+        $ids['project_status']=$this->db->get_where('project_main',['project_id'=>$projectid])->row_array()['status'];
+        $sub_status=$this->db->get_where('project_task',['id'=>$sub_taskid])->row_array()['tracking_description'];
+        if(!empty($sub_status)){
+        $ids['sub_taskid_status']=$sub_status;
+        }else{
+           $ids['sub_taskid_status']=0;
+        }
+        $ids['sub_taskid']=$sub_taskid;
+        echo json_encode($ids);
     }
 
     public function request_update_project_main() {
@@ -270,10 +279,11 @@ class Project extends CI_Controller {
         $client_id = post("client_id");
         $template_cat_id = post('template_cat_id');
         $month = post('month');
+        $year=post('year');
         if (post('page_number') != 0) {
             $render_data['page_number'] = post('page_number');
         }
-        $render_data["project_list"] = $this->Project_Template_model->get_project_list($request, $status, $template_id, $office_id, $department_id, $filter_assign, $filter_data, $sos_value, $sort_criteria, $sort_type, $client_type, $client_id, $template_cat_id, $month);
+        $render_data["project_list"] = $this->Project_Template_model->get_project_list($request, $status, $template_id, $office_id, $department_id, $filter_assign, $filter_data, $sos_value, $sort_criteria, $sort_type, $client_type, $client_id, $template_cat_id, $month,$year);
         $this->load->view("projects/project_dashboard", $render_data);
     }
 

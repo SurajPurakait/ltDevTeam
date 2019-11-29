@@ -97,16 +97,10 @@
                             </div>
                         </div>
                         <div class="col-md-12 col-lg-4 col-lg-offset-1 m-t-8">
-                            <a class="btn notification-btn" href="javascript:void(0);" title="Lead Notifications">Notifications <span class="label label-danger"><?= get_partner_notifications_count('partner'); ?></span></a>
+                            <a class="btn notification-btn" href="javascript:void(0);" title="Partner Notifications">Notifications <span class="label label-danger"><?= get_partner_notifications_count('partner'); ?></span></a>
                         </div>
                     </div>
                     <hr class="hr-line-dashed">
-                    <!-- <div class="filters clearfix">
-                        <div class="dropdown pull-right">
-                            <button title="Create Referral Partner" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" onclick="window.location.href = '<?//= base_url("/referral_partner/referral_partners/new_referral_agent?q=partner") ?>';"><i class="fa fa-plus"></i> Create Referral Partner</button>
-                        </div>
-                    </div> -->
-                    <!-- <hr class="hr-line-dashed">                     -->
                     <div id="load_data"></div>
                 </div>
             </div>

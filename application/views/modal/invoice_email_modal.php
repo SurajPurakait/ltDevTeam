@@ -10,7 +10,9 @@
                     <?php foreach ($email_list as $key => $email) { ?>
                         <div class="form-group">
                             <label class="col-lg-3 control-label">
-                                <input type="checkbox" id="contact-email-<?= ($key + 1); ?>" name="email[]" value="<?= $email; ?>">&nbsp;Contact email<?= ($key + 1); ?>
+                                <input type="checkbox" checked id="contact-email-<?= ($key + 1); ?>" name="email[]" value="<?= $email; ?>">&nbsp;
+                                <!-- Contact email<?//= ($key + 1); ?> -->
+                                Send to:
                             </label>
                             <div class="col-lg-9">
                                 <p id="contact-email-text-<?= ($key + 1); ?>"><?= $email; ?></p>
@@ -20,9 +22,12 @@
                 </div>
                 <div class="row">
                     <div class="form-group">
-                        <label class="col-lg-3 control-label"><input type="checkbox" name="email[]" onchange="this.value = getIdVal('new_email');" id="new_email_checkbox" name="">&nbsp;New email</label>
+                        <label class="col-lg-3 control-label"><input type="checkbox" name="email[]" onchange="this.value = getIdVal('new_email');" id="new_email_checkbox" name="">&nbsp;
+                        <!-- New email -->
+                        Send to:
+                    </label>
                         <div class="col-lg-9">
-                            <input class="form-control" type="email" id="new_email" title="New Email"  onkeypress="setIdVal('new_email_checkbox', this.value);">
+                            <input class="form-control" type="email" id="new_email" title="New Email"  onchange="setIdVal('new_email_checkbox', this.value);">
                             <div class="errorMessage text-danger"></div>
                         </div>
                     </div>                    

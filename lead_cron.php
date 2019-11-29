@@ -92,7 +92,7 @@ if ($result = mysqli_query($conn, $sql)) {
                                 'office_phone_number' => $office_info['phone'],
                                 'office_address' => $office_info['address'],
                                 'office_name' => $office_info['name'],
-                                'requested_by' => $staff_result['last_name'] . ', ' . $staff_result['first_name']
+                                'requested_by' => $staff_result['first_name'] . ' ' . $staff_result['last_name']
                             ];
                             foreach ($veriable_array as $index => $value) {
                                 if ($value != '') {

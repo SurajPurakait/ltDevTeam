@@ -41,6 +41,7 @@ class Service_model extends CI_Model {
         $this->order_select[] = 'cpn.start_month_year AS start_month_year';
         $this->order_select[] = 'ord.status AS status';
         $this->order_select[] = 'inv.id AS invoiced_id';
+        $this->order_select[] = 'inv.is_order AS is_order';
         $this->order_select[] = '(SELECT department.name FROM department WHERE department.id = srv.dept) AS service_department_name';
         $this->load->model('notes');
         $this->load->model('billing_model');
@@ -95,7 +96,7 @@ class Service_model extends CI_Model {
     }
 
     public function get_service_by_id($id) {
-        $this->db->select("s.id, s.category_id, c.name as category_name, c.description as category_description, s.description, s.ideas, s.tutorials, s.dept AS service_department, s.retail_price");
+        $this->db->select("s.id, s.category_id, s.fixed_cost as cost, c.name as category_name, c.description as category_description, s.description, s.ideas, s.tutorials, s.dept AS service_department, s.retail_price");
         $this->db->from('services s');
         $this->db->join('category c', 'c.id = s.category_id');
         $this->db->where(['s.id' => $id]);
@@ -1064,9 +1065,14 @@ class Service_model extends CI_Model {
         return $this->db->query("select SUM(percentage) as total from title where company_id = '$reference_id' and status=1")->row_array()["total"];
     }
 
-    public function get_financial_account_info($id) {
-        $sql = "select f.*, group_concat(q.security_question separator '|') as questions, group_concat(q.security_answer separator '|') as answers from financial_accounts as f inner join security_questions as q on q.financial_accounts_id = f.id where f.id='$id'";
-        return $this->db->query($sql)->row_array();
+    public function get_financial_account_info($id,$refernce='') {
+        if($refernce==''){
+            $sql = "select f.*, group_concat(q.security_question separator '|') as questions, group_concat(q.security_answer separator '|') as answers from financial_accounts as f inner join security_questions as q on q.financial_accounts_id = f.id where f.id='$id'";
+            return $this->db->query($sql)->row_array();
+        }else{
+            $sql = "select f.*, group_concat(q.security_question separator '|') as questions, group_concat(q.security_answer separator '|') as answers from financial_accounts as f inner join security_questions as q on q.financial_accounts_id = f.id where f.id='$id' AND f.reference='project'";
+            return $this->db->query($sql)->row_array();
+        }
     }
 
     public function load_financial_accounts_list($company_id) {
@@ -1110,13 +1116,14 @@ class Service_model extends CI_Model {
                 c1.country_name AS phone1_country_name, 
                 c2.country_name AS phone2_country_name, 
                 ci.phone1, ci.phone2, ci.email1, ci.email2, ci.skype, ci.whatsapp, ci.website, ci.status,
-                ci.address1, ci.address2, ci.city, ci.state, ci.country, c.country_name, ci.zip';
+                ci.address1, ci.address2, ci.city, ci.state, ci.country, c.country_name, ci.zip, st.state_name AS state_name';
         $this->db->select($select);
         $this->db->from('contact_info AS ci');
         $this->db->join('contact_info_type AS ct', 'ct.id = ci.type', 'left');
         $this->db->join('countries AS c', 'c.id = ci.country', 'left');
         $this->db->join('countries AS c1', 'c1.id = ci.phone1_country', 'left');
         $this->db->join('countries AS c2', 'c2.id = ci.phone2_country', 'left');
+        $this->db->join('states AS st', 'st.id = ci.state', 'left');
         $this->db->where(['ci.status' => 1, 'ci.reference_id' => $reference_id, 'ci.reference' => $reference]);
         // $this->db->group_by('ci.reference_id');
         return $this->db->get()->result_array();
@@ -1489,13 +1496,21 @@ class Service_model extends CI_Model {
         return $data;
     }
 
-    public function get_account_list_by_company_id($company_id) {
-        $sql = "select * from financial_accounts where company_id='$company_id'";
+    public function get_account_list_by_company_id($company_id,$reference='') {
+        if($reference=='project'){
+            $sql = "select * from financial_accounts where company_id='$company_id' AND reference='project'";
+        }else{
+            $sql = "select * from financial_accounts where company_id='$company_id'";
+        }
         return $this->db->query($sql)->result();
     }
 
-    public function get_account_list_by_order_id($order_id) {
-        $sql = "select * from financial_accounts where order_id='$order_id'";
+    public function get_account_list_by_order_id($order_id,$reference='') {
+        if($reference=='project'){
+            $sql = "select * from financial_accounts where order_id='$order_id' AND reference='project'";
+        }else{
+            $sql = "select * from financial_accounts where order_id='$order_id'";
+        }
         return $this->db->query($sql)->result();
     }
 
@@ -1830,12 +1845,12 @@ class Service_model extends CI_Model {
                     $price = $data['related_service'][$order_id][$srv_id]['retail_price'];
                 }
             }
-
+                // print_r($price);exit;
             $this->db->where(['order_id' => $data['editval'], 'services_id' => $data['service_id']]);
             $this->db->update('service_request', ['price_charged' => $price]);
 //            print_r($data['related_service']);
             if (isset($data['related_service']) && count($data['related_service']) > 0) {
-                $related_services = $data['related_services'];
+                $related_services = $data['related_service'];
                 $this->db->where(['order_id' => $order_id, 'services_id!=' => $data['service_id']]);
                 $this->db->delete('service_request');
                 foreach ($related_services as $service_order_id => $order_data) {
@@ -1865,7 +1880,7 @@ class Service_model extends CI_Model {
                     $target = $this->get_date_form_target_days($srv_id);
                     $service_request_data = [
                         'order_id' => $order_id,
-                        'services_id' => $order_data,
+                        'services_id' => $srv_id,
                         'price_charged' => $service['retail_price'],
                         'tracking' => $tracking,
                         'date_started' => $target['start_date'],
@@ -2551,6 +2566,23 @@ class Service_model extends CI_Model {
         }
     }
 
+
+    public function get_inputform_attachments($service_request_id) {
+        $this->db->select('rsf.file_name as file_name');
+        $this->db->from('service_request sr');
+        $this->db->join('related_service_files rsf','sr.id = rsf.related_service_id');
+        $this->db->where('sr.id',$service_request_id);
+        return $this->db->get()->row_array();
+    }
+
+    public function get_inputform_notes($service_request_id) {
+        $this->db->select('n.note as note');
+        $this->db->from('service_request sr');
+        $this->db->join('notes n','sr.id = n.reference_id');
+        $this->db->where('sr.id',$service_request_id);
+        return $this->db->get()->row_array();
+    }
+
     public function save_invoice_on_related_service($related_service_id) {
         $service_request_info = $this->db->get_where('service_request', ['id' => $related_service_id])->row_array();
         $order_id = $service_request_info['order_id'];
@@ -2634,4 +2666,127 @@ class Service_model extends CI_Model {
             return $this->db->insert('order_extra_data', $order_extra_data);
     }
 
+    public function update_order_extra_data_fields($data,$order_id){
+        if($data['doc_file'] != ''){
+            $translation = implode(",",$data['language_new']);
+        $order_extra_data = [
+                'translation_to' => $translation,
+                'amount_of_pages' => $data['pages'],
+                'attach_files' => $data['doc_file']
+                // 'order_id' => $order_id
+            ];
+
+            $this->db->where(['order_id' => $order_id]);
+            $this->db->update('order_extra_data',$order_extra_data);  
+
+        }else{
+        $translation = implode(",",$data['language_new']);
+        $order_extra_data = [
+                'translation_to' => $translation,
+                'amount_of_pages' => $data['pages']
+                // 'attach_files' => $data['doc_file'],
+                // 'order_id' => $order_id
+            ];
+
+            $this->db->where(['order_id' => $order_id]);
+            $this->db->update('order_extra_data',$order_extra_data);
+            
+            // return $this->db->insert('order_extra_data', $order_extra_data);
+        }
+    }
+
+    public function get_office_fees_by_service($service_id,$office_id) {
+        $this->db->where('service_id',$service_id);
+        $this->db->where('office_id',$office_id);
+        return $this->db->get('office_service_fees')->row_array()['percentage'];
+    }
+    public function get_weekly_sales_report_data($office= "",$date_range= "") {
+        ## Read value
+        $draw = $_POST['draw'];
+        $row = $_POST['start'];
+        $rowperpage = $_POST['length']; // Rows display per page
+        $columnIndex = $_POST['order'][0]['column']; // Column index
+        $columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+        $searchValue = $_POST['search']['value']; // Search value
+
+        $staff_info = staff_info();
+        $staff_id = $staff_info['id'];
+        $staffrole = $staff_info['role'];
+        $staff_office = $staff_info['office'];
+        $departments = explode(',', $staff_info['department']);
+
+        if (in_array(2, $departments)) {
+            if ($staffrole == 2) {      // frinchisee manager
+                $this->db->where_in('office_id', $staff_office);
+            } else {
+                $this->db->where('created_by',$staff_id);
+            }
+        }
+        if ($office != "") {
+            $this->db->where_in('office_id',$office);
+        }
+        if ($date_range != "") {
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            
+            $this->db->where('date >=',$start_date);
+            $this->db->where('date <=',$end_date);
+        }
+        if ($searchValue != '') {
+            $this->db->group_start();
+            $this->db->like('client_id', $searchValue);
+            $this->db->or_like('service_name', $searchValue);
+            $this->db->group_end();
+        }
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        $res_for_all = $this->db->get('weekly_sales_report')->num_rows();
+        $qr = $this->db->last_query();
+        $qr .= ' order by ' . $columnName . ' ' . $columnSortOrder;
+        $qr .= ' limit ' . $row . ',' . $rowperpage;
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        $sales_reports_data = $this->db->query($qr)->result_array();
+
+        $totalRecords = $res_for_all;
+        $totalRecordwithFilter = $res_for_all;
+        ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $sales_reports_data
+        );
+
+        return $response;
+    }
+
+    public function get_total_of_sales_report($office,$date_range) {
+        if (!empty($office)) {
+            $this->db->where_in('office_id',$office);
+        }            
+        if ($date_range != "") {
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            
+            $this->db->where('date >=',$start_date);
+            $this->db->where('date <=',$end_date);
+        }           
+        $total_data = $this->db->get('weekly_sales_report')->result_array();
+        $total_arr = array(
+            "override_price" => array_sum(array_column($total_data,'override_price')),
+            "cost" => array_sum(array_column($total_data,'cost')),
+            "collected" => array_sum(array_column($total_data,'collected')),
+            "total_net" => array_sum(array_column($total_data,'total_net')),
+            "franchisee_fee" => array_sum(array_column($total_data,'franchisee_fee')),
+            "gross_profit" => array_sum(array_column($total_data,'gross_profit'))
+        );
+        return $total_arr;
+    }
+    public function get_start_date_sales_report() {
+        $sql = "SELECT MIN(order_date) as order_date FROM `order` where date_format(order_date,'%Y-%m-%d')!='0000-00-00' order by order_date asc";
+        $start_date = $this->db->query($sql)->row_array()['order_date'];
+        return date("m/d/Y", strtotime($start_date));
+    }
 }

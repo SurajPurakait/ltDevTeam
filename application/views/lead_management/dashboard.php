@@ -27,10 +27,12 @@ $stat = ($stat == 'all') ? "" : $stat;
                                                 </select>
                                             </div>
                                             <div class="col-sm-4 m-t-10">
-                                                <select class="form-control condition-dropdown" name="condition_dr  opdown[]" onchange="changeCondition(this)">
+                                                <select class="form-control condition-dropdown" name="condition_dropdown[]" onchange="changeCondition(this)">
                                                     <option value="">All Condition</option>
                                                     <option value="1">Is</option>
                                                     <option value="2">Is in the list</option>
+                                                    <option value="3">Is not</option>
+                                                    <option value="4">Is not in the list</option>
                                                 </select>
                                             </div>
                                             <div class="col-sm-4 m-t-10 criteria-div">
@@ -49,13 +51,13 @@ $stat = ($stat == 'all') ? "" : $stat;
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-12">                        
+                                        <div class="col-md-2 m-r-10">                        
                                             <div class="">
                                                 <button class="btn btn-success" type="button" onclick="leadFilter()">Apply Filter</button>
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
-                                            <h4 class="m-t-5 m-r-5"><span class="text-success" style="display: none;" id="clear_filter">By Me - Started &nbsp; </span><a href="javascript:void(0);" onclick="loadLeadDashboard('', '', '', '', '', '');" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></h4>
+                                        <div class="col-md-8">
+                                            <div class=""><span class="text-success" style="display: none;" id="clear_filter">By Me - Started &nbsp; </span><a href="javascript:void(0);" onclick="loadLeadDashboard('', '2', '', '', '', '');" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></div>
                                         </div>
                                     </div>
                                 </form>

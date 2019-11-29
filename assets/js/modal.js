@@ -1699,3 +1699,39 @@ var file_upload_task = () => {
         }
     });
 }
+function task_account_modal(modal_type, id, section) {
+    var reference_id = $("#reference_id").val();
+//    var exist_client_id=$("#exist_client_id").val();
+//    if ($("#editval").val() == '') {
+//        reference_id = $("#new_reference_id").val();
+//    }
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'modal/show_task_financial_account',
+        data: {
+            modal_type: modal_type,
+            id: id,
+            client_id: reference_id,
+            task_id: $("#editval").val(),
+            section: section
+        },
+        success: function (result) {
+            if(result){
+                $('#accounts-form').html(result).modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $("#bookkeeping_account_list").show();
+            }else{
+                $("#bookkeeping_account_list").hide();
+                $("#acc_type").val('');
+                $("#bank_name").val('');
+                $("#acc_no").val('');
+                $("#routing_no").val('');
+                $("#website").val('');
+                $("#user_id").val('');
+                $("#password").val('');
+            }
+        }
+    });
+}

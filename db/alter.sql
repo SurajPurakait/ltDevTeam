@@ -1,4 +1,4 @@
-/**
+*
  * Created: 13 Mar, 2018
  */
 
@@ -960,7 +960,7 @@ ALTER TABLE `project_main` ADD `template_cat_id` INT(11) NOT NULL AFTER `id`;
 /*30.10.2019*/
 /* run patch remove_old_mail_campaign */
 
-/* live end */
+
 /* 05.11.2019 */
 ALTER TABLE `lead_management` ADD `website` VARCHAR(255) NOT NULL AFTER `company_name`;
 
@@ -976,7 +976,7 @@ ALTER TABLE `project_task` ADD `input_form_type` INT(2) NOT NULL DEFAULT '0' AFT
 
 ALTER TABLE `project_template_task` ADD `input_form_type` INT(2) NOT NULL DEFAULT '0' AFTER `is_input_form`; 
 
-CREATE TABLE project_task_sales_tax_process LIKE sales_tax_process 
+CREATE TABLE project_task_sales_tax_process LIKE sales_tax_process;
 
 ALTER TABLE `project_task_sales_tax_process` ADD `task_id` INT(11) NOT NULL AFTER `id`;
 
@@ -987,3 +987,34 @@ ALTER TABLE `project_template_task` CHANGE `tracking_description` `tracking_desc
 ALTER TABLE `project_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for started, 2 for resolved, 3 for ready'; 
 
 ALTER TABLE `order_extra_data` ADD `translation_to` VARCHAR(255) NOT NULL AFTER `document_date`, ADD `amount_of_pages` INT(100) NOT NULL AFTER `translation_to`, ADD `attach_files` VARCHAR(255) NOT NULL AFTER `amount_of_pages`;
+
+
+/*15.11.19*/
+
+ALTER TABLE `financial_accounts` ADD `reference` VARCHAR(50) NOT NULL DEFAULT 'order' AFTER `grand_total`; 
+
+ALTER TABLE `bookkeeping` ADD `reference` VARCHAR(50) NOT NULL DEFAULT 'order' AFTER `sub_category`; 
+
+/* 18.11.19 */
+/* import royalty_report.sql */
+/* run patch import_royalty_reports_data */
+/*19.11.19*/
+
+/*import project_task_bookkeeper_department.sql*/
+
+ALTER TABLE `project_task_bookkeeper_department` ADD `adjustment` ENUM('n','y') NOT NULL COMMENT 'n for no, y for yes' AFTER `reconciled`; 
+
+/*20.11.19*/
+
+ALTER TABLE `project_template_task` ADD `bookkeeping_input_type` INT(4) NOT NULL DEFAULT '0' COMMENT '0 for default input, 1 for bank statement, 2 for bookkeeping bookkeeper, 3 for client manage' AFTER `input_form_type`; 
+
+ALTER TABLE `project_task` ADD `bookkeeping_input_type` INT(4) NOT NULL DEFAULT '0' COMMENT '0 for default input, 1 for bank statement, 2 for bookkeeping bookkeeper, 3 for client manage' AFTER `input_form_type` 
+
+/*21.11.19*/
+
+ALTER TABLE `project_task_bookkeeper_department` ADD `total_time` VARCHAR(100) NOT NULL AFTER `adjustment`; 
+
+/* 24.11.2019 */
+/* import weekly_sales_report.sql */
+
+/* live end */

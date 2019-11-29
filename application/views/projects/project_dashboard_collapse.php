@@ -15,7 +15,7 @@
                     <th style="width:8%;  text-align: center;">Input Form</th>
                 </tr>
                 <?php
-                foreach ($task_list as $task) {
+                foreach ($task_list as $key=> $task) {
                     $task_staff = ProjectTaskStaffList($task->id);
                     $stf = array_column($task_staff, 'staff_id');
                     $new_staffs = implode(',', $stf);
@@ -142,9 +142,9 @@
                                 if ($task->input_form_status == 'n') {
                                     $input_status = 'incomplete';
                                     ?>
-                                    <span class="label input-form-incomplete">Incomplete <a href="<?= base_url() . 'task/task_input_form/' . $task->id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-plus" aria-hidden="true"></i> </a></span>
+                                    <span class="label input-form-incomplete">Incomplete <a href="<?= base_url() . 'task/task_input_form/' . $task->id.'/'.$task->bookkeeping_input_type; ?>" class="text-white p-5" target="_blank"><i class="fa fa-plus" aria-hidden="true"></i> </a></span>
                                 <?php } else { ?>
-                                    <span class="label input-form-complete">Completed <a href="<?= base_url() . 'task/task_input_form/' . $task->id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
+                                    <span class="label input-form-complete">Completed <a href="<?= base_url() . 'task/task_input_form/' . $task->id.'/'.$task->bookkeeping_input_type; ?>" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
                                     <?php
                                 }
                             }

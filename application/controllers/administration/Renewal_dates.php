@@ -18,8 +18,9 @@ class Renewal_dates extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Renewal Dates";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'administration';
-        $render_data['menu'] = 'renewal dates';
+        // $render_data['main_menu'] = 'administration';
+        $render_data['main_menu'] = 'clients';
+        $render_data['menu'] = 'renewal_dates';
         $render_data['header_title'] = $title;
         $render_data['renewal_dates'] = $this->administration->get_renewal_dates();
 //        print_r($render_data);die;

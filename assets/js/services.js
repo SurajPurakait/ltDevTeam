@@ -61,9 +61,11 @@ function change_referred_name_status(referred_source) {
     if (referred_source == '1' || referred_source == '9' || referred_source == '10' || referred_source == '') {
         $("#referred-label").html('Referred By Name');
         $("#referred_by_name").removeAttr('required');
+        $(".chosen-select").chosen();
     } else {
         $("#referred-label").html('Referred By Name<span class="text-danger">*</span>');
         $("#referred_by_name").attr('required', true);
+        $(".chosen-select").chosen();
     }
 }
 
@@ -474,7 +476,13 @@ function loadServiceDashboard(status, categoryID, requestType, officeID, pageNum
                 if (pageNumber != 0) {
                     $('.load-more-btn').not(':last').remove();
                 }
+                if(requestType=='on_load'){
+                    $('#btn_service').hide();
+                    clearFilter();
+                }
             }
+            
+            
         },
         beforeSend: function () {
             openLoading();
@@ -2525,8 +2533,7 @@ function service_filter_form() {
         success: function (result) {
             //console.log("Result: " + result);
             $(".ajaxdiv").html(result);
-            $(".filter-text").addClass('btn btn-ghost');
-            $(".filter-text").html('<a href="javascript:void(0);" onclick="loadServiceDashboard("", "", "on_load", "", 1);"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>');
+            $("#btn_service").show();
             $("#hiddenflag").val('');
         },
         beforeSend: function () {
@@ -3273,4 +3280,12 @@ function request_create_legal_translations() {
             closeLoading();
         }
     });
+}
+
+
+function change_price(price,val) {
+    var changed_price = (price*val);
+    if(changed_price != 0){
+        document.getElementById("employee-retail-price").value = changed_price;
+    }
 }

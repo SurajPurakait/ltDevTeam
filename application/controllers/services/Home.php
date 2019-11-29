@@ -171,6 +171,13 @@ class Home extends CI_Controller {
                     $render_data['delaware'] = $this->service_model->get_service_by_shortname('inc_d_a_r');
                     $this->load->template('services/edit_annual_report', $render_data);
                 }
+
+                case 'bus_l_t':{
+                    $render_data['order_extra_data'] = $this->service_model->get_extra_data($order_id);
+                    // echo "<pre>";
+                    // print_r($render_data['order_extra_data']);exit;
+                    $this->load->template('services/edit_legal_translations', $render_data);
+                }
                 break;
             default :
                 redirect(base_url('services/home'));
@@ -877,9 +884,9 @@ class Home extends CI_Controller {
         $data['order_id'] = post('order_id');
         $data['list_type'] = post('list_type');
         if ($data['order_id'] == '') {
-            $data['list'] = $this->service_model->get_account_list_by_company_id($data['company_id']);
+            $data['list'] = $this->service_model->get_account_list_by_company_id($data['company_id'],post('list_type'));
         } else {
-            $data['list'] = $this->service_model->get_account_list_by_order_id($data['order_id']);
+            $data['list'] = $this->service_model->get_account_list_by_order_id($data['order_id'],post('list_type'));
         }
         $this->load->view("services/account_list", $data);
     }
@@ -1581,6 +1588,7 @@ class Home extends CI_Controller {
         $render_data = post();
         $render_data['order_info'] = $order_info = $this->service_model->get_order_info_by_id($render_data['order_id']);
         $render_data['services_list'] = $this->service_model->get_service_list_by_order_id($render_data['order_id']);
+        $render_data['is_order']=$order_info['is_order'];
         $render_data['reference_id'] = $order_info['company_id'];
         $render_data['service_id'] = $order_info['service_id'];
         $render_data['invoiced_id'] = $order_info['invoiced_id'];

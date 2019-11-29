@@ -149,9 +149,11 @@ class Referral_partners extends CI_Controller {
                 'charset' => 'utf-8',
                 'wordwrap' => TRUE
         );
+        $partner_name = $referral_partner_data['first_name'].' '.$referral_partner_data['last_name'];
         $from = staff_info_by_id($staffrequestedby)['user'];
-        $from_name = staff_info_by_id($staffrequestedby)['full_name'];
-        $email_subject = 'Account Setup';
+        $from_name_details = staff_info_by_id($staffrequestedby);
+        $from_name = $from_name_details['first_name'] .'  '.$from_name_details['last_name'];
+        $email_subject = 'Taxleaf Partnership Account';
         $user_email = $referral_partner_data['email'];
         
         $user_logo = "";
@@ -164,7 +166,7 @@ class Referral_partners extends CI_Controller {
         } else {
             $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
         }
-
+        $user_logo_default = 'https://leafnet.us/assets/img/logo.png';
         if ($referral_partner_data['office'] == 1 || $referral_partner_data['office'] == 18 || $referral_partner_data['office'] == 34) {
             $bgcolor = '#00aec8';
             $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
@@ -172,9 +174,45 @@ class Referral_partners extends CI_Controller {
             $bgcolor = '#8ab645';
             $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
         }
-
-        $mail_body = 'Your Account has been created Successfully <br><br> <b><u>Login Credentials</u> :<b> <br><br> <b>User Name :</b> '.$referral_partner_data['email'].'<br> <b>Password :</b>'.$pwd;
-
+        $url_link = 'https://leafnet.us/';
+        $mail_body ='<td style="padding: 0px">
+                        <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td style="text-align: center;">
+                                    <h3 style="padding-bottom: 10px;">Hello '.$partner_name.',</h3>
+                                    <p style="margin-bottom: 0;">Welcome to Leafnet.</p>
+                                    <p style="margin-bottom: 0; margin-top: 5px;">You have access to a new portal.</p>
+                                    <p style="padding-top: 0px; font-size: 16px; color: #06a0d6; font-weight: 600;">Login Credentials</p>
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="text-align: center; width:100%;" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td style="text-align: right; padding: 0 2px 0px 50px;">
+                                    <p style="margin-bottom: 5px; margin-top: 0; color: #06a0d6; font-weight: 600;">Username :</p> 
+                                </td>
+                                <td style="text-align: left;">
+                                    <p style="margin-top: 5px; width: 180px;"> '.$referral_partner_data['email'].'</p> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right; padding: 0 2px 0 50px;">
+                                    <p style="margin-top: 0; color: #06a0d6; font-weight: 600;">Password : </p>
+                                </td>
+                                <td style="text-align: left; ">
+                                    <p style="margin-bottom: 12px; margin-top: 0; width: 180px;">'.$pwd.'</p> 
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td style="text-align: center; padding: 0px 60px 0px 60px;">
+                                    <h3 style="margin-top:0px;"><a style="color: #0990bf; text-decoration: none; font-weight: 600;" href="http://leafnet.us/" target="_blank">Login Here ( leafnet.us )</a></h3>
+                                    <h3 style="padding-top: 20px;">Thank you !</h3>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>';
         $message = 
             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
             <html xmlns="http://www.w3.org/1999/xhtml">
@@ -213,7 +251,10 @@ class Referral_partners extends CI_Controller {
                             <td>
                                 <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="250"/></td>
+                                        <td style="background: #fff;padding:5px 10px;"><a href="http://leafnet.us/" target="_blank"><img src="' . $user_logo_fullpath . '" width="250"/></a></td>
+                                        <td style="text-align:right;width:200px;background: #fff;padding:5px 10px;">
+                                        <a href="http://leafnet.us/" target="_blank"><img src="' .$user_logo_default. '" alt="site-logo" style="width: 150px;"></a>
+                                    </td>
                                     </tr>
                                 </table>
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -222,11 +263,7 @@ class Referral_partners extends CI_Controller {
                                     </tr>
                                 </table>
                                 <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
-                                    <tr>
-                                        <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong>
-                                            </strong>' . $mail_body . '</span></p>
-                                        </td>
-                                    </tr>
+                                    ' . $mail_body . '
                                 </table>          
                                 <table width="600" border="0" align="center" cellpadding="0" cellspacing="0"></table>
                             </td>

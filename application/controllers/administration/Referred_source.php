@@ -19,7 +19,8 @@ class Referred_source extends CI_Controller
         $this->load->layout = 'dashboard';
         $title = "Referred by Source";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'administration';
+        // $render_data['main_menu'] = 'administration';
+        $render_data['main_menu'] = 'clients';
         $render_data['menu'] = 'referred_by_source';
         $render_data['header_title'] = $title;
         $render_data['source_list'] = $this->administration->get_source_list();

@@ -7,7 +7,7 @@
                 <div class="ibox-content">
                         <h2>Input Forms</h2>
                         <div class="hr-line-dashed"></div>
-                        <?php if ($input_form_type == 1) { ?>
+                        <?php if ($input_form_type == 3) { ?>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Client Name<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
@@ -134,6 +134,95 @@
                         <input type="hidden" name="user_type" id="user_type" value="<?= $staffInfo['type']; ?>">
                         <div class="hr-line-dashed"></div>
                     <?php } ?>
+                    <?php if ($input_form_type == 1):
+                        if($bookkeeping_input_type==1){
+                        ?>
+                        <h3>BANK STATEMENT RETRIEVAL LEAFCLOUD DEPARTMENT</h3>
+                            <div id="documents_div" class="display_div">
+                                <div class="hr-line-dashed"></div>
+                                <h3>Documents &nbsp; (<a data-toggle="modal"  id="add_document_btn" onclick="document_modal('add', 'project', '<?= $task_id ?>'); return false;" href="javascript:void(0);">Add document</a>)</h3> 
+                                <div id="document-list"></div>
+                            </div>
+                        <?php
+                            if (!empty($list)) {
+                                foreach ($list as $document) {
+                                    ?>
+                                    <div class="row" id='document_id_<?= $document['id']; ?>' >
+                                        <label class="col-lg-2 control-label"><?= $document['doc_type']; ?></label>
+                                        <div class="col-lg-10" style="padding-top:8px">
+                                            <p>
+                                                <a href ='javascript:void(0)' onClick="MyWindow = window.open('<?= base_url("/uploads/" . $document["document"]); ?>', 'Document Preview', width = 600, height = 300); return false;"><?= $document["document"]; ?></a>
+                                                &nbsp;&nbsp;<i class="fa fa-trash" style="cursor:pointer" onclick="delete_document('<?= $document["reference"]; ?>', '<?= $document["reference_id"]; ?>', '<?= $document["id"]; ?>', '<?= $document["document"]; ?>')" title="Remove this document"></i>
+                                            </p>
+                                        </div>
+                                    </div>
+                                <?php
+                                }
+                            }
+                            ?>
+                            <div class="accounts-details">
+                                <h3>Financial Accounts<span class="text-danger">*</span>&nbsp; (<a href="javascript:void(0);" onclick="task_account_modal('add', '', 'project');">Add Financial Account</a>)</h3>
+                                <div id="accounts-list">
+                                    <input type="hidden" title="Financial Accounts" id="accounts-list-count" required="required" value="">
+                                    <div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Frequency<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <select class="form-control frequeny_of_bookkeeping" name="frequency" id="frequeny_of_bookkeeping" title="Frequency Of Bookkeeping" required>
+                                        <option value="">Select an option</option>
+                                        <option value="m" <?= $bookkeeping_details['frequency'] == 'm' ? 'selected' : ''; ?>>Monthly</option>
+                                        <option value="q" <?= $bookkeeping_details['frequency'] == 'q' ? 'selected' : ''; ?>>Quarterly</option>
+                                        <option value="y" <?= $bookkeeping_details['frequency'] == 'y' ? 'selected' : ''; ?>>Yearly</option>
+                                    </select>
+                                    <div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+                        <?php }else if($bookkeeping_input_type==2){ ?>
+                        <h3>BOOKKEEPING BOOKKEEPER DEPARTMENT</h3>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Number of Bank Account<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="" class="form-control" type="text" id="bank_acc_no" name="bank_account_no" value="<?= (isset($bookkeeper_details->bank_account_no)?($bookkeeper_details->bank_account_no!=''?$bookkeeper_details->bank_account_no:''):'') ?>" title="Total Due" required ><div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Total Transaction<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="" class="form-control" type="text" id="bank_acc_no" name="transaction" value="<?= (isset($bookkeeper_details->transaction)?($bookkeeper_details->transaction!=''?$bookkeeper_details->transaction:''):'') ?>" title="Total Due" required ><div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Uncategorized Item<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="" class="form-control" type="text" id="bank_acc_no" name="item_uncategorize" value="<?= (isset($bookkeeper_details->item_uncategorize)?($bookkeeper_details->item_uncategorize!=''?$bookkeeper_details->item_uncategorize:''):'') ?>" title="Total Due" required ><div class="errorMessage text-danger"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Reconciled<span class="text-danger">*</span></label>
+                                <label class="checkbox-inline">
+                                    <input class="checkclass" value="1" type="radio" id="reconciled" name="reconciled" required title="Input Form" <?= (isset($bookkeeper_details->reconciled)?($bookkeeper_details->reconciled == 1 ? 'checked' : ''):'') ?>> Yes
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input class="checkclass" value="0" type="radio" id="reconciled2" name="reconciled" required title="Input Form" <?= (isset($bookkeeper_details->reconciled)?($bookkeeper_details->reconciled == 0 ? 'checked' : ''):'')?>> No
+                                </label>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        
+                        <?php }else if($bookkeeping_input_type==3){?>
+                        <h3>REVIEW CLIENT MANAGER</h3>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Adjustment Needed<span class="text-danger">*</span></label>
+                                <label class="checkbox-inline">
+                                    <input class="checkclass" value="y" type="radio" id="need_adjustment" name="need_adjustment" required title="Input Form" <?= (isset($bookkeeper_details->adjustment)?($bookkeeper_details->adjustment == 'y' ? 'checked' : ''):'') ?>> Yes
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input class="checkclass" value="n" type="radio" id="need_adjustment2" name="need_adjustment" required title="Input Form" <?= (isset($bookkeeper_details->adjustment)?($bookkeeper_details->adjustment == 'n' ? 'checked' : ''):'')?>> No
+                                </label>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        <?php } endif; ?>
                     <?php if (!empty($related_service_files)): ?>
                         <ul class="uploaded-file-list">
                             <?php
@@ -217,7 +306,19 @@
                             <a href="javascript:void(0)" class="text-success add-task-note block m-t-10"><i class="fa fa-plus"></i> Add Notes</a>
                         </div>
                     </div>
-
+                    <?php if($bookkeeping_input_type==2){?>
+                    <div class="form-group">
+                            <label class="col-lg-2 control-label">Total Time Spent</label>
+                            <div class="col-lg-10">
+                                <div class="watch">
+                                    <h3 id="total_time" name='total_time'><?= (isset($bookkeeper_details->total_time)?($bookkeeper_details->total_time!='' ? $bookkeeper_details->total_time: ''):'')?></h3>
+                                    <input type='button' class="btn btn-success" id='start' name="start" onclick="add()" value="Start">
+                                    <input type="button" class="btn btn-warning" id='stop' name="stop" value="Stop">
+                                    <input type="button" class="btn btn-danger" id='clear' name="clear" value="Clear">
+                                </div>
+                            </div>
+                    </div>
+                    <?php } ?>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-10">
@@ -225,9 +326,11 @@
                             <!--for sales tax-->
                             <input type="hidden" name="input_form_type" id="input_form_type" value="<?= $input_form_type ?>">
                             <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>"/>
-                            <!--<button class="btn btn-success" type="button" onclick="saveSalesProcess()">Save</button> &nbsp;-->
-                            <!--<button class="btn btn-default" type="button" onclick="go('action/home/sales_tax_process')">Cancel</button>-->
-
+                            <input type="hidden" name="editval" id="editval" value="<?= $task_id; ?>">
+                            <input type="hidden" name="bookkeeping_input_type" id="task_key" value=<?= $bookkeeping_input_type ?>>
+                            <?php if($input_form_type==1 && $bookkeeping_input_type==1){ ?>
+                            <input type="hidden" name="reference_id" id="reference_id" value="<?= $client_id; ?>">
+                            <?php } ?>
                             <button class="btn btn-success" type="button" onclick="saveInputForms()">Save changes</button> &nbsp;&nbsp;&nbsp;
                             <button class="btn btn-default" type="button" onclick="go('project')">Cancel</button>
                         </div>
@@ -235,12 +338,14 @@
                     
                 </div>
             </div>
-                </form>
+            </form>
         </div>
     </div>
 </div>
-
+<div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
+<div id="document-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script>
+    get_financial_account_list('<?= $client_id; ?>', 'project', '<?= $task_id; ?>');
     $(function () {
         $('.add-upload-file').on("click", function () {
             var text_file = $(this).prev('.upload-file-div').html();
@@ -292,4 +397,51 @@
     function removeFile(divID) {
         $("#" + divID).remove();
     }
+    
+    var h3 = document.getElementById('total_time'),
+    start = document.getElementById('start'),
+    stop = document.getElementById('stop'),
+    clear = document.getElementById('clear'),
+    seconds = 0, minutes = 0, hours = 0,
+    t;
+    function add() {
+//        alert('hi');
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+        }
+    }
+    
+    h3.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9   ? seconds : "0" + seconds);
+
+    timer();
+    }
+    function timer() {
+//        alert('hi');
+    t = setTimeout(add, 1000);
+    }
+//     timer();
+
+
+    /* Start button */
+    start.onclick = timer;
+
+    /* Stop button */
+    stop.onclick = function() {
+//        alert('hi');
+    clearTimeout(t);
+
+    }
+
+    /* Clear button */
+    clear.onclick = function() {
+//        alert('hi');
+    h3.textContent = "00:00:00";
+    seconds = 0; minutes = 0; hours = 0;
+    }
+
 </script>

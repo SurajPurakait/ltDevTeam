@@ -504,7 +504,9 @@ Class Lead_management extends CI_Model {
             $reference = 'partner';
         }
         $staff[0] = sess('user_id');
-        $this->system->save_general_notification($reference, $id, 'insert', $staff, '', $lead_type);
+        if($referred_lead==''){
+            $this->system->save_general_notification($reference, $id, 'insert', $staff, '', $lead_type);
+        }
         if ($referred_lead != '') {
             unset($staff);
             $staff=array();
@@ -600,11 +602,14 @@ Class Lead_management extends CI_Model {
         }
         $filter_where_in = [];
         $between = '';
+
         if (!empty($filter_data)) {
+            $key = 0;
             if (isset($filter_data['criteria_dropdown'])) {
                 foreach ($filter_data['criteria_dropdown'] as $filter_key => $filter) {
                     $filter_key = trim($filter_key);
-                    // echo $filter_key;exit;
+                    $condition = isset($filter_data['condition_dropdown'][$key]) ? $filter_data['condition_dropdown'][$key] : 1;
+                    // echo $condition;exit;
                     if ($filter_key == "active_date" || $filter_key == "complete_date") {
                         if (strlen($filter[0]) == 10) {
                             $date_value = date("Y-m-d", strtotime($filter[0]));
@@ -644,7 +649,11 @@ Class Lead_management extends CI_Model {
 
         if (!empty($filter_where_in)) {
             foreach ($filter_where_in as $column => $in) {
-                $this->db->where_in($column, $in);
+                if ($condition == 3 || $condition == 4) {
+                    $this->db->where_not_in($column, $in);
+                } else {
+                    $this->db->where_in($column, $in);    
+                }
             }
         }
 
@@ -1490,10 +1499,6 @@ Class Lead_management extends CI_Model {
                 ["id" => 2, "name" => "Inactive"],
                 ["id" => 3, "name" => "Active"]
         ];
-        // $type_array = [
-        //         ["id" => 1, "name" => "LEADS"],
-        //         ["id" => 2, "name" => "REFERRAL AGENT"]
-        // ];
         
         switch ($element_key):
             case 1: {
@@ -2079,10 +2084,10 @@ Class Lead_management extends CI_Model {
             $key = 0;
             if (isset($filter_data['criteria_dropdown'])) {
                 foreach ($filter_data['criteria_dropdown'] as $filter_key => $filter) {
-                    
+                    // print_r($filter_data['criteria_dropdown']);exit;
                     $filter_key = trim($filter_key);
                     $condition = isset($filter_data['condition_dropdown'][$key]) ? $filter_data['condition_dropdown'][$key] : 1;
-                   
+                    // echo $condition;exit;
                     if ($filter_key == "date") {
                         if (strlen($filter[0]) == 10) {
                            
@@ -2106,18 +2111,14 @@ Class Lead_management extends CI_Model {
                         }
                     } else {
                         foreach ($filter as $key => $filter_value) {
-                            
                             if ($filter_value != '') {
-
                                 if($condition == 1 || $condition == 2){
-                                $filter_where_in[$this->filter_element_event[$filter_key]][] = $filter_value;
-                                
-                               }elseif ($condition == 3 || $condition == 4) {
-                                  
-                                 $this->db->where('ev.event_name!=',$filter_value);
-                                 $this->db->where('ev.location!=',$filter_value);
-                                 $this->db->where('of.name!=',$filter_value);
-                               }
+                                    $filter_where_in[$this->filter_element_event[$filter_key]][] = $filter_value;
+                                }elseif ($condition == 3 || $condition == 4) {
+                                    $this->db->where('ev.event_name!=',$filter_value);
+                                    $this->db->where('ev.location!=',$filter_value);
+                                    $this->db->where('of.name!=',$filter_value);
+                                }
                             }
                         }
                     }
