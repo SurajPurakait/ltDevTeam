@@ -234,10 +234,13 @@ $office_id = get_office_id($staff_info['office']);
                     <a href="javascript:void(0);"><i class="fa fa-usd"></i> <span class="nav-label">Billing</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse" style="height: 0px;">
                         <li <?= active_menu($menu, "billing_dashboard"); ?>>                            
-                            <a href="<?= base_url(); ?>billing/home/index">Dashboard</a>
+                            <a href="<?= base_url(); ?>billing/home/index">Invoice Dashboard</a>
                         </li>
                         <li <?= active_menu($menu, "create_invoice"); ?>>
                             <a href="<?= base_url(); ?>billing/invoice">+ Add New Invoice</a>
+                        </li>
+                        <li <?= active_menu($menu, "recurring_invoice"); ?>>                            
+                            <a href="<?= base_url(); ?>billing/home/index/y">Recurring Invoice</a>
                         </li>
                         <li <?= active_menu($menu, "documents"); ?>>
                             <a href="<?= base_url(); ?>billing/home/documents">Documents</a>

@@ -272,7 +272,7 @@ function saveInvoice() {
 //             console.log(result); return false;
             if (editval == '') {
                 if (result != 0) {
-                    alert(result);
+                    //alert(result);
                     goURL(base_url + 'billing/invoice/place/' + result);
                 } else {
                     swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
@@ -369,7 +369,7 @@ function printOrder() {
     doPrint.print();
     doPrint.close();
 }
-function loadBillingDashboard(status = '', by = '', office = '', payment_status = '', reference_id = '', pageNumber = 0) {
+function loadBillingDashboard(status = '', by = '', office = '', payment_status = '', reference_id = '', pageNumber = 0,is_recurrence='') {
     $.ajax({
         type: "POST",
         url: base_url + 'billing/home/dashboard_ajax',
@@ -379,7 +379,8 @@ function loadBillingDashboard(status = '', by = '', office = '', payment_status 
             office: office,
             payment_status: payment_status,
             reference_id: reference_id,
-            page_number: pageNumber
+            page_number: pageNumber,
+            is_recurrence:is_recurrence
         },
         dataType: "html",
         success: function (result) {

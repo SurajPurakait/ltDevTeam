@@ -197,7 +197,6 @@ class Billing_model extends CI_Model {
     }
 
     public function request_create_invoice($data) {
-//        print_r($data);
 //        exit;
         $staff_info = staff_info();
         $this->db->trans_begin();
@@ -373,7 +372,7 @@ class Billing_model extends CI_Model {
                 }else{
                     $ins_recurrence['duration_time'] ='0';
                 }
-                if (isset($ins_recurrence['duration_type']) && !empty($ins_recurrence['duration_type'])) {
+                if (isset($ins_recurrence['duration_type'])) {
                     $ins_recurrence['duration_type'] = $ins_recurrence['duration_type'];
                 }else{
                     $ins_recurrence['duration_type'] =null;
@@ -387,6 +386,9 @@ class Billing_model extends CI_Model {
 //            if(isset($ins_recurrence['pattern']))
 //            print_r($ins_recurrence);die;
                 $this->db->insert('invoice_recurence', $ins_recurrence);
+//                 echo $this->db->last_query();die;
+                $this->db->where('id',$invoice_id);
+                $this->db->update('invoice_info',['is_recurrence'=>'y']);
 //                echo $this->db->last_query();die;
             }
 
@@ -1355,7 +1357,7 @@ class Billing_model extends CI_Model {
         }
     }
 
-    public function billing_list($status = '', $by = '', $office = '', $payment_status = '', $reference_id = '', $filter_data = [], $sort = []) {
+    public function billing_list($status = '', $by = '', $office = '', $payment_status = '', $reference_id = '', $filter_data = [], $sort = [],$is_recurrence='') {
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
         $staffrole = $staff_info['role'];
@@ -1393,6 +1395,12 @@ class Billing_model extends CI_Model {
         ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
         $where['status'] = 'AND `inv`.`status` != 0 ';
+        if($is_recurrence!=''){
+            $where['inv.is_recurrence']=" AND inv.is_recurrence='".$is_recurrence."' " ;
+        }else{
+            $is_recurrence='n';
+            $where['inv.is_recurrence']=" AND inv.is_recurrence= '".$is_recurrence."' ";
+        }
         if ($by != '') {
             if ($by == 'byme') {
                 $where['inv.created_by'] = 'AND `inv`.`created_by` = ' . $staff_id . ' ';
@@ -1425,9 +1433,10 @@ class Billing_model extends CI_Model {
                     $where['inv.created_by'] = 'AND `inv`.`created_by` = "' . $staff_id . '" ';
                 }
             } else {
-                $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (7)) ';
+                $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (7) AND inv.is_recurrence="'.$is_recurrence.'")';
             }
         }
+        
 
         if ($status == '') {
             $where['inv.payment_status'] = 'AND (CASE WHEN `inv`.`status` = 3 THEN `inv`.`payment_status` IN (1, 2) ELSE `inv`.`payment_status` IN (1, 2, 3) END) ';
@@ -1450,6 +1459,7 @@ class Billing_model extends CI_Model {
             unset($where_or);
             $where['inv.payment_status'] = 'AND `inv`.`payment_status` = ' . $payment_status . ' ';
         }
+        
 
         $is_status = $is_tracking = 'n';
         if (!empty($filter_data)) {
@@ -1526,7 +1536,6 @@ class Billing_model extends CI_Model {
             }
         }
 
-
         $order_by = 'ORDER BY `inv`.`id` DESC ';
         if (!empty($sort) && count($sort) > 0) {
             $order_by = 'ORDER BY ' . $this->sorting_element[$sort['sort_criteria']] . ' ' . $sort['sort_type'];
@@ -1561,8 +1570,10 @@ class Billing_model extends CI_Model {
         $table = '`invoice_info` AS `inv` ' .
                 'INNER JOIN `order` AS `ord` ON `ord`.`invoice_id` = `inv`.`id` ' .
                 'INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END) ';
+        
         $this->db->query('SET SQL_BIG_SELECTS=1');
         return $this->db->query('SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id` ' . $order_by . ' ')->result_array();
+//        echo $this->db->last_query();die;
     }
 
     public function update_payment_status_by_invoice_id($invoice_id) {

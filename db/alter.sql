@@ -1025,3 +1025,6 @@ ALTER TABLE `invoice_recurence` ADD `actual_due_day` INT(4) NOT NULL AFTER `due_
 ALTER TABLE `invoice_recurence` CHANGE `until_date` `until_date` DATE NULL DEFAULT NULL; 
 ALTER TABLE `invoice_recurence` CHANGE `duration_type` `duration_type` VARCHAR(25) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 ALTER TABLE `invoice_recurence` CHANGE `status` `status` INT(2) NOT NULL DEFAULT '0';
+ALTER TABLE `invoice_recurence` CHANGE `due_type` `due_type` INT(4) NULL DEFAULT NULL; 
+
+ALTER TABLE `invoice_info` ADD `is_recurrence` ENUM('n','y') NOT NULL AFTER `status`; 

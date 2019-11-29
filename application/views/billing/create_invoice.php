@@ -82,30 +82,23 @@
                                                 </div>
                                             </div><!-- ./row -->
                                             <div class="row">
+                                                <label class="control-label p-l-15">Duration:</label>
                                                 <div class="col-md-12">
-                                                    <label class="control-label">Duration:</label>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="1">Never</label>&nbsp;
+                                                    <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="0">&nbsp; Never</label>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-inline">
-                                                        <label class="control-label m-r-5">After</label>&nbsp;
+                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="1" onclick="//check_generation_type(this.value)"></label>&nbsp;
+                                                        <label class="control-label">After</label>&nbsp;
                                                         <input class="form-control" type="text" id="duration_time" name="recurrence[duration_time]" style="width: 100px">&nbsp;
-                                                        <label class="control-label">generations</label>&nbsp;
+                                                        <label class="control-label">generations</label>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12 m-t-10">
-                                                    <div class="row">
-                                                        <div class="form-group">
-                                                            <div class='col-md-2'>
-                                                                <label class="control-label m-t-5">Until date</label>
-                                                            </div>
-                                                            <div class='col-md-4'>
-                                                                <input placeholder="mm/dd/yyyy" id="until_date" class="form-control datepicker_mdy_due" type="text" title="Start Date" name="recurrence[until_date]">
-                                                                <div class="errorMessage text-danger"></div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-inline">
+                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="2" checked=""></label>&nbsp;
+                                                        <label class="control-label">Until date</label>&nbsp;
+                                                        <input placeholder="mm/dd/yyyy" id="until_date" class="form-control datepicker_mdy_due" type="text" title="Start Date" name="recurrence[until_date]" style="width: 100px">
                                                     </div>
                                                 </div>
                                             </div>
