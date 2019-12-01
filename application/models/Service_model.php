@@ -610,6 +610,7 @@ class Service_model extends CI_Model {
             $sql .= " ORDER BY ord.id DESC";
         }
         $this->db->query('SET SQL_BIG_SELECTS=1');
+        // echo $sql;exit;
         $result = $this->db->query($sql)->result();
 //        echo count($result);
 //        echo $this->db->last_query();
