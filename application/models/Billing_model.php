@@ -28,7 +28,7 @@ class Billing_model extends CI_Model {
             'inv.is_order as is_order',
             'co.name as name_of_company',
             'co.fein as federal_ID',
-//            'ind.birth_date as date_of_birth',
+            'ind.birth_date as date_of_birth',
             '(SELECT st.state_name FROM states as st WHERE st.id = co.state_opened) as state_of_incorporation',
             '(SELECT ct.type FROM company_type as ct WHERE ct.id = co.type) as type_of_company',
             'inv.start_month_year as start_month_year',
@@ -371,7 +371,7 @@ class Billing_model extends CI_Model {
                 if (isset($ins_recurrence['duration_time']) && !empty($ins_recurrence['duration_time'])) {
                     $ins_recurrence['duration_time'] = $ins_recurrence['duration_time'];
                 }else{
-                    $ins_recurrence['duration_time'] ='0';
+                    $ins_recurrence['duration_time'] =null;
                 }
                 if (isset($ins_recurrence['duration_type'])) {
                     $ins_recurrence['duration_type'] = $ins_recurrence['duration_type'];
@@ -412,7 +412,7 @@ class Billing_model extends CI_Model {
                 }
                 // Create a new order for this request
                 $invoice_id = $data['editval'];
-                if ($data['type_of_client'] == 1) {
+                if (isset($data['type_of_client']) && $data['type_of_client'] == 1) {
                     $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
                     $this->db->where('id', $invoice_id);
                     $this->db->update('invoice_info', $invoice_info_data);
@@ -460,6 +460,94 @@ class Billing_model extends CI_Model {
                 }
                 $this->update_invoice_services($data);
                 $this->system->log("update", "invoice", $invoice_id);
+            }
+            if (isset($data['recurrence']) && !empty($data['recurrence']) && $invoice_id != '') {
+//                echo 'hi';die;
+                $ins_recurrence = [];
+                $ins_recurrence['invoice_id'] = $invoice_id;
+                foreach ($data['recurrence'] as $key => $val) {
+                    $ins_recurrence[$key] = $val;
+                }
+
+                if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
+                    $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                    $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
+                    $ins_recurrence['actual_due_year'] = date('Y');
+                } elseif ($ins_recurrence['pattern'] == 'monthly') {
+                    $current_month = date('m');
+                    $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                    $ins_recurrence['actual_due_month'] = (int) $current_month + (int) $ins_recurrence['due_month'];
+                    $ins_recurrence['actual_due_year'] = date('Y');
+                } elseif ($ins_recurrence['pattern'] == 'weekly') {
+                    $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
+                    $current_day = $day_array[$ins_recurrence['due_month']];
+                    $givenDate = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + $ins_recurrence['due_day'], date('Y')));
+                    $ins_recurrence['actual_due_day'] = date('d', strtotime('next ' . $current_day, strtotime($givenDate)));
+                    $ins_recurrence['actual_due_month'] = date('m', strtotime('next ' . $current_day, strtotime($givenDate)));
+                    $ins_recurrence['actual_due_year'] = date('Y');
+                } elseif ($ins_recurrence['pattern'] == 'quarterly') {
+                    $current_month = date('m');
+                    if ($current_month == '1' || $current_month == '2' || $current_month == '3') {
+                        $next_quarter[1] = '4';
+                        $next_quarter[2] = '5';
+                        $next_quarter[3] = '6';
+                        $due_year = date('Y');
+                    } elseif ($current_month == '4' || $current_month == '5' || $current_month == '6') {
+                        $next_quarter[1] = '7';
+                        $next_quarter[2] = '8';
+                        $next_quarter[3] = '9';
+                        $due_year = date('Y');
+                    } elseif ($current_month == '7' || $current_month == '8' || $current_month == '9') {
+                        $next_quarter[1] = '10';
+                        $next_quarter[2] = '11';
+                        $next_quarter[3] = '12';
+                        $due_year = date('Y');
+                    } else {
+                        $next_quarter[1] = '1';
+                        $next_quarter[2] = '2';
+                        $next_quarter[3] = '3';
+                        $due_year = date('Y', strtotime('+1 year'));
+                    }
+                    $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                    $ins_recurrence['actual_due_month'] = $next_quarter[$ins_recurrence['due_month']];
+                    $ins_recurrence['actual_due_year'] = $due_year;
+                } else {
+                    $ins_recurrence['actual_due_day'] = '0';
+                    $ins_recurrence['actual_due_month'] = '0';
+                    $ins_recurrence['actual_due_year'] = '0';
+                }
+                if ($ins_recurrence['start_date'] != '') {
+                    $ins_recurrence['start_date'] = date('Y-m-d', strtotime($ins_recurrence['start_date']));
+                }
+                if (isset($ins_recurrence['until_date']) && !empty($ins_recurrence['until_date'])) {
+                    $ins_recurrence['until_date'] = date('Y-m-d', strtotime($ins_recurrence['until_date']));
+                }else{
+                    $ins_recurrence['until_date']=null;
+                }
+                if (isset($ins_recurrence['duration_time']) && !empty($ins_recurrence['duration_time'])) {
+                    $ins_recurrence['duration_time'] = $ins_recurrence['duration_time'];
+                }else{
+                    $ins_recurrence['duration_time'] =null;
+                }
+                if (isset($ins_recurrence['duration_type'])) {
+                    $ins_recurrence['duration_type'] = $ins_recurrence['duration_type'];
+                }else{
+                    $ins_recurrence['duration_type'] =null;
+                }
+                if (isset($ins_recurrence['due_type']) && !empty($ins_recurrence['due_type'])) {
+                    $ins_recurrence['due_type'] = $ins_recurrence['due_type'];
+                }else{
+                    $ins_recurrence['due_type'] =null;
+                }
+                
+//            if(isset($ins_recurrence['pattern']))
+//            print_r($ins_recurrence);die;
+                $this->db->where('invoice_id',$invoice_id);
+                $this->db->update('invoice_recurence', $ins_recurrence);
+//                 echo $this->db->last_query();die;
+                $this->db->where('id',$invoice_id);
+                $this->db->update('invoice_info',['is_recurrence'=>'y']);
+//                echo $this->db->last_query();die;
             }
             if (isset($data['invoice_notes'])) {
                 $this->notes->insert_note(1, $data['invoice_notes'], 'reference_id', $invoice_id, 'invoice');
@@ -577,6 +665,8 @@ class Billing_model extends CI_Model {
             $this->db->select(implode(', ', $this->select_billing_1));
             $this->db->from('invoice_info inv');
             $this->db->join('company co', 'co.id = inv.reference_id');
+            $this->db->join('title t', 't.company_id = inv.reference_id');
+            $this->db->join('individual ind', 'ind.id = t.individual_id');
             $this->db->join('internal_data indt', 'indt.reference_id = inv.reference_id and indt.reference = "company"');
         } else {
             $this->db->select(implode(', ', $this->select_billing_2));
@@ -720,6 +810,8 @@ class Billing_model extends CI_Model {
             $this->db->select(implode(', ', $select));
             $this->db->from('invoice_info inv');
             $this->db->join('company co', 'co.id = inv.reference_id');
+            $this->db->join('title t', 't.company_id = inv.reference_id');
+            $this->db->join('individual ind', 'ind.id = t.individual_id');
             $this->db->join('internal_data indt', 'indt.reference_id = inv.reference_id and indt.reference = "company"');
         } else {
             $select = $this->select_billing_2;
@@ -1717,6 +1809,9 @@ class Billing_model extends CI_Model {
     }
     public function getInvoiceIsRecurrence($invoice_id){
         return $this->db->get_where('invoice_info',['id'=>$invoice_id])->row()->is_recurrence;
+    }
+    public function getInvoiceRecurringDetails($invoice_id){
+        return $this->db->get_where('invoice_recurence',['invoice_id'=>$invoice_id])->row();
     }
 
 }

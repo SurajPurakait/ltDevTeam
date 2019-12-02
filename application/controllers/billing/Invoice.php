@@ -527,6 +527,7 @@ class Invoice extends CI_Controller {
             $render_data['invoice_id'] = $invoice_id;
             $render_data['order_summary'] = $order_summary;
             $render_data['edit_type'] = $type;
+            $render_data['is_recurrence']=$this->billing_model->getInvoiceIsRecurrence($invoice_id);
             $render_data['order_summary']['services'] = $this->billing_model->get_order_by_invoice_id($invoice_id);
             $this->load->template('billing/edit_invoice', $render_data);
         } else {
