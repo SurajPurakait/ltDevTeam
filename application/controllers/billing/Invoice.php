@@ -149,6 +149,7 @@ class Invoice extends CI_Controller {
             }
             $render_data['view_type'] = $type;
             $reference_id = $order_summary['reference_id'];
+            $render_data['invoice_id']=$invoice_id;
             $render_data['order_summary'] = $order_summary;
             $render_data['order_summary']['invoice_type_id'] = $invoice_type = $order_summary['invoice_type'];
             $render_data['order_summary']['created_time'] = $created_time = date("m-d-Y h:i", strtotime($order_summary['created_time']));
