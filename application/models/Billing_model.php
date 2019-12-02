@@ -28,7 +28,7 @@ class Billing_model extends CI_Model {
             'inv.is_order as is_order',
             'co.name as name_of_company',
             'co.fein as federal_ID',
-            'ind.birth_date as date_of_birth',
+//            'ind.birth_date as date_of_birth',
             '(SELECT st.state_name FROM states as st WHERE st.id = co.state_opened) as state_of_incorporation',
             '(SELECT ct.type FROM company_type as ct WHERE ct.id = co.type) as type_of_company',
             'inv.start_month_year as start_month_year',
