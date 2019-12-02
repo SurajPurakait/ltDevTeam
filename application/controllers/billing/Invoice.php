@@ -279,7 +279,7 @@ class Invoice extends CI_Controller {
             $render_data['order_summary']['sub_total'] = number_format((float) array_sum(array_column($render_data['order_summary']['services'], 'sub_total')), 2, '.', '');
             $render_data['order_summary']['invoice_notes'] = invoice_notes($invoice_id, '');
             $is_recurrence=$this->billing_model->getInvoiceIsRecurrence($invoice_id);
-            if(!empty($is_recurrence) && $is_recurrence=='y' ){
+            if(!empty($is_recurrence) && $is_recurrence=='y'){
                 $type='y';
             }else{
                 $type='';
