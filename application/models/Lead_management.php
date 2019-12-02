@@ -57,6 +57,13 @@ Class Lead_management extends CI_Model {
             "date" => "ev.event_date",
             "location" => "ev.location"
         ];
+
+        $this->sorting_element_event = [
+            "event_name" => "ev.event_name",
+            "office" => "of.name",
+            "date" => "ev.event_date",
+            "location" => "ev.location"
+        ];
     }
 
     public function get_lead_types() {
@@ -2074,7 +2081,7 @@ Class Lead_management extends CI_Model {
     }
 
 
-      public function get_event_list($office_id = '',$filter_data = []) {
+      public function get_event_list($office_id = '',$filter_data = [],$sort = []) {
         $this->db->select('ev.*,of.*');
         $this->db->from('event AS ev');
         $this->db->join('office AS of','ev.office_id=of.id');
@@ -2125,6 +2132,12 @@ Class Lead_management extends CI_Model {
                 }
                 $key++;
             }
+        }
+
+        // $order_by = 'ORDER BY `ev`.`id` DESC ';
+        if (!empty($sort) && count($sort) > 0) {
+            $order_by = $this->sorting_element_event[$sort['sort_criteria']] . ' ' . $sort['sort_type'];
+            $this->db->order_by($order_by);
         }
 
         if (!empty($filter_where_in)) {

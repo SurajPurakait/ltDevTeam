@@ -43,7 +43,8 @@ class Home extends CI_Controller {
         asort($this->sorting_element);
     }
 
-    public function index($status = '', $office_id = '') {
+    public function index($is_recurrence='',$status = '', $office_id = '') {
+//        echo $status;die;
         $this->load->layout = 'dashboard';
         $title = "Invoice Dashboard";
         $render_data['title'] = $title . ' | Tax Leaf';
@@ -51,11 +52,17 @@ class Home extends CI_Controller {
         $render_data['menu'] = 'billing_dashboard';
         $render_data['header_title'] = $title;
         $render_data['page_heading'] = 'Billing Dashboard';
+        if($is_recurrence=='y'){
+            $is_recurrence ='y';
+        }else{
+            $is_recurrence='';
+        }
         if ($status == 0) {
             $status = '';
         }
         $render_data['status'] = $status;
         $render_data['office_id'] = $office_id;
+        $render_data['is_recurrence']=$is_recurrence;
         asort($this->filter_element);
         $render_data['filter_element_list'] = $this->filter_element;
         $render_data['sorting_element'] = $this->sorting_element;
@@ -78,8 +85,9 @@ class Home extends CI_Controller {
         if (post('page_number') != 0) {
             $render_data['page_number'] = request('page_number');
         }
+        $render_data['is_recurrence']=$is_recurrence=post('is_recurrence');
         $render_data['filter_status'] = post('payment_status');
-        $render_data['result'] = $this->billing_model->billing_list($status, $by, $office, $payment_status, $reference_id);
+        $render_data['result'] = $this->billing_model->billing_list($status, $by, $office, $payment_status, $reference_id,'','',$is_recurrence);
         $this->load->view('billing/ajax_dashboard', $render_data);
     }
 

@@ -14,6 +14,14 @@ class Event extends CI_Controller {
             3 => "Date",
             4 => "Location"
         ];
+
+        $this->sorting_element = [
+            "event_name" => "Event Name",
+            "office_id" => "Office",
+            "event_date" => "Date",
+            "location" => "Location"
+        ];
+        // asort($this->sorting_element);
     }
 
     public function index($office_id=""){
@@ -26,6 +34,7 @@ class Event extends CI_Controller {
 
         $render_data['event_details'] = $this->lm->get_event_details($office_id);
         $render_data['filter_element_list'] = $this->filter_element;
+        $render_data['sorting_element'] = $this->sorting_element;
         // $render_data['office_id'] = $office_id;
 
         $this->load->template('lead_management/event_dashboard', $render_data);
@@ -162,6 +171,16 @@ class Event extends CI_Controller {
     public function event_filter() {
        
         $render_data["event_details"] = $this->lm->get_event_list('',post());
+        $this->load->view("lead_management/event_ajax_dashboard", $render_data);
+    }
+
+    public function sort_event() {
+        $data = post();
+        $sort['sort_criteria'] = $data['sort_criteria'];
+        $sort['sort_type'] = $data['sort_type'];
+        unset($data['sort_criteria']);
+        unset($data['sort_type']);
+        $render_data["event_details"] = $this->lm->get_event_list('',$data,$sort);
         $this->load->view("lead_management/event_ajax_dashboard", $render_data);
     }
 

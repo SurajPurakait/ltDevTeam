@@ -33,6 +33,7 @@ $staff_info = staff_info();
 $staff_department = explode(',', $staff_info['department']);
 $stafftype = $staff_info['type'];
 $staffrole = $staff_info['role'];
+//echo 'ss'.$is_recurrence;die;
 ?>
 <div class="wrapper wrapper-content">
     <div class="row">
@@ -326,7 +327,7 @@ $staffrole = $staff_info['role'];
     </div>
 </div> 
 <script>
-    loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1);
+    loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1,'<?= $is_recurrence ?>');
     var content = $(".filter-div").html();
     var variableArray = [];
     var elementArray = [];
