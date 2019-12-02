@@ -522,8 +522,11 @@ Class System extends CI_Model {
             $and = " and (sns.staff_id='" . sess('user_id') . "' or sn.added_by_user='" . sess('user_id') . "')";
         }
 //        $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.reference_id='" . $ref_id . "'and sns.staff_id='".sess('user_id')."' and sn.service_id='" . $service_id . "'$and group by sn.msg order by sn.id asc";
-        $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.reference_id='" . $ref_id . "' group by sn.id order by sn.id asc";
-
+        if($reference=='projects'){
+            $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.service_id='" . $service_id . "' group by sn.id order by sn.id asc";
+        }else{
+            $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.reference_id='" . $ref_id . "' group by sn.id order by sn.id asc";
+        }
 //        echo $query;die;
         $res = $this->db->query($query)->result_array();
 
