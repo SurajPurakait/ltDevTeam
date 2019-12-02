@@ -60,11 +60,9 @@
                 </div><!-- ./row -->
                 <hr class="hr-line-dashed"/>
                 <h3 class="text-success">Task Information :</h3>
-                <?=$task_details->tracking_description ?>
                 <div class="row">
                     <?php
                         $tracking_stats=get_exist_task($template_id);
-                        echo $tracking_stats;
                     ?>
                     <div class="col-md-12">
                         <div class="form-group">
