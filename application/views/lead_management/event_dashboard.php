@@ -60,8 +60,34 @@
                         </div>
                     </div>
 
-                    <div class="hr-line-dashed"></div>   
-                    <div id="event_dashboard_div"></div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="clearfix">
+                        <!-- <div class="row"> -->
+                            <!-- <div class="col-lg-6">
+                                <h2 class="text-primary dashboard-item-result result-header"></h2>
+                            </div> -->
+                            <!-- <div class="col-lg-6"> -->
+                                <div class="pull-right text-right">
+                                    <div class="dropdown" style="display: inline-block;">
+                                        <a href="javascript:void(0);" id="sort-by-dropdown" data-toggle="dropdown" class="dropdown-toggle btn btn-success">Sort By <span class="caret"></span></a>
+                                        <ul class="dropdown-menu">
+                                            <?php foreach ($sorting_element as $sorting_index => $sorting_value) : ?>
+                                                <li><a id="<?= str_replace(' ', '_', strtolower($sorting_value)) . '-sorting'; ?>" href="javascript:void(0);" onclick="sortEventDashboard('<?= str_replace(' ', '_', strtolower($sorting_value)); ?>', 'ASC')"><?= $sorting_value; ?></a></li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
+                                    <div class="sort_type_div" style="display: none;">
+                                        <a href="javascript:void(0);" id="sort-asc" onclick="sortEventDashboard('', 'DESC')" class="btn btn-success" data-toggle="tooltip" title="Ascending Order" data-placement="top"><i class="fa fa-sort-amount-asc"></i></a>
+                                        <a href="javascript:void(0);" id="sort-desc" onclick="sortEventDashboard('', 'ASC')" class="btn btn-success" data-toggle="tooltip" title="Descending Order" data-placement="top"><i class="fa fa-sort-amount-desc"></i></a>
+                                        <a href="javascript:void(0);" onclick="loadEventDashboard();" class="btn btn-white text-danger" data-toggle="tooltip" title="Remove Sorting" data-placement="top"><i class="fa fa-times"></i></a>
+                                    </div>
+                                </div>
+                            <!-- </div> -->
+                        <!-- </div> -->
+                    </div>
+
+                   
                     
                     <div id="event_dashboard_div2">
                         <?php if (count($event_details) != 0): ?>
@@ -181,6 +207,8 @@
                   
 
                     </div>
+
+                    <div id="event_dashboard_div"></div>
 
                 </div>
               
