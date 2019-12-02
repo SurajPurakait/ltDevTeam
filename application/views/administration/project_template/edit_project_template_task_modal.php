@@ -60,18 +60,20 @@
                 </div><!-- ./row -->
                 <hr class="hr-line-dashed"/>
                 <h3 class="text-success">Task Information :</h3>
+                <?=$task_details->tracking_description ?>
                 <div class="row">
                     <?php
                         $tracking_stats=get_exist_task($template_id);
+                        echo $tracking_stats;
                     ?>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">Tracking Description:</label>
                             <select class="form-control" id="description" name="task[tracking_description]">
-                                <option value="0" value="<?= $task_details->tracking_description=='0'?'selected':'' ?>">New</option>
-                                <option value="1" value="<?= $task_details->tracking_description=='1'?'selected':'' ?>">Started</option>
-                                <option value="3" value="<?= $task_details->tracking_description=='3'?'selected':'' ?> <?= $tracking_stats==0?'selected':'' ?>">Ready</option>
-                                <option value="2" value="<?= $task_details->tracking_description=='2'?'selected':'' ?>">Resolved</option>
+                                <option value="0" <?= $task_details->tracking_description=='0'?'selected':'' ?>>New</option>
+                                <option value="1" <?= $task_details->tracking_description=='1'?'selected':'' ?>>Started</option>
+                                <option value="3" <?= $task_details->tracking_description=='3'?'selected':'' ?> <?= $tracking_stats==0?'selected':'' ?>>Ready</option>
+                                <option value="2" <?= $task_details->tracking_description=='2'?'selected':'' ?>>Resolved</option>
                              </select>
                         </div>
                     </div>
