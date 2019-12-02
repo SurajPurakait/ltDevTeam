@@ -1323,5 +1323,4 @@ function closeInvoiceRecurrenceModal() {
     var patterntext = $("#pattern option:selected").text();
     $('#pattern_show').html(patterntext);
     $('#RecurranceModal').modal('hide');
-
 }
