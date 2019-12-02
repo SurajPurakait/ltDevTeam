@@ -1080,6 +1080,7 @@ function refresh_existing_individual_list(officeID = '', clientID = '') {
         dataType: "html",
         success: function (result) {
             $("#individual_list_ddl").html(result);
+            $("#individual_list_ddl").chosen();
         },
         beforeSend: function () {
             openLoading();

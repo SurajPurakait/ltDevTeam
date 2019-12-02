@@ -1976,6 +1976,7 @@ function clientTypeChange(client_type, new_reference_id, reference, service_id) 
                 url: base_url + 'services/home/get_existing_client_list',
                 success: function (result) {
                     $('#client_list_ddl').html("<option value=''>Select an option</option>" + result);
+                    $('#client_list_ddl').chosen();
                 },
                 beforeSend: function () {
                     openLoading();
