@@ -227,10 +227,11 @@ function saveInvoice() {
     var form_data = new FormData(document.getElementById('form_create_invoice'));
 //    invoice recurence section
     var pattern = $("#pattern option:selected").val();
-    if (pattern == '') {
-        $("#err_generation").html("Please Select Pattern From Generation.");
-        return false;
-    }
+//    if (pattern == '') {
+//        $("#err_generation").html("Please Select Pattern From Generation.");
+//        return false;
+//    }
+if(pattern!=''){
     if (pattern == 'annually') {
             var due_day = $("#r_day").val();
             var due_month = $("#r_month option:selected").val();
@@ -259,6 +260,7 @@ function saveInvoice() {
     form_data.append('recurrence[duration_type]', duration_type);
     form_data.append('recurrence[duration_time]', duration_time);
     form_data.append('recurrence[until_date]', until_date);
+}
     $.ajax({
         type: "POST",
         data: form_data,

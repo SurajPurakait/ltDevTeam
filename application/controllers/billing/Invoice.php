@@ -278,8 +278,14 @@ class Invoice extends CI_Controller {
             $render_data['order_summary']['total_price'] = '$' . number_format((float) array_sum(array_column($render_data['order_summary']['services'], 'override_price')), 2, '.', '');
             $render_data['order_summary']['sub_total'] = number_format((float) array_sum(array_column($render_data['order_summary']['services'], 'sub_total')), 2, '.', '');
             $render_data['order_summary']['invoice_notes'] = invoice_notes($invoice_id, '');
+            $is_recurrence=$this->billing_model->getInvoiceIsRecurrence($invoice_id);
+            if(!empty($is_recurrence) && $is_recurrence=='y' ){
+                $type='y';
+            }else{
+                $type='';
+            }
             $render_data['place'] = '<div class="text-center">
-            <button class="btn btn-default m-t-10 m-r-5" type="button" onclick="window.location.href = \'' . base_url('billing/home') . '\';">Close</button>
+            <button class="btn btn-default m-t-10 m-r-5" type="button" onclick="window.location.href = \'' . base_url('billing/home/index/'.$type) . '\';">Close</button>
             <button class="btn btn-success m-t-10 m-r-5" type="button" onclick="placeOrder(\'' . $invoice_id . '\', \'' . implode(',', $render_data['contact_email_list']) . '\');"><i class="fa fa-envelope-o"></i> Email</button>
             <button class="btn bg-purple m-t-10 m-r-5" type="button" onclick="printOrder();"><i class="fa fa-print"></i> Print</button>
             <button class="btn btn-warning m-t-10 m-r-5" type="button" onclick="go(\'billing/invoice/export/' . $invoice_id . '\');"><i class="fa fa-file-pdf-o"></i> Download PDF</button>

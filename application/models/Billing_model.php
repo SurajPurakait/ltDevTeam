@@ -197,7 +197,8 @@ class Billing_model extends CI_Model {
     }
 
     public function request_create_invoice($data) {
-//        exit;
+//        echo "<pre>";
+//        print_r($data);exit;
         $staff_info = staff_info();
         $this->db->trans_begin();
         if ($data['editval'] == '') { // Insert section
@@ -1713,6 +1714,9 @@ class Billing_model extends CI_Model {
         $sql = 'SELECT MIN(created_time) as created_time FROM `invoice_info` where created_time != "0000-00-00" order by created_time asc';
         $start_date = $this->db->query($sql)->row_array()['created_time'];
         return date("m/d/Y", strtotime($start_date));
+    }
+    public function getInvoiceIsRecurrence($invoice_id){
+        return $this->db->get_where('invoice_info',['id'=>$invoice_id])->row()->is_recurrence;
     }
 
 }
