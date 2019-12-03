@@ -365,31 +365,31 @@ class Billing_model extends CI_Model {
                 }
                 if (isset($ins_recurrence['until_date']) && !empty($ins_recurrence['until_date'])) {
                     $ins_recurrence['until_date'] = date('Y-m-d', strtotime($ins_recurrence['until_date']));
-                }else{
-                    $ins_recurrence['until_date']=null;
+                } else {
+                    $ins_recurrence['until_date'] = null;
                 }
                 if (isset($ins_recurrence['duration_time']) && !empty($ins_recurrence['duration_time'])) {
                     $ins_recurrence['duration_time'] = $ins_recurrence['duration_time'];
-                }else{
-                    $ins_recurrence['duration_time'] =null;
+                } else {
+                    $ins_recurrence['duration_time'] = null;
                 }
                 if (isset($ins_recurrence['duration_type'])) {
                     $ins_recurrence['duration_type'] = $ins_recurrence['duration_type'];
-                }else{
-                    $ins_recurrence['duration_type'] =null;
+                } else {
+                    $ins_recurrence['duration_type'] = null;
                 }
                 if (isset($ins_recurrence['due_type']) && !empty($ins_recurrence['due_type'])) {
                     $ins_recurrence['due_type'] = $ins_recurrence['due_type'];
-                }else{
-                    $ins_recurrence['due_type'] =null;
+                } else {
+                    $ins_recurrence['due_type'] = null;
                 }
-                
+
 //            if(isset($ins_recurrence['pattern']))
 //            print_r($ins_recurrence);die;
                 $this->db->insert('invoice_recurence', $ins_recurrence);
 //                 echo $this->db->last_query();die;
-                $this->db->where('id',$invoice_id);
-                $this->db->update('invoice_info',['is_recurrence'=>'y']);
+                $this->db->where('id', $invoice_id);
+                $this->db->update('invoice_info', ['is_recurrence' => 'y']);
 //                echo $this->db->last_query();die;
             }
 
@@ -521,32 +521,32 @@ class Billing_model extends CI_Model {
                 }
                 if (isset($ins_recurrence['until_date']) && !empty($ins_recurrence['until_date'])) {
                     $ins_recurrence['until_date'] = date('Y-m-d', strtotime($ins_recurrence['until_date']));
-                }else{
-                    $ins_recurrence['until_date']=null;
+                } else {
+                    $ins_recurrence['until_date'] = null;
                 }
                 if (isset($ins_recurrence['duration_time']) && !empty($ins_recurrence['duration_time'])) {
                     $ins_recurrence['duration_time'] = $ins_recurrence['duration_time'];
-                }else{
-                    $ins_recurrence['duration_time'] =null;
+                } else {
+                    $ins_recurrence['duration_time'] = null;
                 }
                 if (isset($ins_recurrence['duration_type'])) {
                     $ins_recurrence['duration_type'] = $ins_recurrence['duration_type'];
-                }else{
-                    $ins_recurrence['duration_type'] =null;
+                } else {
+                    $ins_recurrence['duration_type'] = null;
                 }
                 if (isset($ins_recurrence['due_type']) && !empty($ins_recurrence['due_type'])) {
                     $ins_recurrence['due_type'] = $ins_recurrence['due_type'];
-                }else{
-                    $ins_recurrence['due_type'] =null;
+                } else {
+                    $ins_recurrence['due_type'] = null;
                 }
-                
+
 //            if(isset($ins_recurrence['pattern']))
 //            print_r($ins_recurrence);die;
-                $this->db->where('invoice_id',$invoice_id);
+                $this->db->where('invoice_id', $invoice_id);
                 $this->db->update('invoice_recurence', $ins_recurrence);
 //                 echo $this->db->last_query();die;
-                $this->db->where('id',$invoice_id);
-                $this->db->update('invoice_info',['is_recurrence'=>'y']);
+                $this->db->where('id', $invoice_id);
+                $this->db->update('invoice_info', ['is_recurrence' => 'y']);
 //                echo $this->db->last_query();die;
             }
             if (isset($data['invoice_notes'])) {
@@ -1450,7 +1450,7 @@ class Billing_model extends CI_Model {
         }
     }
 
-    public function billing_list($status = '', $by = '', $office = '', $payment_status = '', $reference_id = '', $filter_data = [], $sort = [],$is_recurrence='') {
+    public function billing_list($status = '', $by = '', $office = '', $payment_status = '', $reference_id = '', $filter_data = [], $sort = [], $is_recurrence = '') {
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
         $staffrole = $staff_info['role'];
@@ -1488,11 +1488,11 @@ class Billing_model extends CI_Model {
         ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
         $where['status'] = 'AND `inv`.`status` != 0 ';
-        if($is_recurrence!=''){
-            $where['inv.is_recurrence']=" AND inv.is_recurrence='".$is_recurrence."' " ;
-        }else{
-            $is_recurrence='n';
-            $where['inv.is_recurrence']=" AND inv.is_recurrence= '".$is_recurrence."' ";
+        if ($is_recurrence != '') {
+            $where['inv.is_recurrence'] = " AND inv.is_recurrence='" . $is_recurrence . "' ";
+        } else {
+            $is_recurrence = 'n';
+            $where['inv.is_recurrence'] = " AND inv.is_recurrence= '" . $is_recurrence . "' ";
         }
         if ($by != '') {
             if ($by == 'byme') {
@@ -1526,10 +1526,10 @@ class Billing_model extends CI_Model {
                     $where['inv.created_by'] = 'AND `inv`.`created_by` = "' . $staff_id . '" ';
                 }
             } else {
-                $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (7) AND inv.is_recurrence="'.$is_recurrence.'")';
+                $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (7) AND inv.is_recurrence="' . $is_recurrence . '")';
             }
         }
-        
+
 
         if ($status == '') {
             $where['inv.payment_status'] = 'AND (CASE WHEN `inv`.`status` = 3 THEN `inv`.`payment_status` IN (1, 2) ELSE `inv`.`payment_status` IN (1, 2, 3) END) ';
@@ -1552,7 +1552,7 @@ class Billing_model extends CI_Model {
             unset($where_or);
             $where['inv.payment_status'] = 'AND `inv`.`payment_status` = ' . $payment_status . ' ';
         }
-        
+
 
         $is_status = $is_tracking = 'n';
         if (!empty($filter_data)) {
@@ -1663,7 +1663,7 @@ class Billing_model extends CI_Model {
         $table = '`invoice_info` AS `inv` ' .
                 'INNER JOIN `order` AS `ord` ON `ord`.`invoice_id` = `inv`.`id` ' .
                 'INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END) ';
-        
+
         $this->db->query('SET SQL_BIG_SELECTS=1');
         return $this->db->query('SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id` ' . $order_by . ' ')->result_array();
 //        echo $this->db->last_query();die;
@@ -1697,7 +1697,7 @@ class Billing_model extends CI_Model {
         return $this->db->get('internal_data')->row_array()['office'];
     }
 
-    public function get_royalty_reports_data($office = "", $date_range = "") {
+    public function get_royalty_reports_data($office= "",$date_range= "") {
         ## Read value
         $draw = $_POST['draw'];
         $row = $_POST['start'];
@@ -1712,7 +1712,7 @@ class Billing_model extends CI_Model {
         $staffrole = $staff_info['role'];
         $staff_office = $staff_info['office'];
         $departments = explode(',', $staff_info['department']);
-
+ 
         // if (in_array(2, $departments)) {
         //     if ($staffrole == 2) {      // frinchisee manager
         //         $this->db->where_in('office_id', $staff_office);
@@ -1726,24 +1726,14 @@ class Billing_model extends CI_Model {
             if($staff_info['type'] == 3) {
                 $this->db->where_in('office_id',$staff_office);
             }    
-
-        if (in_array(2, $departments)) {
-            if ($staffrole == 2) {      // frinchisee manager
-                $this->db->where_in('office_id', $staff_office);
-            } else {
-                $this->db->where('created_by', $staff_id);
-            }
-        }
-        if ($office != "") {
-            $this->db->where_in('office_id', $office);
         }
         if ($date_range != "") {
             $date_value = explode("-", $date_range);
             $start_date = date("Y-m-d", strtotime($date_value[0]));
             $end_date = date("Y-m-d", strtotime($date_value[1]));
-
-            $this->db->where('date >=', $start_date);
-            $this->db->where('date <=', $end_date);
+            
+            $this->db->where('date >=',$start_date);
+            $this->db->where('date <=',$end_date);
         }
         if ($searchValue != '') {
             $this->db->group_start();
@@ -1776,6 +1766,7 @@ class Billing_model extends CI_Model {
         );
 
         return $response;
+
     }
 
     public function get_payment_details_service_id($invoice_id, $order_id) {
@@ -1789,6 +1780,7 @@ class Billing_model extends CI_Model {
         $this->db->where('is_cancel !=', 1);
         return $this->db->get()->result_array();
     }
+
     public function get_total_price_report($office,$date_range) {
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
@@ -1804,30 +1796,27 @@ class Billing_model extends CI_Model {
             }    
         }
 
-    public function get_total_price_report($office, $date_range) {
-        if (!empty($office)) {
-            $this->db->where_in('office_id', $office);
-        }
         if ($date_range != "") {
             $date_value = explode("-", $date_range);
             $start_date = date("Y-m-d", strtotime($date_value[0]));
             $end_date = date("Y-m-d", strtotime($date_value[1]));
-
-            $this->db->where('date >=', $start_date);
-            $this->db->where('date <=', $end_date);
-        }
+            
+            $this->db->where('date >=',$start_date);
+            $this->db->where('date <=',$end_date);
+        }           
         $total_data = $this->db->get('royalty_report')->result_array();
         $total_arr = array(
             "invoice_id" => count($total_data),
-            "retail_price" => array_sum(array_column($total_data, 'retail_price')),
-            "cost" => array_sum(array_column($total_data, 'cost')),
-            "collected" => array_sum(array_column($total_data, 'collected')),
-            "total_net" => array_sum(array_column($total_data, 'total_net')),
-            "override_price" => array_sum(array_column($total_data, 'override_price')),
-            "fee_with_cost" => array_sum(array_column($total_data, 'fee_with_cost')),
-            "fee_without_cost" => array_sum(array_column($total_data, 'fee_without_cost'))
+            "retail_price" => array_sum(array_column($total_data,'retail_price')),
+            "cost" => array_sum(array_column($total_data,'cost')),
+            "collected" => array_sum(array_column($total_data,'collected')),
+            "total_net" => array_sum(array_column($total_data,'total_net')),
+            "override_price" => array_sum(array_column($total_data,'override_price')),
+            "fee_with_cost" => array_sum(array_column($total_data,'fee_with_cost')),
+            "fee_without_cost" => array_sum(array_column($total_data,'fee_without_cost'))
+
         );
-        return $total_arr;
+        return $total_arr;        
     }
 
     public function get_start_date_royalty_report() {
@@ -1835,11 +1824,13 @@ class Billing_model extends CI_Model {
         $start_date = $this->db->query($sql)->row_array()['created_time'];
         return date("m/d/Y", strtotime($start_date));
     }
-    public function getInvoiceIsRecurrence($invoice_id){
-        return $this->db->get_where('invoice_info',['id'=>$invoice_id])->row()->is_recurrence;
+
+    public function getInvoiceIsRecurrence($invoice_id) {
+        return $this->db->get_where('invoice_info', ['id' => $invoice_id])->row()->is_recurrence;
     }
-    public function getInvoiceRecurringDetails($invoice_id){
-        return $this->db->get_where('invoice_recurence',['invoice_id'=>$invoice_id])->row();
+
+    public function getInvoiceRecurringDetails($invoice_id) {
+        return $this->db->get_where('invoice_recurence', ['invoice_id' => $invoice_id])->row();
     }
 
 }
