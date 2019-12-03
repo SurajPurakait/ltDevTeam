@@ -350,7 +350,7 @@ if (!function_exists('load_ddl_option')) {
                     echo "<option $select value='" . $item['id'] . "'>" . $item['name'] . "</option>";
                 }
                 break;
-            case "users_office_list":
+            case "users_office_list": // all active offices 
                 $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : ""); // This values are deleted required to client requirment ($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : ""
                 foreach ($item_list as $item) {
                     $select = ($selected != "" && $item['id'] == $selected) ? "selected = 'selected'" : "";
