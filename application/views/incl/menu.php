@@ -251,8 +251,8 @@ $office_id = get_office_id($staff_info['office']);
                 <!-- Actions -->
                 <li <?= active_menu($main_menu, "action"); ?> >
                     <div class="dashboard-icons pull-right">
-                        <a href="<?= base_url(); ?>action/home/index/0/0/byme" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?= action_list('byme_tome_task', '0'); ?></a>
-                        <a href="<?= base_url(); ?>action/home/index/1/0/byme" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= action_list('byme_tome_task', '1'); ?></a>
+                        <a href="<?= base_url(); ?>action/home/index/0/0/byme_tome_task" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?= action_list('byme_tome_task', '0'); ?></a>
+                        <a href="<?= base_url(); ?>action/home/index/1/0/byme_tome_task" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= action_list('byme_tome_task', '1'); ?></a>
                     </div>
                     <a href="javascript:void(0);">
                         <i class="fa fa-flash"></i>
