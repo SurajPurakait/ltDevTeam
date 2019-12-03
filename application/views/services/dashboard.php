@@ -405,7 +405,7 @@ if ($status == '') {
     </div>
 </div>
 <script type="text/javascript">
-    loadServiceDashboard('<?= $status == '' ? 4 : ''; ?>', '<?= $category_id ?>', 'on_load', '<?= $office_id; ?>', 1);
+    loadServiceDashboard('<?= $status == '' ? 4 : $status; ?>', '<?= $category_id ?>', 'on_load', '<?= $office_id; ?>', 1);
     var content = $(".filter-div").html();
     var variable_dd_array = [];
     var element_array = [];

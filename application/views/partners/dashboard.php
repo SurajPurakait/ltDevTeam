@@ -121,8 +121,9 @@
                                             if($staff_info['type'] == 1) {
                                         ?>
                                         <!-- byother section-->
-                                        <tr id="byother" class="">
-                                            <th>By Other</th>
+                                        <tr id="byother" class="action-row-border-top" style="background: #596571;">
+                                            <!--<tr id="toother" style="background: #596571;">-->
+                                            <th>By Team</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byother-0">
                                                     <span class="label label-success" id="requested_by_other_new" onclick="loadPartnerDashboard(0,'byother');"><?= partnerList(0,'byother'); ?></span>
@@ -145,8 +146,8 @@
                                             </td>
                                         </tr>
                                         <!-- toother section -->
-                                        <tr id="toother" class="">
-                                            <th>To Other</th>
+                                        <tr id="toother" class="action-row-border-top action-row-border-bottom" style="background: #596571;">
+                                            <th>To Team</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-toother-0">
                                                     <span class="label label-success" id="requested_to_other_new" onclick="loadPartnerDashboard(0,'toother');"><?= partnerList(0,'toother'); ?></span>

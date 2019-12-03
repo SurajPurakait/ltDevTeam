@@ -65,7 +65,7 @@
                                 <table class="table table-borderless">
                                     <tbody>
                                         <tr id="byme">
-                                            <th>Added By Me</th>
+                                            <th>My Partners</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-0">
                                                     <span class="label label-success" id="requested_by_me_new" onclick="load_partners_dashboard('','',1); "><?= get_partner_count(1); ?></span>
@@ -76,8 +76,8 @@
                                             $staff_info = staff_info();
                                             if($staff_info['type'] == 1) { 
                                         ?>
-                                        <tr id="tome">
-                                            <th>Added By Others</th>
+                                        <tr id="tome" class="bg-success">
+                                            <th>Team Partners</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-0">
                                                     <!-- 2 : used for byother -->
