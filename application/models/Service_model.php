@@ -2790,4 +2790,8 @@ class Service_model extends CI_Model {
         $start_date = $this->db->query($sql)->row_array()['order_date'];
         return date("m/d/Y", strtotime($start_date));
     }
+
+    public function get_service_by_franchise_data() {
+        
+    }
 }
