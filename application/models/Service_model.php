@@ -2792,6 +2792,23 @@ class Service_model extends CI_Model {
     }
 
     public function get_service_by_franchise_data() {
+        $data_office = $this->system->get_staff_office_list();
+        $office_details = [];
         
+        foreach ($data_office as $do) {    
+            $data = [
+                'office_name' => $do['name'],
+                'totals' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id']))->num_rows(),
+                'new' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'status'=>'2'))->num_rows(),
+                'started' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'status'=>'1'))->num_rows(),
+                'completed' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'status'=>'0'))->num_rows(),
+                'less_than_30' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'late_status'=>'1'))->num_rows(),
+                'less_than_60' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'late_status'=>'1'))->num_rows(),
+                'more_than_60' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'late_status'=>'1'))->num_rows(),           
+                'sos' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'sos !='=>''))->num_rows()           
+            ];
+            array_push($office_details,$data);
+        }
+        return $office_details;
     }
 }

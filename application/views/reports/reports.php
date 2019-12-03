@@ -36,7 +36,7 @@
                                     </div>
                                     <div role="tabpanel" id="tab-2" class="tab-pane">
                                         <div class="panel-body">
-                                            kolkata
+                                            test data
                                         </div>
                                     </div>
                                 </div>
