@@ -1208,6 +1208,7 @@ class Action_model extends CI_Model {
             } else {
                 $this->db->where("type", 1);
             }
+            $this->db->where("status", 1);
             return $this->db->get("office")->result_array();
         } else {
             return $this->administration->get_office_by_staff_id(sess("user_id"));

@@ -3484,3 +3484,10 @@ if (!function_exists('getProjectClientPracticeId')) {
     }
 
 }
+if(!function_exists('get_invoice_recurring_details')){
+    function get_invoice_recurring_details($invoice_id){
+        $ci=&get_instance();
+        $ci->load->model('billing_model');
+        return $ci->billing_model->getInvoiceRecurringDetails($invoice_id);
+    }
+}

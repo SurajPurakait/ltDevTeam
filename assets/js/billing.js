@@ -224,7 +224,46 @@ function saveInvoice() {
     if (editval != '') {
         $('.disabled_field').removeAttr('disabled');
     }
+    var is_recurrence=$('#is_recurrence').val();
+    
     var form_data = new FormData(document.getElementById('form_create_invoice'));
+//    invoice recurence section
+    var pattern = $("#pattern option:selected").val();
+//    if (pattern == '') {
+//        $("#err_generation").html("Please Select Pattern From Generation.");
+//        return false;
+//    }
+    
+if(pattern!=''){
+    if (pattern == 'annually') {
+            var due_day = $("#r_day").val();
+            var due_month = $("#r_month option:selected").val();
+    } else if (pattern == 'none') {
+        var due_day = $("#r_day").val();
+        var due_month = $("#r_month option:selected").val();
+    } else if (pattern == 'weekly') {
+        var due_day = $("#r_day").val();
+        var due_month = $('input[name="recurrence[due_month]"]:checked').val();
+    } else if (pattern == 'quarterly') {
+        var due_day = $("#r_day").val();
+        var due_month = $("#r_month option:selected").val();
+    } else {
+        var due_day = $("#r_day").val();
+        var due_month = $("#r_month").val();
+    }
+
+    var until_date = $('#until_date').val();
+    var start_date = $("#start_date").val();
+    var duration_type = $('input[name="recurrence[duration_type]"]:checked').val();
+    var duration_time = $("#duration_time").val();
+    form_data.append('recurrence[start_date]', start_date);
+    form_data.append('recurrence[pattern]', pattern);
+    form_data.append('recurrence[due_day]', due_day);
+    form_data.append('recurrence[due_month]', due_month);
+    form_data.append('recurrence[duration_type]', duration_type);
+    form_data.append('recurrence[duration_time]', duration_time);
+    form_data.append('recurrence[until_date]', until_date);
+}
     $.ajax({
         type: "POST",
         data: form_data,
@@ -238,6 +277,7 @@ function saveInvoice() {
 //             console.log(result); return false;
             if (editval == '') {
                 if (result != 0) {
+                    //alert(result);
                     goURL(base_url + 'billing/invoice/place/' + result);
                 } else {
                     swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
@@ -252,7 +292,11 @@ function saveInvoice() {
                         if ($("#edit_type").val() == 'edit_place') {
                             goURL(base_url + 'billing/invoice/place/' + result);
                         } else {
-                            goURL(base_url + 'billing/home');
+                            if(is_recurrence==''){
+                                goURL(base_url + 'billing/home');
+                            }else{
+                                goURL(base_url + 'billing/home/index/y');
+                            }
                         }
                     });
                 } else {
@@ -334,7 +378,7 @@ function printOrder() {
     doPrint.print();
     doPrint.close();
 }
-function loadBillingDashboard(status = '', by = '', office = '', payment_status = '', reference_id = '', pageNumber = 0) {
+function loadBillingDashboard(status = '', by = '', office = '', payment_status = '', reference_id = '', pageNumber = 0,is_recurrence='') {
     $.ajax({
         type: "POST",
         url: base_url + 'billing/home/dashboard_ajax',
@@ -344,7 +388,8 @@ function loadBillingDashboard(status = '', by = '', office = '', payment_status 
             office: office,
             payment_status: payment_status,
             reference_id: reference_id,
-            page_number: pageNumber
+            page_number: pageNumber,
+            is_recurrence:is_recurrence
         },
         dataType: "html",
         success: function (result) {
@@ -1042,6 +1087,7 @@ function refresh_existing_individual_list(officeID = '', clientID = '') {
         dataType: "html",
         success: function (result) {
             $("#individual_list_ddl").html(result);
+            $("#individual_list_ddl").chosen();
         },
         beforeSend: function () {
             openLoading();
@@ -1255,4 +1301,34 @@ var invoiceServiceListAjax = function (invoiceID) {
             }
         });
     }
+}
+function change_invoice_pattern(val) {
+    if (val == 'annually') {
+        $(".none-div").show();
+        $(".annual-check-div").show();
+        $(".due-div").html('<label class="control-label m-r-5"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day" class="m-r-5"> New invoice every</label>&nbsp;<select class="form-control m-r-5" id="r_month" name="recurrence[due_month]" value="1"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day">');
+    } else if (val == 'weekly') {
+        $(".none-div").show();
+        $(".annual-check-div").hide();
+        $(".due-div").html('<label class="control-label m-r-5"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day">New invoice every</label>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" value="1" style="width: 100px" id="r_day">&nbsp;week(s) on the following days:&nbsp;<div class="m-t-10"><div class="m-b-10"><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="1" checked="" class="m-r-5">&nbsp;Sunday&nbsp;</span><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="2" class="m-r-5">&nbsp;Monday&nbsp;</span><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="3" class="m-r-5">&nbsp;Tuesday&nbsp;</span><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="4" class="m-r-5">&nbsp;Wednesday&nbsp;</span></div><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="5" class="m-r-5">&nbsp;Thursday&nbsp;</span><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="6" class="m-r-5">&nbsp;Friday&nbsp;</span><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="7" class="m-r-5">&nbsp;Saturday</span></div>');
+    } else if (val == 'quarterly') {
+        $(".none-div").show();
+        $(".annual-check-div").hide();
+        $(".due-div").html('<label class="control-label m-r-5"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> New invoice on day</label>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" value="1" style="width: 100px" id="r_day"><label class="control-label m-r-5">of</label>&nbsp;<select class="form-control m-r-5" id="r_month" name="recurrence[due_month]"><option value="1">First</option><option value="2">Second</option><option value="3">Third</option></select>&nbsp;<label class="control-label m-r-5" id="control-label">month in quarter</label>');
+    } else if (val == 'monthly') {
+        $(".none-div").show();
+        $(".annual-check-div").hide();
+        $(".due-div").html('<label class="control-label m-r-5"><input type="radio" class="m-r-5" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> New invoice on day</label>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" value="1" style="width: 100px" id="r_day"><label class="control-label m-r-5">of every</label>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_month]" min="1" max="12" value="1" style="width: 100px" id="r_month">&nbsp;<label class="control-label" id="control-label">month(s)</label>');
+    } else {
+        $(".none-div").hide();
+        $(".annual-check-div").hide();
+        $(".due-div").html('<label class="control-label m-r-5"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day" class="m-r-5"> Due on every</label>&nbsp;<select class="form-control m-r-5" id="r_month" name="recurrence[due_month]"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day">');
+    }
+}
+function closeInvoiceRecurrenceModal() {
+    var get_content = $('#RecurranceModal .modal-body').html();
+    $('#pattern_show').html('');
+    var patterntext = $("#pattern option:selected").text();
+    $('#pattern_show').html(patterntext);
+    $('#RecurranceModal').modal('hide');
 }
