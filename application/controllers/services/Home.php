@@ -35,9 +35,15 @@ class Home extends CI_Controller {
         $render_data['menu'] = 'service_dashboard';
         $render_data['header_title'] = $title;
         $render_data['page_heading'] = 'Service Dashboard';
+        
+        if($status != ''){
+        $render_data['status'] = $status;
+        }else{
+           $render_data['status'] = $status; 
+        }
         $render_data['category_list'] = $this->service_model->get_service_category();
         $render_data['staffInfo'] = $this->staff_info;
-        $render_data['status'] = $status;
+        // $render_data['status'] = $status;
         $render_data['category_id'] = $category_id;
         $render_data['office_id'] = $office_id;
         $this->load->template('services/dashboard', $render_data);
