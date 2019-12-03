@@ -69,7 +69,7 @@ if ($modal_type == "edit") {
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>CVV<span class="text-danger">*</span></label>
-                                    <input type="password" name="cvv" numeric_valid="" required="" id="cvv" maxlength="3" class="form-control" title="CVV" placeholder="***">
+                                    <input type="password" name="cvv" numeric_valid="" required="" id="cvv" maxlength="4" class="form-control" title="CVV" placeholder="****">
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
