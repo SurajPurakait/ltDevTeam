@@ -1053,13 +1053,13 @@ function request_edit_project_main() {
         }
     });
 }
-function project_task_edit_modal(task_id) {
-//    alert(task_id);
+function project_task_edit_modal(task_id,project_id='') {
+//    alert(project_id);
     $.ajax({
         type: "POST",
         url: base_url + 'modal/edit_project_task_modal',
         dataType: "html",
-        data: {task_id: task_id},
+        data: {task_id: task_id , project_id:project_id},
         success: function (result) {
 //            alert(result);
             $('#taskModal').html(result);
@@ -1344,7 +1344,7 @@ function projectFilter() {
         }
     });
 }
-function loadProjectDashboard(status = '', request = '', templateID = '', officeID = '', departmentID = '', filter_assign = '', filter_data = '', sos_value = '', sort_criteria = '', sort_type = '', client_type = '', client_id = '', clients = '', pageNumber = 0,template_cat_id='',month='') {
+function loadProjectDashboard(status = '', request = '', templateID = '', officeID = '', departmentID = '', filter_assign = '', filter_data = '', sos_value = '', sort_criteria = '', sort_type = '', client_type = '', client_id = '', clients = '', pageNumber = 0,template_cat_id='',month='',year='') {
 //   alert(status);
 //    if (request != '') {
 //        activeShortColumn(request, short_column);
@@ -1368,7 +1368,8 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
             client_id: client_id,
             page_number: pageNumber,
             template_cat_id:template_cat_id,
-            month:month
+            month:month,
+            year:year
         },
         url: base_url + 'project/dashboard_ajax',
         success: function (project_result) {
@@ -1552,8 +1553,10 @@ var saveInputForms = function () {
     $("#total_due").attr('disabled', false);
     var userid = $("#user_id").val();
     var user_type = $("#user_type").val();
+    var total_time=$("#total_time").text();
 //    var input_form_type=$("#input_form_type").val();
     var form_data = new FormData(document.getElementById('project_input_form'));
+    form_data.append('total_time', total_time);
     $.ajax({
         type: "POST",
         data: form_data,

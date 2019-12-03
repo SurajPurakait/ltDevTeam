@@ -21,6 +21,9 @@
             $user_dept = $user_info['department'];
             $usertype = $user_info['type'];
             $role = $user_info['role'];
+//            echo "<pre>";
+//            print_r($services_list);
+//            echo "</pre>";die;
             if (!empty($services_list)) {
                 foreach ($services_list as $keys => $row_inner) {
                     $keysval = $keys+1;
@@ -200,16 +203,24 @@
                             <td style="text-align: center;">
                                 <?php
                                 $input_status = 'complete';
-                                if ($row_inner->service_id != $service_id) {
+                                if ($row_inner->service_id != $service_id || $is_order=='y') {
                                     if ($row_inner->input_form != 'y') {
                                         echo 'N/A';
                                     } else {
+
+                                        $inputform_attachments = get_inputform_attachments($row_inner->service_request_id);
+                                        $inputform_notes = get_inputform_notes($row_inner->service_request_id);
+                                        
                                         if ($row_inner->input_form_status == 'n') {
                                             $input_status = 'incomplete';
                                             ?>
-                                            <span class="label input-form-incomplete">Incomplete <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-plus" aria-hidden="true"></i> </a></span>
+                                            <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><span class="label input-form-incomplete">Incomplete &nbsp;&nbsp;<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp; </a></span>
+                                        <?php } elseif ($inputform_attachments == '' || $inputform_notes == '') { ?>
+                                            
+                                            <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><span class="label input-form-warning">Partial Complete &nbsp;&nbsp;<i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp; </a></span>
+                                        
                                         <?php } else { ?>
-                                            <span class="label input-form-complete">Completed <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
+                                             <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><span class="label input-form-complete">Completed &nbsp;&nbsp;<i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp; </a></span>
                                             <?php
                                         }
                                     }

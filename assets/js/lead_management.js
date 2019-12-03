@@ -659,6 +659,11 @@ function loadEventDashboard() {
             $(".criteria-dropdown").trigger("chosen:updated");
             $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
             $('#btn_clear_filter').css('display', 'none');
+
+            $(".sort_type_div #sort-desc").hide();
+            $(".sort_type_div #sort-asc").css({display: 'inline-block'});
+            $("#sort-by-dropdown").html('Sort By <span class="caret"></span>');
+            $('.sort_type_div').css('display', 'none');
         },
         beforeSend: function () {
             openLoading();
@@ -1046,6 +1051,53 @@ function eventFilter() {
             $("#clear_filter").html('');
             $("#clear_filter").show();
             $('#btn_clear_filter').show();
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function sortEventDashboard(sortCriteria = '', sortType = '') {
+    var form_data = new FormData(document.getElementById('filter-form'));
+    if (sortCriteria == '') {
+        var sc = $('.dropdown-menu li.active').find('a').attr('id');
+        sc = sc.split('-');
+        sortCriteria = sc[0];
+    }
+    form_data.append('sort_criteria', sortCriteria);
+    form_data.append('sort_type', sortType);
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'lead_management/event/sort_event',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            // alert(result);return false;
+            $("#event_dashboard_div2").hide();
+            $("#event_dashboard_div").show();
+            $("#event_dashboard_div").html(result);
+            $(".dropdown-menu li").removeClass('active');
+            $("#" + sortCriteria + "-sorting").parent('li').addClass('active');
+            if (sortType == 'ASC') {
+                $(".sort_type_div #sort-desc").hide();
+                $(".sort_type_div #sort-asc").css({display: 'inline-block'});
+            } else {
+                $(".sort_type_div #sort-asc").hide();
+                $(".sort_type_div #sort-desc").css({display: 'inline-block'});
+            }
+            $(".sort_type_div").css({display: 'inline-block'});
+            var text = $('.dropdown-menu li.active').find('a').text();
+            var textval = 'Sort By : ' + text + ' <span class="caret"></span>';
+            $("#sort-by-dropdown").html(textval);
+            $("[data-toggle=popover]").popover();
         },
         beforeSend: function () {
             openLoading();

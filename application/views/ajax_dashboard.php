@@ -467,7 +467,6 @@ if ($section == 'notification') {
                     $class1 = 'bg-sucess';
                     $view_url = $view_url = base_url() . 'referral_partner/referral_partners/view_referral/' . $gnl['reference_id'];
                 }
-
                 ?>
                 <div class="feed-element notification-item notification-<?= $gnl['reference']; ?>  notification-<?= ($notification_index > 4) ? 'hide' : 'show'; ?> notification-<?= $diff_text; ?>" <?= ($notification_index > 4) ? 'style="display: none;"' : ''; ?> id="notification-div-<?= $gnl['id']; ?>">
                     <?php //if ($gnl['added_by'] != sess('user_id')):   ?>

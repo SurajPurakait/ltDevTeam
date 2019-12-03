@@ -135,9 +135,31 @@
                         <div class="hr-line-dashed"></div>
                     <?php } ?>
                     <?php if ($input_form_type == 1):
-                        if($key==0){
+                        if($bookkeeping_input_type==1){
                         ?>
                         <h3>BANK STATEMENT RETRIEVAL LEAFCLOUD DEPARTMENT</h3>
+                            <div id="documents_div" class="display_div">
+                                <div class="hr-line-dashed"></div>
+                                <h3>Documents &nbsp; (<a data-toggle="modal"  id="add_document_btn" onclick="document_modal('add', 'project', '<?= $task_id ?>'); return false;" href="javascript:void(0);">Add document</a>)</h3> 
+                                <div id="document-list"></div>
+                            </div>
+                        <?php
+                            if (!empty($list)) {
+                                foreach ($list as $document) {
+                                    ?>
+                                    <div class="row" id='document_id_<?= $document['id']; ?>' >
+                                        <label class="col-lg-2 control-label"><?= $document['doc_type']; ?></label>
+                                        <div class="col-lg-10" style="padding-top:8px">
+                                            <p>
+                                                <a href ='javascript:void(0)' onClick="MyWindow = window.open('<?= base_url("/uploads/" . $document["document"]); ?>', 'Document Preview', width = 600, height = 300); return false;"><?= $document["document"]; ?></a>
+                                                &nbsp;&nbsp;<i class="fa fa-trash" style="cursor:pointer" onclick="delete_document('<?= $document["reference"]; ?>', '<?= $document["reference_id"]; ?>', '<?= $document["id"]; ?>', '<?= $document["document"]; ?>')" title="Remove this document"></i>
+                                            </p>
+                                        </div>
+                                    </div>
+                                <?php
+                                }
+                            }
+                            ?>
                             <div class="accounts-details">
                                 <h3>Financial Accounts<span class="text-danger">*</span>&nbsp; (<a href="javascript:void(0);" onclick="task_account_modal('add', '', 'project');">Add Financial Account</a>)</h3>
                                 <div id="accounts-list">
@@ -157,7 +179,7 @@
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
-                        <?php }else if($key==1){ ?>
+                        <?php }else if($bookkeeping_input_type==2){ ?>
                         <h3>BOOKKEEPING BOOKKEEPER DEPARTMENT</h3>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Number of Bank Account<span class="text-danger">*</span></label>
@@ -187,7 +209,8 @@
                                 </label>
                                 <div class="errorMessage text-danger"></div>
                             </div>
-                        <?php }else if($key==2){?>
+                        
+                        <?php }else if($bookkeeping_input_type==3){?>
                         <h3>REVIEW CLIENT MANAGER</h3>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Adjustment Needed<span class="text-danger">*</span></label>
@@ -283,7 +306,19 @@
                             <a href="javascript:void(0)" class="text-success add-task-note block m-t-10"><i class="fa fa-plus"></i> Add Notes</a>
                         </div>
                     </div>
-
+                    <?php if($bookkeeping_input_type==2){?>
+                    <div class="form-group">
+                            <label class="col-lg-2 control-label">Total Time Spent</label>
+                            <div class="col-lg-10">
+                                <div class="watch">
+                                    <h3 id="total_time" name='total_time'><?= (isset($bookkeeper_details->total_time)?($bookkeeper_details->total_time!='' ? $bookkeeper_details->total_time: ''):'')?></h3>
+                                    <input type='button' class="btn btn-success" id='start' name="start" onclick="add()" value="Start">
+                                    <input type="button" class="btn btn-warning" id='stop' name="stop" value="Stop">
+                                    <input type="button" class="btn btn-danger" id='clear' name="clear" value="Clear">
+                                </div>
+                            </div>
+                    </div>
+                    <?php } ?>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-10">
@@ -292,8 +327,8 @@
                             <input type="hidden" name="input_form_type" id="input_form_type" value="<?= $input_form_type ?>">
                             <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>"/>
                             <input type="hidden" name="editval" id="editval" value="<?= $task_id; ?>">
-                            <input type="hidden" name="task_key" id="task_key" value=<?= $key ?>>
-                            <?php if($input_form_type==1 && $key==0){ ?>
+                            <input type="hidden" name="bookkeeping_input_type" id="task_key" value=<?= $bookkeeping_input_type ?>>
+                            <?php if($input_form_type==1 && $bookkeeping_input_type==1){ ?>
                             <input type="hidden" name="reference_id" id="reference_id" value="<?= $client_id; ?>">
                             <?php } ?>
                             <button class="btn btn-success" type="button" onclick="saveInputForms()">Save changes</button> &nbsp;&nbsp;&nbsp;
@@ -308,7 +343,7 @@
     </div>
 </div>
 <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
-
+<div id="document-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script>
     get_financial_account_list('<?= $client_id; ?>', 'project', '<?= $task_id; ?>');
     $(function () {
@@ -362,4 +397,51 @@
     function removeFile(divID) {
         $("#" + divID).remove();
     }
+    
+    var h3 = document.getElementById('total_time'),
+    start = document.getElementById('start'),
+    stop = document.getElementById('stop'),
+    clear = document.getElementById('clear'),
+    seconds = 0, minutes = 0, hours = 0,
+    t;
+    function add() {
+//        alert('hi');
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+        }
+    }
+    
+    h3.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9   ? seconds : "0" + seconds);
+
+    timer();
+    }
+    function timer() {
+//        alert('hi');
+    t = setTimeout(add, 1000);
+    }
+//     timer();
+
+
+    /* Start button */
+    start.onclick = timer;
+
+    /* Stop button */
+    stop.onclick = function() {
+//        alert('hi');
+    clearTimeout(t);
+
+    }
+
+    /* Clear button */
+    clear.onclick = function() {
+//        alert('hi');
+    h3.textContent = "00:00:00";
+    seconds = 0; minutes = 0; hours = 0;
+    }
+
 </script>

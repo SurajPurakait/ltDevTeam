@@ -1,4 +1,4 @@
-/**
+*
  * Created: 13 Mar, 2018
  */
 
@@ -960,7 +960,7 @@ ALTER TABLE `project_main` ADD `template_cat_id` INT(11) NOT NULL AFTER `id`;
 /*30.10.2019*/
 /* run patch remove_old_mail_campaign */
 
-/* live end */
+
 /* 05.11.2019 */
 ALTER TABLE `lead_management` ADD `website` VARCHAR(255) NOT NULL AFTER `company_name`;
 
@@ -976,7 +976,7 @@ ALTER TABLE `project_task` ADD `input_form_type` INT(2) NOT NULL DEFAULT '0' AFT
 
 ALTER TABLE `project_template_task` ADD `input_form_type` INT(2) NOT NULL DEFAULT '0' AFTER `is_input_form`; 
 
-CREATE TABLE project_task_sales_tax_process LIKE sales_tax_process 
+CREATE TABLE project_task_sales_tax_process LIKE sales_tax_process;
 
 ALTER TABLE `project_task_sales_tax_process` ADD `task_id` INT(11) NOT NULL AFTER `id`;
 
@@ -1003,3 +1003,32 @@ ALTER TABLE `bookkeeping` ADD `reference` VARCHAR(50) NOT NULL DEFAULT 'order' A
 /*import project_task_bookkeeper_department.sql*/
 
 ALTER TABLE `project_task_bookkeeper_department` ADD `adjustment` ENUM('n','y') NOT NULL COMMENT 'n for no, y for yes' AFTER `reconciled`; 
+
+/*20.11.19*/
+
+ALTER TABLE `project_template_task` ADD `bookkeeping_input_type` INT(4) NOT NULL DEFAULT '0' COMMENT '0 for default input, 1 for bank statement, 2 for bookkeeping bookkeeper, 3 for client manage' AFTER `input_form_type`; 
+
+ALTER TABLE `project_task` ADD `bookkeeping_input_type` INT(4) NOT NULL DEFAULT '0' COMMENT '0 for default input, 1 for bank statement, 2 for bookkeeping bookkeeper, 3 for client manage' AFTER `input_form_type` 
+
+/*21.11.19*/
+
+ALTER TABLE `project_task_bookkeeper_department` ADD `total_time` VARCHAR(100) NOT NULL AFTER `adjustment`; 
+
+/* 24.11.2019 */
+/* import weekly_sales_report.sql */
+
+/* live end */
+/*28.11.2019*/
+/* import invoice_recurence.sql*/
+ALTER TABLE `invoice_recurence` ADD `actual_due_day` INT(4) NOT NULL AFTER `due_month`, ADD `actual_due_month` INT(4) NOT NULL AFTER `actual_due_day`, ADD `actual_due_year` INT(4) NOT NULL AFTER `actual_due_month`; 
+
+ALTER TABLE `invoice_recurence` CHANGE `until_date` `until_date` DATE NULL DEFAULT NULL; 
+ALTER TABLE `invoice_recurence` CHANGE `duration_type` `duration_type` VARCHAR(25) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `invoice_recurence` CHANGE `status` `status` INT(2) NOT NULL DEFAULT '0';
+ALTER TABLE `invoice_recurence` CHANGE `due_type` `due_type` INT(4) NULL DEFAULT NULL; 
+
+ALTER TABLE `invoice_info` ADD `is_recurrence` ENUM('n','y') NOT NULL AFTER `status`; 
+
+/*02.12.2019*/
+
+ALTER TABLE `invoice_recurence` CHANGE `duration_time` `duration_time` INT(4) NULL DEFAULT NULL; 

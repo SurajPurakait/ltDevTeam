@@ -128,7 +128,7 @@ class Task extends CI_Controller {
         }
         //redirect(base_url() . 'action/home');
     }
-    public function task_input_form($task_id,$key='',$type='edit'){
+    public function task_input_form($task_id,$bookkeeping_input_type='',$type='edit'){
         $this->load->model('notes');
         $this->load->model('bookkeeping_model');
         $this->load->layout = 'dashboard';
@@ -143,7 +143,8 @@ class Task extends CI_Controller {
         $render_data['multiple']='y';
         $render_data['related_table_id']=11;
         $render_data['required']='n';
-        $render_data['key']=$key;
+        $render_data['bookkeeping_input_type']=$bookkeeping_input_type;
+        $render_data['client_id']='';
         $render_data['input_form_type']=$input_form_type=$this->Project_Template_model->getProjectTaskInputFormType($task_id);
 //      
         $client_dtls=$this->Project_Template_model->getClientDtlsByTaskId($task_id);
@@ -159,10 +160,12 @@ class Task extends CI_Controller {
             $render_data['county_details'] = $this->action_model->get_county_name();
             $render_data['sales_tax_process']=$this->Project_Template_model->getProjectTaskSalesTaxProcess($task_id);
         }if($input_form_type==1){
-            if($key==0){
+            if($bookkeeping_input_type==1){
             $render_data['client_id']=$client_dtls->client_id;
             $render_data['bookkeeping_details'] = $this->bookkeeping_model->get_bookkeeping_by_order_id($task_id,'project');
-            }else if($key==1|| $key==2){
+            $render_data['list'] = $this->service_model->get_document_list_by_reference($task_id, 'project');
+//            $this->load->view('services/show_document_list', $data);
+            }else if($bookkeeping_input_type==2|| $bookkeeping_input_type==3){
                 $render_data['bookkeeper_details']=$this->Project_Template_model->getProjetBookkeeperDetails($task_id);
             }
         }

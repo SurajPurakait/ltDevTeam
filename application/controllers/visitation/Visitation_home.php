@@ -14,7 +14,8 @@ class Visitation_home extends CI_Controller {
             $this->load->layout = 'dashboard';
             $title = "Visitation";
             $render_data['title'] = $title . ' | Tax Leaf';
-            $render_data['main_menu'] = 'visitation';
+            // $render_data['main_menu'] = 'visitation';
+            $render_data['main_menu'] = 'corporate_menu';
             $render_data['menu'] = 'visitation';
             $render_data['header_title'] = $title;
             $this->load->template('visitation/dashboard', $render_data);

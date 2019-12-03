@@ -299,15 +299,39 @@ h5 {
 .bg-aqua table {
     margin-bottom: 0;
 }
+/*.nav > li {
+    //border-bottom: 1px solid #4a5a6b;
+}*/
+
+
+/*---------------------------
+        Reports Page start
+-----------------------------*/
+.report-wrapper .tab-content{
+    padding: 0;
+}
+.report-wrapper .ibox-title, .report-wrapper .ibox-content {
+    border: 1px solid #e7eaec;
+}
+.table.report-table tr td{
+    vertical-align: middle !important;
+} 
+.table.report-table tr th{
+    text-align: center;
+}
+
+/*---------------------------
+        Reports Page end
+-----------------------------*/
 .nav > li {
     border-bottom: 1px solid #4a5a6b;
 }
+
 .nav > li.bottom-separator {
     border-bottom: 2px solid #a7b1c2;
 }
 .nav > li > a {
-/*    color: #a7b1c2;*/
-    color: #fff;
+    color: #a7b1c2;
     font-weight: 600;
     padding: 14px 20px 14px 25px;
 }
@@ -318,10 +342,33 @@ h5 {
     color: #ffffff;
 }
 .navbar-default .nav > li > a:hover,
+.navbar-default .nav > li > a:active,
 .navbar-default .nav > li > a:focus {
-    background-color: #293846;
-    color: white;
+    background-color: #495b6b;
+    color: #fff;
     z-index: 1;
+}
+.navbar-default .nav > li > a{
+    background: #2f404f;
+    color: #a7b1c2;
+}
+.navbar-default .nav > li > .nav-second-level li a{
+    background: #4f5861;
+    color: #fff;
+}
+.navbar-default .nav > li > .nav-second-level li a:hover, 
+.navbar-default .nav > li > .nav-second-level li.active a{
+    background: #606971;
+    color: #fff;
+}
+.navbar-default .nav > li > .nav-second-level li a.admin-nav{
+    background: #648645;
+    color: #fff;
+}
+.navbar-default .nav > li > .nav-second-level li a.admin-nav:hover, 
+.navbar-default .nav > li > .nav-second-level li.active a.admin-nav{
+    background: #8ab645;
+    color: #fff;
 }
 .navbar-default .nav > li > a.notification:hover ,.navbar-default .nav > li > a.notification:focus{
     z-index: 99;
@@ -451,12 +498,23 @@ body.body-small .navbar-top-links li:last-child {
     width: 100%;
 }
 .nav > li.active {
-/*    border-left: 4px solid #8ab645;*/
-    background: #293846;
+    border-left: 4px solid #293846;
+    background: #293846;  
 }
 .nav.nav-second-level > li.active {
     border: none;
+    background: #606971;
+   /* background: #609dd2;*/
 }
+.active-blue-bg.nav.nav-second-level > li.active a.bg-primary{
+    background: #609dd2 !important;
+}
+.active-blue-bg.nav.nav-second-level > li a.bg-primary:hover{
+    background: #609dd2 !important;
+}
+/*.blue-bg.nav.nav-second-level > li.bg-primary:hover{
+    background: #609dd2 !important;
+}*/
 .nav.nav-second-level.collapse[style] {
     height: auto !important;
 }
@@ -514,14 +572,14 @@ body.body-small .navbar-top-links li:last-child {
     border-bottom: none !important;
 }
 .nav-second-level li a {
-    padding: 7px 10px 7px 10px;
+    padding: 10px 10px 10px 10px;
     padding-left: 52px;
 }
 .nav-third-level li a {
     padding-left: 62px;
 }
 .nav-second-level li:last-child {
-/*    margin-bottom: 10px;*/
+    /*margin-bottom: 10px;*/
 }
 body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav li:hover > .nav-second-level,
 .mini-navbar .nav li:focus > .nav-second-level {
@@ -1894,7 +1952,7 @@ a.list-group-item.active:focus {
     position: relative;
 }
 /* DATATABLES */
-table.dataTable thead .sorting,
+/*table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc,
 table.dataTable thead .sorting_asc_disabled,
@@ -1918,6 +1976,52 @@ table.dataTable thead .sorting:after {
 }
 .dataTables_wrapper {
     padding-bottom: 30px;
+}*/
+/* DATATABLES */
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc,
+table.dataTable thead .sorting_asc_disabled,
+table.dataTable thead .sorting_desc_disabled {
+  background: transparent;
+}
+.dataTables_wrapper {
+  padding-bottom: 30px;
+}
+.dataTables_length {
+  float: left;
+}
+.dataTables_filter label {
+  margin-right: 5px;
+}
+.html5buttons {
+  float: right;
+}
+.html5buttons a {
+  border: 1px solid #e7eaec;
+  background: #fff;
+  color: #676a6c;
+  box-shadow: none;
+  padding: 6px 8px;
+  font-size: 12px;
+}
+.html5buttons a:hover,
+.html5buttons a:focus:active {
+  background-color: #eee;
+  color: inherit;
+  border-color: #d2d2d2;
+}
+div.dt-button-info {
+  z-index: 100;
+}
+@media (max-width: 768px) {
+  .html5buttons {
+    float: none;
+    margin-top: 10px;
+  }
+  .dataTables_length {
+    float: none;
+  }
 }
 /* CIRCLE */
 .img-circle {
@@ -8335,6 +8439,21 @@ a.text-danger.price-metarials:hover {
     padding: 8px 10px !important;
     border-radius: 0 2.5px 2.5px 0;
 }
+/*-------------*/
+.input-form-warning {
+    padding: 8px 0 8px 10px;
+    font-weight: 900;
+    background-color: #f8ac59;
+    color: #FFFFFF;
+}
+
+.input-form-warning a {
+    color: #fff !important;
+    background: #da8b36;
+    margin-left: 10px;
+    padding: 8px 10px !important;
+    border-radius: 0 2.5px 2.5px 0;
+}
 /*------------------------------------------
    under administration menu project temptlate
 -------------------------------------------*/
@@ -8570,7 +8689,12 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 #report-tab_wrapper #report-tab_filter input{
     margin-left: 0.5em;
 }
-
+.watch {
+    background: #8ab6456e;
+    width: 235px;
+    padding: 10px 25px;
+    border-radius: 5px;
+}
 
 /* Responsive design */
 

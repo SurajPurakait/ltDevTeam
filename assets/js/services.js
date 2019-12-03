@@ -61,9 +61,11 @@ function change_referred_name_status(referred_source) {
     if (referred_source == '1' || referred_source == '9' || referred_source == '10' || referred_source == '') {
         $("#referred-label").html('Referred By Name');
         $("#referred_by_name").removeAttr('required');
+        $(".chosen-select").chosen();
     } else {
         $("#referred-label").html('Referred By Name<span class="text-danger">*</span>');
         $("#referred_by_name").attr('required', true);
+        $(".chosen-select").chosen();
     }
 }
 
@@ -1961,6 +1963,7 @@ function LeadSourceTypeChange(lead_source_type) {
 function clientTypeChange(client_type, new_reference_id, reference, service_id) {
     clearErrorMessageDiv();
     if (parseInt(client_type) == 0) {
+        $('.chosen-select').chosen();
         $('.client_type_field0').prop('required', true);
         $('.client_type_div0').show();
         $('.client_type_field1').val('');
@@ -1973,6 +1976,7 @@ function clientTypeChange(client_type, new_reference_id, reference, service_id) 
                 url: base_url + 'services/home/get_existing_client_list',
                 success: function (result) {
                     $('#client_list_ddl').html("<option value=''>Select an option</option>" + result);
+                    $('#client_list_ddl').chosen();
                 },
                 beforeSend: function () {
                     openLoading();
@@ -1983,6 +1987,7 @@ function clientTypeChange(client_type, new_reference_id, reference, service_id) 
             });
         }
     } else if (parseInt(client_type) == 1) {
+        $('.chosen-select').chosen();
         $('.client_type_field1').prop('required', true);
         $('.client_type_div1').show();
         $('.client_type_field0').val('');
@@ -1992,6 +1997,7 @@ function clientTypeChange(client_type, new_reference_id, reference, service_id) 
         $("#contact-list").html(blank_contact_list());
         $("#owners-list").html(blank_owner_list());
     } else {
+        $('.chosen-select').chosen();
         $('.client_type_field1').prop('required', false);
         $('.client_type_div1').hide();
         $('.client_type_field0, .client_type_div1').val('');
@@ -2148,11 +2154,13 @@ function annual_date(reference_id) {
 function individualTypeChange(client_type, new_reference_id, reference) {
     clearErrorMessageDiv();
     if (parseInt(client_type) == 0) {
+        $('.chosen-select').chosen();
         $('.client_type_field0').prop('required', true);
         $('.client_type_div0').show();
         $('.required_field').prop('required', false);
         $('.display_div').hide();
     } else {
+        $('.chosen-select').chosen();
         $('.client_type_field0').val('');
         $('.client_type_field0').prop('required', false);
         $('.client_type_div0').hide();

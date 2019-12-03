@@ -196,11 +196,11 @@
                         <div class="hr-line-dashed"></div>
                         <h3>Language</h3>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Default Language<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 control-label">Original Language<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
                                 <select class="form-control value_field required_field" id="language_dif" name="language_dif" title="Language" required="">
                                         <option value="">Select an option</option>
-                                        <?php load_ddl_option("language_list"); ?>
+                                        <?php load_ddl_option("language_list_for_legal_translations"); ?>
                                     </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
@@ -211,8 +211,8 @@
                             <div class="col-lg-10">
                                 <select class="form-control value_field required_field" id="language_new" name="language_new[]" title="Language" required="" multiple>
                                         <option value="">Select an option</option>
-                                        <?php load_ddl_option("language_list"); ?>
-                                    </select>
+                                        <?php load_ddl_option("language_list_for_legal_translations"); ?>
+                                </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -220,24 +220,25 @@
 
                         <h3>Price</h3>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Retail Price</label>
+                            <label class="col-lg-2 control-label">Amount Of Pages</label>
                             <div class="col-lg-10">
-                                 <input readonly="" placeholder="" id="employee-retail-price" class="form-control retprice" type="text" title="Retail Price" value="<?= $service_info['retail_price']; ?>" name="retail_price">
-                                <div class="errorMessage text-danger"></div>
+                                <!-- <select class="form-control" name="pages" id="pages" onchange="change_price(<?//= $service_info['retail_price']; ?>,this.value);">
+                                    <option value="1" selected>1</option>
+                                    <?php// for($i=2; $i<=10; $i++){
+                                       // echo "<option value=".$i.">".$i."</option>";
+                                    //}
+                                    ?>    
+                                </select>  -->
+                                <input class="form-control" type="number" id="pages" name="pages" title="Amount Of Pages" onchange="change_price(<?= $service_info['retail_price']; ?>,this.value);">
+                                <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Amount Of Pages</label>
+                            <label class="col-lg-2 control-label">Retail Price</label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="pages" id="pages" onchange="change_price(<?= $service_info['retail_price']; ?>,this.value);">
-                                    <option value="1" selected>1</option>
-                                    <?php for($i=2; $i<=10; $i++){
-                                        echo "<option value=".$i.">".$i."</option>";
-                                    }
-                                    ?>    
-                                </select> 
-                                <div class="errorMessage text-danger"></div>        
+                                 <input readonly="" placeholder="" id="employee-retail-price" class="form-control retprice" type="text" title="Retail Price" value="<?= $service_info['retail_price']; ?>" name="retail_price">
+                                <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
 

@@ -19,7 +19,8 @@ class Service_setup extends CI_Controller
         $this->load->layout = 'dashboard';
         $title = "Service Setup";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'administration';
+        // $render_data['main_menu'] = 'administration';
+        $render_data['main_menu'] = 'services';
         $render_data['menu'] = 'service_setup';
         $render_data['header_title'] = $title;
         $render_data['service_list'] = $this->administration->get_service_list();

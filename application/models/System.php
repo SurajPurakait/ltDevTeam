@@ -133,6 +133,13 @@ Class System extends CI_Model {
         return $this->db->where("status", "1")->order_by("language", "asc")->get("languages")->result_array();
     }
 
+    public function get_languages_for_legal_translations() {
+        $this->db->where("status", "1");
+        $this->db->where("language!=", "French");
+        $this->db->order_by("language", "asc");
+        return $this->db->get("languages")->result_array();
+    }
+
     public function count_duplicate_field($table, $where_data) {
         return $this->db->get_where($table, $where_data)->num_rows();
     }
@@ -515,8 +522,11 @@ Class System extends CI_Model {
             $and = " and (sns.staff_id='" . sess('user_id') . "' or sn.added_by_user='" . sess('user_id') . "')";
         }
 //        $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.reference_id='" . $ref_id . "'and sns.staff_id='".sess('user_id')."' and sn.service_id='" . $service_id . "'$and group by sn.msg order by sn.id asc";
-        $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.reference_id='" . $ref_id . "' group by sn.id order by sn.id asc";
-
+        if($reference=='projects'){
+            $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.service_id='" . $service_id . "' group by sn.id order by sn.id asc";
+        }else{
+            $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.reference_id='" . $ref_id . "' group by sn.id order by sn.id asc";
+        }
 //        echo $query;die;
         $res = $this->db->query($query)->result_array();
 
@@ -999,7 +1009,7 @@ Class System extends CI_Model {
         }
     }
 
-    public function get_general_notification_by_user_id($user_id, $limit = '', $where = [], $start = '', $request_type = '') {
+    public function get_general_notification_by_user_id($user_id, $limit = '', $where = [], $start = '', $request_type = '',$action_id='') {
         // echo $user_id;die;
         // For fetch all general notifications @sumanta
 //        echo $request_type;die;
@@ -1058,6 +1068,9 @@ Class System extends CI_Model {
 
         if (!empty($where)) {
             $this->db->where($where);
+        }
+        if(!empty($action_id)){
+            $this->db->where(['reference'=>'action','reference_id'=>$action_id]);
         }
 
         $this->db->group_by(array("gn.added_by", "gn.reference_id", "gn.reference", "gn.action"));

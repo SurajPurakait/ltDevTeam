@@ -567,16 +567,24 @@ class Patch extends CI_Controller {
     }
 
     public function update_practice_id() {
-        $client_list = $this->db->get('internal_data')->result_array();
+        $sql = "SELECT * FROM `internal_data` WHERE `practice_id`=''";
+        $client_list = $this->db->query($sql)->result_array();
         foreach ($client_list as $key => $cl) {
-            if (trim($cl['practice_id']) == '') {
+//            if (trim($cl['practice_id']) == '') {   // this condition is removed for updating all client's practice_id update
                 $reference_id = $cl['reference_id'];
                 if ($cl['reference'] == 'individual') {
                     $details = $this->db->get_where('individual', ['id' => $reference_id])->row_array();
                     $name = trim($details['last_name']) . trim($details['first_name']);
+                    if (empty($name)) {
+                        $details = $this->db->get_where('company', ['company_id' => $reference_id])->row_array();
+                        $name = strtoupper(str_replace(' ', '', trim($details['name'])));
+                        $c = preg_replace("/[^a-zA-Z0-9]/", "", $name);
+                        $practice_id = substr($c, 0, 11);                            
+                    }
                     $name = strtoupper(str_replace(' ', '', $name));
                     $c = preg_replace("/[^a-zA-Z0-9]/", "", $name);
                     $practice_id = substr($c, 0, 11);
+
                 } elseif ($cl['reference'] == 'company') {
                     $details = $this->db->get_where('company', ['id' => $reference_id])->row_array();
                     $name = strtoupper(str_replace(' ', '', trim($details['name'])));
@@ -587,8 +595,9 @@ class Patch extends CI_Controller {
                 $update_data['practice_id'] = $practice_id;
                 $this->db->where('id', $cl['id']);
                 $this->db->update('internal_data', $update_data);
-            }  //end practice_id blank checking   
+//            }  //end practice_id blank checking   
         } //end foreach
+        echo "success";
     }
 
     public function update_service_request_department() {
@@ -691,7 +700,7 @@ class Patch extends CI_Controller {
         $staffrole = $staff_info['role'];
         $staff_office = $staff_info['office'];
         $departments = explode(',', $staff_info['department']);
-
+        $this->db->query('TRUNCATE royalty_report');
         $select = [
             'inv.id as invoice_id',
             'inv.reference_id as reference_id',
@@ -724,6 +733,7 @@ class Patch extends CI_Controller {
             '(SELECT CONCAT(",",GROUP_CONCAT(`service_id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services',
             '(SELECT CONCAT(",",GROUP_CONCAT(`id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_orders',
             '(SELECT CONCAT(",",GROUP_CONCAT(`total_of_order`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services_override',
+            // '(CASE WHEN ord.quantity = 0 THEN (SELECT SUM(srv.price_charged) FROM `order` WHERE `ord`.`id` = `srv`.`order_id`) ELSE (SELECT SUM(srv.price_charged*ord.quantity) FROM `order` WHERE `ord`.`id` = `srv`.`order_id`) END) as all_services_override',
             '(SELECT CONCAT(",",GROUP_CONCAT(`payment_type`), ",") FROM `payment_history` WHERE `invoice_id` = ord.invoice_id AND `order_id` = ord.id) AS payment_types',
             '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
         ];
@@ -747,8 +757,6 @@ class Patch extends CI_Controller {
                 'INNER JOIN `payment_history` AS `pyh` ON `pyh`.`invoice_id` = `inv`.`id`';
 
         $query = 'SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id`';
-        // $query .= ' order by ' . $columnName . ' ' . $columnSortOrder;
-        // $query .= ' limit ' . $row . ',' . $rowperpage;
         $this->db->query('SET SQL_BIG_SELECTS=1');
         $royalty_reports_data = $this->db->query($query)->result_array();
 
@@ -764,7 +772,7 @@ class Patch extends CI_Controller {
                     $collected = array_sum(array_column($payment_history,'collected'));    
                     $total_net = (explode(',',$rpd['all_services_override'])[$i] != '') ? explode(',',$rpd['all_services_override'])[$i] - $service_detail['cost'] : $service_detail['retail_price'] - $service_detail['cost'];
                     $override_price = explode(',',$rpd['all_services_override'])[$i];
-                    $date = date('Y-m-d', strtotime($rpd['created_time']));
+                    $date_val = date('Y-m-d', strtotime($rpd['created_time']));
                     $fee_with_cost = (($total_net * $office_fees)/100);                    
                     $fee_without_cost = (($override_price * $office_fees)/100);
                     if (($override_price - $collected) == 0) {
@@ -778,7 +786,7 @@ class Patch extends CI_Controller {
                     }
 
                     $data = array(
-                        "date" => $date,
+                        "date" => $date_val,
                         "client_id" => $rpd['practice_id'],
                         "invoice_id" => $rpd['invoice_id'],
                         "service_id" => $rpd['invoice_id']."-".$i,
@@ -798,9 +806,23 @@ class Patch extends CI_Controller {
                         "office_id" => $rpd['office_id'],
                         "created_by" => $rpd['created_by']
                     );
-                    $this->db->insert('royalty_report',$data);                    
+                    $this->db->insert('royalty_report',$data);
                 } 
             }
+            // $total_data = $this->db->get('royalty_report')->result_array();
+            // $total_arr = array(
+            //     "invoice_id" => count($total_data)-1,
+            //     "retail_price" => array_sum(array_column($total_data,'retail_price')),
+            //     "cost" => array_sum(array_column($total_data,'cost')),
+            //     "collected" => array_sum(array_column($total_data,'collected')),
+            //     "total_net" => array_sum(array_column($total_data,'total_net')),
+            //     "override_price" => array_sum(array_column($total_data,'override_price')),
+            //     "fee_with_cost" => array_sum(array_column($total_data,'fee_with_cost')),
+            //     "fee_without_cost" => array_sum(array_column($total_data,'fee_without_cost'))
+
+            // );
+            // $this->db->where('id',1);
+            // $this->db->update('royalty_report',$total_arr);
             echo "Successfully Inserted";
         } else {
             $data = array();

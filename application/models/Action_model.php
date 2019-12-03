@@ -115,7 +115,7 @@ class Action_model extends CI_Model {
 
                 $this->db->where(['added_by_user' => $staff_id, 'my_task' => 0]);
             } elseif ($request == 'tome') {
-                $having[] = 'all_action_staffs LIKE "%,' . $staff_id . ',%" AND added_by_user != "' . $staff_id . '" AND my_task = "0" AND is_all = "0"';
+                $having[] = 'all_action_staffs LIKE "%,' . $staff_id . ',%" AND added_by_user != "' . $staff_id . '" AND my_task = "0"';
             } elseif ($request == 'byother') {
                 if ($user_type == 1 || ($user_type == 2 && $user_department == 14)) {
                     $this->db->where(['my_task' => 0, 'added_by_user!=' => $staff_id]);
@@ -1208,6 +1208,7 @@ class Action_model extends CI_Model {
             } else {
                 $this->db->where("type", 1);
             }
+            $this->db->where("status", 1);
             return $this->db->get("office")->result_array();
         } else {
             return $this->administration->get_office_by_staff_id(sess("user_id"));
@@ -3172,7 +3173,7 @@ class Action_model extends CI_Model {
         $manager_id = $this->get_partner_mngr($manager_fname, $manager_lname, $ofc_id);
 
         $lang = $this->get_lang_id($data['owner_language']);
-
+        
         $internal_lang = $this->get_lang_id($data['internal_language']);
 
         $referred_by_source = $this->get_referred_by_source($data['referred_by_source']);
@@ -3244,12 +3245,15 @@ class Action_model extends CI_Model {
         if (isset($data['practice_id']) && $data['practice_id'] != '') {
             $practice_id = $data['practice_id'];
         } else {
-            $comp_name = str_replace(' ', '', $data['company_name']);
-            if (strlen($comp_name) <= 12) {
-                $practice_id = $comp_name;
-            } else {
-                $practice_id = substr($comp_name, 12);
-                ;
+            if($reference=='individual'){
+                $practice_id='';
+            }else{
+                $comp_name = str_replace(' ', '', $data['company_name']);
+                if (strlen($comp_name) <= 12) {
+                    $practice_id = $comp_name;
+                } else {
+                    $practice_id = substr($comp_name, 12);
+                }
             }
         }
         $update_data = array(
