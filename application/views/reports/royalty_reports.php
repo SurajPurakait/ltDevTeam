@@ -4,7 +4,7 @@
             <div class="ibox float-e-margins form-inline">
                 <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" multiple>
                 	<?php
-                		load_ddl_option("users_office_list", "","");
+                		load_ddl_option("staff_office_list", "","");
                 	?>
                 </select> &nbsp;
                 <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">

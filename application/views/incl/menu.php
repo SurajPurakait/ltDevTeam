@@ -700,7 +700,9 @@ $office_id = get_office_id($staff_info['office']);
                         </li>
                     <?php } ?>
 
-                     <?php if ($staff_info['type'] == '1' || $staff_info['type'] == '3') { ?>
+                     <?php 
+                        // if ($staff_info['type'] == '1' || $staff_info['type'] == '3' ) { 
+                    ?>    
                         <li <?= active_menu($menu, "report_3"); ?>>
                             <a href="javascript:void(0);">
                                 <!--<i class="fa fa-comment"></i>-->
@@ -726,7 +728,9 @@ $office_id = get_office_id($staff_info['office']);
                             <a href="<?php // echo base_url() ?>reports/index/4">Franchisees</a>
                         </li>-->
 
-                    <?php } ?>
+                    <?php 
+                       // } 
+                    ?>
                         
                         <li <?= active_menu($menu, ""); ?>>
                             <a href="#">Leafnet</a>
