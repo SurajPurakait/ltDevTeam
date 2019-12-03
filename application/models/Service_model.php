@@ -610,6 +610,7 @@ class Service_model extends CI_Model {
             $sql .= " ORDER BY ord.id DESC";
         }
         $this->db->query('SET SQL_BIG_SELECTS=1');
+        // echo $sql;exit;
         $result = $this->db->query($sql)->result();
 //        echo count($result);
 //        echo $this->db->last_query();
@@ -2788,5 +2789,26 @@ class Service_model extends CI_Model {
         $sql = "SELECT MIN(order_date) as order_date FROM `order` where date_format(order_date,'%Y-%m-%d')!='0000-00-00' order by order_date asc";
         $start_date = $this->db->query($sql)->row_array()['order_date'];
         return date("m/d/Y", strtotime($start_date));
+    }
+
+    public function get_service_by_franchise_data() {
+        $data_office = $this->system->get_staff_office_list();
+        $office_details = [];
+        
+        foreach ($data_office as $do) {    
+            $data = [
+                'office_name' => $do['name'],
+                'totals' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id']))->num_rows(),
+                'new' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'status'=>'2'))->num_rows(),
+                'started' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'status'=>'1'))->num_rows(),
+                'completed' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'status'=>'0'))->num_rows(),
+                'less_than_30' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'late_status'=>'1'))->num_rows(),
+                'less_than_60' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'late_status'=>'1'))->num_rows(),
+                'more_than_60' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'late_status'=>'1'))->num_rows(),           
+                'sos' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'sos !='=>''))->num_rows()           
+            ];
+            array_push($office_details,$data);
+        }
+        return $office_details;
     }
 }
