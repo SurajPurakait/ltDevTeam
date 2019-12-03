@@ -224,6 +224,8 @@ function saveInvoice() {
     if (editval != '') {
         $('.disabled_field').removeAttr('disabled');
     }
+    var is_recurrence=$('#is_recurrence').val();
+    
     var form_data = new FormData(document.getElementById('form_create_invoice'));
 //    invoice recurence section
     var pattern = $("#pattern option:selected").val();
@@ -231,6 +233,7 @@ function saveInvoice() {
 //        $("#err_generation").html("Please Select Pattern From Generation.");
 //        return false;
 //    }
+    
 if(pattern!=''){
     if (pattern == 'annually') {
             var due_day = $("#r_day").val();
@@ -289,7 +292,11 @@ if(pattern!=''){
                         if ($("#edit_type").val() == 'edit_place') {
                             goURL(base_url + 'billing/invoice/place/' + result);
                         } else {
-                            goURL(base_url + 'billing/home');
+                            if(is_recurrence==''){
+                                goURL(base_url + 'billing/home');
+                            }else{
+                                goURL(base_url + 'billing/home/index/y');
+                            }
                         }
                     });
                 } else {
@@ -1080,6 +1087,7 @@ function refresh_existing_individual_list(officeID = '', clientID = '') {
         dataType: "html",
         success: function (result) {
             $("#individual_list_ddl").html(result);
+            $("#individual_list_ddl").chosen();
         },
         beforeSend: function () {
             openLoading();

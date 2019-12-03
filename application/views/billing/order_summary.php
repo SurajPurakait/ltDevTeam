@@ -222,7 +222,14 @@
                         endif;
                     endforeach;
                 endif;
+                $invoice_recurrence = get_invoice_recurring_details($invoice_id);
+                if(!empty($invoice_recurrence)){
                 ?>
+                                        <tr class="bg-light-green">
+                                            <td><h3>Invoice Recurrence</h3></td>
+                                            <td>Pattern: <?= $invoice_recurrence->pattern  ?></td>
+                                        </tr>
+                <?php } ?>
             </tbody>
         </table>
         <div clas="text-center">

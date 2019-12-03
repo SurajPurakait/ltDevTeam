@@ -1028,3 +1028,7 @@ ALTER TABLE `invoice_recurence` CHANGE `status` `status` INT(2) NOT NULL DEFAULT
 ALTER TABLE `invoice_recurence` CHANGE `due_type` `due_type` INT(4) NULL DEFAULT NULL; 
 
 ALTER TABLE `invoice_info` ADD `is_recurrence` ENUM('n','y') NOT NULL AFTER `status`; 
+
+/*02.12.2019*/
+
+ALTER TABLE `invoice_recurence` CHANGE `duration_time` `duration_time` INT(4) NULL DEFAULT NULL; 
