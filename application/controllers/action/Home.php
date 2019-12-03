@@ -67,10 +67,15 @@ class Home extends CI_Controller {
             $department_id = '';
         }
 //        if ($status == 'all') {
-            $status = '';
+            // $status = '';
 //        }
-        $render_data['stat'] = $status;
+        if($status != ''){
         $render_data['status'] = $status;
+        }else{
+        $render_data['status'] = $status;    
+        }
+        $render_data['stat'] = $status;
+        // $render_data['status'] = $status;
         $render_data['office_id'] = $office_id;
         $render_data['department_id'] = $department_id;
         $render_data['request_type'] = $request_type;
