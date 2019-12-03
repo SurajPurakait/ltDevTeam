@@ -1032,3 +1032,11 @@ ALTER TABLE `invoice_info` ADD `is_recurrence` ENUM('n','y') NOT NULL AFTER `sta
 /*02.12.2019*/
 
 ALTER TABLE `invoice_recurence` CHANGE `duration_time` `duration_time` INT(4) NULL DEFAULT NULL; 
+
+03.12.2019
+
+ALTER TABLE `royalty_report` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT; 
+ALTER TABLE `royalty_report` CHANGE `office_id` `office_id` VARCHAR(100) NULL DEFAULT '0'; 
+
+ALTER TABLE `royalty_report` CHANGE `office_fee` `office_fee` VARCHAR(100) NULL DEFAULT '0'; 
+ALTER TABLE `royalty_report` CHANGE `invoice_id` `invoice_id` INT(4) NOT NULL; 
