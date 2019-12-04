@@ -233,7 +233,9 @@
                 //            alert(result);
                 //            return false;
                 //console.log("Result: " + result);
+                $("#client_list_ddl").chosen('destroy');
                 $("#client_list_ddl").html(result);
+                $("#client_list_ddl").chosen();
             },
             beforeSend: function () {
                 openLoading();
