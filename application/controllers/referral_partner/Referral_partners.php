@@ -128,27 +128,27 @@ class Referral_partners extends CI_Controller {
         $this->referral_partner->set_password($referral_partner_data, $pwd,$staffrequestedby);
         
         // Sending email From Manager to Partner
-        // $config = Array(
-        //    'protocol' => 'smtp',
-        //    'smtp_host' => 'ssl://smtp.gmail.com',
-        //    'smtp_port' => 465,
-        //    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-        //    'smtp_pass' => 'codetestml0016@123', // change it to yours
-        //    'mailtype' => 'html',
-        //    'charset' => 'utf-8',
-        //    'wordwrap' => TRUE
-        // );
+//        $config = Array(
+//           'protocol' => 'smtp',
+//           'smtp_host' => 'ssl://smtp.gmail.com',
+//           'smtp_port' => 465,
+//           'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+//           'smtp_pass' => 'codetestml0016@123', // change it to yours
+//           'mailtype' => 'html',
+//           'charset' => 'utf-8',
+//           'wordwrap' => TRUE
+//        );
 
-        $config = Array(
-                //'protocol' => 'smtp',
-                'smtp_host' => 'mail.leafnet.us',
-                'smtp_port' => 465,
-                'smtp_user' => 'developer@leafnet.us', // change it to yours
-                'smtp_pass' => 'developer@123', // change it to yours
-                'mailtype' => 'html',
-                'charset' => 'utf-8',
-                'wordwrap' => TRUE
-        );
+         $config = Array(
+                 //'protocol' => 'smtp',
+                 'smtp_host' => 'mail.leafnet.us',
+                 'smtp_port' => 465,
+                 'smtp_user' => 'developer@leafnet.us', // change it to yours
+                 'smtp_pass' => 'developer@123', // change it to yours
+                 'mailtype' => 'html',
+                 'charset' => 'utf-8',
+                 'wordwrap' => TRUE
+         );
         $partner_name = $referral_partner_data['first_name'].' '.$referral_partner_data['last_name'];
         $from = staff_info_by_id($staffrequestedby)['user'];
         $from_name_details = staff_info_by_id($staffrequestedby);
@@ -170,15 +170,17 @@ class Referral_partners extends CI_Controller {
         if ($referral_partner_data['office'] == 1 || $referral_partner_data['office'] == 18 || $referral_partner_data['office'] == 34) {
             $bgcolor = '#00aec8';
             $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
+            $divider_style = 'background:#00aec8;height:10px;';
         } else {
             $bgcolor = '#8ab645';
             $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
+            $divider_style = 'background:#8ab645;height:10px;';
         }
         $url_link = 'https://leafnet.us/';
         $mail_body ='<td style="padding: 0px">
                         <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td style="text-align: center;">
+                                <td style="text-align: left;">
                                     <h3 style="padding-bottom: 10px;">Hello '.$partner_name.',</h3>
                                     <p style="margin-bottom: 0;">Welcome to Leafnet.</p>
                                     <p style="margin-bottom: 0; margin-top: 5px;">You have access to a new portal.</p>
@@ -186,29 +188,23 @@ class Referral_partners extends CI_Controller {
                                 </td>
                             </tr>
                         </table>
-                        <table style="text-align: center; width:100%;" border="0" cellpadding="0" cellspacing="0">
+                        <table style="text-align: left; width:100%;" border="0" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td style="text-align: right; padding: 0 2px 0px 50px;">
-                                    <p style="margin-bottom: 5px; margin-top: 0; color: #06a0d6; font-weight: 600;">Username :</p> 
-                                </td>
                                 <td style="text-align: left;">
-                                    <p style="margin-top: 5px; width: 180px;"> '.$referral_partner_data['email'].'</p> 
+                                    <p style="margin-bottom: 5px; margin-top: 0; "><span style="color: #06a0d6; font-weight: 600; width: 200px;">Username </span>:&nbsp; '.$referral_partner_data['email'].'</p> 
                                 </td>
                             </tr>
                             <tr>
-                                <td style="text-align: right; padding: 0 2px 0 50px;">
-                                    <p style="margin-top: 0; color: #06a0d6; font-weight: 600;">Password : </p>
-                                </td>
-                                <td style="text-align: left; ">
-                                    <p style="margin-bottom: 12px; margin-top: 0; width: 180px;">'.$pwd.'</p> 
+                                <td style="text-align: left;">
+                                    <p style="margin-bottom: 0px; margin-top: 0; "><span style="color: #06a0d6; font-weight: 600; width: 200px;">Password  </span>:&nbsp; '.$pwd.'</p>
                                 </td>
                             </tr>
                         </table>
                         <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td style="text-align: center; padding: 0px 60px 0px 60px;">
-                                    <h3 style="margin-top:0px;"><a style="color: #0990bf; text-decoration: none; font-weight: 600;" href="http://leafnet.us/" target="_blank">Login Here ( leafnet.us )</a></h3>
-                                    <h3 style="padding-top: 20px;">Thank you !</h3>
+                                <td style="text-align: left;">
+                                    <p style="padding-top: 20px;"><a style="color: #0990bf; text-decoration: none; font-weight: 600;" href="http://leafnet.us/" target="_blank">Login Here!</a></p>
+                                    <h3 style="padding-bottom: 20px;">Thank you</h3>
                                 </td>
                             </tr>
                         </table>
@@ -246,30 +242,54 @@ class Referral_partners extends CI_Controller {
                 </head>
                 <body>
                     <br/>
-                    <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
+                    <table width="600" border="0" bgcolor="' . $bgcolor . '" cellpadding="0" cellspacing="10">
                         <tr>
                             <td>
-                                <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <td style="background: #fff;padding:5px 10px;"><a href="http://leafnet.us/" target="_blank"><img src="' . $user_logo_fullpath . '" width="250"/></a></td>
-                                        <td style="text-align:right;width:200px;background: #fff;padding:5px 10px;">
-                                        <a href="http://leafnet.us/" target="_blank"><img src="' .$user_logo_default. '" alt="site-logo" style="width: 150px;"></a>
-                                    </td>
+                                <table width="600" border="0" cellpadding="0" cellspacing="0">
+                                    <tr style="background: #fff;">
+                                        <td style="padding: 25px 20px;">
+                                            <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td style="text-align: left; width: 200px;">
+                                                        <a href="http://leafnet.us/" target="_blank"><img src="' . $user_logo_fullpath . '" alt="site-logo" style="width:150px"></a>
+                                                    </td>
+                                                    <td style="text-align: right; width: 200px;">
+                                                        <a href="http://leafnet.us/" target="_blank"><img src="' .$user_logo_default. '" alt="site-logo" style="width:150px"></a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
                                     </tr>
+
+
                                 </table>
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>
-                                        <td><img src="' . $divider_img . '" width="600" height="15"/></td>
+                                        <td style="'.$divider_style.'"></td>
                                     </tr>
                                 </table>
-                                <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
+                                <table width="600" bgcolor="#FFFFFF" border="0" cellpadding="0" cellspacing="15">
                                     ' . $mail_body . '
                                 </table>          
-                                <table width="600" border="0" align="center" cellpadding="0" cellspacing="0"></table>
+                                <table width="600" border="0" cellpadding="0" cellspacing="0"></table>
                             </td>
                         </tr>
                         <tr>
-                            <td height="100" valign="top">&nbsp;</td>
+                            <td valign="top">
+                                <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
+                                    <tr style="background: transparent; height: 60px;">
+                                        <td style="text-align: center;">
+                                            <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Home</a>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Services</a>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Chat</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
                         </tr>
                     </table>
                     <br/>
