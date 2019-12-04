@@ -49,7 +49,11 @@ class Home extends CI_Controller {
         $title = "Invoice Dashboard";
         $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['main_menu'] = 'billing';
-        $render_data['menu'] = 'billing_dashboard';
+        if($is_recurrence=='y'){
+            $render_data['menu'] = 'recurring_invoice';
+        }else{
+            $render_data['menu'] = 'billing_dashboard';
+        }
         $render_data['header_title'] = $title;
         $render_data['page_heading'] = 'Billing Dashboard';
         if($is_recurrence=='y'){
