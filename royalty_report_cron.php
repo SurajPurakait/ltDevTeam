@@ -32,7 +32,7 @@
         'inv.start_month_year as start_month_year',
         'inv.existing_practice_id as existing_practice_ID',
         'inv.status as invoice_status',
-        '(SELECT COUNT(*) FROM `order` WHERE invoice_id = inv.id AND reference = 'invoice') as services',
+        '(SELECT COUNT(*) FROM `order` WHERE invoice_id = inv.id AND reference = \'invoice\') as services',
         'indt.office as office_id',
         '(SELECT ofc.name FROM office as ofc WHERE ofc.id = indt.office) as office',
         '(SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as officeid',
@@ -43,9 +43,9 @@
         '(SELECT CONCAT(",",GROUP_CONCAT(`id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_orders',
         '(SELECT CONCAT(",",GROUP_CONCAT(`total_of_order`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services_override',
         '(SELECT CONCAT(",",GROUP_CONCAT(`payment_type`), ",") FROM `payment_history` WHERE `invoice_id` = ord.invoice_id AND `order_id` = ord.id) AS payment_types',
-        '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = 'payment' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
+        '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
     ];
-    $where['ord.reference'] = '`ord`.`reference` = 'invoice' ';
+    $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
     $where['status'] = 'AND `inv`.`status` != 0 ';
 
     $table = '`invoice_info` AS `inv` ' .
