@@ -57,6 +57,7 @@
                                                             <br>
                                                             Email: <?= $contact["email1"]; ?>
                                                             <br>
+                                                            Address: 
                                                             <?= $contact["address1"]; ?>, <?= $contact["city"]; ?>,
                                                             <?= $contact["state_name"]; ?>,
                                                             <!-- ZIP:  -->
