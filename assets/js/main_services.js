@@ -225,9 +225,9 @@ function save_contact() {
 }
 
 function save_document() {
-    if (!requiredValidation('form_document')) {
-        return false;
-    }
+    // if (!requiredValidation('form_document')) {
+    //     return false;
+    // }
     var form_data = new FormData(document.getElementById('form_document'));
     var reference = $("form#form_document #reference").val();
     var reference_id = $("form#form_document #reference_id").val();
