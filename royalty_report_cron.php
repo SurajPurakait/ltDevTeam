@@ -79,8 +79,8 @@
                     array_push($payment_history,$payment);
                 } 
                 $reference = implode(',',array_column($payment_history,'reference'));
-                $authorization_id = implode(',',array_column($payment_history,'authorization_id'));
-                // $authorization_id= str_replace("'", '', $authorization_id);
+                $authorization_id_without_slash = implode(',',array_column($payment_history,'authorization_id'));
+                $authorization_id = addslashes($authorization_id_without_slash);
                 $payment_type = implode(',',array_column($payment_history,'payment_type'));
                 $collected = array_sum(array_column($payment_history,'collected')); 
                 $override_price = explode(',',$rpd['all_services_override'])[$i];
@@ -119,11 +119,9 @@
                 \''.$reference.'\',\''.$total_net.'\',\''.$office_fees.'\',
                 \''.$fee_with_cost.'\',\''.$fee_without_cost.'\',\''.$office_id.'\',
                 \''.$created_by.'\')';
-                // echo $sql_query."<hr>";
                 mysqli_query($conn,$sql_query)or die('insert error');
             }
         } 
-    // die;
     echo "Success";
     } 
 
