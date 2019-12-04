@@ -112,13 +112,13 @@
                 $created_by = $rpd['created_by'];
 
                 $sql_query = 'INSERT INTO `royalty_report`(`date`, `client_id`, `invoice_id`, `service_id`, `service_name`, `retail_price`, `override_price`, `cost`, `payment_status`, `collected`, `payment_type`, `authorization_id`, `reference`, `total_net`, `office_fee`, `fee_with_cost`, `fee_without_cost`, `office_id`, `created_by`) VALUES (
-                "'.$date_val.'", "'.$practice_id.'","'.$invoice_id.'",
-                "'.$services_ids.'","'.$service_details.'","'.$retail_price.'",
-                "'.$override_price.'","'.$service_cost.'","'.$payment_status.'",
-                "'.$collected.'","'.$payment_type.'","'.$authorization_id.'",
-                "'.$reference.'","'.$total_net.'","'.$office_fees.'",
-                "'.$fee_with_cost.'","'.$fee_without_cost.'","'.$office_id.'",
-                "'.$created_by.'")';
+                \''.$date_val.'\', \''.$practice_id.'\',\''.$invoice_id.'\',
+                \''.$services_ids.'\',\''.$service_details.'\',\''.$retail_price.'\',
+                \''.$override_price.'\',\''.$service_cost.'\',\''.$payment_status.'\',
+                \''.$collected.'\',\''.$payment_type.'\',\''.$authorization_id.'\',
+                \''.$reference.'\',\''.$total_net.'\',\''.$office_fees.'\',
+                \''.$fee_with_cost.'\',\''.$fee_without_cost.'\',\''.$office_id.'\',
+                \''.$created_by.'\')';
                 // echo $sql_query."<hr>";
                 mysqli_query($conn,$sql_query)or die('insert error');
             }
