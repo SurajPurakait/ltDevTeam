@@ -12,7 +12,8 @@
                             <input type="hidden" name="reference_id" id="reference_id" value="<?= $reference_id; ?>">
                             <div class="form-group">
                                 <label>Type</label>
-                                <select class="form-control" name="doc_type" id="doc_type" required title="Type">
+                                <select class="form-control" name="doc_type" id="doc_type" title="Type">
+                                    <!-- required -->
                                     <option value="DRIVERS LICENSE">DRIVER'S LICENSE</option>
                                     <option value="PASSPORT">PASSPORT</option>
                                     <option value="VISA">VISA</option>
@@ -21,12 +22,13 @@
                                     <option value="PURCHASE CONTRACT">PURCHASE CONTRACT</option>
                                     <option value="OTHER">OTHER</option>
                                 </select>
-                                <div class="errorMessage text-danger"></div>
+                                <!-- <div class="errorMessage text-danger"></div> -->
                             </div>
                             <div class="form-group">
                                 <label>File</label>
-                                <input class="" type="file" name="doc_file" allowed_types="pdf|doc|docx|gif|png|jpg|jpeg" id="doc_file" title="Document File" required>
-                                <div class="errorMessage text-danger"></div>
+                                <input class="" type="file" name="doc_file" allowed_types="pdf|doc|docx|gif|png|jpg|jpeg" id="doc_file" title="Document File">
+                                <!-- required -->
+                                <!-- <div class="errorMessage text-danger"></div> -->
                             </div>                        
                 </div>
                 <div class="modal-footer">
