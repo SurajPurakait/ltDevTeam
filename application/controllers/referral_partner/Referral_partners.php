@@ -176,6 +176,7 @@ class Referral_partners extends CI_Controller {
             $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
             $divider_style = 'background:#8ab645;height:10px;';
         }
+        $chat_link = 'https://www.websitealive3.com/12709/operator/guest/gDefault_v2.asp?cframe=login&chattype=mobile&groupid=12709&websiteid=783&departmentid=15447&sessionid_=&iniframe=&ppc_id=&autostart=&proactiveid=&req_router_type=&text2chat_info=&loginname=&loginnamelast=&loginemail=&loginphone=&infocapture_ids=&infocapture_values=&dl=&loginquestion=';
         $url_link = 'https://leafnet.us/';
         $mail_body ='<td style="padding: 0px">
                         <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
@@ -285,7 +286,7 @@ class Referral_partners extends CI_Controller {
                                             <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Services</a>
                                         </td>
                                         <td style="text-align: center;">
-                                            <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Chat</a>
+                                            <a href="'. $chat_link .'" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Chat</a>
                                         </td>
                                     </tr>
                                 </table>
