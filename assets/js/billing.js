@@ -1086,6 +1086,7 @@ function refresh_existing_individual_list(officeID = '', clientID = '') {
         url: base_url + 'billing/invoice/individual_list_by_office',
         dataType: "html",
         success: function (result) {
+            $("#individual_list_ddl").chosen('destroy');
             $("#individual_list_ddl").html(result);
             $("#individual_list_ddl").chosen();
         },
