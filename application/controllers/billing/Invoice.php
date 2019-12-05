@@ -29,7 +29,7 @@ class Invoice extends CI_Controller {
         ];
     }
 
-    public function index($client_id = "", $client_type = "") {
+    public function index($is_recurrence = "",$client_id = "", $client_type = "") {
         $this->load->layout = 'dashboard';
         $title = "Create Invoice";
         $render_data['title'] = $title . ' | Tax Leaf';
@@ -39,6 +39,12 @@ class Invoice extends CI_Controller {
         $render_data['page_heading'] = 'Create Invoice';
         $render_data['client_id'] = '';
         $render_data['office_id'] = '';
+        if($is_recurrence =='y'){
+            $is_recurrence ='y';
+        }else{
+            $is_recurrence='';
+        }
+        $render_data['is_recurrence']=$is_recurrence;
         if (!empty($client_id)) {
             $render_data['client_id'] = base64_decode($client_id);
             $render_data['office_id'] = $this->billing_model->get_office_id_by_individual_id($client_id);
@@ -456,6 +462,7 @@ class Invoice extends CI_Controller {
     public function get_invoice_container_ajax() {
         $invoice_type = post('invoice_type');
         $reference_id = post('reference_id');
+        $is_recurrence = post('is_recurrence');
         $render_data['client_id'] = $client_id = post('client_id');
         $render_data['reference_id'] = $reference_id;
         $render_data['service_category_list'] = $this->billing_model->get_service_category();
@@ -476,6 +483,13 @@ class Invoice extends CI_Controller {
                 $render_data['client_id'] = $individual_info['individual_id'];
             }
         }
+
+        if($is_recurrence =='y'){
+            $render_data['is_recurrence'] = 'y';
+        }else{
+            $render_data['is_recurrence'] = '';
+        }
+
         $this->load->view('billing/invoice_type' . $invoice_type, $render_data);
     }
 

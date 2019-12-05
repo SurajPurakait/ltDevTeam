@@ -7,10 +7,19 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label" style="font: 24px;">Invoice Type<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" onchange="invoiceContainerAjax(this.value, <?= $reference_id; ?>, '');" name="invoice_type" id="invoice_type" title="Invoice Type" required="">
+                                <?php if($is_recurrence == 'y'){ ?>
+                                <select class="form-control" onchange="invoiceContainerAjax(this.value, <?= $reference_id; ?>, '','y');" name="invoice_type" id="invoice_type" title="Invoice Type" required="">
                                     <option value="1" <?= (isset($client_type) && $client_type == '1') ? 'selected' : ''; ?>>Business Client</option>
                                     <option value="2" <?= (isset($client_type) && $client_type == '2') ? 'selected' : ''; ?>>Individual</option>
                                 </select>
+
+                            <?php } else{ ?>
+
+                                 <select class="form-control" onchange="invoiceContainerAjax(this.value, <?= $reference_id; ?>, '','');" name="invoice_type" id="invoice_type" title="Invoice Type" required="">
+                                    <option value="1" <?= (isset($client_type) && $client_type == '1') ? 'selected' : ''; ?>>Business Client</option>
+                                    <option value="2" <?= (isset($client_type) && $client_type == '2') ? 'selected' : ''; ?>>Individual</option>
+                                </select>
+                            <?php } ?>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -25,6 +34,8 @@
                         </div>
                         <h3>Notes</h3>
                         <?= service_note_func('Invoice Notes', 'n', 'invoice'); ?>
+
+                        <?php if($is_recurrence == 'y'){ ?>
                         <hr class="hr-line-dashed"/>
                         <h3>Recurring Invoice :</h3>
                         <div class="row">
@@ -111,6 +122,8 @@
                                 </div><!-- ./modal-dialog -->
                             </div><!-- ./Recurrence Modal -->
                         </div>
+                    <?php } ?>
+
                         <div class="hr-line-dashed"></div>
                         <h3>Confirmation</h3>
                         <div class="form-group" style="display: none;">
@@ -164,9 +177,11 @@
     $(function () {
         $(".datepicker_mdy_due").datepicker({format: 'mm/dd/yyyy', autoHide: true, startDate: new Date()});
     });
-<?php if ($client_id != ''): ?>
-        invoiceContainerAjax(<?= $client_type ?>, <?= $reference_id; ?>, '');
-<?php else: ?>
-        invoiceContainerAjax(1, <?= $reference_id; ?>, '');
-<?php endif; ?>
+<?php if ($client_id != ''){ ?>
+        invoiceContainerAjax(<?= $client_type ?>, <?= $reference_id; ?>, '','');
+<?php } else if($is_recurrence != ''){ ?>
+        invoiceContainerAjax(1, <?= $reference_id; ?>, '','y');
+<?php }else{ ?>
+        invoiceContainerAjax(1, <?= $reference_id; ?>, '','');
+<?php } ?>
 </script>

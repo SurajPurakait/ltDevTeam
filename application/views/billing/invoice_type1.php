@@ -2,10 +2,19 @@
 <div class="form-group">
     <label class="col-lg-2 control-label">Existing Client<span class="text-danger">*</span></label>
     <div class="col-lg-10">
+        <?php if($is_recurrence == 'y'){ ?>
         <select class="form-control type_of_client" name="type_of_client" id="type_of_client_ddl" onchange="clientTypeChange(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1);" title="Type Of Client" required>
             <option value="0" <?= $client_id != '' ? 'selected="selected"' : ''; ?>>Yes</option>
             <option <?= $client_id == '' ? 'selected="selected"' : ''; ?> value="1">No</option>
         </select>
+
+        <?php }else{ ?>
+
+        <select class="form-control type_of_client" name="type_of_client" id="type_of_client_ddl" onchange="clientTypeChange(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1);" title="Type Of Client" required>
+            <option value="0" <?= $client_id != '' ? 'selected="selected"' : ''; ?>>Yes</option>
+            <option <?= $client_id == '' ? 'selected="selected"' : ''; ?> value="1">No</option>
+        </select>
+    <?php } ?>
         <div class="errorMessage text-danger"></div>
     </div>
 </div>
@@ -24,9 +33,15 @@
 <div class="form-group client_type_div0" id="client_list">
     <label class="col-lg-2 control-label">Existing Client List<span class="text-danger">*</span></label>
     <div class="col-lg-10">
+        <?php if($is_recurrence == 'y'){ ?>
+        <select class="form-control client_type_field0" name="client_list" id="client_list_ddl" title="Client List" onchange="fetchExistingClientData(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1);" multiple>
+            <option value="">Select an option</option>
+        </select>
+        <?php }else{ ?>  
         <select class="form-control client_type_field0" name="client_list" id="client_list_ddl" title="Client List" onchange="fetchExistingClientData(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1);">
             <option value="">Select an option</option>
-        </select>        
+        </select>
+        <?php } ?>      
     </div>
 </div>
 
@@ -40,11 +55,13 @@
 </div>
 
 <div class="form-group display_div" id="fein_div">
+    <?php if($is_recurrence != 'y'){ ?>
     <label class="col-lg-2 control-label">Federal ID</label>
     <div class="col-lg-10">
         <input placeholder="xx-xxxxxxx" data-mask="99-9999999" class="form-control value_field" id="fein" type="text" name="fein" value="" title="Federal ID">
         <div class="errorMessage text-danger"></div>
     </div>
+    <?php } ?>
 </div>
 
 <div class="form-group display_div" id="state_div">
@@ -96,12 +113,14 @@
 </div>
 
 <div id="contact_info_div">
+    <?php if($is_recurrence != 'y'){ ?>
     <div class="hr-line-dashed"></div>
     <h3>Contact Info<span class="text-danger">*</span><span class="display_div">&nbsp; (<a href="javascript:void(0);" class="contactadd" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>'); return false;">Add Contact</a>)</span></h3>
     <div id="contact-list">
         <input type="hidden" title="Contact Info" id="contact-list-count" required="required" value="">
         <div class="errorMessage text-danger"></div>
     </div>
+<?php } ?>
 </div>
 
 <div id="owners_div" class="display_div">
