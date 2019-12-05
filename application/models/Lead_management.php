@@ -1618,10 +1618,6 @@ Class Lead_management extends CI_Model {
         return $this->db->get('event')->result_array();
     }
 
-    public function get_office_by_id($id) {
-        return $this->db->get_where("office", array('id' => $id));
-    }
-
     public function get_prospects() {
         return $this->db->get("lead_management")->result_array();
     }

@@ -103,7 +103,7 @@ class Administration extends CI_Model {
     }
 
     public function get_office_by_id($office_id) {
-        $this->db->select('office.*, (SELECT state_name FROM states WHERE id = office.state) AS state_name');
+        $this->db->select('office.*, (SELECT state_name FROM states WHERE id = office.state) AS state_name,CONCAT(address , ", " , city , ", " , (SELECT state_name FROM states where id = office.state) ," ",zip ) as full_address');
         return $this->db->get_where('office', ["id" => $office_id])->row_array();
     }
 
