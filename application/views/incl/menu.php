@@ -732,8 +732,8 @@ $office_id = get_office_id($staff_info['office']);
                        // } 
                     ?>
                         
-                        <li <?= active_menu($menu, ""); ?>>
-                            <a href="#">Leafnet</a>
+                        <li <?= active_menu($menu, "report_3"); ?>>
+                            <a href="<?= base_url() ?>reports/index/3">Leafnet</a>
                         </li>
                         <li <?= active_menu($menu, ""); ?>>
                             <a href="#">Reviews</a>
