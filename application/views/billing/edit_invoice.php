@@ -32,7 +32,7 @@
                         <h3>Recurring Invoice :</h3>
                         <div class="row">
                             <div class="col-md-12">
-                                <h4><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#RecurranceModal" title="Add Recurrence"><i class="fa fa-refresh"></i></button> &nbsp;<b id="pattern_show"><?php echo ucfirst($invoice_recurrence->pattern); ?></b>
+                                <h4><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#RecurranceModal" title="Add Recurrence"><i class="fa fa-refresh"></i></button> &nbsp;<b id="pattern_show"><?php echo isset($invoice_recurrence->pattern)?(ucfirst($invoice_recurrence->pattern)):''; ?></b>
 
                                 </h4>
                                 <div class="errorMessage text-danger" id="err_generation"></div>
