@@ -115,7 +115,7 @@ class New_prospect extends CI_Controller {
                     'source_detail' => $lead_result['lead_source_detail'],
                     'lead_type' => $lead_type_name['name'],
                     'office_phone_number' => $office_info['phone'],
-                    'office_address' => $office_info['address'],
+                    'office_address' => $office_info['full_address'],
                     'office_name' => $office_info['name'],
                     'requested_by' =>  $requested_by['first_name'].' '.$requested_by['last_name']
                 ];
