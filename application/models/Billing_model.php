@@ -383,14 +383,38 @@ class Billing_model extends CI_Model {
                 } else {
                     $ins_recurrence['due_type'] = null;
                 }
+                $remain_generation=null;
+                switch ($ins_recurrence['duration_type']) {
+                        case 0:
+                            $ins_recurrence['total_generation_time']=0;
+                            break;
+                        case 1:
+                            $ins_recurrence['total_generation_time']=($ins_recurrence['duration_time'])-1;
+                            $remain_generation=$ins_recurrence['total_generation_time'];
+                            break;
+                        case 2:
+                            $ins_recurrence['total_generation_time']=1;
+                            break;
+                        default:
+                            break;
+                    }
+                if(($ins_recurrence['actual_due_month'])<=12){
+                    $ins_recurrence['next_occurance_date']=$ins_recurrence['actual_due_year'].'-'.$ins_recurrence['actual_due_month'].'-'.$ins_recurrence['actual_due_day'];
+                }else{
+                    $next_month=$ins_recurrence['actual_due_month']-12;
+                    $ins_recurrence['next_occurance_date']=($ins_recurrence['actual_due_year']+1).'-'.$next_month.'-'.$ins_recurrence['actual_due_day'];
+                }
+                
 
 //            if(isset($ins_recurrence['pattern']))
 //            print_r($ins_recurrence);die;
                 $this->db->insert('invoice_recurence', $ins_recurrence);
+                $recurrence_id= $this->db->insert_id();
 //                 echo $this->db->last_query();die;
                 $this->db->where('id', $invoice_id);
                 $this->db->update('invoice_info', ['is_recurrence' => 'y']);
 //                echo $this->db->last_query();die;
+                
             }
 
             if (isset($data['invoice_notes'])) {
@@ -539,6 +563,7 @@ class Billing_model extends CI_Model {
                 } else {
                     $ins_recurrence['due_type'] = null;
                 }
+                
 
 //            if(isset($ins_recurrence['pattern']))
 //            print_r($ins_recurrence);die;
