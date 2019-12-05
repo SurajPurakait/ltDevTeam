@@ -32,7 +32,7 @@
                         <h3>Recurring Invoice :</h3>
                         <div class="row">
                             <div class="col-md-12">
-                                <h4><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#RecurranceModal" title="Add Recurrence"><i class="fa fa-refresh"></i></button> &nbsp;<b id="pattern_show"></b>
+                                <h4><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#RecurranceModal" title="Add Recurrence"><i class="fa fa-refresh"></i></button> &nbsp;<b id="pattern_show"><?php echo ucfirst($invoice_recurrence->pattern); ?></b>
 
                                 </h4>
                                 <div class="errorMessage text-danger" id="err_generation"></div>
@@ -121,9 +121,9 @@
                                                                 <label class="control-label" id="control-label">month in quarter</label>
                                                                 <?php } else { ?>
                                                                 <label class="control-label"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> Due on day</label>&nbsp;
-                                                                <input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day" value="<?php echo isset($invoice_recurrence->due_day) && $invoice_recurrence->due_day; ?>">
+                                                                <input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day" value="<?php echo isset($invoice_recurrence->due_day)? $invoice_recurrence->due_day:''; ?>">
                                                                 <label class="control-label m-r-5">of every</label>&nbsp;
-                                                                <input class="form-control" type="number" name="recurrence[due_month]" min="1" max="12" style="width: 100px" id="r_month" value="<?php echo isset($invoice_recurrence->due_month) && $invoice_recurrence->due_month; ?>">&nbsp;
+                                                                <input class="form-control" type="number" name="recurrence[due_month]" min="1" max="12" style="width: 100px" id="r_month" value="<?php echo isset($invoice_recurrence->due_month)? $invoice_recurrence->due_month:''; ?>">&nbsp;
                                                                 <label class="control-label" id="control-label">month(s)</label>
                                                                 <?php } ?>
                                                         </div>
