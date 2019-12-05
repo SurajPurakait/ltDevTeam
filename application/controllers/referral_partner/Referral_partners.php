@@ -261,8 +261,6 @@ class Referral_partners extends CI_Controller {
                                             </table>
                                         </td>
                                     </tr>
-
-
                                 </table>
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                     <tr>

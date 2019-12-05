@@ -141,11 +141,21 @@ class New_prospect extends CI_Controller {
                 if ($lead_result['office'] == 1 || $lead_result['office'] == 18 || $lead_result['office'] == 34) {
                     $bgcolor = '#00aec8';
                     $divider_img = 'https://leafnet.us/assets/img/divider-blue.jpg';
+                    $divider_style = 'background:#00aec8;height:10px;';
+                    $bg_chat = 'background:#00aec8';
                 } else {
                     $bgcolor = '#8ab645';
                     $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
+                    $divider_style = 'background:#8ab645;height:10px;';
+                    $bg_chat = 'background:#8ab645';
                 }
-
+                $chat_link = 'https://www.websitealive3.com/12709/operator/guest/gDefault_v2.asp?cframe=login&chattype=mobile&groupid=12709&websiteid=783&departmentid=15447&sessionid_=&iniframe=&ppc_id=&autostart=&proactiveid=&req_router_type=&text2chat_info=&loginname=&loginnamelast=&loginemail=&loginphone=&infocapture_ids=&infocapture_values=&dl=&loginquestion=';
+                // <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+                //     <tr>
+                //         <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="250"/></td>
+                //     </tr>
+                // </table>
+                $user_logo_default = 'https://leafnet.us/assets/img/logo.png';
                 //echo $mail_body; exit;
                 $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
                     <html xmlns="http://www.w3.org/1999/xhtml">
@@ -182,28 +192,55 @@ class New_prospect extends CI_Controller {
                     <br />
                     <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
                       <tr>
-                        <td><table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
-                          <tr>
-                            <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="250"/></td>
-                          </tr>
-                        </table>
-                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                              <td><img src="' . $divider_img . '" width="600" height="15" /></td>
-                            </tr>
-                          </table>
-                          <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
-                            <tr>
-                              <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong>
-                                </strong>' . $mail_body . '</span></p>
-                              </td>
-                            </tr>
+                        <td>
+                            <table width="600" border="0" cellpadding="0" cellspacing="0">
+                                <tr style="background: #fff;">
+                                    <td style="padding: 25px 20px;">
+                                        <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="text-align: left; width: 200px;">
+                                                    <a href="http://leafnet.us/" target="_blank"><img src="' . $user_logo_fullpath . '" alt="site-logo" style="width:170px"></a>
+                                                </td>
+                                                <td style="text-align: right;">
+                                                    <p><span>'. $office_info['phone'].'</span><br>
+                                                    <span style="text-transform: uppercase; text-decoration: none;color: #fff;background:'. $bg_chat .'; padding: 6px 8px; display: inline-block;"><a href="'. $chat_link .'" target="_blank" >chat</a></span></p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td style="'.$divider_style.'"></td>
+                                </tr>
+                            </table>
+                            <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
+                                <tr>
+                                    <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong>
+                                    </strong>' . $mail_body . '</span></p>
+                                    </td>
+                                </tr>
                           </table>          
                           <table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
                         </table></td>
                       </tr>
                         <tr>
-                        <td height="100" valign="top">&nbsp;</td>
+                            <td valign="top">
+                                <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
+                                    <tr style="background: transparent; height: 60px;">
+                                        <td style="text-align: center;">
+                                            <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Home</a>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Services</a>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <a href="'. $chat_link .'" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Chat</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
                       </tr>
                     </table>
                     <br />
