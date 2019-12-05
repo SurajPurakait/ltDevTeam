@@ -1107,3 +1107,22 @@ function sortEventDashboard(sortCriteria = '', sortType = '') {
         }
     });
 }
+
+function change_mail_campaign_status(id) {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'lead_management/home/change_mail_campaign_status_by_type',
+        data: {
+            id: id
+        },
+        cache: false,
+        success: function (result) {
+            $("#mail-campaign-modal").html(result).modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+    });
+
+}
+

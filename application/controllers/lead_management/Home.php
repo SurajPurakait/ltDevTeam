@@ -214,4 +214,10 @@ class Home extends CI_Controller {
     public function get_updated_lead_status() {
         echo $this->lead_management->get_updated_lead_status(post('lead_id'));
     }
+
+    public function change_mail_campaign_status_by_type() {
+        $lead_id = post('id');
+        $render_data['lead_data'] = $this->lead_management->get_lead_details_by_id($lead_id);
+        $this->load->view("lead_management/change_mail_campaign_status_modal", $render_data);     
+    }
 }
