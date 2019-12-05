@@ -61,7 +61,8 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">Pattern:</label>
-                                                        <select class="form-control" id="pattern" name="recurrence[pattern]" onchange="change_invoice_pattern(this.value);">
+                                                        <select class="form-control" id="pattern" name="recurrence[pattern]" onchange="change_invoice_pattern(this.value);" disabled="">
+                                                            <option value="">Select Pattern</option>
                                                             <option value="monthly" <?php echo isset($invoice_recurrence->pattern)?(($invoice_recurrence->pattern == 'monthly') ? 'selected' : ''):''; ?>>Monthly</option>     
                                                             <option value="weekly" <?php echo isset($invoice_recurrence->pattern)?(($invoice_recurrence->pattern == 'weekly') ? 'selected' : ''):''; ?>>Weekly</option>
                                                             <option value="quarterly" <?php echo isset($invoice_recurrence->pattern)?(($invoice_recurrence->pattern == 'quarterly') ? 'selected' : ''):''; ?>>Quarterly</option>
@@ -132,11 +133,11 @@
                                             <div class="row">
                                                 <label class="control-label p-l-15">Duration:</label>
                                                 <div class="col-md-12">
-                                                    <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="0" <?php echo isset($invoice_recurrence->duration_type)?(($invoice_recurrence->duration_type == '0') ? 'selected' : ''):''; ?> >&nbsp; Never</label>
+                                                    <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="0" <?php echo isset($invoice_recurrence->duration_type)?(($invoice_recurrence->duration_type == '0') ? 'checked' : ''):''; ?> >&nbsp; Never</label>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-inline">
-                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="1" <?php echo isset($invoice_recurrence->duration_type)?(($invoice_recurrence->duration_type == '1') ? 'selected' : ''):''; ?> onclick="//check_generation_type(this.value)"></label>&nbsp;
+                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="1" <?php echo isset($invoice_recurrence->duration_type)?(($invoice_recurrence->duration_type == '1') ? 'checked' : ''):''; ?> onclick="//check_generation_type(this.value)"></label>&nbsp;
                                                         <label class="control-label">After</label>&nbsp;
                                                         <input class="form-control" type="text" id="duration_time" name="recurrence[duration_time]" value="<?php echo isset($invoice_recurrence->duration_time)?(($invoice_recurrence->duration_time !='') ? $invoice_recurrence->duration_time : ''):''; ?>" style="width: 100px">&nbsp;
                                                         <label class="control-label">generations</label>
@@ -144,7 +145,7 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-inline">
-                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="2" <?php echo (isset($invoice_recurrence->duration_type)?(($invoice_recurrence->duration_type == '2') ? 'selected' : ''):'') ?> checked=""></label>&nbsp;
+                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="2" <?php echo (isset($invoice_recurrence->duration_type)?(($invoice_recurrence->duration_type == '2') ? 'checked' : ''):'') ?>></label>&nbsp;
                                                         <label class="control-label">Until date</label>&nbsp;
                                                         <input placeholder="mm/dd/yyyy" id="until_date" class="form-control datepicker_mdy_due" type="text" title="Until Date" name="recurrence[until_date]" value="<?= isset($invoice_recurrence->until_date)?($invoice_recurrence->until_date != '0000-00-00' ? date('m/d/Y', strtotime($invoice_recurrence->until_date)) : ''):''; ?>"  style="width: 100px">
                                                     </div>
