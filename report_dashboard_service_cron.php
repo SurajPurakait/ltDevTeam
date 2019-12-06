@@ -24,10 +24,9 @@
         'services.category_id AS category_id', 
         'services.id AS service_id', 
         'indt.office AS office_id',
+        'srv_rq.id AS service_request_id',
         '(SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as office, services.description AS service_name',
         '(SELECT CONCAT(",",GROUP_CONCAT(`msg`), ",") FROM `sos_notification` WHERE reference_id = ord.id and reference = "order") as sos'
-
-
     ];
     
     $where['ord.reference'] = '`ord`.`reference` != \'invoice\' ';
@@ -44,12 +43,19 @@
 
     if (!empty($report_service_result)) {
         while($rsd = mysqli_fetch_assoc($report_service_query)) {
+            $service_request_id = $rsd['service_request_id'];
+            $sql_q_d_c = 'SELECT `created_time` FROM `tracking_logs` WHERE status_value ="1" AND section_id = "'.$service_request_id.'"';
+            $sql_q_d_c_run = mysqli_query($conn,$sql_q_d_c);
+            $sql_q_d_c_result = mysqli_fetch_assoc($sql_q_d_c_run);
+            $date_completed_b_c = $sql_q_d_c_result['created_time'];
+            $date_completed = date('Y-m-d', strtotime($date_completed_b_c. ' + 30 days'));
+
+            $sql_q_d_c_a = 'SELECT `created_time` FROM `tracking_logs` WHERE status_value ="0" AND section_id = "'.$service_request_id.'"';
+            $sql_q_d_c_a_run = mysqli_query($conn,$sql_q_d_c_a);
+            $sql_q_d_c_a_result = mysqli_fetch_assoc($sql_q_d_c_a_run);
+            $date_complete_actual = date('Y-m-d', strtotime($sql_q_d_c_a_result['created_time']));
+
             $service_name = $rsd['service_name'];
-            $order_date = $rsd['order_date'];
-            $start_date = $rsd['start_date'];
-            $target_start_date = $rsd['target_start_date'];
-            $complete_date = $rsd['complete_date'];
-            $target_complete_date = $rsd['target_complete_date'];
             $status = $rsd['status'];
             $late_status = $rsd['late_status'];
             $sos = $rsd['sos'];
@@ -57,8 +63,7 @@
             $department = $rsd['department_id'];
             $office = $rsd['office_id'];
 
-            $insert_sql = "INSERT INTO `report_dashboard_service`(`service_name`, `order_date`, `start_date`, `target_start_date`, `complete_date`, `target_complete_date`, `status`, `late_status`, `sos`, `category`, `department`, `office`) VALUES ('$service_name', '$order_date', '$start_date', '$target_start_date', '$complete_date', '$target_complete_date', '$status', '$late_status', '$sos', '$category', '$department', '$office')";
-            // echo $insert_sql;exit;
+            $insert_sql = "INSERT INTO `report_dashboard_service`(`service_name`, `status`, `date_completed`, `date_complete_actual`, `late_status`, `sos`, `category`, `department`, `office`) VALUES ('$service_name','$status', '$date_completed', '$date_complete_actual', '$late_status', '$sos', '$category', '$department', '$office')";
             mysqli_query($conn,$insert_sql);
         }
     }
