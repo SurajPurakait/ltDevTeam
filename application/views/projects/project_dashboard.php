@@ -97,7 +97,11 @@ if (!empty($project_list)) {
         //     $due_date = $actual_day."th";
         // }
         // $dueDate= $due_date.' '.$due_m[$actual_mnth];
-        $dueDate = $actual_yr . '-' . $actual_mnth . '-' . $actual_day;
+        if($actual_mnth<=12){
+            $dueDate = $actual_yr . '-' . $actual_mnth . '-' . $actual_day;
+        }else{
+            $dueDate = $actual_yr . '-' .($actual_mnth % 12).'-' . $actual_day;
+        }
 //                                } else {
 //                                    $dueDate= 'N/A';
 //                                }
