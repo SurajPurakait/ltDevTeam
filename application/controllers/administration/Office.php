@@ -93,10 +93,15 @@ class Office extends CI_Controller {
 
     public function deactivate_office(){
      $id = $this->input->post("office_id");      
-    $this->administration->deactivate_office($id);
+    $result = $this->administration->deactivate_office($id);
+//    return $result;
+    if ($result == 1) {
+        echo "1";
+        } else {
+            echo "0";
+        }
     }
-
-    
+   
     public function get_office_staff() {
         $office_id = post("office_id");
         $result = $this->administration->get_office_staff_by_office_id($office_id);

@@ -36,7 +36,7 @@ $ci->load->model('system');
                                         $ofc_mngr = get_ofc_mngr($fl['id']);
                                         ?>
                                         <!-- <tr onclick="show_franchise_modal('edit', '<?//= $fl['id']; ?>');"> -->
-                                            <tr style="cursor: pointer;"> 
+                                            <tr style="cursor: pointer;" class="<?= $fl['status']==3?'bg-red odd':'bg-default odd' ?>" > 
                                             <td onclick="redirect_page(<?= $fl['id']; ?>);"><?= isset($fl['type']) ? $ci->administration->get_office_type_by_id($fl['type'])['name'] : ""; ?></td>
                                             <td onclick="redirect_page(<?= $fl['id']; ?>);"><?= $fl['name']; ?></td>
                                             <td onclick="redirect_page(<?= $fl['id']; ?>);"><?= $fl['office_id']; ?></td>
@@ -55,8 +55,8 @@ $ci->load->model('system');
                                                    onclick="delete_office('<?= $fl['id'] ?>');"><i
                                                         class="fa fa-trash"></i></a>
                                                         
-                                                        <a href="javascript:void(0);" title="Deactivate"
-                                                   onclick="deactive_office('<?= $fl['id'] ?>');"><i class="fa fa-window-close" aria-hidden="true"></i></a>
+                                                        <a href="javascript:void(0);" title="<?= $fl['status']==3?'Deactivate':'Activate' ?>"
+                                                   onclick="deactive_office('<?= $fl['id'] ?>');"><i class="<?= $fl['status']==3?'fa fa-ban':'fa fa-check' ?>" aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
                                         <?php
