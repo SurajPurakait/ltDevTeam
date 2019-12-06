@@ -148,10 +148,18 @@ class Project_Template_model extends CI_Model {
                 $current_month = date('m');
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = (int) $current_month + (int) $ins_recurrence['due_month'];
-                if($ins_recurrence['actual_due_month']<=12){
-                    $ins_recurrence['actual_due_year'] = date('Y');
+                if($ins_recurrence['actual_due_day']>=date('d')){
+                    if($ins_recurrence['actual_due_month']<=12){
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y');
+                    }
                 }else{
-                    $ins_recurrence['actual_due_year']=date('Y')+($ins_recurrence['actual_due_month']/12);
+                   if($ins_recurrence['actual_due_month']<=12){
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y')+($ins_recurrence['actual_due_month']/12);
+                    } 
                 }
             } elseif ($ins_recurrence['pattern'] == 'weekly') {
                 $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
@@ -768,10 +776,18 @@ class Project_Template_model extends CI_Model {
                 $current_month = date('m');
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = (int) $current_month + (int) $ins_recurrence['due_month'];
-                if($ins_recurrence['actual_due_month']<=12){
-                    $ins_recurrence['actual_due_year'] = date('Y');
+                if($ins_recurrence['actual_due_day']>=date('d')){
+                    if($ins_recurrence['actual_due_month']<=12){
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y');
+                    }
                 }else{
-                    $ins_recurrence['actual_due_year']=date('Y')+($ins_recurrence['actual_due_month']/12);
+                   if($ins_recurrence['actual_due_month']<=12){
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y')+($ins_recurrence['actual_due_month']/12);
+                    } 
                 }
             } elseif ($ins_recurrence['pattern'] == 'weekly') {
                 $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
