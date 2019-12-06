@@ -1,4 +1,4 @@
-    <?php
+<?php
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -61,11 +61,11 @@ class Office extends CI_Controller {
         }
     }
 
-    public function save_service_fees(){
+    public function save_service_fees() {
         $result = $this->administration->insert_service_fees(post());
-        if($result){
+        if ($result) {
             echo 1;
-        }else{
+        } else {
             echo 0;
         }
     }
@@ -82,7 +82,7 @@ class Office extends CI_Controller {
 
     public function delete_office() {
         $id = $this->input->post("office_id");
-        
+
         $result = $this->administration->delete_office($id);
         if ($result == 1) {
             echo "1";
@@ -91,12 +91,16 @@ class Office extends CI_Controller {
         }
     }
 
-    public function deactivate_office(){
-     $id = $this->input->post("office_id");      
-    $this->administration->deactivate_office($id);
+    public function deactivate_office() {
+        $id = $this->input->post("office_id");
+        $result = $this->administration->deactivate_office($id);
+        if ($result) {
+            echo "1";
+        } else {
+            echo "0";
+        }
     }
 
-    
     public function get_office_staff() {
         $office_id = post("office_id");
         $result = $this->administration->get_office_staff_by_office_id($office_id);
@@ -112,7 +116,6 @@ class Office extends CI_Controller {
         $staff_id = post("staff_id");
         $this->administration->save_office_staff_manager($staff_id, $office_id);
     }
-
 
     public function show_office_edit_info($edit_id) {
         // $render_data['modal_type'] = $this->input->post('modal_type');
@@ -140,7 +143,6 @@ class Office extends CI_Controller {
     }
 
     // public function servicelist_dropdown_option_ajax(){
-
     //     $result['element_key'] = $element_key = post('variable');
     //     // $result['condition'] = '';
     //     // if (post('condition')) {
@@ -159,5 +161,4 @@ class Office extends CI_Controller {
     //     }
     //     $this->load->view('action/filter_dropdown_option_ajax', $result);
     // }
-
 }

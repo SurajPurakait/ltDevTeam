@@ -82,23 +82,28 @@
                         <table class="table table-borderless" style="margin-bottom: 0px;">
                             <tbody>
                                 <tr>
-                                    <th class="text-center" width="20%">Type</th>
-                                    <th class="text-center" width="20%">Source</th>
-                                    <th class="text-center" width="8%">Name</th>
-                                    <th class="text-center" width="8%">Tracking</th>
-                                    <th class="text-center" style="white-space:nowrap" width="8%">Requested By</th>
-                                    <th class="text-center" style="white-space:nowrap" width="8%">Submission Date</th>
-                                    <th class="bg-blue text-center" colspan="3" width="20%">Mail Campaign</th>
-                                    <th style="white-space:nowrap" class="text-center" width="8%">Active Date</th>
-                                    <th style="white-space:nowrap" class="text-center" width="8%">Inactive Date</th>
-                                    <th style="white-space:nowrap" class="text-center" width="8%">Completed Date</th>
-                                    <th class="text-center" width="5%">Notes</th>
+                                    <th class="text-center" width="8">Type</th>
+                                    <th class="text-center" width="8">Source</th>
+                                    <th class="text-center" width="7">Name</th>
+                                    <th class="text-center" width="7">Tracking</th>
+                                    <th class="text-center" style="white-space:nowrap" width="7">Requested By</th>
+                                    <th class="text-center" style="white-space:nowrap" width="7">Submission Date</th>
+                                    <th class="text-center" width="7">Mail Campaign</th>
+                                    
+                                    <th class="bg-blue text-center" width="7">DAY 0</th>
+                                    <th class="bg-blue text-center" width="7">DAY 3</th>
+                                    <th class="bg-blue text-center" width="7">DAY 6</th>
+
+                                    <th style="white-space:nowrap" class="text-center" width="7">Active Date</th>
+                                    <th style="white-space:nowrap" class="text-center" width="7">Inactive Date</th>
+                                    <th style="white-space:nowrap" class="text-center" width="7">Completed Date</th>
+                                    <th class="text-center" width="7">Notes</th>
                                 </tr>
                                 <tr>
-                                    <td title="Type" class="text-center" width="20%" style="word-break:break-all"><?= ($lead["contact_type_name"] != '') ? $lead["contact_type_name"] : 'N/A'; ?></td>
-                                    <td title="Type" class="text-center" width="20%" style="word-break:break-all"><?= ($lead["lead_source_detail"] != '') ? $lead["lead_source_detail"] : 'N/A'; ?></td> 
-                                    <td title="Name" class="text-center" width="8%"><?= implode(" ", explode(',', $lead["full_name"])); ?></td>
-                                    <td align='left' title="Tracking Description" class="text-center" width="8%">
+                                    <td title="Type" class="text-center" width="8" style="word-break:break-all"><?= ($lead["contact_type_name"] != '') ? $lead["contact_type_name"] : 'N/A'; ?></td>
+                                    <td title="Type" class="text-center" width="8" style="word-break:break-all"><?= ($lead["lead_source_detail"] != '') ? $lead["lead_source_detail"] : 'N/A'; ?></td> 
+                                    <td title="Name" class="text-center" width="7"><?= implode(" ", explode(',', $lead["full_name"])); ?></td>
+                                    <td align='left' title="Tracking Description" class="text-center" width="7">
                                         <?php
                                         if ($lead["status"] == 0) {
                                             $trk_class = "label label-success";
@@ -114,15 +119,29 @@
                                         ?>
                                         <a href='javascript:void(0);' onclick='show_lead_tracking_modal("<?= $lead["id"]; ?>")'><span class="<?= $trk_class; ?>" id="lead_status_<?= $lead["id"]; ?>"><?= $lead["status_name"]; ?></span></a>
                                     </td>
-                                    <td title="Requested By" class="text-center" width="9%"><?= $lead["requested_staff_name"] . (($lead['office'] != '0') ? '<br><b>' . get_office_info_by_id($lead['office'])['office_id'] . '</b>' : ''); ?><?= "<br>" . $lead['request_staff_office_name']; ?></td>
-                                    <td title="Submission Date" class="text-center" width="9%"><?= ($lead["submission_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["submission_date"])) : "-"; ?></td>
-                                    <td class="bg-blue text-center" title="DAY0">DAY0<br><?= (isset($lead['day_0_mail_date']) && $lead['day_0_mail_date'] != "0000-00-00") ? date("m/d/Y", strtotime($lead['day_0_mail_date'])) : " - "; ?></td>
-                                    <td class="bg-blue text-center" title="DAY3">DAY3<br><?= (isset($lead['day_3_mail_date']) && $lead['day_3_mail_date'] != "0000-00-00") ? date("m/d/Y", strtotime($lead['day_3_mail_date'])) : " - "; ?></td>
-                                    <td class="bg-blue text-center" title="DAY6">DAY6<br><?= (isset($lead['day_6_mail_date']) && $lead['day_6_mail_date'] != "0000-00-00") ? date("m/d/Y", strtotime($lead['day_6_mail_date'])) : " - "; ?></td>
-                                    <td title="Active Date" class="text-center" width="8%"><?= ($lead["active_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["active_date"])) : "-"; ?></td>
-                                    <td title="Inactive Date" class="text-center" width="8%"><?= ($lead["inactive_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["inactive_date"])) : "-"; ?></td>
-                                    <td title="Completed Date" class="text-center" width="8%"><?= ($lead["complete_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["complete_date"])) : "-"; ?></td>
-                                    <td title="Notes" class="text-center" width="5%">
+                                    <td title="Requested By" class="text-center" width="7"><?= $lead["requested_staff_name"] . (($lead['office'] != '0') ? '<br><b>' . get_office_info_by_id($lead['office'])['office_id'] . '</b>' : ''); ?><?= "<br>" . $lead['request_staff_office_name']; ?></td>
+                                    <td title="Submission Date" class="text-center" width="7"><?= ($lead["submission_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["submission_date"])) : "-"; ?></td>
+                                    <td class="text-center" title="Mail Campaign" width="7">
+                                        <?php
+                                            if ($lead["mail_campaign_status"] == 1) {
+                                                $trk_class_campaign = "label label-primary";
+                                                $mail_campaign_status_text = "YES";
+                                            } elseif ($lead["mail_campaign_status"] == 0) {
+                                                $trk_class_campaign = "label label-danger";
+                                                $mail_campaign_status_text = "NO";
+                                            }
+                                        ?>
+                                        <a href='javascript:void(0);' onclick='change_mail_campaign_status("<?= $lead["id"]; ?>")'><span class="<?= $trk_class_campaign; ?>" id="lead_mail_campaign_status_<?= $lead["id"]; ?>"><?= $mail_campaign_status_text; ?></span></a>
+                                    </td>
+                                    <td class="bg-blue text-center" title="DAY0" width="7"><?= (isset($lead['day_0_mail_date']) && $lead['day_0_mail_date'] != "0000-00-00") ? date("m/d/Y", strtotime($lead['day_0_mail_date'])) : " - "; ?></td>
+                                    <td class="bg-blue text-center" title="DAY3" width="7"><?= (isset($lead['day_3_mail_date']) && $lead['day_3_mail_date'] != "0000-00-00") ? date("m/d/Y", strtotime($lead['day_3_mail_date'])) : " - "; ?></td>
+                                    <td class="bg-blue text-center" title="DAY6" width="7"><?= (isset($lead['day_6_mail_date']) && $lead['day_6_mail_date'] != "0000-00-00") ? date("m/d/Y", strtotime($lead['day_6_mail_date'])) : " - "; ?></td>
+                                    
+
+                                    <td title="Active Date" class="text-center" width="7"><?= ($lead["active_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["active_date"])) : "-"; ?></td>
+                                    <td title="Inactive Date" class="text-center" width="7"><?= ($lead["inactive_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["inactive_date"])) : "-"; ?></td>
+                                    <td title="Completed Date" class="text-center" width="7"><?= ($lead["complete_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["complete_date"])) : "-"; ?></td>
+                                    <td title="Notes" class="text-center" width="7">
                                         <span><?= (($lead["notes_count"] > 0) ? '<a class="label label-warning" href="javascript:void(0)" onclick="show_lead_notes(\'' . $lead["id"] . '\')"><b>' . $lead["notes_count"] . '</b></a>' : '<b class="label label-warning">' . $lead["notes_count"] . '</b>') ?></span>
                                     </td>
                                 </tr>

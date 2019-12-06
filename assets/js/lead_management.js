@@ -1107,3 +1107,71 @@ function sortEventDashboard(sortCriteria = '', sortType = '') {
         }
     });
 }
+
+function change_mail_campaign_status(id) {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'lead_management/home/change_mail_campaign_status_by_type',
+        data: {
+            id: id
+        },
+        cache: false,
+        success: function (result) {
+            $("#mail-campaign-modal").html(result).modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+    });
+
+}
+
+function show_confirm_email_div(status) {
+    if (status == 0) {
+        $("#confirm_email_div").hide();
+    } else {
+        $("#confirm_email_div").show();
+    }
+}
+
+function update_mail_campaign_status_lead () {
+    var email_confimation_status = $("input[name=lead_email]:checked").val();
+
+    if (email_confimation_status == 'other') {
+        if (!requiredValidation('change_mail_campaign_status_modal')) {
+            return false;
+        }    
+    }
+    var form_data = new FormData(document.getElementById('change_mail_campaign_status_modal'));
+    
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'lead_management/home/change_mail_campaign_status_lead',
+        data: form_data,
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (result) {
+            if (result.trim() == "0") {
+                goURL(base_url + 'lead_management/home');
+            } else if (result.trim() == "1") {
+                swal({title: "Success!", text: "Mail Campaign Activated Successfully!", type: "success"}, function () {
+                    goURL(base_url + 'lead_management/home');
+                });
+            } else if (result.trim() == "-1") {
+                swal({title: "Success!", text: "Mail Campaign Inactivated Successfully!", type: "success"}, function () {
+                    goURL(base_url + 'lead_management/home');
+                });                
+            } else {
+                swal("ERROR!", "Unable to change mail campaign status!", "error");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });    
+}
