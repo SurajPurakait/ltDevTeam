@@ -441,13 +441,15 @@ function delete_office(id) {
         }
     });
 }
+
+
 function deactive_office(id) {
     // alert(id);return false;
     $.get(base_url + "administration/office/get_office_relations/" + id, function (result) {
-        if (result != '') {
+        if (result != 0) {
             
             swal({
-                title: "Are you sure want to deactivate?",
+                title: "Do you want to deactivate?",
                 
                 type: "warning",
                 showCancelButton: true,
@@ -472,6 +474,34 @@ function deactive_office(id) {
                             }
                         });
                     });
+        }
+        else{
+          swal({
+                title: "Do you want to activate again?",
+                
+                type: "warning",
+                showCancelButton: true,
+                showConfirmButton: true
+            },
+                    function () {
+                        $.ajax({
+                            type: 'POST',
+                            url: base_url + '/administration/office/deactivate_office',
+                            data: {
+                                office_id: id
+                            },
+                            success: function (result) {
+                                    swal({
+                                        title: "Success!",
+                                        "text": "Office been activated successfully!",
+                                        "type": "success"
+                                    }, function () {
+                                        goURL(base_url + 'administration/office');
+                                    });
+
+                            }
+                        });
+                    });  
         }
     });
 }
