@@ -144,6 +144,7 @@ $stat = ($stat == 'all') ? "" : $stat;
     </div>
 </div>
 <div id="modal_area" class="modal fade" aria-hidden="true" style="display: none;"></div>
+<div id="mail-campaign-modal" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <!-- Modal -->
 <div class="modal fade" id="showNotes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">

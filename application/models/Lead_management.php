@@ -35,6 +35,7 @@ Class Lead_management extends CI_Model {
         $this->lead_select[] = 'lm.day_0_mail_date AS day_0_mail_date';
         $this->lead_select[] = 'lm.day_3_mail_date AS day_3_mail_date';
         $this->lead_select[] = 'lm.day_6_mail_date AS day_6_mail_date';
+        $this->lead_select[] = 'lm.mail_campaign_status AS mail_campaign_status';
         $this->filter_element = [
             "type" => "type_of_contact",
             "tracking" => "status",
@@ -446,13 +447,8 @@ Class Lead_management extends CI_Model {
             $status = 1;
         } else {
             if (isset($data['mail_campaign_status'])) {
-                if ($data['mail_campaign_status'] == 1) {
-                    $status = 3;
-                } else {
-                    $status = 0;
-                }
-            } else {
                 $status = 0;
+                // concept changed as per mantis issue on 03.12.2019 
             }
         }
 
@@ -875,9 +871,11 @@ Class Lead_management extends CI_Model {
         $this->db->trans_begin();
         $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => $status, "section_id" => $id, "related_table_name" => "lead_management"]);
         $data = ["status" => $status];
+
         switch ($status) {
             case "0":
                 $data["submission_date"] = date('Y-m-d');
+                $data["active_date"] = '';
                 break;
             case "1":
                 $data["complete_date"] = date('Y-m-d');
@@ -887,13 +885,40 @@ Class Lead_management extends CI_Model {
                 break;
             case "3":
                 $data["active_date"] = date('Y-m-d');
-                $data["mail_campaign_status"] = '1';
                 break;
         }
 
         $this->db->where("id", $id)->update("lead_management", $data);
 
-        if ($status == 3) {
+        $staff[0] = sess('user_id');
+        $this->system->save_general_notification('lead', $id, 'tracking', $staff, '', 1);
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return false;
+        } else {
+            $this->db->trans_commit();
+            return true;
+        }
+    }
+    public function change_mail_campaign_lead($data) {
+        $id = $data['lead_id'];
+        $update_data = [];
+        if ($data['lead_email'] == 'other') {
+            $update_data['email'] = $data['confirm_email'];
+        }
+        if ($data['mail_campaign_status_lead'] == '1') {
+            $update_data['mail_campaign_status'] = '1';
+
+        } else {
+            $update_data['mail_campaign_status'] = '0';
+
+        }
+        $this->db->where('id',$id);
+        $this->db->update('lead_management',$update_data);
+
+        $lead_data = $this->db->get_where('lead_management',array('id'=>$id))->row_array();
+        
+        if ($lead_data['mail_campaign_status'] == 1) {
             $check = $this->db->query("select * from lead_management where id=$id")->row_array();
             if (!empty($check)) {
                 //if ($check['day_0_mail_date'] == '0000-00-00') {
@@ -954,7 +979,7 @@ Class Lead_management extends CI_Model {
                     'source_detail' => $lead_result['lead_source_detail'],
                     'lead_type' => $lead_type_name['name'],
                     'office_phone_number' => $office_info['phone'],
-                    'office_address' => $office_info['address'],
+                    'office_address' => $office_info['full_address'],
                     'office_name' => $office_info['name'],
                     'requested_by' => $requested_by['full_name']
                 ];
@@ -965,7 +990,7 @@ Class Lead_management extends CI_Model {
                         $email_subject = str_replace('#' . $index, $value, $email_subject);
                     }
                 }
-
+                $chat_link = 'https://www.websitealive3.com/12709/operator/guest/gDefault_v2.asp?cframe=login&chattype=mobile&groupid=12709&websiteid=783&departmentid=15447&sessionid_=&iniframe=&ppc_id=&autostart=&proactiveid=&req_router_type=&text2chat_info=&loginname=&loginnamelast=&loginemail=&loginphone=&infocapture_ids=&infocapture_values=&dl=&loginquestion=';
                 $user_logo = "";
                 if ($lead_result['office'] != 0) {
                     $user_logo = get_user_logo($lead_result['office']);
@@ -984,62 +1009,80 @@ Class Lead_management extends CI_Model {
                     $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
                 }
                 $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-		                    <html xmlns="http://www.w3.org/1999/xhtml">
-		                    <head>
-		                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		                    <title>TAXLEAF</title>
-		                    <style type="text/css">
-		                    body {
-		                        background-color: #FFFFFF;
-		                        margin-left: 0px;
-		                        margin-top: 0px;
-		                        margin-right: 0px;
-		                        margin-bottom: 0px;
-		                    }
-		                    .textoblanco {
-		                        font-family: Arial, Helvetica, sans-serif;
-		                        font-size: 12px;
-		                        color: #000;
-		                    }
-		                    .textoblanco {
-		                        font-family: Arial, Helvetica, sans-serif;
-		                        font-size: 12px;
-		                        color: #FFF;
-		                    }
-		                    .textonegro {
-		                        font-family: Arial, Helvetica, sans-serif;
-		                        font-size: 12px;
-		                        color: #000;
-		                    }
-		                    </style>
-		                    </head>
+                            <html xmlns="http://www.w3.org/1999/xhtml">
+                            <head>
+                            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                            <title>TAXLEAF</title>
+                            <style type="text/css">
+                            body {
+                                background-color: #FFFFFF;
+                                margin-left: 0px;
+                                margin-top: 0px;
+                                margin-right: 0px;
+                                margin-bottom: 0px;
+                            }
+                            .textoblanco {
+                                font-family: Arial, Helvetica, sans-serif;
+                                font-size: 12px;
+                                color: #000;
+                            }
+                            .textoblanco {
+                                font-family: Arial, Helvetica, sans-serif;
+                                font-size: 12px;
+                                color: #FFF;
+                            }
+                            .textonegro {
+                                font-family: Arial, Helvetica, sans-serif;
+                                font-size: 12px;
+                                color: #000;
+                            }
+                            </style>
+                            </head>
 
-		                    <body>
-		                    <br />
-		                    <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
-		                      <tr>
-		                        <td><table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
-		                          <tr>
-		                            <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="250" /></td>
-		                          </tr>
-		                        </table>
-		                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-		                            <tr>
-		                              <td><img src="' . $divider_img . '" width="600" height="30" /></td>
-		                            </tr>
-		                          </table>
-		                          <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
-		                            <tr>
-		                              <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong>
-		                                </strong>' . $mail_body . '</span></p>
-		                              </td>
-		                            </tr>
-		                          </table>          
-		                          </td>
-		                      </tr>		                        
-		                    </table>
-		                    </body>
-		                    </html>';
+                            <body>
+                            <br />
+                            <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
+                              <tr>
+                                <td><table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+                                  <tr>
+                                    <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="250" /></td>
+                                  </tr>
+                                </table>
+                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                      <td><img src="' . $divider_img . '" width="600" height="30" /></td>
+                                    </tr>
+                                  </table>
+                                  <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
+                                    <tr>
+                                      <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong>
+                                        </strong>' . $mail_body . '</span></p>
+                                      </td>
+                                    </tr>
+                                  </table>          
+                                  </td>
+
+                              </tr>
+                              <tr>
+                                  <td valign="top">
+                                      <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
+                                        <tr style="background: transparent; height: 60px;">
+                                            <td style="text-align: center;">
+                                                <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Home</a>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Services</a>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <a href="'. $chat_link .'" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Chat</a>
+                                            </td>
+                                        </tr>
+                                      </table>
+                                  </td>
+                              </tr>                             
+                            </table>
+                            </body>
+                            </html>';
                 $this->load->library('email', $config);
                 $this->email->set_newline("\r\n");
                 $this->email->from($from, $from_name); // change it to yours
@@ -1055,18 +1098,11 @@ Class Lead_management extends CI_Model {
                 /* mail section */
                 //}
             }
-        }
-        $staff[0] = sess('user_id');
-        $this->system->save_general_notification('lead', $id, 'tracking', $staff, '', 1);
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
-            return false;
+            echo "1";
         } else {
-            $this->db->trans_commit();
-            return true;
+            echo "-1";
         }
     }
-
     public function load_count_data() {
         $user_details = staff_info();
         $usertype = $user_details['type'];
@@ -2150,6 +2186,19 @@ Class Lead_management extends CI_Model {
 
         $result = $this->db->get()->result_array();
         return $result;
+    }
+
+    public function get_lead_details_by_id($lead_id) {
+        $this->db->where('type !=','2');
+        $this->db->where('id',$lead_id);
+        return $this->db->get('lead_management')->row_array();
+    }
+
+    public function check_changes_in_mail_campaign($data) {
+        $this->db->where('mail_campaign_status',$data['mail_campaign_status_lead']);
+        $this->db->where('email',$data['lead_email']);
+        $this->db->where('id',$data['lead_id']);
+        return $this->db->get('lead_management')->num_rows();
     }
 
 }
