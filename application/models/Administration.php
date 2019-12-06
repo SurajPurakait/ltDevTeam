@@ -69,8 +69,10 @@ class Administration extends CI_Model {
     public function get_all_office() {
         $staff_info = staff_info();
         if($staff_info['type']==1 || $staff_info['type']==2 || $staff_info['department']==14){
-            $this->db->order_by('name', 'ASC');
-            return $this->db->get_where('office', ['status' => 1])->result_array();
+//            return $this->db->get_where('office', ['status' => 1])->result_array();
+            $this->db->where_in('status',[1,3]);
+            $this->db->order_by('status', 'ASC');
+            return $this->db->get("office")->result_array();
         }else{
             $this->db->select('o.*');
             $this->db->from('office o');
@@ -103,7 +105,7 @@ class Administration extends CI_Model {
     }
 
     public function get_office_by_id($office_id) {
-        $this->db->select('office.*, (SELECT state_name FROM states WHERE id = office.state) AS state_name');
+        $this->db->select('office.*, (SELECT state_name FROM states WHERE id = office.state) AS state_name,CONCAT(address , ", " , city , ", " , (SELECT state_name FROM states where id = office.state) ," ",zip ) as full_address');
         return $this->db->get_where('office', ["id" => $office_id])->row_array();
     }
 
@@ -650,7 +652,13 @@ class Administration extends CI_Model {
             return 1;
         }
     }
-
+   
+     public function deactivate_office($id){      
+    $this->db->set('status', 3);
+    $this->db->where('id', $id);
+    return $this->db->update("office");
+    }
+    
     public function get_staff_relations($staff_id) {
         $count = $this->db->where('staff_id', $staff_id)->from("action_staffs")->count_all_results();
         $count += $this->db->where('staff_requested_by', $staff_id)->from("lead_management")->count_all_results();
