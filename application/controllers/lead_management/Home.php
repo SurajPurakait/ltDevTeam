@@ -220,4 +220,14 @@ class Home extends CI_Controller {
         $render_data['lead_data'] = $this->lead_management->get_lead_details_by_id($lead_id);
         $this->load->view("lead_management/change_mail_campaign_status_modal", $render_data);     
     }
+
+    public function change_mail_campaign_status_lead() {
+        $response = $this->lead_management->check_changes_in_mail_campaign(post());
+        if ($response == 1) {
+            echo "0";
+        } else {
+            echo $this->lead_management->change_mail_campaign_lead(post());
+        }
+        
+    }
 }

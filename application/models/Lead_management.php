@@ -871,9 +871,11 @@ Class Lead_management extends CI_Model {
         $this->db->trans_begin();
         $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => $status, "section_id" => $id, "related_table_name" => "lead_management"]);
         $data = ["status" => $status];
+
         switch ($status) {
             case "0":
                 $data["submission_date"] = date('Y-m-d');
+                $data["active_date"] = '';
                 break;
             case "1":
                 $data["complete_date"] = date('Y-m-d');
@@ -883,7 +885,6 @@ Class Lead_management extends CI_Model {
                 break;
             case "3":
                 $data["active_date"] = date('Y-m-d');
-                $data["mail_campaign_status"] = '1';
                 break;
         }
 
@@ -899,7 +900,22 @@ Class Lead_management extends CI_Model {
             return true;
         }
     }
-    public function activate_mail_campaign($id) {
+    public function change_mail_campaign_lead($data) {
+        $id = $data['lead_id'];
+        $update_data = [];
+        if ($data['lead_email'] == 'other') {
+            $update_data['email'] = $data['confirm_email'];
+        }
+        if ($data['mail_campaign_status_lead'] == '1') {
+            $update_data['mail_campaign_status'] = '1';
+
+        } else {
+            $update_data['mail_campaign_status'] = '0';
+
+        }
+        $this->db->where('id',$id);
+        $this->db->update('lead_management',$update_data);
+
         $lead_data = $this->db->get_where('lead_management',array('id'=>$id))->row_array();
         
         if ($lead_data['mail_campaign_status'] == 1) {
@@ -974,7 +990,7 @@ Class Lead_management extends CI_Model {
                         $email_subject = str_replace('#' . $index, $value, $email_subject);
                     }
                 }
-
+                $chat_link = 'https://www.websitealive3.com/12709/operator/guest/gDefault_v2.asp?cframe=login&chattype=mobile&groupid=12709&websiteid=783&departmentid=15447&sessionid_=&iniframe=&ppc_id=&autostart=&proactiveid=&req_router_type=&text2chat_info=&loginname=&loginnamelast=&loginemail=&loginphone=&infocapture_ids=&infocapture_values=&dl=&loginquestion=';
                 $user_logo = "";
                 if ($lead_result['office'] != 0) {
                     $user_logo = get_user_logo($lead_result['office']);
@@ -1045,6 +1061,24 @@ Class Lead_management extends CI_Model {
                                     </tr>
                                   </table>          
                                   </td>
+
+                              </tr>
+                              <tr>
+                                  <td valign="top">
+                                      <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
+                                        <tr style="background: transparent; height: 60px;">
+                                            <td style="text-align: center;">
+                                                <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Home</a>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Services</a>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <a href="'. $chat_link .'" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Chat</a>
+                                            </td>
+                                        </tr>
+                                      </table>
+                                  </td>
                               </tr>                             
                             </table>
                             </body>
@@ -1064,6 +1098,9 @@ Class Lead_management extends CI_Model {
                 /* mail section */
                 //}
             }
+            echo "1";
+        } else {
+            echo "-1";
         }
     }
     public function load_count_data() {
@@ -2155,6 +2192,13 @@ Class Lead_management extends CI_Model {
         $this->db->where('type !=','2');
         $this->db->where('id',$lead_id);
         return $this->db->get('lead_management')->row_array();
+    }
+
+    public function check_changes_in_mail_campaign($data) {
+        $this->db->where('mail_campaign_status',$data['mail_campaign_status_lead']);
+        $this->db->where('email',$data['lead_email']);
+        $this->db->where('id',$data['lead_id']);
+        return $this->db->get('lead_management')->num_rows();
     }
 
 }
