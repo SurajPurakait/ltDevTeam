@@ -228,7 +228,10 @@
                 ?>
                                         <tr class="bg-light-green">
                                             <td><h3>Invoice Recurrence</h3></td>
-                                            <td>Pattern: <?= $invoice_recurrence->pattern  ?></td>
+                                            <td><b>Pattern:</b> <?= $invoice_recurrence->pattern  ?><br>
+                                                <b>Remaining Generation: </b><?= $invoice_recurrence->total_generation_time  ?><br>
+                                                <b>Next Occurance Date: </b><?= $invoice_recurrence->next_occurance_date ?>
+                                            </td>
                                         </tr>
                 <?php } ?>
             </tbody>

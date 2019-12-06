@@ -7788,7 +7788,7 @@ body.skin-3 {
     margin-top: 6px;
 }
 .nav .icon-incomplete{
-    background:#FFB046;
+    background:#FFB046 !important;
     border-radius: 15px;
     padding: 1px !important;
     color: #000;
@@ -7799,7 +7799,7 @@ body.skin-3 {
     margin-top: 6px;
 }
 .nav .icon-complete-new{
-    background: #06a0d6;
+    background: #06a0d6 !important;
     border-radius: 15px;
     padding: 1px !important;
     color: #fff;
