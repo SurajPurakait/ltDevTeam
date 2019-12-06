@@ -441,6 +441,40 @@ function delete_office(id) {
         }
     });
 }
+function deactive_office(id) {
+    // alert(id);return false;
+    $.get(base_url + "administration/office/get_office_relations/" + id, function (result) {
+        if (result != '') {
+            
+            swal({
+                title: "Are you sure want to deactivate?",
+                
+                type: "warning",
+                showCancelButton: true,
+                showConfirmButton: true
+            },
+                    function () {
+                        $.ajax({
+                            type: 'POST',
+                            url: base_url + '/administration/office/deactivate_office',
+                            data: {
+                                office_id: id
+                            },
+                            success: function (result) {
+                                    swal({
+                                        title: "Success!",
+                                        "text": "Office been deactivated successfully!",
+                                        "type": "success"
+                                    }, function () {
+                                        goURL(base_url + 'administration/office');
+                                    });
+
+                            }
+                        });
+                    });
+        }
+    });
+}
 
 function delete_staff(id) {
     $.get(base_url + "administration/manage_staff/get_staff_relations/" + id, function (result) {

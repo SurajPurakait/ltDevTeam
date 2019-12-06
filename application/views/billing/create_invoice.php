@@ -88,7 +88,7 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-inline">
-                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="1" onclick="//check_generation_type(this.value)"></label>&nbsp;
+                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="1" checked onclick="//check_generation_type(this.value)"></label>&nbsp;
                                                         <label class="control-label">After</label>&nbsp;
                                                         <input class="form-control" type="text" id="duration_time" name="recurrence[duration_time]" style="width: 100px">&nbsp;
                                                         <label class="control-label">generations</label>
@@ -96,7 +96,7 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-inline">
-                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="2" checked=""></label>&nbsp;
+                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="2"></label>&nbsp;
                                                         <label class="control-label">Until date</label>&nbsp;
                                                         <input placeholder="mm/dd/yyyy" id="until_date" class="form-control datepicker_mdy_due" type="text" title="Start Date" name="recurrence[until_date]" style="width: 100px">
                                                     </div>

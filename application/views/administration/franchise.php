@@ -54,6 +54,9 @@ $ci->load->model('system');
                                                 <a href="javascript:void(0);" title="DELETE"
                                                    onclick="delete_office('<?= $fl['id'] ?>');"><i
                                                         class="fa fa-trash"></i></a>
+                                                        
+                                                        <a href="javascript:void(0);" title="Deactivate"
+                                                   onclick="deactive_office('<?= $fl['id'] ?>');"><i class="fa fa-window-close" aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
                                         <?php
