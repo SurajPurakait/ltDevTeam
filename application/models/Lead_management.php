@@ -924,27 +924,27 @@ Class Lead_management extends CI_Model {
                 //if ($check['day_0_mail_date'] == '0000-00-00') {
                 /* mail section */
                 $user_email = $check['email'];
-                $config = Array(
-                   'protocol' => 'smtp',
-                   'smtp_host' => 'ssl://smtp.gmail.com',
-                   'smtp_port' => 465,
-                   'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-                   'smtp_pass' => 'codetestml0016@123', // change it to yours
-                   'mailtype' => 'html',
-                   'charset' => 'utf-8',
-                   'wordwrap' => TRUE
-                );
-
                 // $config = Array(
-                //     //'protocol' => 'smtp',
-                //     'smtp_host' => 'mail.leafnet.us',
-                //     'smtp_port' => 465,
-                //     'smtp_user' => 'developer@leafnet.us', // change it to yours
-                //     'smtp_pass' => 'developer@123', // change it to yours
-                //     'mailtype' => 'html',
-                //     'charset' => 'utf-8',
-                //     'wordwrap' => TRUE
+                //    'protocol' => 'smtp',
+                //    'smtp_host' => 'ssl://smtp.gmail.com',
+                //    'smtp_port' => 465,
+                //    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+                //    'smtp_pass' => 'codetestml0016@123', // change it to yours
+                //    'mailtype' => 'html',
+                //    'charset' => 'utf-8',
+                //    'wordwrap' => TRUE
                 // );
+
+                $config = Array(
+                    //'protocol' => 'smtp',
+                    'smtp_host' => 'mail.leafnet.us',
+                    'smtp_port' => 465,
+                    'smtp_user' => 'developer@leafnet.us', // change it to yours
+                    'smtp_pass' => 'developer@123', // change it to yours
+                    'mailtype' => 'html',
+                    'charset' => 'utf-8',
+                    'wordwrap' => TRUE
+                );
                 $lead_result = $this->view_leads_record($id);
                 $mail_data = $this->get_campaign_mail_data(($check["type"] == '1') ? '1':'2', $check["language"], 1);
                 $email_subject = $mail_data['subject'];
