@@ -34,7 +34,7 @@
                     <div class="col-md-2 m-t-5">
                         <label>Email<span class="text-danger">*</span></label> 
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-8">
                         <div class="form-group">
                             <input type="text" class="form-control" name="confirm_email" id="confirm_email" placeholder="Confirm Your Email" title="Email" required>
                             <div class="errorMessage text-danger m-t-2 m-l-2"></div>
