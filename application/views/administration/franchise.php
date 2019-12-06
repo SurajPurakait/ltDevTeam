@@ -56,7 +56,7 @@ $ci->load->model('system');
                                                         class="fa fa-trash"></i></a>
                                                         
                                                         <a href="javascript:void(0);" title="<?= $fl['status']==3?'Deactivate':'Activate' ?>"
-                                                   onclick="deactive_office('<?= $fl['id'] ?>');"><i class="<?= $fl['status']==3?'fa fa-ban':'fa fa-check' ?>" aria-hidden="true"></i></a>
+                                                   onclick="deactive_office('<?= $fl['id'] ?>','<?= $fl['status']?>');"><i class="<?= $fl['status']==3?'fa fa-ban':'fa fa-check' ?>" aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
                                         <?php
