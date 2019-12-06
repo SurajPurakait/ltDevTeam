@@ -1032,6 +1032,3 @@ ALTER TABLE `invoice_info` ADD `is_recurrence` ENUM('n','y') NOT NULL AFTER `sta
 /*02.12.2019*/
 
 ALTER TABLE `invoice_recurence` CHANGE `duration_time` `duration_time` INT(4) NULL DEFAULT NULL; 
-
-/*05.12.2019*/
-ALTER TABLE `office` CHANGE `status` `status` TINYINT(4) NOT NULL DEFAULT '1' COMMENT '1 for default, 2 for delete, 3 for deactivate ';
