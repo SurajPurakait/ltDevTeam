@@ -274,7 +274,7 @@ if(pattern!=''){
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//             console.log(result); return false;
+            // console.log(result); return false;
             if (editval == '') {
                 if (result != 0) {
                     //alert(result);
@@ -576,7 +576,7 @@ function cancelInvoice() {
     goURL('../');
 }
 
-function invoiceContainerAjax(invoice_type, reference_id, invoice_id) {
+function invoiceContainerAjax(invoice_type, reference_id, invoice_id,is_recurrence) {
     var url = '';
     if (invoice_id != '') {
         url = 'billing/invoice/get_edit_invoice_container_ajax';
@@ -590,11 +590,13 @@ function invoiceContainerAjax(invoice_type, reference_id, invoice_id) {
             invoice_id: invoice_id,
             invoice_type: invoice_type,
             reference_id: reference_id,
+            is_recurrence: is_recurrence,
             client_id: $('#client_id').val()
         },
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
+            // alert(result);return false;
             if (result != '0') {
                 $('#invoice_container').html(result);
             } else {
