@@ -1,4 +1,4 @@
-<div class="wrapper wrapper-content">
+ <div class="wrapper wrapper-content">
     <div class="row">
         <div class="col-lg-12">
             <form class="form-horizontal" method="post" id="form_add_new_prospect">
