@@ -186,9 +186,10 @@ Class System extends CI_Model {
         if ($staff_id == "") {
             $return = $this->db->get_where('office', ['status' => '1'])->result_array();
         } else {
-            $this->db->select('ofc.id, ofc.address, ofc.city');
+            $this->db->select('ofc.id, ofc.address, ofc.city, ofc.zip ,st.state_code');
             $this->db->from('office_staff os');
             $this->db->join('office ofc', 'os.office_id = ofc.id');
+            $this->db->join('states st', 'st.id = ofc.state');
             $this->db->where(['os.staff_id' => $staff_id, 'ofc.status' => '1']);
             $return = $this->db->get()->row_array();
         }

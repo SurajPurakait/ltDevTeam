@@ -795,7 +795,7 @@ $office_id = get_office_id($staff_info['office']);
                     <p><?php echo staff_office_name($referred_info['id']); ?></p>
                     <hr class="m-t-xs m-b-xs">
                     <p><i class="fa fa-envelope" aria-hidden="true"></i> <?php echo $referred_info['user']; ?></p>
-                    <p><i class="fa fa-address-card-o" aria-hidden="true"></i> <?php echo $referred_address_info['address'] . " , " . $referred_address_info['city']; ?></p>
+                    <p><i class="fa fa-address-card-o" aria-hidden="true"></i> <?php echo $referred_address_info['address'] . " , " ."<br>". $referred_address_info['city'] . " , " . $referred_address_info['state_code'] . " " . $referred_address_info['zip']; ?></p>
                     <p><i class="fa fa-phone" aria-hidden="true"></i> <?php echo ($referred_info['phone'] != '') ? $referred_info['phone'] : 'N/A'; ?></p>
                 </div>
             <?php } ?>
