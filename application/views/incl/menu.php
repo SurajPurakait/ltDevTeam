@@ -251,8 +251,10 @@ $office_id = get_office_id($staff_info['office']);
                 <!-- Actions -->
                 <li <?= active_menu($main_menu, "action"); ?> >
                     <div class="dashboard-icons pull-right">
-                        <a href="<?= base_url(); ?>action/home/index/0/0/byme_tome_task" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?= action_list('byme_tome_task', '0'); ?></a>
-                        <a href="<?= base_url(); ?>action/home/index/1/0/byme_tome_task" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= action_list('byme_tome_task', '1'); ?></a>
+                        <a href="javascript:void(0)" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New" onclick="reflactFilterWithMenu('0-New', 'byme-By ME');loadActionDashboard(0, 'byme', '', '', '', '');"><?= action_list('byme_tome_task', '0'); ?></a>
+                        <!--<a href="<//?= base_url(); ?>action/home/index/1/0/byme_tome_task" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= action_list('byme_tome_task', '1'); ?></a>-->
+                    <a href="javascript:void(0)" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithMenu('1-Started', 'byme-By ME');loadActionDashboard(1, 'byme', '', '', '', '');"><?= action_list('byme', '1'); ?></a>
+                   
                     </div>
                     <a href="javascript:void(0);">
                         <i class="fa fa-flash"></i>
@@ -413,8 +415,8 @@ $office_id = get_office_id($staff_info['office']);
                 <!-- Leads -->
                 <li <?= active_menu($main_menu, "leads"); ?> >
                     <div class="dashboard-icons pull-right">
-                        <a href="<?= base_url(); ?>lead_management/home/index/0/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php echo get_new_lead_count(); ?></a>
-                        <a href="<?= base_url(); ?>lead_management/home/index/3/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php echo get_active_lead_count(); ?></a>
+                        <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New" onclick="reflactFilterWithLead('0-New'); loadLeadDashboard(1, 0)"><?php echo get_new_lead_count(); ?></a>
+                        <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active" onclick="reflactFilterWithLead('3-Active'); loadLeadDashboard('', 3)"><?php echo get_active_lead_count(); ?></a>
                         <!-- <div class="clearfix"></div> -->
                         <!-- <a href="<?//= base_url(); ?>lead_management/home/index/0/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php// echo get_new_lead_count(2); ?></a>
                         <a href="<?//= base_url(); ?>lead_management/home/index/3/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php //echo get_active_lead_count(2); ?></a> -->
@@ -839,4 +841,34 @@ $office_id = get_office_id($staff_info['office']);
             }
         });
     });
+    var reflactFilterWithMenu = function (status, requestType) {
+        clearFilter();
+        variableArray = [];
+        elementArray = [];
+        $("select.variable-dropdown:first").val(2);
+        var statusArray = status.split('-');
+        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
+        $("select.criteria-dropdown:first").trigger("chosen:updated");
+        $("select.condition-dropdown:first").val(1).attr('disabled', true);
+        elementArray.push($("select.condition-dropdown:first"));
+        variableArray.push(2);
+        addFilterRow();
+        $("select.variable-dropdown:eq(1)").val(13);
+        var requestTypeArray = requestType.split('-');
+        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
+        $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
+        $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
+        elementArray.push($("select.condition-dropdown:eq(1)"));
+        variableArray.push(13);
+    }
+     var reflactFilterWithLead = function (status, requestType) {
+        clearFilter();
+        variableArray = [];
+        elementArray = [];
+        $("select.variable-dropdown:first").val(2);
+        var statusArray = status.split('-');
+        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
+        $("select.criteria-dropdown:first").trigger("chosen:updated");
+        $("select.condition-dropdown:first").val(1).attr('disabled', true);
+    }
 </script>
