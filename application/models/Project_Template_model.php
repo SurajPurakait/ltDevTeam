@@ -143,12 +143,30 @@ class Project_Template_model extends CI_Model {
             if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
-                $ins_recurrence['actual_due_year'] = date('Y');
+                $current_month=date('m');
+                $current_day=date('d');
+                if($ins_recurrence['due_month']>=$current_month && $ins_recurrence['due_day']>=$current_day){
+                    $ins_recurrence['actual_due_year'] = date('Y');
+                }else{
+                    $ins_recurrence['actual_due_year'] = date('Y')+1;
+                }
             } elseif ($ins_recurrence['pattern'] == 'monthly') {
                 $current_month = date('m');
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = (int) $current_month + (int) $ins_recurrence['due_month'];
-                $ins_recurrence['actual_due_year'] = date('Y');
+                if($ins_recurrence['actual_due_day']>=date('d')){
+                    if($ins_recurrence['actual_due_month']<=12){
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y');
+                    }
+                }else{
+                   if($ins_recurrence['actual_due_month']<=12){
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y')+($ins_recurrence['actual_due_month']/12);
+                    } 
+                }
             } elseif ($ins_recurrence['pattern'] == 'weekly') {
                 $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
                 $current_day = $day_array[$ins_recurrence['due_month']];
@@ -759,12 +777,30 @@ class Project_Template_model extends CI_Model {
             if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
-                $ins_recurrence['actual_due_year'] = date('Y');
+                $current_month=date('m');
+                $current_day=date('d');
+                if($ins_recurrence['due_month']>=$current_month && $ins_recurrence['due_day']>=$current_day){
+                    $ins_recurrence['actual_due_year'] = date('Y');
+                }else{
+                    $ins_recurrence['actual_due_year'] = date('Y')+1;
+                }
             } elseif ($ins_recurrence['pattern'] == 'monthly') {
                 $current_month = date('m');
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = (int) $current_month + (int) $ins_recurrence['due_month'];
-                $ins_recurrence['actual_due_year'] = date('Y');
+                if($ins_recurrence['actual_due_day']>=date('d')){
+                    if($ins_recurrence['actual_due_month']<=12){
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y');
+                    }
+                }else{
+                   if($ins_recurrence['actual_due_month']<=12){
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y')+($ins_recurrence['actual_due_month']/12);
+                    } 
+                }
             } elseif ($ins_recurrence['pattern'] == 'weekly') {
                 $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
                 $current_day = $day_array[$ins_recurrence['due_month']];
@@ -1001,8 +1037,12 @@ class Project_Template_model extends CI_Model {
                             $project_recurrence_main_data['actual_due_day'] = $fye_day;
                             $project_recurrence_main_data['actual_due_month'] = date('m', $newDate);
                             $project_recurrence_main_data['actual_due_year'] = date('Y', $newDate);
-
-                            $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            
+                            if($project_recurrence_main_data['actual_due_month']<=12){
+                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            }else{
+                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' .($project_recurrence_main_data['actual_due_month'] % 12).'-' . $project_recurrence_main_data['actual_due_day'];
+                            }
 
                             if ($due_date <= $creation_date) {
                                 $project_recurrence_main_data['actual_due_year'] = $project_recurrence_main_data['actual_due_year'] + 1;
@@ -1030,7 +1070,11 @@ class Project_Template_model extends CI_Model {
                         }
                     }
                     unset($project_recurrence_main_data['id']);
-                    $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                    if($project_recurrence_main_data['actual_due_month']<=12){
+                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            }else{
+                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' .($project_recurrence_main_data['actual_due_month'] % 12).'-' . $project_recurrence_main_data['actual_due_day'];
+                            }
 
                     if ($project_recurrence_main_data['generation_month'] == '') {
                         $project_recurrence_main_data['generation_month'] = '0';
@@ -1042,7 +1086,7 @@ class Project_Template_model extends CI_Model {
                     $generation_days = ((int) $project_recurrence_main_data['generation_month'] * 30) + (int) $project_recurrence_main_data['generation_day'];
 
                     $project_recurrence_main_data['due_date'] = $due_date;
-
+//                    echo $due_date;die;
                     if ($project_recurrence_main_data['pattern'] == 'monthly') {
                         $next_due_date = date("Y-m-d", strtotime("+1 month", strtotime($due_date)));
                         $project_recurrence_main_data['next_due_date'] = $next_due_date;
@@ -2310,14 +2354,14 @@ class Project_Template_model extends CI_Model {
         if ($client_id != '') {
             $this->db->where('pro.client_id', $client_id);
         }
-        if($template_cat_id==1){
-            if($year==''){
-                $present_year=date('Y');
-                $this->db->where('prm.actual_due_year',$present_year);
-            }else{
-               $this->db->where('prm.actual_due_year',$year); 
-            }
-        }
+//        if($template_cat_id==1){
+//            if($year==''){
+//                $present_year=date('Y');
+//                $this->db->where('prm.actual_due_year',$present_year);
+//            }else{
+//               $this->db->where('prm.actual_due_year',$year); 
+//            }
+//        }
         $this->db->group_by('pro.id');
         if ($sort_criteria != '') {
 //            echo "a";

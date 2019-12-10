@@ -653,11 +653,9 @@ class Administration extends CI_Model {
         }
     }
    
-     public function deactivate_office($id){      
-    $this->db->set('status', 3);
-    $this->db->where('id', $id);
-    return $this->db->update("office");
-    }
+     public function deactivate_office($id){  
+        return $this->db->query("UPDATE office SET status=(case when status=3 then 1 else 3 end) WHERE id='$id'");
+}
     
     public function get_staff_relations($staff_id) {
         $count = $this->db->where('staff_id', $staff_id)->from("action_staffs")->count_all_results();
