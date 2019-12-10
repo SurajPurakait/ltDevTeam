@@ -3752,6 +3752,16 @@ body.body-small .footer.fixed {
 .table-responsive {
     border: none;
 }
+#royalty-total td, #royalty-total th {
+    border: 1px solid #000;
+}
+#royalty-total td{
+    background-color: #fff;
+}
+#royalty-total th{
+    color: #fff;
+    background-color: #9ccc51;
+}
 
 /* PANELS */
 .panel.blank-panel {

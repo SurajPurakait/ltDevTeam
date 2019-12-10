@@ -54,10 +54,10 @@ function loadRoyaltyReportsData(office = '',date_range = '') {
             {data: 'payment_type'},
             {data: 'authorization_id'},
             {data: 'reference'},
-            {data: 'total_net',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
-            {data: 'office_fee',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
-            {data: 'fee_with_cost',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
-            {data: 'fee_without_cost',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )}
+            {data: 'total_net',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
+            {data: 'office_fee',render: $.fn.dataTable.render.number(',', '.', 0,'','%')},
+            {data: 'fee_with_cost',render: $.fn.dataTable.render.number(',', '.', 2,'$')},
+            {data: 'fee_without_cost',render: $.fn.dataTable.render.number(',', '.', 2,'$')}
         ]
     });
 }
