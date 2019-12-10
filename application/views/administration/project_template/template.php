@@ -130,25 +130,7 @@
 
                                             <div id="responsible_staff_div"></div>
                                         </div>
-                                        <!--                                <div class="row">
-                                                                            <div class="form-group dept_div" style="display: inline-block;width: 100%;">
-                                                                                <label class="col-sm-3 col-md-2 control-label text-right">Office<span class="spanclass text-danger">*</span></label>
-                                                                                <div class="col-sm-9 col-md-10">
-                                                                                    <select required class="form-control" title="Office" name="template_main[office]" id="office" onchange="get_template_office_staff();" required>
-                                                                                        <option value="">Select an option</option>
-                                        <?php
-//                                                foreach ($office_list as $key => $value):
-                                        ?>
-                                                                                            <option value="<? $value["id"]; ?>"><? $value["name"]; ?></option>
-                                        <?php
-//                                                endforeach;
-                                        ?>
-                                                                                    </select>
-                                                                                    <div class="errorMessage text-danger"></div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div id="ofic_staff_div"></div>
-                                                                        </div>-->
+                                       
                                         <hr class="hr-line-dashed"/>
                                         <h3>Assigned :</h3>
                                         <?php

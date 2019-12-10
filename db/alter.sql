@@ -1036,10 +1036,11 @@ ALTER TABLE `invoice_recurence` CHANGE `duration_time` `duration_time` INT(4) NU
 
 /*import report_dashboard_service.sql*/
 
-/* live end */
+
 
 /*05.12.2019*/
 
 ALTER TABLE `invoice_recurence` ADD `total_generation_time` INT(4) NOT NULL DEFAULT '0' AFTER `until_date`; 
 
 ALTER TABLE `invoice_recurence` ADD `next_occurance_date` DATE NULL DEFAULT NULL AFTER `total_generation_time`; 
+/* live end */
