@@ -143,7 +143,13 @@ class Project_Template_model extends CI_Model {
             if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
-                $ins_recurrence['actual_due_year'] = date('Y');
+                $current_month=date('m');
+                $current_day=date('d');
+                if($ins_recurrence['due_month']>=$current_month && $ins_recurrence['due_day']>=$current_day){
+                    $ins_recurrence['actual_due_year'] = date('Y');
+                }else{
+                    $ins_recurrence['actual_due_year'] = date('Y')+1;
+                }
             } elseif ($ins_recurrence['pattern'] == 'monthly') {
                 $current_month = date('m');
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
@@ -429,7 +435,7 @@ class Project_Template_model extends CI_Model {
                         . 'where project_id=' . $id . ' and type=2';
                 $data2 = $this->db->query($query)->row_array();
 
-                $query = 'select CONCAT(last_name, ", ",first_name) as full_name '
+                $query = 'select CONCAT(first_name, " ",last_name) as full_name '
                         . 'from staff '
                         . 'where id=' . $data2['staff_id'] . '';
                 $data3 = $this->db->query($query)->row_array();
@@ -771,7 +777,13 @@ class Project_Template_model extends CI_Model {
             if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
-                $ins_recurrence['actual_due_year'] = date('Y');
+                $current_month=date('m');
+                $current_day=date('d');
+                if($ins_recurrence['due_month']>=$current_month && $ins_recurrence['due_day']>=$current_day){
+                    $ins_recurrence['actual_due_year'] = date('Y');
+                }else{
+                    $ins_recurrence['actual_due_year'] = date('Y')+1;
+                }
             } elseif ($ins_recurrence['pattern'] == 'monthly') {
                 $current_month = date('m');
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
@@ -1453,7 +1465,7 @@ class Project_Template_model extends CI_Model {
                     $k++;
                 }
             }
-
+//            echo $status_array;die;
             $status_array_values = explode(",", $status_array);
             if (count(array_unique($status_array_values)) == 1) {
                 $this->db->where('project_id', $suborder_order_id);
@@ -1569,7 +1581,7 @@ class Project_Template_model extends CI_Model {
         if (isset($post['template_main']) && !empty($post['template_main'])) {
             unset($post['template_main']['project_id']);
             unset($post['template_main']['edit_template']);
-            $temp_main_ins['added_by_user'] = sess('user_id');
+//            $temp_main_ins['added_by_user'] = sess('user_id');
             $temp_main_ins['template_id'] = $post['template_main']['template_id'];
             $temp_main_ins['title'] = $post['template_main']['title'];
             $temp_main_ins['description'] = $post['template_main']['description'];
