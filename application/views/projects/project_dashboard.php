@@ -118,7 +118,8 @@ if (!empty($project_list)) {
                             <tbody>
                                 <tr>
                                     <th style="width:8%; text-align: center">Project ID</th>
-                                    <th style="width:8%; text-align: center">Project Template</th>
+                                    <th style="width:8%; text-align: center">Category</th>
+                                    <th style="width:8%; text-align: center">Project Name</th>
                                     <th style="width:10%; text-align: center">Pattern</th>
                                     <!--<th style="width:8%; text-align: center">Client Type</th>-->
                                     <th style="width:8%; text-align: center">Client Id</th>
@@ -128,12 +129,13 @@ if (!empty($project_list)) {
                                     <th style="width:8%; text-align: center">Tracking</th>
                                     <th style="width:8%; text-align: center">Creation Date</th>
                                     <th style="width:8%; text-align: center">Due Date</th>
-                                    <th style="width:8%; text-align: center">Recurrence Date</th>
+                                    <th style="width:8%; text-align: center">Next Recurrence</th>
                                     <th style="width:8%; text-align: center">Note</th>
                                 </tr>
                                 <tr>
                                     <td title="ID"><?= $list['id'] ?></td>
-                                    <td title="Project Title">
+                                    <td title="Category"><?= get_template_category_name($list['template_cat_id']) ?></td>
+                                    <td title="Project Name">
                                         <span class=""><?= $templatedetails->title ?></span>
                                     </td>
                                     <td title="Pattern"><?= ucfirst($pattern_details->pattern) ?></td>
