@@ -14,6 +14,7 @@
     $select = [
         'ord.id AS id',  
         'ord.status AS status',  
+        'services.id AS services_id',  
         'services.dept AS department_id',  
         'ord.order_date AS order_date', 
         'ord.late_status AS late_status', 
@@ -44,27 +45,44 @@
     if (!empty($report_service_result)) {
         while($rsd = mysqli_fetch_assoc($report_service_query)) {
             $service_request_id = $rsd['service_request_id'];
+            
+            // date completed calculation 
             $sql_q_d_c = 'SELECT `created_time` FROM `tracking_logs` WHERE status_value ="1" AND section_id = "'.$service_request_id.'"';
             $sql_q_d_c_run = mysqli_query($conn,$sql_q_d_c);
             $sql_q_d_c_result = mysqli_fetch_assoc($sql_q_d_c_run);
             $date_completed_b_c = $sql_q_d_c_result['created_time'];
-            $date_completed = date('Y-m-d', strtotime($date_completed_b_c. ' + 30 days'));
+                        
+            $get_service_end_days_query = "select * from target_days where service_id='" . $rsd['services_id'] . "'";
+            $get_service_end_days_query_run = mysqli_query($conn,$get_service_end_days_query);
+            $get_service_end_days = mysqli_fetch_assoc($get_service_end_days_query_run);
+            $end_days = $get_service_end_days['end_days'];
 
-            $sql_q_d_c_a = 'SELECT `created_time` FROM `tracking_logs` WHERE status_value ="0" AND section_id = "'.$service_request_id.'"';
+            if (!empty($sql_q_d_c_result)) { 
+                $date_completed = date('Y-m-d', strtotime($date_completed_b_c. '+' .$end_days));
+            } else {
+                $date_completed = '0000-00-00';
+            }
+            // actual date completed calculation 
+            $sql_q_d_c_a = 'SELECT date_format(`created_time`,"%Y-%m-%d") as created_time FROM `tracking_logs` WHERE status_value ="0" AND section_id = "'.$service_request_id.'"';
             $sql_q_d_c_a_run = mysqli_query($conn,$sql_q_d_c_a);
             $sql_q_d_c_a_result = mysqli_fetch_assoc($sql_q_d_c_a_run);
-            $date_complete_actual = date('Y-m-d', strtotime($sql_q_d_c_a_result['created_time']));
-
-            $service_name = $rsd['service_name'];
+            if (!empty($sql_q_d_c_a_result)) {
+                $date_complete_actual = date('Y-m-d', strtotime($sql_q_d_c_a_result['created_time']));
+            } else {
+                $date_complete_actual = date('Y-m-d');
+            }
+            $service_name = addslashes($rsd['service_name']);
             $status = $rsd['status'];
             $late_status = $rsd['late_status'];
-            $sos = $rsd['sos'];
+            $sos = addslashes($rsd['sos']);
             $category = $rsd['category_id'];
             $department = $rsd['department_id'];
             $office = $rsd['office_id'];
 
             $insert_sql = "INSERT INTO `report_dashboard_service`(`service_name`, `status`, `date_completed`, `date_complete_actual`, `late_status`, `sos`, `category`, `department`, `office`) VALUES ('$service_name','$status', '$date_completed', '$date_complete_actual', '$late_status', '$sos', '$category', '$department', '$office')";
-            mysqli_query($conn,$insert_sql);
+            echo $insert_sql;
+            echo "<hr>";
+            mysqli_query($conn,$insert_sql)or die('Insert Error');
         }
     }
     echo "successfully inserted";
