@@ -3753,14 +3753,17 @@ body.body-small .footer.fixed {
     border: none;
 }
 #royalty-total td, #royalty-total th {
-    border: 1px solid #000;
+    border: 1px solid #96b26a;
 }
 #royalty-total td{
     background-color: #fff;
 }
 #royalty-total th{
-    color: #fff;
-    background-color: #9ccc51;
+    color: #000;
+    background-color: #a8e34c;
+}
+#ofc_chosen{
+    width: 100% !important;
 }
 
 /* PANELS */
