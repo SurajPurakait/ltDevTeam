@@ -78,7 +78,7 @@ $stat = ($stat == 'all') ? "" : $stat;
                                     <tbody>
                                         <tr>
                                             <th>LEADS</th>
-                                            <td class="text-center">
+                                         <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-0">
                                                     <span class="label label-success" id="lead_new" onclick="reflactFilterWithSummery('0-New'); loadLeadDashboard(1, 0);"><?= count(lead_list(1,'0')); ?></span>
                                                 </a>
@@ -288,7 +288,7 @@ $stat = ($stat == 'all') ? "" : $stat;
             }
         }
     }
-     var reflactFilterWithSummery = function (status, requestType) {
+    var reflactFilterWithSummery = function (status, requestType) {
         clearFilter();
         variableArray = [];
         elementArray = [];
@@ -308,4 +308,5 @@ $stat = ($stat == 'all') ? "" : $stat;
 //        elementArray.push($("select.condition-dropdown:eq(1)"));
 //        variableArray.push(13);
     }
+
 </script>
