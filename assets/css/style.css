@@ -3765,7 +3765,14 @@ body.body-small .footer.fixed {
 #ofc_chosen{
     width: 100% !important;
 }
-
+.buttons-print {
+    background:#8ab645 ;
+    color: black;     
+}
+.buttons-excel{
+    background:rgb(252, 186, 3);
+    color: black;    
+}
 /* PANELS */
 .panel.blank-panel {
     background: none;
