@@ -875,7 +875,7 @@ Class Lead_management extends CI_Model {
         switch ($status) {
             case "0":
                 $data["submission_date"] = date('Y-m-d');
-                $data["active_date"] = '';
+                $data["active_date"] = '0000-00-00';
                 break;
             case "1":
                 $data["complete_date"] = date('Y-m-d');
@@ -911,7 +911,7 @@ Class Lead_management extends CI_Model {
 
         } else {
             $update_data['mail_campaign_status'] = '0';
-
+            $update_data["day_0_mail_date"] = '0000-00-00';
         }
         $this->db->where('id',$id);
         $this->db->update('lead_management',$update_data);
@@ -924,27 +924,27 @@ Class Lead_management extends CI_Model {
                 //if ($check['day_0_mail_date'] == '0000-00-00') {
                 /* mail section */
                 $user_email = $check['email'];
-                // $config = Array(
-                //    'protocol' => 'smtp',
-                //    'smtp_host' => 'ssl://smtp.gmail.com',
-                //    'smtp_port' => 465,
-                //    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-                //    'smtp_pass' => 'codetestml0016@123', // change it to yours
-                //    'mailtype' => 'html',
-                //    'charset' => 'utf-8',
-                //    'wordwrap' => TRUE
-                // );
-
                 $config = Array(
-                    //'protocol' => 'smtp',
-                    'smtp_host' => 'mail.leafnet.us',
-                    'smtp_port' => 465,
-                    'smtp_user' => 'developer@leafnet.us', // change it to yours
-                    'smtp_pass' => 'developer@123', // change it to yours
-                    'mailtype' => 'html',
-                    'charset' => 'utf-8',
-                    'wordwrap' => TRUE
+                   'protocol' => 'smtp',
+                   'smtp_host' => 'ssl://smtp.gmail.com',
+                   'smtp_port' => 465,
+                   'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+                   'smtp_pass' => 'codetestml0016@123', // change it to yours
+                   'mailtype' => 'html',
+                   'charset' => 'utf-8',
+                   'wordwrap' => TRUE
                 );
+
+                // $config = Array(
+                //     //'protocol' => 'smtp',
+                //     'smtp_host' => 'mail.leafnet.us',
+                //     'smtp_port' => 465,
+                //     'smtp_user' => 'developer@leafnet.us', // change it to yours
+                //     'smtp_pass' => 'developer@123', // change it to yours
+                //     'mailtype' => 'html',
+                //     'charset' => 'utf-8',
+                //     'wordwrap' => TRUE
+                // );
                 $lead_result = $this->view_leads_record($id);
                 $mail_data = $this->get_campaign_mail_data(($check["type"] == '1') ? '1':'2', $check["language"], 1);
                 $email_subject = $mail_data['subject'];

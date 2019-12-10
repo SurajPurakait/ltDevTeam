@@ -182,36 +182,49 @@ $office_id = get_office_id($staff_info['office']);
                         </li>
                         <li <?= active_menu($menu, "incorporation"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <a href="<?= base_url(); ?>services/home/index/2/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 1); ?></a>
-                                <a href="<?= base_url(); ?>services/home/index/1/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 1); ?></a>
+                                <!--<a href="<//?= base_url(); ?>services/home/index/2/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><//?= count_services(2, '', 1); ?></a>-->
+                                <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService('2-Not Started','1-Incorporation');loadServiceDashboard('2','1','','',1);"><?= count_services(2, '', 1); ?></a>
+                                <!--<a href="<//?= base_url(); ?>services/home/index/1/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= count_services(1, '', 1); ?></a>-->
+                                 <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService('1-Started','1-Incorporation');loadServiceDashboard('1','1','','',1);"><?= count_services(1, '', 1); ?></a>
                             </div>
                             <a href="<?= base_url(); ?>services/incorporation">+ Incorporation</a>
                         </li>
                         <li <?= active_menu($menu, "accounting_services"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <a href="<?= base_url(); ?>services/home/index/2/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 2); ?></a>
-                                <a href="<?= base_url(); ?>services/home/index/1/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 2); ?></a>
+                                <!--<a href="<//?= base_url(); ?>services/home/index/2/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><//?= count_services(2, '', 2); ?></a>-->
+                                 <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService('2-Not Started','2-Accounting Service');loadServiceDashboard('2','2','','',1);"><?= count_services(2, '', 2); ?></a>                              
+                                <!--<a href="<//?= base_url(); ?>services/home/index/1/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= count_services(1, '', 2); ?></a>-->
+                                 <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService('1-Started','2-Accounting Service');loadServiceDashboard('1','2','','',1);"><?= count_services(1, '', 2); ?></a>
+                               
                             </div>
                             <a href="<?= base_url(); ?>services/accounting_services">+ Accounting</a>
                         </li>
                         <li <?= active_menu($menu, "tax_services"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <a href="<?= base_url(); ?>services/home/index/2/3" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 3); ?></a>
-                                <a href="<?= base_url(); ?>services/home/index/1/3" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 3); ?></a>
+                                <!--<a href="<//?= base_url(); ?>services/home/index/2/3" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><//?= count_services(2, '', 3); ?></a>-->
+                                <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService('2-Not Started','3-Tax Services');loadServiceDashboard('2','3','','',1);"><?= count_services(2, '', 3); ?></a>
+                                <!--<a href="<//?= base_url(); ?>services/home/index/1/3" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= count_services(1, '', 3); ?></a>-->
+                               <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService('1-Started','3-Tax Services');loadServiceDashboard('1','3','','',1);"><?= count_services(1, '', 3); ?></a>
                             </div>
                             <a href="<?= base_url(); ?>services/tax_services">+ Taxes</a>
                         </li>
                         <li <?= active_menu($menu, "business_services"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <a href="<?= base_url(); ?>services/home/index/2/4" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 4); ?></a>
-                                <a href="<?= base_url(); ?>services/home/index/1/4" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 4); ?></a>
+                                <!--<a href="<//?= base_url(); ?>services/home/index/2/4" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><//?= count_services(2, '', 4); ?></a>-->
+                                <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService('2-Not Started','4-Business Services');loadServiceDashboard('2','4','','',1);" ><?= count_services(2, '', 4); ?></a>
+                                <!--<a href="<//?= base_url(); ?>services/home/index/1/4" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= count_services(1, '', 4); ?></a>-->
+                                <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService('1-Started','4-Business Services');loadServiceDashboard('1','4','','',1);"><?= count_services(1, '', 4); ?></a>
                             </div>
                             <a href="<?= base_url(); ?>services/business_services">+ Business</a>
                         </li>
                         <li <?= active_menu($menu, "partner_services"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <a href="<?= base_url(); ?>services/home/index/2/5" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 5); ?></a>
-                                <a href="<?= base_url(); ?>services/home/index/1/5" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 5); ?></a>
+                                <!--<a href="<//?= base_url(); ?>services/home/index/2/5" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><//?= count_services(2, '', 5); ?></a>-->
+                                <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService('2-Not Started','5-Partner Services');loadServiceDashboard('2','5','','',1);"><?= count_services(2, '', 5); ?></a>
+                                
+                                <!--<a href="<//?= base_url(); ?>services/home/index/1/5" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= count_services(1, '', 5); ?></a>-->
+                            <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService('1-Started','5-Partner Services');loadServiceDashboard('1','5','','',1);"><?= count_services(1, '', 5); ?></a>
+                          
                             </div>
                             <a href="<?= base_url(); ?>services/partner_services">+ Partner</a>
                         </li>
@@ -251,8 +264,10 @@ $office_id = get_office_id($staff_info['office']);
                 <!-- Actions -->
                 <li <?= active_menu($main_menu, "action"); ?> >
                     <div class="dashboard-icons pull-right">
-                        <a href="<?= base_url(); ?>action/home/index/0/0/byme_tome_task" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?= action_list('byme_tome_task', '0'); ?></a>
-                        <a href="<?= base_url(); ?>action/home/index/1/0/byme_tome_task" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= action_list('byme_tome_task', '1'); ?></a>
+                        <a href="javascript:void(0)" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New" onclick="reflactFilterWithMenu('0-New', 'byme-By ME');loadActionDashboard(0, 'byme', '', '', '', '');"><?= action_list('byme_tome_task', '0'); ?></a>
+                        <!--<a href="<//?= base_url(); ?>action/home/index/1/0/byme_tome_task" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= action_list('byme_tome_task', '1'); ?></a>-->
+                    <a href="javascript:void(0)" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithMenu1('1-Started', 'byme-By ME');loadActionDashboard(1, 'byme_mytask', '', '', '', '');"><?= action_list('byme_tome_task', '1'); ?></a>
+                   
                     </div>
                     <a href="javascript:void(0);">
                         <i class="fa fa-flash"></i>
@@ -413,8 +428,8 @@ $office_id = get_office_id($staff_info['office']);
                 <!-- Leads -->
                 <li <?= active_menu($main_menu, "leads"); ?> >
                     <div class="dashboard-icons pull-right">
-                        <a href="<?= base_url(); ?>lead_management/home/index/0/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php echo get_new_lead_count(); ?></a>
-                        <a href="<?= base_url(); ?>lead_management/home/index/3/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php echo get_active_lead_count(); ?></a>
+                        <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New" onclick="reflactFilterWithLead('0-New'); loadLeadDashboard(1, 0)"><?php echo get_new_lead_count(); ?></a>
+                        <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active" onclick="reflactFilterWithLead('3-Active'); loadLeadDashboard('', 3)"><?php echo get_active_lead_count(); ?></a>
                         <!-- <div class="clearfix"></div> -->
                         <!-- <a href="<?//= base_url(); ?>lead_management/home/index/0/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php// echo get_new_lead_count(2); ?></a>
                         <a href="<?//= base_url(); ?>lead_management/home/index/3/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php //echo get_active_lead_count(2); ?></a> -->
@@ -830,6 +845,7 @@ $office_id = get_office_id($staff_info['office']);
     </div>
 </div>
 <script type="text/javascript">
+    
     $(function () {
         $('#side-menu').find('a').each(function () {
             if ($(this).attr('href') != 'javascript:void(0);') {
@@ -839,4 +855,78 @@ $office_id = get_office_id($staff_info['office']);
             }
         });
     });
+    var reflactFilterWithMenu = function (status, requestType) {
+        clearFilter();
+        variableArray = [];
+        elementArray = [];
+        $("select.variable-dropdown:first").val(2);
+        var statusArray = status.split('-');
+        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
+        $("select.criteria-dropdown:first").trigger("chosen:updated");
+        $("select.condition-dropdown:first").val(1).attr('disabled', true);
+        elementArray.push($("select.condition-dropdown:first"));
+        variableArray.push(2);
+        addFilterRow();
+        $("select.variable-dropdown:eq(1)").val(13);
+        var requestTypeArray = requestType.split('-');
+        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
+        $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
+        $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
+        elementArray.push($("select.condition-dropdown:eq(1)"));
+        variableArray.push(13);
+    }
+    var reflactFilterWithMenu1 = function (status, requestType) {
+        clearFilter();
+        variableArray = [];
+        elementArray = [];
+        $("select.variable-dropdown:first").val(2);
+        var statusArray = status.split('-');
+        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
+        $("select.criteria-dropdown:first").trigger("chosen:updated");
+        $("select.condition-dropdown:first").val(1).attr('disabled', true);
+        elementArray.push($("select.condition-dropdown:first"));
+        variableArray.push(2);
+//        addFilterRow();
+//        $("select.variable-dropdown:eq(1)").val(13);
+//        var requestTypeArray = requestType.split('-');
+//        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
+//        $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
+//        $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
+//        elementArray.push($("select.condition-dropdown:eq(1)"));
+//        variableArray.push(13);
+    }
+     var reflactFilterWithLead = function (status, requestType) {
+        clearFilter();
+        variableArray = [];
+        elementArray = [];
+        $("select.variable-dropdown:first").val(2);
+        var statusArray = status.split('-');
+        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
+        $("select.criteria-dropdown:first").trigger("chosen:updated");
+        $("select.condition-dropdown:first").val(1).attr('disabled', true);
+        elementArray.push($("select.condition-dropdown:first"));
+        variableArray.push(2);
+    }
+    
+    var reflactFilterWithService = function (status, categoryID) {
+        clearFilter();
+         variable_dd_array = [];
+        element_array = [];
+        $("select.variable-dropdown:first").val(4);
+        var statusArray = status.split('-');
+        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
+        $("select.criteria-dropdown:first").trigger("chosen:updated");
+        $("select.condition-dropdown:first").val(1).attr('disabled', true);
+        element_array.push($("select.condition-dropdown:first"));
+        variable_dd_array.push(4);
+        add_new_filter_row();
+        $("select.variable-dropdown:eq(1)").val(1);
+        var categoryArray = categoryID.split('-');
+        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + categoryArray[0] + '">' + categoryArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[category_id][]'});
+        $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
+        $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
+        element_array.push($("select.condition-dropdown:eq(1)"));
+        variable_dd_array.push(1);
+    }
+
 </script>
