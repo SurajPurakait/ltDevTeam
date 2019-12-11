@@ -3752,7 +3752,27 @@ body.body-small .footer.fixed {
 .table-responsive {
     border: none;
 }
-
+#royalty-total td, #royalty-total th {
+    border: 1px solid #96b26a;
+}
+#royalty-total td{
+    background-color: #fff;
+}
+#royalty-total th{
+    color: #000;
+    background-color: #a8e34c;
+}
+#ofc_chosen{
+    width: 100% !important;
+}
+.buttons-print {
+    background:#8ab645 ;
+    color: black;     
+}
+.buttons-excel{
+    background:rgb(252, 186, 3);
+    color: black;    
+}
 /* PANELS */
 .panel.blank-panel {
     background: none;

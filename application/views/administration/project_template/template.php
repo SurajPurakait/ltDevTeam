@@ -130,25 +130,7 @@
 
                                             <div id="responsible_staff_div"></div>
                                         </div>
-                                        <!--                                <div class="row">
-                                                                            <div class="form-group dept_div" style="display: inline-block;width: 100%;">
-                                                                                <label class="col-sm-3 col-md-2 control-label text-right">Office<span class="spanclass text-danger">*</span></label>
-                                                                                <div class="col-sm-9 col-md-10">
-                                                                                    <select required class="form-control" title="Office" name="template_main[office]" id="office" onchange="get_template_office_staff();" required>
-                                                                                        <option value="">Select an option</option>
-                                        <?php
-//                                                foreach ($office_list as $key => $value):
-                                        ?>
-                                                                                            <option value="<? $value["id"]; ?>"><? $value["name"]; ?></option>
-                                        <?php
-//                                                endforeach;
-                                        ?>
-                                                                                    </select>
-                                                                                    <div class="errorMessage text-danger"></div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div id="ofic_staff_div"></div>
-                                                                        </div>-->
+                                       
                                         <hr class="hr-line-dashed"/>
                                         <h3>Assigned :</h3>
                                         <?php
@@ -194,7 +176,7 @@
 
                                         </div>
                                         <hr class="hr-line-dashed"/>
-                                        <h3>Generation :</h3>
+                                        <h3>Generation:</h3>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <h4><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#RecurranceModal" title="Add Recurrence"><i class="fa fa-refresh"></i></button> &nbsp;<b id="pattern_show"></b>
@@ -213,7 +195,7 @@
                                                             <h2 class="modal-title">Recurrence</h2>
                                                         </div><!-- modal-header -->
                                                         <div class="modal-body">
-                                                            <h3 class="m-0 p-b-20">Frequency :</h3>
+                                                            <h3 class="m-0 p-b-20">Frequency:</h3>
                                                             <div class="row">
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
@@ -251,7 +233,7 @@
                                                                 </div>
                                                             </div><!-- ./row -->
                                                             <hr class="hr-line-dashed"/>                                                   
-                                                            <h3 class="m-0 p-b-20">Target Dates :</h3>
+                                                            <h3 class="m-0 p-b-20">Target Dates:</h3>
                                                             <div class="row">
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
@@ -272,7 +254,7 @@
                                                             </div><!-- ./row -->
                                                             <div class="none-div">
                                                                 <hr class="hr-line-dashed"/>
-                                                                <h3 class="m-0 p-b-20">Expiration :</h3>
+                                                                <h3 class="m-0 p-b-20">Expiration:</h3>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="form-group">
@@ -293,7 +275,7 @@
 
                                                                 </div><!--./row -->
                                                                 <hr class="hr-line-dashed"/>
-                                                                <h3 class="m-0 p-b-20">Generation :</h3>
+                                                                <h3 class="m-0 p-b-20">Generation:</h3>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <label class="control-label"><input type="radio" disabled name="recurrence[generation_type]" value="0" onclick="//check_generation_type(this.value)">&nbsp; When the current Schedule Item is Complete</label>
@@ -315,7 +297,8 @@
                                                             </div>
                                                         </div><!-- ./modal-body -->
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" onclick="closeRecurrenceModal();">Ok</button>
+                                                            <button type="button" class="btn btn-primary" onclick="closeRecurrenceModal();">Save</button>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                                         </div><!-- modal-footer -->
                                                     </div><!-- Modal content-->
 

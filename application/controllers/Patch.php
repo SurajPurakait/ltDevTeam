@@ -828,5 +828,16 @@ class Patch extends CI_Controller {
             $data = array();
         }
     }
+    function update_project_due_date(){
+        $ids=$this->db->query("SELECT id FROM project_recurrence_main WHERE created_at LIKE '%2019-12-06%'")->result_array();
+        foreach($ids as $id){
+            $this->db->set('due_date', '2019-12-19');
+            $this->db->set('actual_due_year', 2019);
+            $this->db->set('next_due_date','2020-01-19');
+            $this->db->set('generation_date','2020-01-01');
+            $this->db->where_in('id',$id);
+            $this->db->update('project_recurrence_main');
+        }
+    }
 }
     

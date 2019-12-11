@@ -12,14 +12,14 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Id:<span class="spanclass text-danger">*</span></label>
+                            <label class="control-label">Task Title:<span class="spanclass text-danger">*</span></label>
                             <input type="text" class="form-control" id="task_order" name="task[task_order]" value="<?= $task_details->task_order ?>" title="Order" required>
                             <div class="errorMessage text-danger"></div>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Task:</label>
+                            <label class="control-label">Task Description:</label>
                             <textarea class="form-control" id="description" name="task[description]" > <?= $task_details->description ?></textarea>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                             <label class="">For Complete</label>
                             <input class="form-control" type="number" name="task[target_complete_date]" value="<?= $task_details->target_complete_date ?>" min="0" style="width: 100px" id="target_complete_date" required>
                             <!--<label class="control-label"><input type="radio" <?php // echo ($task_details->target_complete_day==1) ? 'checked' : ''; ?> name="task[target_complete_day]" value="1">&nbsp; Days before due date</label>-->
-                            <label class="control-label"><input type="radio" <?php echo ($task_details->target_complete_day==2) ? 'checked' : ''; ?> name="task[target_complete_day]" value="2">&nbsp; Days after creation date</label>
+                            <label class="control-label"><input type="radio" <?php echo ($task_details->target_complete_day==2) ? 'checked' : ''; ?> name="task[target_complete_day]" value="2">&nbsp; Days before project due date</label>
                         </div>
                     </div>
                     <div class="errorMessage text-danger"></div>

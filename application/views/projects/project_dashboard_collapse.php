@@ -16,6 +16,7 @@
                 </tr>
                 <?php
                 foreach ($task_list as $key=> $task) {
+                    $taskId=$key+1;
                     $task_staff = ProjectTaskStaffList($task->id);
                     $stf = array_column($task_staff, 'staff_id');
                     $new_staffs = implode(',', $stf);
@@ -66,7 +67,7 @@
                     }
                     ?>
                     <tr>
-                        <td title="Order" class="text-center"><?= $task->task_order; ?></td>
+                        <td title="Task Id" class="text-center"><?= $task->project_id.'-'.$taskId; ?></td>
                         <td title="Description" class="text-center"><?= $task->description; ?></td>
                         <!--<td title="Order" class="text-center"><?//= date('Y-m-d', strtotime($task->created_at)); ?></td>-->
         <!--                                                                <td title="Target Start Date" class="text-center"><?= $task->target_start_date; ?></td>

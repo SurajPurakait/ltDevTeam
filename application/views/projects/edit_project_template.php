@@ -131,7 +131,7 @@
                                                                                     <div id="ofic_staff_div"></div>
                                                                                 </div>-->
                                         <hr class="hr-line-dashed"/>
-                                        <h3>Assigned :</h3>
+                                        <h3>Assigned:</h3>
                                         <?php
                                         foreach ($departments as $key => $value) {
                                             if ($value['id'] == '2') {
@@ -175,7 +175,7 @@
                                         </div>
                                         <hr class="hr-line-dashed"/>
                                         <?php $pattern_details = get_project_pattern_details($project_id); ?>
-                                        <h3>Generation :</h3>
+                                        <h3>Generation:</h3>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <h4><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#RecurranceModal" title="Add Recurrence"><i class="fa fa-refresh"></i></button> &nbsp;<b id="pattern_show"><?php echo ucfirst($pattern_details->pattern); ?></b>
@@ -194,7 +194,7 @@
                                                             <h2 class="modal-title">Recurrence</h2>
                                                         </div><!-- modal-header -->
                                                         <div class="modal-body">
-                                                            <h3 class="m-0 p-b-20">Frequency :</h3>
+                                                            <h3 class="m-0 p-b-20">Frequency:</h3>
                                                             <div class="row">
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
@@ -332,7 +332,7 @@
                                                                 </div>
                                                             </div><!-- ./row -->
                                                             <hr class="hr-line-dashed"/>
-                                                            <h3 class="m-0 p-b-20">Target Dates :</h3>
+                                                            <h3 class="m-0 p-b-20">Target Dates:</h3>
                                                             <div class="row">
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
@@ -374,7 +374,7 @@
 
                                                                 </div><!--./row -->
                                                                 <hr class="hr-line-dashed"/>
-                                                                <h3 class="m-0 p-b-20">Generation :</h3>
+                                                                <h3 class="m-0 p-b-20">Generation:</h3>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <label class="control-label"><input type="radio" name="recurrence[generation_type]" disabled value="0" <?php echo ($pattern_details->generation_type == '0') ? 'checked' : ''; ?> onclick="//check_generation_type(this.value)">&nbsp; When the current Schedule Item is Complete</label>
@@ -396,7 +396,8 @@
 
                                                             </div><!-- ./modal-body -->
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn btn-primary" onclick="closeRecurrenceModal();">Ok</button>
+                                                                <button type="button" class="btn btn-primary" onclick="closeRecurrenceModal();">Save</button>
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                                             </div><!-- modal-footer -->
                                                         </div><!-- Modal content-->
 

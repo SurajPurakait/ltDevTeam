@@ -11,7 +11,6 @@
     if($conn === false){
     die("ERROR: Could not connect. " . mysqli_connect_error());
     }
-
     $select = [
         'inv.id as invoice_id',
         'inv.reference_id as reference_id',
@@ -67,7 +66,8 @@
                 $services_query_run = mysqli_query($conn,$services_query);
                 $service_detail = mysqli_fetch_assoc($services_query_run);
 
-                $sql_p = "select percentage from office_service_fees where service_id = '".$services_id." and office_id = '".$rpd['office_id']."'";
+                $sql_p = "select percentage from office_service_fees where service_id = '".$services_id."' and office_id = '".$rpd['office_id']."'";
+                // echo $sql_p;
                 $office_fees_qry = mysqli_query($conn,$sql_p);
                 $office_fees_result=mysqli_fetch_assoc($office_fees_qry);
                 $office_fees=$office_fees_result['percentage'];
@@ -111,18 +111,20 @@
                 $office_id = $rpd['office_id'];
                 $created_by = $rpd['created_by'];
 
-                $sql_query = 'INSERT INTO `royalty_report`(`date`, `client_id`, `invoice_id`, `service_id`, `service_name`, `retail_price`, `override_price`, `cost`, `payment_status`, `collected`, `payment_type`, `authorization_id`, `reference`, `total_net`, `office_fee`, `fee_with_cost`, `fee_without_cost`, `office_id`, `created_by`) VALUES (
-                \''.$date_val.'\', \''.$practice_id.'\',\''.$invoice_id.'\',
-                \''.$services_ids.'\',\''.$service_details.'\',\''.$retail_price.'\',
-                \''.$override_price.'\',\''.$service_cost.'\',\''.$payment_status.'\',
-                \''.$collected.'\',\''.$payment_type.'\',\''.$authorization_id.'\',
-                \''.$reference.'\',\''.$total_net.'\',\''.$office_fees.'\',
-                \''.$fee_with_cost.'\',\''.$fee_without_cost.'\',\''.$office_id.'\',
-                \''.$created_by.'\')';
+                $sql_query = "INSERT INTO `royalty_report`(`date`, `client_id`, `invoice_id`, `service_id`, `service_name`, `retail_price`, `override_price`, `cost`, `payment_status`, `collected`, `payment_type`, `authorization_id`, `reference`, `total_net`, `office_fee`, `fee_with_cost`, `fee_without_cost`, `office_id`, `created_by`) VALUES (
+                '$date_val', '$practice_id','$invoice_id',
+                '$services_ids','$service_details','$retail_price',
+                '$override_price','$service_cost','$payment_status',
+                '$collected','$payment_type','$authorization_id',
+                '$reference','$total_net','$office_fees',
+                '$fee_with_cost','$fee_without_cost','$office_id',
+                '$created_by')";
                 mysqli_query($conn,$sql_query)or die('insert error');
             }
+            // echo "<hr>";
         } 
-    echo "Success";
+    echo "Success";exit;
     } 
 
 ?>
+

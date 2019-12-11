@@ -222,6 +222,9 @@ class Billing_model extends CI_Model {
                         return false;
                     }
                 }
+                if($data['type_of_client']!=0){
+                    $val=$data['reference_id'];
+                }
                 $today = date('Y-m-d h:i:s');
                 $invoice_info_data['reference_id'] = $val;
                 $invoice_info_data['client_id'] = $val;
