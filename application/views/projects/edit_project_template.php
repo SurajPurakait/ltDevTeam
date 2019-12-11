@@ -393,7 +393,7 @@
                                                                             <input class="form-control" type="number" id="generation_month" name="recurrence[generation_month]" value="<?php echo $pattern_details->generation_month; ?>" min="0" max="12" style="width: 100px">&nbsp;
                                                                             <label class="control-label">month(s)</label>&nbsp;
                                                                             <input class="form-control" value="<?php echo $pattern_details->generation_day; ?>" type="number" id="generation_day" name="recurrence[generation_day]" min="1" max="31" style="width: 100px">&nbsp;
-                                                                            <label class="control-label">Day(s) before next occurrence</label>
+                                                                            <label class="control-label">Day(s) before next occurrence due date</label>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-12">
