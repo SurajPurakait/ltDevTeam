@@ -1045,3 +1045,7 @@ ALTER TABLE `invoice_recurence` ADD `total_generation_time` INT(4) NOT NULL DEFA
 ALTER TABLE `invoice_recurence` ADD `next_occurance_date` DATE NULL DEFAULT NULL AFTER `total_generation_time`; 
 
 /*live end*/
+/*11.12.2019*/
+ALTER TABLE `project_main` CHANGE `status` `status` INT(11) NOT NULL COMMENT '0-not started,1-started,2-completed,4-canceled'; 
+
+ALTER TABLE `project_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for started, 2 for resolved, 3 for ready, 4 for canceled'; 

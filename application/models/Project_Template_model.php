@@ -1432,7 +1432,42 @@ class Project_Template_model extends CI_Model {
             $this->db->where('project_id', $suborder_order_id);
             $this->db->update('project_main', array('status' => 0));
         }
-        
+        elseif ($status == 4) {
+            if (!empty($get_main_order_query)) {
+                $suborder_order_id = $get_main_order_query[0]['project_id'];
+            }
+            $end_date = date('Y-m-d h:i:s');
+            $this->db->where('id', $id);
+            $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 4));
+//            $this->db->where('project_id', $suborder_order_id);
+//            $this->db->update('project_main', array('status' => 0));
+            
+            if (!empty($get_main_order_query)) {
+                $suborder_order_id = $get_main_order_query[0]['project_id'];
+            }
+            $check_if_all_services_not_started = $this->db->query('select * from project_task where project_id="' . $suborder_order_id . '"')->result_array();
+//          
+            
+            if (!empty($check_if_all_services_not_started)) {
+                $k = 0;
+                $status_array = '';
+                $len = count($check_if_all_services_not_started);
+                foreach ($check_if_all_services_not_started as $val) {
+                    if ($k == $len - 1) {
+                        $status_array .= $val['tracking_description'];
+                    } else {
+                        $status_array .= $val['tracking_description'] . ',';
+                    }
+                    $k++;
+                }
+            }
+//            echo $status_array;die;
+            $status_array_values = explode(",", $status_array);
+            if (count(array_unique($status_array_values)) == 1) {
+                $this->db->where('project_id', $suborder_order_id);
+                $this->db->update('project_main', array('status' => 4));
+            }
+        }
         else {
             $end_date = date('Y-m-d h:i:s');
             $this->db->where('id', $id);
