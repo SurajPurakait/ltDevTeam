@@ -5,6 +5,14 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="tabs-container">
+                        <div>
+                            <?php
+                            $project_data=get_project_office_client($project_id);
+                            ?>
+                            <b>Project ID: </b><?= $project_id ?><br>
+                            <b>Client ID: </b><?= getProjectClientPracticeId($project_data->client_id, $project_data->client_type);?><br>
+                            <b>Office ID: </b><?= get_project_office_name($project_data->office_id); ?>
+                        </div>
                         <ul class="nav nav-tabs template-menu" role="tablist">
                             <li class="active"><a class="nav-link active" id="nav-link-1" data-toggle="tab" href="#tab-1">Main</a></li>
                             <li><a class="nav-link" id="nav-link-2" data-toggle="tab" href="#tab-2">Task</a></li>
