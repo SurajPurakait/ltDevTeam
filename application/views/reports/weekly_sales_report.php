@@ -3,14 +3,14 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins form-inline">
                 <div class="row">
-                    <div class="col-md-9">        
+                    <div class="col-md-8">        
                         <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" multiple>
                         	<?php
                         		load_ddl_option("users_office_list", "","");
                         	?>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4 text-right">
                         <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">
                        	<button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>
                     </div>
@@ -27,7 +27,7 @@
                                     <th style="white-space: nowrap;">Service Name</th>
                                     <th style="white-space: nowrap;">Status</th>
                                     <th style="white-space: nowrap;">Retail Price</th>
-                                    <th style="white-space: nowrap;">Override Price</th>
+                                    <th style="white-space: nowrap;">Price</th>
                                     <th style="white-space: nowrap;">Cost</th>
                                     <th style="white-space: nowrap;">Collected</th>
                                     <th style="white-space: nowrap;">Total Net</th>
