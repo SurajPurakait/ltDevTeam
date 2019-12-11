@@ -134,7 +134,7 @@ if (!empty($project_list)) {
                                 </tr>
                                 <tr>
                                     <td title="ID"><?= $list['id'] ?></td>
-                                    <td title="Category"><?= (!empty(get_template_category_name($list['template_cat_id']))?get_template_category_name($list['template_cat_id']):'') ?></td>
+                                    <td title="Category"><?= get_template_category_name($list['template_cat_id']) ?></td>
                                     <td title="Project Name">
                                         <span class=""><?= $templatedetails->title ?></span>
                                     </td>
