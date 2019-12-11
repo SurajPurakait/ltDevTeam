@@ -2714,19 +2714,27 @@ class Service_model extends CI_Model {
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
         $staffrole = $staff_info['role'];
-        $staff_office = $staff_info['office'];
+        $staff_office = explode(',',$staff_info['office']);
         $departments = explode(',', $staff_info['department']);
 
-        if (in_array(2, $departments)) {
-            if ($staffrole == 2) {      // frinchisee manager
-                $this->db->where_in('office_id', $staff_office);
-            } else {
-                $this->db->where('created_by',$staff_id);
-            }
-        }
-        if ($office != "") {
+        // if (in_array(2, $departments)) {
+        //     if ($staffrole == 2) {      // frinchisee manager
+        //         $this->db->where_in('office_id', $staff_office);
+        //     } else {
+        //         $this->db->where('created_by',$staff_id);
+        //     }
+        // }
+        // if ($office != "") {
+        //     $this->db->where_in('office_id',$office);
+        // }
+        if (!empty($office)) {
             $this->db->where_in('office_id',$office);
+        } else {
+            if($staff_info['type'] == 3) {
+                $this->db->where_in('office_id',$staff_office);
+            }    
         }
+
         if ($date_range != "") {
             $date_value = explode("-", $date_range);
             $start_date = date("Y-m-d", strtotime($date_value[0]));
@@ -2763,9 +2771,19 @@ class Service_model extends CI_Model {
     }
 
     public function get_total_of_sales_report($office,$date_range) {
+        $staff_info = staff_info();
+        $staff_id = $staff_info['id'];
+        $staffrole = $staff_info['role'];
+        $staff_office = explode(',',$staff_info['office']);
+        $departments = explode(',', $staff_info['department']);
+
         if (!empty($office)) {
             $this->db->where_in('office_id',$office);
-        }            
+        } else {
+            if($staff_info['type'] == 3) {
+                $this->db->where_in('office_id',$staff_office);
+            }    
+        }          
         if ($date_range != "") {
             $date_value = explode("-", $date_range);
             $start_date = date("Y-m-d", strtotime($date_value[0]));

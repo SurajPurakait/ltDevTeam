@@ -327,7 +327,8 @@
 
                                         <?php
                                         if (!empty($task_list)) {
-                                            foreach ($task_list as $value) {
+                                            foreach ($task_list as $key=> $value) {
+                                                $index_id=$key+1;
                                                 if (strlen($value['description']) > 20) {
                                                     $description = substr($value['description'], 0, 20) . '...';
                                                 } else {
@@ -343,16 +344,14 @@
                                                                 <table class="table table-borderless text-center" style="margin-bottom: 0px;">
                                                                     <tbody>
                                                                         <tr>
-                                                                            <th style="width:8%; text-align: center">Task Order</th>
-                                                                            <th style="width:8%; text-align: center">Description</th>
+                                                                            <th style="width:8%; text-align: center">Task Id</th>
+                                                                            <th style="width:8%; text-align: center">Title</th>
                                                                             <th style="width:8%; text-align: center">Assigned To</th>
                                                                             <th style="width:8%; text-align: center">Notes</th>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td title="Task Order"><?= $value['task_order'] ?></td>
-                                                                            <td title="Description">
-                                                                                <a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $description ?>" data-trigger="hover" title="" data-original-title=""><?= $description ?></a>
-                                                                            </td>
+                                                                            <td title="ID"><?= $index_id ?></td>
+                                                                            <td title="Title"><?= $value['task_order'] ?></td>
                                                                             <!--<td title="Assign To"><span></span></td>-->
                                                                             <td title="Assign To"><span class="text-success"><?php echo get_assigned_task_staff($value['id']); ?></span><br><?php echo get_assigned_task_department($value['id']); ?></td>                                                    
 

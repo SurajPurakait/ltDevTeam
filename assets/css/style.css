@@ -3762,6 +3762,19 @@ body.body-small .footer.fixed {
     color: #000;
     background-color: #a8e34c;
 }
+
+#weekly-sales-total td, #weekly-sales-total th {
+    border: 1px solid #96b26a;
+}
+#weekly-sales-total td{
+    background-color: #fff;
+}
+#weekly-sales-total th{
+    color: #000;
+    background-color: #a8e34c;
+}
+
+
 #ofc_chosen{
     width: 100% !important;
 }

@@ -1,6 +1,6 @@
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped" id="weekly-sales-total">
     <tr>
-		<th rowspan="2" style="padding:25px;">Total</th>
+		<th rowspan="2" style="padding:25px;font-size: 14px;">Total</th>
         <th>Total Price</th>
         <th>Total Cost</th>
 		<th>Total Collected</th>
