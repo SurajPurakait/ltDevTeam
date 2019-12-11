@@ -938,6 +938,10 @@ class Project_Template_model extends CI_Model {
                 if (isset($project['office_id']) && $project['office_id'] != '') {
                     $post['project']['office_id'] = $project['office_id'];
                 }
+                $client_office=$this->db->get_where('internal_data',['reference_id'=>$pcid])->row();
+                if(!empty($client_office)){
+                    $post['project']['office_id']=$client_office->office;
+                }
                 $post['project']['client_id'] = $pcid;
                 $this->db->insert('projects', $post['project']);
                 $insert_id = $this->db->insert_id();
@@ -1428,11 +1432,52 @@ class Project_Template_model extends CI_Model {
             $this->db->where('project_id', $suborder_order_id);
             $this->db->update('project_main', array('status' => 0));
         }
-        
+        elseif ($status == 4) {
+            if (!empty($get_main_order_query)) {
+                $suborder_order_id = $get_main_order_query[0]['project_id'];
+            }
+            $end_date = date('Y-m-d h:i:s');
+            $this->db->where('id', $id);
+            $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 4));
+//            $this->db->where('project_id', $suborder_order_id);
+//            $this->db->update('project_main', array('status' => 0));
+            
+            if (!empty($get_main_order_query)) {
+                $suborder_order_id = $get_main_order_query[0]['project_id'];
+            }
+            $check_if_all_services_not_started = $this->db->query('select * from project_task where project_id="' . $suborder_order_id . '"')->result_array();
+//          
+            
+            if (!empty($check_if_all_services_not_started)) {
+                $k = 0;
+                $status_array = '';
+                $len = count($check_if_all_services_not_started);
+                foreach ($check_if_all_services_not_started as $val) {
+                    if ($k == $len - 1) {
+                        $status_array .= $val['tracking_description'];
+                    } else {
+                        $status_array .= $val['tracking_description'] . ',';
+                    }
+                    $k++;
+                }
+            }
+//            echo $status_array;die;
+            $status_array_values = explode(",", $status_array);
+            if (count(array_unique($status_array_values)) == 1) {
+                $this->db->where('project_id', $suborder_order_id);
+                $this->db->update('project_main', array('status' => 4));
+            }
+        }
         else {
             $end_date = date('Y-m-d h:i:s');
             $this->db->where('id', $id);
             $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 2));
+            
+            if (!empty($get_main_order_query)) {
+                $suborder_order_id = $get_main_order_query[0]['project_id'];
+            }
+            $this->db->where('project_id', $suborder_order_id);
+            $this->db->update('project_main', array('status' => 1));
             
             $this->db->select('id');
             $this->db->from('project_task');
@@ -2120,19 +2165,20 @@ class Project_Template_model extends CI_Model {
         $staff_id = sess('user_id');
         $role = $user_info['role'];
         $user_office = $user_info['office'];
-        $office_staff = $department_staff = $departments = $action_id = [];
-        if ($user_type == 3 && $role == 2) {
-            $office_staff = explode(",", $user_info['office_staff']);
-            $office_staff = array_unique($office_staff);
-        }
-        if ($user_type == 2 && $role == 4) {
-            if ($user_department != '14') {
-                $departments = $user_department;
-                $department_staff = explode(",", $user_info['department_staff']);
-                $department_staff = array_unique($department_staff);
-                //$action_id = $this->get_request_to_others_action_by_staff_id($staff_id);
-            }
-        }
+        
+//        $office_staff = $department_staff = $departments = $action_id = [];
+//        if ($user_type == 3 && $role == 2) {
+//            $office_staff = explode(",", $user_info['office_staff']);
+//            $office_staff = array_unique($office_staff);
+//        }
+//        if ($user_type == 2 && $role == 4) {
+//            if ($user_department != '14') {
+//                $departments = $user_department;
+//                $department_staff = explode(",", $user_info['department_staff']);
+//                $department_staff = array_unique($department_staff);
+//                //$action_id = $this->get_request_to_others_action_by_staff_id($staff_id);
+//            }
+//        }
         $select = implode(', ', $this->project_select);
         $this->db->select($select);
         //$this->db->select('pro.*,pm.office_id as project_office_id,pm.department_id as project_department_id');
@@ -2239,41 +2285,13 @@ class Project_Template_model extends CI_Model {
             }
         } else {
             $having_or = [];
-            if ($user_type == 1 || ($user_type == 2 && $user_department == 14)) {
+            if ($user_type == 1 || ($user_type == 2 && $user_department == 14)||$user_type==2) {
 //                $this->db->where_in('my_task', [0, $staff_id]);
-            } else if ($user_type == 3 && $role == 2) {
-//                echo 'b2';die;
-                if (!empty($office_staff)) {
-                    $having_or[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%")';
-                    $having_or[] = 'added_by_user IN (' . implode(',', $office_staff) . ')';
-//                    $having_or[] = 'my_task = "' . $staff_id . '"';
-                    unset($office_staff[array_search(sess('user_id'), $office_staff)]);
-                    foreach ($office_staff as $staffID) {
-                        $having_or[] = '(all_project_staffs LIKE "%,' . $staffID . ',%" OR all_task_staffs LIKE "%,' . $staffID . ',%")';
-                    }
-                    $having[] = '(' . implode(' OR ', $having_or) . ')';
-                } else {
-                    $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%" )';
-                }
-            } else if ($user_type == 2 && $role == 4) {
-//                echo 'b3';die;
-                if ($user_department != 14) {
-                    if (isset($departments)) {
-                        $having_or[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%")';
-                        if (!empty($department_staff)) {
-                            $having_or[] = 'added_by_user IN (' . implode(',', $department_staff) . ')';
-                            foreach ($department_staff as $ds) {
-                                $having_or[] = '(all_project_staffs LIKE "%,' . $ds . ',%" OR all_task_staffs LIKE "%,' . $ds . ',%")';
-                            }
-                        }
-//                    $having_or[] = 'my_task = "' . $staff_id . '"';
-                        $having_or[] = 'department_id IN (' . $departments . ')';
-                        $having[] = '(' . implode(' OR ', $having_or) . ')';
-                    } else {
-                        $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%")';
-                    }
-                }
-            } else {
+            } 
+            else if ($user_type == 3) {
+                $this->db->where(['pm.office_id'=>3,'pro.office_id'=>$user_office]);
+            }
+            else {
                 $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%" OR added_by_user = "' . $staff_id . '")';
             }
         }
@@ -2888,6 +2906,9 @@ class Project_Template_model extends CI_Model {
             $data = $this->db->get()->row();
             return $data->practice_id;
         }
+    }
+    public function getTemplateCategoryName($template_cat_id){
+        return $this->db->get_where('template_category',['id'=>$template_cat_id])->row()->name;
     }
 }
 

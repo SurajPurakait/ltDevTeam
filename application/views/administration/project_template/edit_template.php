@@ -192,7 +192,7 @@
                                         </div>
                                         <hr class="hr-line-dashed"/>
                                         <?php $pattern_details = get_pattern_details($template_details->id); ?>
-                                        <h3>Generation :</h3>
+                                        <h3>Generation:</h3>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <h4><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#RecurranceModal" title="Add Recurrence"><i class="fa fa-refresh"></i></button> &nbsp;<b id="pattern_show"><?php echo ucfirst($pattern_details->pattern); ?></b>
@@ -211,7 +211,7 @@
                                                             <h2 class="modal-title">Recurrence</h2>
                                                         </div><!-- modal-header -->
                                                         <div class="modal-body">
-                                                            <h3 class="m-0 p-b-20">Frequency :</h3>
+                                                            <h3 class="m-0 p-b-20">Frequency:</h3>
                                                             <div class="row">
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
@@ -351,7 +351,7 @@
                                                                 </div>
                                                             </div><!-- ./row -->
                                                             <hr class="hr-line-dashed"/>
-                                                            <h3 class="m-0 p-b-20">Target Dates :</h3>
+                                                            <h3 class="m-0 p-b-20">Target Dates:</h3>
                                                             <div class="row">
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
@@ -372,7 +372,7 @@
                                                             </div><!-- ./row -->
                                                             <div class="none-div" <?php echo ($pattern_details->pattern == 'none') ? 'style="display:none;"' : 'style="display:block;"'; ?>>
                                                                 <hr class="hr-line-dashed"/>
-                                                                <h3 class="m-0 p-b-20">Expiration :</h3>
+                                                                <h3 class="m-0 p-b-20">Expiration:</h3>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="form-group">
@@ -393,7 +393,7 @@
 
                                                                 </div><!--./row -->
                                                                 <hr class="hr-line-dashed"/>
-                                                                <h3 class="m-0 p-b-20">Generation :</h3>
+                                                                <h3 class="m-0 p-b-20">Generation:</h3>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <label class="control-label"><input type="radio" name="recurrence[generation_type]" disabled value="0" <?php echo ($pattern_details->generation_type == '0') ? 'checked' : ''; ?> onclick="//check_generation_type(this.value)">&nbsp; When the current Schedule Item is Complete</label>
@@ -415,7 +415,7 @@
 
                                                             </div><!-- ./modal-body -->
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn btn-primary" onclick="closeRecurrenceModal();">Ok</button>
+                                                                <button type="button" class="btn btn-primary" onclick="closeRecurrenceModal();">Save</button>
                                                             </div><!-- modal-footer -->
                                                         </div><!-- Modal content-->
 
@@ -429,6 +429,7 @@
                                                 <!--<input type="hidden" id="tmplt_id" value="3">-->
                                                 <input type="hidden" id="edit_template" name="edit_template" value="<?= $template_details->id ?>">
                                                 <button type="button" class="btn btn-primary" onclick="request_edit_template();">Save</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                             </div>
                                     </form> 
                                 </div>
@@ -445,7 +446,8 @@
 
                                     <?php
                                     if (!empty($task_list)) {
-                                        foreach ($task_list as $value) {
+                                        foreach ($task_list as $keys=> $value) {
+                                            $index_id=$keys+1;
                                             if (strlen($value['description']) > 20) {
                                                 $description = substr($value['description'], 0, 20) . '...';
                                             } else {
@@ -461,16 +463,14 @@
                                                             <table class="table table-borderless text-center" style="margin-bottom: 0px;">
                                                                 <tbody>
                                                                     <tr>
-                                                                        <th style="width:8%; text-align: center">Task Order</th>
-                                                                        <th style="width:8%; text-align: center">Description</th>
+                                                                        <th style="width:8%; text-align: center">Task Id</th>
+                                                                        <th style="width:8%; text-align: center">Title</th>
                                                                         <th style="width:8%; text-align: center">Assigned To</th>
                                                                         <th style="width:8%; text-align: center">Notes</th>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td title="Task Order"><?= $value['task_order'] ?></td>
-                                                                        <td title="Description">
-                                                                            <a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $description ?>" data-trigger="hover" title="" data-original-title=""><?= $description ?></a>
-                                                                        </td>
+                                                                        <td title="Task Id"><?= $index_id ?></td>
+                                                                        <td title="Title"><?= $value['task_order'] ?></td>
                                                                         <!--<td title="Assign To"><span></span></td>-->
                                                                         <td title="Assign To"><span class="text-success"><?php echo get_assigned_task_staff($value['id']); ?></span><br><?php echo get_assigned_task_department($value['id']); ?></td>                                                    
                                                                         <!--get_task_note($value['id'])-->

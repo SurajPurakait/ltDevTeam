@@ -2006,7 +2006,7 @@ class Billing_model extends CI_Model {
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
         $staffrole = $staff_info['role'];
-        $staff_office = $staff_info['office'];
+        $staff_office = explode(',',$staff_info['office']);
         $departments = explode(',', $staff_info['department']);
  
         // if (in_array(2, $departments)) {
@@ -2081,7 +2081,7 @@ class Billing_model extends CI_Model {
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
         $staffrole = $staff_info['role'];
-        $staff_office = $staff_info['office'];
+        $staff_office = explode(',',$staff_info['office']);
         $departments = explode(',', $staff_info['department']);
 
         if (!empty($office)) {
