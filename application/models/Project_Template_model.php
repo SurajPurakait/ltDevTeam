@@ -2908,7 +2908,12 @@ class Project_Template_model extends CI_Model {
         }
     }
     public function getTemplateCategoryName($template_cat_id){
-        return $this->db->get_where('template_category',['id'=>$template_cat_id])->row()->name;
+        $data=$this->db->get_where('template_category',['id'=>$template_cat_id])->row();
+        if(!empty($data)){
+            return $data->name;
+        }else{
+            return '';
+        }
     }
 }
 
