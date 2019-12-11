@@ -25,6 +25,8 @@
                         </div>
                         <h3>Notes</h3>
                         <?= service_note_func('Invoice Notes', 'n', 'invoice', $invoice_id); ?>
+
+                        <?php if($is_recurrence == 'y'){ ?>
                         <div class="hr-line-dashed"></div>
                         <?php
                         $invoice_recurrence = get_invoice_recurring_details($invoice_id);
@@ -160,6 +162,8 @@
                                 </div><!-- ./modal-dialog -->
                             </div><!-- ./Recurrence Modal -->
                         </div>
+                    <?php } ?>
+
                         <div class="hr-line-dashed"></div>
                         <h3>Confirmation</h3>
                         <div class="form-group" style="display: none">

@@ -3491,3 +3491,10 @@ if(!function_exists('get_invoice_recurring_details')){
         return $ci->billing_model->getInvoiceRecurringDetails($invoice_id);
     }
 }
+if(!function_exists('get_template_category_name')){
+    function get_template_category_name($template_cat_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getTemplateCategoryName($template_cat_id);
+    }
+}
