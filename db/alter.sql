@@ -1044,10 +1044,4 @@ ALTER TABLE `invoice_recurence` ADD `total_generation_time` INT(4) NOT NULL DEFA
 
 ALTER TABLE `invoice_recurence` ADD `next_occurance_date` DATE NULL DEFAULT NULL AFTER `total_generation_time`; 
 
-
-/*06.12.2019*/
-ALTER TABLE `report_dashboard_service` DROP `order_date`, DROP `start_date`, DROP `target_start_date`, DROP `complete_date`, DROP `target_complete_date`;
-ALTER TABLE `report_dashboard_service` ADD `date_completed` DATETIME NOT NULL AFTER `status`, ADD `date_complete_actual` DATETIME NOT NULL AFTER `date_completed`;
-
-/*10.12.2019*/
-ALTER TABLE `report_dashboard_service` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+/*live end*/
