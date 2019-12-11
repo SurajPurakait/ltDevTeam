@@ -2832,11 +2832,11 @@ class Service_model extends CI_Model {
 
     public function late_status_calculation_report_dashboard_service($ofc_id,$late_span) {
             if ($late_span == 'less_than_30') {
-                $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$ofc_id."' AND `date_completed` != '0000-00-00 00:00:00' AND DATEDIFF(`date_complete_actual`,`date_completed`) < 30 AND `date_complete_actual` > `date_completed`";
+                $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$ofc_id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 30 AND `date_complete_actual` > `date_completed`";
             } elseif ($late_span == 'less_than_60') {
-                $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$ofc_id."' AND `date_completed` != '0000-00-00 00:00:00' AND DATEDIFF(`date_complete_actual`,`date_completed`) < 60 AND `date_complete_actual` > `date_completed`";
+                $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$ofc_id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 60 AND `date_complete_actual` > `date_completed`";
             } elseif ($late_span == 'more_than_60') {
-                $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$ofc_id."' AND `date_completed` != '0000-00-00 00:00:00' AND DATEDIFF(`date_complete_actual`,`date_completed`) > 60 AND `date_complete_actual` > `date_completed`";
+                $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$ofc_id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) > 60 AND `date_complete_actual` > `date_completed`";
             }
             
             return $this->db->query($sql)->num_rows();

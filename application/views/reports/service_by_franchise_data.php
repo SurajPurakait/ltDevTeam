@@ -1,4 +1,4 @@
-<table class="table table-bordered report-table text-center">
+<table class="table table-bordered report-table table-striped text-center m-b-0">
     <thead>
         <tr>
             <th>Offices</th>
