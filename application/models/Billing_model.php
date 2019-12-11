@@ -1727,8 +1727,14 @@ class Billing_model extends CI_Model {
 
         $service_request_data = $service_request_info;
         foreach ($service_request_data as $key => $srl) {
+            $target_query = $this->db->get_where("target_days", ["service_id" => $service_request_data[$key]['services_id']])->row_array();
             $service_request_data[$key]['order_id'] = $order_id;
-            $service_request_data[$key]['status'] = 2;
+            if($target_query['input_form'] == 'n' && $target_query['service_id'] == $service_request_data[$key]['services_id']){
+                   $service_request_data[$key]['status'] = 0; 
+                }else{
+                    $service_request_data[$key]['status'] = 2;
+                }
+                
         }
         $this->db->insert_batch('service_request', $service_request_data);
 
