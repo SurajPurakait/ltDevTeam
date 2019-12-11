@@ -2912,7 +2912,7 @@ class Project_Template_model extends CI_Model {
         if(!empty($data)){
             return $data->name;
         }else{
-            return '';
+            return 'N/A';
         }
     }
 }
