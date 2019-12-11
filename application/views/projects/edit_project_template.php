@@ -361,7 +361,7 @@
                                                             </div><!-- ./row -->
                                                             <div class="none-div" <?php echo ($pattern_details->pattern == 'none') ? 'style="display:none;"' : 'style="display:block;"'; ?>>
                                                                 <hr class="hr-line-dashed"/>
-                                                                <h3 class="m-0 p-b-20">Expiration :</h3>
+                                                                <h3 class="m-0 p-b-20">Expiration:</h3>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="form-group">
