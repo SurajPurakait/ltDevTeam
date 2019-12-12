@@ -26,6 +26,7 @@
                                     <th style="white-space: nowrap;">Client Id</th>
                                     <th style="white-space: nowrap;">Invoice Id</th>
                                     <th style="white-space: nowrap;">Service Id</th>
+                                    <th style="white-space: nowrap;">Office Id</th>
                                     <th style="white-space: nowrap;">Service Name</th>
                                     <th style="white-space: nowrap;">Retail Price</th>
                                     <th style="white-space: nowrap;">Price</th>
