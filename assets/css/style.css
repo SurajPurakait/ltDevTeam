@@ -3993,13 +3993,13 @@ code {
 #tab-content-div table th {
     padding: 15px;
 }
-#service_by_franchise1 .ibox-title{
+#service_by_franchise_1 .ibox-title{
     border-top: 4px solid #ec8fb3;
 }
-#service_by_department .ibox-title{
+#service_by_department_1 .ibox-title{
     border-top: 4px solid #ffab96;
 }
-#service_by_category .ibox-title{
+#service_by_category_1 .ibox-title{
     border-top: 4px solid #f2a3a3;
 }
 .ibox-content {
