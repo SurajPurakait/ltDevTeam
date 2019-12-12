@@ -5,6 +5,14 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="tabs-container">
+                        <div>
+                            <?php
+                            $project_data=get_project_office_client($project_id);
+                            ?>
+                            <b>Project ID: </b><?= $project_id ?><br>
+                            <b>Client ID: </b><?= getProjectClientPracticeId($project_data->client_id, $project_data->client_type);?><br>
+                            <b>Office ID: </b><?= get_project_office_name($project_data->office_id); ?>
+                        </div>
                         <ul class="nav nav-tabs template-menu" role="tablist">
                             <li class="active"><a class="nav-link active" id="nav-link-1" data-toggle="tab" href="#tab-1">Main</a></li>
                             <li><a class="nav-link" id="nav-link-2" data-toggle="tab" href="#tab-2">Task</a></li>
@@ -353,7 +361,7 @@
                                                             </div><!-- ./row -->
                                                             <div class="none-div" <?php echo ($pattern_details->pattern == 'none') ? 'style="display:none;"' : 'style="display:block;"'; ?>>
                                                                 <hr class="hr-line-dashed"/>
-                                                                <h3 class="m-0 p-b-20">Expiration :</h3>
+                                                                <h3 class="m-0 p-b-20">Expiration:</h3>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="form-group">
@@ -385,7 +393,7 @@
                                                                             <input class="form-control" type="number" id="generation_month" name="recurrence[generation_month]" value="<?php echo $pattern_details->generation_month; ?>" min="0" max="12" style="width: 100px">&nbsp;
                                                                             <label class="control-label">month(s)</label>&nbsp;
                                                                             <input class="form-control" value="<?php echo $pattern_details->generation_day; ?>" type="number" id="generation_day" name="recurrence[generation_day]" min="1" max="31" style="width: 100px">&nbsp;
-                                                                            <label class="control-label">Day(s) before next occurrence</label>
+                                                                            <label class="control-label">Day(s) before next occurrence due date</label>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-12">

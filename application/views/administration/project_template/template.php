@@ -286,7 +286,7 @@
                                                                             <input class="form-control" type="number" id="generation_month" name="recurrence[generation_month]" min="0" max="12" value="1" style="width: 100px">&nbsp;
                                                                             <label class="control-label">month(s)</label>&nbsp;
                                                                             <input class="form-control" type="number" id="generation_day" name="recurrence[generation_day]" min="1" max="31" value="1" style="width: 100px">&nbsp;
-                                                                            <label class="control-label">Day(s) before next occurrence</label>
+                                                                            <label class="control-label">Day(s) before next occurrence due date</label>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-12">

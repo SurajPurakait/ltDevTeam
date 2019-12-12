@@ -198,6 +198,9 @@ h5 {
 .f-s-11 {
     font-size: 11px; 
 }
+.f-s-16 {
+    font-size: 16px !important; 
+}
 .text-overflow-ellipsis {
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -217,6 +220,9 @@ h5 {
 }
 .bg-light-green {
     background: #edf6ed !important;
+}
+.bg-extra-light-green {
+    background: #afe35e !important;
 }
 .bg-light-red {
     background: #f9ebeb !important;
@@ -3979,6 +3985,22 @@ code {
     margin-bottom: 0;
     padding: 12px 15px 7px;
     min-height: 48px;
+}
+#tab-content-div table,
+#tab-content-div .ibox-content{
+    border: none;
+}
+#tab-content-div table th {
+    padding: 15px;
+}
+#service_by_franchise1 .ibox-title{
+    border-top: 4px solid #ec8fb3;
+}
+#service_by_department .ibox-title{
+    border-top: 4px solid #ffab96;
+}
+#service_by_category .ibox-title{
+    border-top: 4px solid #f2a3a3;
 }
 .ibox-content {
     background-color: #ffffff;
@@ -9095,7 +9117,7 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 .fixed-container .tab-content {
     padding-top: 153px;
 }
-.nav-tabs li a { background:#e6e6e6; color: #000; }
+.nav-tabs li a { background:#afe35e; color: #000; }
 .tab-content {padding:30px 5px 20px 5px;}
 .alert-primar {
     color: #004085;
