@@ -15,13 +15,15 @@ if (!empty($data)) {
                         <table class="table table-borderless text-center" style="margin-bottom: 0px;">
                             <tbody>
                                 <tr>
-                                    <th style="width:8%; text-align: center">Task Order</th>
+                                    <th style="width:8%; text-align: center">Task Id</th>
+                                    <th style="width:8%; text-align: center">Title</th>
                                     <th style="width:8%; text-align: center">Description</th>
                                     <th style="width:8%; text-align: center">Assigned To</th>
                                     <th style="width:8%; text-align: center">Notes</th>
                                 </tr>
                                 <tr>
                                     <td title="Task Order"><?= $value['task_order'] ?></td>
+                                    <td title="Task Order"><?= $value['task_title'] ?></td>
                                     <td title="Description">
                                         <a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $description ?>" data-trigger="hover" title="" data-original-title=""><?= $description ?></a>
                                     </td>

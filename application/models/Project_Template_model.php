@@ -226,6 +226,7 @@ class Project_Template_model extends CI_Model {
         $task_data['template_main_id'] = $post['task']['template_main_id'];
         $task_data['added_by_user'] = sess('user_id');
         $task_data['task_order'] = $post['task']['task_order'];
+        $task_data['task_title'] = $post['task']['task_title'];
         $task_data['description'] = $post['task']['description'];
         $task_data['target_start_date'] = $post['task']['target_start_date'];
         $task_data['target_start_day'] = $post['task']['target_start_day'];
@@ -292,19 +293,19 @@ class Project_Template_model extends CI_Model {
 
     function project_template_task_list($template_main_id) {
         $added_user = sess('user_id');
-        $this->db->order_by('id', 'DESC');
+//        $this->db->order_by('id', 'DESC');
         return $this->db->get_where('project_template_task', ['template_main_id' => $template_main_id])->result_array();
     }
 
     function project_task_list($project_id) {
         $added_user = sess('user_id');
-        $this->db->order_by('id', 'DESC');
+//        $this->db->order_by('id', 'DESC');
         return $this->db->get_where('project_task', ['project_id' => $project_id])->result_array();
     }
 
     function project_main_task_list($template_main_id) {
         $added_user = sess('user_id');
-        $this->db->order_by('id', 'DESC');
+//        $this->db->order_by('id', 'DESC');
         return $this->db->get_where('project_task', ['project_id' => $template_main_id])->result_array();
     }
 
@@ -956,21 +957,6 @@ class Project_Template_model extends CI_Model {
                 $project_recurrence_main_data = $this->db->get_where('project_template_recurrence_main', ['template_id' => $project_template_id])->row_array();
                 $project_task_data = $this->db->get_where('project_template_task', ['template_main_id' => $project_template_id])->result_array();
 
-                if (!empty($project_task_data)) {
-                    $task_id_array = [];
-                    foreach ($project_task_data as $val) {
-                        $task_id_array[] = $val['id'];
-                    }
-                    $this->db->where_in('task_id', $task_id_array);
-                    $project_task_staff_data = $this->db->get('project_template_task_staff')->result_array();
-                    $this->db->where_in('task_id', $task_id_array);
-                    $project_task_notes = $this->db->get('template_task_note')->result_array();
-//            echo $this->db->last_query();exit;
-                }
-//        echo '<pre>';
-//        print_r($project_task_notes);
-//        echo "</pre>";die;
-//        print_r($project_task_staff_data);exit;
                 $project_staff_main_data = $this->db->get_where('project_template_staff_main', ['template_id' => $project_template_id])->result_array();
 //        print_r($project_staff_main_data);die;
                 $end_array = end($project_staff_main_data);
@@ -1026,14 +1012,6 @@ class Project_Template_model extends CI_Model {
                             $fye_month = $project_recurrence_main_data['fye_month'];
 
                             $after_days = (int) $fye_month * 30;
-
-                            // if(strlen($project_recurrence_main_data['actual_due_month'])==1){
-                            //     $actual_mnth = '0'.$project_recurrence_main_data['actual_due_month'];
-                            // }
-                            // if(strlen($project_recurrence_main_data['actual_due_day'])==1){
-                            //     $actual_day = '0'.$project_recurrence_main_data['actual_due_day'];
-                            // }
-
                             $current_due = $project_recurrence_main_data['actual_due_year'] . '-' . $get_client_fye;
 
                             $newDate = strtotime($current_due . ' + ' . $after_days . ' days');
@@ -1052,20 +1030,6 @@ class Project_Template_model extends CI_Model {
                                 $project_recurrence_main_data['actual_due_year'] = $project_recurrence_main_data['actual_due_year'] + 1;
                             }
                         }
-                        //    else{
-                        //     $fye_day = $project_recurrence_main_data['fye_day'];
-                        //     $fye_is_weekday = $project_recurrence_main_data['fye_is_weekday'];
-                        //     $fye_month = $project_recurrence_main_data['fye_month'];
-                        //     $after_days = (int)$fye_month*2);
-                        //     if(strlen($project_recurrence_main_data['actual_due_month'])==1){
-                        //         $actual_mnth = '0'.$project_recurrence_main_data['actual_due_month'];
-                        //     }
-                        //     if(strlen($project_recurrence_main_data['actual_due_day'])==1){
-                        //         $actual_day = '0'.$project_recurrence_main_data['actual_due_day'];
-                        //     }
-                        //     $current_due = $project_recurrence_main_data['actual_due_year'].'-'.$actual_mnth.'-'.$actual_day;
-                        //     $newDate = strtotime('+'.$after_days.' days',$current_due);
-                        // }
                     }
                     if ($project_recurrence_main_data['pattern'] == 'monthly') {
                         $cur_day = date('d');
@@ -1113,16 +1077,15 @@ class Project_Template_model extends CI_Model {
                     $this->db->set($project_recurrence_main_data);
                     $this->db->insert('project_recurrence_main', $project_recurrence_main_data);
                 }
-
                 if (isset($project_task_data) && !empty($project_task_data)) {
                     $tid = [];
                     foreach ($project_task_data as $key => $val) {
                         $this->db->where('task_id', $val['id']);
                         $note_data = $this->db->get('template_task_note')->result_array();
+                        $this->db->where('task_id', $val['id']);
+                        $project_task_staff_data = $this->db->get('project_template_task_staff')->result_array();
                         unset($val['id']);
                         $val['project_id'] = $insert_id;
-//                        $this->db->set($val);
-//                        print_r($val);die;
                         $this->db->insert('project_task', $val);
                         $project_task_id = $this->db->insert_id();
                         $tid[$key] = $project_task_id;
@@ -1138,13 +1101,13 @@ class Project_Template_model extends CI_Model {
                             }
                         }
                         if (isset($project_task_staff_data) && !empty($project_task_staff_data)) {
-                            if ($this->db->get_where('project_task_staff', ['task_id' => $project_task_id])->num_rows() < 1) {
-                                foreach ($project_task_staff_data as $key => $val) {
-                                    unset($val['id']);
-                                    unset($val['task_id']);
-                                    $val['task_id'] = $project_task_id;
-                                    $this->db->set($val);
-                                    $this->db->insert('project_task_staff', $val);
+                            if ($this->db->get_where('project_task_staff', ['task_id' => $project_task_id])->num_rows() == '0') {
+                                foreach ($project_task_staff_data as $key => $val1) {
+                                    unset($val1['id']);
+                                    unset($val1['task_id']);
+                                    $val1['task_id'] = $project_task_id;
+                                    $this->db->set($val1);
+                                    $this->db->insert('project_task_staff', $val1);
                                 }
                             }
                         }
@@ -1546,6 +1509,7 @@ class Project_Template_model extends CI_Model {
         $task_data['template_main_id'] = $template_id;
         $task_data['added_by_user'] = sess('user_id');
         $task_data['task_order'] = $post['task']['task_order'];
+        $task_data['task_title'] = $post['task']['task_title'];
         $task_data['description'] = $post['task']['description'];
         $task_data['target_start_date'] = $post['task']['target_start_date'];
         $task_data['target_start_day'] = $post['task']['target_start_day'];
@@ -1862,6 +1826,7 @@ class Project_Template_model extends CI_Model {
         $task_data['template_main_id'] = $template_id;
         $task_data['added_by_user'] = sess('user_id');
         $task_data['task_order'] = $post['task']['task_order'];
+        $task_data['task_title'] = $post['task']['task_title'];
         $task_data['description'] = $post['task']['description'];
         $task_data['target_start_date'] = $post['task']['target_start_date'];
         $task_data['target_start_day'] = $post['task']['target_start_day'];
@@ -1953,6 +1918,7 @@ class Project_Template_model extends CI_Model {
         $task_data['project_id'] = $post['task']['project_id'];
         $task_data['added_by_user'] = sess('user_id');
         $task_data['task_order'] = $post['task']['task_order'];
+        $task_data['task_title'] = $post['task']['task_title'];
         $task_data['description'] = $post['task']['description'];
         $task_data['target_start_date'] = $post['task']['target_start_date'];
         $task_data['target_complete_date'] = $post['task']['target_complete_date'];
