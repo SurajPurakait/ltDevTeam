@@ -31,7 +31,7 @@
                                             </div> -->
                                             <h4 class="m-b-15"> Period Time : <span class="btn-sm btn-default text-dark">Last 30 Days</span></h4>
                                             <?php 
-                                                if ($staff_info['type'] == 1 || $staff_info['department'] == 14){
+                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
                                             ?>
                                             <div class="ibox m-t-25" id="service_by_franchise_1">
                                                 <div class="ibox-title p-t-15 p-b-40">
@@ -61,7 +61,7 @@
                                             </div>
                                             <?php
                                                 } 
-                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14)) {
+                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2) {
                                             ?>
                                             <div class="ibox" id="service_by_category_1">
                                                 <div class="ibox-title p-t-15 p-b-40">
