@@ -1044,10 +1044,8 @@ ALTER TABLE `invoice_recurence` ADD `total_generation_time` INT(4) NOT NULL DEFA
 
 ALTER TABLE `invoice_recurence` ADD `next_occurance_date` DATE NULL DEFAULT NULL AFTER `total_generation_time`; 
 
+/*live end*/
+/*11.12.2019*/
+ALTER TABLE `project_main` CHANGE `status` `status` INT(11) NOT NULL COMMENT '0-not started,1-started,2-completed,4-canceled'; 
 
-/*06.12.2019*/
-ALTER TABLE `report_dashboard_service` DROP `order_date`, DROP `start_date`, DROP `target_start_date`, DROP `complete_date`, DROP `target_complete_date`;
-ALTER TABLE `report_dashboard_service` ADD `date_completed` DATETIME NOT NULL AFTER `status`, ADD `date_complete_actual` DATETIME NOT NULL AFTER `date_completed`;
-
-/*10.12.2019*/
-ALTER TABLE `report_dashboard_service` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `project_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for started, 2 for resolved, 3 for ready, 4 for canceled'; 

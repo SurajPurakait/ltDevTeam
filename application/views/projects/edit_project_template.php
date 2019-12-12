@@ -5,6 +5,14 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="tabs-container">
+                        <div>
+                            <?php
+                            $project_data=get_project_office_client($project_id);
+                            ?>
+                            <b>Project ID: </b><?= $project_id ?><br>
+                            <b>Client ID: </b><?= getProjectClientPracticeId($project_data->client_id, $project_data->client_type);?><br>
+                            <b>Office ID: </b><?= get_project_office_name($project_data->office_id); ?>
+                        </div>
                         <ul class="nav nav-tabs template-menu" role="tablist">
                             <li class="active"><a class="nav-link active" id="nav-link-1" data-toggle="tab" href="#tab-1">Main</a></li>
                             <li><a class="nav-link" id="nav-link-2" data-toggle="tab" href="#tab-2">Task</a></li>
@@ -353,7 +361,7 @@
                                                             </div><!-- ./row -->
                                                             <div class="none-div" <?php echo ($pattern_details->pattern == 'none') ? 'style="display:none;"' : 'style="display:block;"'; ?>>
                                                                 <hr class="hr-line-dashed"/>
-                                                                <h3 class="m-0 p-b-20">Expiration :</h3>
+                                                                <h3 class="m-0 p-b-20">Expiration:</h3>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="form-group">
@@ -385,7 +393,7 @@
                                                                             <input class="form-control" type="number" id="generation_month" name="recurrence[generation_month]" value="<?php echo $pattern_details->generation_month; ?>" min="0" max="12" style="width: 100px">&nbsp;
                                                                             <label class="control-label">month(s)</label>&nbsp;
                                                                             <input class="form-control" value="<?php echo $pattern_details->generation_day; ?>" type="number" id="generation_day" name="recurrence[generation_day]" min="1" max="31" style="width: 100px">&nbsp;
-                                                                            <label class="control-label">Day(s) before next occurrence</label>
+                                                                            <label class="control-label">Day(s) before next occurrence due date</label>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-12">
@@ -428,7 +436,8 @@
                                     <div id="task_list">
                                         <?php
                                         if (!empty($task_list)) {
-                                            foreach ($task_list as $value) {
+                                            foreach ($task_list as $key=> $value) {
+                                                $index_id=$key+1;
                                                 if (strlen($value['description']) > 20) {
                                                     $description = substr($value['description'], 0, 20) . '...';
                                                 } else {
@@ -443,16 +452,14 @@
                                                                 <table class="table table-borderless text-center" style="margin-bottom: 0px;">
                                                                     <tbody>
                                                                         <tr>
-                                                                            <th style="width:8%; text-align: center">Task Order</th>
-                                                                            <th style="width:8%; text-align: center">Description</th>
+                                                                            <th style="width:8%; text-align: center">Task Id</th>
+                                                                            <th style="width:8%; text-align: center">Title</th>
                                                                             <th style="width:8%; text-align: center">Assigned To</th>
                                                                             <th style="width:8%; text-align: center">Notes</th>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td title="Task Order"><?= $value['task_order'] ?></td>
-                                                                            <td title="Description">
-                                                                                <a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $description ?>" data-trigger="hover" title="" data-original-title=""><?= $description ?></a>
-                                                                            </td>
+                                                                            <td title="Task Id"><?= $index_id ?></td>
+                                                                            <td title="Title"><?= $value['task_order'] ?></td>
                                                                             <!--<td title="Assign To"><span></span></td>-->
                                                                             <td title="Assign To"><span class="text-success"><?php echo get_assigned_project_task_staff($value['id']); ?></span><br><?php echo get_assigned_project_task_department($value['id']); ?></td>                                                    
                                                                             <!--get_task_note($value['id'])-->

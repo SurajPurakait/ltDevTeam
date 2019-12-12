@@ -3498,3 +3498,17 @@ if(!function_exists('get_template_category_name')){
         return $ci->Project_Template_model->getTemplateCategoryName($template_cat_id);
     }
 }
+if(!function_exists('get_project_office_client')){
+    function get_project_office_client($project_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getProjectOfficeClient($project_id);
+    }
+}
+if(!function_exists('get_project_office_name')){
+    function get_project_office_name($office_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getProjectOfficeName($office_id);
+    }
+}

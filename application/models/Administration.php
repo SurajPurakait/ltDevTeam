@@ -523,6 +523,11 @@ class Administration extends CI_Model {
         return $this->db->query($sql)->result_array()[0];
     }
 
+    public function get_service_by_id_for_service_setup($id) {
+        $sql = "select s.id as id, s.description as servicename,s.note,s.fixed_cost as fixedcost,s.retail_price as price, s.category_id as catid, t.start_days, t.end_days, t.input_form, s.dept as department, s.ideas, group_concat(r.related_services_id) as related_services from services as s inner join target_days as t on t.service_id = s.id left join related_services as r on r.services_id = s.id where s.id = '$id'";
+        return $this->db->query($sql)->result_array()[0];
+    }
+
     public function delete_service($id) {
         $this->db->trans_begin();
         $this->db->where("service_id", $id)->delete("target_days");

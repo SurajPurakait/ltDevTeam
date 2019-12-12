@@ -543,9 +543,10 @@ $role = $user_info['role'];
                 $("#" + divID).find('.criteria-div').html(result);
                 $(".chosen-select").chosen();
                 $("#" + divID).find('.condition-dropdown').removeAttr('disabled').val('');
-                if (variableValue == 13) {
-                    $("#" + divID).find('.condition-dropdown option:not(:eq(0),:eq(1))').remove();
-                } else {
+//                if (variableValue == 13) {
+//                    $("#" + divID).find('.condition-dropdown option:not(:eq(0),:eq(1))').remove();
+//                } else
+                {
                     $("#" + divID).find('.condition-dropdown').html('<option value="">All Condition</option><option value="1">Is</option><option value="2">Is in the list</option><option value="3">Is not</option><option value="4">Is not in the list</option>');
                 }
                 $("#" + divID).nextAll(".filter-div").each(function () {
