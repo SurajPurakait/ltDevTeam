@@ -144,13 +144,26 @@ function get_total_sales_report(office = '',date_range = '') {
 }
 
 // show franchisee result
-function show_service_franchise_result() {
-    $("#service_by_franchise").toggle();
+function show_service_franchise_result(category) {
+    if (category == 'franchise') {
+        $("#service_by_franchise").toggle();
+    } else if(category == 'department') {
+        $("#service_by_department").toggle();
+    } else if (category == 'service_category') {
+        $("#service_by_category").toggle();
+    }  
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_service_by_franchise_data',
+        data: {'category': category},
         success: function (result) {
-            $("#service_by_franchise").html(result);
+            if (category == 'franchise') {
+                $("#service_by_franchise").html(result);
+            } else if(category == 'department') {
+                $("#service_by_department").html(result);
+            } else if (category == 'service_category') {
+                $("#service_by_category").html(result);
+            }
         },
     });
 }

@@ -1437,5 +1437,7 @@ Class System extends CI_Model {
         $c = preg_replace("/[^a-zA-Z0-9]/", "", $company_name);
         return strtoupper(substr($c, 0, 11));
     }
-
+    public function get_all_category_list() {
+        return $this->db->get('category')->result_array();
+    }
 }
