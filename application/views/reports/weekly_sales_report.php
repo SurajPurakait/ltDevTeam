@@ -2,20 +2,22 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins form-inline">
-                <div class="row">
-                    <div class="col-md-8">        
-                        <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" multiple>
-                        	<?php
-                        		load_ddl_option("users_office_list", "","");
-                        	?>
-                        </select>
+                <div class="sales_header m-0" id="salesHeader">
+                    <div class="row">
+                        <div class="col-md-6">        
+                            <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" multiple>
+                            	<?php
+                            		load_ddl_option("users_office_list", "","");
+                            	?>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">
+                           	<button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>
+                        </div>
                     </div>
-                    <div class="col-md-4 text-right">
-                        <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">
-                       	<button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>
-                    </div>
-                </div>
-                <div id="total_sales_data" class="m-t-25"></div>
+                    <div id="total_sales_data" class="m-t-25"></div>
+                </div>    
                 <div class="ibox-content ajaxdiv-reports m-t-0">
                     <div class="">
                         <table id="sales-reports-tab" class="table table-bordered table-striped">
@@ -45,6 +47,19 @@
     </div>
 </div>
 <script type="text/javascript">
+    window.onscroll = function() {royaltyFunction()};
+
+    var sales_header = document.getElementById("salesHeader");
+    var sticky = sales_header.offsetTop;
+
+    function royaltyFunction() {
+      if (window.pageYOffset > sticky) {
+        sales_header.classList.add("sticky_report");
+      } else {
+        sales_header.classList.remove("sticky_report");
+      }
+    }
+
     loadSalesReportsData();
     $(function () {
         $(".chosen-select").chosen();

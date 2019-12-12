@@ -4,7 +4,7 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12" id="nav-tabs-div">
                             <div class="tabs-container">
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="active"><a class="nav-link" data-toggle="tab" href="#tab-1">Services</a></li>
