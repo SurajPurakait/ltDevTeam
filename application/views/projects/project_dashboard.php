@@ -76,6 +76,8 @@ if (!empty($project_list)) {
         }else{
             $dueDate = $actual_yr . '-' .($actual_mnth % 12).'-' . $actual_day;
         }
+        $added_user_department=get_added_user_department($list['added_by_user']);
+        $added_user_office=get_added_user_office($list['added_by_user']);
         ?>
         <div class="panel panel-default service-panel type2 filter-active" id="action<?= $list['id'] ?>">
             <div class="panel-heading" onclick="load_project_tasks('<?php echo $list['id']; ?>', '<?php echo $list['created_at']; ?>', '<?php echo $dueDate; ?>');"> 
@@ -133,7 +135,7 @@ if (!empty($project_list)) {
                                         }
                                         echo $resp_name . "<br><span class='text-info'>" . $office_name . " </span></td>";
                                         ?> </td>   
-                                    <td title="Requested By"><?php echo isset(staff_info_by_id($list['added_by_user'])['full_name']) ? staff_info_by_id($list['added_by_user'])['full_name'] : ''; ?><br><span class='text-info'><?= get_department_name_by_id($user_department); ?></span></td>
+                                    <td title="Requested By"><?php echo isset(staff_info_by_id($list['added_by_user'])['full_name']) ? staff_info_by_id($list['added_by_user'])['full_name'] : ''; ?><br><span class='text-info'><?= get_office_id($added_user_office); ?></span></td>
                                     <td title="Assign To"><span class="text-success"><?php echo get_assigned_dept_staff_project_main($list['id']); ?></span><br><?php
                                         if ($list['office_id'] != '2') {
                                             echo get_department_name_by_id($list['department_id']);

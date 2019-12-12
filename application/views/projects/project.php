@@ -28,7 +28,7 @@ $role = $user_info['role'];
                     </div>
                     <div class="clearfix"></div>
                     <div class="row"> 
-
+                        <div class="col-md-12">
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs tab" role="tablist">
                             <li role="presentation" class="active "><a href="#bookkeeping" aria-controls="bookkeeping" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '', );loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1)">Bookkeeping</a></li>
@@ -248,6 +248,7 @@ $role = $user_info['role'];
                         <hr class="hr-line-dashed  m-t-5 m-b-5">
                         <div class="ajaxdiv" id="action_dashboard_div"> 
                         </div>
+                    </div>
                     </div>
 
                 </div>
