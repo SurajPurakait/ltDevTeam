@@ -1,9 +1,13 @@
 <?php
-    $servername = "localhost";
-    $username = "leafnet_db_user";
-    $password = "leafnet@123";
-    $db = 'leafnet_staging';
+    // $servername = "localhost";
+    // $username = "leafnet_db_user";
+    // $password = "leafnet@123";
+    // $db = 'leafnet_staging';
 
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $db = 'leafnet';
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
 
@@ -109,19 +113,21 @@
                 $retail_price = $service_detail['retail_price'];
                 $service_cost = $service_detail['cost'];
                 $office_id = $rpd['office_id'];
+                $office_id_name = $rpd['officeid'];
                 $created_by = $rpd['created_by'];
 
-                $sql_query = "INSERT INTO `royalty_report`(`date`, `client_id`, `invoice_id`, `service_id`, `service_name`, `retail_price`, `override_price`, `cost`, `payment_status`, `collected`, `payment_type`, `authorization_id`, `reference`, `total_net`, `office_fee`, `fee_with_cost`, `fee_without_cost`, `office_id`, `created_by`) VALUES (
+                $sql_query = "INSERT INTO `royalty_report`(`date`, `client_id`, `invoice_id`, `service_id`, `service_name`, `retail_price`, `override_price`, `cost`, `payment_status`, `collected`, `payment_type`, `authorization_id`, `reference`, `total_net`, `office_fee`, `fee_with_cost`, `fee_without_cost`, `office_id`,`office_id_name` ,`created_by`) VALUES (
                 '$date_val', '$practice_id','$invoice_id',
                 '$services_ids','$service_details','$retail_price',
                 '$override_price','$service_cost','$payment_status',
                 '$collected','$payment_type','$authorization_id',
                 '$reference','$total_net','$office_fees',
-                '$fee_with_cost','$fee_without_cost','$office_id',
+                '$fee_with_cost','$fee_without_cost','$office_id','$office_id_name',
                 '$created_by')";
                 mysqli_query($conn,$sql_query)or die('insert error');
             }
-            // echo "<hr>";
+            echo $sql_query;
+            echo "<hr>";
         } 
     echo "Success";exit;
     } 

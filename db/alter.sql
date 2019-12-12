@@ -1049,3 +1049,6 @@ ALTER TABLE `invoice_recurence` ADD `next_occurance_date` DATE NULL DEFAULT NULL
 ALTER TABLE `project_main` CHANGE `status` `status` INT(11) NOT NULL COMMENT '0-not started,1-started,2-completed,4-canceled'; 
 
 ALTER TABLE `project_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for started, 2 for resolved, 3 for ready, 4 for canceled'; 
+
+/* 12.12.2019 */
+ALTER TABLE `royalty_report` ADD `office_id_name` VARCHAR(255) NOT NULL AFTER `office_id`;

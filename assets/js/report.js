@@ -45,6 +45,7 @@ function loadRoyaltyReportsData(office = '',date_range = '') {
             {data: 'client_id'},
             {data: 'invoice_id'},
             {data: 'service_id'},
+            {data: 'office_id_name'},
             {data: 'service_name'},
             {data: 'retail_price',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
             {data: 'override_price',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
