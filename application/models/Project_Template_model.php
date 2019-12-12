@@ -2895,6 +2895,12 @@ class Project_Template_model extends CI_Model {
             return 'N/A';
         }
     }
+    public function getAddedUserDepartment($user_id){
+        return $this->db->get_where('department_staff',['staff_id'=>$user_id])->row()->department_id;
+    }
+    public function getAddedUserOffice($user_id){
+        return $this->db->get_where('office_staff',['staff_id'=>$user_id])->row()->office_id;
+    }
 }
 
 ?>
