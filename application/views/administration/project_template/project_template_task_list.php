@@ -1,7 +1,6 @@
 <?php
 if (!empty($data)) {
     foreach ($data as $keys=> $value) {
-        $index_id=$keys+1;
         if (strlen($value['description']) > 20) {
             $description = substr($value['description'], 0, 20) . '...';
         } else {
@@ -23,8 +22,8 @@ if (!empty($data)) {
                                     <th style="width:8%; text-align: center">Notes</th>
                                 </tr>
                                 <tr>
-                                    <td title="Title"><?= $index_id ?></td>
                                     <td title="Title"><?= $value['task_order'] ?></td>
+                                    <td title="Title"><?= $value['task_title'] ?></td>
                                     
                                     <!--<td title="Assign To"><span></span></td>-->
                                     <td title="Assign To"><span class="text-success"><?php echo get_assigned_task_staff($value['id']); ?></span><br><?php echo get_assigned_task_department($value['id']); ?></td>                                                    
