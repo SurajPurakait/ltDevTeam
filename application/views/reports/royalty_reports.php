@@ -2,21 +2,21 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins form-inline">
-                <div class="row">
-                    <div class="col-md-8">
-                        <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" multiple>
-                            <?php
-                                load_ddl_option("staff_office_list", "","");
-                            ?>
-                        </select>                        
+                <div class="royalty_header m-0" id="royaltyHeader">
+                    <div class="row">
+                        <div class="col-md-6" id="ofc-multiselect-div">
+                            <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" multiple>
+                                <?php
+                                    load_ddl_option("staff_office_list", "","");
+                                ?>
+                            </select>                        
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">
+                            <button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>                      </div>
                     </div>
-                    <div class="col-md-4 text-right">
-                        <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">
-                        <button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>                      </div>
+                    <div id="total" class="m-t-25"></div>
                 </div>
-
-
-                <div id="total" class="m-t-25"></div>
                 <div class="ibox-content ajaxdiv-reports m-t-0">
                     <div class="">
                         <table id="reports-tab" class="table table-bordered table-striped">
@@ -38,7 +38,7 @@
                                     <th style="white-space: nowrap;">Total Net</th>
                                     <th style="white-space: nowrap;">Office Fee</th>
                                     <th style="white-space: nowrap;">Fee W/ Cost</th>
-                                    <th style="white-space: nowrap;ap;">Fee W/O Cost</th>
+                                    <th style="white-space: nowrap;">Fee W/O Cost</th>
                                 </tr>
                             </thead>
                         </table>                   
@@ -49,6 +49,20 @@
     </div>
 </div>
 <script type="text/javascript">
+
+    window.onscroll = function() {royaltyFunction()};
+
+    var royalty_header = document.getElementById("royaltyHeader");
+    var sticky = royalty_header.offsetTop;
+
+    function royaltyFunction() {
+      if (window.pageYOffset > sticky) {
+        royalty_header.classList.add("sticky_report");
+      } else {
+        royalty_header.classList.remove("sticky_report");
+      }
+    }
+
 	loadRoyaltyReportsData();
 		$(function () {
 			$(".chosen-select").chosen();
