@@ -728,7 +728,7 @@ $office_id = get_office_id($staff_info['office']);
                             </a>
                         <ul class="nav nav-second-level collapse" style="height: 0px;">
                             <li <?= active_menu($menu, "report_3"); ?>>
-                                <a href="<?= base_url() ?>reports/index/3">Dashboard</a>
+                                <a href="javascript:void(0);">Dashboard</a>
                             </li>
 
                             <li <?= active_menu($menu, "royalty_report"); ?>>

@@ -3993,13 +3993,13 @@ code {
 #tab-content-div table th {
     padding: 15px;
 }
-#service_by_franchise1 .ibox-title{
+#service_by_franchise_1 .ibox-title{
     border-top: 4px solid #ec8fb3;
 }
-#service_by_department .ibox-title{
+#service_by_department_1 .ibox-title{
     border-top: 4px solid #ffab96;
 }
-#service_by_category .ibox-title{
+#service_by_category_1 .ibox-title{
     border-top: 4px solid #f2a3a3;
 }
 .ibox-content {
@@ -9117,7 +9117,9 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 .fixed-container .tab-content {
     padding-top: 153px;
 }
-.nav-tabs li a { background:#afe35e; color: #000; }
+.nav-tabs li a { background:#e6e6e6; color: #000; }
+#nav-tabs-div .nav-tabs li a { background:#afe35e !important; color: #000; }
+#nav-tabs-div .nav-tabs > li.active > a { background: #fff !important; color: #000; }
 .tab-content {padding:30px 5px 20px 5px;}
 .alert-primar {
     color: #004085;
@@ -9134,4 +9136,21 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 .lead-warning {
     background-color: #f8ac59;
     color: #FFFFFF;
+}
+#ofc-multiselect-div .chosen-container-active .chosen-choices{
+    border: 1px solid #1ab394;
+    box-shadow: none;
+}
+
+.sticky_report {
+  position: fixed;
+  top: 62px;
+  width: 78.5%;
+  z-index: 6;
+  background: #f3f3f4;
+  padding-top: 20px;
+}
+
+.sticky_report + .ajaxdiv-reports {
+  padding-top: 300px;
 }
