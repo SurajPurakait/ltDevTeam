@@ -3512,3 +3512,17 @@ if(!function_exists('get_project_office_name')){
         return $ci->Project_Template_model->getProjectOfficeName($office_id);
     }
 }
+if(!function_exists('get_added_user_department')){
+    function get_added_user_department($user_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getAddedUserDepartment($user_id);
+    }
+}
+if(!function_exists('get_added_user_office')){
+    function get_added_user_office($user_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getAddedUserOffice($user_id);
+    }
+}
