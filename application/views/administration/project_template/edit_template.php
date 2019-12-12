@@ -404,7 +404,7 @@
                                                                             <input class="form-control" type="number" id="generation_month" name="recurrence[generation_month]" value="<?php echo $pattern_details->generation_month; ?>" min="0" max="12" style="width: 100px">&nbsp;
                                                                             <label class="control-label">month(s)</label>&nbsp;
                                                                             <input class="form-control" value="<?php echo $pattern_details->generation_day; ?>" type="number" id="generation_day" name="recurrence[generation_day]" min="1" max="31" style="width: 100px">&nbsp;
-                                                                            <label class="control-label">Day(s) before next occurrence</label>
+                                                                            <label class="control-label">Day(s) before next occurrence due date</label>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-12">
@@ -446,7 +446,8 @@
 
                                     <?php
                                     if (!empty($task_list)) {
-                                        foreach ($task_list as $value) {
+                                        foreach ($task_list as $keys=> $value) {
+                                            $index_id=$keys+1;
                                             if (strlen($value['description']) > 20) {
                                                 $description = substr($value['description'], 0, 20) . '...';
                                             } else {
@@ -462,16 +463,14 @@
                                                             <table class="table table-borderless text-center" style="margin-bottom: 0px;">
                                                                 <tbody>
                                                                     <tr>
-                                                                        <th style="width:8%; text-align: center">Task Order</th>
-                                                                        <th style="width:8%; text-align: center">Description</th>
+                                                                        <th style="width:8%; text-align: center">Task Id</th>
+                                                                        <th style="width:8%; text-align: center">Title</th>
                                                                         <th style="width:8%; text-align: center">Assigned To</th>
                                                                         <th style="width:8%; text-align: center">Notes</th>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td title="Task Order"><?= $value['task_order'] ?></td>
-                                                                        <td title="Description">
-                                                                            <a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $description ?>" data-trigger="hover" title="" data-original-title=""><?= $description ?></a>
-                                                                        </td>
+                                                                        <td title="Task Id"><?= $index_id ?></td>
+                                                                        <td title="Title"><?= $value['task_order'] ?></td>
                                                                         <!--<td title="Assign To"><span></span></td>-->
                                                                         <td title="Assign To"><span class="text-success"><?php echo get_assigned_task_staff($value['id']); ?></span><br><?php echo get_assigned_task_department($value['id']); ?></td>                                                    
                                                                         <!--get_task_note($value['id'])-->

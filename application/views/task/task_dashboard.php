@@ -64,6 +64,10 @@ if (!empty($task_list)) {
             $tracking = 'Ready';
             $trk_class = 'label-secondary';
         }
+        elseif ($status == 4) {
+            $tracking = 'Canceled';
+            $trk_class = 'label-danger';
+        }
         $pattern_details = get_project_pattern($task['project_id']);
 
         $due_date = '';
@@ -159,8 +163,8 @@ if (!empty($task_list)) {
                                     <td title="Assign To" class="text-center"><span class="text-success"><?php echo get_assigned_project_task_staff($task['id']); ?></span><br><?php echo get_assigned_project_task_department($task['id']); ?></td>                                                     
                                 <?php } ?>
                 <!--<td title="Assign To" class="text-center"><span class="text-success"><?php // echo get_assigned_project_task_staff($task['id']);   ?></span><br><?php // echo get_assigned_project_task_department($task['id']);   ?></td>-->                                                     
-                                <td title="Start Date" class="text-center">T: <?= $targetSstartDate ?></td>
-                                <td title="Complete Date" class="text-center">T: <?= $targetCompleteDate ?></td>
+                                <td title="Start Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetSstartDate)) ?></td>
+                                <td title="Complete Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetCompleteDate)) ?></td>
                                 <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task['id']; ?>,<?= $status; ?>, <?= $task['id'] ?>);'><span class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                                 <td title="SOS" style="text-align: center;">
                                     <span>
@@ -206,9 +210,9 @@ if (!empty($task_list)) {
                                     if ($task['input_form_status'] == 'n') {
                                         $input_status = 'incomplete';
                                         ?>
-                                        <span class="label input-form-incomplete">Incomplete <a href="#" onclick= "window.location.href = '<?php echo base_url() . 'task/task_input_form/' . $task['id'].'/'.$task['bookkeeping_input_type']; ?>'" class="text-white p-5" target="_blank"><i class="fa fa-plus" aria-hidden="true"></i> </a></span>
+                                        <a href="#" onclick= "window.location.href = '<?php echo base_url() . 'task/task_input_form/' . $task['id'].'/'.$task['bookkeeping_input_type']; ?>'" class="text-white label input-form-incomplete p-t-10 p-l-10 p-b-10" target="_blank">Incomplete<span class='p-10'><i class="fa fa-plus" aria-hidden="true"></i> </span></a>
                                     <?php } else { ?>
-                                        <span class="label input-form-complete">Completed <a href="#" onclick= "window.location.href = '<?php echo base_url() . 'task/task_input_form/' . $task['id'].'/'.$task['bookkeeping_input_type']; ?>'" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
+                                        <a href="#" onclick= "window.location.href = '<?php echo base_url() . 'task/task_input_form/' . $task['id'].'/'.$task['bookkeeping_input_type']; ?>'" class="text-white label input-form-complete p-t-10 p-l-10 p-b-10" target="_blank">Completed<span class='p-10'><i class="fa fa-pencil" aria-hidden="true"></i> </span></a>
                                         <?php
                                     }
                                     ?>
