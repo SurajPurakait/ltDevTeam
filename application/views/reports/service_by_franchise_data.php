@@ -17,7 +17,17 @@
             foreach ($service_by_franchise_list as $value) {
         ?>
         <tr>
-            <td><?= $value['office_name']; ?></td>
+            <td>
+                <?php 
+                    if ($category == 'franchise') {
+                        echo $value['office_name'];
+                    } elseif ($category == 'department') {
+                        echo $value['department_name'];
+                    } elseif ($category == 'service_category') {
+                        echo $value['category_name'];
+                    }
+                ?>        
+            </td>
             <td><?= $value['totals']; ?></td>
             <td><?= $value['new']; ?></td>
             <td><?= $value['started']; ?></td>

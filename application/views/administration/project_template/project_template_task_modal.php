@@ -12,8 +12,15 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Task Title:<span class="spanclass text-danger">*</span></label>
-                            <input type="text" class="form-control" id="task_order" name="task[task_order]" title="Order" required>
+                            <label class="control-label">Task Id:<span class="spanclass text-danger">*</span></label>
+                            <input type="text" class="form-control" id="task_order" name="task[task_order]" title="Task Id" required>
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Title:<span class="spanclass text-danger">*</span></label>
+                            <input type="text" class="form-control" id="task_title" name="task[task_title]" title="Title" required>
                             <div class="errorMessage text-danger"></div>
                         </div>
                     </div>

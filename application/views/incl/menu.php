@@ -301,9 +301,11 @@ $office_id = get_office_id($staff_info['office']);
                             <li <?= active_menu($menu, "task_dashboard"); ?> >
                                 <a href="<?= base_url(); ?>task">Task Dashboard</span></a>
                             </li>
+            <?php if ($staff_info['type'] == '1' ||$staff_info['type']==2) { ?>
                             <li <?= active_menu($menu, "project_dashboard"); ?>>
                                 <a href="javascript:void(0);" onclick="CreateProjectModal('add', '');">+ Add New Project</a>
                             </li>
+                            <?php } ?>
                             <?php if ($staff_info['type'] == '1') { ?>
                             <li <?= active_menu($menu, "template"); ?>>
                                 <a class="admin-nav" href="<?= base_url('projects/template'); ?>">Project Templates</a>
@@ -728,7 +730,7 @@ $office_id = get_office_id($staff_info['office']);
                             </a>
                         <ul class="nav nav-second-level collapse" style="height: 0px;">
                             <li <?= active_menu($menu, "report_3"); ?>>
-                                <a href="<?= base_url() ?>reports/index/3">Dashboard</a>
+                                <a href="javascript:void(0);">Dashboard</a>
                             </li>
 
                             <li <?= active_menu($menu, "royalty_report"); ?>>
