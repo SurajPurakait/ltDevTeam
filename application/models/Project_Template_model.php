@@ -2908,7 +2908,26 @@ class Project_Template_model extends CI_Model {
         }
     }
     public function getTemplateCategoryName($template_cat_id){
-        return $this->db->get_where('template_category',['id'=>$template_cat_id])->row()->name;
+        $data=$this->db->get_where('template_category',['id'=>$template_cat_id])->row();
+        if(!empty($data)){
+            return $data->name;
+        }else{
+            return 'N/A';
+        }
+    }
+    public function getProjectOfficeClient($project_id){
+        $this->db->select('client_id,client_type,office_id');
+        $this->db->from('projects');
+        $this->db->where('id',$project_id);
+        return $this->db->get()->row();
+    }
+    public function getProjectOfficeName($office_id){
+        $data=$this->db->get_where('office',['id'=>$office_id])->row();
+        if(!empty($data)){
+            return $data->name;
+        }else{
+            return 'N/A';
+        }
     }
 }
 

@@ -101,7 +101,7 @@ class Modal extends CI_Controller {
         $render_data["categories"] = $this->administration->get_all_categories();
         $render_data['department_list'] = $this->administration->get_all_departments();
         if ($render_data['modal_type'] == "edit") {
-            $render_data['service_info'] = $this->administration->get_service_by_id($this->input->post('service_id'));
+            $render_data['service_info'] = $this->administration->get_service_by_id_for_service_setup($this->input->post('service_id'));
         }
         $this->load->view('modal/service_modal', $render_data);
     }

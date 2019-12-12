@@ -15,20 +15,56 @@
                                     <li><a class="nav-link" data-toggle="tab" href="#tab-6">Partners</a></li>
                                     <li><a class="nav-link" data-toggle="tab" href="#tab-7">Leads</a></li>
                                 </ul>
-                                <div class="tab-content">
+                                <div class="tab-content" id="tab-content-div">
                                     <div role="tabpanel" id="tab-1" class="tab-pane active">
                                         <div class="panel-body">
-                                            <h4 class="m-b-15">Period Time: <span class="btn-sm btn-default text-dark">Last 30 Days</span></h4>
-                                            <div class="ibox collapsed">
-                                                <div class="ibox-title">
-                                                    <h5 class="m-0">Services By Franchisee</h5>
+                                            <!-- <div class="row">
+                                                <div class="col-md-2">
+                                                    <h4 class="bg-success p-5 text-center f-s-16">Period Time</h4>
+                                                </div>
+                                                <div class="col-md-2">
+                                                   <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period"> 
+                                                </div>
+                                            </div> -->
+                                            <h4 class="m-b-15"> <span class="btn-sm btn-default text-dark">Last 30 Days</span></h4>
+                                            <div class="ibox m-t-25" id="service_by_franchise1">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Services By Franchisee</h5>
                                                     <div class="ibox-tools">
                                                         <a class="" onclick="show_service_franchise_result()">
                                                             <i class="fa fa-chevron-up"></i>
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content" id="service_by_franchise" style="display: none;">
+                                                <div class="ibox-content p-0" id="service_by_franchise" style="display: none;">
+                                                    
+                                                </div>
+                                            </div>
+
+                                            <div class="ibox" id="service_by_department">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Services By Department</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="" onclick="show_service_franchise_result()">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="service_by_franchise2" style="display: none;">
+                                                    
+                                                </div>
+                                            </div>
+
+                                            <div class="ibox" id="service_by_category">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Services By Category</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="" onclick="show_service_franchise_result()">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="service_by_franchise3" style="display: none;">
                                                     
                                                 </div>
                                             </div>
@@ -48,3 +84,26 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+        $(function () {
+            var start = moment();
+            var end = moment();
+            function cb(start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+
+            $('#reportrange').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+            cb(start, end);
+        }); 
+</script>

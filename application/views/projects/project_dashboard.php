@@ -49,19 +49,7 @@ if (!empty($project_list)) {
             }
         }
         $templatedetails = getProjectTemplateDetailsById($list['id']);
-//         $office_dtls = get_assigned_project_main_template_office($list['id']);
-// //                                                            print_r($office_dtls);die;
-//         $office_name = [];
-//         foreach ($office_dtls as $key => $ofc) {
-//             $office_name[] = $ofc;
-//         }
-        //$task_list = getProjectTaskList($list['id']);
         $pattern_details = get_project_pattern($list['id']);
-//                                print_r($pattern_details);die;
-//                                $due_date=$pattern_details['actual_due_day'];
-//                                print_r($templatedetails);
-
-
         $status = $templatedetails->status;
         if ($status == 2) {
             $tracking = 'Completed';
@@ -73,11 +61,7 @@ if (!empty($project_list)) {
             $tracking = 'Not Started';
             $trk_class = 'label-success';
         }
-//                                $client_name=getProjectClientName($list['client_id']);
-
-
         $due_date = '';
-//                                if ($pattern_details->pattern != '' && $pattern_details->pattern == 'annually') {
         $actual_day = $pattern_details->actual_due_day;
         $actual_mnth = $pattern_details->actual_due_month;
         $actual_yr = $pattern_details->actual_due_year;
@@ -87,24 +71,11 @@ if (!empty($project_list)) {
         if (strlen($actual_day) == 1) {
             $actual_day = '0' . $actual_day;
         }
-        // if ($actual_day == 1) {
-        //     $due_date = $actual_day."st";
-        // } elseif ($actual_day == 2) {
-        //     $due_date = $actual_day."nd";
-        // }elseif ($actual_day == 3) {
-        //     $due_date = $actual_day."rd";
-        // }else {
-        //     $due_date = $actual_day."th";
-        // }
-        // $dueDate= $due_date.' '.$due_m[$actual_mnth];
         if($actual_mnth<=12){
             $dueDate = $actual_yr . '-' . $actual_mnth . '-' . $actual_day;
         }else{
             $dueDate = $actual_yr . '-' .($actual_mnth % 12).'-' . $actual_day;
         }
-//                                } else {
-//                                    $dueDate= 'N/A';
-//                                }
         ?>
         <div class="panel panel-default service-panel type2 filter-active" id="action<?= $list['id'] ?>">
             <div class="panel-heading" onclick="load_project_tasks('<?php echo $list['id']; ?>', '<?php echo $list['created_at']; ?>', '<?php echo $dueDate; ?>');"> 
@@ -162,7 +133,7 @@ if (!empty($project_list)) {
                                         }
                                         echo $resp_name . "<br><span class='text-info'>" . $office_name . " </span></td>";
                                         ?> </td>   
-                                    <td title="Requested By"><?php echo isset(staff_info_by_id($list['added_by_user'])['full_name']) ? staff_info_by_id($list['added_by_user'])['full_name'] : ''; ?></td>
+                                    <td title="Requested By"><?php echo isset(staff_info_by_id($list['added_by_user'])['full_name']) ? staff_info_by_id($list['added_by_user'])['full_name'] : ''; ?><br><span class='text-info'><?= get_department_name_by_id($user_department); ?></span></td>
                                     <td title="Assign To"><span class="text-success"><?php echo get_assigned_dept_staff_project_main($list['id']); ?></span><br><?php
                                         if ($list['office_id'] != '2') {
                                             echo get_department_name_by_id($list['department_id']);
