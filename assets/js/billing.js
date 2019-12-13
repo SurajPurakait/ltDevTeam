@@ -292,10 +292,12 @@ if(pattern!=''){
                         if ($("#edit_type").val() == 'edit_place') {
                             goURL(base_url + 'billing/invoice/place/' + result);
                         } else {
-                            if(is_recurrence==''){
-                                goURL(base_url + 'billing/home');
+                            if(is_recurrence =='y'){
+                                   goURL(base_url + 'billing/home/index/y');
+                                // goURL(base_url + 'billing/home');
                             }else{
-                                goURL(base_url + 'billing/home/index/y');
+                                   goURL(base_url + 'billing/home'); 
+                                // goURL(base_url + 'billing/home/index/y');
                             }
                         }
                     });
