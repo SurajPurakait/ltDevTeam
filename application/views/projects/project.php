@@ -479,7 +479,7 @@ $role = $user_info['role'];
     });
     function change_project_status_inner(id, status, section_id) {
         openModal('changeStatusinner');
-        var txt = 'Change Status of Tracking Project id #' + id;
+        var txt = 'Tracking Project #' + id;
         $("#changeStatusinner .modal-title").html(txt);
         if (status == 0) {
             $("#changeStatusinner #rad0").prop('checked', true);
