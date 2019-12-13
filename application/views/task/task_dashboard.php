@@ -119,9 +119,8 @@ if (!empty($task_list)) {
                             $due_m = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'Jun', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
                             ?>
                             <tr>
-                                <th style='width:8%;  text-align: center;'>ID</th>
+                                <th style='width:8%;  text-align: center;'>Task ID</th>
                                 <th style='width:8%;  text-align: center;'>Task Title</th>
-                                <th style='width:8%;  text-align: center;'>Description</th>
                                 <th style='width:8%;  text-align: center;'>Assign To</th>
                                 <th style='width:8%;  text-align: center;'>Start Date</th>
                                 <th style='width:8%;  text-align: center;'>Complete Date</th>
@@ -135,7 +134,6 @@ if (!empty($task_list)) {
                             <tr>
                                 <td title="ID" class="text-center"><?= $task['project_id'].'-'.$task['task_order'] ?></td>
                                 <td title="Order" class="text-center"><?= $task['task_title']; ?></td>
-                                <td title="Description" class="text-center"><a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $data_description ?>" data-trigger="hover" title="" data-original-title=""><?= $description ?></a></td>
                                 <!--<td title="Order" class="text-center"><?//= date('Y-m-d', strtotime($task->created_at)); ?></td>-->
         <!--                                                                <td title="Target Start Date" class="text-center"><?= $task->target_start_date; ?></td>
                                 <td title="Target Complete Date" class="text-center"><?= $task['target_complete_date']; ?></td>-->
