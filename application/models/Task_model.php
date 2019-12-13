@@ -135,39 +135,10 @@ class Task_model extends CI_Model {
         } else {
 //            echo 'bbb';die;
             $having_or = [];
-            if ($user_type == 1 || ($user_type == 2 && $user_department == 14)) {
-//                echo "b1";die;
-//                $this->db->where_in('pt.added_by_user', [0, $staff_id]);
-//                $having[] = '(assign_staff LIKE "%,' . $staff_id . ',%")';
-            } else if ($user_type == 3 && $role == 2) {
-//                echo 'b2';die;
-                if (!empty($office_staff)) {
-//                    $having_or[] = 'all_project_staffs LIKE "%,' . $staff_id . ',%"';
-                    $having_or[] = 'added_by_user IN (' . implode(',', $office_staff) . ')';
-//                    $having_or[] = 'my_task = "' . $staff_id . '"';
-                    unset($office_staff[array_search(sess('user_id'), $office_staff)]);
-                    foreach ($office_staff as $staffID) {
-                        $having_or[] = 'assign_staff LIKE "%,' . $staff_id . ',%"';
-                    }
-                    $having[] = '(' . implode(' OR ', $having_or) . ')';
-                } else {
-                    $having[] = '(assign_staff LIKE "%,' . $staff_id . ',%")';
-                }
-            } else if ($user_type == 2 && $role == 4) {
-//                echo 'b3';die;
-                if ($user_department != 14) {
-                    if (!empty($departments)) {
-//                    $having_or[] = 'all_project_staffs LIKE "%,' . $staff_id . ',%"';
-                        if (!empty($department_staff)) {
-                            $having_or[] = 'added_by_user IN (' . implode(',', $department_staff) . ')';
-                        }
-//                    $having_or[] = 'my_task = "' . $staff_id . '"';
-                        $having_or[] = 'department_id IN (' . implode(',', $departments) . ') OR assign_staff LIKE "%,' . $staff_id . ',%"';
-                        $having[] = '(' . implode(' OR ', $having_or) . ')';
-                    } else {
-                        $having[] = '(assign_staff LIKE "%,' . $staff_id . ',%")';
-                    }
-                }
+            if ($user_type == 1 || ($user_type == 2 && $user_department == 14) || $user_type == 2) {
+//                
+            } else if ($user_type == 3) {
+                $this->db->where(['pt.department_id'=>2,'pro.office_id'=>$user_office]);
             } else {
 //                echo 'b4';die;
                 $having[] = '(added_by_user = "' . $staff_id . '" OR assign_staff LIKE "%,' . $staff_id . ',%")';
