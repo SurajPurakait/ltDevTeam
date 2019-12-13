@@ -106,13 +106,13 @@ if (!empty($task_list)) {
             $data_description=$task['description'];
         }
         ?>
-        <div class="panel panel-default service-panel type2 filter-active" id="action<?= $task['id'] ?>">
+        <div class="panel panel-default service-panel type2 filter-active" id="action">
             <div class="panel-heading"> 
         <!--        <a href="javascript:void(0)" onclick="delete_project(<?//= $task['id']; ?>)" class="btn btn-danger btn-xs btn-service-view-project"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a> &nbsp;
                 <a href="javascript:void(0)" onclick="CreateProjectModal('edit',<?//= $task['id'] ?>);" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>  &nbsp; 
                 <a href="<?//= base_url() . 'project/edit_project_template/' . base64_encode($task['id']); ?>" class="btn btn-primary btn-xs btn-service-edit-project"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Project</a> -->
 
-                <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="false" class="collapsed">
+                <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $task['id']; ?>" aria-expanded="false" class="collapsed">
                     <div class="table-responsive">
                         <table class="table table-borderless">
                             <?php
