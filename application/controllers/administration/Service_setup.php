@@ -68,8 +68,9 @@ class Service_setup extends CI_Controller
             $shortcode = $this->input->post("shortcode");
             $note = $this->input->post('note');
             $fixedcost = $this->input->post('fixedcost');
+            $client_type = $this->input->post('client_type');
 
-            echo $this->administration->add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode,$note,$fixedcost);
+            echo $this->administration->add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode,$note,$fixedcost,$client_type);
 
         }
     }
@@ -93,8 +94,9 @@ class Service_setup extends CI_Controller
             $shortcode = $this->input->post("shortcode");
             $note = $this->input->post('note');
             $fixedcost = $this->input->post('fixedcost');
+            $client_type = $this->input->post('client_type');
             // echo $fixedcost;exit;
-            echo $this->administration->update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode,$note, $fixedcost);
+            echo $this->administration->update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode,$note, $fixedcost,$client_type);
 
         }
     }
@@ -113,6 +115,21 @@ class Service_setup extends CI_Controller
     public function get_service_relations($service_id)
     {
         echo $this->administration->get_service_relations($service_id);
+    }
+
+    public function get_service_setup_relations($service_id) {
+
+        echo $this->administration->get_service_setup_relations($service_id);
+    }
+
+    public function deactive_service() {
+        $id = $this->input->post("service_id");
+        $result = $this->administration->deactive_service($id);
+        if ($result) {
+            echo "1";
+        } else {
+            echo "0";
+        }
     }
 
 }
