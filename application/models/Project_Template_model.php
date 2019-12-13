@@ -447,6 +447,41 @@ class Project_Template_model extends CI_Model {
         }
         return $array;
     }
+    public function getAssignedOfficeStaffProjectTask($task_id,$project_id, $responsible_staff){
+        $project_details=$this->db->get_where('projects',['id'=>$project_id])->row();
+        $officeid=$project_details->office_id;
+        $client_id=$project_details->client_id;
+        $client_type=$project_details->client_type;
+        $data['office']= $this->db->get_where('office',['id'=>$officeid])->row()->office_id;
+        if($responsible_staff==1){
+            $this->db->select("concat(s.first_name ,' ', s.last_name) as name");
+            $this->db->from('staff s');
+            $this->db->join('internal_data ind','s.id=ind.partner');
+            $this->db->where('ind.reference_id',$client_id);
+            $result=$this->db->get()->row();
+            if(!empty($result)){
+                $data['staff_name']=$result->name;
+            }else{
+               $data['staff_name']='N/A';
+            }
+        }else if($responsible_staff==2){
+            $this->db->select("concat(s.first_name ,' ', s.last_name) as name");
+            $this->db->from('staff s');
+            $this->db->join('internal_data ind','s.id=ind.manager');
+            $this->db->where('ind.reference_id',$client_id);
+            $result=$this->db->get()->row();
+            if(!empty($result)){
+                $data['staff_name']=$result->name;
+            }else{
+               $data['staff_name']='N/A';
+            }
+        }
+        else{
+            $data['staff_name']='N/A';
+        }
+        return $data;
+           
+    }
 
     public function getTemplateStaffList($template_id) {
         return $this->db->get_where('project_template_main', ['id' => $template_id])->row();
@@ -2339,12 +2374,12 @@ class Project_Template_model extends CI_Model {
             $this->db->where('pro.client_id', $client_id);
         }
 //        if($template_cat_id==1){
-//            if($year==''){
-//                $present_year=date('Y');
-//                $this->db->where('prm.actual_due_year',$present_year);
-//            }else{
-//               $this->db->where('prm.actual_due_year',$year); 
-//            }
+            if($year==''){
+                $present_year=date('Y');
+                $this->db->where('YEAR(prm.due_date)',$present_year);
+            }else{
+               $this->db->where('YEAR(prm.due_date)',$year); 
+            }
 //        }
         $this->db->group_by('pro.id');
         if ($sort_criteria != '') {
@@ -2855,7 +2890,15 @@ class Project_Template_model extends CI_Model {
     public function getDueYear(){
         $this->db->select('YEAR(due_date) as due_year');
         $this->db->from('project_recurrence_main');
+        $this->db->where('YEAR(due_date)!=','0');
         $this->db->group_by('YEAR(due_date)');
+        return $this->db->get()->result_array();
+    }
+    public function getDueMonth(){
+        $this->db->select('MONTH(due_date) as due_month');
+        $this->db->from('project_recurrence_main');
+        $this->db->where('MONTH(due_date)!=','0');
+        $this->db->group_by('MONTH(due_date)');
         return $this->db->get()->result_array();
     }
     public function getProjectClientPracticeId($client_id, $client_type, $office_id = '') {
