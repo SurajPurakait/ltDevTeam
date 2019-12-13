@@ -7,7 +7,7 @@
                         <div class="col-md-6">
                             <h1><br>Dashboard Partners</h1>
                             <?php $staffinfo = staff_info(); ?>
-                            <button title="Create Referral Partner" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" onclick="window.location.href = '<?= base_url("/referral_partner/referral_partners/add_lead/").$staffinfo['office_manager']; ?>';"><i class="fa fa-plus"></i> Refer a Lead to : <?php echo get_assigned_by_staff_name($staffinfo['office_manager']); ?></button>
+                            <button title="Create Referral Partner" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" onclick="window.location.href = '<?= base_url("/referral_partner/referral_partners/add_lead/").$staffinfo['office_manager']; ?>';"><i class="fa fa-plus"></i> Refer a Lead to: <?php echo get_assigned_by_staff_name($staffinfo['office_manager']); ?></button>
                         </div>
                         <div class="col-md-6">
                             <div class="bg-aqua table-responsive">

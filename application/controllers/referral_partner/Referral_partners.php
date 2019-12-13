@@ -17,7 +17,7 @@ class Referral_partners extends CI_Controller {
 
     function partners($req_by = '', $stat = '', $type = '', $lead_type = '') {
         $this->load->layout = 'dashboard';
-        $title = "Referral Partners";
+        $title = "Partners / All Partners";
         $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['main_menu'] = 'referral_partners';
         $render_data['menu'] = 'partners';
