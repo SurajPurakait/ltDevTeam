@@ -69,30 +69,26 @@
                     } else {
                         $targetCompleteDate = date("Y-m-d", strtotime(("+$complete_date"), $created_at));
                     }
+                    if (strlen($task->description) > 20) {
+                        $description = substr($task->description, 0, 20) . '...';
+                        $data_description=$task->description;
+                    } else {
+                        $description = $task->description;
+                        $data_description=$task->description;
+                    }
                     ?>
                     <tr>
                         <td title="Task Id" class="text-center"><?= $task->project_id.'-'.$taskId; ?></td>
-                        <td title="Description" class="text-center"><?= $task->description; ?></td>
+                        <td title="Description" class="text-center"><a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $data_description ?>" data-trigger="hover" title="" data-original-title=""><?= $description ?></a></td>
                         <!--<td title="Order" class="text-center"><?//= date('Y-m-d', strtotime($task->created_at)); ?></td>-->
         <!--                                                                <td title="Target Start Date" class="text-center"><?= $task->target_start_date; ?></td>
                         <td title="Target Complete Date" class="text-center"><?= $task->target_complete_date; ?></td>-->
                         <!--<td title="assign to"></td>-->
-                        <?php if ($task->department_id == 2) { ?>
+                        <?php if ($task->department_id == 2) {?>
                             <td title="Assign To" class="text-center">
                                 <?php
-                                $resp_value = get_assigned_office_staff_project_main($task->project_id, '');
-                                if (is_numeric($resp_value['name'])) {
-                                    $resp_name = get_assigned_by_staff_name($resp_value['name']);
-                                } else {
-                                    $resp_name = $resp_value['name'];
-                                }
-
-                                if ($resp_value['office'] != 0) {
-                                    $office_name = get_office_id($resp_value['office']);
-                                } else {
-                                    $office_name = 'Admin';
-                                }
-                                echo $resp_name . "<br><span class='text-info'>" . $office_name . " </span></td>";
+                                $resp_value = get_assigned_office_staff_project_task($task->id,$task->project_id, $task->responsible_task_staff);
+                                    echo "<span class='text-success'>". $resp_value['staff_name'] ."</span><br>" . $resp_value['office'] . "</td>";
                                 ?> 
                             </td> <?php } else { ?> 
                             <td title="Assign To" class="text-center"><span class="text-success"><?php echo get_assigned_project_task_staff($task->id); ?></span><br><?php echo get_assigned_project_task_department($task->id); ?></td>                                                     

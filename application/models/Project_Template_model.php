@@ -447,6 +447,41 @@ class Project_Template_model extends CI_Model {
         }
         return $array;
     }
+    public function getAssignedOfficeStaffProjectTask($task_id,$project_id, $responsible_staff){
+        $project_details=$this->db->get_where('projects',['id'=>$project_id])->row();
+        $officeid=$project_details->office_id;
+        $client_id=$project_details->client_id;
+        $client_type=$project_details->client_type;
+        $data['office']= $this->db->get_where('office',['id'=>$officeid])->row()->office_id;
+        if($responsible_staff==1){
+            $this->db->select("concat(s.first_name ,' ', s.last_name) as name");
+            $this->db->from('staff s');
+            $this->db->join('internal_data ind','s.id=ind.partner');
+            $this->db->where('ind.reference_id',$client_id);
+            $result=$this->db->get()->row();
+            if(!empty($result)){
+                $data['staff_name']=$result->name;
+            }else{
+               $data['staff_name']='N/A';
+            }
+        }else if($responsible_staff==2){
+            $this->db->select("concat(s.first_name ,' ', s.last_name) as name");
+            $this->db->from('staff s');
+            $this->db->join('internal_data ind','s.id=ind.manager');
+            $this->db->where('ind.reference_id',$client_id);
+            $result=$this->db->get()->row();
+            if(!empty($result)){
+                $data['staff_name']=$result->name;
+            }else{
+               $data['staff_name']='N/A';
+            }
+        }
+        else{
+            $data['staff_name']='N/A';
+        }
+        return $data;
+           
+    }
 
     public function getTemplateStaffList($template_id) {
         return $this->db->get_where('project_template_main', ['id' => $template_id])->row();
