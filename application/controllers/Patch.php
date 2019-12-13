@@ -839,5 +839,19 @@ class Patch extends CI_Controller {
             $this->db->update('project_recurrence_main');
         }
     }
+
+    public function update_added_by_user_action_notes() {
+        $added_by_user_ids = $this->db->get('action_notes')->result_array();
+        foreach ($added_by_user_ids as $val) {
+            if ($val['added_by_user'] == 0) {
+                $action_added_by = $this->db->get_where('actions',array('id'=>$val['action_id']))->row_array()['added_by_user'];
+                $data = array('added_by_user' => $action_added_by);
+                $this->db->where('action_id',$val['action_id']);
+                $this->db->where('added_by_user','0');
+                $this->db->update('action_notes',$data);
+            }
+        }
+        echo "Successfully Updated";
+    }
 }
     

@@ -5,20 +5,30 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="tabs-container">
-                        <div>
+                        <table class="table table-bordered">
                             <?php
                             $project_data=get_project_office_client($project_id);
                             ?>
-                            <b>Project ID: </b><?= $project_id ?><br>
-                            <b>Client ID: </b><?= getProjectClientPracticeId($project_data->client_id, $project_data->client_type);?><br>
-                            <b>Office ID: </b><?= get_project_office_name($project_data->office_id); ?>
-                        </div>
+                            <tr>
+                                <td style="width: 150px;"><b>Project ID: </b></td>
+                                <td><?= $project_id ?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 150px;"><b>Client ID: </b></td>
+                                <td><?= getProjectClientPracticeId($project_data->client_id, $project_data->client_type);?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 150px;"><b>Office ID: </b></td>
+                                <td><?= get_project_office_name($project_data->office_id); ?></td>
+                            </tr>
+                            
+                        </table>
                         <ul class="nav nav-tabs template-menu" role="tablist">
                             <li class="active"><a class="nav-link active" id="nav-link-1" data-toggle="tab" href="#tab-1">Main</a></li>
                             <li><a class="nav-link" id="nav-link-2" data-toggle="tab" href="#tab-2">Task</a></li>
                             <!--                            <li><a class="nav-link" data-toggle="tab" href="#tab-3">Custom Fields</a></li>-->
                         </ul>
-                        <div class="tab-content">
+                        <div class="tab-content p-0">
                             <div role="tabpanel" id="tab-1" class="tab-pane active">
                                 <div class="panel-body">
                                     <form method="post" id="update_project_main">

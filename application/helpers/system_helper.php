@@ -3526,3 +3526,12 @@ if(!function_exists('get_added_user_office')){
         return $ci->Project_Template_model->getAddedUserOffice($user_id);
     }
 }
+if (!function_exists('get_assigned_office_staff_project_task')) {
+
+    function get_assigned_office_staff_project_task($task_id,$project_id, $responsible_staff) {
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getAssignedOfficeStaffProjectTask($task_id,$project_id, $responsible_staff);
+    }
+
+}

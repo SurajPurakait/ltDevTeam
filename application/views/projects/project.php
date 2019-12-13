@@ -45,7 +45,7 @@ $role = $user_info['role'];
                                         <div class="col-lg-10">
                                             <?php $presenet_year=date('Y'); ?>
                                             <!--<input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">-->
-                                            <select class="form-control year-dropdown" name="due_year" onchange="change_project_year(this.value)" disabled="">
+                                            <select class="form-control year-dropdown" id="due_year" name="due_year" onchange="change_project_year(this.value)">
                                                 <option value="">All Years</option>
                                                 <?php foreach ($due_years as $key => $year): ?>
                                                     <option value="<?= $year['due_year'] ?>" <?= $presenet_year== $year['due_year']?'selected':'' ?> >
@@ -56,6 +56,22 @@ $role = $user_info['role'];
                                             <div class="errorMessage text-danger"></div>
                                         </div>
                                     </div>
+<!--                                    <div class="pull-right">
+                                        <label class="col-lg-2 m-t-5 control-label">Month: </label>
+                                        <div class="col-lg-10">
+                                            <?php // $presenet_month=date('m'); ?>
+                                            <input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">
+                                            <select class="form-control year-dropdown" name="due_year" onchange="change_project_year(this.value)" readonly style="pointer-events: none;">
+                                                <option value="">All Months</option>
+                                                <?php // foreach ($months as $key => $month): ?>
+                                                    <option value="<? $key ?>" <? $presenet_month== $key?'selected':'' ?> >
+                                                        <? $month ?>
+                                                    </option>
+                                                <?php // endforeach; ?>
+                                            </select>
+                                            <div class="errorMessage text-danger"></div>
+                                        </div>
+                                    </div>-->
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="filter-outer">
@@ -243,6 +259,7 @@ $role = $user_info['role'];
                                     ?>
                                 </div>
                             </div>
+                            <input type="hidden" id="cat">
                         </div>
 
                         <hr class="hr-line-dashed  m-t-5 m-b-5">
@@ -745,14 +762,19 @@ $role = $user_info['role'];
             variableArray.push(8);
         }
         if (statusArray[1] == 'bookkeeping') {
+            $('#cat').val(statusArray[0]+'-'+statusArray[1]);
             $('#bookkeeping_tax_btn_clear_filter').show();
         } else if (statusArray[1] == 'tax_returns') {
+            $('#cat').val(statusArray[0]+'-'+statusArray[1]);
             $('#tax_btn_clear_filter').show();
         } else if (statusArray[1] == 'sales_tax') {
+            $('#cat').val(statusArray[0]+'-'+statusArray[1]);
             $('#sales_btn_clear_filter').show();
         } else if (statusArray[1] == 'annual_report') {
+            $('#cat').val(statusArray[0]+'-'+statusArray[1]);
             $('#annual_btn_clear_filter').show();
-    }
+        }
+//        $("#due_year").val(new Date().getFullYear());
     }
     function clearProjectFilter() {
         $(".criteria-dropdown").trigger("chosen:updated");
@@ -760,6 +782,10 @@ $role = $user_info['role'];
         $('#btn_clear_filter').css('display', 'none');
     }
     function change_project_year(year){
-        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1,'',year)
+        var category=$('#cat').val();
+        var statusArray = category.split('-');
+        $("#due_year").val(year);
+        reflactProjectFilterWithCategory(category,'');
+        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, statusArray[0],'',year)
     }
 </script> 
