@@ -44,7 +44,7 @@ $ci->load->model('system');
                                         <a href="javascript:void(0);" class="editmodal edit_service" onclick="show_service_modal('edit', '<?php echo $sl['id']; ?>');" title="EDIT"><i class="fa fa-edit"></i></a>&nbsp;
                                         <!--<a href="javascript:void(0);" title="DELETE" onclick="delete_service('<?php //echo $sl['id'] ?>');"><i class="fa fa-trash"></i></a>-->
 
-                                        <a href="javascript:void(0);" title="<?= $sl['is_active'] == 'y' ?'Activate':'Deactivate' ?>"onclick="deactive_service('<?= $sl['id'] ?>','<?= $sl['is_active']?>');"><i class="<?= $sl['is_active'] == 'y'?'fa fa-check':'fa fa-ban' ?>" aria-hidden="true"></i></a>
+                                        <a href="javascript:void(0);" title="<?= (isset($sl['is_active'])?$sl['is_active'] == 'y' ?'Activate':'Deactivate':'') ?>"onclick="deactive_service('<?= $sl['id'] ?>','<?= isset($sl['is_active'])?$sl['is_active']:''?>');"><i class="<?= isset($sl['is_active'])?$sl['is_active'] == 'y'?'fa fa-check':'fa fa-ban':'' ?>" aria-hidden="true"></i></a>
                                     </td>
                                 </tr>
                                 <?php
