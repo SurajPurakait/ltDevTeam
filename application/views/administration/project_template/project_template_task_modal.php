@@ -12,14 +12,21 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Id:<span class="spanclass text-danger">*</span></label>
-                            <input type="text" class="form-control" id="task_order" name="task[task_order]" title="Order" required>
+                            <label class="control-label">Task Id:<span class="spanclass text-danger">*</span></label>
+                            <input type="text" class="form-control" id="task_order" name="task[task_order]" title="Task Id" required>
                             <div class="errorMessage text-danger"></div>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Task:</label>
+                            <label class="control-label">Title:<span class="spanclass text-danger">*</span></label>
+                            <input type="text" class="form-control" id="task_title" name="task[task_title]" title="Title" required>
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Task Description:</label>
                             <textarea class="form-control" id="description" name="task[description]" ></textarea>
                         </div>
                     </div>
@@ -52,7 +59,7 @@
                             <label class="">For Complete</label>
                             <input class="form-control" type="number" name="task[target_complete_date]" value="0" min="0" style="width: 100px" id="target_complete_date" required>
                             <!--<label class="control-label"><input type="radio" name="task[target_complete_day]" value="1" checked="">&nbsp; Days before due date</label>-->
-                            <label class="control-label"><input type="radio" name="task[target_complete_day]" value="2" checked>&nbsp; Days after creation date</label>
+                            <label class="control-label"><input type="radio" name="task[target_complete_day]" value="2" checked>&nbsp; Days before project due date</label>
                         </div>
                     </div>
                     <div class="errorMessage text-danger"></div>

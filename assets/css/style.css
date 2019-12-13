@@ -198,6 +198,9 @@ h5 {
 .f-s-11 {
     font-size: 11px; 
 }
+.f-s-16 {
+    font-size: 16px !important; 
+}
 .text-overflow-ellipsis {
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -217,6 +220,9 @@ h5 {
 }
 .bg-light-green {
     background: #edf6ed !important;
+}
+.bg-extra-light-green {
+    background: #afe35e !important;
 }
 .bg-light-red {
     background: #f9ebeb !important;
@@ -3752,7 +3758,40 @@ body.body-small .footer.fixed {
 .table-responsive {
     border: none;
 }
+#royalty-total td, #royalty-total th {
+    border: 1px solid #96b26a;
+}
+#royalty-total td{
+    background-color: #fff;
+}
+#royalty-total th{
+    color: #000;
+    background-color: #a8e34c;
+}
 
+#weekly-sales-total td, #weekly-sales-total th {
+    border: 1px solid #96b26a;
+}
+#weekly-sales-total td{
+    background-color: #fff;
+}
+#weekly-sales-total th{
+    color: #000;
+    background-color: #a8e34c;
+}
+
+
+#ofc_chosen{
+    width: 100% !important;
+}
+.buttons-print {
+    background:#8ab645 ;
+    color: black;     
+}
+.buttons-excel{
+    background:rgb(252, 186, 3);
+    color: black;    
+}
 /* PANELS */
 .panel.blank-panel {
     background: none;
@@ -3946,6 +3985,22 @@ code {
     margin-bottom: 0;
     padding: 12px 15px 7px;
     min-height: 48px;
+}
+#tab-content-div table,
+#tab-content-div .ibox-content{
+    border: none;
+}
+#tab-content-div table th {
+    padding: 15px;
+}
+#service_by_franchise_1 .ibox-title{
+    border-top: 4px solid #ec8fb3;
+}
+#service_by_department_1 .ibox-title{
+    border-top: 4px solid #ffab96;
+}
+#service_by_category_1 .ibox-title{
+    border-top: 4px solid #f2a3a3;
 }
 .ibox-content {
     background-color: #ffffff;
@@ -4154,6 +4209,9 @@ table.table-mail tr td {
     margin-top: 0;
 }
 /* COLORS */
+ .text-green{
+    color: #8ab645;
+}
 .text-navy {
     color: #1ab394;
 }
@@ -7788,7 +7846,7 @@ body.skin-3 {
     margin-top: 6px;
 }
 .nav .icon-incomplete{
-    background:#FFB046;
+    background:#FFB046 !important;
     border-radius: 15px;
     padding: 1px !important;
     color: #000;
@@ -7799,7 +7857,7 @@ body.skin-3 {
     margin-top: 6px;
 }
 .nav .icon-complete-new{
-    background: #06a0d6;
+    background: #06a0d6 !important;
     border-radius: 15px;
     padding: 1px !important;
     color: #fff;
@@ -8281,9 +8339,7 @@ a.text-danger.price-metarials:hover {
     font-size: 20px;
     color: #1c84c6;
 }
-.text-green {
-    color: #8ab645;
-}
+
 .contect-box-left li a {    
     font-size: 15px;
     font-weight: 600;    
@@ -9062,6 +9118,8 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
     padding-top: 153px;
 }
 .nav-tabs li a { background:#e6e6e6; color: #000; }
+#nav-tabs-div .nav-tabs li a { background:#afe35e !important; color: #000; }
+#nav-tabs-div .nav-tabs > li.active > a { background: #fff !important; color: #000; }
 .tab-content {padding:30px 5px 20px 5px;}
 .alert-primar {
     color: #004085;
@@ -9078,4 +9136,21 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 .lead-warning {
     background-color: #f8ac59;
     color: #FFFFFF;
+}
+#ofc-multiselect-div .chosen-container-active .chosen-choices{
+    border: 1px solid #1ab394;
+    box-shadow: none;
+}
+
+.sticky_report {
+  position: fixed;
+  top: 62px;
+  width: 78.5%;
+  z-index: 6;
+  background: #f3f3f4;
+  padding-top: 20px;
+}
+
+.sticky_report + .ajaxdiv-reports {
+  padding-top: 300px;
 }

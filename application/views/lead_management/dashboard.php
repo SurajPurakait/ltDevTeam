@@ -78,24 +78,24 @@ $stat = ($stat == 'all') ? "" : $stat;
                                     <tbody>
                                         <tr>
                                             <th>LEADS</th>
-                                            <td class="text-center">
+                                         <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-0">
-                                                    <span class="label label-success" id="lead_new" onclick="loadLeadDashboard(1, 0)"><?= count(lead_list(1,'0')); ?></span>
+                                                    <span class="label label-success" id="lead_new" onclick="reflactFilterWithSummery('0-New'); loadLeadDashboard(1, 0);"><?= count(lead_list(1,'0')); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-3">
-                                                    <span class="label label-warning" id="lead_active" onclick="loadLeadDashboard('', 3)"><?= count(lead_list('', 3)); ?></span>
+                                                    <span class="label label-warning" id="lead_active" onclick="reflactFilterWithSummery('3-Active'); loadLeadDashboard('', 3)"><?= count(lead_list('', 3)); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-2">
-                                                    <span class="label label-danger" id="lead_inactive" onclick="loadLeadDashboard(1, 2)"><?= count(lead_list(1, 2)); ?></span>
+                                                    <span class="label label-danger" id="lead_inactive" onclick="reflactFilterWithSummery('2-Inactive'); loadLeadDashboard(1, 2)"><?= count(lead_list(1, 2)); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-1">
-                                                    <span class="label label-primary" id="lead_complete" onclick="loadLeadDashboard(1, 1)"><?= count(lead_list(1, 1)); ?></span>
+                                                    <span class="label label-primary" id="lead_complete" onclick="reflactFilterWithSummery('1-Completed'); loadLeadDashboard(1, 1)"><?= count(lead_list(1, 1)); ?></span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -144,6 +144,7 @@ $stat = ($stat == 'all') ? "" : $stat;
     </div>
 </div>
 <div id="modal_area" class="modal fade" aria-hidden="true" style="display: none;"></div>
+<div id="mail-campaign-modal" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <!-- Modal -->
 <div class="modal fade" id="showNotes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
@@ -287,4 +288,25 @@ $stat = ($stat == 'all') ? "" : $stat;
             }
         }
     }
+    var reflactFilterWithSummery = function (status, requestType) {
+        clearFilter();
+        variableArray = [];
+        elementArray = [];
+        $("select.variable-dropdown:first").val(2);
+        var statusArray = status.split('-');
+        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
+        $("select.criteria-dropdown:first").trigger("chosen:updated");
+        $("select.condition-dropdown:first").val(1).attr('disabled', true);
+//        elementArray.push($("select.condition-dropdown:first"));
+//        variableArray.push(2);
+//        addFilterRow();
+//        $("select.variable-dropdown:eq(1)").val(13);
+//        var requestTypeArray = requestType.split('-');
+//        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
+//        $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
+//        $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
+//        elementArray.push($("select.condition-dropdown:eq(1)"));
+//        variableArray.push(13);
+    }
+
 </script>

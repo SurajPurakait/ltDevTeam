@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 04, 2019 at 01:07 AM
+-- Generation Time: Dec 11, 2019 at 01:59 AM
 -- Server version: 5.7.28
 -- PHP Version: 7.2.7
 
@@ -25,30 +25,20 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `royalty_report`
+-- Table structure for table `report_dashboard_service`
 --
 
-CREATE TABLE `royalty_report` (
+CREATE TABLE `report_dashboard_service` (
   `id` int(11) NOT NULL,
-  `date` date NOT NULL,
-  `client_id` varchar(100) NOT NULL,
-  `invoice_id` int(4) NOT NULL,
-  `service_id` varchar(100) NOT NULL,
   `service_name` varchar(255) NOT NULL,
-  `retail_price` varchar(50) NOT NULL,
-  `override_price` varchar(50) NOT NULL,
-  `cost` varchar(50) NOT NULL,
-  `payment_status` varchar(100) NOT NULL,
-  `collected` varchar(50) NOT NULL,
-  `payment_type` varchar(100) NOT NULL,
-  `authorization_id` varchar(100) NOT NULL,
-  `reference` varchar(100) NOT NULL,
-  `total_net` varchar(50) NOT NULL,
-  `office_fee` varchar(100) DEFAULT '0',
-  `fee_with_cost` varchar(50) NOT NULL,
-  `fee_without_cost` varchar(50) NOT NULL,
-  `office_id` int(4) DEFAULT NULL,
-  `created_by` int(4) DEFAULT NULL
+  `status` int(3) NOT NULL,
+  `date_completed` date DEFAULT NULL,
+  `date_complete_actual` date DEFAULT NULL,
+  `late_status` int(3) NOT NULL,
+  `sos` longtext NOT NULL,
+  `category` varchar(100) NOT NULL,
+  `department` int(4) NOT NULL,
+  `office` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -56,9 +46,9 @@ CREATE TABLE `royalty_report` (
 --
 
 --
--- Indexes for table `royalty_report`
+-- Indexes for table `report_dashboard_service`
 --
-ALTER TABLE `royalty_report`
+ALTER TABLE `report_dashboard_service`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -66,9 +56,9 @@ ALTER TABLE `royalty_report`
 --
 
 --
--- AUTO_INCREMENT for table `royalty_report`
+-- AUTO_INCREMENT for table `report_dashboard_service`
 --
-ALTER TABLE `royalty_report`
+ALTER TABLE `report_dashboard_service`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 

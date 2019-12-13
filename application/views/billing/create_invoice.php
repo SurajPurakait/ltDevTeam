@@ -7,10 +7,19 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label" style="font: 24px;">Invoice Type<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" onchange="invoiceContainerAjax(this.value, <?= $reference_id; ?>, '');" name="invoice_type" id="invoice_type" title="Invoice Type" required="">
+                                <?php if($is_recurrence == 'y'){ ?>
+                                <select class="form-control" onchange="invoiceContainerAjax(this.value, <?= $reference_id; ?>, '','y');" name="invoice_type" id="invoice_type" title="Invoice Type" required="">
                                     <option value="1" <?= (isset($client_type) && $client_type == '1') ? 'selected' : ''; ?>>Business Client</option>
                                     <option value="2" <?= (isset($client_type) && $client_type == '2') ? 'selected' : ''; ?>>Individual</option>
                                 </select>
+
+                                 <?php } else{ ?>
+
+                                    <select class="form-control" onchange="invoiceContainerAjax(this.value, <?= $reference_id; ?>, '','');" name="invoice_type" id="invoice_type" title="Invoice Type" required="">
+                                    <option value="1" <?= (isset($client_type) && $client_type == '1') ? 'selected' : ''; ?>>Business Client</option>
+                                    <option value="2" <?= (isset($client_type) && $client_type == '2') ? 'selected' : ''; ?>>Individual</option>
+                                </select>
+                            <?php } ?>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -25,6 +34,8 @@
                         </div>
                         <h3>Notes</h3>
                         <?= service_note_func('Invoice Notes', 'n', 'invoice'); ?>
+
+                        <?php if($is_recurrence == 'y'){ ?>
                         <hr class="hr-line-dashed"/>
                         <h3>Recurring Invoice :</h3>
                         <div class="row">
@@ -88,7 +99,7 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-inline">
-                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="1" onclick="//check_generation_type(this.value)"></label>&nbsp;
+                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="1" checked onclick="//check_generation_type(this.value)"></label>&nbsp;
                                                         <label class="control-label">After</label>&nbsp;
                                                         <input class="form-control" type="text" id="duration_time" name="recurrence[duration_time]" style="width: 100px">&nbsp;
                                                         <label class="control-label">generations</label>
@@ -96,7 +107,7 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <div class="form-inline">
-                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="2" checked=""></label>&nbsp;
+                                                        <label class="control-label"><input type="radio" name="recurrence[duration_type]" value="2"></label>&nbsp;
                                                         <label class="control-label">Until date</label>&nbsp;
                                                         <input placeholder="mm/dd/yyyy" id="until_date" class="form-control datepicker_mdy_due" type="text" title="Start Date" name="recurrence[until_date]" style="width: 100px">
                                                     </div>
@@ -111,6 +122,8 @@
                                 </div><!-- ./modal-dialog -->
                             </div><!-- ./Recurrence Modal -->
                         </div>
+                        <?php } ?>
+
                         <div class="hr-line-dashed"></div>
                         <h3>Confirmation</h3>
                         <div class="form-group" style="display: none;">
@@ -145,6 +158,7 @@
                                 <input type="hidden" name="company_id" id="company_id" value="<?= $reference_id; ?>">
                                 <input type="hidden" name="client_id" id="client_id" value="<?= (isset($client_id)) ? $client_id : ''; ?>">
                                 <input type="hidden" name="editval" id="editval" value="">
+                                <input type="hidden" name="recurring" id="recurring" value="<?= (isset($is_recurrence)) ? $is_recurrence : ''; ?>">
                                 <button class="btn btn-success" type="button" onclick="saveInvoice()">Place</button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button" onclick="cancelInvoice()">Cancel</button>
                             </div>
@@ -164,9 +178,11 @@
     $(function () {
         $(".datepicker_mdy_due").datepicker({format: 'mm/dd/yyyy', autoHide: true, startDate: new Date()});
     });
-<?php if ($client_id != ''): ?>
-        invoiceContainerAjax(<?= $client_type ?>, <?= $reference_id; ?>, '');
-<?php else: ?>
-        invoiceContainerAjax(1, <?= $reference_id; ?>, '');
-<?php endif; ?>
+<?php if ($client_id != ''){ ?>
+        invoiceContainerAjax(<?= $client_type ?>, <?= $reference_id; ?>, '','');
+<?php } else if($is_recurrence != ''){ ?>
+        invoiceContainerAjax(1, <?= $reference_id; ?>, '','y');
+<?php }else{ ?>
+        invoiceContainerAjax(1, <?= $reference_id; ?>, '','');
+<?php } ?>
 </script>

@@ -274,7 +274,7 @@ if(pattern!=''){
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//             console.log(result); return false;
+            // console.log(result); return false;
             if (editval == '') {
                 if (result != 0) {
                     //alert(result);
@@ -292,10 +292,12 @@ if(pattern!=''){
                         if ($("#edit_type").val() == 'edit_place') {
                             goURL(base_url + 'billing/invoice/place/' + result);
                         } else {
-                            if(is_recurrence==''){
-                                goURL(base_url + 'billing/home');
+                            if(is_recurrence =='y'){
+                                   goURL(base_url + 'billing/home/index/y');
+                                // goURL(base_url + 'billing/home');
                             }else{
-                                goURL(base_url + 'billing/home/index/y');
+                                   goURL(base_url + 'billing/home'); 
+                                // goURL(base_url + 'billing/home/index/y');
                             }
                         }
                     });
@@ -576,7 +578,7 @@ function cancelInvoice() {
     goURL('../');
 }
 
-function invoiceContainerAjax(invoice_type, reference_id, invoice_id) {
+function invoiceContainerAjax(invoice_type, reference_id, invoice_id,is_recurrence) {
     var url = '';
     if (invoice_id != '') {
         url = 'billing/invoice/get_edit_invoice_container_ajax';
@@ -590,11 +592,13 @@ function invoiceContainerAjax(invoice_type, reference_id, invoice_id) {
             invoice_id: invoice_id,
             invoice_type: invoice_type,
             reference_id: reference_id,
+            is_recurrence: is_recurrence,
             client_id: $('#client_id').val()
         },
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
+            // alert(result);return false;
             if (result != '0') {
                 $('#invoice_container').html(result);
             } else {
@@ -1086,6 +1090,8 @@ function refresh_existing_individual_list(officeID = '', clientID = '') {
         url: base_url + 'billing/invoice/individual_list_by_office',
         dataType: "html",
         success: function (result) {
+            $("#individual_list_ddl").chosen();
+            $("#individual_list_ddl").chosen('destroy');
             $("#individual_list_ddl").html(result);
             $("#individual_list_ddl").chosen();
         },

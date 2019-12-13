@@ -46,16 +46,21 @@ class Home extends CI_Controller {
     public function index($is_recurrence='',$status = '', $office_id = '') {
 //        echo $status;die;
         $this->load->layout = 'dashboard';
-        $title = "Invoice Dashboard";
-        $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['main_menu'] = 'billing';
-        $render_data['menu'] = 'billing_dashboard';
+        if($is_recurrence=='y'){
+            $title = "Recurring Invoice";
+            $render_data['menu'] = 'recurring_invoice';
+        }else{
+            $title = "Invoice Dashboard";
+            $render_data['menu'] = 'billing_dashboard';
+        }
+        $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['header_title'] = $title;
         $render_data['page_heading'] = 'Billing Dashboard';
-        if($is_recurrence=='y'){
+        if($is_recurrence =='y'){
             $is_recurrence ='y';
         }else{
-            $is_recurrence='';
+            $is_recurrence ='';
         }
         if ($status == 0) {
             $status = '';

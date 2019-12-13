@@ -1,13 +1,13 @@
 <?php
-    // $servername = "localhost";
-    // $username = "leafnet_db_user";
-    // $password = "leafnet@123";
-    // $db = 'leafnet_staging';
-
     $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $db = 'leafnet';
+    $username = "leafnet_db_user";
+    $password = "leafnet@123";
+    $db = 'leafnet_staging';
+
+    // $servername = "localhost";
+    // $username = "root";
+    // $password = "";
+    // $db = 'leafnet';
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
 
@@ -107,9 +107,9 @@
                 }
                 $sql_query = "INSERT INTO `weekly_sales_report`(`date`, `client_id`, `service_id`, `service_name`, `status`, `retail_price`, `override_price`, `cost`, `collected`, `total_net`, `franchisee_fee`, `gross_profit`, `notes`,`office_id`,`created_by`) VALUES (
                     '" . $date . "','" . $client_id . "','".$service_id."','".$service_name."','".$status."','".$retail_price."','".$override_price."','".$cost."','".$collected."','".$total_net."','".$franchisee_fee."','".$gross_profit."','".$notes."','".$office_id."','".$created_by."')";
-                mysqli_query($conn,$sql_query);
+                mysqli_query($conn,$sql_query)or die('insert error');
             }
         }
     }
-    echo "successfully inserted";
+    echo "Success";
 ?>

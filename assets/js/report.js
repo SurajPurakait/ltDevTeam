@@ -45,6 +45,7 @@ function loadRoyaltyReportsData(office = '',date_range = '') {
             {data: 'client_id'},
             {data: 'invoice_id'},
             {data: 'service_id'},
+            {data: 'office_id_name'},
             {data: 'service_name'},
             {data: 'retail_price',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
             {data: 'override_price',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
@@ -54,10 +55,10 @@ function loadRoyaltyReportsData(office = '',date_range = '') {
             {data: 'payment_type'},
             {data: 'authorization_id'},
             {data: 'reference'},
-            {data: 'total_net',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
-            {data: 'office_fee',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
-            {data: 'fee_with_cost',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
-            {data: 'fee_without_cost',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )}
+            {data: 'total_net',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
+            {data: 'office_fee',render: $.fn.dataTable.render.number(',', '.', 0,'','%')},
+            {data: 'fee_with_cost',render: $.fn.dataTable.render.number(',', '.', 2,'$')},
+            {data: 'fee_without_cost',render: $.fn.dataTable.render.number(',', '.', 2,'$')}
         ]
     });
 }
@@ -139,6 +140,31 @@ function get_total_sales_report(office = '',date_range = '') {
         data: {'ofc': office,'daterange':date_range},
         success: function (result) {
             $("#total_sales_data").html(result);
+        },
+    });
+}
+
+// show franchisee result
+function show_service_franchise_result(category) {
+    if (category == 'franchise') {
+        $("#service_by_franchise").toggle();
+    } else if(category == 'department') {
+        $("#service_by_department").toggle();
+    } else if (category == 'service_category') {
+        $("#service_by_category").toggle();
+    }  
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/get_service_by_franchise_data',
+        data: {'category': category},
+        success: function (result) {
+            if (category == 'franchise') {
+                $("#service_by_franchise").html(result);
+            } else if(category == 'department') {
+                $("#service_by_department").html(result);
+            } else if (category == 'service_category') {
+                $("#service_by_category").html(result);
+            }
         },
     });
 }

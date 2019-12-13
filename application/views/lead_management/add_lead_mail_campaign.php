@@ -28,7 +28,7 @@
                                         <option value="">Select</option>
                                         <?php
                                         foreach ($languages as $value):
-                                            if ($value['id'] != 4) {
+                                            if ($value['id'] != 4 && $value['id'] != 5) {
                                                 ?>
                                                 <option value="<?= $value["id"]; ?>"><?= $value["language"]; ?></option>
     <?php } endforeach; ?>

@@ -1,6 +1,6 @@
-<table class="table table-bordered table-striped">
+<table class="table table-bordered m-t-5" id="royalty-total">
     <tr>
-	<th rowspan="2" style="padding:25px;">Total</th>
+	<th rowspan="2" style="padding:25px;font-size: 14px;">Total</th>
         <th>Invoices</th>
         <th>Retail Price</th>
 		<th>Override Price</th>

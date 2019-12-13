@@ -3,10 +3,20 @@
 <div class="form-group">
     <label class="col-lg-2 control-label">Existing Individual<span class="text-danger">*</span></label>
     <div class="col-lg-10">
+        <?php if($is_recurrence == 'y'){ ?>
         <select class="form-control type_of_individual" name="type_of_individual" id="type_of_individual_ddl" onchange="individualTypeChange(this.value, <?= $reference_id; ?>, '<?= $reference; ?>');" title="Type Of Individual" required>
             <option value="0" <?= $client_id != '' ? 'selected="selected"' : ''; ?>>Yes</option>
             <option <?= $client_id == '' ? 'selected="selected"' : ''; ?> value="1">No</option>
         </select>
+
+        <?php }else{ ?>
+
+        <select class="form-control type_of_individual" name="type_of_individual" id="type_of_individual_ddl" onchange="individualTypeChange(this.value, <?= $reference_id; ?>, '<?= $reference; ?>');" title="Type Of Individual" required>
+            <option value="0" <?= $client_id != '' ? 'selected="selected"' : ''; ?>>Yes</option>
+            <option <?= $client_id == '' ? 'selected="selected"' : ''; ?> value="1">No</option>
+        </select>
+        <?php } ?>
+
         <div class="errorMessage text-danger"></div>
     </div>
 </div>
@@ -24,10 +34,17 @@
     <div class="form-group">
         <label class="col-lg-2 control-label">Individual List<span class="text-danger">*</span></label>
         <div class="col-lg-10">
+            <?php if($is_recurrence == 'y'){ ?>
+            <select class="form-control individual_list client_type_field0" name="individual_list[]" id="individual_list_ddl" onchange="fetchExistingIndividualData(this.value, <?= $reference_id; ?>, '<?= $reference; ?>');" title="Individual List" multiple>
+                <option value="">Select an option</option>
+                <?php //load_ddl_option("existing_individual_list_new"); ?>
+            </select>
+            <?php }else{ ?>
             <select class="form-control individual_list client_type_field0" name="individual_list" id="individual_list_ddl" onchange="fetchExistingIndividualData(this.value, <?= $reference_id; ?>, '<?= $reference; ?>');" title="Individual List">
                 <option value="">Select an option</option>
                 <?php //load_ddl_option("existing_individual_list_new"); ?>
             </select>
+            <?php } ?>   
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
@@ -71,13 +88,15 @@
 </div>
 
 
-<div id="contact_info_div">    
+<div id="contact_info_div">
+    <?php if($is_recurrence != 'y'){ ?>    
     <h3>Contact Info<span class="text-danger">*</span><span class="display_div">&nbsp; (<a href="javascript:void(0);" class="contactadd" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>'); return false;">Add Contact</a>)</span></h3>
     <div id="contact-list">
         <input type="hidden" title="Contact Info" id="contact-list-count" required="required" value="">
         <div class="errorMessage text-danger"></div>
     </div>
     <div class="hr-line-dashed"></div>
+    <?php } ?>
 </div>
 
 <div id="documents_div" class="display_div">

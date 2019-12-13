@@ -260,7 +260,7 @@
                         <div class="hr-line-dashed"></div>
 
                         <div id="documents_div">
-                            <h3>Documents &nbsp; (<a data-toggle="modal"  id="add_document_btn" onclick="document_modal('add', '<?= $reference ?>', ''); return false;" href="javascript:void(0);">Add document</a>)</h3> 
+                            <h3>Documents &nbsp; (<a data-toggle="modal"  id="add_document_btn" onclick="document_modal('add', '<?= $reference ?>', '<?= $reference_id ?>'); return false;" href="javascript:void(0);">Add document</a>)</h3> 
                             <div id="document-list"></div>
                         </div>
                         <div class="hr-line-dashed"></div>

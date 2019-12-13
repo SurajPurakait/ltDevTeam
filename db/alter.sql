@@ -1017,7 +1017,7 @@ ALTER TABLE `project_task_bookkeeper_department` ADD `total_time` VARCHAR(100) N
 /* 24.11.2019 */
 /* import weekly_sales_report.sql */
 
-/* live end */
+
 /*28.11.2019*/
 /* import invoice_recurence.sql*/
 ALTER TABLE `invoice_recurence` ADD `actual_due_day` INT(4) NOT NULL AFTER `due_month`, ADD `actual_due_month` INT(4) NOT NULL AFTER `actual_due_day`, ADD `actual_due_year` INT(4) NOT NULL AFTER `actual_due_month`; 
@@ -1032,3 +1032,26 @@ ALTER TABLE `invoice_info` ADD `is_recurrence` ENUM('n','y') NOT NULL AFTER `sta
 /*02.12.2019*/
 
 ALTER TABLE `invoice_recurence` CHANGE `duration_time` `duration_time` INT(4) NULL DEFAULT NULL; 
+ /*04.12.2019*/
+
+/*import report_dashboard_service.sql*/
+
+
+
+/*05.12.2019*/
+
+ALTER TABLE `invoice_recurence` ADD `total_generation_time` INT(4) NOT NULL DEFAULT '0' AFTER `until_date`; 
+
+ALTER TABLE `invoice_recurence` ADD `next_occurance_date` DATE NULL DEFAULT NULL AFTER `total_generation_time`; 
+
+/*11.12.2019*/
+ALTER TABLE `project_main` CHANGE `status` `status` INT(11) NOT NULL COMMENT '0-not started,1-started,2-completed,4-canceled'; 
+
+ALTER TABLE `project_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for started, 2 for resolved, 3 for ready, 4 for canceled'; 
+
+/*12.12.2019*/
+ALTER TABLE `project_template_task` ADD `task_title` VARCHAR(255) NOT NULL AFTER `task_order`; 
+ALTER TABLE `project_task` ADD `task_title` VARCHAR(255) NOT NULL AFTER `task_order`; 
+ALTER TABLE `royalty_report` ADD `office_id_name` VARCHAR(255) NOT NULL AFTER `office_id`;
+
+/*live end*/

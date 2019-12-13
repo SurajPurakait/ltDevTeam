@@ -65,10 +65,10 @@
                                 <table class="table table-borderless">
                                     <tbody>
                                         <tr id="byme">
-                                            <th>Added By Me</th>
+                                            <th>My Partners</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-0">
-                                                    <span class="label label-success" id="requested_by_me_new" onclick="load_partners_dashboard('','',1); "><?= get_partner_count(1); ?></span>
+                                                    <span class="label label-warning" id="requested_by_me_new" onclick="load_partners_dashboard('','',1); "><?= get_partner_count(1); ?></span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -76,12 +76,13 @@
                                             $staff_info = staff_info();
                                             if($staff_info['type'] == 1) { 
                                         ?>
-                                        <tr id="tome">
-                                            <th>Added By Others</th>
+                                        <!-- <tr id="tome" class="bg-success"> -->
+                                        <tr id="tome" class="action-row-border-top action-row-border-bottom" style="background: #596571;">
+                                            <th>Team Partners</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-0">
                                                     <!-- 2 : used for byother -->
-                                                    <span class="label label-success" id="requested_to_me_new" onclick="load_partners_dashboard('','',2);"><?= get_partner_count(2); ?></span>
+                                                    <span class="label label-warning" id="requested_to_me_new" onclick="load_partners_dashboard('','',2);"><?= get_partner_count(2); ?></span>
                                                 </a>
                                             </td>
                                         </tr>

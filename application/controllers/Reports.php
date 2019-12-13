@@ -52,7 +52,7 @@ class Reports extends CI_Controller {
 
     /* royalty_reports total calculation */
     public function royalty_reports_totals() {
-    	if (post('ofc') != '') {
+        if (post('ofc') != '') {
     		$office = post('ofc');
     	} else {
     		$office = '';
@@ -107,5 +107,13 @@ class Reports extends CI_Controller {
         }  
         $render_data['sales_total_data'] = $this->service_model->get_total_of_sales_report($office,$daterange);
         $this->load->view('reports/totals_of_weekly_sales_report',$render_data);
+    }
+
+    /* service_by_franchisee */
+    public function get_service_by_franchise_data() {
+        $category = post('category');
+        $render_data['service_by_franchise_list'] = $this->service_model->get_service_by_franchise_data(post());
+        $render_data['category'] = $category; 
+        $this->load->view('reports/service_by_franchise_data',$render_data);
     }
 }
