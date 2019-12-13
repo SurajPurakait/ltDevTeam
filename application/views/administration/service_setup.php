@@ -14,13 +14,16 @@ $ci->load->model('system');
                         <table id="service-tab" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Department</th>
-                            <th>Category</th>
-                            <th>Retail Price</th>
-                            <th>Target Start Days</th>
-                            <th>Target End Days</th>
-                            <th>Action</th>
+                            <th style="width: 15px;">Service Category</th>
+                            <th style="width: 15px;">Service Name</th>
+                            <!-- <th>Department</th> -->
+                            <th style="width: 10px;">Responsible Assigned</th>
+                            <th style="width: 10px;">Input Form</th>
+                            <th style="width: 10px;">Target Started Days</th>
+                            <th style="width: 10px;">Target Completed Days</th>
+                            <th style="width: 10px;">Fixed Cost</th>
+                            <th style="width: 10px;">Retail Price</th>
+                            <th style="width: 10px;">Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -29,15 +32,19 @@ $ci->load->model('system');
                             foreach ($service_list as $sl) {
                                 ?>
                                 <tr>
+                                    <td><?php echo $sl['catname']; ?></td>
                                     <td><?php echo $sl['description']; ?></td>
                                     <td><?php echo $sl['name']; ?></td>
-                                    <td><?php echo $sl['catname']; ?></td>
-                                    <td><?php echo $sl['retail_price']; ?></td>
+                                    <td><?php echo $sl['input_form']; ?></td> 
                                     <td><?php echo $sl['start_days']; ?></td>
                                     <td><?php echo $sl['end_days']; ?></td>
+                                    <td><?php echo $sl['fixed_cost']; ?></td>
+                                    <td><?php echo $sl['retail_price']; ?></td>
                                     <td>
                                         <a href="javascript:void(0);" class="editmodal edit_service" onclick="show_service_modal('edit', '<?php echo $sl['id']; ?>');" title="EDIT"><i class="fa fa-edit"></i></a>&nbsp;
-                                        <!--<a href="javascript:void(0);" title="DELETE" onclick="delete_service('<?php echo $sl['id'] ?>');"><i class="fa fa-trash"></i></a>-->
+                                        <!--<a href="javascript:void(0);" title="DELETE" onclick="delete_service('<?php //echo $sl['id'] ?>');"><i class="fa fa-trash"></i></a>-->
+
+                                        <a href="javascript:void(0);" title="<?= $sl['is_active'] == 'y' ?'Activate':'Deactivate' ?>"onclick="deactive_service('<?= $sl['id'] ?>','<?= $sl['is_active']?>');"><i class="<?= $sl['is_active'] == 'y'?'fa fa-check':'fa fa-ban' ?>" aria-hidden="true"></i></a>
                                     </td>
                                 </tr>
                                 <?php
