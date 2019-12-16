@@ -118,7 +118,7 @@ $role = $user_info['role'];
                                             <div class="row">
                                                 <div class="col-sm-12 m-b-10">
                                                     <div class="" style="display: inline-block;">
-                                                        <button class="btn btn-success" type="button" onclick="projectFilter()">Apply Filter</button>
+                                                        <button class="btn btn-success" type="button" onclick="projectFilter(<?= $presenet_year ?>)">Apply Filter</button>
                                                     </div>
                                                     <!--                                                    <div class="" style="display: inline-block;"> col-lg-1 row clear-project-btn-one 
                                                                                                             <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1);" class="btn btn-ghost" id="bookkeeping_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
