@@ -1315,12 +1315,14 @@ function sort_project_dashboard(sort_criteria = '', sort_type = '') {
         }
     });
 }
-function projectFilter() {
+function projectFilter(select_year) {
+//    alert(select_year);return false;
     var form_data = new FormData(document.getElementById('filter-form'));
+//    form_data.append('year', select_year);
     $.ajax({
         type: "POST",
         data: form_data,
-        url: base_url + 'project/project_filter',
+        url: base_url + 'project/project_filter/'+select_year,
         dataType: "html",
         processData: false,
         contentType: false,

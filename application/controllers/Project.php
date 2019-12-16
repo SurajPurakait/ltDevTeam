@@ -34,8 +34,8 @@ class Project extends CI_Controller {
         ];
     }
 
-    function index($status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '', $template_cat_id = '') {
-//        echo 'kk'.$template_id;die;
+    function index($status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '', $template_cat_id = '',$year='',$category='') {
+//        echo $category;die;
         $this->load->layout = 'dashboard';
         $title = "Project Dashboard";
         $render_data['title'] = $title . ' | Tax Leaf';
@@ -56,6 +56,20 @@ class Project extends CI_Controller {
         if ($status == 'all') {
             $status = '';
         }
+        if($template_cat_id==''){
+            $template_cat_id=1;
+        }
+        if($category==''){
+            $category='1-bookkeeping';
+        }
+//        echo $category;die;
+    if($status=='n'||$template_id=='n'||$request_type=='n'||$office_id=='n'||$department_id=='n'||$filter_assign=='n'||$filter_data=='n'||$sos_value=='n'||$sort_criteria=='n'||$sort_type=='n'||$client_type=='n'||$client_id=='n'){
+            $status='';$request_type='';$department_id='';$filter_assign='';$filter_data='';$sos_value='';$sort_criteria='';$sort_type='';$client_type='';$client_id='';
+            $template_id='';
+            $office_id='';
+        }
+//        echo $status.'<br>2'.$template_id."<br>3".$request_type.'<br>4'.$office_id.'<br>5'.$department_id
+//                .'<br>6'.$filter_assign.'<br>7'.$filter_data.'<br>'.$sos_value.'<br>'.$sort_criteria.'<br>'.$sort_type.'<br>'.$client_type.'<br>'.$client_id.'<br>'.$template_cat_id;die;
         $render_data['stat'] = $status;
         $render_data['status'] = $status;
         $render_data['office_id'] = $office_id;
@@ -63,6 +77,8 @@ class Project extends CI_Controller {
         $render_data['request_type'] = $request_type;
         $render_data['template_id'] = $template_id;
         $render_data['template_cat_id'] = $template_cat_id;
+        $render_data['select_year']=$year;
+        $render_data['category']=$category;
         $render_data['filter_element_list'] = $this->filter_element;
         $render_data['templateIds'] = $this->Project_Template_model->getTemplateIds();
         $render_data['due_m'] = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
@@ -261,8 +277,8 @@ class Project extends CI_Controller {
         echo json_encode($return);
     }
 
-    public function project_filter() {
-        $render_data["project_list"] = $this->Project_Template_model->get_project_list('', '', '', '', '', '', post());
+    public function project_filter($year) {
+        $render_data["project_list"] = $this->Project_Template_model->get_project_list('', '', '', '', '', '', post(),'','','','','','','',$year);
         $this->load->view("projects/project_dashboard", $render_data);
     }
 
