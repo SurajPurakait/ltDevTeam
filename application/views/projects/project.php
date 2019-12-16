@@ -31,10 +31,10 @@ $role = $user_info['role'];
                         <div class="col-md-12">
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs tab" role="tablist">
-                            <li role="presentation" class="<?= $category=='1-bookkeeping'?'active':'' ?>"><a href="#bookkeeping" aria-controls="bookkeeping" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '', );loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1)">Bookkeeping</a></li>
-                            <li role="presentation" class="<?= $category=='2-tax_returns'?'active':'' ?>" ><a href="#tax_returns" aria-controls="tax_returns" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('2-tax_returns', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 2)">Tax Returns</a></li>
+                            <li role="presentation" class="<?= ($category=='1-bookkeeping')?'active':'' ?>"><a href="#bookkeeping" aria-controls="bookkeeping" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '', );loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1)">Bookkeeping</a></li>
+                            <li role="presentation" class="<?= ($category=='2-tax_returns')?'active':'' ?>" ><a href="#tax_returns" aria-controls="tax_returns" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('2-tax_returns', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 2)">Tax Returns</a></li>
                             <li role="presentation" class="<?= ($category=='3-sales_tax')?'active':'' ?>"><a href="#sales_tax" aria-controls="sales_tax" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('3-sales_tax', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 3)">Sales Tax</a></li>
-                            <li role="presentation" class="<?= $category=='4-annual_report'?'active':'' ?>"><a href="#annual_report" aria-controls="annual_report" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('4-annual_report', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 4)">Annual Report</a></li>
+                            <li role="presentation" class="<?= ($category=='4-annual_report')?'active':'' ?>"><a href="#annual_report" aria-controls="annual_report" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('4-annual_report', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 4)">Annual Report</a></li>
                         </ul>
                         <!-- Tab panes -->
                         <div class="tab-content">
@@ -132,7 +132,7 @@ $role = $user_info['role'];
                                     </div>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane <?= $category=='1-bookkeeping'?'active':'' ?>" id="bookkeeping">
+                            <div role="tabpanel" class="tab-pane <?= ($category=='1-bookkeeping')?'active':'' ?>" id="bookkeeping">
                                 <div class="project-clear-filter"><!-- col-lg-1 row clear-project-btn-one -->
                                     <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 1);" class="btn btn-ghost" id="bookkeeping_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
                                 </div>
@@ -468,7 +468,7 @@ $role = $user_info['role'];
 </div>
 <script>
     loadProjectDashboard('<?= $status; ?>', '<?= $request_type; ?>', '<?= $template_id; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '', '', '', '', '', '', '', '', 1,<?= $template_cat_id ?>);
-    reflactProjectFilterWithCategory(<?= $category ?>, '');
+    reflactProjectFilterWithCategory('<?= $category ?>', '');
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });

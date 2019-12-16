@@ -35,7 +35,7 @@ class Project extends CI_Controller {
     }
 
     function index($status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '', $template_cat_id = '',$year='',$category='') {
-//        echo $request_type;die;
+//        echo $category;die;
         $this->load->layout = 'dashboard';
         $title = "Project Dashboard";
         $render_data['title'] = $title . ' | Tax Leaf';
@@ -62,6 +62,7 @@ class Project extends CI_Controller {
         if($category==''){
             $category='1-bookkeeping';
         }
+//        echo $category;die;
     if($status=='n'||$template_id=='n'||$request_type=='n'||$office_id=='n'||$department_id=='n'||$filter_assign=='n'||$filter_data=='n'||$sos_value=='n'||$sort_criteria=='n'||$sort_type=='n'||$client_type=='n'||$client_id=='n'){
             $status='';$request_type='';$department_id='';$filter_assign='';$filter_data='';$sos_value='';$sort_criteria='';$sort_type='';$client_type='';$client_id='';
             $template_id='';
