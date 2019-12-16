@@ -18,7 +18,7 @@
                     <div id="total" class="m-t-25"></div>
                 </div>
                 <div class="ibox-content ajaxdiv-reports m-t-0">
-                    <div class="">
+                    <div class="" id="dt-report-tab-wrap">
                         <table id="reports-tab" class="table table-bordered table-striped">
                             <thead>
                                 <tr>

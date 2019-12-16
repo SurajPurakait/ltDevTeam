@@ -9154,3 +9154,36 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 .sticky_report + .ajaxdiv-reports {
   padding-top: 300px;
 }
+
+#dt-reports-wrap div.dataTables_wrapper div.dataTables_filter,
+#dt-report-tab-wrap div.dataTables_wrapper div.dataTables_filter{
+  text-align: left;
+}
+#dt-reports-wrap div.dataTables_wrapper div.dataTables_filter label,
+#dt-report-tab-wrap div.dataTables_wrapper div.dataTables_filter label{
+    margin-left: 10px;
+}
+#dt-reports-wrap .dt-buttons .btn.btn-secondary.buttons-excel.buttons-html5 span,
+#dt-reports-wrap .btn.btn-secondary.buttons-print span,
+#dt-report-tab-wrap .dt-buttons .btn.btn-secondary.buttons-excel.buttons-html5 span,
+#dt-report-tab-wrap .btn.btn-secondary.buttons-print span{
+    color: #fff;
+    font-weight: 600;
+}
+#dt-reports-wrap .btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle),
+#dt-report-tab-wrap .btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle){
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    margin-right: 10px;
+}
+#dt-reports-wrap .btn-group > .btn:last-child:not(:first-child),
+#dt-report-tab-wrap .btn-group > .btn:last-child:not(:first-child){
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+#dt-reports-wrap table.dataTable thead .sorting_asc{
+    background: none;
+}
+
+
+
