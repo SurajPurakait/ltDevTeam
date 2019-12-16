@@ -277,8 +277,8 @@ class Project extends CI_Controller {
         echo json_encode($return);
     }
 
-    public function project_filter() {
-        $render_data["project_list"] = $this->Project_Template_model->get_project_list('', '', '', '', '', '', post());
+    public function project_filter($year) {
+        $render_data["project_list"] = $this->Project_Template_model->get_project_list('', '', '', '', '', '', post(),'','','','','','','',$year);
         $this->load->view("projects/project_dashboard", $render_data);
     }
 
