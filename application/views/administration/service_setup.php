@@ -34,7 +34,14 @@ $ci->load->model('system');
                                 <tr>
                                     <td><?php echo $sl['catname']; ?></td>
                                     <td><?php echo $sl['description']; ?></td>
-                                    <td><?php echo $sl['name']; ?></td>
+                                    <td><?php 
+                                            if($sl['dept'] == 0){
+                                                echo "Franchisee";
+                                            }else{
+                                                echo $sl['name'];
+                                            }?>
+                                                
+                                    </td>
                                     <td><?php echo $sl['input_form']; ?></td> 
                                     <td><?php echo $sl['start_days']; ?></td>
                                     <td><?php echo $sl['end_days']; ?></td>

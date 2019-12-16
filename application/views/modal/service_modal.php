@@ -47,15 +47,25 @@
                     </div>
 
                     <div class="form-group">
-                        <!-- <label>Select Department</label> -->
-                        <label>Responsible Assigned</label>
+                        <label>Responsible Assigned<span class="text-danger">*</span></label>
+                        <label class="checkbox-inline">
+                            <input class="checkclass" value="1" type="radio" id="responsible_franchisee" name="responsible_assigned" required="" title="Responsible Assigned" onclick="show_corporate_departments(this.value)"> Franchisee
+                        </label>
+                        <label class="checkbox-inline">
+                            <input class="checkclass" value="2" type="radio" id="responsible_corporate" name="responsible_assigned" required="" title="Responsible Assigned" onclick="show_corporate_departments(this.value)"> Corporate
+                        </label>
+                        <div class="errorMessage text-danger"></div>
+                    </div>
+
+                    <div class="form-group" id="corporate_dept_div"  style="display: none;">
+                        <label>Select Department<span class="text-danger">*</span></label>
                         <select id="dept" name="dept" class="form-control" title="Department" required>
                             <?php
                             if (!empty($department_list)) {
                                 foreach ($department_list as $key => $value) {
-                                    if ($value['id'] != 1) {
+                                    if ($value['id'] != 1 && $value['id'] != 2) {
                                         ?>
-                                        <option value="<? $value['id']; ?>"><?= $value['name']; ?></option>
+                                        <option value="<?= $value['id']; ?>"><?= $value['name']; ?></option>
                                         <?php
                                     }
                                 }
@@ -126,6 +136,15 @@
             get_related_services("", "");
             generate_shortcode();
         });
+
+        function show_corporate_departments($val){
+            // alert($val);return false;
+            if($val == 2){
+                document.getElementById('corporate_dept_div').style.display = 'block';
+            }else{
+                document.getElementById('corporate_dept_div').style.display = 'none';
+            }
+        }
     </script>
 
 <?php else: ?>
@@ -177,12 +196,24 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Responsible Assigned</label>
+                        <label>Responsible Assigned<span class="text-danger">*</span></label>
+                        <label class="checkbox-inline">
+                            <input class="checkclass" value="1" type="radio" id="responsible_franchisee" name="responsible_assigned" required="" title="Responsible Assigned" <?= ($service_info["responsible_assign"] == '1') ? 'checked' : ''; ?> onclick="show_corporate_departments(this.value)"> Franchisee
+                        </label>
+                        <label class="checkbox-inline">
+                            <input class="checkclass" value="2" type="radio" id="responsible_corporate" name="responsible_assigned" required="" title="Responsible Assigned" <?= ($service_info["responsible_assign"] == '2') ? 'checked' : ''; ?> onclick="show_corporate_departments(this.value)"> Corporate
+                        </label>
+                        <div class="errorMessage text-danger" id="input_form_error"></div>
+                    </div>
+
+                    <?php if($service_info["responsible_assign"] == '2'){ ?>
+                    <div class="form-group" id="edit_corporate_dept_div">
+                        <label>Select Department</label>
                         <select id="dept" name="dept" class="form-control" title="Department" required>
                             <?php
                             if (!empty($department_list)) {
                                 foreach ($department_list as $key => $value) {
-                                    if ($value['id'] != 1){
+                                    if ($value['id'] != 1 && $value['id'] != 2){
                                     ?>
                                     <option value="<?= $value['id']; ?>" <?= ($service_info["department"] == $value["id"]) ? "selected" : ""; ?>><?= $value['name']; ?></option>
                                     <?php
@@ -193,6 +224,26 @@
                         </select>
                         <div class="errorMessage text-danger"></div>
                     </div>
+                    <?php }else{ ?>
+                    <div class="form-group" id="edit_corporate_dept_div" style="display: none;">
+                        <label>Select Department</label>
+                        <select id="dept" name="dept" class="form-control" title="Department" required>
+                            <?php
+                            if (!empty($department_list)) {
+                                foreach ($department_list as $key => $value) {
+                                    if ($value['id'] != 1 && $value['id'] != 2){
+                                    ?>
+                                    <option value="<?= $value['id']; ?>" <?= ($service_info["department"] == $value["id"]) ? "selected" : ""; ?>><?= $value['name']; ?></option>
+                                    <?php
+                                    }
+                                }
+                            }
+                            ?>
+                        </select>
+                        <div class="errorMessage text-danger"></div>
+                    </div>
+
+                    <?php } ?>
 
                     <div class="form-group">
                         <label>Target Starting Day</label>
@@ -254,6 +305,15 @@
         $(function () {
             get_related_services('<?= $service_info["related_services"]; ?>', '<?= $service_info["id"]; ?>');
         });
+
+        function show_corporate_departments($val){
+            // alert($val);return false;
+            if($val == 2){
+                document.getElementById('edit_corporate_dept_div').style.display = 'block';
+            }else{
+                document.getElementById('edit_corporate_dept_div').style.display = 'none';
+            }
+        }
     </script>
 
 <?php endif; ?>
