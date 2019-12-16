@@ -1057,4 +1057,10 @@ ALTER TABLE `royalty_report` ADD `office_id_name` VARCHAR(255) NOT NULL AFTER `o
 /*13.12.2019*/
 ALTER TABLE `services` ADD `client_type_assign` ENUM('0','1','2') NOT NULL DEFAULT '2' COMMENT '0=Business client,1=Individual client,2=both business and individual clients' AFTER `status`;
 ALTER TABLE `services` ADD `is_active` ENUM('n','y') NOT NULL DEFAULT 'y' COMMENT 'y for active,n for inactive' AFTER `note`;
+
+/*16.12.2019*/
+ALTER TABLE `services` ADD `responsible_assign` INT(100) NULL DEFAULT NULL COMMENT '1 for Franchisee,2 for Corporate' AFTER `status`;
+ALTER TABLE `services` CHANGE `dept` `dept` INT(10) NULL DEFAULT NULL;
+ALTER TABLE `services` CHANGE `dept` `dept` VARCHAR(10) NULL DEFAULT NULL;
+
 /*live end*/

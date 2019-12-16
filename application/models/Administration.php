@@ -378,6 +378,17 @@ class Administration extends CI_Model {
         return $data;
     }
 
+    public function get_service_list_for_service_setup() {
+        $sql = "select s.*,(select name from category where id=s.category_id) AS catname,td.start_days,td.end_days,td.input_form,d.name "
+                . "from services s "
+                . "inner join target_days td on(s.id=td.service_id) "
+                . "inner join department d on(d.id=s.dept) OR (s.dept=0)"
+                . "where status = 1 group by s.id order by s.description asc";
+
+        $data = $this->db->query($sql)->result_array();
+        return $data;
+    }
+
     public function get_service_fees_list($edit_id) {
         $this->db->select('*');
         $this->db->from('office_service_fees');
@@ -429,7 +440,7 @@ class Administration extends CI_Model {
         return $data;
     }
 
-    public function add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost,$client_type) {
+    public function add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost,$responsible_assigned,$client_type) {
         $this->db->trans_begin();
 
         $insert_data = array('id' => '',
@@ -441,6 +452,7 @@ class Administration extends CI_Model {
             'retail_price' => $retailprice . '.00',
             'dept' => $dept,
             'status' => 1,
+            'responsible_assign' => $responsible_assigned,
             'client_type_assign' => $client_type,
             'note' => $note
         );
@@ -475,7 +487,7 @@ class Administration extends CI_Model {
         }
     }
 
-    public function update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost,$client_type) {
+    public function update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost,$responsible_assigned,$client_type) {
         $this->db->trans_begin();
 
         $update_data = array('category_id' => $servicecat,
@@ -486,6 +498,7 @@ class Administration extends CI_Model {
             'retail_price' => $retailprice . '.00',
             'dept' => $dept,
             'status' => 1,
+            'responsible_assign' => $responsible_assigned,
             'client_type_assign' => $client_type,
             'note' => $note
         );
@@ -527,7 +540,7 @@ class Administration extends CI_Model {
     }
 
     public function get_service_by_id_for_service_setup($id) {
-        $sql = "select s.id as id, s.description as servicename,s.note,s.fixed_cost as fixedcost,s.retail_price as price, s.category_id as catid, t.start_days, t.end_days, t.input_form, s.dept as department, s.ideas,s.client_type_assign, group_concat(r.related_services_id) as related_services from services as s inner join target_days as t on t.service_id = s.id left join related_services as r on r.services_id = s.id where s.id = '$id'";
+        $sql = "select s.id as id, s.description as servicename,s.note,s.fixed_cost as fixedcost,s.retail_price as price, s.category_id as catid, t.start_days, t.end_days, t.input_form, s.dept as department, s.ideas,s.responsible_assign,s.client_type_assign, group_concat(r.related_services_id) as related_services from services as s inner join target_days as t on t.service_id = s.id left join related_services as r on r.services_id = s.id where s.id = '$id'";
         return $this->db->query($sql)->result_array()[0];
     }
 
