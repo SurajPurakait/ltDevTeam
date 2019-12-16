@@ -782,24 +782,27 @@ $office_id = get_office_id($staff_info['office']);
             <?php } else { 
                 $user_who_referred = user_who_referred(sess('user_id'));
                 ?>
-                <li <?= active_menu($main_menu, "referral_partners"); ?> >
+<!--                <li <//?= active_menu($main_menu, "referral_partners"); ?> >
                     <a href="javascript:void(0);"><i class="fa fa-users"></i> <span class="nav-label">Referral Partners</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse" style="height: 0px;">
-                        <li <?= active_menu($menu, "reffer_partner_dashboard"); ?>>
-                            <a href="<?= base_url(); ?>referral_partner/referral_partners/referral_partner_dashboard">Dashboard</a>
+                        <li <//?= active_menu($menu, "reffer_partner_dashboard"); ?>>
+                            <a href="<//?= base_url(); ?>referral_partner/referral_partners/referral_partner_dashboard">Dashboard</a>
                         </li>
-                        <li <?= active_menu($menu, "refferred_leads_dashboard"); ?>>
-                            <a href="<?= base_url(); ?>referral_partner/referral_partners/add_lead/<?= $user_who_referred['office_manager']; ?>">Refer a Lead</a>
+                        <li <//?= active_menu($menu, "refferred_leads_dashboard"); ?>>
+                            <a href="<//?= base_url(); ?>referral_partner/referral_partners/add_lead/<//?= $user_who_referred['office_manager']; ?>"><i class="fa fa-users"></i>Refer a Lead</a>
                         </li>
-                        <li <?= active_menu($menu, "refferred_leads_dashboard"); ?>>
-                            <a href="javascript:void(0)">Tutorial</a>
+                        <li <//?= active_menu($menu, "refferred_leads_dashboard"); ?>>
+                            <a href="javascript:void(0)"><i class="fa fa-video-camera"></i>Tutorial</a>
                         </li>
                     </ul>
-                </li>
-
-
-
-                <div class="box-profile">
+                </li>-->
+                <li <?= active_menu($menu, "refferred_leads_dashboard"); ?>>
+                 <a href="<?= base_url(); ?>referral_partner/referral_partners/add_lead/<?= $user_who_referred['office_manager']; ?>"><i class="fa fa-users"></i>Refer a Lead</a>
+                 </li>
+                 <li <?= active_menu($menu, "refferred_leads_dashboard"); ?>>
+                  <a href="javascript:void(0)"><i class="fa fa-video-camera"></i>Tutorial</a>
+                  </li>
+               <div class="box-profile">
                     <?php
                     // echo $user_who_referred['office_manager'];
                     $referred_info = staff_info_by_id($user_who_referred['office_manager']);
@@ -813,9 +816,9 @@ $office_id = get_office_id($staff_info['office']);
                     <h5><?php echo $referred_info['first_name'] . '  ' . $referred_info['last_name']; ?> </h5>
                     <p><?php echo staff_office_name($referred_info['id']); ?></p>
                     <hr class="m-t-xs m-b-xs">
-                    <p><i class="fa fa-envelope" aria-hidden="true"></i> <?php echo $referred_info['user']; ?></p>
-                    <p><i class="fa fa-address-card-o" aria-hidden="true"></i> <?php echo $referred_address_info['address'] . " , " ."<br>". $referred_address_info['city'] . " , " . $referred_address_info['state_code'] . " " . $referred_address_info['zip']; ?></p>
                     <p><i class="fa fa-phone" aria-hidden="true"></i> <?php echo ($referred_info['phone'] != '') ? $referred_info['phone'] : 'N/A'; ?></p>
+                    <p><i class="fa fa-envelope" aria-hidden="true"></i> <?php echo $referred_info['user']; ?></p>
+                    <p><i class="fa fa-address-card-o" aria-hidden="true"></i> <?php echo $referred_address_info['address'] . " , " ."<br>". $referred_address_info['city'] . " , " . $referred_address_info['state_code'] . " " . $referred_address_info['zip']; ?></p>                 
                 </div>
             <?php } ?>
         </ul>
@@ -932,5 +935,13 @@ var reflactFilterWithService1 = function (status, requestType) {
 //        element_array.push($("select.condition-dropdown:eq(1)"));
 //        variable_dd_array.push(1);
     }
-   
+   function addFilterRow() {
+        var random = Math.floor((Math.random() * 999) + 1);
+        var clone = '<div class="filter-div row m-b-20" id="clone-' + random + '">' + content + '<div class="col-sm-1 text-right p-l-0"><a href="javascript:void(0);" onclick="removeFilterRow(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
+        $('.filter-inner').append(clone);
+        $.each(variableArray, function (key, value) {
+            $("#clone-" + random + " .variable-dropdown option[value='" + value + "']").remove();
+        });
+        $("div.add_filter_div:not(:first)").remove();
+    }
 </script>

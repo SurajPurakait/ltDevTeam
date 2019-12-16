@@ -81,8 +81,8 @@
                         <td title="Task Id" class="text-center"><?= $task->project_id.'-'.$taskId; ?></td>
                         <td title="Description" class="text-center"><a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $data_description ?>" data-trigger="hover" title="" data-original-title=""><?= $description ?></a></td>
                         <!--<td title="Order" class="text-center"><?//= date('Y-m-d', strtotime($task->created_at)); ?></td>-->
-        <!--                                                                <td title="Target Start Date" class="text-center"><?= $task->target_start_date; ?></td>
-                        <td title="Target Complete Date" class="text-center"><?= $task->target_complete_date; ?></td>-->
+        <!--                                                                <td title="Target Start Date" class="text-center"><? $task->target_start_date; ?></td>
+                        <td title="Target Complete Date" class="text-center"><? $task->target_complete_date; ?></td>-->
                         <!--<td title="assign to"></td>-->
                         <?php if ($task->department_id == 2) {?>
                             <td title="Assign To" class="text-center">
@@ -179,3 +179,8 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function(){
+  $('[data-toggle="popover"]').popover();   
+});
+</script>

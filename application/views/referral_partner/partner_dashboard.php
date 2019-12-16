@@ -7,8 +7,8 @@
                         <div class="col-lg-7">
                             <div class="row m-l-2 m-b-10">
                                 <a href="<?= base_url(); ?>referral_partner/referral_partners/new_referral_agent?q=partner" class="btn btn-lg btn-primary p-l-20 p-r-20  m-r-10" style="font-size:12px"><i class="fa fa-plus"></i> Add New Partner</a>
-                                <a href="<?= base_url(); ?>partners" class="btn btn-lg btn-success p-l-20 p-r-20 m-r-10" style="font-size:12px">Partner Dashboard</a>
-                                <a href="<?= base_url(); ?>lead_management/home" class="btn btn-lg btn-warning p-l-20 p-r-20" style="font-size:12px">Lead Dashboard</a>
+                                <a href="<?= base_url(); ?>partners" class="btn btn-lg btn-success p-l-20 p-r-20 m-r-10" style="font-size:12px">Partners Dashboard</a>
+                                <a href="<?= base_url(); ?>lead_management/home" class="btn btn-lg btn-warning p-l-20 p-r-20" style="font-size:12px">Leads Dashboard</a>
                             </div>
                             <div class="filter-outer">
                                 <form name="filter_form" id="filter-form"  method="post" onsubmit="service_filter_form()">
@@ -21,6 +21,8 @@
                                                     <option value="2">Requested By</option>
                                                     <option value="3">Requested Date</option>
                                                     <option value="4">Partner Name</option>
+                                                    <!--<option value="5">Language</option>-->
+                                                    <!--<option value="6">Source</option>-->
                                                 </select>
                                             </div>
                                             <div class="col-md-4 m-t-5">
