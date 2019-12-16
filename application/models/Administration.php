@@ -6,6 +6,7 @@ class Administration extends CI_Model {
         if (!empty($type_array) && count($type_array) != 0) {
             $this->db->where_in('type', $type_array);
         }
+            $this->db->order_by('name', 'ASC');
         return $this->db->get("department")->result_array();
     }
 
@@ -367,10 +368,21 @@ class Administration extends CI_Model {
     }
 
     public function get_service_list() {
-        $sql = "select s.*,(select name from category where id=s.category_id) AS catname,td.start_days,td.end_days,d.name "
+        $sql = "select s.*,(select name from category where id=s.category_id) AS catname,td.start_days,td.end_days,td.input_form,d.name "
                 . "from services s "
                 . "inner join target_days td on(s.id=td.service_id) "
                 . "inner join department d on(d.id=s.dept)"
+                . "where status = 1 group by s.id order by s.description asc";
+
+        $data = $this->db->query($sql)->result_array();
+        return $data;
+    }
+
+    public function get_service_list_for_service_setup() {
+        $sql = "select s.*,(select name from category where id=s.category_id) AS catname,td.start_days,td.end_days,td.input_form,d.name "
+                . "from services s "
+                . "inner join target_days td on(s.id=td.service_id) "
+                . "inner join department d on(d.id=s.dept) OR (s.dept=0)"
                 . "where status = 1 group by s.id order by s.description asc";
 
         $data = $this->db->query($sql)->result_array();
@@ -428,7 +440,7 @@ class Administration extends CI_Model {
         return $data;
     }
 
-    public function add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost) {
+    public function add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost,$responsible_assigned,$client_type) {
         $this->db->trans_begin();
 
         $insert_data = array('id' => '',
@@ -440,6 +452,8 @@ class Administration extends CI_Model {
             'retail_price' => $retailprice . '.00',
             'dept' => $dept,
             'status' => 1,
+            'responsible_assign' => $responsible_assigned,
+            'client_type_assign' => $client_type,
             'note' => $note
         );
         $this->db->insert('services', $insert_data);
@@ -473,7 +487,7 @@ class Administration extends CI_Model {
         }
     }
 
-    public function update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost) {
+    public function update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost,$responsible_assigned,$client_type) {
         $this->db->trans_begin();
 
         $update_data = array('category_id' => $servicecat,
@@ -484,6 +498,8 @@ class Administration extends CI_Model {
             'retail_price' => $retailprice . '.00',
             'dept' => $dept,
             'status' => 1,
+            'responsible_assign' => $responsible_assigned,
+            'client_type_assign' => $client_type,
             'note' => $note
         );
         $this->db->set($update_data)->where("id", $service_id)->update("services");
@@ -524,7 +540,7 @@ class Administration extends CI_Model {
     }
 
     public function get_service_by_id_for_service_setup($id) {
-        $sql = "select s.id as id, s.description as servicename,s.note,s.fixed_cost as fixedcost,s.retail_price as price, s.category_id as catid, t.start_days, t.end_days, t.input_form, s.dept as department, s.ideas, group_concat(r.related_services_id) as related_services from services as s inner join target_days as t on t.service_id = s.id left join related_services as r on r.services_id = s.id where s.id = '$id'";
+        $sql = "select s.id as id, s.description as servicename,s.note,s.fixed_cost as fixedcost,s.retail_price as price, s.category_id as catid, t.start_days, t.end_days, t.input_form, s.dept as department, s.ideas,s.responsible_assign,s.client_type_assign, group_concat(r.related_services_id) as related_services from services as s inner join target_days as t on t.service_id = s.id left join related_services as r on r.services_id = s.id where s.id = '$id'";
         return $this->db->query($sql)->result_array()[0];
     }
 
@@ -618,6 +634,10 @@ class Administration extends CI_Model {
         return $this->db->where('services_id', $service_id)->from("service_request")->count_all_results();
     }
 
+    public function get_service_setup_relations($service_id) {
+        return $this->db->where('id', $service_id)->from("services")->count_all_results();
+    }
+
     public function get_department_relations($department_id) {
         $count = $this->db->where('department', $department_id)->from("actions")->count_all_results();
         $count += $this->db->where('department_id', $department_id)->from("department_staff")->count_all_results();
@@ -658,9 +678,9 @@ class Administration extends CI_Model {
         }
     }
    
-     public function deactivate_office($id){  
+    public function deactivate_office($id){  
         return $this->db->query("UPDATE office SET status=(case when status=3 then 1 else 3 end) WHERE id='$id'");
-}
+    }
     
     public function get_staff_relations($staff_id) {
         $count = $this->db->where('staff_id', $staff_id)->from("action_staffs")->count_all_results();
@@ -1098,5 +1118,9 @@ ORDER BY `submit_time` DESC";
         }
     }
 
+
+    public function deactive_service($id){  
+        return $this->db->query("UPDATE services SET is_active = (case when is_active = 'n' then 'y' else 'n' end) WHERE id='$id'");
+    }
     //}
 }

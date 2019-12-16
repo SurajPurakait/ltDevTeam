@@ -37,7 +37,9 @@ if (count($referral_data) != 0): ?>
                                     <th width="20%">Type</th>
                                     <th width="20%">Name</th>
                                     <th width="20%">Requested By</th>
+                                    <th width="20%">Language</th>
                                     <th width="20%">Requested Date</th>
+                                    <th width="20%">Source</th>
                                     <th width="10%">Leads</th>
                                     <th width="10%">Notes</th>
                                 </tr>
@@ -45,7 +47,9 @@ if (count($referral_data) != 0): ?>
                                     <td title="Type"><?= $value["type"]; ?></td>
                                     <td title="Name"><?= $value["name"]; ?></td>
                                     <td title="Requested By"><?= $value["requested_by"]; ?></td>
+                                    <td title="Language"><?= $value["language"]; ?></td>
                                     <td title="Requested Date"><?= ($value["submission_date"] != "0000-00-00") ? date('m/d/Y', strtotime($value["submission_date"])) : "-"; ?></td>
+                                    <td title="Source"><?= $value["source"]; ?></td>
                                     <td>
                                         <?php
                                             $partner_to_staff_count = get_partner_to_staff_count($value["id"]); // green // Referred // 0

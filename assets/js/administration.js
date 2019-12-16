@@ -267,12 +267,31 @@ function addRelatedservice() {
     var relatedserv = $('#add-services-form #relatedserv').val();
     var startdays = $('#add-services-form #startdays').val();
     var enddays = $('#add-services-form #enddays').val();
-    var dept = $('#add-services-form #dept option:selected').val();
+    // var dept = $('#add-services-form #dept option:selected').val();
     var input_form = $('#add-services-form input[name="input_form"]:checked').val();
     var shortcode = $('#add-services-form #shorthidden').val();
     var note = $('#add-services-form #note').val();
     var fixedcost = $('#add-services-form #fixedcost').val();
 
+    var responsible_assigned = $('#add-services-form input[name="responsible_assigned"]:checked').val();
+    if(responsible_assigned == 2){
+      var dept = $('#add-services-form #dept option:selected').val();  
+  }else{
+      var dept = "NULL"; 
+  }
+
+    var client_type = [];
+            $.each($("input[name='client_type']:checked"), function(){
+                client_type.push($(this).val());
+            });
+    if(client_type == 0){
+        client_type = 0;
+    }else if(client_type == 1){
+        client_type = 1;
+    }else if(client_type == "0,1"){
+        client_type = 2;
+    }
+   
     $.ajax({
         type: "POST",
         data: {
@@ -286,11 +305,14 @@ function addRelatedservice() {
             input_form: input_form,
             shortcode: shortcode,
             note: note,
-            fixedcost: fixedcost
+            fixedcost: fixedcost,
+            responsible_assigned:responsible_assigned,
+            client_type: client_type
         },
         url: base_url + '/administration/service_setup/add_related_service',
         dataType: "html",
         success: function (result) {
+            // console.log(result);return false;
             if (result.trim() == "1") {
                 swal({
                     title: "Success!",
@@ -542,12 +564,31 @@ function updateRelatedservice() {
     var relatedserv = $('#edit-services-form #relatedserv').val();
     var startdays = $('#edit-services-form #startdays').val();
     var enddays = $('#edit-services-form #enddays').val();
-    var dept = $('#edit-services-form #dept option:selected').val();
+    // var dept = $('#edit-services-form #dept option:selected').val();
     var id = $('#edit-services-form #service_id').val();
     var input_form = $('#edit-services-form input[name="input_form"]:checked').val();
     var shortcode = $('#edit-services-form #shorthidden').val();
     var note = $('#edit-services-form #note').val();
     var fixedcost = $('#edit-services-form #fixedcost').val();
+
+    var responsible_assigned = $('#edit-services-form input[name="responsible_assigned"]:checked').val();
+    if(responsible_assigned == 2){
+      var dept = $('#edit-services-form #dept option:selected').val();  
+    }else{
+      var dept = "NULL"; 
+   }
+
+    var client_type = [];
+            $.each($("input[name='client_type']:checked"), function(){
+                client_type.push($(this).val());
+            });
+    if(client_type == 0){
+        client_type = 0;
+    }else if(client_type == 1){
+        client_type = 1;
+    }else if(client_type == "0,1"){
+        client_type = 2;
+    }
 
     $.ajax({
         type: "POST",
@@ -563,11 +604,14 @@ function updateRelatedservice() {
             input_form: input_form,
             shortcode: shortcode,
             note: note,
-            fixedcost: fixedcost
+            fixedcost: fixedcost,
+            responsible_assigned: responsible_assigned,
+            client_type: client_type
         },
         url: base_url + '/administration/service_setup/update_related_service',
         dataType: "html",
         success: function (result) {
+            // console.log(result);return false;
             if (result.trim() == "1") {
                 swal({title: "Success!", text: "Successfully Updated!", type: "success"}, function () {
                     goURL(base_url + 'administration/service_setup');

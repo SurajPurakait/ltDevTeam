@@ -1315,12 +1315,14 @@ function sort_project_dashboard(sort_criteria = '', sort_type = '') {
         }
     });
 }
-function projectFilter() {
+function projectFilter(select_year) {
+//    alert(select_year);return false;
     var form_data = new FormData(document.getElementById('filter-form'));
+//    form_data.append('year', select_year);
     $.ajax({
         type: "POST",
         data: form_data,
-        url: base_url + 'project/project_filter',
+        url: base_url + 'project/project_filter/'+select_year,
         dataType: "html",
         processData: false,
         contentType: false,
@@ -1345,12 +1347,9 @@ function projectFilter() {
     });
 }
 function loadProjectDashboard(status = '', request = '', templateID = '', officeID = '', departmentID = '', filter_assign = '', filter_data = '', sos_value = '', sort_criteria = '', sort_type = '', client_type = '', client_id = '', clients = '', pageNumber = 0,template_cat_id='',month='',year='') {
-//   alert(status);
-//    if (request != '') {
-//        activeShortColumn(request, short_column);
-//    } else {
-//        $(".short-value-dropdown").hide();
-//    }
+    if(year==''){
+        var year =$('#due_year').val();
+    }
     $.ajax({
         type: "POST",
         data: {
