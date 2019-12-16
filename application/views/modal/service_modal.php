@@ -29,7 +29,7 @@
                         <div class="errorMessage text-danger"></div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="display: none;">
                         <label>Service Shortname</label>
                         <input title="Service Shortname" class="form-control" type="text" name="servicesn" id="servicesn" value="" disabled>
                         <input type="hidden" name="shorthidden" id="shorthidden">
@@ -45,16 +45,49 @@
                         <input title="Retail Price" class="form-control" type="number" name="retailprice" id="retailprice" required>
                         <div class="errorMessage text-danger"></div>
                     </div>
+
                     <div class="form-group">
-                        <label>Target For Start(days)<span class="text-danger">*</span></label>
+                        <!-- <label>Select Department</label> -->
+                        <label>Responsible Assigned</label>
+                        <select id="dept" name="dept" class="form-control" title="Department" required>
+                            <?php
+                            if (!empty($department_list)) {
+                                foreach ($department_list as $key => $value) {
+                                    if ($value['id'] != 1) {
+                                        ?>
+                                        <option value="<? $value['id']; ?>"><?= $value['name']; ?></option>
+                                        <?php
+                                    }
+                                }
+                            }
+                            ?>
+                        </select>
+                        <div class="errorMessage text-danger"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Target Starting Day<span class="text-danger">*</span></label>
                         <input title="Target For Start(days)" class="form-control" type="number" name="startdays" id="startdays" required>
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
-                        <label>Target For Completion(days)<span class="text-danger">*</span></label>
+                        <label>Target Completed Day<span class="text-danger">*</span></label>
                         <input title="Target For Completion(days)" class="form-control" type="number" name="enddays" id="enddays" required>
                         <div class="errorMessage text-danger"></div>
                     </div>
+
+                    <div class="form-group">
+                        <label>Client Type<span class="text-danger">*</span></label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="checkbox-inline">
+                            <input class="checkboxclass" value="0" type="checkbox" id="business_clients" name="client_type" required="" title="Client Type"> Business Clients
+                        </label>
+                        <label class="checkbox-inline">
+                            <input class="checkboxclass" value="1" type="checkbox" id="individual_clients" name="client_type" required="" title="Client Type"> Individual Clients
+                        </label>
+                        <div class="errorMessage text-danger"></div>
+                    </div>
+
                     <div class="form-group">
                         <label>Input Form<span class="text-danger">*</span></label>
                         <label class="checkbox-inline">
@@ -65,23 +98,7 @@
                         </label>
                         <div class="errorMessage text-danger" id="input_form_error"></div>
                     </div>
-                    <div class="form-group">
-                        <label>Select Department</label>
-                        <select id="dept" name="dept" class="form-control" title="Department" required>
-                            <?php
-                            if (!empty($department_list)) {
-                                foreach ($department_list as $key => $value) {
-                                    if ($value['id'] != 1 && $value['id'] != 2) {
-                                        ?>
-                                        <option value="<?= $value['id']; ?>"><?= $value['name']; ?></option>
-                                        <?php
-                                    }
-                                }
-                            }
-                            ?>
-                        </select>
-                        <div class="errorMessage text-danger"></div>
-                    </div>
+                    
                     <div class="form-group">
                         <label>Related Services</label>
                         <select title="Related Services" class="form-control" id="relatedserv" name="relatedserv" multiple="multiple">
@@ -90,7 +107,7 @@
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
-                        <label>Note</label>
+                        <label>Notes</label>
                         <textarea class="form-control" name="note" id="note"></textarea>
                     </div>                           
 
@@ -142,7 +159,7 @@
                         <input title="Service Name" class="form-control" type="text" name="servicename" id="servicename" value="<?= $service_info["servicename"]; ?>" required>
                         <div class="errorMessage text-danger"></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="display: none;">
                         <label>Service Shortname</label>
                         <input title="Service Shortname" class="form-control" type="text" name="servicesn" id="servicesn" value="<?php echo $service_info['ideas']; ?>" disabled>
                         <input type="hidden" name="shorthidden" id="shorthidden" value="<?php echo $service_info['ideas']; ?>">
@@ -158,33 +175,14 @@
                         <input title="Retail Price" class="form-control" type="number" name="retailprice" id="retailprice" value="<?= $service_info["price"]; ?>" required>
                         <div class="errorMessage text-danger"></div>
                     </div>
+
                     <div class="form-group">
-                        <label>Target For Start(days)</label>
-                        <input title="Target For Start(days)" class="form-control" type="number" name="startdays" id="startdays" value="<?= $service_info["start_days"]; ?>" required>
-                        <div class="errorMessage text-danger"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Target For Completion(days)</label>
-                        <input title="Target For Completion(days)" class="form-control" type="number" name="enddays" id="enddays" value="<?= $service_info["end_days"]; ?>" required>
-                        <div class="errorMessage text-danger"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Input Form<span class="text-danger">*</span></label>
-                        <label class="checkbox-inline">
-                            <input class="checkclass" value="y" type="radio" id="inputform1" name="input_form" required="" title="Input Form" <?= ($service_info["input_form"] == 'y') ? 'checked' : ''; ?>> Yes
-                        </label>
-                        <label class="checkbox-inline">
-                            <input class="checkclass" value="n" type="radio" id="inputform2" name="input_form" required="" title="Input Form" <?= ($service_info["input_form"] == 'n') ? 'checked' : ''; ?>> No
-                        </label>
-                        <div class="errorMessage text-danger" id="input_form_error"></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Select Department</label>
+                        <label>Responsible Assigned</label>
                         <select id="dept" name="dept" class="form-control" title="Department" required>
                             <?php
                             if (!empty($department_list)) {
                                 foreach ($department_list as $key => $value) {
-                                    if ($value['id'] != 1 && $value['id'] != 2){
+                                    if ($value['id'] != 1){
                                     ?>
                                     <option value="<?= $value['id']; ?>" <?= ($service_info["department"] == $value["id"]) ? "selected" : ""; ?>><?= $value['name']; ?></option>
                                     <?php
@@ -195,6 +193,41 @@
                         </select>
                         <div class="errorMessage text-danger"></div>
                     </div>
+
+                    <div class="form-group">
+                        <label>Target Starting Day</label>
+                        <input title="Target For Start(days)" class="form-control" type="number" name="startdays" id="startdays" value="<?= $service_info["start_days"]; ?>" required>
+                        <div class="errorMessage text-danger"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Completed Day</label>
+                        <input title="Target For Completion(days)" class="form-control" type="number" name="enddays" id="enddays" value="<?= $service_info["end_days"]; ?>" required>
+                        <div class="errorMessage text-danger"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Client Type<span class="text-danger">*</span></label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="checkbox-inline">
+                            <input class="checkclass" value="0" type="checkbox" id="business_clients" name="client_type" required="" title="Client Type" <?= ($service_info["client_type_assign"] == '0' || $service_info["client_type_assign"] == '2') ? 'checked' : ''; ?>> Business Clients
+                        </label>
+                        <label class="checkbox-inline">
+                            <input class="checkclass" value="1" type="checkbox" id="individual_clients" name="client_type" required="" title="Client Type" <?= ($service_info["client_type_assign"] == '1' || $service_info["client_type_assign"] == '2') ? 'checked' : ''; ?>> Individual Clients
+                        </label>
+                        <div class="errorMessage text-danger"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Input Form<span class="text-danger">*</span></label>
+                        <label class="checkbox-inline">
+                            <input class="checkclass" value="y" type="radio" id="inputform1" name="input_form" required="" title="Input Form" <?= ($service_info["input_form"] == 'y') ? 'checked' : ''; ?>> Yes
+                        </label>
+                        <label class="checkbox-inline">
+                            <input class="checkclass" value="n" type="radio" id="inputform2" name="input_form" required="" title="Input Form" <?= ($service_info["input_form"] == 'n') ? 'checked' : ''; ?>> No
+                        </label>
+                        <div class="errorMessage text-danger" id="input_form_error"></div>
+                    </div>
+                    
                     <div class="form-group">
                         <label>Related Services</label>
                         <select title="Related Services" class="form-control" id="relatedserv" name="relatedserv" multiple="multiple">
@@ -203,7 +236,7 @@
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
-                        <label>Note</label>
+                        <label>Notes</label>
                         <textarea class="form-control" name="note" id="note"><?php echo $service_info['note'] ?></textarea>
                     </div>                        
 

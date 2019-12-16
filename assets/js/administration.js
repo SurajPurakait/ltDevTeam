@@ -272,7 +272,18 @@ function addRelatedservice() {
     var shortcode = $('#add-services-form #shorthidden').val();
     var note = $('#add-services-form #note').val();
     var fixedcost = $('#add-services-form #fixedcost').val();
-
+    var client_type = [];
+            $.each($("input[name='client_type']:checked"), function(){
+                client_type.push($(this).val());
+            });
+    if(client_type == 0){
+        client_type = 0;
+    }else if(client_type == 1){
+        client_type = 1;
+    }else if(client_type == "0,1"){
+        client_type = 2;
+    }
+   
     $.ajax({
         type: "POST",
         data: {
@@ -286,11 +297,13 @@ function addRelatedservice() {
             input_form: input_form,
             shortcode: shortcode,
             note: note,
-            fixedcost: fixedcost
+            fixedcost: fixedcost,
+            client_type: client_type
         },
         url: base_url + '/administration/service_setup/add_related_service',
         dataType: "html",
         success: function (result) {
+            // console.log(result);return false;
             if (result.trim() == "1") {
                 swal({
                     title: "Success!",
@@ -548,6 +561,17 @@ function updateRelatedservice() {
     var shortcode = $('#edit-services-form #shorthidden').val();
     var note = $('#edit-services-form #note').val();
     var fixedcost = $('#edit-services-form #fixedcost').val();
+    var client_type = [];
+            $.each($("input[name='client_type']:checked"), function(){
+                client_type.push($(this).val());
+            });
+    if(client_type == 0){
+        client_type = 0;
+    }else if(client_type == 1){
+        client_type = 1;
+    }else if(client_type == "0,1"){
+        client_type = 2;
+    }
 
     $.ajax({
         type: "POST",
@@ -563,11 +587,13 @@ function updateRelatedservice() {
             input_form: input_form,
             shortcode: shortcode,
             note: note,
-            fixedcost: fixedcost
+            fixedcost: fixedcost,
+            client_type: client_type
         },
         url: base_url + '/administration/service_setup/update_related_service',
         dataType: "html",
         success: function (result) {
+            // console.log(result);return false;
             if (result.trim() == "1") {
                 swal({title: "Success!", text: "Successfully Updated!", type: "success"}, function () {
                     goURL(base_url + 'administration/service_setup');

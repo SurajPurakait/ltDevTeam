@@ -3295,3 +3295,49 @@ function change_price(price,val) {
         document.getElementById("employee-retail-price").value = changed_price;
     }
 }
+
+
+function deactive_service(service_id, is_active = '') {
+//     alert(status);return false;
+    if (is_active == 'n') {
+        var title = 'Do you want to activate?';
+        var msg = "Service has been activated successfully!";
+    } else {
+        title = 'Do you want to deactivate?';
+        msg = "Service has been deactivated successfully!";
+    }
+    $.get(base_url + "administration/service_setup/get_service_setup_relations/" + service_id, function (result) {
+        if (result != 0) {
+            swal({
+                title: title,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, change it!",
+                closeOnConfirm: false
+            },
+                    function () {
+                        $.ajax({
+                            type: 'POST',
+                            url: base_url + '/administration/service_setup/deactive_service',
+                            data: {
+                                service_id: service_id
+                            },
+                            success: function (results) {
+                                if (results == 1) {
+                                    swal({
+                                        title: "Success!",
+                                        "text": msg,
+                                        "type": "success"
+                                    }, function () {
+                                        goURL(base_url + 'administration/service_setup');
+                                    });
+                                } else {
+                                    swal("ERROR!", "Unable to change this service status", "error");
+                                }
+                            }
+                        });
+                    });
+        }
+    });
+}

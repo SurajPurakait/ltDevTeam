@@ -46,7 +46,6 @@ $role = $user_info['role'];
                                             <?php $presenet_year=date('Y'); ?>
                                             <!--<input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">-->
                                             <select class="form-control year-dropdown" id="due_year" name="due_year" onchange="change_project_year(this.value)">
-                                                <option value="">All Years</option>
                                                 <?php foreach ($due_years as $key => $year): ?>
                                                     <option value="<?= $year['due_year'] ?>" <?= $presenet_year== $year['due_year']?'selected':'' ?> >
                                                         <?= $year['due_year'] ?>
@@ -480,7 +479,7 @@ $role = $user_info['role'];
     });
     function change_project_status_inner(id, status, section_id) {
         openModal('changeStatusinner');
-        var txt = 'Change Status of Tracking Project id #' + id;
+        var txt = 'Tracking Project #' + id;
         $("#changeStatusinner .modal-title").html(txt);
         if (status == 0) {
             $("#changeStatusinner #rad0").prop('checked', true);
