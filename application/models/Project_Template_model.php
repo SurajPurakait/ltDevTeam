@@ -2363,7 +2363,7 @@ class Project_Template_model extends CI_Model {
             $this->db->where('pm.template_cat_id',$template_cat_id);
         }
         if($month!=''){
-            $this->db->where('prm.actual_due_month',$month);
+            $this->db->where('MONTH(prm.due_date)',$month);
         }
         
         if (count($having) != 0) {
