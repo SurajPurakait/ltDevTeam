@@ -19,7 +19,7 @@
                     <div id="total_sales_data" class="m-t-25"></div>
                 </div>    
                 <div class="ibox-content ajaxdiv-reports m-t-0">
-                    <div class="">
+                    <div class="" id="dt-reports-wrap">
                         <table id="sales-reports-tab" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
