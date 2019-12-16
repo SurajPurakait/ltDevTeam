@@ -798,6 +798,6 @@ $role = $user_info['role'];
 //        }
 //        go('Project/index/'+'t'+'uk');
         go('Project/index/'+'n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/'+statusArray[0]+'/'+year+'/'+category);
-        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, statusArray[0],'',year)
+//        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, statusArray[0],'',year)
     }
 </script> 
