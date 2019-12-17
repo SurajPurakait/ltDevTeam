@@ -202,7 +202,13 @@ class Service_model extends CI_Model {
     }
 
     public function get_states() {
-        return $this->db->get('states')->result_array();
+//        return $this->db->get('states')->result_array();
+        $this->db->select('states.*');
+        $this->db->from('states');
+        $this->db->join('sales_tax_rate', 'sales_tax_rate.state = states.id ');
+        $this->db->group_by('states.state_name');
+        $query = $this->db->get()->result_array();
+        return $query;
     }
 
     public function ajax_services_dashboard_filter1($status, $request_type, $category_id, $request_by = "", $department = "", $office = "", $staff_type = "", $sort = "", $form_data = "", $sos_value = "", $sort_criteria = "", $sort_type = "") {

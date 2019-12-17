@@ -8,7 +8,7 @@
     </div>
 
     <div class="form-group">
-        <label class="col-lg-2 control-label">Start Date<span class="text-danger">*</span></label>
+        <label class="col-lg-2 control-label">Sales Tax Start Date<span class="text-danger">*</span></label>
         <div class="col-lg-10">
             <input placeholder="mm/dd/yyyy" id="month" class="form-control datepicker_mdy value_field required_field" type="text" title="Start Date" name="start_year" value="">
             <div class="errorMessage text-danger"></div>
