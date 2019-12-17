@@ -151,23 +151,25 @@
         <h4 class="m-t-40 text-center">Department</h4>
         <?php 
             foreach ($reports as $key => $value) {
-                    $data = array_column($service_by_franchise_list,'totals');        
+                $data_id = array_column($service_by_franchise_list,'id');        
+                $data_total = array_column($service_by_franchise_list,'totals');
+                $data = array_combine($data_id,$data_total);             
             ?>
             <div class="service-department-donut-<?= $key ?> text-center" data-size="120" id="service_department_donut_<?= $key ?>" data-json="service_department_data_<?= $key ?>"></div>
             
             <script>
                 var service_department_data_<?= $key ?> = [
-                    {'section_label': 'Billing ', 'value': <?= $data[0]; ?>, 'color': '#FFB046'}, 
-                    {'section_label': 'Payroll ', 'value': <?= $data[1]; ?>, 'color': '#06a0d6'}, 
-                    {'section_label': 'Bookkeeping', 'value': <?= $data[2]; ?>, 'color': '#ff8c1a'},
-                    {'section_label': 'Data', 'value':<?= $data[3];?>, 'color': '#009900'},
-                    {'section_label': 'Franchisor', 'value':<?= $data[4];?>, 'color': '#663300'},
-                    {'section_label': 'Government', 'value':<?= $data[5];?>, 'color': '#ff66cc'},
-                    {'section_label': 'Marketing', 'value':<?= $data[6];?>, 'color': '#ffdb4d'},
-                    {'section_label': 'Leafnet', 'value':<?= $data[7];?>, 'color': '#00ff99'},
-                    {'section_label': 'Leafcloud', 'value':<?= $data[8];?>, 'color': '#99ff99'},
-                    {'section_label': 'CPA ', 'value':<?= $data[9];?>, 'color': '#669900'},
-                    {'section_label': 'Admin', 'value':<?= $data[10];?>, 'color': '#ffcc00'},
+                    {'section_label': 'Billing ', 'value': <?= $data[3]; ?>, 'color': '#cc6600'}, 
+                    {'section_label': 'Payroll ', 'value': <?= $data[4]; ?>, 'color': '#06a0d6'}, 
+                    {'section_label': 'Bookkeeping', 'value': <?= $data[5]; ?>, 'color': '#ff8c1a'},
+                    {'section_label': 'Data', 'value':<?= $data[6];?>, 'color': '#009900'},
+                    {'section_label': 'Franchisor', 'value':<?= $data[7];?>, 'color': '#663300'},
+                    {'section_label': 'Government', 'value':<?= $data[8];?>, 'color': '#ff66cc'},
+                    {'section_label': 'Marketing', 'value':<?= $data[10];?>, 'color': '#ffdb4d'},
+                    {'section_label': 'Leafnet', 'value':<?= $data[11];?>, 'color': '#00ff99'},
+                    {'section_label': 'Leafcloud', 'value':<?= $data[12];?>, 'color': '#99ff99'},
+                    {'section_label': 'CPA ', 'value':<?= $data[13];?>, 'color': '#669900'},
+                    {'section_label': 'Admin', 'value':<?= $data[14];?>, 'color': '#ffcc00'},
                 ];                    
             </script>
             <script>
