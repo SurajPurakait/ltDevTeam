@@ -22,6 +22,7 @@ class Task_model extends CI_Model {
 
     public function get_task_list($request = '', $status = '', $priority = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '') {
 //        echo 'kkk'.$status;die;
+        $this->load->model('administration');
         $user_info =  $this->session->userdata('staff_info');
         $user_department = $user_info['department'];
         $user_type = $user_info['type'];
