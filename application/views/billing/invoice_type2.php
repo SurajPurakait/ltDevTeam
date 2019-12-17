@@ -217,6 +217,7 @@
 </div>
 <div id="service_section_div"></div>
 <input type="hidden" id="section_id" value="">
+<input type="hidden" id="invoice_type" value="<?= $invoice_type; ?>">
 <input type="hidden" name="reference" id="reference" value="<?= $reference; ?>">
 <input type="hidden" name="reference_id" id="reference_id" value="<?= $reference_id; ?>">
 <script>
