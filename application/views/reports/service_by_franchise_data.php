@@ -6,15 +6,15 @@
 <table class="table table-bordered report-table table-striped text-center m-b-0">
     <thead>
         <tr>
-            <th>Offices</th>
-            <th>Totals</th>
-            <th>New</th>
-            <th>Started</th>
-            <th>Completed</th>
-            <th>< 30</th>
-            <th>< 60</th>
-            <th>+ 60</th>
-            <th>SOS</th>
+            <th class="text-uppercase">Offices</th>
+            <th class="text-uppercase">Totals</th>
+            <th class="text-uppercase">New</th>
+            <th class="text-uppercase">Started</th>
+            <th class="text-uppercase">Completed</th>
+            <th class="text-uppercase">< 30</th>
+            <th class="text-uppercase">< 60</th>
+            <th class="text-uppercase">+ 60</th>
+            <th class="text-uppercase">SOS</th>
             
         </tr>
     </thead>
@@ -45,9 +45,9 @@
         foreach ($reports as $key => $value) {
             $data_id = array_column($service_by_franchise_list,'id');        
             $data_total = array_column($service_by_franchise_list,'totals');
-            $data = array_combine($data_id, $data_total);
+            $data = array_combine($data_id, $data_total);        
     ?>
-    <div class="service-franchise-donut-<?= $key ?> text-center" data-size="120" id="service_franchise_donut_<?= $key ?>" data-json="service_franchise_data_<?= $key ?>"></div>
+    <div class="service-franchise-donut-<?= $key ?> text-center" data-size="100" id="service_franchise_donut_<?= $key ?>" data-json="service_franchise_data_<?= $key ?>"></div>
     
     <script>
         var service_franchise_data_<?= $key ?> = [
@@ -88,7 +88,7 @@
             $completed = array_sum(array_column($service_by_franchise_list,'completed'));
             // echo $new."-".$Started."-".$completed;          
     ?>
-    <div class="service-tracking-donut-<?= $key ?> text-center" data-size="120" id="service_tracking_donut_<?= $key ?>" data-json="service_tracking_data_<?= $key ?>"></div>
+    <div class="service-tracking-donut-<?= $key ?> text-center" data-size="100" id="service_tracking_donut_<?= $key ?>" data-json="service_tracking_data_<?= $key ?>"></div>
     
     <script>
         var service_tracking_data_<?= $key ?> = [
@@ -114,15 +114,15 @@
 <table class="table table-bordered report-table table-striped text-center m-b-0">
     <thead>
         <tr>
-            <th>Departments</th>
-            <th>Totals</th>
-            <th>New</th>
-            <th>Started</th>
-            <th>Completed</th>
-            <th>< 30</th>
-            <th>< 60</th>
-            <th>+ 60</th>
-            <th>SOS</th>
+            <th class="text-uppercase">Departments</th>
+            <th class="text-uppercase">Totals</th>
+            <th class="text-uppercase">New</th>
+            <th class="text-uppercase">Started</th>
+            <th class="text-uppercase">Completed</th>
+            <th class="text-uppercase">< 30</th>
+            <th class="text-uppercase">< 60</th>
+            <th class="text-uppercase">+ 60</th>
+            <th class="text-uppercase">SOS</th>
         </tr>
     </thead>
     <tbody>
@@ -153,9 +153,9 @@
             foreach ($reports as $key => $value) {
                 $data_id = array_column($service_by_franchise_list,'id');        
                 $data_total = array_column($service_by_franchise_list,'totals');
-                $data = array_combine($data_id,$data_total);             
+                $data = array_combine($data_id,$data_total);        
             ?>
-            <div class="service-department-donut-<?= $key ?> text-center" data-size="120" id="service_department_donut_<?= $key ?>" data-json="service_department_data_<?= $key ?>"></div>
+            <div class="service-department-donut-<?= $key ?> text-center" data-size="100" id="service_department_donut_<?= $key ?>" data-json="service_department_data_<?= $key ?>"></div>
             
             <script>
                 var service_department_data_<?= $key ?> = [
@@ -185,7 +185,7 @@
                     $started = array_sum(array_column($service_by_franchise_list,'started')); 
                     $completed = array_sum(array_column($service_by_franchise_list,'completed'));          
             ?>
-            <div class="department-tracking-donut-<?= $key ?> text-center" data-size="120" id="department_tracking_donut_<?= $key ?>" data-json="department_tracking_data_<?= $key ?>"></div>
+            <div class="department-tracking-donut-<?= $key ?> text-center" data-size="100" id="department_tracking_donut_<?= $key ?>" data-json="department_tracking_data_<?= $key ?>"></div>
             
             <script>
                 var department_tracking_data_<?= $key ?> = [
@@ -210,15 +210,15 @@
 <table class="table table-bordered report-table table-striped text-center m-b-0">
     <thead>
         <tr>
-            <th>Category</th>
-            <th>Totals</th>
-            <th>New</th>
-            <th>Started</th>
-            <th>Completed</th>
-            <th>< 30</th>
-            <th>< 60</th>
-            <th>+ 60</th>
-            <th>SOS</th>
+            <th class="text-uppercase">Category</th>
+            <th class="text-uppercase">Totals</th>
+            <th class="text-uppercase">New</th>
+            <th class="text-uppercase">Started</th>
+            <th class="text-uppercase">Completed</th>
+            <th class="text-uppercase">< 30</th>
+            <th class="text-uppercase">< 60</th>
+            <th class="text-uppercase">+ 60</th>
+            <th class="text-uppercase">SOS</th>
         </tr>
     </thead>
     <tbody>
@@ -248,7 +248,7 @@
                 foreach ($reports as $key => $value) {
                     $data = array_column($service_by_franchise_list,'totals');        
             ?>
-            <div class="service-category-donut-<?= $key ?> text-center" data-size="120" id="service_category_donut_<?= $key ?>" data-json="service_category_data_<?= $key ?>"></div>
+            <div class="service-category-donut-<?= $key ?> text-center" data-size="100" id="service_category_donut_<?= $key ?>" data-json="service_category_data_<?= $key ?>"></div>
             
             <script>
                 var service_category_data_<?= $key ?> = [
@@ -272,7 +272,7 @@
                     $started = array_sum(array_column($service_by_franchise_list,'started')); 
                     $completed = array_sum(array_column($service_by_franchise_list,'completed'));          
             ?>
-            <div class="category-tracking-donut-<?= $key ?> text-center" data-size="120" id="category_tracking_donut_<?= $key ?>" data-json="category_tracking_data_<?= $key ?>"></div>
+            <div class="category-tracking-donut-<?= $key ?> text-center" data-size="100" id="category_tracking_donut_<?= $key ?>" data-json="category_tracking_data_<?= $key ?>"></div>
             
             <script>
                 var category_tracking_data_<?= $key ?> = [
