@@ -302,6 +302,9 @@ class Project extends CI_Controller {
             $render_data['page_number'] = post('page_number');
         }
         $render_data["project_list"] = $this->Project_Template_model->get_project_list($request, $status, $template_id, $office_id, $department_id, $filter_assign, $filter_data, $sos_value, $sort_criteria, $sort_type, $client_type, $client_id, $template_cat_id, $month,$year);
+        $render_data['template_cat_id']=$template_cat_id;
+        $render_data['year']=$year;
+        $render_data['month']=$month;
         $this->load->view("projects/project_dashboard", $render_data);
     }
 

@@ -81,10 +81,11 @@ if (!empty($project_list)) {
         ?>
         <div class="panel panel-default service-panel type2 filter-active" id="action<?= $list['id'] ?>">
             <div class="panel-heading" onclick="load_project_tasks('<?php echo $list['id']; ?>', '<?php echo $list['created_at']; ?>', '<?php echo $dueDate; ?>');"> 
-                <a href="javascript:void(0)" onclick="delete_project(<?= $list['id']; ?>,<?= $list['template_id']; ?>)" class="btn btn-danger btn-xs btn-service-edit"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a> &nbsp;
+                <!--<a href="javascript:void(0)" onclick="delete_project(<= $list['id']; ?>,<= $list['template_id']; ?>)" class="btn btn-danger btn-xs btn-service-edit"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a> &nbsp;-->
                 <!-- <a href="javascript:void(0)" onclick="CreateProjectModal('edit',<?//= $list['id'] ?>);" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>  &nbsp; --> 
+                <?php if($user_type!=3){ ?>
                 <a target="_blank" href="<?= base_url() . 'project/edit_project_template/' . base64_encode($list['id']); ?>" class="btn btn-primary btn-xs btn-service-edit-project"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Project</a> 
-
+                <?php } ?>
                 <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $list['id']; ?>" aria-expanded="false" class="collapsed">
                     <div class="table-responsive">
                         <table class="table table-borderless text-center" style="margin-bottom: 0px;">
@@ -147,7 +148,7 @@ if (!empty($project_list)) {
                                     <td title="Tracking" class="text-center"><span id="trackouter-<?php echo $list['id']; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></td>
                                     <td title="Creation Date"><?= date('m/d/Y', strtotime($list['created_at'])) ?></td>
                                     <td title="Due Date"><?= date('m/d/Y',strtotime($dueDate)) ?></td>
-                                    <td title="Recurrence Date"><?= date('m/d/Y',strtotime($pattern_details->generation_date)); ?></td>
+                                    <td title="Recurrence Date"><?= ($pattern_details->generation_date!=''?(date('m/d/Y',strtotime($pattern_details->generation_date))):'Manual'); ?></td>
 
                                             <!-- <td title='Note'><a id="notecount-<?//= $list['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_notes(<?//= $list["id"]; ?>)"><b> <?//= get_project_note_count($list['id']) ?></b></a> -->
 
@@ -198,7 +199,7 @@ if (!empty($project_list)) {
     if (isset($page_number) && $row_number < count($project_list)):
         ?>
         <div class="text-center p-0 load-more-btn">
-            <a href="javascript:void(0);" onclick="loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', <?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more results</a>
+            <a href="javascript:void(0);" onclick="loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', <?= $page_number + 1; ?>,'<?= $template_cat_id ?>','<?= $month ?>','<?= $year ?>');" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more results</a>
         </div>
     <?php endif; ?>
     <script>
