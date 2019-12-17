@@ -43,32 +43,34 @@
     <h4 class="text-center">Offices</h4>
     <?php 
         foreach ($reports as $key => $value) {
-            $data = array_column($service_by_franchise_list,'totals');        
+            $data_id = array_column($service_by_franchise_list,'id');        
+            $data_total = array_column($service_by_franchise_list,'totals');
+            $data = array_combine($data_id, $data_total);
     ?>
     <div class="service-franchise-donut-<?= $key ?> text-center" data-size="120" id="service_franchise_donut_<?= $key ?>" data-json="service_franchise_data_<?= $key ?>"></div>
     
     <script>
         var service_franchise_data_<?= $key ?> = [
-            {'section_label': 'Contador Fort Lauderdale ', 'value': <?= $data[0]; ?>, 'color': '#FFB046'}, 
+            {'section_label': 'Contador Fort Lauderdale ', 'value': <?= $data[34]; ?>, 'color': '#FFB046'}, 
             {'section_label': 'Contador Miami ', 'value': <?= $data[1]; ?>, 'color': '#06a0d6'}, 
-            {'section_label': 'Contador Orlando', 'value': <?= $data[2]; ?>, 'color': '#ff8c1a'},
-            {'section_label': 'Contador Sunny Isles', 'value':<?= $data[3];?>, 'color': '#009900'},
-            {'section_label': 'Corporate', 'value':<?= $data[4];?>, 'color': '#663300'},
-            {'section_label': 'LeafNet Office', 'value':<?= $data[5];?>, 'color': '#ff66cc'},
-            {'section_label': 'Nalogi Miami', 'value':<?= $data[6];?>, 'color': '#ffdb4d'},
-            {'section_label': 'TaxLeaf Aventura', 'value':<?= $data[7];?>, 'color': '#00ff99'},
-            {'section_label': 'TaxLeaf Coral Gables', 'value':<?= $data[8];?>, 'color': '#99ff99'},
-            {'section_label': 'TaxLeaf Coral Springs', 'value':<?= $data[9];?>, 'color': '#669900'},
-            {'section_label': 'TaxLeaf Doral', 'value':<?= $data[10];?>, 'color': '#ffcc00'},
-            {'section_label': 'Taxleaf DSM', 'value':<?= $data[11];?>, 'color': '#99ff66'},
-            {'section_label': 'TaxLeaf Fort Lauderdale', 'value':<?= $data[12];?>, 'color': '#66ffff'},
-            {'section_label': 'TaxLeaf Hallandale', 'value':<?= $data[13];?>, 'color': '#ff8c66'},
-            {'section_label': 'TaxLeaf Hialeah', 'value':<?= $data[14];?>, 'color': '#e600ac'},
-            {'section_label': 'TaxLeaf Kendall', 'value':<?= $data[15];?>, 'color': '#aaaa55'},
-            {'section_label': 'TaxLeaf Lake Mary', 'value':<?= $data[16];?>, 'color': '#ff9900'},
-            {'section_label': 'TaxLeaf Miramar', 'value':<?= $data[17];?>, 'color': '#004de6'},
-            {'section_label': 'TaxLeaf North Miami Beach', 'value':<?= $data[18];?>, 'color': '#993333'},
-            {'section_label': 'TaxLeaf Pembroke Pines', 'value':<?= $data[19];?>, 'color': '#003300'}
+            {'section_label': 'Contador Orlando', 'value': <?= $data[44]; ?>, 'color': '#ff8c1a'},
+            {'section_label': 'Contador Sunny Isles', 'value':<?= $data[18];?>, 'color': '#009900'},
+            {'section_label': 'Corporate', 'value':<?= $data[17];?>, 'color': '#663300'},
+            {'section_label': 'LeafNet Office', 'value':<?= $data[41];?>, 'color': '#ff66cc'},
+            {'section_label': 'Nalogi Miami', 'value':<?= $data[32];?>, 'color': '#ffdb4d'},
+            {'section_label': 'TaxLeaf Aventura', 'value':<?= $data[30];?>, 'color': '#00ff99'},
+            {'section_label': 'TaxLeaf Coral Gables', 'value':<?= $data[25];?>, 'color': '#99ff99'},
+            {'section_label': 'TaxLeaf Coral Springs', 'value':<?= $data[29];?>, 'color': '#669900'},
+            {'section_label': 'TaxLeaf Doral', 'value':<?= $data[22];?>, 'color': '#ffcc00'},
+            {'section_label': 'Taxleaf DSM', 'value':<?= $data[39];?>, 'color': '#99ff66'},
+            {'section_label': 'TaxLeaf Fort Lauderdale', 'value':<?= $data[26];?>, 'color': '#66ffff'},
+            {'section_label': 'TaxLeaf Hallandale', 'value':<?= $data[24];?>, 'color': '#ff8c66'},
+            {'section_label': 'TaxLeaf Hialeah', 'value':<?= $data[28];?>, 'color': '#e600ac'},
+            {'section_label': 'TaxLeaf Kendall', 'value':<?= $data[27];?>, 'color': '#aaaa55'},
+            {'section_label': 'TaxLeaf Lake Mary', 'value':<?= $data[31];?>, 'color': '#ff9900'},
+            {'section_label': 'TaxLeaf Miramar', 'value':<?= $data[23];?>, 'color': '#004de6'},
+            {'section_label': 'TaxLeaf North Miami Beach', 'value':<?= $data[19];?>, 'color': '#993333'},
+            {'section_label': 'TaxLeaf Pembroke Pines', 'value':<?= $data[20];?>, 'color': '#003300'}
         ];                    
     </script>
     <script>
