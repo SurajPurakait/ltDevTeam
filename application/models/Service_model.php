@@ -2842,6 +2842,7 @@ class Service_model extends CI_Model {
             
             foreach ($data_department as $dd) {    
                 $data = [
+                    'id' => $dd['id'], 
                     'department_name' => $dd['name'],
                     'totals' => $this->db->get_where('report_dashboard_service',array('department'=>$dd['id']))->num_rows(),
                     'new' => $this->db->get_where('report_dashboard_service',array('department'=>$dd['id'],'status'=>'2'))->num_rows(),
