@@ -60,13 +60,15 @@ class Invoice extends CI_Controller {
         $category_id = post('category_id');
         $service_id = post('service_id');
         $section_id = post('section_id');
+        $invoice_type = post('invoice_type');
         if ($category_id != '') {
             echo '<div class="form-group" id="service_dropdown_div_' . $section_id . '">
             <label class="col-lg-2 control-label">Service<span class="text-danger">*</span></label>
             <div class="col-lg-10">
                 <select class="form-control" name="service_section[' . $section_id . '][service_id]" onchange="getServiceInfoById(this.value, ' . $category_id . ', ' . $section_id . ');" id="service' . $section_id . '" title="Service" required="">
                     <option value="">Select an option</option>';
-            load_ddl_option("get_service_list_by_category_id", $service_id != '' ? $service_id : '', $category_id);
+            // load_ddl_option("get_service_list_by_category_id", $service_id != '' ? $service_id : '', $category_id);
+                load_ddl_option_for_service_list($service_id != '' ? $service_id : '', $category_id, $invoice_type);
             echo '</select>
                 <div class="errorMessage text-danger"></div>
             </div>
@@ -93,6 +95,8 @@ class Invoice extends CI_Controller {
             $return['last_section_id'] = end($section_id);
             $section_id_hidden = post('section_id') . ',' . $render_data['section_id'];
         }
+
+        $render_data['invoice_type'] = post('invoice_type');
         $return['section_result'] = $this->load->view('billing/service_section_ajax', $render_data, TRUE);
         $return['section_id_hidden'] = $section_id_hidden;
         echo json_encode($return);
@@ -480,8 +484,10 @@ class Invoice extends CI_Controller {
         $render_data['service_category_list'] = $this->billing_model->get_service_category();
         if ($invoice_type == '1') {
             $render_data['reference'] = 'company';
+            $render_data['invoice_type'] = $invoice_type;
         } else {
             $render_data['reference'] = 'individual';
+            $render_data['invoice_type'] = $invoice_type;
         }
         $render_data['office_id'] = $render_data['title_id'] = '';
         if ($client_id != '') {

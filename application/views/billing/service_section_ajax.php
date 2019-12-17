@@ -6,7 +6,7 @@ $random_keys=array_rand($colors);
     <div class="form-group" id="category_div_<?= $section_id; ?>">
         <label class="col-lg-2 control-label">Service Category<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <select class="form-control" name="service_section[<?= $section_id; ?>][category_id]" onchange="getServiceDropdownByCategory(this.value, '', '<?= $section_id; ?>');" id="category_<?= $section_id; ?>" title="Service Category" required="">
+            <select class="form-control" name="service_section[<?= $section_id; ?>][category_id]" onchange="getServiceDropdownByCategory(this.value, '', '<?= $section_id; ?>','<?= $invoice_type; ?>');" id="category_<?= $section_id; ?>" title="Service Category" required="">
                 <option value="">Select an option</option>
                 <?php load_ddl_option("get_service_category"); ?>
             </select>
