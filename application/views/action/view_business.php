@@ -38,9 +38,12 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
             <li role="presentation">
                 <a href="#invoice" aria-controls="invoice" role="tab" data-toggle="tab" onclick="loadbusinesstab('invoice')">Invoice</a>
             </li>
+             <li role="presentation">
+                <a href="#invoice" aria-controls="invoice" role="tab" data-toggle="tab" onclick="loadbusinesstab('recurring_invoice')">Recurring Invoice</a>
+            </li>
             <li role="presentation">
                 <a href="#project" aria-controls="project" role="tab" data-toggle="tab" onclick="loadbusinesstab('project', '<?= $check_project_exist ?>')">Project</a>
-            </li>
+            </li>      
         </ul>
 
         <div class="tab-content">
@@ -351,13 +354,20 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                     </tbody>
                 </table>
             </div>
+                <div role="tabpanel" class="tab-pane" id="recurring_invoice">
 
+                <table class="table table-striped table-bordered" style="width:100%;">
+                    <tbody>
+                    <div class="ajaxdiv" id="recurring_result_div"></div>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <script>
         function loadbusinesstab(tab_value, projectval = '') {
             if (tab_value == 'invoice') {
-                loadBillingDashboard('', '', '', '', '<?= $reference_id . '-company'; ?>');
+                loadBillingDashboard('', '', '', '', '<?= $reference_id . '-company'; ?>','','n');
             }
             if (tab_value == 'project') {
                 if (projectval != 0) {
@@ -365,6 +375,9 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                 } else {
                     $('#project_list_business').show();
                 }
+            }
+             if (tab_value == 'recurring_invoice') {
+                loadBillingDashboard('', '', '', '', '<?= $reference_id . '-company'; ?>','','y');
             }
         }
 
