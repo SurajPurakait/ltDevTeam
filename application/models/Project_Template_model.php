@@ -1105,8 +1105,11 @@ class Project_Template_model extends CI_Model {
                     } else {
                         $project_recurrence_main_data['next_due_date'] = '0000-00-00';
                     }
-
-                    $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
+                    if($project_recurrence_main_data['generation_type']==2){
+                        $generation_date =NULL;
+                    }else{
+                        $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
+                    }
                     $project_recurrence_main_data['generation_date'] = $generation_date;
                     $project_recurrence_main_data['project_id'] = $insert_id;
                     $this->db->set($project_recurrence_main_data);
