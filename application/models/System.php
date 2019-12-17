@@ -362,7 +362,10 @@ Class System extends CI_Model {
     public function get_all_dept() {
         return $this->db->get('department')->result_array();
     }
-
+    public function get_all_corporate_dept() {
+        $this->db->where('type',3);
+        return $this->db->get('department')->result_array();
+    }
     public function get_staff_list() {
         $staff_info = staff_info();
         if ($staff_info['type'] == 3) {

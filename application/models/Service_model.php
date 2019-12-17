@@ -2816,6 +2816,7 @@ class Service_model extends CI_Model {
             
             foreach ($data_office as $do) {    
                 $data = [
+                    'id' => $do['id'],
                     'office_name' => $do['name'],
                     'totals' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id']))->num_rows(),
                     'new' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'status'=>'2'))->num_rows(),
@@ -2830,7 +2831,7 @@ class Service_model extends CI_Model {
             }
             return $office_details;
         } elseif ($data['category'] == 'department') {
-            $data_department = $this->system->get_all_dept();
+            $data_department = $this->system->get_all_corporate_dept();
             $department_details = [];
             
             foreach ($data_department as $dd) {    
