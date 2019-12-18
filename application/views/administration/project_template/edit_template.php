@@ -221,12 +221,15 @@
                                                                             <option value="weekly" <?php echo ($pattern_details->pattern == 'weekly') ? 'selected' : ''; ?>>Weekly</option>
                                                                             <option value="quarterly" <?php echo ($pattern_details->pattern == 'quarterly') ? 'selected' : ''; ?>>Quarterly</option>
                                                                             <option value="annually" <?php echo ($pattern_details->pattern == 'annually') ? 'selected' : ''; ?>>Annually</option>
+                                                                            <option value="periodic" <?php echo ($pattern_details->pattern == 'periodic') ? 'selected' : ''; ?>>Periodic</option>
                                                                             <option value="none" <?php echo ($pattern_details->pattern == 'none') ? 'selected' : ''; ?>>None</option>
                                                                         </select>
-                                                                    </div>                                                            
-                                                                    <div class="form-group">
+                                                                    </div> 
+                                                                    <?php if($pattern_details->pattern!= 'periodic'){ ?>
+                                                                    <div class="form-group" id='weekend_val'>
                                                                         <label class="control-label"><input type="checkbox" name="recurrence[occur_weekdays]" id="occur_weekdays" <?php echo ($pattern_details->occur_weekdays == '0') ? '' : 'checked'; ?>> Must occur on weekdays</label>
                                                                     </div>
+                                                                    <?php } ?>
                                                                     <div class="annual-check-div" <?php echo ($pattern_details->pattern == 'annually') ? 'style="display: block;"' : 'style="display: none;"'; ?>>
                                                                         <div class="form-group">
                                                                             <label class="control-label"><input type="checkbox" <?php echo ($pattern_details->client_fiscal_year_end == '0') ? '' : 'checked'; ?> name="recurrence[client_fiscal_year_end]" id="client_fiscal_year_end"> Based on Client fiscal year ends</label>
@@ -339,6 +342,12 @@
                                                                                     <option value="3" <?php echo ($pattern_details->due_month == '3') ? 'selected' : ''; ?>>Third</option>
                                                                                 </select>&nbsp;
                                                                                 <label class="control-label" id="control-label">month in quarter</label>
+                                                                            <?php }elseif($pattern_details->pattern == 'periodic'){ ?>
+                                                                                <label class="control-label"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> Due on day</label>&nbsp;
+                                                                                <input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day" value="<?php echo $pattern_details->due_day; ?>">
+                                                                                <label class="control-label m-r-5">of month</label>&nbsp;
+                                                                                <input class="form-control" type="number" name="recurrence[due_month]" min="1" max="12" style="width: 100px" id="r_month" value="<?php echo $pattern_details->due_month; ?>">&nbsp;
+                                                                                
                                                                             <?php } else { ?>
                                                                                 <label class="control-label"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> Due on day</label>&nbsp;
                                                                                 <input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day" value="<?php echo $pattern_details->due_day; ?>">
@@ -608,6 +617,7 @@ if (!empty($dept_staff)) {
 }
 ?>
 <script>
+//    change_due_pattern('<? $pattern_details->pattern ?>');
     get_template_responsible_staff('<?php echo $template_details->responsible_department ?>', '<?php echo $template_details->responsible_staff ?>', '<?php echo $template_details->ofc_is_all ?>',<?= $staff_id ?>);
 //    get_template_office_staff(<? $template_details->ofc_is_all ?>,<? $template_details->office_id ?>,'<? $staff_id ?>','<? $template_details->partner_id ?>','<? $template_details->manager_id ?>','<? $template_details->associate_id ?>');
     get_template_office_new(<?= $template_details->dept_is_all ?>,<?= $template_details->department_id ?>, '<?= $dept_staff_id ?>');
