@@ -202,7 +202,13 @@ class Service_model extends CI_Model {
     }
 
     public function get_states() {
-        return $this->db->get('states')->result_array();
+//        return $this->db->get('states')->result_array();
+        $this->db->select('states.*');
+        $this->db->from('states');
+        $this->db->join('sales_tax_rate', 'sales_tax_rate.state = states.id ');
+        $this->db->group_by('states.state_name');
+        $query = $this->db->get()->result_array();
+        return $query;
     }
 
     public function ajax_services_dashboard_filter1($status, $request_type, $category_id, $request_by = "", $department = "", $office = "", $staff_type = "", $sort = "", $form_data = "", $sos_value = "", $sort_criteria = "", $sort_type = "") {
@@ -610,6 +616,7 @@ class Service_model extends CI_Model {
             $sql .= " ORDER BY ord.id DESC";
         }
         $this->db->query('SET SQL_BIG_SELECTS=1');
+        // echo $sql;exit;
         $result = $this->db->query($sql)->result();
 //        echo count($result);
 //        echo $this->db->last_query();
@@ -2713,19 +2720,27 @@ class Service_model extends CI_Model {
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
         $staffrole = $staff_info['role'];
-        $staff_office = $staff_info['office'];
+        $staff_office = explode(',',$staff_info['office']);
         $departments = explode(',', $staff_info['department']);
 
-        if (in_array(2, $departments)) {
-            if ($staffrole == 2) {      // frinchisee manager
-                $this->db->where_in('office_id', $staff_office);
-            } else {
-                $this->db->where('created_by',$staff_id);
-            }
-        }
-        if ($office != "") {
+        // if (in_array(2, $departments)) {
+        //     if ($staffrole == 2) {      // frinchisee manager
+        //         $this->db->where_in('office_id', $staff_office);
+        //     } else {
+        //         $this->db->where('created_by',$staff_id);
+        //     }
+        // }
+        // if ($office != "") {
+        //     $this->db->where_in('office_id',$office);
+        // }
+        if (!empty($office)) {
             $this->db->where_in('office_id',$office);
+        } else {
+            if($staff_info['type'] == 3) {
+                $this->db->where_in('office_id',$staff_office);
+            }    
         }
+
         if ($date_range != "") {
             $date_value = explode("-", $date_range);
             $start_date = date("Y-m-d", strtotime($date_value[0]));
@@ -2762,9 +2777,19 @@ class Service_model extends CI_Model {
     }
 
     public function get_total_of_sales_report($office,$date_range) {
+        $staff_info = staff_info();
+        $staff_id = $staff_info['id'];
+        $staffrole = $staff_info['role'];
+        $staff_office = explode(',',$staff_info['office']);
+        $departments = explode(',', $staff_info['department']);
+
         if (!empty($office)) {
             $this->db->where_in('office_id',$office);
-        }            
+        } else {
+            if($staff_info['type'] == 3) {
+                $this->db->where_in('office_id',$staff_office);
+            }    
+        }          
         if ($date_range != "") {
             $date_value = explode("-", $date_range);
             $start_date = date("Y-m-d", strtotime($date_value[0]));
@@ -2788,5 +2813,116 @@ class Service_model extends CI_Model {
         $sql = "SELECT MIN(order_date) as order_date FROM `order` where date_format(order_date,'%Y-%m-%d')!='0000-00-00' order by order_date asc";
         $start_date = $this->db->query($sql)->row_array()['order_date'];
         return date("m/d/Y", strtotime($start_date));
+    }
+
+    public function get_service_by_franchise_data($data) {
+        if ($data['category'] == 'franchise') { 
+            $data_office = $this->system->get_staff_office_list();
+            $office_details = [];
+            
+            foreach ($data_office as $do) {    
+                $data = [
+                    'id' => $do['id'],
+                    'office_name' => $do['name'],
+                    'totals' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id']))->num_rows(),
+                    'new' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'status'=>'2'))->num_rows(),
+                    'started' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'status'=>'1'))->num_rows(),
+                    'completed' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'status'=>'0'))->num_rows(),
+                    'less_than_30' => $this->late_status_calculation_report_dashboard_service('franchise',$do['id'],'less_than_30'),
+                    'less_than_60' => $this->late_status_calculation_report_dashboard_service('franchise',$do['id'],'less_than_60'),
+                    'more_than_60' => $this->late_status_calculation_report_dashboard_service('franchise',$do['id'],'more_than_60'),           
+                    'sos' => $this->db->get_where('report_dashboard_service',array('office'=>$do['id'],'sos !='=>''))->num_rows()           
+                ];
+                array_push($office_details,$data);
+            }
+            return $office_details;
+        } elseif ($data['category'] == 'department') {
+            $data_department = $this->system->get_all_corporate_dept();
+            $department_details = [];
+            
+            foreach ($data_department as $dd) {    
+                $data = [
+                    'id' => $dd['id'], 
+                    'department_name' => $dd['name'],
+                    'totals' => $this->db->get_where('report_dashboard_service',array('department'=>$dd['id']))->num_rows(),
+                    'new' => $this->db->get_where('report_dashboard_service',array('department'=>$dd['id'],'status'=>'2'))->num_rows(),
+                    'started' => $this->db->get_where('report_dashboard_service',array('department'=>$dd['id'],'status'=>'1'))->num_rows(),
+                    'completed' => $this->db->get_where('report_dashboard_service',array('department'=>$dd['id'],'status'=>'0'))->num_rows(),
+                    'less_than_30' => $this->late_status_calculation_report_dashboard_service('department',$dd['id'],'less_than_30'),
+                    'less_than_60' => $this->late_status_calculation_report_dashboard_service('department',$dd['id'],'less_than_60'),
+                    'more_than_60' => $this->late_status_calculation_report_dashboard_service('department',$dd['id'],'more_than_60'),           
+                    'sos' => $this->db->get_where('report_dashboard_service',array('department'=>$dd['id'],'sos !='=>''))->num_rows()           
+                ];
+                array_push($department_details,$data);
+            }
+            return $department_details;
+        } elseif ($data['category'] == 'service_category') {
+            $data_category = $this->system->get_all_category_list();
+            $category_details = [];
+            
+            foreach ($data_category as $dc) {    
+                $data = [
+                    'category_name' => $dc['name'],
+                    'totals' => $this->db->get_where('report_dashboard_service',array('category'=>$dc['id']))->num_rows(),
+                    'new' => $this->db->get_where('report_dashboard_service',array('category'=>$dc['id'],'status'=>'2'))->num_rows(),
+                    'started' => $this->db->get_where('report_dashboard_service',array('category'=>$dc['id'],'status'=>'1'))->num_rows(),
+                    'completed' => $this->db->get_where('report_dashboard_service',array('category'=>$dc['id'],'status'=>'0'))->num_rows(),
+                    'less_than_30' => $this->late_status_calculation_report_dashboard_service('service_category',$dc['id'],'less_than_30'),
+                    'less_than_60' => $this->late_status_calculation_report_dashboard_service('service_category',$dc['id'],'less_than_60'),
+                    'more_than_60' => $this->late_status_calculation_report_dashboard_service('service_category',$dc['id'],'more_than_60'),           
+                    'sos' => $this->db->get_where('report_dashboard_service',array('category'=>$dc['id'],'sos !='=>''))->num_rows()           
+                ];
+                array_push($category_details,$data);
+            }
+            return $category_details;
+        }   
+    }
+
+    public function late_status_calculation_report_dashboard_service($category,$id,$late_span) {
+        if ($category == 'franchise') {
+            if ($late_span == 'less_than_30') {
+                $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 30 AND `date_complete_actual` > `date_completed`";
+            } elseif ($late_span == 'less_than_60') {
+                $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 60 AND `date_complete_actual` > `date_completed`";
+            } elseif ($late_span == 'more_than_60') {
+                $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) > 60 AND `date_complete_actual` > `date_completed`";
+            }
+            
+            return $this->db->query($sql)->num_rows();
+            
+            // $this->db->where('office',$ofc_id);
+            // $this->db->where('date_completed !=','0000-00-00 00:00:00');            
+            // $this->db->where(`date_complete_actual >`, `date_completed`);
+
+            // if ($late_span == 'less_than_30') {
+            //     $this->db->where('DATEDIFF(`date_complete_actual`,`date_completed`) <', 30);
+            // } elseif ($late_span == 'less_than_60') {
+            //     $this->db->where('DATEDIFF(`date_complete_actual`,`date_completed`) <', 60);
+            // } elseif ($late_span == 'more_than_60') {
+            //     $this->db->where('DATEDIFF(`date_complete_actual`,`date_completed`) >', 60);
+            // }
+            // $this->db->get('report_dashboard_service')->num_rows();
+            // return $this->db->last_query();
+        } elseif ($category == 'department') {
+            if ($late_span == 'less_than_30') {
+                $sql = "SELECT * FROM `report_dashboard_service` WHERE `department` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 30 AND `date_complete_actual` > `date_completed`";
+            } elseif ($late_span == 'less_than_60') {
+                $sql = "SELECT * FROM `report_dashboard_service` WHERE `department` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 60 AND `date_complete_actual` > `date_completed`";
+            } elseif ($late_span == 'more_than_60') {
+                $sql = "SELECT * FROM `report_dashboard_service` WHERE `department` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) > 60 AND `date_complete_actual` > `date_completed`";
+            }
+            
+            return $this->db->query($sql)->num_rows();
+        } elseif ($category == 'service_category') {
+            if ($late_span == 'less_than_30') {
+                $sql = "SELECT * FROM `report_dashboard_service` WHERE `category` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 30 AND `date_complete_actual` > `date_completed`";
+            } elseif ($late_span == 'less_than_60') {
+                $sql = "SELECT * FROM `report_dashboard_service` WHERE `category` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 60 AND `date_complete_actual` > `date_completed`";
+            } elseif ($late_span == 'more_than_60') {
+                $sql = "SELECT * FROM `report_dashboard_service` WHERE `category` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) > 60 AND `date_complete_actual` > `date_completed`";
+            }
+            
+            return $this->db->query($sql)->num_rows();
+        }   
     }
 }

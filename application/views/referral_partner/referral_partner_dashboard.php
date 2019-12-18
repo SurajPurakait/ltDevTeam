@@ -7,7 +7,7 @@
                         <div class="col-md-6">
                             <h1><br>Dashboard Partners</h1>
                             <?php $staffinfo = staff_info(); ?>
-                            <button title="Create Referral Partner" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" onclick="window.location.href = '<?= base_url("/referral_partner/referral_partners/add_lead/").$staffinfo['office_manager']; ?>';"><i class="fa fa-plus"></i> Refer a Lead to : <?php echo get_assigned_by_staff_name($staffinfo['office_manager']); ?></button>
+                            <button title="Create Referral Partner" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" onclick="window.location.href = '<?= base_url("/referral_partner/referral_partners/add_lead/").$staffinfo['office_manager']; ?>';"><i class="fa fa-plus"></i> Refer a Lead to: <?php echo get_assigned_by_staff_name($staffinfo['office_manager']); ?></button>
                         </div>
                         <div class="col-md-6">
                             <div class="bg-aqua table-responsive">
@@ -15,10 +15,10 @@
                                     <thead>
                                         <tr>
                                             <td></td>
-                                            <th>New</th>                                            
-                                            <th>Active</th>
-                                            <th>Inactive</th>
-                                            <th>Completed</th>
+                                            <th class="text-center">New</th>                                            
+                                            <th class="text-center">Active</th>
+                                            <th class="text-center">Inactive</th>
+                                            <th class="text-center">Completed</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -26,7 +26,7 @@
                                             <th>Referred By Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-leads-0">
-                                                    <span class="label label-warning" id="requested_by_me_new" onclick="load_referral_partners_dashboard(1, 0);"><?php echo load_partner_count(1, 0); ?></span>
+                                                    <span class="label label-success" id="requested_by_me_new" onclick="load_referral_partners_dashboard(1, 0);"><?php echo load_partner_count(1, 0); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
@@ -36,12 +36,12 @@
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-2">
-                                                    <span class="label label-warning" id="requested_by_me_inactive" onclick="load_referral_partners_dashboard(1, 2);"><?php echo load_partner_count(1, 2); ?></span>
+                                                    <span class="label label-danger" id="requested_by_me_inactive" onclick="load_referral_partners_dashboard(1, 2);"><?php echo load_partner_count(1, 2); ?></span>
                                                 </a>
                                             </td>                                            
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-1">
-                                                    <span class="label label-warning" id="requested_by_me_completed" onclick="load_referral_partners_dashboard(1, 1);"><?php echo load_partner_count(1, 1); ?></span>
+                                                    <span class="label label-primary" id="requested_by_me_completed" onclick="load_referral_partners_dashboard(1, 1);"><?php echo load_partner_count(1, 1); ?></span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -52,7 +52,7 @@
                                             <th>Referred To Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byothers-0">
-                                                    <span class="label label-warning" id="requested_by_others_new" onclick="load_referral_partners_dashboard(2, 0);"><?php echo load_partner_count(2, 0); ?></span>
+                                                    <span class="label label-success" id="requested_by_others_new" onclick="load_referral_partners_dashboard(2, 0);"><?php echo load_partner_count(2, 0); ?></span>
                                                 </a>
                                             </td>
                                             <td class="text-center">
@@ -62,13 +62,13 @@
                                             </td>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byothers-2">
-                                                    <span class="label label-warning" id="requested_by_others_inactive" onclick="load_referral_partners_dashboard(2, 2);"><?php echo load_partner_count(2, 2); ?></span>
+                                                    <span class="label label-danger" id="requested_by_others_inactive" onclick="load_referral_partners_dashboard(2, 2);"><?php echo load_partner_count(2, 2); ?></span>
                                                 </a>
                                             </td>
                                             
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byothers-1">
-                                                    <span class="label label-warning" id="requested_by_others_completed" onclick="load_referral_partners_dashboard(2, 1);"><?php echo load_partner_count(2, 1); ?></span>
+                                                    <span class="label label-primary" id="requested_by_others_completed" onclick="load_referral_partners_dashboard(2, 1);"><?php echo load_partner_count(2, 1); ?></span>
                                                 </a>
                                             </td>
                                         </tr>

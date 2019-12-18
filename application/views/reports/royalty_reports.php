@@ -2,15 +2,23 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins form-inline">
-                <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" multiple>
-                	<?php
-                		load_ddl_option("users_office_list", "","");
-                	?>
-                </select> &nbsp;
-                <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">
-               	<button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>
-                <div class="ibox-content ajaxdiv-reports m-t-25">
-                    <div class="">
+                <div class="royalty_header m-0" id="royaltyHeader">
+                    <div class="row">
+                        <div class="col-md-6" id="ofc-multiselect-div">
+                            <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" multiple>
+                                <?php
+                                    load_ddl_option("staff_office_list", "","");
+                                ?>
+                            </select>                        
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">
+                            <button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>                      </div>
+                    </div>
+                    <div id="total" class="m-t-25"></div>
+                </div>
+                <div class="ibox-content ajaxdiv-reports m-t-0">
+                    <div class="" id="dt-report-tab-wrap">
                         <table id="reports-tab" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -18,23 +26,23 @@
                                     <th style="white-space: nowrap;">Client Id</th>
                                     <th style="white-space: nowrap;">Invoice Id</th>
                                     <th style="white-space: nowrap;">Service Id</th>
+                                    <th style="white-space: nowrap;">Office Id</th>
                                     <th style="white-space: nowrap;">Service Name</th>
                                     <th style="white-space: nowrap;">Retail Price</th>
-                                    <th style="white-space: nowrap;">Override Price</th>
+                                    <th style="white-space: nowrap;">Price</th>
                                     <th style="white-space: nowrap;">Cost</th>
-                                    <th style="white-space: nowrap;">Payment Status</th>
+                                    <th style="white-space: nowrap;">Status</th>
                                     <th style="white-space: nowrap;">Collected</th>
-                                    <th style="white-space: nowrap;">Payment Type</th>
-                                    <th style="white-space: nowrap;">Authorization Id</th>
+                                    <th style="white-space: nowrap;">Payment</th>
+                                    <th style="white-space: nowrap;">Approval Id</th>
                                     <th style="white-space: nowrap;">Reference</th>
                                     <th style="white-space: nowrap;">Total Net</th>
-                                    <th style="white-space: nowrap;">Office Fee %</th>
-                                    <th style="white-space: nowrap;">Fee With Cost</th>
-                                    <th style="white-space: nowrap;">Fee Without Cost</th>
+                                    <th style="white-space: nowrap;">Office Fee</th>
+                                    <th style="white-space: nowrap;">Fee W/ Cost</th>
+                                    <th style="white-space: nowrap;">Fee W/O Cost</th>
                                 </tr>
                             </thead>
-                        </table><br>
-                        <div id="total"></div>    
+                        </table>                   
                     </div>
                 </div>
             </div>
@@ -42,6 +50,20 @@
     </div>
 </div>
 <script type="text/javascript">
+
+    window.onscroll = function() {royaltyFunction()};
+
+    var royalty_header = document.getElementById("royaltyHeader");
+    var sticky = royalty_header.offsetTop;
+
+    function royaltyFunction() {
+      if (window.pageYOffset > sticky) {
+        royalty_header.classList.add("sticky_report");
+      } else {
+        royalty_header.classList.remove("sticky_report");
+      }
+    }
+
 	loadRoyaltyReportsData();
 		$(function () {
 			$(".chosen-select").chosen();

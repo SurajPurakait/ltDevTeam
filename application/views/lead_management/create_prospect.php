@@ -1,4 +1,4 @@
-<div class="wrapper wrapper-content">
+ <div class="wrapper wrapper-content">
     <div class="row">
         <div class="col-lg-12">
             <form class="form-horizontal" method="post" id="form_add_new_prospect">
@@ -143,9 +143,11 @@
                         <label class="col-lg-2 control-label">Language<span class="text-danger">*</span></label>
                         <div class="col-lg-10">
                             <select required class="form-control" id="language" name="language">
-                                <?php foreach ($languages as $value): ?>
+                                <?php foreach ($languages as $value): 
+                                    if ($value['id'] != 4 && $value['id'] != 5) {
+                                        ?>
                                     <option value="<?= $value["id"]; ?>"><?= $value["language"]; ?></option>
-                                <?php endforeach; ?>
+                                <?php } endforeach; ?>
                             </select>
                             <div class="errorMessage text-danger"></div>
                         </div>

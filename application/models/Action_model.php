@@ -1208,6 +1208,7 @@ class Action_model extends CI_Model {
             } else {
                 $this->db->where("type", 1);
             }
+            $this->db->where("status", 1);
             return $this->db->get("office")->result_array();
         } else {
             return $this->administration->get_office_by_staff_id(sess("user_id"));
@@ -2296,6 +2297,7 @@ class Action_model extends CI_Model {
     }
 
     public function get_action_filter_element_value($element_key, $office) {
+        $staff_info = staff_info();
         $tracking_array = [
 //                ["id" => 4, "name" => "All Tracking"],
                 ["id" => 0, "name" => "New"],
@@ -2354,13 +2356,26 @@ class Action_model extends CI_Model {
                 }
                 break;
             case 13: {
-                    return [
+
+                    if($staff_info['type'] == 1){
+                        return [
                             ["id" => 'byme', "name" => "By ME"],
                             ["id" => 'tome', "name" => "To ME"],
-                            ["id" => 'byother', "name" => "By Others"],
-                            ["id" => 'toother', "name" => "To Others"],
+                            ["id" => 'byother', "name" => "By My Team"],
+                            ["id" => 'mytask', "name" => "My Tasks"]
+                    ]; 
+                }else{
+                     return [
+                            ["id" => 'byme', "name" => "By ME"],
+                            ["id" => 'tome', "name" => "To ME"],
+                            // ["id" => 'byother', "name" => "By Others"],
+                            ["id" => 'byother', "name" => "By My Team"],
+                            // ["id" => 'toother', "name" => "To Others"],
+                            ["id" => 'toother', "name" => "To My Team"],
                             ["id" => 'mytask', "name" => "My Tasks"]
                     ];
+                }
+                   
                 }
                 break;
             default: {

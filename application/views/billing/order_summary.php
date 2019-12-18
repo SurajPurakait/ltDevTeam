@@ -57,6 +57,7 @@
                                                             <br>
                                                             Email: <?= $contact["email1"]; ?>
                                                             <br>
+                                                            Address: 
                                                             <?= $contact["address1"]; ?>, <?= $contact["city"]; ?>,
                                                             <?= $contact["state_name"]; ?>,
                                                             <!-- ZIP:  -->
@@ -222,7 +223,17 @@
                         endif;
                     endforeach;
                 endif;
+                $invoice_recurrence = get_invoice_recurring_details($invoice_id);
+                if(!empty($invoice_recurrence)){
                 ?>
+                                        <tr class="bg-light-green">
+                                            <td><h3>Invoice Recurrence</h3></td>
+                                            <td><b>Pattern:</b> <?= $invoice_recurrence->pattern  ?><br>
+                                                <b>Remaining Generation: </b><?= $invoice_recurrence->total_generation_time  ?><br>
+                                                <b>Next Occurance Date: </b><?= $invoice_recurrence->next_occurance_date ?>
+                                            </td>
+                                        </tr>
+                <?php } ?>
             </tbody>
         </table>
         <div clas="text-center">

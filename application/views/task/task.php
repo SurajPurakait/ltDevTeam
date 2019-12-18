@@ -63,7 +63,7 @@ $role = $user_info['role'];
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <h4 class="m-t-5 m-r-5"><span class="text-success" style="display: none;" id="clear_filter">By Me - Started &nbsp; </span><a href="javascript:void(0);" onclick="loadTaskDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1);" class="btn btn-ghost" id="btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></h4>
+                                            <h4 class="m-t-5 m-r-5"><span class="text-success" style="display: none;" id="clear_filter">By Me - Started &nbsp; </span><a href="javascript:void(0);" onclick="loadTaskDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1);" class="btn btn-ghost" id="task_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a></h4>
                                         </div>
                                     </div>
                                 </form>
@@ -466,7 +466,12 @@ $role = $user_info['role'];
                                 <label for="rad2"><strong>Resolved</strong></label>
                             </div>
                         </div>
-                        
+                        <div class="funkyradio">
+                            <div class="funkyradio-success">
+                                <input type="radio" name="radio" id="rad4" value="4"/>
+                                <label for="rad4"><strong>Canceled</strong></label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <input type="hidden" id="prosubid" value="">
@@ -514,27 +519,39 @@ $role = $user_info['role'];
     });
     function change_project_status_inner(id, status, section_id) {
         openModal('changeStatusinner');
-        var txt = 'Change Status of SubOrder id #' + id;
+        var txt = 'Tracking Task #' + id;
         $("#changeStatusinner .modal-title").html(txt);
         if (status == 0) {
             $("#changeStatusinner #rad0").prop('checked', true);
             $("#changeStatusinner #rad1").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
         } else if (status == 1) {
             $("#changeStatusinner #rad1").prop('checked', true);
             $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
         } else if (status == 2) {
             $("#changeStatusinner #rad2").prop('checked', true);
             $("#changeStatusinner #rad1").prop('checked', false);
             $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
             $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
-        } else if (status == 3) {
+            $("#changeStatusinner #rad4").prop('checked', false);
+        }
+        else if (status == 3) {
             $("#changeStatusinner #rad3").prop('checked', true);
+            $("#changeStatusinner #rad4").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+        }
+        else if (status == 4) {
+            $("#changeStatusinner #rad4").prop('checked', true);
+            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad2").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled',true);
             $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
         }
         $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {

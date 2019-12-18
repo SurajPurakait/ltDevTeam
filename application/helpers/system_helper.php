@@ -296,6 +296,18 @@ if (!function_exists('staff_office_ofc_id')) {
 
 }
 
+if (!function_exists('load_ddl_option_for_service_list')) {
+        function load_ddl_option_for_service_list($selected = "", $service_id = null, $invoice_type) {
+        $ci = &get_instance();
+        $ci->load->model('billing_model');
+        $item_list = $ci->billing_model->get_service_list_by_category_id_for_billing($service_id, $invoice_type);
+        foreach ($item_list as $item) {
+        $select = ($selected != "" && $item["id"] == $selected) ? "selected = 'selected'" : "";
+        echo "<option $select value='{$item['id']}'>{$item['description']}</option>";
+        }       
+    }
+}
+
 if (!function_exists('load_ddl_option')) {
 
     function load_ddl_option($action, $selected = "", $service_id = null) {
@@ -350,7 +362,7 @@ if (!function_exists('load_ddl_option')) {
                     echo "<option $select value='" . $item['id'] . "'>" . $item['name'] . "</option>";
                 }
                 break;
-            case "users_office_list":
+            case "users_office_list": // all active offices 
                 $item_list = $ci->system->get_staff_office_list(($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : ""); // This values are deleted required to client requirment ($staff_info['type'] == 3 || $service_id == 'staff_office') ? sess('user_id') : ""
                 foreach ($item_list as $item) {
                     $select = ($selected != "" && $item['id'] == $selected) ? "selected = 'selected'" : "";
@@ -3398,10 +3410,10 @@ if(!function_exists('getUnreadTaskFileCount')){
     }
 }
 if(!function_exists('getTemplateCategoryProjectList')){
-    function getTemplateCategoryProjectList($template_id,$template_cat_id='',$month=''){
+    function getTemplateCategoryProjectList($template_id,$template_cat_id='',$month='',$year){
         $ci=&get_instance();
         $ci->load->model("project_template_model");
-        return $ci->project_template_model->get_project_list('','',$template_id,'','','','','','','','','',$template_cat_id,$month);
+        return $ci->project_template_model->get_project_list('','',$template_id,'','','','','','','','','',$template_cat_id,$month,$year);
     }
 }
 if(!function_exists('getProjectListAccordingToMonth')){
@@ -3481,6 +3493,57 @@ if (!function_exists('getProjectClientPracticeId')) {
         $ci = &get_instance();
         $ci->load->model('Project_Template_model');
         return $ci->Project_Template_model->getProjectClientPracticeId($client_id, $client_type);
+    }
+
+}
+if(!function_exists('get_invoice_recurring_details')){
+    function get_invoice_recurring_details($invoice_id){
+        $ci=&get_instance();
+        $ci->load->model('billing_model');
+        return $ci->billing_model->getInvoiceRecurringDetails($invoice_id);
+    }
+}
+if(!function_exists('get_template_category_name')){
+    function get_template_category_name($template_cat_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getTemplateCategoryName($template_cat_id);
+    }
+}
+if(!function_exists('get_project_office_client')){
+    function get_project_office_client($project_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getProjectOfficeClient($project_id);
+    }
+}
+if(!function_exists('get_project_office_name')){
+    function get_project_office_name($office_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getProjectOfficeName($office_id);
+    }
+}
+if(!function_exists('get_added_user_department')){
+    function get_added_user_department($user_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getAddedUserDepartment($user_id);
+    }
+}
+if(!function_exists('get_added_user_office')){
+    function get_added_user_office($user_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getAddedUserOffice($user_id);
+    }
+}
+if (!function_exists('get_assigned_office_staff_project_task')) {
+
+    function get_assigned_office_staff_project_task($task_id,$project_id, $responsible_staff) {
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getAssignedOfficeStaffProjectTask($task_id,$project_id, $responsible_staff);
     }
 
 }

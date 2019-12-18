@@ -186,9 +186,10 @@ Class System extends CI_Model {
         if ($staff_id == "") {
             $return = $this->db->get_where('office', ['status' => '1'])->result_array();
         } else {
-            $this->db->select('ofc.id, ofc.address, ofc.city');
+            $this->db->select('ofc.id, ofc.address, ofc.city, ofc.zip ,st.state_code');
             $this->db->from('office_staff os');
             $this->db->join('office ofc', 'os.office_id = ofc.id');
+            $this->db->join('states st', 'st.id = ofc.state');
             $this->db->where(['os.staff_id' => $staff_id, 'ofc.status' => '1']);
             $return = $this->db->get()->row_array();
         }
@@ -361,7 +362,10 @@ Class System extends CI_Model {
     public function get_all_dept() {
         return $this->db->get('department')->result_array();
     }
-
+    public function get_all_corporate_dept() {
+        $this->db->where('type',3);
+        return $this->db->get('department')->result_array();
+    }
     public function get_staff_list() {
         $staff_info = staff_info();
         if ($staff_info['type'] == 3) {
@@ -522,8 +526,11 @@ Class System extends CI_Model {
             $and = " and (sns.staff_id='" . sess('user_id') . "' or sn.added_by_user='" . sess('user_id') . "')";
         }
 //        $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.reference_id='" . $ref_id . "'and sns.staff_id='".sess('user_id')."' and sn.service_id='" . $service_id . "'$and group by sn.msg order by sn.id asc";
-        $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.reference_id='" . $ref_id . "' group by sn.id order by sn.id asc";
-
+        if($reference=='projects'){
+            $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.service_id='" . $service_id . "' group by sn.id order by sn.id asc";
+        }else{
+            $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.reference_id='" . $ref_id . "' group by sn.id order by sn.id asc";
+        }
 //        echo $query;die;
         $res = $this->db->query($query)->result_array();
 
@@ -1433,5 +1440,7 @@ Class System extends CI_Model {
         $c = preg_replace("/[^a-zA-Z0-9]/", "", $company_name);
         return strtoupper(substr($c, 0, 11));
     }
-
+    public function get_all_category_list() {
+        return $this->db->get('category')->result_array();
+    }
 }

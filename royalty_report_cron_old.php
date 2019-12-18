@@ -1,8 +1,8 @@
 <?php
     $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $db = 'leafnet';
+    $username = "leafnet_db_user";
+    $password = "leafnet@123";
+    $db = 'leafnet_staging';
 
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
@@ -18,7 +18,6 @@
         'inv.new_existing as new_existing',
         'inv.created_time as created_time',
         'srv.price_charged as override_price',
-        'srv.status as service_status',
         'srv.services_id as service_id',
         'inv.existing_reference_id as existing_reference_id',
         'inv.type as invoice_type',
@@ -58,12 +57,10 @@
     // echo $query;exit; 
     mysqli_query($conn, 'SET SQL_BIG_SELECTS=1');
     $reports_data = mysqli_query($conn,$query); 
+    mysqli_query($conn,'TRUNCATE royalty_report');
     if (!empty(mysqli_fetch_assoc($reports_data))) {
         while ($rpd = mysqli_fetch_assoc($reports_data)) { 
             for($i=1; $i <= $rpd['services']; $i++) {
-                // echo "<pre>";
-                // print_r($rpd);
-                // exit;
                 $services_id = explode(',',$rpd['all_services'])[$i];
                 $services_query = "select s.id, s.category_id, s.fixed_cost as cost, c.name as category_name, c.description as category_description, s.description, s.ideas, s.tutorials, s.dept AS service_department, s.retail_price from services s inner join category c on c.id = s.category_id where s.id ='".$services_id."'";
                 $services_query_run = mysqli_query($conn,$services_query);
@@ -115,91 +112,17 @@
                 $office_id_name = $rpd['officeid'];
                 $created_by = $rpd['created_by'];
 
-                $comparison_array = array(
-                    'date' => $date_val,
-                    'client_id' => $client_id,
-                    'invoice_id' => $invoice_id,
-                    'service_id' => $services_ids,
-                    'service_name' => $service_name,
-                    'retail_price' => $retail_price,
-                    'override_price' => $override_price,
-                    'cost' => $service_cost,
-                    'payment_status' => $payment_status,
-                    'collected' => $collected,
-                    'payment_type' => $payment_type,
-                    'authorization_id' => $authorization_id,
-                    'reference' => $reference,
-                    'total_net' => $total_net,
-                    'office_fee' => $office_fees,
-                    'fee_with_cost' => $fee_with_cost,
-                    'fee_without_cost' => $fee_without_cost,
-                    'office_id' => $office_id,
-                    'office_id_name' => $office_id_name,
-                    'created_by' => $created_by
-                );
-                
-                if ($rpd['service_status'] != 0 && $rpd['service_status'] != 7) {
-                    // fetching data from royalty report table
-                    $royalty_sql = "SELECT * FROM `royalty_report`";
-                    $royalty_query_run = mysqli_query($conn,$royalty_sql);
-                    while ($rqr = mysqli_fetch_assoc($royalty_query_run)) {
-                        if ($invoice_id == $rqr['invoice_id']) {
-                            if ($comparison_array == $rqr) {
-                                echo "Hello";        
-                            } else {
-                                $update_sql = "UPDATE `royalty_report` SET ";
-                                if ($date_val != $rqr['date']) {
-                                    $update_sql .= "`date`='$date_val', ";
-                                } elseif ($client_id != $rqr['client_id']) {
-                                    $update_sql .= "`client_id`='$client_id', ";
-                                } elseif ($service_name != $rqr['service_name']) {
-                                    $update_sql .= "`service_name`='$service_name', ";
-                                } elseif ($retail_price != $rqr['retail_price']) {
-                                    $update_sql .= "`retail_price`='$retail_price', ";
-                                } elseif ($override_price != $rqr['override_price']) {
-                                    $update_sql .= "`override_price` = '$override_price', ";
-                                } elseif ($payment_status != $rqr['payment_status']) {
-                                    $update_sql .= "`payment_status`= '$payment_status', ";
-                                } elseif ($collected != $rqr['collected']) {
-                                    $update_sql .= "`collected`='$collected', "; 
-                                } elseif ($payment_type != $rqr['payment_type']) {
-                                    $update_sql .= "`payment_type`='$payment_type', ";
-                                } elseif ($authorization_id != $rqr['authorization_id']) {
-                                    $update_sql .= "`authorization_id`='$authorization_id', ";
-                                } elseif ($reference != $rqr['reference']) {
-                                    $update_sql .= "`reference`='$reference', ";
-                                } elseif ($total_net != $rqr['total_net']) {
-                                    $update_sql .= "`total_net`='$total_net', ";
-                                } elseif ($total_net != $positions['v']) {
-                                    $update_sql .= `office_fee`=
-                                } elseif ($office_patlaz_feesa == '') {
-                                    $update_sql .= `fee_with_cost`= 
-                                } elseif ($office_patlaz_feesa == '') {
-                                    $update_sql .= `fee_without_cost`=
-                                } elseif ($office_patlaz_feesa == '') {
-                                    $update_sql .= `office_id`=
-                                } elseif($office_patlaz_feesa == '') {
-                                    $update_sql .= `office_id_name`=
-                                } else {
-                                    $update_sql .= `created_by`=
-                                }
-                                $update_sql .= "WHERE invoice_id = '".$invoice_id."'";
-                            }    
-                        } else {                            
-                            $sql_query = "INSERT INTO `royalty_report`(`date`, `client_id`, `invoice_id`, `service_id`, `service_name`, `retail_price`, `override_price`, `cost`, `payment_status`, `collected`, `payment_type`, `authorization_id`, `reference`, `total_net`, `office_fee`, `fee_with_cost`, `fee_without_cost`, `office_id`,`office_id_name` ,`created_by`) VALUES (
-                            '$date_val', '$practice_id','$invoice_id',
-                            '$services_ids','$service_details','$retail_price',
-                            '$override_price','$service_cost','$payment_status',
-                            '$collected','$payment_type','$authorization_id',
-                            '$reference','$total_net','$office_fees',
-                            '$fee_with_cost','$fee_without_cost','$office_id','$office_id_name',
-                            '$created_by')";
-                            mysqli_query($conn,$sql_query)or die('insert error');
-                        }
-                    }    
-                }
+                $sql_query = "INSERT INTO `royalty_report`(`date`, `client_id`, `invoice_id`, `service_id`, `service_name`, `retail_price`, `override_price`, `cost`, `payment_status`, `collected`, `payment_type`, `authorization_id`, `reference`, `total_net`, `office_fee`, `fee_with_cost`, `fee_without_cost`, `office_id`,`office_id_name` ,`created_by`) VALUES (
+                '$date_val', '$practice_id','$invoice_id',
+                '$services_ids','$service_details','$retail_price',
+                '$override_price','$service_cost','$payment_status',
+                '$collected','$payment_type','$authorization_id',
+                '$reference','$total_net','$office_fees',
+                '$fee_with_cost','$fee_without_cost','$office_id','$office_id_name',
+                '$created_by')";
+                mysqli_query($conn,$sql_query)or die('insert error');
             }
-            // echo $sql_query;
+            echo $sql_query;
             echo "<hr>";
         } 
     echo "Success";exit;

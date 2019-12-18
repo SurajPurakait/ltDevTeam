@@ -16,6 +16,7 @@
                 </tr>
                 <?php
                 foreach ($task_list as $key=> $task) {
+                    $taskId=$key+1;
                     $task_staff = ProjectTaskStaffList($task->id);
                     $stf = array_column($task_staff, 'staff_id');
                     $new_staffs = implode(',', $stf);
@@ -34,6 +35,10 @@
                     }elseif ($status == 3) {
                         $tracking = 'Ready';
                         $trk_class = 'label-secondary';
+                    }
+                    elseif ($status == 4) {
+                        $tracking = 'Canceled';
+                        $trk_class = 'label-danger';
                     }
 
                     $pattern_details = get_project_pattern($task->project_id);
@@ -64,36 +69,32 @@
                     } else {
                         $targetCompleteDate = date("Y-m-d", strtotime(("+$complete_date"), $created_at));
                     }
+                    if (strlen($task->description) > 20) {
+                        $description = substr($task->description, 0, 20) . '...';
+                        $data_description=$task->description;
+                    } else {
+                        $description = $task->description;
+                        $data_description=$task->description;
+                    }
                     ?>
                     <tr>
-                        <td title="Order" class="text-center"><?= $task->task_order; ?></td>
-                        <td title="Description" class="text-center"><?= $task->description; ?></td>
+                        <td title="Task Id" class="text-center"><?= $task->project_id.'-'.$taskId; ?></td>
+                        <td title="Description" class="text-center"><a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $data_description ?>" data-trigger="hover" title="" data-original-title=""><?= $description ?></a></td>
                         <!--<td title="Order" class="text-center"><?//= date('Y-m-d', strtotime($task->created_at)); ?></td>-->
-        <!--                                                                <td title="Target Start Date" class="text-center"><?= $task->target_start_date; ?></td>
-                        <td title="Target Complete Date" class="text-center"><?= $task->target_complete_date; ?></td>-->
+        <!--                                                                <td title="Target Start Date" class="text-center"><? $task->target_start_date; ?></td>
+                        <td title="Target Complete Date" class="text-center"><? $task->target_complete_date; ?></td>-->
                         <!--<td title="assign to"></td>-->
-                        <?php if ($task->department_id == 2) { ?>
+                        <?php if ($task->department_id == 2) {?>
                             <td title="Assign To" class="text-center">
                                 <?php
-                                $resp_value = get_assigned_office_staff_project_main($task->project_id, '');
-                                if (is_numeric($resp_value['name'])) {
-                                    $resp_name = get_assigned_by_staff_name($resp_value['name']);
-                                } else {
-                                    $resp_name = $resp_value['name'];
-                                }
-
-                                if ($resp_value['office'] != 0) {
-                                    $office_name = get_office_id($resp_value['office']);
-                                } else {
-                                    $office_name = 'Admin';
-                                }
-                                echo $resp_name . "<br><span class='text-info'>" . $office_name . " </span></td>";
+                                $resp_value = get_assigned_office_staff_project_task($task->id,$task->project_id, $task->responsible_task_staff);
+                                    echo "<span class='text-success'>". $resp_value['staff_name'] ."</span><br>" . $resp_value['office'] . "</td>";
                                 ?> 
                             </td> <?php } else { ?> 
                             <td title="Assign To" class="text-center"><span class="text-success"><?php echo get_assigned_project_task_staff($task->id); ?></span><br><?php echo get_assigned_project_task_department($task->id); ?></td>                                                     
                         <?php } ?>
-                        <td title="Start Date" class="text-center">T: <?= $targetSstartDate ?></td>
-                        <td title="Complete Date" class="text-center">T: <?= $targetCompleteDate ?></td>
+                        <td title="Start Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetSstartDate)) ?></td>
+                        <td title="Complete Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetCompleteDate)) ?></td>
                         <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task->id; ?>,<?= $status; ?>, <?= $task->id ?>);'><span id="trackinner-<?= $task->id ?>" projectid="<?= $id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                         <td title="SOS" style="text-align: center;">
                             <span>
@@ -142,9 +143,9 @@
                                 if ($task->input_form_status == 'n') {
                                     $input_status = 'incomplete';
                                     ?>
-                                    <span class="label input-form-incomplete">Incomplete <a href="<?= base_url() . 'task/task_input_form/' . $task->id.'/'.$task->bookkeeping_input_type; ?>" class="text-white p-5" target="_blank"><i class="fa fa-plus" aria-hidden="true"></i> </a></span>
+                            <a href="<?= base_url() . 'task/task_input_form/' . $task->id.'/'.$task->bookkeeping_input_type; ?>" class="text-white label input-form-incomplete p-t-10 p-l-10 p-b-10" target="_blank">Incomplete <span class="p-10"><i class="fa fa-plus" aria-hidden="true"></i> </span></a>
                                 <?php } else { ?>
-                                    <span class="label input-form-complete">Completed <a href="<?= base_url() . 'task/task_input_form/' . $task->id.'/'.$task->bookkeeping_input_type; ?>" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
+                                     <a href="<?= base_url() . 'task/task_input_form/' . $task->id.'/'.$task->bookkeeping_input_type; ?>" class="text-white label input-form-complete p-t-10 p-l-10 p-b-10" target="_blank">Completed<span class="p-10"> <i class="fa fa-pencil" aria-hidden="true"></i> </span></a>
                                     <?php
                                 }
                             }
@@ -178,3 +179,8 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function(){
+  $('[data-toggle="popover"]').popover();   
+});
+</script>

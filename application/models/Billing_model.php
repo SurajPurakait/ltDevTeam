@@ -192,18 +192,32 @@ class Billing_model extends CI_Model {
         return $this->db->get_where('services', ['category_id' => $category_id])->result_array();
     }
 
+    public function get_service_list_by_category_id_for_billing($category_id, $invoice_type) {
+        if($invoice_type == 1){   
+            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '0' or client_type_assign = '2')")->result_array();
+        }else{         
+            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '1' or client_type_assign = '2')")->result_array();
+        }
+    }
+
     public function get_service_by_id($service_id) {
         return $this->db->get_where('services', ['id' => $service_id])->row_array();
     }
 
-    public function request_create_invoice($data) {
-//        print_r($data);
-//        exit;
+    public function request_create_invoice($data,$is_recurrence = "") {
+       // echo "<pre>";
+       // print_r($data);exit;
         $staff_info = staff_info();
         $this->db->trans_begin();
         if ($data['editval'] == '') { // Insert section
+            
             if ($data['invoice_type'] == 1) {        # Business Client Section
-                if ($data['type_of_client'] == 0) {
+
+                if($is_recurrence == 'y'){ // Recurring invoice for business client 
+
+                  foreach ($data['client_list'] as $key => $val) {
+
+                      if ($data['type_of_client'] == 0) {
                     $this->service_model->updateCompany($data);
                 } else {
                     if ($this->service_model->insertCompany($data)) {
@@ -216,15 +230,18 @@ class Billing_model extends CI_Model {
                         return false;
                     }
                 }
+                if($data['type_of_client']!=0){
+                    $val=$data['reference_id'];
+                }
                 $today = date('Y-m-d h:i:s');
-                $invoice_info_data['reference_id'] = $data['reference_id'];
-                $invoice_info_data['client_id'] = $data['reference_id'];
+                $invoice_info_data['reference_id'] = $val;
+                $invoice_info_data['client_id'] = $val;
                 if (isset($data['invoice_type'])) {
                     $invoice_info_data['type'] = $data['invoice_type'];
                 }
                 $invoice_info_data['new_existing'] = $data['type_of_client'];
                 if ($data['type_of_client'] == 0) {
-                    $invoice_info_data['existing_reference_id'] = $data['client_list'];
+                    $invoice_info_data['existing_reference_id'] = $val;
                 }
                 $invoice_info_data['start_month_year'] = $data['start_year'];
 //                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
@@ -234,80 +251,457 @@ class Billing_model extends CI_Model {
                     $invoice_info_data['is_order'] = 'y';
                     $invoice_info_data['status'] = 1;
                 }
+                unset($invoice_info_data[0]);
+               
                 $this->db->insert('invoice_info', $invoice_info_data);
+                // echo $this->db->last_query();exit;
                 $invoice_id = $this->db->insert_id();
-                // Create a new order for this request
+                // Create a new order for this request               
+                unset($data['client_list']);
+                $data['reference_id'] = $val;
+                $data['client_id'] = $val;
                 $this->insert_invoice_services($data, $invoice_id);
+                 // echo $this->db->last_query();exit;
                 $this->system->log("insert", "invoice", $invoice_id);
-            } else {        # Individual Section
-                if ($data['individual_list'] == "" && $data['type_of_individual'] == 1) {
-                    $individual_insert_data = array(
-                        'first_name' => $data['first_name'],
-                        'middle_name' => $data['middle_name'],
-                        'last_name' => $data['last_name'],
-                        'birth_date' => $this->system->invertDate($data['birth_date']),
-                        'ssn_itin' => $data['ssn_itin'],
-                        'type' => '',
-                        'language' => $data['language'],
-                        'country_residence' => $data['country_residence'],
-                        'country_citizenship' => $data['country_citizenship'],
-                        'status' => 1,
-                        "added_by_user" => sess('user_id')
-                    );
-                    $this->db->insert('individual', $individual_insert_data);
-                    $individual_id = $this->db->insert_id();
-                    $title_insert_data = array(
-                        'company_id' => $data['reference_id'],
-                        'individual_id' => $individual_id,
-                        'company_type' => $data['type'],
-                        'status' => 1,
-                        'existing_reference_id' => $data['reference_id']
-                    );
-                    $this->db->insert('title', $title_insert_data);
-                    $internal_data = $data;
-                    $internal_data['reference_id'] = $individual_id;
-                    $internal_data['practice_id'] = $data['internal_data']['practice_id'];
+               
 
-                    if (!$this->internal->saveInternalData($internal_data)) {
-                        return false;
+                    if (isset($data['recurrence']) && !empty($data['recurrence']) && $invoice_id != '') {
+    
+                    $ins_recurrence = [];
+                    $ins_recurrence['invoice_id'] = $invoice_id;
+                    foreach ($data['recurrence'] as $key => $val) {
+                        $ins_recurrence[$key] = $val;
                     }
-                    $this->service_model->change_contact_reference($data['reference_id'], $individual_id);
-                    $this->service_model->change_document_reference($data['reference_id'], $individual_id);
-                } else {
-                    $individual_details = $this->individual->individual_info_by_title_id($data['individual_list']);
-                    if (empty($individual_details)) {
-                        return false;
+
+                    if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
+                        $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                        $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    } elseif ($ins_recurrence['pattern'] == 'monthly') {
+                        $current_month = date('m');
+                        $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                        $ins_recurrence['actual_due_month'] = (int) $current_month + (int) $ins_recurrence['due_month'];
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    } elseif ($ins_recurrence['pattern'] == 'weekly') {
+                        $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
+                        $current_day = $day_array[$ins_recurrence['due_month']];
+                        $givenDate = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + $ins_recurrence['due_day'], date('Y')));
+                        $ins_recurrence['actual_due_day'] = date('d', strtotime('next ' . $current_day, strtotime($givenDate)));
+                        $ins_recurrence['actual_due_month'] = date('m', strtotime('next ' . $current_day, strtotime($givenDate)));
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    } elseif ($ins_recurrence['pattern'] == 'quarterly') {
+                        $current_month = date('m');
+                        if ($current_month == '1' || $current_month == '2' || $current_month == '3') {
+                            $next_quarter[1] = '4';
+                            $next_quarter[2] = '5';
+                            $next_quarter[3] = '6';
+                            $due_year = date('Y');
+                        } elseif ($current_month == '4' || $current_month == '5' || $current_month == '6') {
+                            $next_quarter[1] = '7';
+                            $next_quarter[2] = '8';
+                            $next_quarter[3] = '9';
+                            $due_year = date('Y');
+                        } elseif ($current_month == '7' || $current_month == '8' || $current_month == '9') {
+                            $next_quarter[1] = '10';
+                            $next_quarter[2] = '11';
+                            $next_quarter[3] = '12';
+                            $due_year = date('Y');
+                        } else {
+                            $next_quarter[1] = '1';
+                            $next_quarter[2] = '2';
+                            $next_quarter[3] = '3';
+                            $due_year = date('Y', strtotime('+1 year'));
+                        }
+                        $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                        $ins_recurrence['actual_due_month'] = $next_quarter[$ins_recurrence['due_month']];
+                        $ins_recurrence['actual_due_year'] = $due_year;
+                    } else {
+                        $ins_recurrence['actual_due_day'] = '0';
+                        $ins_recurrence['actual_due_month'] = '0';
+                        $ins_recurrence['actual_due_year'] = '0';
                     }
-                    $individual_id = $individual_details['individual_id'];
-                    $data['reference_id'] = $individual_details['existing_reference_id'];
+                    if ($ins_recurrence['start_date'] != '') {
+                        $ins_recurrence['start_date'] = date('Y-m-d', strtotime($ins_recurrence['start_date']));
+                    }
+                    if (isset($ins_recurrence['until_date']) && !empty($ins_recurrence['until_date'])) {
+                        $ins_recurrence['until_date'] = date('Y-m-d', strtotime($ins_recurrence['until_date']));
+                    } else {
+                        $ins_recurrence['until_date'] = null;
+                    }
+                    if (isset($ins_recurrence['duration_time']) && !empty($ins_recurrence['duration_time'])) {
+                        $ins_recurrence['duration_time'] = $ins_recurrence['duration_time'];
+                    } else {
+                        $ins_recurrence['duration_time'] = null;
+                    }
+                    if (isset($ins_recurrence['duration_type'])) {
+                        $ins_recurrence['duration_type'] = $ins_recurrence['duration_type'];
+                    } else {
+                        $ins_recurrence['duration_type'] = null;
+                    }
+                    if (isset($ins_recurrence['due_type']) && !empty($ins_recurrence['due_type'])) {
+                        $ins_recurrence['due_type'] = $ins_recurrence['due_type'];
+                    } else {
+                        $ins_recurrence['due_type'] = null;
+                    }
+                    $remain_generation=null;
+                    switch ($ins_recurrence['duration_type']) {
+                            case 0:
+                                $ins_recurrence['total_generation_time']=0;
+                                break;
+                            case 1:
+                                $ins_recurrence['total_generation_time']=($ins_recurrence['duration_time'])-1;
+                                $remain_generation=$ins_recurrence['total_generation_time'];
+                                break;
+                            case 2:
+                                $ins_recurrence['total_generation_time']=1;
+                                break;
+                            default:
+                                break;
+                        }
+                    if(($ins_recurrence['actual_due_month'])<=12){
+                        $ins_recurrence['next_occurance_date']=$ins_recurrence['actual_due_year'].'-'.$ins_recurrence['actual_due_month'].'-'.$ins_recurrence['actual_due_day'];
+                    }else{
+                        $next_month=$ins_recurrence['actual_due_month']-12;
+                        $ins_recurrence['next_occurance_date']=($ins_recurrence['actual_due_year']+1).'-'.$next_month.'-'.$ins_recurrence['actual_due_day'];
+                    }
+                    
+
+    //            if(isset($ins_recurrence['pattern']))
+    //            print_r($ins_recurrence);die;
+                    $this->db->insert('invoice_recurence', $ins_recurrence);
+                    $recurrence_id= $this->db->insert_id();
+    //                 echo $this->db->last_query();die;
+                    $this->db->where('id', $invoice_id);
+                    $this->db->update('invoice_info', ['is_recurrence' => 'y']);
+    //                echo $this->db->last_query();die;
+                    
                 }
-                $today = date('Y-m-d h:i:s');
-                $invoice_info_data['reference_id'] = $data['reference_id'];
-                if (isset($data['invoice_type'])) {
-                    $invoice_info_data['type'] = $data['invoice_type'];
+
+                if (isset($data['invoice_notes'])) {
+                    $this->notes->insert_note(1, $data['invoice_notes'], 'reference_id', $invoice_id, 'invoice');
                 }
-                $invoice_info_data['client_id'] = $individual_id;
-                $invoice_info_data['new_existing'] = $data['type_of_individual'];
-                $invoice_info_data['existing_reference_id'] = $data['reference_id'];
-//                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
-                $invoice_info_data['created_by'] = sess('user_id');
-                $invoice_info_data['created_time'] = $today;
-                if (isset($data['is_create_order']) && $data['is_create_order'] == 'yes') {
-                    $invoice_info_data['is_order'] = 'y';
-                    $invoice_info_data['status'] = 1;
+                $this->system->save_general_notification('invoice', $invoice_id, 'insert');
+              }  
+ 
+                  
+            }else{  // Billing invoice for business client
+                    if ($data['type_of_client'] == 0) {
+                        $this->service_model->updateCompany($data);
+                    } else {
+                        if ($this->service_model->insertCompany($data)) {
+
+                            $data['practice_id'] = $data['internal_data']['practice_id'];
+                            if (!$this->internal->saveInternalData($data)) {
+                                return false;
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                    $today = date('Y-m-d h:i:s');
+                    $invoice_info_data['reference_id'] = $data['reference_id'];
+                    $invoice_info_data['client_id'] = $data['reference_id'];
+                    if (isset($data['invoice_type'])) {
+                        $invoice_info_data['type'] = $data['invoice_type'];
+                    }
+                    $invoice_info_data['new_existing'] = $data['type_of_client'];
+                    if ($data['type_of_client'] == 0) {
+                        $invoice_info_data['existing_reference_id'] = $data['client_list'];
+                    }
+                    $invoice_info_data['start_month_year'] = $data['start_year'];
+    //                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
+                    $invoice_info_data['created_by'] = sess('user_id');
+                    $invoice_info_data['created_time'] = $today;
+                    if (isset($data['is_create_order']) && $data['is_create_order'] == 'yes') {
+                        $invoice_info_data['is_order'] = 'y';
+                        $invoice_info_data['status'] = 1;
+                    }
+                    $this->db->insert('invoice_info', $invoice_info_data);
+                    $invoice_id = $this->db->insert_id();
+                     // print_r($invoice_id);exit;
+                    // Create a new order for this request
+                    $this->insert_invoice_services($data, $invoice_id);
+                    $this->system->log("insert", "invoice", $invoice_id); 
+
+                    if (isset($data['invoice_notes'])) {
+                    $this->notes->insert_note(1, $data['invoice_notes'], 'reference_id', $invoice_id, 'invoice');
+                    }
+                    $this->system->save_general_notification('invoice', $invoice_id, 'insert');
+
                 }
-                $this->db->insert('invoice_info', $invoice_info_data);
-                $invoice_id = $this->db->insert_id();
-                // Create a new order for this request
-                $this->insert_invoice_services($data, $invoice_id);
-                $this->system->log("insert", "invoice", $invoice_id);
-            }
-            if (isset($data['invoice_notes'])) {
-                $this->notes->insert_note(1, $data['invoice_notes'], 'reference_id', $invoice_id, 'invoice');
-            }
-            $this->system->save_general_notification('invoice', $invoice_id, 'insert');
+                
+            } else {        # Individual Section
+
+                if($is_recurrence == 'y'){ // Recurring invoice for individual client
+
+                    foreach ($data['individual_list'] as $key => $val) {
+                        if ($val == "" && $data['type_of_individual'] == 1) {
+                            $individual_insert_data = array(
+                                'first_name' => $data['first_name'],
+                                'middle_name' => $data['middle_name'],
+                                'last_name' => $data['last_name'],
+                                'birth_date' => $this->system->invertDate($data['birth_date']),
+                                'ssn_itin' => $data['ssn_itin'],
+                                'type' => '',
+                                'language' => $data['language'],
+                                'country_residence' => $data['country_residence'],
+                                'country_citizenship' => $data['country_citizenship'],
+                                'status' => 1,
+                                "added_by_user" => sess('user_id')
+                            );
+                            $this->db->insert('individual', $individual_insert_data);
+                            $individual_id = $this->db->insert_id();
+                            $title_insert_data = array(
+                                'company_id' => $data['reference_id'],
+                                'individual_id' => $individual_id,
+                                'company_type' => $data['type'],
+                                'status' => 1,
+                                'existing_reference_id' => $data['reference_id']
+                            );
+                            $this->db->insert('title', $title_insert_data);
+                            $internal_data = $data;
+                            $internal_data['reference_id'] = $individual_id;
+                            $internal_data['practice_id'] = $data['internal_data']['practice_id'];
+
+                        if (!$this->internal->saveInternalData($internal_data)) {
+                                return false;
+                            }
+                            $this->service_model->change_contact_reference($data['reference_id'], $individual_id);
+                            $this->service_model->change_document_reference($data['reference_id'], $individual_id);
+                        } else {
+                            $individual_details = $this->individual->individual_info_by_title_id($val);
+                            if (empty($individual_details)) {
+                                return false;
+                            }
+                            $individual_id = $individual_details['individual_id'];
+                           
+                            $data['reference_id'] = $individual_details['existing_reference_id'];
+                        }
+                        $today = date('Y-m-d h:i:s');
+                        $invoice_info_data['reference_id'] = $data['reference_id'];
+                        if (isset($data['invoice_type'])) {
+                            $invoice_info_data['type'] = $data['invoice_type'];
+                        }
+                        $invoice_info_data['client_id'] = $individual_id;
+                        $invoice_info_data['new_existing'] = $data['type_of_individual'];
+                        $invoice_info_data['existing_reference_id'] = $data['reference_id'];
+        //                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
+                        $invoice_info_data['created_by'] = sess('user_id');
+                        $invoice_info_data['created_time'] = $today;
+                        if (isset($data['is_create_order']) && $data['is_create_order'] == 'yes') {
+                            $invoice_info_data['is_order'] = 'y';
+                            $invoice_info_data['status'] = 1;
+                        }
+
+                        // print_r($invoice_info_data);exit;
+                        $this->db->insert('invoice_info', $invoice_info_data);
+                        $invoice_id = $this->db->insert_id();
+
+                        unset($data['individual_list'] );
+                        $data['reference_id'] = $data['reference_id'];
+                        $data['client_id'] = $individual_id;
+                        // Create a new order for this request
+                        $this->insert_invoice_services($data, $invoice_id);
+                        $this->system->log("insert", "invoice", $invoice_id);
+
+                        if (isset($data['recurrence']) && !empty($data['recurrence']) && $invoice_id != '') {
+            
+                            $ins_recurrence = [];
+                            $ins_recurrence['invoice_id'] = $invoice_id;
+                            foreach ($data['recurrence'] as $key => $val) {
+                                $ins_recurrence[$key] = $val;
+                            }
+
+                            if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
+                                $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                                $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
+                                $ins_recurrence['actual_due_year'] = date('Y');
+                            } elseif ($ins_recurrence['pattern'] == 'monthly') {
+                                $current_month = date('m');
+                                $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                                $ins_recurrence['actual_due_month'] = (int) $current_month + (int) $ins_recurrence['due_month'];
+                                $ins_recurrence['actual_due_year'] = date('Y');
+                            } elseif ($ins_recurrence['pattern'] == 'weekly') {
+                                $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
+                                $current_day = $day_array[$ins_recurrence['due_month']];
+                                $givenDate = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + $ins_recurrence['due_day'], date('Y')));
+                                $ins_recurrence['actual_due_day'] = date('d', strtotime('next ' . $current_day, strtotime($givenDate)));
+                                $ins_recurrence['actual_due_month'] = date('m', strtotime('next ' . $current_day, strtotime($givenDate)));
+                                $ins_recurrence['actual_due_year'] = date('Y');
+                            } elseif ($ins_recurrence['pattern'] == 'quarterly') {
+                                $current_month = date('m');
+                                if ($current_month == '1' || $current_month == '2' || $current_month == '3') {
+                                    $next_quarter[1] = '4';
+                                    $next_quarter[2] = '5';
+                                    $next_quarter[3] = '6';
+                                    $due_year = date('Y');
+                                } elseif ($current_month == '4' || $current_month == '5' || $current_month == '6') {
+                                    $next_quarter[1] = '7';
+                                    $next_quarter[2] = '8';
+                                    $next_quarter[3] = '9';
+                                    $due_year = date('Y');
+                                } elseif ($current_month == '7' || $current_month == '8' || $current_month == '9') {
+                                    $next_quarter[1] = '10';
+                                    $next_quarter[2] = '11';
+                                    $next_quarter[3] = '12';
+                                    $due_year = date('Y');
+                                } else {
+                                    $next_quarter[1] = '1';
+                                    $next_quarter[2] = '2';
+                                    $next_quarter[3] = '3';
+                                    $due_year = date('Y', strtotime('+1 year'));
+                                }
+                                $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                                $ins_recurrence['actual_due_month'] = $next_quarter[$ins_recurrence['due_month']];
+                                $ins_recurrence['actual_due_year'] = $due_year;
+                            } else {
+                                $ins_recurrence['actual_due_day'] = '0';
+                                $ins_recurrence['actual_due_month'] = '0';
+                                $ins_recurrence['actual_due_year'] = '0';
+                            }
+                            if ($ins_recurrence['start_date'] != '') {
+                                $ins_recurrence['start_date'] = date('Y-m-d', strtotime($ins_recurrence['start_date']));
+                            }
+                            if (isset($ins_recurrence['until_date']) && !empty($ins_recurrence['until_date'])) {
+                                $ins_recurrence['until_date'] = date('Y-m-d', strtotime($ins_recurrence['until_date']));
+                            } else {
+                                $ins_recurrence['until_date'] = null;
+                            }
+                            if (isset($ins_recurrence['duration_time']) && !empty($ins_recurrence['duration_time'])) {
+                                $ins_recurrence['duration_time'] = $ins_recurrence['duration_time'];
+                            } else {
+                                $ins_recurrence['duration_time'] = null;
+                            }
+                            if (isset($ins_recurrence['duration_type'])) {
+                                $ins_recurrence['duration_type'] = $ins_recurrence['duration_type'];
+                            } else {
+                                $ins_recurrence['duration_type'] = null;
+                            }
+                            if (isset($ins_recurrence['due_type']) && !empty($ins_recurrence['due_type'])) {
+                                $ins_recurrence['due_type'] = $ins_recurrence['due_type'];
+                            } else {
+                                $ins_recurrence['due_type'] = null;
+                            }
+                            $remain_generation=null;
+                            switch ($ins_recurrence['duration_type']) {
+                                    case 0:
+                                        $ins_recurrence['total_generation_time']=0;
+                                        break;
+                                    case 1:
+                                        $ins_recurrence['total_generation_time']=($ins_recurrence['duration_time'])-1;
+                                        $remain_generation=$ins_recurrence['total_generation_time'];
+                                        break;
+                                    case 2:
+                                        $ins_recurrence['total_generation_time']=1;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            if(($ins_recurrence['actual_due_month'])<=12){
+                                $ins_recurrence['next_occurance_date']=$ins_recurrence['actual_due_year'].'-'.$ins_recurrence['actual_due_month'].'-'.$ins_recurrence['actual_due_day'];
+                            }else{
+                                $next_month=$ins_recurrence['actual_due_month']-12;
+                                $ins_recurrence['next_occurance_date']=($ins_recurrence['actual_due_year']+1).'-'.$next_month.'-'.$ins_recurrence['actual_due_day'];
+                            }
+                            
+            //            print_r($ins_recurrence);die;
+                            $this->db->insert('invoice_recurence', $ins_recurrence);
+                            $recurrence_id= $this->db->insert_id();
+            //                 echo $this->db->last_query();die;
+                            $this->db->where('id', $invoice_id);
+                            $this->db->update('invoice_info', ['is_recurrence' => 'y']);
+            //                echo $this->db->last_query();die;
+                            
+                        }
+
+                        if (isset($data['invoice_notes'])) {
+                            $this->notes->insert_note(1, $data['invoice_notes'], 'reference_id', $invoice_id, 'invoice');
+                            }
+                            $this->system->save_general_notification('invoice', $invoice_id, 'insert');
+
+                    }
+
+                }else{ // Billing invoice for individual client
+
+                    if ($data['individual_list'] == "" && $data['type_of_individual'] == 1) {
+                        $individual_insert_data = array(
+                            'first_name' => $data['first_name'],
+                            'middle_name' => $data['middle_name'],
+                            'last_name' => $data['last_name'],
+                            'birth_date' => $this->system->invertDate($data['birth_date']),
+                            'ssn_itin' => $data['ssn_itin'],
+                            'type' => '',
+                            'language' => $data['language'],
+                            'country_residence' => $data['country_residence'],
+                            'country_citizenship' => $data['country_citizenship'],
+                            'status' => 1,
+                            "added_by_user" => sess('user_id')
+                        );
+                        $this->db->insert('individual', $individual_insert_data);
+                        $individual_id = $this->db->insert_id();
+                        $title_insert_data = array(
+                            'company_id' => $data['reference_id'],
+                            'individual_id' => $individual_id,
+                            'company_type' => $data['type'],
+                            'status' => 1,
+                            'existing_reference_id' => $data['reference_id']
+                        );
+                        $this->db->insert('title', $title_insert_data);
+                        $internal_data = $data;
+                        $internal_data['reference_id'] = $individual_id;
+                        $internal_data['practice_id'] = $data['internal_data']['practice_id'];
+
+                        if (!$this->internal->saveInternalData($internal_data)) {
+                            return false;
+                        }
+                        $this->service_model->change_contact_reference($data['reference_id'], $individual_id);
+                        $this->service_model->change_document_reference($data['reference_id'], $individual_id);
+                    } else {
+                        $individual_details = $this->individual->individual_info_by_title_id($data['individual_list']);
+                        if (empty($individual_details)) {
+                            return false;
+                        }
+                        $individual_id = $individual_details['individual_id'];
+                        $data['reference_id'] = $individual_details['existing_reference_id'];
+                    }
+                        $today = date('Y-m-d h:i:s');
+                        $invoice_info_data['reference_id'] = $data['reference_id'];
+                        if (isset($data['invoice_type'])) {
+                            $invoice_info_data['type'] = $data['invoice_type'];
+                        }
+                        $invoice_info_data['client_id'] = $individual_id;
+                        $invoice_info_data['new_existing'] = $data['type_of_individual'];
+                        $invoice_info_data['existing_reference_id'] = $data['reference_id'];
+        //                $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
+                        $invoice_info_data['created_by'] = sess('user_id');
+                        $invoice_info_data['created_time'] = $today;
+                        if (isset($data['is_create_order']) && $data['is_create_order'] == 'yes') {
+                            $invoice_info_data['is_order'] = 'y';
+                            $invoice_info_data['status'] = 1;
+                        }
+                        $this->db->insert('invoice_info', $invoice_info_data);
+                        $invoice_id = $this->db->insert_id();
+                        // Create a new order for this request
+                        $this->insert_invoice_services($data, $invoice_id);
+                        $this->system->log("insert", "invoice", $invoice_id);
+
+                        if (isset($data['invoice_notes'])) {
+                            $this->notes->insert_note(1, $data['invoice_notes'], 'reference_id', $invoice_id, 'invoice');
+                            }
+                            $this->system->save_general_notification('invoice', $invoice_id, 'insert');
+                    }
+                }
+//            recurring invoice section
+
+
+            // if (isset($data['invoice_notes'])) {
+            //     $this->notes->insert_note(1, $data['invoice_notes'], 'reference_id', $invoice_id, 'invoice');
+            // }
+            // $this->system->save_general_notification('invoice', $invoice_id, 'insert');
         } else {  // Update section
             if ($data['invoice_type'] == 1) {        # Business Client Section
+                if($is_recurrence == 'y'){  // Update recurring invoice for business client
+
                 if ($data['type_of_client'] == 1) {
                     // Save company information
                     if (!$this->company_model->save_company_data($this->company_model->make_company_data($data))) {
@@ -321,7 +715,7 @@ class Billing_model extends CI_Model {
                 }
                 // Create a new order for this request
                 $invoice_id = $data['editval'];
-                if ($data['type_of_client'] == 1) {
+                if (isset($data['type_of_client']) && $data['type_of_client'] == 1) {
                     $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
                     $this->db->where('id', $invoice_id);
                     $this->db->update('invoice_info', $invoice_info_data);
@@ -329,7 +723,141 @@ class Billing_model extends CI_Model {
                 $this->insert_invoice_services($data, $invoice_id);
                 $this->update_invoice_services($data);
                 $this->system->log("update", "invoice", $invoice_id);
+
+                    if (isset($data['recurrence']) && !empty($data['recurrence']) && $invoice_id != '') {
+    //                echo 'hi';die;
+                    $ins_recurrence = [];
+                    $ins_recurrence['invoice_id'] = $invoice_id;
+                    foreach ($data['recurrence'] as $key => $val) {
+                        $ins_recurrence[$key] = $val;
+                    }
+
+                    if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
+                        $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                        $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    } elseif ($ins_recurrence['pattern'] == 'monthly') {
+                        $current_month = date('m');
+                        $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                        $ins_recurrence['actual_due_month'] = (int) $current_month + (int) $ins_recurrence['due_month'];
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    } elseif ($ins_recurrence['pattern'] == 'weekly') {
+                        $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
+                        $current_day = $day_array[$ins_recurrence['due_month']];
+                        $givenDate = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + $ins_recurrence['due_day'], date('Y')));
+                        $ins_recurrence['actual_due_day'] = date('d', strtotime('next ' . $current_day, strtotime($givenDate)));
+                        $ins_recurrence['actual_due_month'] = date('m', strtotime('next ' . $current_day, strtotime($givenDate)));
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    } elseif ($ins_recurrence['pattern'] == 'quarterly') {
+                        $current_month = date('m');
+                        if ($current_month == '1' || $current_month == '2' || $current_month == '3') {
+                            $next_quarter[1] = '4';
+                            $next_quarter[2] = '5';
+                            $next_quarter[3] = '6';
+                            $due_year = date('Y');
+                        } elseif ($current_month == '4' || $current_month == '5' || $current_month == '6') {
+                            $next_quarter[1] = '7';
+                            $next_quarter[2] = '8';
+                            $next_quarter[3] = '9';
+                            $due_year = date('Y');
+                        } elseif ($current_month == '7' || $current_month == '8' || $current_month == '9') {
+                            $next_quarter[1] = '10';
+                            $next_quarter[2] = '11';
+                            $next_quarter[3] = '12';
+                            $due_year = date('Y');
+                        } else {
+                            $next_quarter[1] = '1';
+                            $next_quarter[2] = '2';
+                            $next_quarter[3] = '3';
+                            $due_year = date('Y', strtotime('+1 year'));
+                        }
+                        $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                        $ins_recurrence['actual_due_month'] = $next_quarter[$ins_recurrence['due_month']];
+                        $ins_recurrence['actual_due_year'] = $due_year;
+                    } else {
+                        $ins_recurrence['actual_due_day'] = '0';
+                        $ins_recurrence['actual_due_month'] = '0';
+                        $ins_recurrence['actual_due_year'] = '0';
+                    }
+                    if ($ins_recurrence['start_date'] != '') {
+                        $ins_recurrence['start_date'] = date('Y-m-d', strtotime($ins_recurrence['start_date']));
+                    }
+                    if (isset($ins_recurrence['until_date']) && !empty($ins_recurrence['until_date'])) {
+                        $ins_recurrence['until_date'] = date('Y-m-d', strtotime($ins_recurrence['until_date']));
+                    } else {
+                        $ins_recurrence['until_date'] = null;
+                    }
+                    if (isset($ins_recurrence['duration_time']) && !empty($ins_recurrence['duration_time'])) {
+                        $ins_recurrence['duration_time'] = $ins_recurrence['duration_time'];
+                    } else {
+                        $ins_recurrence['duration_time'] = null;
+                    }
+                    if (isset($ins_recurrence['duration_type'])) {
+                        $ins_recurrence['duration_type'] = $ins_recurrence['duration_type'];
+                    } else {
+                        $ins_recurrence['duration_type'] = null;
+                    }
+                    if (isset($ins_recurrence['due_type']) && !empty($ins_recurrence['due_type'])) {
+                        $ins_recurrence['due_type'] = $ins_recurrence['due_type'];
+                    } else {
+                        $ins_recurrence['due_type'] = null;
+                    }
+                    
+
+    //            if(isset($ins_recurrence['pattern']))
+    //            print_r($ins_recurrence);die;
+                    $this->db->where('invoice_id', $invoice_id);
+                    $this->db->update('invoice_recurence', $ins_recurrence);
+    //                 echo $this->db->last_query();die;
+                    $this->db->where('id', $invoice_id);
+                    $this->db->update('invoice_info', ['is_recurrence' => 'y']);
+    //                echo $this->db->last_query();die;
+                }
+                if (isset($data['invoice_notes'])) {
+                    $this->notes->insert_note(1, $data['invoice_notes'], 'reference_id', $invoice_id, 'invoice');
+                }
+                if (isset($data['edit_invoice_notes'])) {
+                    $this->notes->update_note(1, $data['edit_invoice_notes'], $invoice_id, 'invoice');
+                }
+                $this->system->save_general_notification('invoice', $invoice_id, 'edit');
+                $this->save_order_on_invoice($invoice_id, 'edit');
+
+                }else{  // Update billing invoice for business client
+
+                    if ($data['type_of_client'] == 1) {
+                    // Save company information
+                    if (!$this->company_model->save_company_data($this->company_model->make_company_data($data))) {
+                        return false;
+                    }
+                    // Save company internal data
+                    $data['practice_id'] = $data['internal_data']['practice_id'];
+                    if (!$this->internal->saveInternalData($data)) {
+                        return false;
+                    }
+                }
+                // Create a new order for this request
+                $invoice_id = $data['editval'];
+                if (isset($data['type_of_client']) && $data['type_of_client'] == 1) {
+                    $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
+                    $this->db->where('id', $invoice_id);
+                    $this->db->update('invoice_info', $invoice_info_data);
+                }
+                $this->insert_invoice_services($data, $invoice_id);
+                $this->update_invoice_services($data);
+                $this->system->log("update", "invoice", $invoice_id);
+
+                if (isset($data['invoice_notes'])) {
+                $this->notes->insert_note(1, $data['invoice_notes'], 'reference_id', $invoice_id, 'invoice');
+                }
+                if (isset($data['edit_invoice_notes'])) {
+                $this->notes->update_note(1, $data['edit_invoice_notes'], $invoice_id, 'invoice');
+                }
+                $this->system->save_general_notification('invoice', $invoice_id, 'edit');
+                $this->save_order_on_invoice($invoice_id, 'edit');
+                }
             } else {        # Individual Section
+
+                if($is_recurrence == 'y'){ // Recurring invoice for individual client
                 if ($data['type_of_individual'] == 1) {
                     $individual_update_data = array(
                         'first_name' => $data['first_name'],
@@ -369,6 +897,95 @@ class Billing_model extends CI_Model {
                 }
                 $this->update_invoice_services($data);
                 $this->system->log("update", "invoice", $invoice_id);
+
+                            if (isset($data['recurrence']) && !empty($data['recurrence']) && $invoice_id != '') {
+//                echo 'hi';die;
+                $ins_recurrence = [];
+                $ins_recurrence['invoice_id'] = $invoice_id;
+                foreach ($data['recurrence'] as $key => $val) {
+                    $ins_recurrence[$key] = $val;
+                }
+
+                if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
+                    $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                    $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
+                    $ins_recurrence['actual_due_year'] = date('Y');
+                } elseif ($ins_recurrence['pattern'] == 'monthly') {
+                    $current_month = date('m');
+                    $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                    $ins_recurrence['actual_due_month'] = (int) $current_month + (int) $ins_recurrence['due_month'];
+                    $ins_recurrence['actual_due_year'] = date('Y');
+                } elseif ($ins_recurrence['pattern'] == 'weekly') {
+                    $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
+                    $current_day = $day_array[$ins_recurrence['due_month']];
+                    $givenDate = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + $ins_recurrence['due_day'], date('Y')));
+                    $ins_recurrence['actual_due_day'] = date('d', strtotime('next ' . $current_day, strtotime($givenDate)));
+                    $ins_recurrence['actual_due_month'] = date('m', strtotime('next ' . $current_day, strtotime($givenDate)));
+                    $ins_recurrence['actual_due_year'] = date('Y');
+                } elseif ($ins_recurrence['pattern'] == 'quarterly') {
+                    $current_month = date('m');
+                    if ($current_month == '1' || $current_month == '2' || $current_month == '3') {
+                        $next_quarter[1] = '4';
+                        $next_quarter[2] = '5';
+                        $next_quarter[3] = '6';
+                        $due_year = date('Y');
+                    } elseif ($current_month == '4' || $current_month == '5' || $current_month == '6') {
+                        $next_quarter[1] = '7';
+                        $next_quarter[2] = '8';
+                        $next_quarter[3] = '9';
+                        $due_year = date('Y');
+                    } elseif ($current_month == '7' || $current_month == '8' || $current_month == '9') {
+                        $next_quarter[1] = '10';
+                        $next_quarter[2] = '11';
+                        $next_quarter[3] = '12';
+                        $due_year = date('Y');
+                    } else {
+                        $next_quarter[1] = '1';
+                        $next_quarter[2] = '2';
+                        $next_quarter[3] = '3';
+                        $due_year = date('Y', strtotime('+1 year'));
+                    }
+                    $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                    $ins_recurrence['actual_due_month'] = $next_quarter[$ins_recurrence['due_month']];
+                    $ins_recurrence['actual_due_year'] = $due_year;
+                } else {
+                    $ins_recurrence['actual_due_day'] = '0';
+                    $ins_recurrence['actual_due_month'] = '0';
+                    $ins_recurrence['actual_due_year'] = '0';
+                }
+                if ($ins_recurrence['start_date'] != '') {
+                    $ins_recurrence['start_date'] = date('Y-m-d', strtotime($ins_recurrence['start_date']));
+                }
+                if (isset($ins_recurrence['until_date']) && !empty($ins_recurrence['until_date'])) {
+                    $ins_recurrence['until_date'] = date('Y-m-d', strtotime($ins_recurrence['until_date']));
+                } else {
+                    $ins_recurrence['until_date'] = null;
+                }
+                if (isset($ins_recurrence['duration_time']) && !empty($ins_recurrence['duration_time'])) {
+                    $ins_recurrence['duration_time'] = $ins_recurrence['duration_time'];
+                } else {
+                    $ins_recurrence['duration_time'] = null;
+                }
+                if (isset($ins_recurrence['duration_type'])) {
+                    $ins_recurrence['duration_type'] = $ins_recurrence['duration_type'];
+                } else {
+                    $ins_recurrence['duration_type'] = null;
+                }
+                if (isset($ins_recurrence['due_type']) && !empty($ins_recurrence['due_type'])) {
+                    $ins_recurrence['due_type'] = $ins_recurrence['due_type'];
+                } else {
+                    $ins_recurrence['due_type'] = null;
+                }
+                
+
+//            if(isset($ins_recurrence['pattern']))
+//            print_r($ins_recurrence);die;
+                $this->db->where('invoice_id', $invoice_id);
+                $this->db->update('invoice_recurence', $ins_recurrence);
+//                 echo $this->db->last_query();die;
+                $this->db->where('id', $invoice_id);
+                $this->db->update('invoice_info', ['is_recurrence' => 'y']);
+//                echo $this->db->last_query();die;
             }
             if (isset($data['invoice_notes'])) {
                 $this->notes->insert_note(1, $data['invoice_notes'], 'reference_id', $invoice_id, 'invoice');
@@ -378,6 +995,158 @@ class Billing_model extends CI_Model {
             }
             $this->system->save_general_notification('invoice', $invoice_id, 'edit');
             $this->save_order_on_invoice($invoice_id, 'edit');
+
+            }else{  // Billing invoice for individual client
+
+                if ($data['type_of_individual'] == 1) {
+                    $individual_update_data = array(
+                        'first_name' => $data['first_name'],
+                        'middle_name' => $data['middle_name'],
+                        'last_name' => $data['last_name'],
+                        'birth_date' => $this->system->invertDate($data['birth_date']),
+                        'ssn_itin' => $data['ssn_itin'],
+                        'type' => '',
+                        'language' => $data['language'],
+                        'country_residence' => $data['country_residence'],
+                        'country_citizenship' => $data['country_citizenship'],
+                        'status' => 1,
+                        "added_by_user" => sess('user_id')
+                    );
+                    $this->db->where(['id' => $data['individual_id']]);
+                    $this->db->update('individual', $individual_update_data);
+
+                    // Save company internal data
+                    $internal_data = $data;
+                    $internal_data['reference_id'] = $data['individual_id'];
+                    $internal_data['practice_id'] = $data['internal_data']['practice_id'];
+                    if (!$this->internal->saveInternalData($internal_data)) {
+                        return false;
+                    }
+                }
+                $this->service_model->change_contact_reference($data['reference_id'], $data['individual_id']);
+                $this->service_model->change_document_reference($data['reference_id'], $data['individual_id']);
+                $invoice_id = $data['editval'];
+                if ($data['type_of_individual'] == 1) {
+                    $invoice_info_data['existing_practice_id'] = $data['existing_practice_id'];
+                    $this->db->where('id', $invoice_id);
+                    $this->db->update('invoice_info', $invoice_info_data);
+                }
+                // Create a new order for this request
+                if (isset($data['service_section'])) {
+                    $this->insert_invoice_services($data, $invoice_id);
+                }
+                $this->update_invoice_services($data);
+                $this->system->log("update", "invoice", $invoice_id);
+
+                if (isset($data['invoice_notes'])) {
+                $this->notes->insert_note(1, $data['invoice_notes'], 'reference_id', $invoice_id, 'invoice');
+                }
+                if (isset($data['edit_invoice_notes'])) {
+                $this->notes->update_note(1, $data['edit_invoice_notes'], $invoice_id, 'invoice');
+                }
+                $this->system->save_general_notification('invoice', $invoice_id, 'edit');
+                $this->save_order_on_invoice($invoice_id, 'edit');
+
+            }
+
+        }
+//             if (isset($data['recurrence']) && !empty($data['recurrence']) && $invoice_id != '') {
+// //                echo 'hi';die;
+//                 $ins_recurrence = [];
+//                 $ins_recurrence['invoice_id'] = $invoice_id;
+//                 foreach ($data['recurrence'] as $key => $val) {
+//                     $ins_recurrence[$key] = $val;
+//                 }
+
+//                 if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
+//                     $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+//                     $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
+//                     $ins_recurrence['actual_due_year'] = date('Y');
+//                 } elseif ($ins_recurrence['pattern'] == 'monthly') {
+//                     $current_month = date('m');
+//                     $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+//                     $ins_recurrence['actual_due_month'] = (int) $current_month + (int) $ins_recurrence['due_month'];
+//                     $ins_recurrence['actual_due_year'] = date('Y');
+//                 } elseif ($ins_recurrence['pattern'] == 'weekly') {
+//                     $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
+//                     $current_day = $day_array[$ins_recurrence['due_month']];
+//                     $givenDate = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + $ins_recurrence['due_day'], date('Y')));
+//                     $ins_recurrence['actual_due_day'] = date('d', strtotime('next ' . $current_day, strtotime($givenDate)));
+//                     $ins_recurrence['actual_due_month'] = date('m', strtotime('next ' . $current_day, strtotime($givenDate)));
+//                     $ins_recurrence['actual_due_year'] = date('Y');
+//                 } elseif ($ins_recurrence['pattern'] == 'quarterly') {
+//                     $current_month = date('m');
+//                     if ($current_month == '1' || $current_month == '2' || $current_month == '3') {
+//                         $next_quarter[1] = '4';
+//                         $next_quarter[2] = '5';
+//                         $next_quarter[3] = '6';
+//                         $due_year = date('Y');
+//                     } elseif ($current_month == '4' || $current_month == '5' || $current_month == '6') {
+//                         $next_quarter[1] = '7';
+//                         $next_quarter[2] = '8';
+//                         $next_quarter[3] = '9';
+//                         $due_year = date('Y');
+//                     } elseif ($current_month == '7' || $current_month == '8' || $current_month == '9') {
+//                         $next_quarter[1] = '10';
+//                         $next_quarter[2] = '11';
+//                         $next_quarter[3] = '12';
+//                         $due_year = date('Y');
+//                     } else {
+//                         $next_quarter[1] = '1';
+//                         $next_quarter[2] = '2';
+//                         $next_quarter[3] = '3';
+//                         $due_year = date('Y', strtotime('+1 year'));
+//                     }
+//                     $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+//                     $ins_recurrence['actual_due_month'] = $next_quarter[$ins_recurrence['due_month']];
+//                     $ins_recurrence['actual_due_year'] = $due_year;
+//                 } else {
+//                     $ins_recurrence['actual_due_day'] = '0';
+//                     $ins_recurrence['actual_due_month'] = '0';
+//                     $ins_recurrence['actual_due_year'] = '0';
+//                 }
+//                 if ($ins_recurrence['start_date'] != '') {
+//                     $ins_recurrence['start_date'] = date('Y-m-d', strtotime($ins_recurrence['start_date']));
+//                 }
+//                 if (isset($ins_recurrence['until_date']) && !empty($ins_recurrence['until_date'])) {
+//                     $ins_recurrence['until_date'] = date('Y-m-d', strtotime($ins_recurrence['until_date']));
+//                 } else {
+//                     $ins_recurrence['until_date'] = null;
+//                 }
+//                 if (isset($ins_recurrence['duration_time']) && !empty($ins_recurrence['duration_time'])) {
+//                     $ins_recurrence['duration_time'] = $ins_recurrence['duration_time'];
+//                 } else {
+//                     $ins_recurrence['duration_time'] = null;
+//                 }
+//                 if (isset($ins_recurrence['duration_type'])) {
+//                     $ins_recurrence['duration_type'] = $ins_recurrence['duration_type'];
+//                 } else {
+//                     $ins_recurrence['duration_type'] = null;
+//                 }
+//                 if (isset($ins_recurrence['due_type']) && !empty($ins_recurrence['due_type'])) {
+//                     $ins_recurrence['due_type'] = $ins_recurrence['due_type'];
+//                 } else {
+//                     $ins_recurrence['due_type'] = null;
+//                 }
+                
+
+// //            if(isset($ins_recurrence['pattern']))
+// //            print_r($ins_recurrence);die;
+//                 $this->db->where('invoice_id', $invoice_id);
+//                 $this->db->update('invoice_recurence', $ins_recurrence);
+// //                 echo $this->db->last_query();die;
+//                 $this->db->where('id', $invoice_id);
+//                 $this->db->update('invoice_info', ['is_recurrence' => 'y']);
+// //                echo $this->db->last_query();die;
+//             }
+//             if (isset($data['invoice_notes'])) {
+//                 $this->notes->insert_note(1, $data['invoice_notes'], 'reference_id', $invoice_id, 'invoice');
+//             }
+//             if (isset($data['edit_invoice_notes'])) {
+//                 $this->notes->update_note(1, $data['edit_invoice_notes'], $invoice_id, 'invoice');
+//             }
+//             $this->system->save_general_notification('invoice', $invoice_id, 'edit');
+//             $this->save_order_on_invoice($invoice_id, 'edit');
         }
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
@@ -397,7 +1166,7 @@ class Billing_model extends CI_Model {
             $this->db->select(implode(', ', $this->select_billing_1));
             $this->db->from('invoice_info inv');
             $this->db->join('company co', 'co.id = inv.reference_id');
-            $this->db->join('title t', 't.company_id = inv.reference_id');            
+            $this->db->join('title t', 't.company_id = inv.reference_id');
             $this->db->join('individual ind', 'ind.id = t.individual_id');
             $this->db->join('internal_data indt', 'indt.reference_id = inv.reference_id and indt.reference = "company"');
         } else {
@@ -410,7 +1179,7 @@ class Billing_model extends CI_Model {
         }
         $this->db->where($where);
         $r = $this->db->get()->row_array();
-//        echo $this->db->last_query();
+//        echo $this->db->last_query();die;
         return $r;
     }
 
@@ -486,6 +1255,8 @@ class Billing_model extends CI_Model {
             $this->db->select(implode(', ', $this->select_billing_1));
             $this->db->from('invoice_info inv');
             $this->db->join('company co', 'co.id = inv.reference_id');
+            $this->db->join('title t', 't.company_id = inv.reference_id');
+            $this->db->join('individual ind', 'ind.id = t.individual_id');
             $this->db->join('internal_data indt', 'indt.reference_id = inv.reference_id and indt.reference = "company"');
         } else {
             $this->db->select(implode(', ', $this->select_billing_2));
@@ -629,6 +1400,8 @@ class Billing_model extends CI_Model {
             $this->db->select(implode(', ', $select));
             $this->db->from('invoice_info inv');
             $this->db->join('company co', 'co.id = inv.reference_id');
+            $this->db->join('title t', 't.company_id = inv.reference_id');
+            $this->db->join('individual ind', 'ind.id = t.individual_id');
             $this->db->join('internal_data indt', 'indt.reference_id = inv.reference_id and indt.reference = "company"');
         } else {
             $select = $this->select_billing_2;
@@ -721,6 +1494,8 @@ class Billing_model extends CI_Model {
     }
 
     public function insert_invoice_services($data, $invoice_id) {
+        // echo "<pre>";
+        // print_r($data);exit;
         $tracking = time();
         $today = date('Y-m-d h:i:s');
         if (isset($data['service_section'])) {
@@ -983,15 +1758,15 @@ class Billing_model extends CI_Model {
 
     public function get_invoice_filter_element_value($element_key, $office) {
         $tracking_array = [
-            ["id" => 1, "name" => "Not Started"],
-            ["id" => 2, "name" => "Started"],
-            ["id" => 3, "name" => "Completed"],
-            ["id" => 7, "name" => "Canceled"]
+                ["id" => 1, "name" => "Not Started"],
+                ["id" => 2, "name" => "Started"],
+                ["id" => 3, "name" => "Completed"],
+                ["id" => 7, "name" => "Canceled"]
         ];
         $status_array = [
-            ["id" => 1, "name" => "Unpaid"],
-            ["id" => 2, "name" => "Partial"],
-            ["id" => 3, "name" => "Paid"]
+                ["id" => 1, "name" => "Unpaid"],
+                ["id" => 2, "name" => "Partial"],
+                ["id" => 3, "name" => "Paid"]
         ];
         switch ($element_key):
             case 1: {
@@ -1014,8 +1789,8 @@ class Billing_model extends CI_Model {
                 break;
             case 5: {
                     return [
-                        ["id" => 1, "name" => "Business Client"],
-                        ["id" => 2, "name" => "Individual"]
+                            ["id" => 1, "name" => "Business Client"],
+                            ["id" => 2, "name" => "Individual"]
                     ];
                 }
                 break;
@@ -1055,8 +1830,8 @@ class Billing_model extends CI_Model {
                 break;
             case 11: {
                     return [
-                        ["id" => 'byme', "name" => "By ME"],
-                        ["id" => 'tome', "name" => "By Others"]
+                            ["id" => 'byme', "name" => "By ME"],
+                            ["id" => 'tome', "name" => "By Others"]
                     ];
                 }
                 break;
@@ -1211,6 +1986,10 @@ class Billing_model extends CI_Model {
         $order_data['status'] = 2;
         $order_data['quantity'] = 0;
         $order_data['reference'] = $invoice_info['type'] == 1 ? 'company' : 'individual';
+        $internal_data_info = $this->internal->get_internal_data($order_data['reference'],$invoice_info['client_id']);
+        if($internal_data_info[0]['manager'] != ""){
+        $order_data['staff_requested_service'] = $internal_data_info[0]['manager'];
+        }
 
         $this->db->select('date_started');
         $this->db->where_in('order_id', $order_ids);
@@ -1248,8 +2027,14 @@ class Billing_model extends CI_Model {
 
         $service_request_data = $service_request_info;
         foreach ($service_request_data as $key => $srl) {
+            $target_query = $this->db->get_where("target_days", ["service_id" => $service_request_data[$key]['services_id']])->row_array();
             $service_request_data[$key]['order_id'] = $order_id;
-            $service_request_data[$key]['status'] = 2;
+            if($target_query['input_form'] == 'n' && $target_query['service_id'] == $service_request_data[$key]['services_id']){
+                   $service_request_data[$key]['status'] = 0; 
+                }else{
+                    $service_request_data[$key]['status'] = 2;
+                }
+                
         }
         $this->db->insert_batch('service_request', $service_request_data);
 
@@ -1267,7 +2052,7 @@ class Billing_model extends CI_Model {
         }
     }
 
-    public function billing_list($status = '', $by = '', $office = '', $payment_status = '', $reference_id = '', $filter_data = [], $sort = []) {
+    public function billing_list($status = '', $by = '', $office = '', $payment_status = '', $reference_id = '', $filter_data = [], $sort = [], $is_recurrence = '') {
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
         $staffrole = $staff_info['role'];
@@ -1302,9 +2087,17 @@ class Billing_model extends CI_Model {
             '(SELECT CONCAT(",", GROUP_CONCAT(`service_id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services',
 //            '(CAST((SELECT sr.price_charged FROM service_request sr WHERE sr.order_id = ord.id AND sr.services_id = ord.service_id) AS Decimal(10,2)) * ord.quantity) as sub_total',
             '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
-        ];
+            '(SELECT pattern FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as pattern',
+            '(SELECT next_occurance_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as next_generation_date',
+            ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
         $where['status'] = 'AND `inv`.`status` != 0 ';
+        if ($is_recurrence != '') {
+            $where['inv.is_recurrence'] = " AND inv.is_recurrence='" . $is_recurrence . "' ";
+        } else {
+            $is_recurrence = 'n';
+            $where['inv.is_recurrence'] = " AND inv.is_recurrence= '" . $is_recurrence . "' ";
+        }
         if ($by != '') {
             if ($by == 'byme') {
                 $where['inv.created_by'] = 'AND `inv`.`created_by` = ' . $staff_id . ' ';
@@ -1337,9 +2130,10 @@ class Billing_model extends CI_Model {
                     $where['inv.created_by'] = 'AND `inv`.`created_by` = "' . $staff_id . '" ';
                 }
             } else {
-                $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (7)) ';
+                $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (7) AND inv.is_recurrence="' . $is_recurrence . '")';
             }
         }
+
 
         if ($status == '') {
             $where['inv.payment_status'] = 'AND (CASE WHEN `inv`.`status` = 3 THEN `inv`.`payment_status` IN (1, 2) ELSE `inv`.`payment_status` IN (1, 2, 3) END) ';
@@ -1363,6 +2157,7 @@ class Billing_model extends CI_Model {
             $where['inv.payment_status'] = 'AND `inv`.`payment_status` = ' . $payment_status . ' ';
         }
 
+
         $is_status = $is_tracking = 'n';
         if (!empty($filter_data)) {
             $key = 0;
@@ -1382,24 +2177,21 @@ class Billing_model extends CI_Model {
                             }
                             $where[$this->filter_element[$filter_key]] = 'AND (Date(' . $this->filter_element[$filter_key] . ') ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . 'BETWEEN ' . implode(' AND ', $date_value) . ') ';
                         }
-                    }elseif ($filter_key == "due_date") {
-                     
-                         if (strlen($filter[0]) == 10) {
-                    $date_value = date('Y-m-d', strtotime('-30 days', strtotime($filter[0])));
-                   
-                    $where['inv.created_time'] = 'AND inv.created_time' . ' ' . (($condition == 3) ? 'not like ' : 'like') . '"' . $date_value . '%"';
-                           
-                        } elseif (strlen($filter[0]) == 23) {                          
+                    } elseif ($filter_key == "due_date") {
+
+                        if (strlen($filter[0]) == 10) {
+                            $date_value = date('Y-m-d', strtotime('-30 days', strtotime($filter[0])));
+
+                            $where['inv.created_time'] = 'AND inv.created_time' . ' ' . (($condition == 3) ? 'not like ' : 'like') . '"' . $date_value . '%"';
+                        } elseif (strlen($filter[0]) == 23) {
                             $date_value = explode(" - ", $filter[0]);
-                            
-                          foreach ($date_value as $date_key => $date) {
-                                $date_value[$date_key] = "'" .date("Y-m-d", strtotime('-30 days', strtotime($date))) . "'";
+
+                            foreach ($date_value as $date_key => $date) {
+                                $date_value[$date_key] = "'" . date("Y-m-d", strtotime('-30 days', strtotime($date))) . "'";
                             }
                             $where['inv.created_time'] = 'AND (Date(inv.created_time) ' . (($condition == 3 || $condition == 4) ? 'NOT ' : '') . ' BETWEEN ' . implode(' AND ', $date_value) . ') ';
                         }
-                    }
-
-                    else {
+                    } else {
                         if ($filter_key == 'tracking') {
                             $is_tracking = 'y';
                         }
@@ -1441,7 +2233,6 @@ class Billing_model extends CI_Model {
             }
         }
 
-
         $order_by = 'ORDER BY `inv`.`id` DESC ';
         if (!empty($sort) && count($sort) > 0) {
             $order_by = 'ORDER BY ' . $this->sorting_element[$sort['sort_criteria']] . ' ' . $sort['sort_type'];
@@ -1466,7 +2257,7 @@ class Billing_model extends CI_Model {
         }
         if (!empty($filter_data)) {
             if ($is_tracking == 'n') {
-                unset($where['inv.status']);                
+                unset($where['inv.status']);
             }
             if ($is_status == 'n') {
                 unset($where['inv.payment_status']);
@@ -1476,8 +2267,10 @@ class Billing_model extends CI_Model {
         $table = '`invoice_info` AS `inv` ' .
                 'INNER JOIN `order` AS `ord` ON `ord`.`invoice_id` = `inv`.`id` ' .
                 'INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END) ';
+
         $this->db->query('SET SQL_BIG_SELECTS=1');
         return $this->db->query('SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id` ' . $order_by . ' ')->result_array();
+//        echo $this->db->last_query();die;
     }
 
     public function update_payment_status_by_invoice_id($invoice_id) {
@@ -1521,18 +2314,22 @@ class Billing_model extends CI_Model {
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
         $staffrole = $staff_info['role'];
-        $staff_office = $staff_info['office'];
+        $staff_office = explode(',',$staff_info['office']);
         $departments = explode(',', $staff_info['department']);
-
-        if (in_array(2, $departments)) {
-            if ($staffrole == 2) {      // frinchisee manager
-                $this->db->where_in('office_id', $staff_office);
-            } else {
-                $this->db->where('created_by',$staff_id);
-            }
-        }
+ 
+        // if (in_array(2, $departments)) {
+        //     if ($staffrole == 2) {      // frinchisee manager
+        //         $this->db->where_in('office_id', $staff_office);
+        //     } else {
+        //         $this->db->where('created_by',$staff_id);
+        //     }
+        // }
         if ($office != "") {
             $this->db->where_in('office_id',$office);
+        } else{
+            if($staff_info['type'] == 3) {
+                $this->db->where_in('office_id',$staff_office);
+            }    
         }
         if ($date_range != "") {
             $date_value = explode("-", $date_range);
@@ -1575,21 +2372,34 @@ class Billing_model extends CI_Model {
         return $response;
 
     }
-    public function get_payment_details_service_id($invoice_id,$order_id) {
+
+    public function get_payment_details_service_id($invoice_id, $order_id) {
         $sql = "pay.reference_no AS reference,pay.authorization_id,typ.name AS payment_type,pay.pay_amount AS collected";
         $this->db->select($sql);
         $this->db->from('payment_history pay');
         $this->db->join('payment_type typ', 'typ.id = pay.payment_type');
-        $this->db->where("invoice_id",$invoice_id);
-        $this->db->where("order_id",$order_id);
+        $this->db->where("invoice_id", $invoice_id);
+        $this->db->where("order_id", $order_id);
         $this->db->where('type', 'payment');
         $this->db->where('is_cancel !=', 1);
         return $this->db->get()->result_array();
     }
+
     public function get_total_price_report($office,$date_range) {
+        $staff_info = staff_info();
+        $staff_id = $staff_info['id'];
+        $staffrole = $staff_info['role'];
+        $staff_office = explode(',',$staff_info['office']);
+        $departments = explode(',', $staff_info['department']);
+
         if (!empty($office)) {
             $this->db->where_in('office_id',$office);
-        }            
+        } else {
+            if($staff_info['type'] == 3) {
+                $this->db->where_in('office_id',$staff_office);
+            }    
+        }
+
         if ($date_range != "") {
             $date_value = explode("-", $date_range);
             $start_date = date("Y-m-d", strtotime($date_value[0]));
@@ -1618,4 +2428,13 @@ class Billing_model extends CI_Model {
         $start_date = $this->db->query($sql)->row_array()['created_time'];
         return date("m/d/Y", strtotime($start_date));
     }
+
+    public function getInvoiceIsRecurrence($invoice_id) {
+        return $this->db->get_where('invoice_info', ['id' => $invoice_id])->row()->is_recurrence;
+    }
+
+    public function getInvoiceRecurringDetails($invoice_id) {
+        return $this->db->get_where('invoice_recurence', ['invoice_id' => $invoice_id])->row();
+    }
+
 }

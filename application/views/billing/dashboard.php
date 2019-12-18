@@ -33,6 +33,7 @@ $staff_info = staff_info();
 $staff_department = explode(',', $staff_info['department']);
 $stafftype = $staff_info['type'];
 $staffrole = $staff_info['role'];
+//echo 'ss'.$is_recurrence;die;
 ?>
 <div class="wrapper wrapper-content">
     <div class="row">
@@ -46,7 +47,11 @@ $staffrole = $staff_info['role'];
                                     <div class="form-group filter-inner">
                                         <div class="row">
                                             <div class="m-b-8 pull-left col-md-8">
-                                                <a href="<?= base_url() ?>billing/invoice" title="Create Invoice" class="btn btn-primary dropdown-toggle"><i class="fa fa-plus"></i> Create Invoice</a>
+                                                <?php if($is_recurrence == 'y'){ ?>
+                                                <a href="<?= base_url() ?>billing/invoice/index/y" title="Create Invoice" class="btn btn-primary dropdown-toggle"><i class="fa fa-plus"></i> Create Invoice</a>
+                                                <?php } else{ ?>
+                                                <a href="<?= base_url() ?>billing/invoice/index" title="Create Invoice" class="btn btn-primary dropdown-toggle"><i class="fa fa-plus"></i> Create Invoice</a>
+                                            <?php } ?>
                                             </div>                                            
                                         </div>
                                         <div class="filter-div m-b-20 row" id="original-filter">                                           
@@ -326,7 +331,7 @@ $staffrole = $staff_info['role'];
     </div>
 </div> 
 <script>
-    loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1);
+    loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1,'<?= $is_recurrence ?>');
     var content = $(".filter-div").html();
     var variableArray = [];
     var elementArray = [];

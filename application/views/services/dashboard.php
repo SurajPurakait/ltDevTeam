@@ -119,11 +119,11 @@ if ($status == '') {
                                                 <th>By ME</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byme-2">
-                                                        <span class="label label-warning">-</span>
+                                                        <span class="label label-success">-</span>
                                                     </a></td>
                                                 <td class="text-center">                                                    
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byme-1">
-                                                        <span class="label label-primary">-</span>
+                                                        <span class="label label-warning">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
@@ -132,7 +132,7 @@ if ($status == '') {
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a class="filter-button" onclick="sos_filter('order', 'byme');" title="By Me"><span class="label label-success label-byme" id="sos-byme"><?= sos_dashboard_count('order', 'byme'); ?></span></a>
+                                                    <a class="filter-button" onclick="sos_filter('order', 'byme');" title="By Me"><span class="label label-primary label-byme" id="sos-byme"><?= sos_dashboard_count('order', 'byme'); ?></span></a>
                                                 </td>
                                             </tr>
                                             <?php
@@ -143,12 +143,12 @@ if ($status == '') {
                                                 <th>To ME</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-tome-2">
-                                                        <span class="label label-warning">-</span>
+                                                        <span class="label label-success">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-tome-1">
-                                                        <span class="label label-primary">-</span>
+                                                        <span class="label label-warning">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
@@ -157,7 +157,7 @@ if ($status == '') {
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
-                                                    <a class="filter-button" onclick="sos_filter('order', 'tome');" title="To Me"><span class="label label-success label-tome" id="sos-tome"><?= sos_dashboard_count('order', 'tome'); ?></span></a>
+                                                    <a class="filter-button" onclick="sos_filter('order', 'tome');" title="To Me"><span class="label label-primary label-tome" id="sos-tome"><?= sos_dashboard_count('order', 'tome'); ?></span></a>
                                                 </td>
                                             </tr>
                                             <?php
@@ -168,12 +168,12 @@ if ($status == '') {
                                                 <th>Others</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byothers-2">
-                                                        <span class="label label-warning">-</span>
+                                                        <span class="label label-success">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byothers-1">
-                                                        <span class="label label-primary">-</span>
+                                                        <span class="label label-warning">-</span>
                                                     </a>
                                                 </td>
                                                 <td class="text-center">
@@ -405,7 +405,7 @@ if ($status == '') {
     </div>
 </div>
 <script type="text/javascript">
-    loadServiceDashboard('<?= $status == '' ? 4 : ''; ?>', '<?= $category_id ?>', 'on_load', '<?= $office_id; ?>', 1);
+    loadServiceDashboard('<?= $status == '' ? 4 : $status; ?>', '<?= $category_id ?>', 'on_load', '<?= $office_id; ?>', 1);
     var content = $(".filter-div").html();
     var variable_dd_array = [];
     var element_array = [];
@@ -928,6 +928,8 @@ if ($status == '') {
     }
     var reflactFilterWithSummery = function (status, requestType) {
         clearFilter();
+        element_array = [];
+        variable_dd_array = [];
         $("select.variable-dropdown:first").val(4);
         var statusArray = status.split('-');
         $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});

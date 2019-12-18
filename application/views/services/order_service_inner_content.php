@@ -134,7 +134,15 @@
                                 $<?= ($row_inner->service_id == '10' || $row_inner->service_id == '41') ? $tot : $row_inner->retail_price; ?>
                             </td>
                             <td title="Override Price" style="text-align: center;">$<?= $row_inner->price_charged; ?></td>    
-                            <td title="Responsible Dept" style="text-align: center;"><?= $row_inner->service_department_name; ?></td>
+                            <td title="Responsible Dept" style="text-align: center;">
+                                <?php $dept_name = $row_inner->service_department_name;
+                                if($dept_name == ''){
+                                    echo "Franchisee";
+                                }else{
+                                    echo $row_inner->service_department_name;
+                                } ?>
+                                    
+                            </td>
                             <?php if ($usertype == "3"): ?>
                                 <td align='left' title="Tracking Description">
                                     <span class='label <?php echo $trk_inner_class; ?> label-block' style="width: 80px;"><?= $tracking; ?></span>
@@ -214,13 +222,13 @@
                                         if ($row_inner->input_form_status == 'n') {
                                             $input_status = 'incomplete';
                                             ?>
-                                            <span class="label input-form-incomplete">Incomplete <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-plus" aria-hidden="true"></i> </a></span>
+                                            <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><span class="label input-form-incomplete">Incomplete &nbsp;&nbsp;<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp; </a></span>
                                         <?php } elseif ($inputform_attachments == '' || $inputform_notes == '') { ?>
                                             
-                                            <span class="label input-form-warning">Partial Complete <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
+                                            <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><span class="label input-form-warning">Partial Complete &nbsp;&nbsp;<i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp; </a></span>
                                         
                                         <?php } else { ?>
-                                            <span class="label input-form-complete">Completed <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><i class="fa fa-pencil" aria-hidden="true"></i> </a></span>
+                                             <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><span class="label input-form-complete">Completed &nbsp;&nbsp;<i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp; </a></span>
                                             <?php
                                         }
                                     }

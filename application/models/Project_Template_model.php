@@ -143,12 +143,30 @@ class Project_Template_model extends CI_Model {
             if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
-                $ins_recurrence['actual_due_year'] = date('Y');
+                $current_month=date('m');
+                $current_day=date('d');
+                if($ins_recurrence['due_month']>=$current_month && $ins_recurrence['due_day']>=$current_day){
+                    $ins_recurrence['actual_due_year'] = date('Y');
+                }else{
+                    $ins_recurrence['actual_due_year'] = date('Y')+1;
+                }
             } elseif ($ins_recurrence['pattern'] == 'monthly') {
                 $current_month = date('m');
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = (int) $current_month + (int) $ins_recurrence['due_month'];
-                $ins_recurrence['actual_due_year'] = date('Y');
+                if($ins_recurrence['actual_due_day']>=date('d')){
+                    if($ins_recurrence['actual_due_month']<=12){
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y');
+                    }
+                }else{
+                   if($ins_recurrence['actual_due_month']<=12){
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y')+($ins_recurrence['actual_due_month']/12);
+                    } 
+                }
             } elseif ($ins_recurrence['pattern'] == 'weekly') {
                 $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
                 $current_day = $day_array[$ins_recurrence['due_month']];
@@ -208,6 +226,7 @@ class Project_Template_model extends CI_Model {
         $task_data['template_main_id'] = $post['task']['template_main_id'];
         $task_data['added_by_user'] = sess('user_id');
         $task_data['task_order'] = $post['task']['task_order'];
+        $task_data['task_title'] = $post['task']['task_title'];
         $task_data['description'] = $post['task']['description'];
         $task_data['target_start_date'] = $post['task']['target_start_date'];
         $task_data['target_start_day'] = $post['task']['target_start_day'];
@@ -274,19 +293,19 @@ class Project_Template_model extends CI_Model {
 
     function project_template_task_list($template_main_id) {
         $added_user = sess('user_id');
-        $this->db->order_by('id', 'DESC');
+//        $this->db->order_by('id', 'DESC');
         return $this->db->get_where('project_template_task', ['template_main_id' => $template_main_id])->result_array();
     }
 
     function project_task_list($project_id) {
         $added_user = sess('user_id');
-        $this->db->order_by('id', 'DESC');
+//        $this->db->order_by('id', 'DESC');
         return $this->db->get_where('project_task', ['project_id' => $project_id])->result_array();
     }
 
     function project_main_task_list($template_main_id) {
         $added_user = sess('user_id');
-        $this->db->order_by('id', 'DESC');
+//        $this->db->order_by('id', 'DESC');
         return $this->db->get_where('project_task', ['project_id' => $template_main_id])->result_array();
     }
 
@@ -417,7 +436,7 @@ class Project_Template_model extends CI_Model {
                         . 'where project_id=' . $id . ' and type=2';
                 $data2 = $this->db->query($query)->row_array();
 
-                $query = 'select CONCAT(last_name, ", ",first_name) as full_name '
+                $query = 'select CONCAT(first_name, " ",last_name) as full_name '
                         . 'from staff '
                         . 'where id=' . $data2['staff_id'] . '';
                 $data3 = $this->db->query($query)->row_array();
@@ -427,6 +446,41 @@ class Project_Template_model extends CI_Model {
             $array['office'] = '0';
         }
         return $array;
+    }
+    public function getAssignedOfficeStaffProjectTask($task_id,$project_id, $responsible_staff){
+        $project_details=$this->db->get_where('projects',['id'=>$project_id])->row();
+        $officeid=$project_details->office_id;
+        $client_id=$project_details->client_id;
+        $client_type=$project_details->client_type;
+        $data['office']= $this->db->get_where('office',['id'=>$officeid])->row()->office_id;
+        if($responsible_staff==1){
+            $this->db->select("concat(s.first_name ,' ', s.last_name) as name");
+            $this->db->from('staff s');
+            $this->db->join('internal_data ind','s.id=ind.partner');
+            $this->db->where('ind.reference_id',$client_id);
+            $result=$this->db->get()->row();
+            if(!empty($result)){
+                $data['staff_name']=$result->name;
+            }else{
+               $data['staff_name']='N/A';
+            }
+        }else if($responsible_staff==2){
+            $this->db->select("concat(s.first_name ,' ', s.last_name) as name");
+            $this->db->from('staff s');
+            $this->db->join('internal_data ind','s.id=ind.manager');
+            $this->db->where('ind.reference_id',$client_id);
+            $result=$this->db->get()->row();
+            if(!empty($result)){
+                $data['staff_name']=$result->name;
+            }else{
+               $data['staff_name']='N/A';
+            }
+        }
+        else{
+            $data['staff_name']='N/A';
+        }
+        return $data;
+           
     }
 
     public function getTemplateStaffList($template_id) {
@@ -759,12 +813,30 @@ class Project_Template_model extends CI_Model {
             if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
-                $ins_recurrence['actual_due_year'] = date('Y');
+                $current_month=date('m');
+                $current_day=date('d');
+                if($ins_recurrence['due_month']>=$current_month && $ins_recurrence['due_day']>=$current_day){
+                    $ins_recurrence['actual_due_year'] = date('Y');
+                }else{
+                    $ins_recurrence['actual_due_year'] = date('Y')+1;
+                }
             } elseif ($ins_recurrence['pattern'] == 'monthly') {
                 $current_month = date('m');
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = (int) $current_month + (int) $ins_recurrence['due_month'];
-                $ins_recurrence['actual_due_year'] = date('Y');
+                if($ins_recurrence['actual_due_day']>=date('d')){
+                    if($ins_recurrence['actual_due_month']<=12){
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y');
+                    }
+                }else{
+                   if($ins_recurrence['actual_due_month']<=12){
+                        $ins_recurrence['actual_due_year'] = date('Y');
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y')+($ins_recurrence['actual_due_month']/12);
+                    } 
+                }
             } elseif ($ins_recurrence['pattern'] == 'weekly') {
                 $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
                 $current_day = $day_array[$ins_recurrence['due_month']];
@@ -902,6 +974,10 @@ class Project_Template_model extends CI_Model {
                 if (isset($project['office_id']) && $project['office_id'] != '') {
                     $post['project']['office_id'] = $project['office_id'];
                 }
+                $client_office=$this->db->get_where('internal_data',['reference_id'=>$pcid])->row();
+                if(!empty($client_office)){
+                    $post['project']['office_id']=$client_office->office;
+                }
                 $post['project']['client_id'] = $pcid;
                 $this->db->insert('projects', $post['project']);
                 $insert_id = $this->db->insert_id();
@@ -916,21 +992,6 @@ class Project_Template_model extends CI_Model {
                 $project_recurrence_main_data = $this->db->get_where('project_template_recurrence_main', ['template_id' => $project_template_id])->row_array();
                 $project_task_data = $this->db->get_where('project_template_task', ['template_main_id' => $project_template_id])->result_array();
 
-                if (!empty($project_task_data)) {
-                    $task_id_array = [];
-                    foreach ($project_task_data as $val) {
-                        $task_id_array[] = $val['id'];
-                    }
-                    $this->db->where_in('task_id', $task_id_array);
-                    $project_task_staff_data = $this->db->get('project_template_task_staff')->result_array();
-                    $this->db->where_in('task_id', $task_id_array);
-                    $project_task_notes = $this->db->get('template_task_note')->result_array();
-//            echo $this->db->last_query();exit;
-                }
-//        echo '<pre>';
-//        print_r($project_task_notes);
-//        echo "</pre>";die;
-//        print_r($project_task_staff_data);exit;
                 $project_staff_main_data = $this->db->get_where('project_template_staff_main', ['template_id' => $project_template_id])->result_array();
 //        print_r($project_staff_main_data);die;
                 $end_array = end($project_staff_main_data);
@@ -986,14 +1047,6 @@ class Project_Template_model extends CI_Model {
                             $fye_month = $project_recurrence_main_data['fye_month'];
 
                             $after_days = (int) $fye_month * 30;
-
-                            // if(strlen($project_recurrence_main_data['actual_due_month'])==1){
-                            //     $actual_mnth = '0'.$project_recurrence_main_data['actual_due_month'];
-                            // }
-                            // if(strlen($project_recurrence_main_data['actual_due_day'])==1){
-                            //     $actual_day = '0'.$project_recurrence_main_data['actual_due_day'];
-                            // }
-
                             $current_due = $project_recurrence_main_data['actual_due_year'] . '-' . $get_client_fye;
 
                             $newDate = strtotime($current_due . ' + ' . $after_days . ' days');
@@ -1001,27 +1054,17 @@ class Project_Template_model extends CI_Model {
                             $project_recurrence_main_data['actual_due_day'] = $fye_day;
                             $project_recurrence_main_data['actual_due_month'] = date('m', $newDate);
                             $project_recurrence_main_data['actual_due_year'] = date('Y', $newDate);
-
-                            $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            
+                            if($project_recurrence_main_data['actual_due_month']<=12){
+                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            }else{
+                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' .($project_recurrence_main_data['actual_due_month'] % 12).'-' . $project_recurrence_main_data['actual_due_day'];
+                            }
 
                             if ($due_date <= $creation_date) {
                                 $project_recurrence_main_data['actual_due_year'] = $project_recurrence_main_data['actual_due_year'] + 1;
                             }
                         }
-                        //    else{
-                        //     $fye_day = $project_recurrence_main_data['fye_day'];
-                        //     $fye_is_weekday = $project_recurrence_main_data['fye_is_weekday'];
-                        //     $fye_month = $project_recurrence_main_data['fye_month'];
-                        //     $after_days = (int)$fye_month*2);
-                        //     if(strlen($project_recurrence_main_data['actual_due_month'])==1){
-                        //         $actual_mnth = '0'.$project_recurrence_main_data['actual_due_month'];
-                        //     }
-                        //     if(strlen($project_recurrence_main_data['actual_due_day'])==1){
-                        //         $actual_day = '0'.$project_recurrence_main_data['actual_due_day'];
-                        //     }
-                        //     $current_due = $project_recurrence_main_data['actual_due_year'].'-'.$actual_mnth.'-'.$actual_day;
-                        //     $newDate = strtotime('+'.$after_days.' days',$current_due);
-                        // }
                     }
                     if ($project_recurrence_main_data['pattern'] == 'monthly') {
                         $cur_day = date('d');
@@ -1030,7 +1073,11 @@ class Project_Template_model extends CI_Model {
                         }
                     }
                     unset($project_recurrence_main_data['id']);
-                    $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                    if($project_recurrence_main_data['actual_due_month']<=12){
+                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            }else{
+                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' .($project_recurrence_main_data['actual_due_month'] % 12).'-' . $project_recurrence_main_data['actual_due_day'];
+                            }
 
                     if ($project_recurrence_main_data['generation_month'] == '') {
                         $project_recurrence_main_data['generation_month'] = '0';
@@ -1042,7 +1089,7 @@ class Project_Template_model extends CI_Model {
                     $generation_days = ((int) $project_recurrence_main_data['generation_month'] * 30) + (int) $project_recurrence_main_data['generation_day'];
 
                     $project_recurrence_main_data['due_date'] = $due_date;
-
+//                    echo $due_date;die;
                     if ($project_recurrence_main_data['pattern'] == 'monthly') {
                         $next_due_date = date("Y-m-d", strtotime("+1 month", strtotime($due_date)));
                         $project_recurrence_main_data['next_due_date'] = $next_due_date;
@@ -1058,23 +1105,25 @@ class Project_Template_model extends CI_Model {
                     } else {
                         $project_recurrence_main_data['next_due_date'] = '0000-00-00';
                     }
-
-                    $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
+                    if($project_recurrence_main_data['generation_type']==2){
+                        $generation_date =NULL;
+                    }else{
+                        $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
+                    }
                     $project_recurrence_main_data['generation_date'] = $generation_date;
                     $project_recurrence_main_data['project_id'] = $insert_id;
                     $this->db->set($project_recurrence_main_data);
                     $this->db->insert('project_recurrence_main', $project_recurrence_main_data);
                 }
-
                 if (isset($project_task_data) && !empty($project_task_data)) {
                     $tid = [];
                     foreach ($project_task_data as $key => $val) {
                         $this->db->where('task_id', $val['id']);
                         $note_data = $this->db->get('template_task_note')->result_array();
+                        $this->db->where('task_id', $val['id']);
+                        $project_task_staff_data = $this->db->get('project_template_task_staff')->result_array();
                         unset($val['id']);
                         $val['project_id'] = $insert_id;
-//                        $this->db->set($val);
-//                        print_r($val);die;
                         $this->db->insert('project_task', $val);
                         $project_task_id = $this->db->insert_id();
                         $tid[$key] = $project_task_id;
@@ -1090,13 +1139,13 @@ class Project_Template_model extends CI_Model {
                             }
                         }
                         if (isset($project_task_staff_data) && !empty($project_task_staff_data)) {
-                            if ($this->db->get_where('project_task_staff', ['task_id' => $project_task_id])->num_rows() < 1) {
-                                foreach ($project_task_staff_data as $key => $val) {
-                                    unset($val['id']);
-                                    unset($val['task_id']);
-                                    $val['task_id'] = $project_task_id;
-                                    $this->db->set($val);
-                                    $this->db->insert('project_task_staff', $val);
+                            if ($this->db->get_where('project_task_staff', ['task_id' => $project_task_id])->num_rows() == '0') {
+                                foreach ($project_task_staff_data as $key => $val1) {
+                                    unset($val1['id']);
+                                    unset($val1['task_id']);
+                                    $val1['task_id'] = $project_task_id;
+                                    $this->db->set($val1);
+                                    $this->db->insert('project_task_staff', $val1);
                                 }
                             }
                         }
@@ -1384,11 +1433,52 @@ class Project_Template_model extends CI_Model {
             $this->db->where('project_id', $suborder_order_id);
             $this->db->update('project_main', array('status' => 0));
         }
-        
+        elseif ($status == 4) {
+            if (!empty($get_main_order_query)) {
+                $suborder_order_id = $get_main_order_query[0]['project_id'];
+            }
+            $end_date = date('Y-m-d h:i:s');
+            $this->db->where('id', $id);
+            $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 4));
+//            $this->db->where('project_id', $suborder_order_id);
+//            $this->db->update('project_main', array('status' => 0));
+            
+            if (!empty($get_main_order_query)) {
+                $suborder_order_id = $get_main_order_query[0]['project_id'];
+            }
+            $check_if_all_services_not_started = $this->db->query('select * from project_task where project_id="' . $suborder_order_id . '"')->result_array();
+//          
+            
+            if (!empty($check_if_all_services_not_started)) {
+                $k = 0;
+                $status_array = '';
+                $len = count($check_if_all_services_not_started);
+                foreach ($check_if_all_services_not_started as $val) {
+                    if ($k == $len - 1) {
+                        $status_array .= $val['tracking_description'];
+                    } else {
+                        $status_array .= $val['tracking_description'] . ',';
+                    }
+                    $k++;
+                }
+            }
+//            echo $status_array;die;
+            $status_array_values = explode(",", $status_array);
+            if (count(array_unique($status_array_values)) == 1) {
+                $this->db->where('project_id', $suborder_order_id);
+                $this->db->update('project_main', array('status' => 4));
+            }
+        }
         else {
             $end_date = date('Y-m-d h:i:s');
             $this->db->where('id', $id);
             $this->db->update('project_task', array('date_completed' => $end_date, 'tracking_description' => 2));
+            
+            if (!empty($get_main_order_query)) {
+                $suborder_order_id = $get_main_order_query[0]['project_id'];
+            }
+            $this->db->where('project_id', $suborder_order_id);
+            $this->db->update('project_main', array('status' => 1));
             
             $this->db->select('id');
             $this->db->from('project_task');
@@ -1421,7 +1511,7 @@ class Project_Template_model extends CI_Model {
                     $k++;
                 }
             }
-
+//            echo $status_array;die;
             $status_array_values = explode(",", $status_array);
             if (count(array_unique($status_array_values)) == 1) {
                 $this->db->where('project_id', $suborder_order_id);
@@ -1457,6 +1547,7 @@ class Project_Template_model extends CI_Model {
         $task_data['template_main_id'] = $template_id;
         $task_data['added_by_user'] = sess('user_id');
         $task_data['task_order'] = $post['task']['task_order'];
+        $task_data['task_title'] = $post['task']['task_title'];
         $task_data['description'] = $post['task']['description'];
         $task_data['target_start_date'] = $post['task']['target_start_date'];
         $task_data['target_start_day'] = $post['task']['target_start_day'];
@@ -1537,7 +1628,7 @@ class Project_Template_model extends CI_Model {
         if (isset($post['template_main']) && !empty($post['template_main'])) {
             unset($post['template_main']['project_id']);
             unset($post['template_main']['edit_template']);
-            $temp_main_ins['added_by_user'] = sess('user_id');
+//            $temp_main_ins['added_by_user'] = sess('user_id');
             $temp_main_ins['template_id'] = $post['template_main']['template_id'];
             $temp_main_ins['title'] = $post['template_main']['title'];
             $temp_main_ins['description'] = $post['template_main']['description'];
@@ -1773,6 +1864,7 @@ class Project_Template_model extends CI_Model {
         $task_data['template_main_id'] = $template_id;
         $task_data['added_by_user'] = sess('user_id');
         $task_data['task_order'] = $post['task']['task_order'];
+        $task_data['task_title'] = $post['task']['task_title'];
         $task_data['description'] = $post['task']['description'];
         $task_data['target_start_date'] = $post['task']['target_start_date'];
         $task_data['target_start_day'] = $post['task']['target_start_day'];
@@ -1864,6 +1956,7 @@ class Project_Template_model extends CI_Model {
         $task_data['project_id'] = $post['task']['project_id'];
         $task_data['added_by_user'] = sess('user_id');
         $task_data['task_order'] = $post['task']['task_order'];
+        $task_data['task_title'] = $post['task']['task_title'];
         $task_data['description'] = $post['task']['description'];
         $task_data['target_start_date'] = $post['task']['target_start_date'];
         $task_data['target_complete_date'] = $post['task']['target_complete_date'];
@@ -2076,19 +2169,20 @@ class Project_Template_model extends CI_Model {
         $staff_id = sess('user_id');
         $role = $user_info['role'];
         $user_office = $user_info['office'];
-        $office_staff = $department_staff = $departments = $action_id = [];
-        if ($user_type == 3 && $role == 2) {
-            $office_staff = explode(",", $user_info['office_staff']);
-            $office_staff = array_unique($office_staff);
-        }
-        if ($user_type == 2 && $role == 4) {
-            if ($user_department != '14') {
-                $departments = $user_department;
-                $department_staff = explode(",", $user_info['department_staff']);
-                $department_staff = array_unique($department_staff);
-                //$action_id = $this->get_request_to_others_action_by_staff_id($staff_id);
-            }
-        }
+        
+//        $office_staff = $department_staff = $departments = $action_id = [];
+//        if ($user_type == 3 && $role == 2) {
+//            $office_staff = explode(",", $user_info['office_staff']);
+//            $office_staff = array_unique($office_staff);
+//        }
+//        if ($user_type == 2 && $role == 4) {
+//            if ($user_department != '14') {
+//                $departments = $user_department;
+//                $department_staff = explode(",", $user_info['department_staff']);
+//                $department_staff = array_unique($department_staff);
+//                //$action_id = $this->get_request_to_others_action_by_staff_id($staff_id);
+//            }
+//        }
         $select = implode(', ', $this->project_select);
         $this->db->select($select);
         //$this->db->select('pro.*,pm.office_id as project_office_id,pm.department_id as project_department_id');
@@ -2195,41 +2289,13 @@ class Project_Template_model extends CI_Model {
             }
         } else {
             $having_or = [];
-            if ($user_type == 1 || ($user_type == 2 && $user_department == 14)) {
+            if ($user_type == 1 || ($user_type == 2 && $user_department == 14)||$user_type==2) {
 //                $this->db->where_in('my_task', [0, $staff_id]);
-            } else if ($user_type == 3 && $role == 2) {
-//                echo 'b2';die;
-                if (!empty($office_staff)) {
-                    $having_or[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%")';
-                    $having_or[] = 'added_by_user IN (' . implode(',', $office_staff) . ')';
-//                    $having_or[] = 'my_task = "' . $staff_id . '"';
-                    unset($office_staff[array_search(sess('user_id'), $office_staff)]);
-                    foreach ($office_staff as $staffID) {
-                        $having_or[] = '(all_project_staffs LIKE "%,' . $staffID . ',%" OR all_task_staffs LIKE "%,' . $staffID . ',%")';
-                    }
-                    $having[] = '(' . implode(' OR ', $having_or) . ')';
-                } else {
-                    $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%" )';
-                }
-            } else if ($user_type == 2 && $role == 4) {
-//                echo 'b3';die;
-                if ($user_department != 14) {
-                    if (isset($departments)) {
-                        $having_or[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%")';
-                        if (!empty($department_staff)) {
-                            $having_or[] = 'added_by_user IN (' . implode(',', $department_staff) . ')';
-                            foreach ($department_staff as $ds) {
-                                $having_or[] = '(all_project_staffs LIKE "%,' . $ds . ',%" OR all_task_staffs LIKE "%,' . $ds . ',%")';
-                            }
-                        }
-//                    $having_or[] = 'my_task = "' . $staff_id . '"';
-                        $having_or[] = 'department_id IN (' . $departments . ')';
-                        $having[] = '(' . implode(' OR ', $having_or) . ')';
-                    } else {
-                        $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%")';
-                    }
-                }
-            } else {
+            } 
+            else if ($user_type == 3) {
+                $this->db->where(['pm.office_id'=>3,'pro.office_id'=>$user_office]);
+            }
+            else {
                 $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%" OR added_by_user = "' . $staff_id . '")';
             }
         }
@@ -2300,7 +2366,7 @@ class Project_Template_model extends CI_Model {
             $this->db->where('pm.template_cat_id',$template_cat_id);
         }
         if($month!=''){
-            $this->db->where('prm.actual_due_month',$month);
+            $this->db->where('MONTH(prm.due_date)',$month);
         }
         
         if (count($having) != 0) {
@@ -2310,14 +2376,14 @@ class Project_Template_model extends CI_Model {
         if ($client_id != '') {
             $this->db->where('pro.client_id', $client_id);
         }
-        if($template_cat_id==1){
+//        if($template_cat_id==1){
             if($year==''){
                 $present_year=date('Y');
-                $this->db->where('prm.actual_due_year',$present_year);
+                $this->db->where('YEAR(prm.due_date)',$present_year);
             }else{
-               $this->db->where('prm.actual_due_year',$year); 
+               $this->db->where('YEAR(prm.due_date)',$year); 
             }
-        }
+//        }
         $this->db->group_by('pro.id');
         if ($sort_criteria != '') {
 //            echo "a";
@@ -2827,7 +2893,15 @@ class Project_Template_model extends CI_Model {
     public function getDueYear(){
         $this->db->select('YEAR(due_date) as due_year');
         $this->db->from('project_recurrence_main');
+        $this->db->where('YEAR(due_date)!=','0');
         $this->db->group_by('YEAR(due_date)');
+        return $this->db->get()->result_array();
+    }
+    public function getDueMonth(){
+        $this->db->select('MONTH(due_date) as due_month');
+        $this->db->from('project_recurrence_main');
+        $this->db->where('MONTH(due_date)!=','0');
+        $this->db->group_by('MONTH(due_date)');
         return $this->db->get()->result_array();
     }
     public function getProjectClientPracticeId($client_id, $client_type, $office_id = '') {
@@ -2844,6 +2918,34 @@ class Project_Template_model extends CI_Model {
             $data = $this->db->get()->row();
             return $data->practice_id;
         }
+    }
+    public function getTemplateCategoryName($template_cat_id){
+        $data=$this->db->get_where('template_category',['id'=>$template_cat_id])->row();
+        if(!empty($data)){
+            return $data->name;
+        }else{
+            return 'N/A';
+        }
+    }
+    public function getProjectOfficeClient($project_id){
+        $this->db->select('client_id,client_type,office_id');
+        $this->db->from('projects');
+        $this->db->where('id',$project_id);
+        return $this->db->get()->row();
+    }
+    public function getProjectOfficeName($office_id){
+        $data=$this->db->get_where('office',['id'=>$office_id])->row();
+        if(!empty($data)){
+            return $data->name;
+        }else{
+            return 'N/A';
+        }
+    }
+    public function getAddedUserDepartment($user_id){
+        return $this->db->get_where('department_staff',['staff_id'=>$user_id])->row()->department_id;
+    }
+    public function getAddedUserOffice($user_id){
+        return $this->db->get_where('office_staff',['staff_id'=>$user_id])->row()->office_id;
     }
 }
 

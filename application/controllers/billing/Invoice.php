@@ -29,7 +29,7 @@ class Invoice extends CI_Controller {
         ];
     }
 
-    public function index($client_id = "", $client_type = "") {
+    public function index($is_recurrence = "",$client_id = "", $client_type = "") {
         $this->load->layout = 'dashboard';
         $title = "Create Invoice";
         $render_data['title'] = $title . ' | Tax Leaf';
@@ -39,6 +39,12 @@ class Invoice extends CI_Controller {
         $render_data['page_heading'] = 'Create Invoice';
         $render_data['client_id'] = '';
         $render_data['office_id'] = '';
+        if($is_recurrence =='y'){
+            $is_recurrence ='y';
+        }else{
+            $is_recurrence='';
+        }
+        $render_data['is_recurrence']=$is_recurrence;
         if (!empty($client_id)) {
             $render_data['client_id'] = base64_decode($client_id);
             $render_data['office_id'] = $this->billing_model->get_office_id_by_individual_id($client_id);
@@ -54,13 +60,15 @@ class Invoice extends CI_Controller {
         $category_id = post('category_id');
         $service_id = post('service_id');
         $section_id = post('section_id');
+        $invoice_type = post('invoice_type');
         if ($category_id != '') {
             echo '<div class="form-group" id="service_dropdown_div_' . $section_id . '">
             <label class="col-lg-2 control-label">Service<span class="text-danger">*</span></label>
             <div class="col-lg-10">
                 <select class="form-control" name="service_section[' . $section_id . '][service_id]" onchange="getServiceInfoById(this.value, ' . $category_id . ', ' . $section_id . ');" id="service' . $section_id . '" title="Service" required="">
                     <option value="">Select an option</option>';
-            load_ddl_option("get_service_list_by_category_id", $service_id != '' ? $service_id : '', $category_id);
+            // load_ddl_option("get_service_list_by_category_id", $service_id != '' ? $service_id : '', $category_id);
+                load_ddl_option_for_service_list($service_id != '' ? $service_id : '', $category_id, $invoice_type);
             echo '</select>
                 <div class="errorMessage text-danger"></div>
             </div>
@@ -87,6 +95,8 @@ class Invoice extends CI_Controller {
             $return['last_section_id'] = end($section_id);
             $section_id_hidden = post('section_id') . ',' . $render_data['section_id'];
         }
+
+        $render_data['invoice_type'] = post('invoice_type');
         $return['section_result'] = $this->load->view('billing/service_section_ajax', $render_data, TRUE);
         $return['section_id_hidden'] = $section_id_hidden;
         echo json_encode($return);
@@ -124,12 +134,24 @@ class Invoice extends CI_Controller {
     }
 
     public function request_create_invoice() {
-        $result = $this->billing_model->request_create_invoice(post());
-        if ($result) {
-            echo base64_encode($result);
-        } else {
-            echo 0;
+        // print_r(post());exit;
+        $is_recurrence = $this->input->post('recurring');
+        if($is_recurrence != ''){
+            $result = $this->billing_model->request_create_invoice(post(),$is_recurrence);
+            if ($result) {
+                echo base64_encode($result);
+            } else {
+                echo 0;
+            } 
+        }else{
+            $result = $this->billing_model->request_create_invoice(post(),'');
+            if ($result) {
+                echo base64_encode($result);
+            } else {
+                echo 0;
+            } 
         }
+        
     }
 
     public function place($invoice_id = "", $type = "place") {
@@ -149,6 +171,7 @@ class Invoice extends CI_Controller {
             }
             $render_data['view_type'] = $type;
             $reference_id = $order_summary['reference_id'];
+            $render_data['invoice_id']=$invoice_id;
             $render_data['order_summary'] = $order_summary;
             $render_data['order_summary']['invoice_type_id'] = $invoice_type = $order_summary['invoice_type'];
             $render_data['order_summary']['created_time'] = $created_time = date("m-d-Y h:i", strtotime($order_summary['created_time']));
@@ -278,8 +301,14 @@ class Invoice extends CI_Controller {
             $render_data['order_summary']['total_price'] = '$' . number_format((float) array_sum(array_column($render_data['order_summary']['services'], 'override_price')), 2, '.', '');
             $render_data['order_summary']['sub_total'] = number_format((float) array_sum(array_column($render_data['order_summary']['services'], 'sub_total')), 2, '.', '');
             $render_data['order_summary']['invoice_notes'] = invoice_notes($invoice_id, '');
+            $is_recurrence=$this->billing_model->getInvoiceIsRecurrence($invoice_id);
+            if(!empty($is_recurrence) && $is_recurrence=='y'){
+                $type='y';
+            }else{
+                $type='';
+            }
             $render_data['place'] = '<div class="text-center">
-            <button class="btn btn-default m-t-10 m-r-5" type="button" onclick="window.location.href = \'' . base_url('billing/home') . '\';">Close</button>
+            <button class="btn btn-default m-t-10 m-r-5" type="button" onclick="window.location.href = \'' . base_url('billing/home/index/'.$type) . '\';">Close</button>
             <button class="btn btn-success m-t-10 m-r-5" type="button" onclick="placeOrder(\'' . $invoice_id . '\', \'' . implode(',', $render_data['contact_email_list']) . '\');"><i class="fa fa-envelope-o"></i> Email</button>
             <button class="btn bg-purple m-t-10 m-r-5" type="button" onclick="printOrder();"><i class="fa fa-print"></i> Print</button>
             <button class="btn btn-warning m-t-10 m-r-5" type="button" onclick="go(\'billing/invoice/export/' . $invoice_id . '\');"><i class="fa fa-file-pdf-o"></i> Download PDF</button>
@@ -449,13 +478,16 @@ class Invoice extends CI_Controller {
     public function get_invoice_container_ajax() {
         $invoice_type = post('invoice_type');
         $reference_id = post('reference_id');
+        $is_recurrence = post('is_recurrence');
         $render_data['client_id'] = $client_id = post('client_id');
         $render_data['reference_id'] = $reference_id;
         $render_data['service_category_list'] = $this->billing_model->get_service_category();
         if ($invoice_type == '1') {
             $render_data['reference'] = 'company';
+            $render_data['invoice_type'] = $invoice_type;
         } else {
             $render_data['reference'] = 'individual';
+            $render_data['invoice_type'] = $invoice_type;
         }
         $render_data['office_id'] = $render_data['title_id'] = '';
         if ($client_id != '') {
@@ -469,6 +501,13 @@ class Invoice extends CI_Controller {
                 $render_data['client_id'] = $individual_info['individual_id'];
             }
         }
+
+        if($is_recurrence =='y'){
+            $render_data['is_recurrence'] = 'y';
+        }else{
+            $render_data['is_recurrence'] = '';
+        }
+
         $this->load->view('billing/invoice_type' . $invoice_type, $render_data);
     }
 
@@ -521,6 +560,7 @@ class Invoice extends CI_Controller {
             $render_data['invoice_id'] = $invoice_id;
             $render_data['order_summary'] = $order_summary;
             $render_data['edit_type'] = $type;
+            $render_data['is_recurrence']=$this->billing_model->getInvoiceIsRecurrence($invoice_id);
             $render_data['order_summary']['services'] = $this->billing_model->get_order_by_invoice_id($invoice_id);
             $this->load->template('billing/edit_invoice', $render_data);
         } else {

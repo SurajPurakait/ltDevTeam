@@ -12,14 +12,21 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Id:<span class="spanclass text-danger">*</span></label>
-                            <input type="text" class="form-control" id="task_order" name="task[task_order]" value="<?= $task_details->task_order ?>" title="Order" required>
+                            <label class="control-label">Task Id:<span class="spanclass text-danger">*</span></label>
+                            <input type="text" class="form-control" id="task_order" name="task[task_order]" value="<?= $task_details->task_order ?>" title="Task Id" required>
                             <div class="errorMessage text-danger"></div>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="control-label">Task:</label>
+                            <label class="control-label">Task Title:<span class="spanclass text-danger">*</span></label>
+                            <input type="text" class="form-control" id="task_title" name="task[task_title]" value="<?= $task_details->task_title ?>" title="Title" required>
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Task Description:</label>
                             <textarea class="form-control" id="description" name="task[description]" > <?= $task_details->description ?></textarea>
                         </div>
                     </div>
@@ -52,7 +59,7 @@
                             <label class="">For Complete</label>
                             <input class="form-control" type="number" name="task[target_complete_date]" value="<?= $task_details->target_complete_date ?>" min="0" style="width: 100px" id="target_complete_date" required>
                             <!--<label class="control-label"><input type="radio" <?php // echo ($task_details->target_complete_day==1) ? 'checked' : ''; ?> name="task[target_complete_day]" value="1">&nbsp; Days before due date</label>-->
-                            <label class="control-label"><input type="radio" <?php echo ($task_details->target_complete_day==2) ? 'checked' : ''; ?> name="task[target_complete_day]" value="2">&nbsp; Days after creation date</label>
+                            <label class="control-label"><input type="radio" <?php echo ($task_details->target_complete_day==2) ? 'checked' : ''; ?> name="task[target_complete_day]" value="2">&nbsp; Days before project due date</label>
                         </div>
                     </div>
                     <div class="errorMessage text-danger"></div>
@@ -64,10 +71,10 @@
                         <div class="form-group">
                             <label class="control-label">Tracking Description:</label>
                             <select class="form-control" id="description" name="task[tracking_description]">
-                                <option value="0" value="<?= $task_details->tracking_description=='0'?'selected':'' ?>">New</option>
-                                <option value="1" value="<?= $task_details->tracking_description=='1'?'selected':'' ?>">Started</option>
-                                <option value="3" value="<?= $task_details->tracking_description=='3'?'selected':'' ?>">Ready</option>
-                                <option value="2" value="<?= $task_details->tracking_description=='2'?'selected':'' ?>">Completed</option>
+                                <option value="0" <?= $task_details->tracking_description=='0'?'selected':'' ?>>New</option>
+                                <option value="1" <?= $task_details->tracking_description=='1'?'selected':'' ?>>Started</option>
+                                <option value="3" <?= $task_details->tracking_description=='3'?'selected':'' ?>>Ready</option>
+                                <option value="2" <?= $task_details->tracking_description=='2'?'selected':'' ?>>Completed</option>
                             </select>
                         </div>
                     </div>

@@ -3,17 +3,27 @@
 <div class="form-group">
     <label class="col-lg-2 control-label">Existing Individual<span class="text-danger">*</span></label>
     <div class="col-lg-10">
+        <?php if($is_recurrence == 'y'){ ?>
         <select class="form-control type_of_individual" name="type_of_individual" id="type_of_individual_ddl" onchange="individualTypeChange(this.value, <?= $reference_id; ?>, '<?= $reference; ?>');" title="Type Of Individual" required>
             <option value="0" <?= $client_id != '' ? 'selected="selected"' : ''; ?>>Yes</option>
             <option <?= $client_id == '' ? 'selected="selected"' : ''; ?> value="1">No</option>
         </select>
+
+        <?php }else{ ?>
+
+        <select class="form-control type_of_individual" name="type_of_individual" id="type_of_individual_ddl" onchange="individualTypeChange(this.value, <?= $reference_id; ?>, '<?= $reference; ?>');" title="Type Of Individual" required>
+            <option value="0" <?= $client_id != '' ? 'selected="selected"' : ''; ?>>Yes</option>
+            <option <?= $client_id == '' ? 'selected="selected"' : ''; ?> value="1">No</option>
+        </select>
+        <?php } ?>
+
         <div class="errorMessage text-danger"></div>
     </div>
 </div>
 <div class="form-group client_type_div0">
     <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
     <div class="col-lg-10">
-        <select class="form-control client_type_field0" name="staff_office" id="staff_office" onchange="refresh_existing_individual_list(this.value, '');" title="Office" required="">
+        <select class="form-control chosen-select client_type_field0" name="staff_office" id="staff_office" onchange="refresh_existing_individual_list(this.value, '');" title="Office" required="">
             <option value="">Select Office</option>
             <?php load_ddl_option("staff_office_list", $office_id, (staff_info()['type'] != 1) ? "staff_office" : ""); ?>
         </select>
@@ -24,10 +34,17 @@
     <div class="form-group">
         <label class="col-lg-2 control-label">Individual List<span class="text-danger">*</span></label>
         <div class="col-lg-10">
+            <?php if($is_recurrence == 'y'){ ?>
+            <select class="form-control individual_list client_type_field0" name="individual_list[]" id="individual_list_ddl" onchange="fetchExistingIndividualData(this.value, <?= $reference_id; ?>, '<?= $reference; ?>');" title="Individual List" multiple>
+                <option value="">Select an option</option>
+                <?php //load_ddl_option("existing_individual_list_new"); ?>
+            </select>
+            <?php }else{ ?>
             <select class="form-control individual_list client_type_field0" name="individual_list" id="individual_list_ddl" onchange="fetchExistingIndividualData(this.value, <?= $reference_id; ?>, '<?= $reference; ?>');" title="Individual List">
                 <option value="">Select an option</option>
                 <?php //load_ddl_option("existing_individual_list_new"); ?>
             </select>
+            <?php } ?>   
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
@@ -71,13 +88,15 @@
 </div>
 
 
-<div id="contact_info_div">    
+<div id="contact_info_div">
+    <?php if($is_recurrence != 'y'){ ?>    
     <h3>Contact Info<span class="text-danger">*</span><span class="display_div">&nbsp; (<a href="javascript:void(0);" class="contactadd" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>'); return false;">Add Contact</a>)</span></h3>
     <div id="contact-list">
         <input type="hidden" title="Contact Info" id="contact-list-count" required="required" value="">
         <div class="errorMessage text-danger"></div>
     </div>
     <div class="hr-line-dashed"></div>
+    <?php } ?>
 </div>
 
 <div id="documents_div" class="display_div">
@@ -128,7 +147,7 @@
     <div class="form-group office-internal">
         <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <select class="form-control value_field required_field" name="office" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required="">
+            <select class="form-control chosen-select value_field required_field" name="office" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required="">
                 <option value="">Select an option</option>
                 <?php load_ddl_option("staff_office_list"); ?>
             </select>
@@ -173,7 +192,7 @@
     <div class="form-group">
         <label class="col-lg-2 control-label">Referred By Source<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <select class="form-control value_field required_field" name="referred_by_source" id="referred_by_source" onchange="change_referred_name_status(this.value);" title="Referred By Source" required>
+            <select class="form-control chosen-select value_field required_field" name="referred_by_source" id="referred_by_source" onchange="change_referred_name_status(this.value);" title="Referred By Source" required>
                 <option value="">Select an option</option>
                 <?php load_ddl_option("referer_by_source"); ?>
             </select>
@@ -198,6 +217,7 @@
 </div>
 <div id="service_section_div"></div>
 <input type="hidden" id="section_id" value="">
+<input type="hidden" id="invoice_type" value="<?= $invoice_type; ?>">
 <input type="hidden" name="reference" id="reference" value="<?= $reference; ?>">
 <input type="hidden" name="reference_id" id="reference_id" value="<?= $reference_id; ?>">
 <script>

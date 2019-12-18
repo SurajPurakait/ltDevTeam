@@ -16,9 +16,10 @@ Class Lead_management extends CI_Model {
         $this->lead_select[] = 'lm.office AS office';
         $this->lead_select[] = 'lm.type AS type';
         $this->lead_select[] = 'lm.type_of_contact AS type_of_contact';
-        $this->lead_select[] = 'lm.language AS language';
+//      $this->lead_select[] = 'lm.language AS language';
+        $this->lead_select[] ='(SELECT  language from  languages WHERE id = lm.language) AS language';
         $this->lead_select[] = '(CASE WHEN lm.type = \'1\' THEN (SELECT name FROM type_of_contact_prospect WHERE id = lm.type_of_contact) ELSE (SELECT name FROM type_of_contact_referral WHERE id = lm.type_of_contact) END) AS contact_type_name';
-        $this->lead_select[] = 'CONCAT(lm.last_name, \', \', lm.first_name) AS full_name';
+        $this->lead_select[] = 'CONCAT(lm.first_name, \', \', lm.last_name) AS full_name';
         $this->lead_select[] = 'lm.first_name AS first_name';
         $this->lead_select[] = '(CASE WHEN lm.status = 0 THEN \'New\' WHEN lm.status = 1 THEN \'Complete\' WHEN lm.status = 2 THEN \'Inactive\' WHEN lm.status = 3 THEN \'Active\' ELSE \'Unknown\' END) AS status_name';
         $this->lead_select[] = 'lm.status AS status';
@@ -28,13 +29,14 @@ Class Lead_management extends CI_Model {
         $this->lead_select[] = 'lm.complete_date AS complete_date';
         $this->lead_select[] = 'lm.assigned_status AS assigned_status';
         $this->lead_select[] = 'lm.lead_source_detail AS lead_source_detail';
-        $this->lead_select[] = '(SELECT CONCAT(staff.last_name, \', \',staff.first_name, \' \', staff.middle_name) FROM staff WHERE id = lm.staff_requested_by) AS requested_staff_name';
+        $this->lead_select[] = '(SELECT CONCAT(staff.first_name, \' \',staff.last_name, \' \', staff.middle_name) FROM staff WHERE id = lm.staff_requested_by) AS requested_staff_name';
         $this->lead_select[] = '(SELECT id FROM staff WHERE id = lm.staff_requested_by) AS requested_staff_id';
         $this->lead_select[] = '(SELECT office_id from office WHERE id = (SELECT office_id FROM office_staff WHERE staff_id = lm.staff_requested_by limit 0,1)) AS request_staff_office_name';
         $this->lead_select[] = '(SELECT COUNT(ln.id) FROM lead_notes AS ln WHERE ln.lead_id = lm.id) AS notes_count';
         $this->lead_select[] = 'lm.day_0_mail_date AS day_0_mail_date';
         $this->lead_select[] = 'lm.day_3_mail_date AS day_3_mail_date';
         $this->lead_select[] = 'lm.day_6_mail_date AS day_6_mail_date';
+        $this->lead_select[] = 'lm.mail_campaign_status AS mail_campaign_status';
         $this->filter_element = [
             "type" => "type_of_contact",
             "tracking" => "status",
@@ -52,6 +54,13 @@ Class Lead_management extends CI_Model {
         ];
 
         $this->filter_element_event = [
+            "event_name" => "ev.event_name",
+            "office" => "of.name",
+            "date" => "ev.event_date",
+            "location" => "ev.location"
+        ];
+
+        $this->sorting_element_event = [
             "event_name" => "ev.event_name",
             "office" => "of.name",
             "date" => "ev.event_date",
@@ -439,13 +448,8 @@ Class Lead_management extends CI_Model {
             $status = 1;
         } else {
             if (isset($data['mail_campaign_status'])) {
-                if ($data['mail_campaign_status'] == 1) {
-                    $status = 3;
-                } else {
-                    $status = 0;
-                }
-            } else {
                 $status = 0;
+                // concept changed as per mantis issue on 03.12.2019 
             }
         }
 
@@ -868,9 +872,11 @@ Class Lead_management extends CI_Model {
         $this->db->trans_begin();
         $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => $status, "section_id" => $id, "related_table_name" => "lead_management"]);
         $data = ["status" => $status];
+
         switch ($status) {
             case "0":
                 $data["submission_date"] = date('Y-m-d');
+                $data["active_date"] = '0000-00-00';
                 break;
             case "1":
                 $data["complete_date"] = date('Y-m-d');
@@ -880,39 +886,66 @@ Class Lead_management extends CI_Model {
                 break;
             case "3":
                 $data["active_date"] = date('Y-m-d');
-                $data["mail_campaign_status"] = '1';
                 break;
         }
 
         $this->db->where("id", $id)->update("lead_management", $data);
 
-        if ($status == 3) {
+        $staff[0] = sess('user_id');
+        $this->system->save_general_notification('lead', $id, 'tracking', $staff, '', 1);
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return false;
+        } else {
+            $this->db->trans_commit();
+            return true;
+        }
+    }
+    public function change_mail_campaign_lead($data) {
+        $id = $data['lead_id'];
+        $update_data = [];
+        if ($data['lead_email'] == 'other') {
+            $update_data['email'] = $data['confirm_email'];
+        }
+        if ($data['mail_campaign_status_lead'] == '1') {
+            $update_data['mail_campaign_status'] = '1';
+
+        } else {
+            $update_data['mail_campaign_status'] = '0';
+            $update_data["day_0_mail_date"] = '0000-00-00';
+        }
+        $this->db->where('id',$id);
+        $this->db->update('lead_management',$update_data);
+
+        $lead_data = $this->db->get_where('lead_management',array('id'=>$id))->row_array();
+        
+        if ($lead_data['mail_campaign_status'] == 1) {
             $check = $this->db->query("select * from lead_management where id=$id")->row_array();
             if (!empty($check)) {
                 //if ($check['day_0_mail_date'] == '0000-00-00') {
                 /* mail section */
                 $user_email = $check['email'];
-                // $config = Array(
-                //    'protocol' => 'smtp',
-                //    'smtp_host' => 'ssl://smtp.gmail.com',
-                //    'smtp_port' => 465,
-                //    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-                //    'smtp_pass' => 'codetestml0016@123', // change it to yours
-                //    'mailtype' => 'html',
-                //    'charset' => 'utf-8',
-                //    'wordwrap' => TRUE
-                // );
-
                 $config = Array(
-                    //'protocol' => 'smtp',
-                    'smtp_host' => 'mail.leafnet.us',
-                    'smtp_port' => 465,
-                    'smtp_user' => 'developer@leafnet.us', // change it to yours
-                    'smtp_pass' => 'developer@123', // change it to yours
-                    'mailtype' => 'html',
-                    'charset' => 'utf-8',
-                    'wordwrap' => TRUE
+                   'protocol' => 'smtp',
+                   'smtp_host' => 'ssl://smtp.gmail.com',
+                   'smtp_port' => 465,
+                   'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+                   'smtp_pass' => 'codetestml0016@123', // change it to yours
+                   'mailtype' => 'html',
+                   'charset' => 'utf-8',
+                   'wordwrap' => TRUE
                 );
+
+                // $config = Array(
+                //     //'protocol' => 'smtp',
+                //     'smtp_host' => 'mail.leafnet.us',
+                //     'smtp_port' => 465,
+                //     'smtp_user' => 'developer@leafnet.us', // change it to yours
+                //     'smtp_pass' => 'developer@123', // change it to yours
+                //     'mailtype' => 'html',
+                //     'charset' => 'utf-8',
+                //     'wordwrap' => TRUE
+                // );
                 $lead_result = $this->view_leads_record($id);
                 $mail_data = $this->get_campaign_mail_data(($check["type"] == '1') ? '1':'2', $check["language"], 1);
                 $email_subject = $mail_data['subject'];
@@ -947,7 +980,7 @@ Class Lead_management extends CI_Model {
                     'source_detail' => $lead_result['lead_source_detail'],
                     'lead_type' => $lead_type_name['name'],
                     'office_phone_number' => $office_info['phone'],
-                    'office_address' => $office_info['address'],
+                    'office_address' => $office_info['full_address'],
                     'office_name' => $office_info['name'],
                     'requested_by' => $requested_by['full_name']
                 ];
@@ -958,7 +991,7 @@ Class Lead_management extends CI_Model {
                         $email_subject = str_replace('#' . $index, $value, $email_subject);
                     }
                 }
-
+                $chat_link = 'https://www.websitealive3.com/12709/operator/guest/gDefault_v2.asp?cframe=login&chattype=mobile&groupid=12709&websiteid=783&departmentid=15447&sessionid_=&iniframe=&ppc_id=&autostart=&proactiveid=&req_router_type=&text2chat_info=&loginname=&loginnamelast=&loginemail=&loginphone=&infocapture_ids=&infocapture_values=&dl=&loginquestion=';
                 $user_logo = "";
                 if ($lead_result['office'] != 0) {
                     $user_logo = get_user_logo($lead_result['office']);
@@ -977,62 +1010,80 @@ Class Lead_management extends CI_Model {
                     $divider_img = 'http://www.taxleaf.com/Email/divider2.gif';
                 }
                 $message = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-		                    <html xmlns="http://www.w3.org/1999/xhtml">
-		                    <head>
-		                    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		                    <title>TAXLEAF</title>
-		                    <style type="text/css">
-		                    body {
-		                        background-color: #FFFFFF;
-		                        margin-left: 0px;
-		                        margin-top: 0px;
-		                        margin-right: 0px;
-		                        margin-bottom: 0px;
-		                    }
-		                    .textoblanco {
-		                        font-family: Arial, Helvetica, sans-serif;
-		                        font-size: 12px;
-		                        color: #000;
-		                    }
-		                    .textoblanco {
-		                        font-family: Arial, Helvetica, sans-serif;
-		                        font-size: 12px;
-		                        color: #FFF;
-		                    }
-		                    .textonegro {
-		                        font-family: Arial, Helvetica, sans-serif;
-		                        font-size: 12px;
-		                        color: #000;
-		                    }
-		                    </style>
-		                    </head>
+                            <html xmlns="http://www.w3.org/1999/xhtml">
+                            <head>
+                            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                            <title>TAXLEAF</title>
+                            <style type="text/css">
+                            body {
+                                background-color: #FFFFFF;
+                                margin-left: 0px;
+                                margin-top: 0px;
+                                margin-right: 0px;
+                                margin-bottom: 0px;
+                            }
+                            .textoblanco {
+                                font-family: Arial, Helvetica, sans-serif;
+                                font-size: 12px;
+                                color: #000;
+                            }
+                            .textoblanco {
+                                font-family: Arial, Helvetica, sans-serif;
+                                font-size: 12px;
+                                color: #FFF;
+                            }
+                            .textonegro {
+                                font-family: Arial, Helvetica, sans-serif;
+                                font-size: 12px;
+                                color: #000;
+                            }
+                            </style>
+                            </head>
 
-		                    <body>
-		                    <br />
-		                    <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
-		                      <tr>
-		                        <td><table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
-		                          <tr>
-		                            <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="250" /></td>
-		                          </tr>
-		                        </table>
-		                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
-		                            <tr>
-		                              <td><img src="' . $divider_img . '" width="600" height="30" /></td>
-		                            </tr>
-		                          </table>
-		                          <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
-		                            <tr>
-		                              <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong>
-		                                </strong>' . $mail_body . '</span></p>
-		                              </td>
-		                            </tr>
-		                          </table>          
-		                          </td>
-		                      </tr>		                        
-		                    </table>
-		                    </body>
-		                    </html>';
+                            <body>
+                            <br />
+                            <table width="600" border="0" bgcolor="' . $bgcolor . '" align="center" cellpadding="0" cellspacing="10">
+                              <tr>
+                                <td><table width="600" border="0" align="center" cellpadding="0" cellspacing="0">
+                                  <tr>
+                                    <td style="background: #fff"><img src="' . $user_logo_fullpath . '" width="250" /></td>
+                                  </tr>
+                                </table>
+                                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                      <td><img src="' . $divider_img . '" width="600" height="30" /></td>
+                                    </tr>
+                                  </table>
+                                  <table width="600" bgcolor="#FFFFFF" border="0" align="center" cellpadding="0" cellspacing="15">
+                                    <tr>
+                                      <td valign="top" style="color:#000;" class="textoblanco"><p><span class="textonegro"><strong>
+                                        </strong>' . $mail_body . '</span></p>
+                                      </td>
+                                    </tr>
+                                  </table>          
+                                  </td>
+
+                              </tr>
+                              <tr>
+                                  <td valign="top">
+                                      <table style="width:100%;" border="0" cellpadding="0" cellspacing="0">
+                                        <tr style="background: transparent; height: 60px;">
+                                            <td style="text-align: center;">
+                                                <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Home</a>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Services</a>
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <a href="'. $chat_link .'" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Chat</a>
+                                            </td>
+                                        </tr>
+                                      </table>
+                                  </td>
+                              </tr>                             
+                            </table>
+                            </body>
+                            </html>';
                 $this->load->library('email', $config);
                 $this->email->set_newline("\r\n");
                 $this->email->from($from, $from_name); // change it to yours
@@ -1048,18 +1099,11 @@ Class Lead_management extends CI_Model {
                 /* mail section */
                 //}
             }
-        }
-        $staff[0] = sess('user_id');
-        $this->system->save_general_notification('lead', $id, 'tracking', $staff, '', 1);
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
-            return false;
+            echo "1";
         } else {
-            $this->db->trans_commit();
-            return true;
+            echo "-1";
         }
     }
-
     public function load_count_data() {
         $user_details = staff_info();
         $usertype = $user_details['type'];
@@ -1611,10 +1655,6 @@ Class Lead_management extends CI_Model {
         return $this->db->get('event')->result_array();
     }
 
-    public function get_office_by_id($id) {
-        return $this->db->get_where("office", array('id' => $id));
-    }
-
     public function get_prospects() {
         return $this->db->get("lead_management")->result_array();
     }
@@ -2074,7 +2114,7 @@ Class Lead_management extends CI_Model {
     }
 
 
-      public function get_event_list($office_id = '',$filter_data = []) {
+      public function get_event_list($office_id = '',$filter_data = [],$sort = []) {
         $this->db->select('ev.*,of.*');
         $this->db->from('event AS ev');
         $this->db->join('office AS of','ev.office_id=of.id');
@@ -2127,6 +2167,12 @@ Class Lead_management extends CI_Model {
             }
         }
 
+        // $order_by = 'ORDER BY `ev`.`id` DESC ';
+        if (!empty($sort) && count($sort) > 0) {
+            $order_by = $this->sorting_element_event[$sort['sort_criteria']] . ' ' . $sort['sort_type'];
+            $this->db->order_by($order_by);
+        }
+
         if (!empty($filter_where_in)) {
             
             foreach ($filter_where_in as $column => $in) {
@@ -2141,6 +2187,19 @@ Class Lead_management extends CI_Model {
 
         $result = $this->db->get()->result_array();
         return $result;
+    }
+
+    public function get_lead_details_by_id($lead_id) {
+        $this->db->where('type !=','2');
+        $this->db->where('id',$lead_id);
+        return $this->db->get('lead_management')->row_array();
+    }
+
+    public function check_changes_in_mail_campaign($data) {
+        $this->db->where('mail_campaign_status',$data['mail_campaign_status_lead']);
+        $this->db->where('email',$data['lead_email']);
+        $this->db->where('id',$data['lead_id']);
+        return $this->db->get('lead_management')->num_rows();
     }
 
 }

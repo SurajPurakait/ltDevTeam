@@ -23,7 +23,7 @@ class Service_setup extends CI_Controller
         $render_data['main_menu'] = 'services';
         $render_data['menu'] = 'service_setup';
         $render_data['header_title'] = $title;
-        $render_data['service_list'] = $this->administration->get_service_list();
+        $render_data['service_list'] = $this->administration->get_service_list_for_service_setup();
         $this->load->template('administration/service_setup', $render_data);
     }
 
@@ -68,8 +68,10 @@ class Service_setup extends CI_Controller
             $shortcode = $this->input->post("shortcode");
             $note = $this->input->post('note');
             $fixedcost = $this->input->post('fixedcost');
+            $responsible_assigned = $this->input->post('responsible_assigned');
+            $client_type = $this->input->post('client_type');
 
-            echo $this->administration->add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode,$note,$fixedcost);
+            echo $this->administration->add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode,$note,$fixedcost,$responsible_assigned,$client_type);
 
         }
     }
@@ -93,8 +95,10 @@ class Service_setup extends CI_Controller
             $shortcode = $this->input->post("shortcode");
             $note = $this->input->post('note');
             $fixedcost = $this->input->post('fixedcost');
+            $responsible_assigned = $this->input->post('responsible_assigned');
+            $client_type = $this->input->post('client_type');
             // echo $fixedcost;exit;
-            echo $this->administration->update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode,$note, $fixedcost);
+            echo $this->administration->update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode,$note, $fixedcost,$responsible_assigned,$client_type);
 
         }
     }
@@ -113,6 +117,21 @@ class Service_setup extends CI_Controller
     public function get_service_relations($service_id)
     {
         echo $this->administration->get_service_relations($service_id);
+    }
+
+    public function get_service_setup_relations($service_id) {
+
+        echo $this->administration->get_service_setup_relations($service_id);
+    }
+
+    public function deactive_service() {
+        $id = $this->input->post("service_id");
+        $result = $this->administration->deactive_service($id);
+        if ($result) {
+            echo "1";
+        } else {
+            echo "0";
+        }
     }
 
 }

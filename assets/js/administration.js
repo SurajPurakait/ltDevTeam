@@ -31,8 +31,8 @@ function update_departments() {
     });
 }
 
-function insert_departments(){
-   if (!requiredValidation('add_dept_form')) {
+function insert_departments() {
+    if (!requiredValidation('add_dept_form')) {
         return false;
     }
     var form_data = new FormData(document.getElementById('add_dept_form'));
@@ -59,7 +59,7 @@ function insert_departments(){
         complete: function (msg) {
             closeLoading();
         }
-    }); 
+    });
 }
 
 function add_franchise() {
@@ -128,10 +128,10 @@ function update_franchise() {
 }
 
 
-    function save_service_fees(){
-        // alert("Hello");return false;
-       
-        var form_data = new FormData(document.getElementById('filter-form'));
+function save_service_fees() {
+    // alert("Hello");return false;
+
+    var form_data = new FormData(document.getElementById('filter-form'));
     $.ajax({
         type: 'POST',
         url: base_url + 'administration/office/save_service_fees',
@@ -141,7 +141,7 @@ function update_franchise() {
         contentType: false,
         processData: false,
         success: function (result) {
-            
+
             if (result == 1) {
                 // save_office_manager();
                 swal("Success!", "Successfully saved!", "success");
@@ -158,23 +158,23 @@ function update_franchise() {
         }
     });
 
-    }
+}
 
-    function cancel_office() {
+function cancel_office() {
     goURL('../index');
-  }
+}
 
 function insert_staff() {
     if (!requiredValidation('add_staff_form')) {
         return false;
     }
-     var password=$("#password").val();
-        var retype_password=$("#retype_password").val();
-    
-    if (retype_password != "" && password != retype_password ) {
+    var password = $("#password").val();
+    var retype_password = $("#retype_password").val();
+
+    if (retype_password != "" && password != retype_password) {
         swal("ERROR!", "Password Mismatch! \n Please, try again.", "error");
-         return false;
-       
+        return false;
+
     }
     var form_data = new FormData(document.getElementById('add_staff_form'));
     $.ajax({
@@ -207,13 +207,13 @@ function update_staff() {
     if (!requiredValidation('edit_staff_form')) {
         return false;
     }
-        var password=$("#password").val();
-        var retype_password=$("#retype_password").val();
-    
-    if (retype_password != "" && password != retype_password ) {
+    var password = $("#password").val();
+    var retype_password = $("#retype_password").val();
+
+    if (retype_password != "" && password != retype_password) {
         swal("ERROR!", "Password Mismatch! \n Please, try again.", "error");
-         return false;
-       
+        return false;
+
     }
     var form_data = new FormData(document.getElementById('edit_staff_form'));
     $.ajax({
@@ -240,11 +240,11 @@ function update_staff() {
             }
         }
     });
-        
+
 }
 
 
-function get_related_services(previous_services, current_service) {    
+function get_related_services(previous_services, current_service) {
     var service_id = $("#servicecat").find(":selected").val();
     $.post(base_url + "/administration/service_setup/get_related_services", {
         id: service_id,
@@ -267,12 +267,31 @@ function addRelatedservice() {
     var relatedserv = $('#add-services-form #relatedserv').val();
     var startdays = $('#add-services-form #startdays').val();
     var enddays = $('#add-services-form #enddays').val();
-    var dept = $('#add-services-form #dept option:selected').val();
+    // var dept = $('#add-services-form #dept option:selected').val();
     var input_form = $('#add-services-form input[name="input_form"]:checked').val();
     var shortcode = $('#add-services-form #shorthidden').val();
     var note = $('#add-services-form #note').val();
     var fixedcost = $('#add-services-form #fixedcost').val();
 
+    var responsible_assigned = $('#add-services-form input[name="responsible_assigned"]:checked').val();
+    if(responsible_assigned == 2){
+      var dept = $('#add-services-form #dept option:selected').val();  
+  }else{
+      var dept = "NULL"; 
+  }
+
+    var client_type = [];
+            $.each($("input[name='client_type']:checked"), function(){
+                client_type.push($(this).val());
+            });
+    if(client_type == 0){
+        client_type = 0;
+    }else if(client_type == 1){
+        client_type = 1;
+    }else if(client_type == "0,1"){
+        client_type = 2;
+    }
+   
     $.ajax({
         type: "POST",
         data: {
@@ -285,12 +304,15 @@ function addRelatedservice() {
             dept: dept,
             input_form: input_form,
             shortcode: shortcode,
-            note:note,
-            fixedcost:fixedcost
+            note: note,
+            fixedcost: fixedcost,
+            responsible_assigned:responsible_assigned,
+            client_type: client_type
         },
         url: base_url + '/administration/service_setup/add_related_service',
         dataType: "html",
         success: function (result) {
+            // console.log(result);return false;
             if (result.trim() == "1") {
                 swal({
                     title: "Success!",
@@ -423,7 +445,6 @@ function delete_office(id) {
                                 office_id: id
                             },
                             success: function (result) {
-                                alert(result);
                                 if (result == "1") {
                                     swal({
                                         title: "Success!",
@@ -434,6 +455,52 @@ function delete_office(id) {
                                     });
                                 } else {
                                     swal("ERROR!", "Unable to delete this office", "error");
+                                }
+                            }
+                        });
+                    });
+        }
+    });
+}
+
+
+function deactive_office(id, status = '') {
+//     alert(status);return false;
+    if (status == 3) {
+        var title = 'Do you want to activate?';
+        var msg = "Office has been activated successfully!";
+    } else {
+        title = 'Do you want to deactivate?';
+        msg = "Office has been deactivated successfully!";
+    }
+    $.get(base_url + "administration/office/get_office_relations/" + id, function (result) {
+        if (result != 0) {
+            swal({
+                title: title,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, change it!",
+                closeOnConfirm: false
+            },
+                    function () {
+                        $.ajax({
+                            type: 'POST',
+                            url: base_url + '/administration/office/deactivate_office',
+                            data: {
+                                office_id: id
+                            },
+                            success: function (results) {
+                                if (results == 1) {
+                                    swal({
+                                        title: "Success!",
+                                        "text": msg,
+                                        "type": "success"
+                                    }, function () {
+                                        goURL(base_url + 'administration/office');
+                                    });
+                                } else {
+                                    swal("ERROR!", "Unable to change this office status", "error");
                                 }
                             }
                         });
@@ -497,12 +564,31 @@ function updateRelatedservice() {
     var relatedserv = $('#edit-services-form #relatedserv').val();
     var startdays = $('#edit-services-form #startdays').val();
     var enddays = $('#edit-services-form #enddays').val();
-    var dept = $('#edit-services-form #dept option:selected').val();
+    // var dept = $('#edit-services-form #dept option:selected').val();
     var id = $('#edit-services-form #service_id').val();
     var input_form = $('#edit-services-form input[name="input_form"]:checked').val();
     var shortcode = $('#edit-services-form #shorthidden').val();
     var note = $('#edit-services-form #note').val();
     var fixedcost = $('#edit-services-form #fixedcost').val();
+
+    var responsible_assigned = $('#edit-services-form input[name="responsible_assigned"]:checked').val();
+    if(responsible_assigned == 2){
+      var dept = $('#edit-services-form #dept option:selected').val();  
+    }else{
+      var dept = "NULL"; 
+   }
+
+    var client_type = [];
+            $.each($("input[name='client_type']:checked"), function(){
+                client_type.push($(this).val());
+            });
+    if(client_type == 0){
+        client_type = 0;
+    }else if(client_type == 1){
+        client_type = 1;
+    }else if(client_type == "0,1"){
+        client_type = 2;
+    }
 
     $.ajax({
         type: "POST",
@@ -517,12 +603,15 @@ function updateRelatedservice() {
             id: id,
             input_form: input_form,
             shortcode: shortcode,
-            note:note,
-            fixedcost:fixedcost
+            note: note,
+            fixedcost: fixedcost,
+            responsible_assigned: responsible_assigned,
+            client_type: client_type
         },
         url: base_url + '/administration/service_setup/update_related_service',
         dataType: "html",
         success: function (result) {
+            // console.log(result);return false;
             if (result.trim() == "1") {
                 swal({title: "Success!", text: "Successfully Updated!", type: "success"}, function () {
                     goURL(base_url + 'administration/service_setup');
@@ -1010,36 +1099,36 @@ function delete_business_client(client_id) {
 //    });
 }
 
-function insert_import_lead(){
-   var atLeastOneIsChecked = $('input[name="import_lead[]"]:checked').length > 0;
-   if(atLeastOneIsChecked == false){
-     swal("ERROR!", "Please check at least one lead for import", "error");
-   }else{
-    var form_data = new FormData(document.getElementById('import_lead_form'));
-   var lead_count = $('input[name="import_lead[]"]:checked').length;
+function insert_import_lead() {
+    var atLeastOneIsChecked = $('input[name="import_lead[]"]:checked').length > 0;
+    if (atLeastOneIsChecked == false) {
+        swal("ERROR!", "Please check at least one lead for import", "error");
+    } else {
+        var form_data = new FormData(document.getElementById('import_lead_form'));
+        var lead_count = $('input[name="import_lead[]"]:checked').length;
 
-    $.ajax({
-        type: "POST",
-        data: form_data,
-        url: base_url + 'administration/get_leads/insert_import_lead',
-        dataType: "html",
-        processData: false,
-        contentType: false,
-        enctype: 'multipart/form-data',
-        cache: false,
-        success: function (result) {
-            //alert(result); return false;
-            if (result == "1") {
-                swal({title: "Success!", text: "Successfully Imported!", type: "success"}, function () {
-                    $("#import_lead_div").html('<span class="text-info">'+lead_count+' Leads Successfully Imported</span>');
-                });
-            } else {
-                swal("ERROR!", "Unable To Import Leads", "error");
+        $.ajax({
+            type: "POST",
+            data: form_data,
+            url: base_url + 'administration/get_leads/insert_import_lead',
+            dataType: "html",
+            processData: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            cache: false,
+            success: function (result) {
+                //alert(result); return false;
+                if (result == "1") {
+                    swal({title: "Success!", text: "Successfully Imported!", type: "success"}, function () {
+                        $("#import_lead_div").html('<span class="text-info">' + lead_count + ' Leads Successfully Imported</span>');
+                    });
+                } else {
+                    swal("ERROR!", "Unable To Import Leads", "error");
+                }
             }
-        }
-    });
-   } 
+        });
+    }
 }
 
 
-    
+

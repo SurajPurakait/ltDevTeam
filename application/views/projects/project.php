@@ -28,13 +28,13 @@ $role = $user_info['role'];
                     </div>
                     <div class="clearfix"></div>
                     <div class="row"> 
-
+                        <div class="col-md-12">
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs tab" role="tablist">
-                            <li role="presentation" class="active "><a href="#bookkeeping" aria-controls="bookkeeping" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '', );loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1)">Bookkeeping</a></li>
-                            <li role="presentation"><a href="#tax_returns" aria-controls="tax_returns" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('2-tax_returns', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 2)">Tax Returns</a></li>
-                            <li role="presentation"><a href="#sales_tax" aria-controls="sales_tax" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('3-sales_tax', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 3)">Sales Tax</a></li>
-                            <li role="presentation"><a href="#annual_report" aria-controls="annual_report" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('4-annual_report', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 4)">Annual Report</a></li>
+                            <li role="presentation" class="<?= ($category=='1-bookkeeping')?'active':'' ?>"><a href="#bookkeeping" aria-controls="bookkeeping" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '', );loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1)">Bookkeeping</a></li>
+                            <li role="presentation" class="<?= ($category=='2-tax_returns')?'active':'' ?>" ><a href="#tax_returns" aria-controls="tax_returns" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('2-tax_returns', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 2)">Tax Returns</a></li>
+                            <li role="presentation" class="<?= ($category=='3-sales_tax')?'active':'' ?>"><a href="#sales_tax" aria-controls="sales_tax" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('3-sales_tax', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 3)">Sales Tax</a></li>
+                            <li role="presentation" class="<?= ($category=='4-annual_report')?'active':'' ?>"><a href="#annual_report" aria-controls="annual_report" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('4-annual_report', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 4)">Annual Report</a></li>
                         </ul>
                         <!-- Tab panes -->
                         <div class="tab-content">
@@ -43,12 +43,17 @@ $role = $user_info['role'];
                                     <div class="pull-right">
                                         <label class="col-lg-2 m-t-5 control-label">Year: </label>
                                         <div class="col-lg-10">
-                                            <?php $presenet_year=date('Y'); ?>
+                                            <?php 
+                                            if($select_year!=''){
+                                                $presenet_year=$select_year;
+                                            }else{
+                                                $presenet_year=date('Y'); 
+                                            }
+                                            ?>
                                             <!--<input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">-->
-                                            <select class="form-control year-dropdown" name="due_year" onchange="change_project_year(this.value)" disabled="">
-                                                <option value="">All Years</option>
+                                            <select class="form-control year-dropdown" id="due_year" name="due_year" onchange="change_project_year(this.value)">
                                                 <?php foreach ($due_years as $key => $year): ?>
-                                                    <option value="<?= $year['due_year'] ?>" <?= $presenet_year== $year['due_year']?'selected':'' ?> >
+                                                    <option value="<?= $year['due_year'] ?>" <?= $presenet_year== $year['due_year']?'selected':'' ?>>
                                                         <?= $year['due_year'] ?>
                                                     </option>
                                                 <?php endforeach; ?>
@@ -56,6 +61,22 @@ $role = $user_info['role'];
                                             <div class="errorMessage text-danger"></div>
                                         </div>
                                     </div>
+<!--                                    <div class="pull-right">
+                                        <label class="col-lg-2 m-t-5 control-label">Month: </label>
+                                        <div class="col-lg-10">
+                                            <?php // $presenet_month=date('m'); ?>
+                                            <input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">
+                                            <select class="form-control year-dropdown" name="due_year" onchange="change_project_year(this.value)" readonly style="pointer-events: none;">
+                                                <option value="">All Months</option>
+                                                <?php // foreach ($months as $key => $month): ?>
+                                                    <option value="<? $key ?>" <? $presenet_month== $key?'selected':'' ?> >
+                                                        <? $month ?>
+                                                    </option>
+                                                <?php // endforeach; ?>
+                                            </select>
+                                            <div class="errorMessage text-danger"></div>
+                                        </div>
+                                    </div>-->
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="filter-outer">
@@ -97,7 +118,7 @@ $role = $user_info['role'];
                                             <div class="row">
                                                 <div class="col-sm-12 m-b-10">
                                                     <div class="" style="display: inline-block;">
-                                                        <button class="btn btn-success" type="button" onclick="projectFilter()">Apply Filter</button>
+                                                        <button class="btn btn-success" type="button" onclick="projectFilter(<?= $presenet_year ?>)">Apply Filter</button>
                                                     </div>
                                                     <!--                                                    <div class="" style="display: inline-block;"> col-lg-1 row clear-project-btn-one 
                                                                                                             <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1);" class="btn btn-ghost" id="bookkeeping_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
@@ -111,15 +132,17 @@ $role = $user_info['role'];
                                     </div>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane active" id="bookkeeping">
+                            <div role="tabpanel" class="tab-pane <?= ($category=='1-bookkeeping')?'active':'' ?>" id="bookkeeping">
                                 <div class="project-clear-filter"><!-- col-lg-1 row clear-project-btn-one -->
                                     <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 1);" class="btn btn-ghost" id="bookkeeping_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="row">
                                     <?php
+//                                    echo "<pre>";
+//                                    print_r($due_m);
                                     foreach ($due_m as $key => $value) {
-                                        $projects_list = getTemplateCategoryProjectList('', 1, $key);
+                                        $projects_list = getTemplateCategoryProjectList('', 1, $key,$select_year);
                                         $status_array = array_count_values(array_column($projects_list, 'status'));
                                         if (!empty($projects_list)) {
                                             ?>
@@ -130,7 +153,7 @@ $role = $user_info['role'];
                                                     <div class="col-md-5 m-t-3  p-l-0">
                                                         <div class="project-bookkeeping-campaigns-donut-<?= $key ?> text-center" data-size="65" id="project_bookkeeping_donut_<?= $key ?>" data-json="project_bookkeeping_data_<?= $key ?>"></div>
                                                         <script>
-                                                            var project_bookkeeping_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': 'green'}];
+                                                            var project_bookkeeping_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': '#309f77'}];
                                                         </script>
                                                     </div>
                                                 </div>
@@ -144,7 +167,7 @@ $role = $user_info['role'];
                                     ?>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="tax_returns">
+                            <div role="tabpanel" class="tab-pane <?= $category=='2-tax_returns'?'active':'' ?>" id="tax_returns" >
                                 <div class="project-clear-filter">
                                     <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 2);" class="btn btn-ghost" id="tax_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
                                 </div>
@@ -152,7 +175,7 @@ $role = $user_info['role'];
                                 <div class="row">
                                     <?php
                                     foreach ($templateIds as $key => $value) {
-                                        $projects_list2 = getTemplateCategoryProjectList($value['template_id'], 2);
+                                        $projects_list2 = getTemplateCategoryProjectList($value['template_id'], 2,'',$select_year);
                                         $status_array = array_count_values(array_column($projects_list2, 'status'));
                                         if (!empty($projects_list2)) {
                                             ?>
@@ -163,7 +186,7 @@ $role = $user_info['role'];
                                                     <div class="col-md-5 m-t-3">
                                                         <div class="project-tax-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_tax_donut_<?= $key ?>" data-json="project_tax_data_<?= $key ?>"></div>
                                                         <script>
-                                                            var project_tax_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': 'green'}];
+                                                            var project_tax_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': '#309f77'}];
                                                         </script>
                                                     </div>
                                                 </div>
@@ -177,7 +200,7 @@ $role = $user_info['role'];
                                     ?>
                                 </div>                                
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="sales_tax">
+                            <div role="tabpanel" class="tab-pane <?= ($category=='3-sales_tax')?'active':'' ?>" id="sales_tax" >
                                 <div class="project-clear-filter">
                                     <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 3);" class="btn btn-ghost" id="sales_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
                                 </div>
@@ -185,7 +208,7 @@ $role = $user_info['role'];
                                 <div class="row">
                                     <?php
                                     foreach ($templateIds as $key => $value) {
-                                        $projects_list3 = getTemplateCategoryProjectList($value['template_id'], 3);
+                                        $projects_list3 = getTemplateCategoryProjectList($value['template_id'], 3,'',$select_year);
                                         $status_array1 = array_count_values(array_column($projects_list3, 'status'));
                                         if (!empty($projects_list3)) {
                                             ?>
@@ -196,7 +219,7 @@ $role = $user_info['role'];
                                                     <div class="col-md-4">
                                                         <div class="project-sales-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_sales_donut_<?= $key ?>" data-json="project_sales_data_<?= $key ?>"></div>
                                                         <script>
-                                                            var project_sales_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': 'green'}];
+                                                            var project_sales_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': '#309f77'}];
                                                         </script>
                                                     </div>
                                                 </div>
@@ -210,7 +233,7 @@ $role = $user_info['role'];
                                     ?>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="annual_report">
+                            <div role="tabpanel" class="tab-pane <?= $category=='4-annual_report'?'active':'' ?>" id="annual_report" >
                                 <div class="project-clear-filter">
                                     <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 4);" class="btn btn-ghost" id="annual_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
                                 </div>
@@ -218,7 +241,7 @@ $role = $user_info['role'];
                                 <div class="row">
                                     <?php
                                     foreach ($templateIds as $key => $value) {
-                                        $projects_list4 = getTemplateCategoryProjectList($value['template_id'], 4);
+                                        $projects_list4 = getTemplateCategoryProjectList($value['template_id'], 4,'',$select_year);
                                         $status_array1 = array_count_values(array_column($projects_list4, 'status'));
                                         if (!empty($projects_list4)) {
                                             ?>
@@ -229,7 +252,7 @@ $role = $user_info['role'];
                                                     <div class="col-md-4">
                                                         <div class="project-annual-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_annual_donut_<?= $key ?>" data-json="project_annual_data_<?= $key ?>"></div>
                                                         <script>
-                                                            var project_annual_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': 'green'}];
+                                                            var project_annual_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': '#309f77'}];
                                                         </script>
                                                     </div>
                                                 </div>
@@ -243,11 +266,13 @@ $role = $user_info['role'];
                                     ?>
                                 </div>
                             </div>
+                            <input type="hidden" id="cat">
                         </div>
 
                         <hr class="hr-line-dashed  m-t-5 m-b-5">
                         <div class="ajaxdiv" id="action_dashboard_div"> 
                         </div>
+                    </div>
                     </div>
 
                 </div>
@@ -407,6 +432,12 @@ $role = $user_info['role'];
                                 <label for="rad2"><strong>Resolved</strong></label>
                             </div>
                         </div>
+                        <div class="funkyradio">
+                            <div class="funkyradio-success">
+                                <input type="radio" name="radio" id="rad4" value="4"/>
+                                <label for="rad4"><strong>Canceled</strong></label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <input type="hidden" id="prosubid" value="">
@@ -436,8 +467,8 @@ $role = $user_info['role'];
     </div>
 </div>
 <script>
-    loadProjectDashboard('<?= $status; ?>', '<?= $request_type; ?>', '<?= $template_id; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '', '', '', '', '', '', '', '', 1, 1);
-    reflactProjectFilterWithCategory('1-bookkeeping', '');
+    loadProjectDashboard('<?= $status; ?>', '<?= $request_type; ?>', '<?= $template_id; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '', '', '', '', '', '', '', '', 1,<?= $template_cat_id ?>);
+    reflactProjectFilterWithCategory('<?= $category ?>', '');
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
@@ -456,28 +487,39 @@ $role = $user_info['role'];
     });
     function change_project_status_inner(id, status, section_id) {
         openModal('changeStatusinner');
-        var txt = 'Change Status of SubOrder id #' + id;
+        var txt = 'Tracking Project #' + id;
         $("#changeStatusinner .modal-title").html(txt);
         if (status == 0) {
             $("#changeStatusinner #rad0").prop('checked', true);
             $("#changeStatusinner #rad1").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
         } else if (status == 1) {
             $("#changeStatusinner #rad1").prop('checked', true);
             $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
         } else if (status == 2) {
             $("#changeStatusinner #rad2").prop('checked', true);
-            $("#changeStatusinner #rad1").prop('checked', false)
+            $("#changeStatusinner #rad1").prop('checked', false);
             $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
             $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad4").prop('checked', false);
         }
         else if (status == 3) {
             $("#changeStatusinner #rad3").prop('checked', true);
-            $("#changeStatusinner #rad2").prop('checked', false)
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+        }
+        else if (status == 4) {
+            $("#changeStatusinner #rad4").prop('checked', true);
+            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad2").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled',true);
             $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
         }
         $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
@@ -519,6 +561,9 @@ $role = $user_info['role'];
                     } else if (res.task_status == 3) {
                         var tracking = 'Ready';
                         var trk_class = 'label label-info';
+                    }else if (res.task_status == 4) {
+                        var tracking = 'Canceled';
+                        var trk_class = 'label label-danger';
                     }
 
                     if (res.project_status == 0) {
@@ -530,6 +575,9 @@ $role = $user_info['role'];
                     } else if (res.project_status == 2) {
                         var tracking_main = 'Completed';
                         var trk_class_main = 'label label-primary';
+                    }else if (res.project_status == 4) {
+                        var tracking_main = 'Canceled';
+                        var trk_class_main = 'label label-danger';
                     } 
                     
                     if(res.sub_taskid_status == 3){
@@ -721,14 +769,19 @@ $role = $user_info['role'];
             variableArray.push(8);
         }
         if (statusArray[1] == 'bookkeeping') {
-            $('#bookkeeping_tax_btn_clear_filter').show();
+            $('#cat').val(statusArray[0]+'-'+statusArray[1]);
+            $('#bookkeeping_btn_clear_filter').show();
         } else if (statusArray[1] == 'tax_returns') {
+            $('#cat').val(statusArray[0]+'-'+statusArray[1]);
             $('#tax_btn_clear_filter').show();
         } else if (statusArray[1] == 'sales_tax') {
+            $('#cat').val(statusArray[0]+'-'+statusArray[1]);
             $('#sales_btn_clear_filter').show();
         } else if (statusArray[1] == 'annual_report') {
+            $('#cat').val(statusArray[0]+'-'+statusArray[1]);
             $('#annual_btn_clear_filter').show();
-    }
+        }
+//        $("#due_year").val(new Date().getFullYear());
     }
     function clearProjectFilter() {
         $(".criteria-dropdown").trigger("chosen:updated");
@@ -736,6 +789,15 @@ $role = $user_info['role'];
         $('#btn_clear_filter').css('display', 'none');
     }
     function change_project_year(year){
-        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1,'',year)
+        var category=$('#cat').val();
+        var statusArray = category.split('-');
+        $("#due_year").val(year);
+        reflactProjectFilterWithCategory(category,'');
+//        if(statusArray[0]==1){
+//            pieChart('project-bookkeeping-campaigns-donut-1');
+//        }
+//        go('Project/index/'+'t'+'uk');
+        go('Project/index/'+'n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/'+statusArray[0]+'/'+year+'/'+category);
+//        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, statusArray[0],'',year)
     }
 </script> 
