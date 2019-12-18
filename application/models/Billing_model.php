@@ -2087,7 +2087,9 @@ class Billing_model extends CI_Model {
             '(SELECT CONCAT(",", GROUP_CONCAT(`service_id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services',
 //            '(CAST((SELECT sr.price_charged FROM service_request sr WHERE sr.order_id = ord.id AND sr.services_id = ord.service_id) AS Decimal(10,2)) * ord.quantity) as sub_total',
             '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
-        ];
+            '(SELECT pattern FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as pattern',
+            '(SELECT next_occurance_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as next_generation_date',
+            ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
         $where['status'] = 'AND `inv`.`status` != 0 ';
         if ($is_recurrence != '') {
