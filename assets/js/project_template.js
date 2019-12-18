@@ -724,7 +724,11 @@ function request_edit_template() {
     } else if (pattern == 'quarterly') {
         var due_day = $("#r_day").val();
         var due_month = $("#r_month option:selected").val();
-    } else {
+    }else if (pattern == 'periodic') {
+       var due_day = $("#r_day").val();
+        var due_month = $("#r_month").val();
+    }  
+    else {
         var due_day = $("#r_day").val();
         var due_month = $("#r_month").val();
     }
@@ -769,7 +773,7 @@ function request_edit_template() {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//            alert(result);
+//            alert(result);return false;
             if (result.trim() != "-1") {
                 swal({
                     title: "Success!",
