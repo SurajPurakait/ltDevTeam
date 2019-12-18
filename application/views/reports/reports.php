@@ -79,7 +79,7 @@
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Invoice Payments</h5>
                                                     <div class="ibox-tools">
-                                                        <a class="">
+                                                        <a class="" onclick="show_billing_data()">
                                                             <i class="fa fa-chevron-up"></i>
                                                         </a>
                                                     </div>
