@@ -205,14 +205,14 @@ class Project_Template_model extends CI_Model {
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = (int) $ins_recurrence['due_month'];
                 if($ins_recurrence['actual_due_day']>=date('d')){
-                    if($ins_recurrence['actual_due_month']<=$current_month){
-                        $ins_recurrence['actual_due_year'] = date('Y')+1;
+                    if($ins_recurrence['actual_due_month']<$current_month){
+                        $ins_recurrence['actual_due_year'] = date('Y', strtotime('+1 year'));
                     }else{
                         $ins_recurrence['actual_due_year']=date('Y');
                     }
                 }else{
                    if($ins_recurrence['actual_due_month']<=$current_month){
-                        $ins_recurrence['actual_due_year'] = date('Y')+1;
+                        $ins_recurrence['actual_due_year'] = date('Y', strtotime('+1 year'));
                     }else{
                         $ins_recurrence['actual_due_year']=date('Y');
                     } 
@@ -893,14 +893,14 @@ class Project_Template_model extends CI_Model {
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = (int) $ins_recurrence['due_month'];
                 if($ins_recurrence['actual_due_day']>=date('d')){
-                    if($ins_recurrence['actual_due_month']<=$current_month){
-                        $ins_recurrence['actual_due_year'] = date('Y')+1;
+                    if($ins_recurrence['actual_due_month']<$current_month){
+                        $ins_recurrence['actual_due_year'] = date('Y', strtotime('+1 year'));
                     }else{
                         $ins_recurrence['actual_due_year']=date('Y');
                     }
                 }else{
                    if($ins_recurrence['actual_due_month']<=$current_month){
-                        $ins_recurrence['actual_due_year'] = date('Y')+1;
+                        $ins_recurrence['actual_due_year'] = date('Y', strtotime('+1 year'));
                     }else{
                         $ins_recurrence['actual_due_year']=date('Y');
                     } 
