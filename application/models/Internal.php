@@ -83,7 +83,7 @@ Class Internal extends CI_Model {
     }
 
     public function get_internal_data($reference, $reference_id) {
-        $sql = "select * from internal_data where reference_id=$reference_id and status=1";
+        $sql = "select * from internal_data where reference_id=$reference_id and reference='$reference' and status=1";
         return $this->db->query($sql)->result_array();
     }
 

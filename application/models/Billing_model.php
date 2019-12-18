@@ -1986,6 +1986,10 @@ class Billing_model extends CI_Model {
         $order_data['status'] = 2;
         $order_data['quantity'] = 0;
         $order_data['reference'] = $invoice_info['type'] == 1 ? 'company' : 'individual';
+        $internal_data_info = $this->internal->get_internal_data($order_data['reference'],$invoice_info['client_id']);
+        if($internal_data_info[0]['manager'] != ""){
+        $order_data['staff_requested_service'] = $internal_data_info[0]['manager'];
+        }
 
         $this->db->select('date_started');
         $this->db->where_in('order_id', $order_ids);
