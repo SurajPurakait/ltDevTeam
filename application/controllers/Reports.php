@@ -118,4 +118,11 @@ class Reports extends CI_Controller {
         $render_data['category'] = $category; 
         $this->load->view('reports/service_by_franchise_data',$render_data);
     }
+
+    // report dashboard billing data
+    public function get_show_billing_data() {
+        $render_data['section'] = "billing";
+        $render_data['reports'] = array('report'=>'leafnet_report');
+        $this->load->view('reports/billing_invoice_payments_data',$render_data);   
+    }
 }
