@@ -4002,6 +4002,9 @@ code {
 #service_by_category_1 .ibox-title{
     border-top: 4px solid #f2a3a3;
 }
+#billing_invoice_payments_section .ibox-title {
+    border-top: 4px solid #ec8fb3;    
+}
 .ibox-content {
     background-color: #ffffff;
     color: inherit;
