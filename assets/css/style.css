@@ -9241,6 +9241,7 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 #dt-reports-wrap table.dataTable thead .sorting_asc{
     background: none;
 }
-
-
-
+#weekend_val input[type="checkbox"],
+.recurrence-date input[type="radio"]{
+    vertical-align: bottom;
+}
