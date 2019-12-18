@@ -63,25 +63,46 @@ foreach ($result as $row_count => $value):
                             <th class="text-center" width="5%">Order&nbsp;ID#</th>
                             <th class="text-center" width="15%">Client&nbsp;Name</th>
                             <th class="text-center" width="5%">Office&nbsp;ID</th>
+                            <?php 
+                            if($is_recurrence == 'y') { ?>                           
+                            <!--<th class="text-center" width="5%">Pattern</th>-->
+                            <th class="text-center" width="5%">Next&nbsp;Generation&nbsp;Date</th>
+                            <?php } else{ ?>
                             <th class="text-center" width="5%">Partner</th>
                             <th class="text-center" width="5%">Manager</th>
+                            <?php } ?>
                             <th class="text-center" width="10%">Tracking</th>
                             <th class="text-center" width="10%">Requested&nbsp;by</th>
                             <th class="text-center" width="10%">Created&nbsp;Date</th>
                             <th class="text-center" width="5%">Due Date</th>
+                            <?php if($is_recurrence == 'y') { ?>                           
+                            <th class="text-center" width="5%">Pattern</th>
+                            <?php } ?>
                             <th class="text-center" width="5%">Services</th>
                             <th class="text-center" width="5%">Total</th>
                             <th class="text-center" width="5%">Status</th>
                         </tr>
                         <tr>
                             <td title="ID"><a href="<?= base_url("billing/invoice/details/" . base64_encode($row->invoice_id)); ?>">#<?= $row->invoice_id; ?></a></td><td title="Client Name" style="word-break: break-all;"><?= ($row->invoice_type == 1) ? $row->client_name : $row->client_name; ?></td>
-                            <td title="Office"><?= $row->officeid; ?></td>
+                            <?php if($is_recurrence == 'y'){?>
+                            <td title="Office"><?='<b>'. $row->officeid .'</b>'; ?><?= "<br>". $row->manager; ?></td>
+                            <?php } else{ ?>
+                            <td title="Office"><?= $row->officeid ; ?></td>
+                            <?php } ?>
+                            <?php if($is_recurrence == 'y'){?>
+                            <!--<td title="Pattern"><//?= $row->pattern; ?></td>-->
+                            <td title="Next Generation Date"><?= $row->next_generation_date; ?></td>
+                            <?php } else { ?>
                             <td title="Partner"><?= $row->partner; ?></td>
                             <td title="Manager"><?= $row->manager; ?></td>
+                            <?php } ?>
                             <td title="Tracking"><a href="javascript:void(0)" onclick="billingDashboardTrackingModal(<?= $row->invoice_id; ?>, <?= $row->invoice_status; ?>);"><span class="label <?= $tracking_class ?> invoice-tracking-span-<?= $row->invoice_id; ?>"><b><?= $tracking[$row->invoice_status]; ?></b></span></a></td>
                             <td title="Requested by"><?= $row->created_by_name; ?></td>
                             <td title="Create Time"><?= date('m/d/Y', strtotime($row->created_time)); ?></td>
-                            <td title="Create Time"><?= date('m/d/Y', strtotime('+30 days', strtotime($row->created_time))); ?></td>                            
+                            <td title="Create Time"><?= date('m/d/Y', strtotime('+30 days', strtotime($row->created_time))); ?></td>  
+                            <?php if($is_recurrence == 'y'){?>
+                            <td title="Pattern"><?= $row->pattern; ?></td>                          
+                            <?php } ?>
                             <td align="center" title="Services"><span class="label label-success"><b><?= (substr_count($row->all_services, ',') - 1); ?></b></span></td>
                             <td title="Total Amount">$<?= $row->sub_total; ?></td>
                             <td title="Payment status"><a href="javascript:void(0);"><span class="label <?= $status_class ?>"><b><?= $payment_status_array[$row->payment_status]; ?></b></span></a></td>
