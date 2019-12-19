@@ -192,11 +192,11 @@ class Billing_model extends CI_Model {
         return $this->db->get_where('services', ['category_id' => $category_id])->result_array();
     }
 
-    public function get_service_list_by_category_id_for_billing($category_id, $invoice_type) {
+    public function get_service_list_by_category_id_for_billing($service_id,$category_id, $invoice_type) {
         if($invoice_type == 1){   
-            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '0' or client_type_assign = '2')")->result_array();
+            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '0' or client_type_assign = '2') and id !='$service_id'")->result_array();
         }else{         
-            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '1' or client_type_assign = '2')")->result_array();
+            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '1' or client_type_assign = '2') and id !='$service_id'")->result_array();
         }
     }
 
