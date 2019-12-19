@@ -93,10 +93,10 @@
                                     <th class="bg-blue text-center" width="7">DAY 0</th>
                                     <th class="bg-blue text-center" width="7">DAY 3</th>
                                     <th class="bg-blue text-center" width="7">DAY 6</th>
-
-                                    <th style="white-space:nowrap" class="text-center" width="7">Active Date</th>
+                                    <th style="white-space:nowrap" class="text-center" width="7">Language</th>
+<!--                                    <th style="white-space:nowrap" class="text-center" width="7">Active Date</th>
                                     <th style="white-space:nowrap" class="text-center" width="7">Inactive Date</th>
-                                    <th style="white-space:nowrap" class="text-center" width="7">Completed Date</th>
+                                    <th style="white-space:nowrap" class="text-center" width="7">Completed Date</th>-->
                                     <th class="text-center" width="7">Notes</th>
                                 </tr>
                                 <tr>
@@ -136,11 +136,11 @@
                                     <td class="bg-blue text-center" title="DAY0" width="7"><?= (isset($lead['day_0_mail_date']) && $lead['day_0_mail_date'] != "0000-00-00") ? date("m/d/Y", strtotime($lead['day_0_mail_date'])) : " - "; ?></td>
                                     <td class="bg-blue text-center" title="DAY3" width="7"><?= (isset($lead['day_3_mail_date']) && $lead['day_3_mail_date'] != "0000-00-00") ? date("m/d/Y", strtotime($lead['day_3_mail_date'])) : " - "; ?></td>
                                     <td class="bg-blue text-center" title="DAY6" width="7"><?= (isset($lead['day_6_mail_date']) && $lead['day_6_mail_date'] != "0000-00-00") ? date("m/d/Y", strtotime($lead['day_6_mail_date'])) : " - "; ?></td>
-                                    
+                                    <td title="Type" class="text-center" width="8" style="word-break:break-all"><?= $lead["language"]; ?></td>
 
-                                    <td title="Active Date" class="text-center" width="7"><?= ($lead["active_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["active_date"])) : "-"; ?></td>
-                                    <td title="Inactive Date" class="text-center" width="7"><?= ($lead["inactive_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["inactive_date"])) : "-"; ?></td>
-                                    <td title="Completed Date" class="text-center" width="7"><?= ($lead["complete_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["complete_date"])) : "-"; ?></td>
+<!--                                <td title="Active Date" class="text-center" width="7"><//?= ($lead["active_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["active_date"])) : "-"; ?></td>
+                                    <td title="Inactive Date" class="text-center" width="7"><//?= ($lead["inactive_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["inactive_date"])) : "-"; ?></td>
+                                    <td title="Completed Date" class="text-center" width="7"><//?= ($lead["complete_date"] != "0000-00-00") ? date("m/d/Y", strtotime($lead["complete_date"])) : "-"; ?></td>-->
                                     <td title="Notes" class="text-center" width="7">
                                         <span><?= (($lead["notes_count"] > 0) ? '<a class="label label-warning" href="javascript:void(0)" onclick="show_lead_notes(\'' . $lead["id"] . '\')"><b>' . $lead["notes_count"] . '</b></a>' : '<b class="label label-warning">' . $lead["notes_count"] . '</b>') ?></span>
                                     </td>
