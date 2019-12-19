@@ -84,7 +84,7 @@ foreach ($services as $key => $ord) {
                 </div>
             </div>
             <?php if (end($services)['order_id'] == $ord['order_id']) { ?>
-                <a href="javascript:void(0)" id="section_link_<?= $ord['order_id']; ?>" onclick="addService();" class="text-success pull-right"><h3><i class="fa fa-plus"></i> Add Another Service</h3></a><br>
+                <a href="javascript:void(0)" id="section_link_<?= $ord['order_id']; ?>" onclick="addService(<?= $ord['service_id'] ?>);" class="text-success pull-right"><h3><i class="fa fa-plus"></i> Add Another Service</h3></a><br>
             <?php } else { ?>
                 <a href="javascript:void(0)" id="section_link_<?= $ord['order_id']; ?>" onclick="removeService(<?= $ord['order_id']; ?>);" class="text-danger pull-right"><h3><i class="fa fa-times"></i> Remove Service</h3></a><br>
                         <?php }
