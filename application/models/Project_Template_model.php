@@ -947,6 +947,10 @@ class Project_Template_model extends CI_Model {
                         $ins_recurrence['actual_due_year']=date('Y');
                     } 
                 }
+                $periodic_day= json_decode($ins_recurrence['periodic_due_day']);
+                $periodic_month=json_decode($ins_recurrence['periodic_due_month']);
+                unset($ins_recurrence['periodic_due_day']);
+                unset($ins_recurrence['periodic_due_month']);
             }
             else {
                 $ins_recurrence['actual_due_day'] = '0';
@@ -955,6 +959,41 @@ class Project_Template_model extends CI_Model {
             }
 //            print_r($ins_recurrence);die;
             $this->db->insert('project_template_recurrence_main', $ins_recurrence);
+            if(isset($periodic_day) && !empty($periodic_day)){
+                $this->db->where('template_id',$template_id);
+                $this->db->delete('template_periodic_pattern');
+                $new_val= array_combine($periodic_day, $periodic_month);
+//                print_r($new_val);die;
+                foreach($new_val as $day=>$month){
+                    $periodic_data=array();
+                    $current_month = date('m');
+                    $actual_due_day = $day;
+                    $actual_due_month = $month;
+                    if($actual_due_day>=date('d')){
+                        if($actual_due_month<$current_month){
+                            $actual_due_year = date('Y', strtotime('+1 year'));
+                        }else{
+                            $actual_due_year=date('Y');
+                        }
+                    }else{
+                       if($actual_due_month<=$current_month){
+                            $actual_due_year = date('Y', strtotime('+1 year'));
+                        }else{
+                            $actual_due_year=date('Y');
+                        } 
+                    }
+                    $periodic_data=array(
+                        'template_id'=>$template_id,
+                        'due_day'=>$day,
+                        'due_month'=>$month,
+                        'actual_due_day'=>$actual_due_day,
+                        'actual_due_month'=>$actual_due_month,
+                        'actual_due_year'=>$actual_due_year
+                    );
+                    $this->db->insert('template_periodic_pattern',$periodic_data);
+                }
+                
+            }
         }
 
         if ($this->db->trans_status() === FALSE) {
@@ -3047,6 +3086,12 @@ class Project_Template_model extends CI_Model {
     }
     public function getProjectPeriodicData($project_id){
         return $this->db->get_where('project_periodic_pattern',['project_id'=>$project_id])->row();
+    }
+    public function getTemplatePeriodicPattern($template_id){
+        return $this->db->get_where('template_periodic_pattern',['template_id'=>$template_id])->result_array();
+    }
+    public function getProjectMainPeriodicData($project_id){
+        return $this->db->get_where('project_periodic_pattern',['project_id'=>$project_id])->result_array();
     }
 }
 
