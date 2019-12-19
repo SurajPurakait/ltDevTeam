@@ -2925,4 +2925,12 @@ class Service_model extends CI_Model {
             return $this->db->query($sql)->num_rows();
         }   
     }
+
+    public function get_manager_name_by_id($id){
+        $this->db->select('s.first_name,s.last_name');
+        $this->db->from('staff s');
+        $this->db->join('order or','or.staff_requested_service=s.id');
+        $this->db->where('or.id',$id);
+        return $this->db->get()->row_array();
+    }
 }

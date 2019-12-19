@@ -1598,6 +1598,7 @@ class Home extends CI_Controller {
         $render_data['reference_id'] = $order_info['company_id'];
         $render_data['service_id'] = $order_info['service_id'];
         $render_data['invoiced_id'] = $order_info['invoiced_id'];
+        $render_data['staff_requested_service'] = $this->service_model->get_manager_name_by_id($render_data['order_id']);
         $render_data['requested_staff_id'] = $order_info['staff_requested_service'];
         $all_staff_id_list = explode(',', $render_data['all_staffs']);
         $all_staff_id_list = array_merge($all_staff_id_list, [$render_data['requested_staff_id']]);
