@@ -739,6 +739,16 @@ function request_edit_template() {
     }else if (pattern == 'periodic') {
        var due_day = $("#r_day").val();
         var due_month = $("#r_month").val();
+        var periodic_days= new Array();
+        var periodic_months= new Array();
+        $("input[name='due_days[]']").each(function(){
+            periodic_days.push($(this).val());
+        });
+        var periodic_months = $('.periodic_mnth').map(function(){
+            return this.value;
+        }).get();
+        var periodic_due_days=JSON.stringify(periodic_days);
+        var periodic_due_months=JSON.stringify(periodic_months);
     }  
     else {
         var due_day = $("#r_day").val();
@@ -760,6 +770,8 @@ function request_edit_template() {
     form_data.append('recurrence[client_fiscal_year_end]', client_fiscal_year_end);
     form_data.append('recurrence[due_day]', due_day);
     form_data.append('recurrence[due_month]', due_month);
+    form_data.append('recurrence[periodic_due_day]', periodic_due_days);
+    form_data.append('recurrence[periodic_due_month]', periodic_due_months);
     form_data.append('recurrence[expiration_type]', expiration_type);
     form_data.append('recurrence[end_occurrence]', end_occurrence);
     form_data.append('recurrence[target_start_days]', target_start_days);
