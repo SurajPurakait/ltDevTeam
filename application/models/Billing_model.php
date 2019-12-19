@@ -2071,6 +2071,7 @@ class Billing_model extends CI_Model {
             'inv.payment_status AS payment_status',
             'inv.total_amount AS sub_total',
             'inv.client_id as client_id',
+            'inv.is_recurrence as is_recurrence',
             '(CASE WHEN inv.type = 1 THEN (SELECT `company`.`name` FROM `company` WHERE `company`.`id` = `inv`.`client_id`) ELSE (SELECT CONCAT(individual.last_name,", ",individual.first_name) FROM `individual` WHERE `individual`.`id` = `inv`.`client_id`) END) as client_name',
             '(CASE WHEN inv.created_by = ' . sess('user_id') . ' THEN \'byme\' ELSE \'byothers\' END) as request_type',
             '(CASE WHEN inv.created_by = ' . sess('user_id') . ' THEN CONCAT(\'byme-\', inv.payment_status) ELSE CONCAT(\'byothers-\', inv.payment_status) END) as filter_value',
