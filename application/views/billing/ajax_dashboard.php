@@ -17,6 +17,9 @@ $tracking = [
 ];
 $i = 0;
 $row_number = 0;
+echo "<pre>";
+print_r($result);
+echo "</pre>";die;
 foreach ($result as $row_count => $value):
     if (isset($page_number)) {
         if ($page_number != 1) {
@@ -47,6 +50,7 @@ foreach ($result as $row_count => $value):
     } elseif ($row->invoice_status == 3) {
         $tracking_class = 'label-primary';
     }
+    $is_recurrence=$value->is_recurrence;
     ?>
     <div class="panel panel-default service-panel">
         <div class="panel-heading" style="padding-right: 0px">
