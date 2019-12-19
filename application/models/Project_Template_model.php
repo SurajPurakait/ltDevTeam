@@ -47,6 +47,9 @@ class Project_Template_model extends CI_Model {
     }
 
     public function request_create_template($post) {
+//        echo "<pre>";
+//        print_r($post);
+//        echo "</pre>";die;
         $last_id = '';
         $this->db->trans_begin();
         if (isset($post['template_main']) && !empty($post['template_main'])) {
@@ -223,9 +226,48 @@ class Project_Template_model extends CI_Model {
                 $ins_recurrence['actual_due_month'] = '0';
                 $ins_recurrence['actual_due_year'] = '0';
             }
+            $periodic_day= json_decode($ins_recurrence['periodic_due_day']);
+            $periodic_month=json_decode($ins_recurrence['periodic_due_month']);
+            unset($ins_recurrence['periodic_due_day']);
+            unset($ins_recurrence['periodic_due_month']);
 //            if(isset($ins_recurrence['pattern']))
 //            print_r($ins_recurrence);die;
             $this->db->insert('project_template_recurrence_main', $ins_recurrence);
+//            print_r($periodic_day);echo '<br>';
+//            print_r($periodic_month);echo "<br>";
+            if(isset($periodic_day) && !empty($periodic_day)){
+                $new_val= array_combine($periodic_day, $periodic_month);
+//                print_r($new_val);die;
+                foreach($new_val as $day=>$month){
+                    $periodic_data=array();
+                    $current_month = date('m');
+                    $actual_due_day = $day;
+                    $actual_due_month = $month;
+                    if($actual_due_day>=date('d')){
+                        if($actual_due_month<$current_month){
+                            $actual_due_year = date('Y', strtotime('+1 year'));
+                        }else{
+                            $actual_due_year=date('Y');
+                        }
+                    }else{
+                       if($actual_due_month<=$current_month){
+                            $actual_due_year = date('Y', strtotime('+1 year'));
+                        }else{
+                            $actual_due_year=date('Y');
+                        } 
+                    }
+                    $periodic_data=array(
+                        'template_id'=>$last_id,
+                        'due_day'=>$day,
+                        'due_month'=>$month,
+                        'actual_due_day'=>$actual_due_day,
+                        'actual_due_month'=>$actual_due_month,
+                        'actual_due_year'=>$actual_due_year
+                    );
+                    $this->db->insert('template_periodic_pattern',$periodic_data);
+                }
+                
+            }
         }
 
         if ($this->db->trans_status() === FALSE) {
@@ -1027,7 +1069,9 @@ class Project_Template_model extends CI_Model {
                 $project_main_data = $this->db->get_where('project_template_main', ['id' => $project_template_id])->row_array();
                 $project_recurrence_main_data = $this->db->get_where('project_template_recurrence_main', ['template_id' => $project_template_id])->row_array();
                 $project_task_data = $this->db->get_where('project_template_task', ['template_main_id' => $project_template_id])->result_array();
-
+                $project_recurrence_periodic_data=$this->db->get_where('template_periodic_pattern',['template_id'=>$project_template_id])->result_array();
+//                echo"<pre>";
+//                print_r($project_recurrence_periodic_data);
                 $project_staff_main_data = $this->db->get_where('project_template_staff_main', ['template_id' => $project_template_id])->result_array();
 //        print_r($project_staff_main_data);die;
                 $end_array = end($project_staff_main_data);
@@ -1154,6 +1198,20 @@ class Project_Template_model extends CI_Model {
                     $project_recurrence_main_data['project_id'] = $insert_id;
                     $this->db->set($project_recurrence_main_data);
                     $this->db->insert('project_recurrence_main', $project_recurrence_main_data);
+                }
+                if(isset($project_recurrence_periodic_data) && !empty($project_recurrence_periodic_data)){
+                    foreach($project_recurrence_periodic_data as $periodic_data){
+                        unset($periodic_data['id']);
+                        unset($periodic_data['template_id']);
+                        $recurrence_periodic_data['template_id']=$project_template_id;
+                        $recurrence_periodic_data['project_id']=$insert_id;
+                        $recurrence_periodic_data['due_day']=$periodic_data['due_day'];
+                        $recurrence_periodic_data['due_month']=$periodic_data['due_month'];
+                        $recurrence_periodic_data['actual_due_day']=$periodic_data['actual_due_day'];
+                        $recurrence_periodic_data['actual_due_month']=$periodic_data['actual_due_month'];
+                        $recurrence_periodic_data['actual_due_year']=$periodic_data['actual_due_year'];
+                        $this->db->insert('project_periodic_pattern',$recurrence_periodic_data);
+                    }
                 }
                 if (isset($project_task_data) && !empty($project_task_data)) {
                     $tid = [];
@@ -2986,6 +3044,9 @@ class Project_Template_model extends CI_Model {
     }
     public function getAddedUserOffice($user_id){
         return $this->db->get_where('office_staff',['staff_id'=>$user_id])->row()->office_id;
+    }
+    public function getProjectPeriodicData($project_id){
+        return $this->db->get_where('project_periodic_pattern',['project_id'=>$project_id])->row();
     }
 }
 
