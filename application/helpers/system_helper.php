@@ -297,10 +297,10 @@ if (!function_exists('staff_office_ofc_id')) {
 }
 
 if (!function_exists('load_ddl_option_for_service_list')) {
-        function load_ddl_option_for_service_list($selected = "", $service_id = null, $invoice_type) {
+        function load_ddl_option_for_service_list($selected = "", $category_id = null, $invoice_type) {
         $ci = &get_instance();
         $ci->load->model('billing_model');
-        $item_list = $ci->billing_model->get_service_list_by_category_id_for_billing($service_id, $invoice_type);
+        $item_list = $ci->billing_model->get_service_list_by_category_id_for_billing($selected, $category_id, $invoice_type);
         foreach ($item_list as $item) {
         $select = ($selected != "" && $item["id"] == $selected) ? "selected = 'selected'" : "";
         echo "<option $select value='{$item['id']}'>{$item['description']}</option>";
@@ -3546,4 +3546,11 @@ if (!function_exists('get_assigned_office_staff_project_task')) {
         return $ci->Project_Template_model->getAssignedOfficeStaffProjectTask($task_id,$project_id, $responsible_staff);
     }
 
+}
+if(!function_exists('get_project_periodic_data')){
+    function get_project_periodic_data($project_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getProjectPeriodicData($project_id);
+    }
 }

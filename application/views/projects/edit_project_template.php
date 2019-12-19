@@ -222,12 +222,15 @@
                                                                             <option value="weekly" <?php echo ($pattern_details->pattern == 'weekly') ? 'selected' : ''; ?>>Weekly</option>
                                                                             <option value="quarterly" <?php echo ($pattern_details->pattern == 'quarterly') ? 'selected' : ''; ?>>Quarterly</option>
                                                                             <option value="annually" <?php echo ($pattern_details->pattern == 'annually') ? 'selected' : ''; ?>>Annually</option>
+                                                                            <option value="periodic" <?php echo ($pattern_details->pattern == 'periodic') ? 'selected' : ''; ?>>Periodic</option>
                                                                             <option value="none" <?php echo ($pattern_details->pattern == 'none') ? 'selected' : ''; ?>>None</option>
                                                                         </select>
-                                                                    </div>                                                            
+                                                                    </div>
+                                                                    <?php if($pattern_details->pattern!= 'periodic'){ ?>
                                                                     <div class="form-group">
                                                                         <label class="control-label"><input type="checkbox" name="recurrence[occur_weekdays]" id="occur_weekdays" <?php echo ($pattern_details->occur_weekdays == '0') ? '' : 'checked'; ?>> Must occur on weekdays</label>
                                                                     </div>
+                                                                    <?php } ?>
                                                                     <div class="annual-check-div" <?php echo ($pattern_details->pattern == 'annually') ? 'style="display: block;"' : 'style="display: none;"'; ?>>
                                                                         <div class="form-group">
                                                                             <label class="control-label"><input type="checkbox" <?php echo ($pattern_details->client_fiscal_year_end == '0') ? '' : 'checked'; ?> name="recurrence[client_fiscal_year_end]" id="client_fiscal_year_end"> Based on Client fiscal year ends</label>
@@ -338,7 +341,26 @@
                                                                             <option value="3" <?php echo ($pattern_details->due_month=='3') ? 'selected' : ''; ?>>Third</option>
                                                                         </select>&nbsp;
                                                                         <label class="control-label" id="control-label">month in quarter</label>
-                                                                  <?php }else{ ?>
+                                                                  <?php }elseif($pattern_details->pattern == 'periodic'){ ?>
+                                                                        <label class="control-label"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> Due on day</label>&nbsp;
+                                                                        <input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day" value="<?php echo $pattern_details->due_day; ?>">
+                                                                        <label class="control-label m-r-5">of month</label>&nbsp;
+                                                                        <!--<input class="form-control" type="number" name="recurrence[due_month]" min="1" max="12" style="width: 100px" id="r_month" value="<?php echo $pattern_details->due_month; ?>">&nbsp;-->
+                                                                        <select class="form-control" id="r_month" name="recurrence[due_month]">
+                                                                                        <option value="1" <?php echo ($pattern_details->due_month == '1') ? 'selected' : ''; ?>>January</option>
+                                                                                        <option value="2" <?php echo ($pattern_details->due_month == '2') ? 'selected' : ''; ?>>February</option>
+                                                                                        <option value="3" <?php echo ($pattern_details->due_month == '3') ? 'selected' : ''; ?>>March</option>
+                                                                                        <option value="4" <?php echo ($pattern_details->due_month == '4') ? 'selected' : ''; ?>>April</option>
+                                                                                        <option value="5" <?php echo ($pattern_details->due_month == '5') ? 'selected' : ''; ?>>May</option>
+                                                                                        <option value="6" <?php echo ($pattern_details->due_month == '6') ? 'selected' : ''; ?>>June</option>
+                                                                                        <option value="7" <?php echo ($pattern_details->due_month == '7') ? 'selected' : ''; ?>>July</option>
+                                                                                        <option value="8" <?php echo ($pattern_details->due_month == '8') ? 'selected' : ''; ?>>August</option>
+                                                                                        <option value="9" <?php echo ($pattern_details->due_month == '9') ? 'selected' : ''; ?>>September</option>
+                                                                                        <option value="10" <?php echo ($pattern_details->due_month == '10') ? 'selected' : ''; ?>>October</option>
+                                                                                        <option value="11" <?php echo ($pattern_details->due_month == '11') ? 'selected' : ''; ?>>November</option>
+                                                                                        <option value="12" <?php echo ($pattern_details->due_month == '12') ? 'selected' : ''; ?>>December</option>
+                                                                                    </select>&nbsp;
+                                                                    <?php } else { ?>
                                                                     <label class="control-label"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> Due on day</label>&nbsp;
                                                                     <input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day" value="<?php echo $pattern_details->due_day; ?>">
                                                                     <label class="control-label m-r-5">of every</label>&nbsp;
