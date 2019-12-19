@@ -853,5 +853,38 @@ class Patch extends CI_Controller {
         }
         echo "Successfully Updated";
     }
+
+    public function update_quantity_for_same_service() {
+        $order_data = $this->db->get('order')->result_array();
+
+        foreach ($order_data as $od) {
+            $this->db->where('order_id',$od['id']);
+            $this->db->where('services_id',$od['service_id']);
+            $service_request_data = $this->db->get('service_request')->num_rows();
+
+            if ($service_request_data > 1) {
+                echo "<pre>";
+                $this->db->where('order_id',$od['id']);
+                $this->db->where('services_id',$od['service_id']);
+                $service_request_data_inner = $this->db->get('service_request')->result_array();
+
+                $id_arr = array_column($service_request_data_inner,'id');
+                $price_charged = array_sum(array_column($service_request_data_inner,'price_charged'));
+
+                $data = array(
+                    'quantity' => $service_request_data,
+                    'price_charged' => $price_charged
+                );
+                $this->db->where('id',$id_arr[0]);
+                $this->db->update('service_request',$data);
+
+                for ($i=1; $i < count($id_arr) ; $i++) { 
+                    $this->db->where('id',$id_arr[$i]);
+                    $this->db->delete('service_request');    
+                }
+            }
+        }
+        echo "Successfully Updated";
+    }
 }
     
