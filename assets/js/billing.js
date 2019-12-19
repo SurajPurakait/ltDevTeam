@@ -332,6 +332,9 @@ function placeOrder(invoice_id, emails) {
                 backdrop: 'static',
                 keyboard: false
             });
+            if (emails == ''){
+                $('#row_div').hide();
+            }
         },
         beforeSend: function () {
             openLoading();
