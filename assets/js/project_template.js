@@ -426,11 +426,24 @@ function request_create_template() {
     } else if (pattern == 'quarterly') {
         var due_day = $("#r_day").val();
         var due_month = $("#r_month option:selected").val();
-    } else {
+    } else if(pattern=='periodic'){
+        var due_day = $("#r_day").val();
+        var due_month = $("#r_month").val();
+        var periodic_days= new Array();
+        var periodic_months= new Array();
+        $("input[name='due_days[]']").each(function(){
+            periodic_days.push($(this).val());
+        });
+        var periodic_months = $('.periodic_mnth').map(function(){
+            return this.value;
+        }).get();
+        var periodic_due_days=JSON.stringify(periodic_days);
+        var periodic_due_months=JSON.stringify(periodic_months);
+    }
+    else {
         var due_day = $("#r_day").val();
         var due_month = $("#r_month").val();
     }
-
     var expiration_type = $('input[name="recurrence[expiration_type]"]:checked').val();
     var end_occurrence = $("#end_occurrence").val();
     var target_start_days = $("#t_start_day").val();
@@ -446,6 +459,8 @@ function request_create_template() {
     form_data.append('recurrence[client_fiscal_year_end]', client_fiscal_year_end);
     form_data.append('recurrence[due_day]', due_day);
     form_data.append('recurrence[due_month]', due_month);
+    form_data.append('recurrence[periodic_due_day]', periodic_due_days);
+    form_data.append('recurrence[periodic_due_month]', periodic_due_months);
     form_data.append('recurrence[expiration_type]', expiration_type);
     form_data.append('recurrence[end_occurrence]', end_occurrence);
     form_data.append('recurrence[target_start_days]', target_start_days);
@@ -542,32 +557,51 @@ function change_due_pattern(val) {
     if (val == 'annually') {
         $(".none-div").show();
         $(".annual-check-div").show();
+        $('#weekend_val').show();
         $(".due-div").html('<label class="control-label m-r-5"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day" class="m-r-5"> Due on every</label>&nbsp;<select class="form-control m-r-5" id="r_month" name="recurrence[due_month]" value="1"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day">');
     } else if (val == 'weekly') {
         $(".none-div").show();
         $(".annual-check-div").hide();
+        $('#weekend_val').show();
         $(".due-div").html('<label class="control-label m-r-5"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> Due every</label>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" value="1" style="width: 100px" id="r_day">&nbsp;week(s) on the following days:&nbsp;<div class="m-t-10"><div class="m-b-10"><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="1" checked="" class="m-r-5">&nbsp;Sunday&nbsp;</span><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="2" class="m-r-5">&nbsp;Monday&nbsp;</span><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="3" class="m-r-5">&nbsp;Tuesday&nbsp;</span><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="4" class="m-r-5">&nbsp;Wednesday&nbsp;</span></div><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="5" class="m-r-5">&nbsp;Thursday&nbsp;</span><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="6" class="m-r-5">&nbsp;Friday&nbsp;</span><span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="7" class="m-r-5">&nbsp;Saturday</span></div>');
     } else if (val == 'quarterly') {
         $(".none-div").show();
         $(".annual-check-div").hide();
+        $('#weekend_val').show();
         $(".due-div").html('<label class="control-label m-r-5"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> Due on day</label>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" value="1" style="width: 100px" id="r_day"><label class="control-label m-r-5">of</label>&nbsp;<select class="form-control m-r-5" id="r_month" name="recurrence[due_month]"><option value="1">First</option><option value="2">Second</option><option value="3">Third</option></select>&nbsp;<label class="control-label m-r-5" id="control-label">month in quarter</label>');
     } else if (val == 'monthly') {
         $(".none-div").show();
         $(".annual-check-div").hide();
+        $('#weekend_val').show();
         $(".due-div").html('<label class="control-label m-r-5"><input type="radio" class="m-r-5" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> Due on day</label>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" value="1" style="width: 100px" id="r_day"><label class="control-label m-r-5">of every</label>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_month]" min="1" max="12" value="1" style="width: 100px" id="r_month">&nbsp;<label class="control-label" id="control-label">month(s)</label>');
+    } else if (val == 'periodic') {
+        $(".none-div").show();
+        $(".annual-check-div").hide();
+        $('#weekend_val').hide();
+        $(".due-div").addClass("recurrence-date");
+        $(".due-div").html('<div class="row"><div class="col-md-12 m-b-5"><label class="control-label m-r-5">Due on day</label>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" value="1" style="width: 100px" id="r_day"><label class="control-label m-r-5">of month</label>&nbsp;<select class="form-control m-r-5" id="r_month" name="recurrence[due_month]" value="1"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>&nbsp;<a href="javascript:void(0);" onclick="addPeriodicDate()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Periodic Date"> <i class="fa fa-plus" aria-hidden="true"></i> </a></div></div>');
     } else {
         $(".none-div").hide();
         $(".annual-check-div").hide();
+        $('#weekend_val').show();
         $(".due-div").html('<label class="control-label m-r-5"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day" class="m-r-5"> Due on every</label>&nbsp;<select class="form-control m-r-5" id="r_month" name="recurrence[due_month]"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day">');
     }
 }
-
-// function check_generation_type(radioval){
-//     var pattern = $("#pattern option:selected").val();
-//     if(radioval==2){
-
-//     }
-// }
+    
+function addPeriodicDate(){
+    var random = Math.floor((Math.random() * 999) + 1);
+    var clone='<div class="row" id="clone-'+random+'"><div class="col-md-12 m-b-5"><label class="control-label m-r-5"> Due on day</label>&nbsp;<input class="form-control m-r-5 test" type="number" name="due_days[]" min="1" max="31" value="1" style="width: 100px" id="r_day1"><label class="control-label m-r-5">of month</label>&nbsp;<select class="form-control m-r-2 periodic_mnth" id="r_month1" name="due_months[]" value="1"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>&nbsp; <a href="javascript:void(0);" onclick="removePeriodicDate(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
+    $(".due-div").append(clone);
+}
+function removePeriodicDate(random) {
+    var variableArray = [];
+    var elementArray = [];
+    var divID = 'clone-' + random;
+    var variableDropdownValue = $("#clone-" + random).val();
+    var index = variableArray.indexOf(variableDropdownValue);
+    variableArray.splice(index, 1);
+    $("#" + divID).remove();
+}
 
 function closeRecurrenceModal() {
     var get_content = $('#RecurranceModal .modal-body').html();
@@ -702,7 +736,21 @@ function request_edit_template() {
     } else if (pattern == 'quarterly') {
         var due_day = $("#r_day").val();
         var due_month = $("#r_month option:selected").val();
-    } else {
+    }else if (pattern == 'periodic') {
+       var due_day = $("#r_day").val();
+        var due_month = $("#r_month").val();
+        var periodic_days= new Array();
+        var periodic_months= new Array();
+        $("input[name='due_days[]']").each(function(){
+            periodic_days.push($(this).val());
+        });
+        var periodic_months = $('.periodic_mnth').map(function(){
+            return this.value;
+        }).get();
+        var periodic_due_days=JSON.stringify(periodic_days);
+        var periodic_due_months=JSON.stringify(periodic_months);
+    }  
+    else {
         var due_day = $("#r_day").val();
         var due_month = $("#r_month").val();
     }
@@ -722,6 +770,8 @@ function request_edit_template() {
     form_data.append('recurrence[client_fiscal_year_end]', client_fiscal_year_end);
     form_data.append('recurrence[due_day]', due_day);
     form_data.append('recurrence[due_month]', due_month);
+    form_data.append('recurrence[periodic_due_day]', periodic_due_days);
+    form_data.append('recurrence[periodic_due_month]', periodic_due_months);
     form_data.append('recurrence[expiration_type]', expiration_type);
     form_data.append('recurrence[end_occurrence]', end_occurrence);
     form_data.append('recurrence[target_start_days]', target_start_days);
@@ -747,7 +797,7 @@ function request_edit_template() {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//            alert(result);
+//            alert(result);return false;
             if (result.trim() != "-1") {
                 swal({
                     title: "Success!",

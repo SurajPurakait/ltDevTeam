@@ -192,11 +192,11 @@ class Billing_model extends CI_Model {
         return $this->db->get_where('services', ['category_id' => $category_id])->result_array();
     }
 
-    public function get_service_list_by_category_id_for_billing($category_id, $invoice_type) {
+    public function get_service_list_by_category_id_for_billing($service_id,$category_id, $invoice_type) {
         if($invoice_type == 1){   
-            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '0' or client_type_assign = '2')")->result_array();
+            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '0' or client_type_assign = '2') and id !='$service_id'")->result_array();
         }else{         
-            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '1' or client_type_assign = '2')")->result_array();
+            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '1' or client_type_assign = '2') and id !='$service_id'")->result_array();
         }
     }
 
@@ -1986,6 +1986,10 @@ class Billing_model extends CI_Model {
         $order_data['status'] = 2;
         $order_data['quantity'] = 0;
         $order_data['reference'] = $invoice_info['type'] == 1 ? 'company' : 'individual';
+        $internal_data_info = $this->internal->get_internal_data($order_data['reference'],$invoice_info['client_id']);
+        if($internal_data_info[0]['manager'] != ""){
+        $order_data['staff_requested_service'] = $internal_data_info[0]['manager'];
+        }
 
         $this->db->select('date_started');
         $this->db->where_in('order_id', $order_ids);
@@ -2067,6 +2071,7 @@ class Billing_model extends CI_Model {
             'inv.payment_status AS payment_status',
             'inv.total_amount AS sub_total',
             'inv.client_id as client_id',
+            'inv.is_recurrence as is_recurrence',
             '(CASE WHEN inv.type = 1 THEN (SELECT `company`.`name` FROM `company` WHERE `company`.`id` = `inv`.`client_id`) ELSE (SELECT CONCAT(individual.last_name,", ",individual.first_name) FROM `individual` WHERE `individual`.`id` = `inv`.`client_id`) END) as client_name',
             '(CASE WHEN inv.created_by = ' . sess('user_id') . ' THEN \'byme\' ELSE \'byothers\' END) as request_type',
             '(CASE WHEN inv.created_by = ' . sess('user_id') . ' THEN CONCAT(\'byme-\', inv.payment_status) ELSE CONCAT(\'byothers-\', inv.payment_status) END) as filter_value',
@@ -2083,7 +2088,9 @@ class Billing_model extends CI_Model {
             '(SELECT CONCAT(",", GROUP_CONCAT(`service_id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services',
 //            '(CAST((SELECT sr.price_charged FROM service_request sr WHERE sr.order_id = ord.id AND sr.services_id = ord.service_id) AS Decimal(10,2)) * ord.quantity) as sub_total',
             '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
-        ];
+            '(SELECT pattern FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as pattern',
+            '(SELECT next_occurance_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as next_generation_date',
+            ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
         $where['status'] = 'AND `inv`.`status` != 0 ';
         if ($is_recurrence != '') {

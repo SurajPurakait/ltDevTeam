@@ -21,7 +21,8 @@ class Task_model extends CI_Model {
     }
 
     public function get_task_list($request = '', $status = '', $priority = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '') {
-//        echo 'kkk'.$sos_value;die;
+//        echo 'kkk'.$status;die;
+        $this->load->model('administration');
         $user_info =  $this->session->userdata('staff_info');
         $user_department = $user_info['department'];
         $user_type = $user_info['type'];
@@ -117,7 +118,7 @@ class Task_model extends CI_Model {
             
             
             if ($status != '') {
-                if ($status == '0' || $status == '1' || $status == '2') {
+                if ($status == '0' || $status == '1' || $status == '2'|| $status=='4' ||$status=='3') {
                     $this->db->where('pt.tracking_description', $status);
                 }
             } else {
@@ -143,7 +144,11 @@ class Task_model extends CI_Model {
 //                echo 'b4';die;
                 $having[] = '(added_by_user = "' . $staff_id . '" OR assign_staff LIKE "%,' . $staff_id . ',%")';
             }
+            if($status=='' && empty($filter_data)){
+                $this->db->where_in('pt.tracking_description', [0,1,3]);
+            }
         }
+        
 
         if (isset($sos_value) && $sos_value != '') {
             if ($sos_value == 'tome') {
@@ -252,7 +257,9 @@ class Task_model extends CI_Model {
         $tracking_array = [
                 ["id" => 0, "name" => "Not Started"],
                 ["id" => 1, "name" => "Started"],
-                ["id" => 2, "name" => "Completed"]
+                ["id" => 3, "name" => "Ready"],
+                ["id" => 2, "name" => "Resolved"],
+                ["id" => 4, "name" => "Canceled"]
         ];
         switch ($element_key):
             case 1: {

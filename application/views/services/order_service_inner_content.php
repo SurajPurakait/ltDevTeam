@@ -134,7 +134,16 @@
                                 $<?= ($row_inner->service_id == '10' || $row_inner->service_id == '41') ? $tot : $row_inner->retail_price; ?>
                             </td>
                             <td title="Override Price" style="text-align: center;">$<?= $row_inner->price_charged; ?></td>    
-                            <td title="Responsible Dept" style="text-align: center;"><?= $row_inner->service_department_name; ?></td>
+                            <td title="Responsible Dept" style="text-align: center;">
+                                <?php $dept_name = $row_inner->service_department_name;
+                                if($dept_name == ''){
+                                   echo "Franchisee<br>";
+                                   echo $staff_requested_service['first_name'].' '.$staff_requested_service['last_name'];
+                                }else{
+                                    echo $row_inner->service_department_name;
+                                } ?>
+                                    
+                            </td>
                             <?php if ($usertype == "3"): ?>
                                 <td align='left' title="Tracking Description">
                                     <span class='label <?php echo $trk_inner_class; ?> label-block' style="width: 80px;"><?= $tracking; ?></span>

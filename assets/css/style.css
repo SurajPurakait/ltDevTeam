@@ -3992,6 +3992,8 @@ code {
 }
 #tab-content-div table th {
     padding: 15px;
+    background:#8eb0db;
+    color:#fff;
 }
 #service_by_franchise_1 .ibox-title{
     border-top: 4px solid #ec8fb3;
@@ -4001,6 +4003,63 @@ code {
 }
 #service_by_category_1 .ibox-title{
     border-top: 4px solid #f2a3a3;
+}
+
+#billing_invoice_payments_section .ibox-title {
+    border-top: 4px solid #ec8fb3;    
+}
+
+#action_by_office_section .ibox-title {
+    border-top: 4px solid #ec8fb3;    
+}
+#action_to_office_section .ibox-title {
+    border-top: 4px solid #ffab96;    
+}
+#action_by_department_section .ibox-title {
+    border-top: 4px solid #ec8fb3;    
+}
+#action_to_department_section .ibox-title {
+    border-top: 4px solid #ffab96;    
+}
+
+#projects_by_office_section .ibox-title {
+    border-top: 4px solid #ec8fb3;    
+}
+#tasks_by_office_section .ibox-title {
+    border-top: 4px solid #ffab96;    
+}
+#projects_to_department_section .ibox-title {
+    border-top: 4px solid #ec8fb3;    
+}
+#tasks_to_department_section .ibox-title {
+    border-top: 4px solid #ffab96;    
+}
+
+#total_clients_by_office_section .ibox-title {
+    border-top: 4px solid #ec8fb3;    
+}
+#business_clients_by_office_section .ibox-title {
+    border-top: 4px solid #ffab96;    
+}
+#individual_clients_by_office_section .ibox-title {
+    border-top: 4px solid #f2a3a3;    
+}
+
+#partners_by_status_section .ibox-title {
+    border-top: 4px solid #ec8fb3;    
+}
+#partners_by_type_section .ibox-title {
+    border-top: 4px solid #ffab96;    
+}
+
+#leads_by_status_section .ibox-title {
+    border-top: 4px solid #ec8fb3;    
+}
+#leads_by_type_section .ibox-title {
+    border-top: 4px solid #ffab96;    
+}
+#leads_email_campaign_section .ibox-title {
+    border-top: 4px solid #f2a3a3;    
 }
 .ibox-content {
     background-color: #ffffff;
@@ -9184,6 +9243,10 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 #dt-reports-wrap table.dataTable thead .sorting_asc{
     background: none;
 }
-
-
-
+#weekend_val input[type="checkbox"],
+.recurrence-date input[type="radio"]{
+    vertical-align: bottom;
+}
+#royaltyHeader .form-control, #salesHeader .form-control {
+    font-size: 13px;
+}

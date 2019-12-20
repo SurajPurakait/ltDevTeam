@@ -6,7 +6,7 @@
         </div>
         <form  method="post" id="invoice_email_form" name="invoice_email_form" onsubmit="sendInvoiceEmail();">    
             <div class="modal-body">
-                <div class="row">
+                <div class="row" id="row_div">
                     <?php foreach ($email_list as $key => $email) { ?>
                         <div class="form-group">
                             <label class="col-lg-3 control-label">
@@ -22,7 +22,18 @@
                 </div>
                 <div class="row">
                     <div class="form-group">
+                        <?php
+                            if ($email_list[0] != '') {
+                        ?>
                         <label class="col-lg-3 control-label"><input type="checkbox" name="email[]" onchange="this.value = getIdVal('new_email');" id="new_email_checkbox" name="">&nbsp;
+                        <?php        
+                            } else {
+                        ?>
+                        <label class="col-lg-3 control-label"><input type="checkbox" name="email[]" onchange="this.value = getIdVal('new_email');" id="new_email_checkbox" name="" checked>&nbsp;
+                        <?php        
+                            }
+                        ?>
+                        
                         <!-- New email -->
                         Send to:
                     </label>

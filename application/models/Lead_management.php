@@ -16,9 +16,10 @@ Class Lead_management extends CI_Model {
         $this->lead_select[] = 'lm.office AS office';
         $this->lead_select[] = 'lm.type AS type';
         $this->lead_select[] = 'lm.type_of_contact AS type_of_contact';
-        $this->lead_select[] = 'lm.language AS language';
+//      $this->lead_select[] = 'lm.language AS language';
+        $this->lead_select[] ='(SELECT  language from  languages WHERE id = lm.language) AS language';
         $this->lead_select[] = '(CASE WHEN lm.type = \'1\' THEN (SELECT name FROM type_of_contact_prospect WHERE id = lm.type_of_contact) ELSE (SELECT name FROM type_of_contact_referral WHERE id = lm.type_of_contact) END) AS contact_type_name';
-        $this->lead_select[] = 'CONCAT(lm.last_name, \', \', lm.first_name) AS full_name';
+        $this->lead_select[] = 'CONCAT(lm.first_name, \', \', lm.last_name) AS full_name';
         $this->lead_select[] = 'lm.first_name AS first_name';
         $this->lead_select[] = '(CASE WHEN lm.status = 0 THEN \'New\' WHEN lm.status = 1 THEN \'Complete\' WHEN lm.status = 2 THEN \'Inactive\' WHEN lm.status = 3 THEN \'Active\' ELSE \'Unknown\' END) AS status_name';
         $this->lead_select[] = 'lm.status AS status';
@@ -28,7 +29,7 @@ Class Lead_management extends CI_Model {
         $this->lead_select[] = 'lm.complete_date AS complete_date';
         $this->lead_select[] = 'lm.assigned_status AS assigned_status';
         $this->lead_select[] = 'lm.lead_source_detail AS lead_source_detail';
-        $this->lead_select[] = '(SELECT CONCAT(staff.last_name, \', \',staff.first_name, \' \', staff.middle_name) FROM staff WHERE id = lm.staff_requested_by) AS requested_staff_name';
+        $this->lead_select[] = '(SELECT CONCAT(staff.first_name, \' \',staff.last_name, \' \', staff.middle_name) FROM staff WHERE id = lm.staff_requested_by) AS requested_staff_name';
         $this->lead_select[] = '(SELECT id FROM staff WHERE id = lm.staff_requested_by) AS requested_staff_id';
         $this->lead_select[] = '(SELECT office_id from office WHERE id = (SELECT office_id FROM office_staff WHERE staff_id = lm.staff_requested_by limit 0,1)) AS request_staff_office_name';
         $this->lead_select[] = '(SELECT COUNT(ln.id) FROM lead_notes AS ln WHERE ln.lead_id = lm.id) AS notes_count';

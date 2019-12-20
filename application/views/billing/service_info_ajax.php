@@ -39,4 +39,4 @@
         <a href="javascript:void(0)" id="note_link_<?= $section_id; ?>" onclick="addNote(<?= $section_id; ?>);" class="text-success"><i class="fa fa-plus"></i> Add Notes</a>
     </div>
 </div>
-<a href="javascript:void(0)" id="section_link_<?= $section_id; ?>" onclick="addService();" class="text-success pull-right"><h3><i class="fa fa-plus"></i> Add Another Service</h3></a><br>
+<a href="javascript:void(0)" id="section_link_<?= $section_id; ?>" onclick="addService(<?= $service_info['id'] ?>);" class="text-success pull-right"><h3><i class="fa fa-plus"></i> Add Another Service</h3></a><br>

@@ -34,16 +34,16 @@ function loadTaskDashboard(status, request, priority, officeID, departmentID, fi
                 $(".request-dropdown").val(request);
                 $("[data-toggle=popover]").popover();
             }
-            // var filter_result = '';
-            // if (filter_result != '') {
-            //     $("#clear_filter").html(filter_result + ' &nbsp; ');
-            //     $("#clear_filter").show();
-            //     $('#btn_clear_filter').show();
-            // } else {
-            //     $("#clear_filter").html('');
-            //     $("#clear_filter").hide();
-            //     $('#btn_clear_filter').hide();
-            // }
+             var filter_result = '';
+             if (filter_result != '') {
+                 $("#clear_filter").html(filter_result + ' &nbsp; ');
+                 $("#clear_filter").show();
+                 $('#task_btn_clear_filter').show();
+             } else {
+                 $("#clear_filter").html('');
+                 $("#clear_filter").hide();
+                 $('#task_btn_clear_filter').hide();
+             }
         },
         beforeSend: function () {
             openLoading();
@@ -73,7 +73,7 @@ function taskFilter() {
             $("#task_dashboard_div").html(result);
             $("[data-toggle=popover]").popover();
             $("#clear_filter").show();
-            $('#btn_clear_filter').show();
+            $('#task_btn_clear_filter').show();
         },
         beforeSend: function () {
             openLoading();

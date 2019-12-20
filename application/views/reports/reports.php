@@ -11,24 +11,16 @@
                             <div class="tabs-container">
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="active"><a class="nav-link" data-toggle="tab" href="#tab-1">Services</a></li>
-                                    <li><a class="nav-link" data-toggle="tab" href="#tab-2">Billings</a></li>
-                                    <li><a class="nav-link" data-toggle="tab" href="#tab-3">Actions</a></li>
-                                    <li><a class="nav-link" data-toggle="tab" href="#tab-4">Projects</a></li>
-                                    <li><a class="nav-link" data-toggle="tab" href="#tab-5">Clients</a></li>
-                                    <li><a class="nav-link" data-toggle="tab" href="#tab-6">Partners</a></li>
-                                    <li><a class="nav-link" data-toggle="tab" href="#tab-7">Leads</a></li>
+                                    <li><a class="nav-link" data-toggle="tab" href="#tab-billing">Billings</a></li>
+                                    <li><a class="nav-link" data-toggle="tab" href="#tab-action">Actions</a></li>
+                                    <li><a class="nav-link" data-toggle="tab" href="#tab-projects">Projects</a></li>
+                                    <li><a class="nav-link" data-toggle="tab" href="#tab-clients">Clients</a></li>
+                                    <li><a class="nav-link" data-toggle="tab" href="#tab-partners">Partners</a></li>
+                                    <li><a class="nav-link" data-toggle="tab" href="#tab-leads">Leads</a></li>
                                 </ul>
                                 <div class="tab-content" id="tab-content-div">
                                     <div role="tabpanel" id="tab-1" class="tab-pane active">
                                         <div class="panel-body">
-                                            <!-- <div class="row">
-                                                <div class="col-md-2">
-                                                    <h4 class="bg-success p-5 text-center f-s-16">Period Time</h4>
-                                                </div>
-                                                <div class="col-md-2">
-                                                   <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period"> 
-                                                </div>
-                                            </div> -->
                                             <h4 class="m-b-15"> Period Time : <span class="btn-sm btn-default text-dark">Last 30 Days</span></h4>
                                             <?php 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
@@ -81,9 +73,215 @@
                                             ?>
                                         </div>
                                     </div>
-                                    <div role="tabpanel" id="tab-2" class="tab-pane">
+                                    <div role="tabpanel" id="tab-billing" class="tab-pane">
                                         <div class="panel-body">
-                                            test data
+                                            <div class="ibox m-t-25" id="billing_invoice_payments_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Invoice Payments</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="" onclick="show_billing_data()">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="billing_invoice_payments" style="display: none;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" id="tab-action" class="tab-pane">
+                                        <div class="panel-body">
+                                            <div class="ibox m-t-25" id="action_by_office_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Actions By Office</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="action_by_office" style="display: none;"></div>
+                                            </div>                                        
+                                            <div class="ibox m-t-25" id="action_to_office_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Actions To Office</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="action_to_office" style="display: none;"></div>
+                                            </div>
+                                            <div class="ibox m-t-25" id="action_by_department_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Actions By Department</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="action_by_department" style="display: none;"></div>
+                                            </div>
+                                            <div class="ibox m-t-25" id="action_to_department_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Actions To Department</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="action_to_department" style="display: none;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" id="tab-projects" class="tab-pane">
+                                        <div class="panel-body">
+                                            <div class="ibox m-t-25" id="projects_by_office_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Projects By Office</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="projects_by_office" style="display: none;"></div>
+                                            </div>                                        
+                                            <div class="ibox m-t-25" id="tasks_by_office_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Tasks By Office</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="tasks_by_office" style="display: none;"></div>
+                                            </div>
+                                            <div class="ibox m-t-25" id="projects_to_department_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Projects To Department</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="projects_to_department" style="display: none;"></div>
+                                            </div>
+                                            <div class="ibox m-t-25" id="tasks_to_department_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Tasks To Department</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="tasks_to_department" style="display: none;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" id="tab-clients" class="tab-pane">
+                                        <div class="panel-body">
+                                            <div class="ibox m-t-25" id="total_clients_by_office_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Total Clients By Office</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="total_clients_by_office" style="display: none;"></div>
+                                            </div>                                        
+                                            <div class="ibox m-t-25" id="business_clients_by_office_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Business Clients By Office</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="business_clients_by_office" style="display: none;"></div>
+                                            </div>
+                                            <div class="ibox m-t-25" id="individual_clients_by_office_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Individual Clients By Office</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="individual_clients_by_office" style="display: none;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" id="tab-partners" class="tab-pane">
+                                        <div class="panel-body">
+                                            <div class="ibox m-t-25" id="partners_by_status_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Partners By Status</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="partners_by_status" style="display: none;"></div>
+                                            </div>                                        
+                                            <div class="ibox m-t-25" id="partners_by_type_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Partners By Type</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="partners_by_type" style="display: none;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" id="tab-leads" class="tab-pane">
+                                        <div class="panel-body">
+                                            <div class="ibox m-t-25" id="leads_by_status_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Leads By Status</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="leads_by_status" style="display: none;"></div>
+                                            </div>                                        
+                                            <div class="ibox m-t-25" id="leads_by_type_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Leads By Type</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="leads_by_type" style="display: none;"></div>
+                                            </div>
+                                            <div class="ibox m-t-25" id="leads_email_campaign_section">
+                                                <div class="ibox-title p-t-15 p-b-40">
+                                                    <h5 class="m-0 f-s-16">Leads Email Campaign</h5>
+                                                    <div class="ibox-tools">
+                                                        <a class="">
+                                                            <i class="fa fa-chevron-up"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="ibox-content p-0" id="leads_email_campaign" style="display: none;"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

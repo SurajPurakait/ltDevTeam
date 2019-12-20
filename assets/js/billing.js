@@ -30,7 +30,7 @@ function saveDocument() {
     });
 }
 
-function getServiceDropdownByCategory(category_id, service_id, section_id, invoice_type) {
+function getServiceDropdownByCategory(category_id, service_id="", section_id, invoice_type) {
     if (category_id == '') {
         $('#service_dropdown_div_' + section_id + ', #service_div_' + section_id).html('');
     } else {
@@ -96,7 +96,7 @@ function getServiceInfoById(service_id, category_id, section_id) {
 }
 
 
-function addService() {
+function addService(service_id) {
     var section_id = $('#section_id').val();
     var invoice_type = $('#invoice_type').val();
     $.ajax({
@@ -104,7 +104,8 @@ function addService() {
         url: base_url + 'billing/invoice/add_service',
         data: {
             section_id: section_id,
-            invoice_type: invoice_type
+            invoice_type: invoice_type,
+            service_id: service_id
         },
         dataType: "html",
         success: function (result) {
@@ -332,6 +333,9 @@ function placeOrder(invoice_id, emails) {
                 backdrop: 'static',
                 keyboard: false
             });
+            if (emails == ''){
+                $('#row_div').hide();
+            }
         },
         beforeSend: function () {
             openLoading();

@@ -206,12 +206,13 @@
                                                                             <option value="weekly">Weekly</option>
                                                                             <option value="quarterly">Quarterly</option>
                                                                             <option value="annually">Annually</option>
+                                                                            <option value="periodic">Periodic</option>
                                                                             <option value="none">None</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6">    
-                                                                    <div class="form-group m-t-25">
+                                                                    <div class="form-group m-t-25" id="weekend_val">
                                                                         <label class="control-label"><input type="checkbox" name="recurrence[occur_weekdays]" id="occur_weekdays"> Must occur on weekdays</label>
                                                                     </div>
                                                                     <div class="annual-check-div" style="display: none;">
