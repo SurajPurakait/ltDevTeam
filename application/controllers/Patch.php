@@ -868,20 +868,21 @@ class Patch extends CI_Controller {
                 $this->db->where('services_id',$od['service_id']);
                 $service_request_data_inner = $this->db->get('service_request')->result_array();
 
-                $id_arr = array_column($service_request_data_inner,'id');
-                $price_charged = array_sum(array_column($service_request_data_inner,'price_charged'));
+                print_r($service_request_data_inner);
+                // $id_arr = array_column($service_request_data_inner,'id');
+                // $price_charged = array_sum(array_column($service_request_data_inner,'price_charged'));
+                // $status_arr = array_column($service_request_data_inner,'status');
+                // $data = array(
+                //     'quantity' => $service_request_data,
+                //     'price_charged' => $price_charged
+                // );
+                // $this->db->where('id',$id_arr[0]);
+                // $this->db->update('service_request',$data);
 
-                $data = array(
-                    'quantity' => $service_request_data,
-                    'price_charged' => $price_charged
-                );
-                $this->db->where('id',$id_arr[0]);
-                $this->db->update('service_request',$data);
-
-                for ($i=1; $i < count($id_arr) ; $i++) { 
-                    $this->db->where('id',$id_arr[$i]);
-                    $this->db->delete('service_request');    
-                }
+                // for ($i=1; $i < count($id_arr) ; $i++) { 
+                //     $this->db->where('id',$id_arr[$i]);
+                //     $this->db->delete('service_request');    
+                // }
             }
         }
         echo "Successfully Updated";
