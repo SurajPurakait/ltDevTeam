@@ -3992,6 +3992,8 @@ code {
 }
 #tab-content-div table th {
     padding: 15px;
+    background:#8eb0db;
+    color:#fff;
 }
 #service_by_franchise_1 .ibox-title{
     border-top: 4px solid #ec8fb3;
@@ -9244,4 +9246,7 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 #weekend_val input[type="checkbox"],
 .recurrence-date input[type="radio"]{
     vertical-align: bottom;
+}
+#royaltyHeader .form-control, #salesHeader .form-control {
+    font-size: 13px;
 }

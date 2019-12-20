@@ -78,6 +78,12 @@ if (!empty($project_list)) {
         }
         $added_user_department=get_added_user_department($list['added_by_user']);
         $added_user_office=get_added_user_office($list['added_by_user']);
+        $periodic_data=get_project_periodic_data($list['id']);
+        if(!empty($periodic_data)){
+            $periodic_recurrence_date=$periodic_data->actual_due_month.'/'.$periodic_data->actual_due_day.'/'.$periodic_data->actual_due_year;
+        }else{
+            $periodic_recurrence_date='N/A';
+        }
         ?>
         <div class="panel panel-default service-panel type2 filter-active" id="action<?= $list['id'] ?>">
             <div class="panel-heading" onclick="load_project_tasks('<?php echo $list['id']; ?>', '<?php echo $list['created_at']; ?>', '<?php echo $dueDate; ?>');"> 
@@ -148,8 +154,11 @@ if (!empty($project_list)) {
                                     <td title="Tracking" class="text-center"><span id="trackouter-<?php echo $list['id']; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></td>
                                     <td title="Creation Date"><?= date('m/d/Y', strtotime($list['created_at'])) ?></td>
                                     <td title="Due Date"><?= date('m/d/Y',strtotime($dueDate)) ?></td>
+                                    <?php if($pattern_details->pattern=='periodic'){ ?>
+                                        <td title="Recurrence Date"><?= $periodic_recurrence_date ?></td>
+                                    <?php } else { ?>
                                     <td title="Recurrence Date"><?= ($pattern_details->generation_date!=''?(date('m/d/Y',strtotime($pattern_details->generation_date))):'Manual'); ?></td>
-
+                                    <?php } ?>
                                             <!-- <td title='Note'><a id="notecount-<?//= $list['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_notes(<?//= $list["id"]; ?>)"><b> <?//= get_project_note_count($list['id']) ?></b></a> -->
 
 

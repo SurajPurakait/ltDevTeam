@@ -429,6 +429,16 @@ function request_create_template() {
     } else if(pattern=='periodic'){
         var due_day = $("#r_day").val();
         var due_month = $("#r_month").val();
+        var periodic_days= new Array();
+        var periodic_months= new Array();
+        $("input[name='due_days[]']").each(function(){
+            periodic_days.push($(this).val());
+        });
+        var periodic_months = $('.periodic_mnth').map(function(){
+            return this.value;
+        }).get();
+        var periodic_due_days=JSON.stringify(periodic_days);
+        var periodic_due_months=JSON.stringify(periodic_months);
     }
     else {
         var due_day = $("#r_day").val();
@@ -449,6 +459,8 @@ function request_create_template() {
     form_data.append('recurrence[client_fiscal_year_end]', client_fiscal_year_end);
     form_data.append('recurrence[due_day]', due_day);
     form_data.append('recurrence[due_month]', due_month);
+    form_data.append('recurrence[periodic_due_day]', periodic_due_days);
+    form_data.append('recurrence[periodic_due_month]', periodic_due_months);
     form_data.append('recurrence[expiration_type]', expiration_type);
     form_data.append('recurrence[end_occurrence]', end_occurrence);
     form_data.append('recurrence[target_start_days]', target_start_days);
@@ -578,7 +590,7 @@ function change_due_pattern(val) {
     
 function addPeriodicDate(){
     var random = Math.floor((Math.random() * 999) + 1);
-    var clone='<div class="row" id="clone-'+random+'"><div class="col-md-12 m-b-5"><label class="control-label m-r-5"> Due on day</label>&nbsp;<input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" value="1" style="width: 100px" id="r_day1"><label class="control-label m-r-5">of month</label>&nbsp;<select class="form-control m-r-2" id="r_month1" name="recurrence[due_month]" value="1"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>&nbsp; <a href="javascript:void(0);" onclick="removePeriodicDate(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
+    var clone='<div class="row" id="clone-'+random+'"><div class="col-md-12 m-b-5"><label class="control-label m-r-5"> Due on day</label>&nbsp;<input class="form-control m-r-5 test" type="number" name="due_days[]" min="1" max="31" value="1" style="width: 100px" id="r_day1"><label class="control-label m-r-5">of month</label>&nbsp;<select class="form-control m-r-2 periodic_mnth" id="r_month1" name="due_months[]" value="1"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>&nbsp; <a href="javascript:void(0);" onclick="removePeriodicDate(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
     $(".due-div").append(clone);
 }
 function removePeriodicDate(random) {
@@ -727,6 +739,16 @@ function request_edit_template() {
     }else if (pattern == 'periodic') {
        var due_day = $("#r_day").val();
         var due_month = $("#r_month").val();
+        var periodic_days= new Array();
+        var periodic_months= new Array();
+        $("input[name='due_days[]']").each(function(){
+            periodic_days.push($(this).val());
+        });
+        var periodic_months = $('.periodic_mnth').map(function(){
+            return this.value;
+        }).get();
+        var periodic_due_days=JSON.stringify(periodic_days);
+        var periodic_due_months=JSON.stringify(periodic_months);
     }  
     else {
         var due_day = $("#r_day").val();
@@ -748,6 +770,8 @@ function request_edit_template() {
     form_data.append('recurrence[client_fiscal_year_end]', client_fiscal_year_end);
     form_data.append('recurrence[due_day]', due_day);
     form_data.append('recurrence[due_month]', due_month);
+    form_data.append('recurrence[periodic_due_day]', periodic_due_days);
+    form_data.append('recurrence[periodic_due_month]', periodic_due_months);
     form_data.append('recurrence[expiration_type]', expiration_type);
     form_data.append('recurrence[end_occurrence]', end_occurrence);
     form_data.append('recurrence[target_start_days]', target_start_days);

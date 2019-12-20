@@ -3547,3 +3547,24 @@ if (!function_exists('get_assigned_office_staff_project_task')) {
     }
 
 }
+if(!function_exists('get_project_periodic_data')){
+    function get_project_periodic_data($project_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getProjectPeriodicData($project_id);
+    }
+}
+if(!function_exists('get_periodic_pattern')){
+    function get_periodic_pattern($template_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getTemplatePeriodicPattern($template_id);
+    }
+}
+if(!function_exists('get_project_main_periodic_data')){
+    function get_project_main_periodic_data($project_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getProjectMainPeriodicData($project_id);
+    }
+}
