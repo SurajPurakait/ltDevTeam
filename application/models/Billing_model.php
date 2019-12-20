@@ -2433,5 +2433,71 @@ class Billing_model extends CI_Model {
     public function getInvoiceRecurringDetails($invoice_id) {
         return $this->db->get_where('invoice_recurence', ['invoice_id' => $invoice_id])->row();
     }
+    public function report_billing_list() {
+        $data_office = $this->system->get_staff_office_list();
+        $invoice_details = [];
+        
+        foreach ($data_office as $do) {    
+            $data = [
+                'id' => $do['id'],
+                'office' => $do['name'],
+                'total_invoice' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id']))->num_rows(),
+                'amount_collected' => $this->amount_collected($do['id']),
+                'unpaid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Unpaid'))->num_rows(),
+                'paid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Paid'))->num_rows(),
+                'partial' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Partial'))->num_rows(),
+                'less_than_30' => $this->late_status_calculation_report_dashboard_billing($do['id'],'less_than_30'),
+                'less_than_60' => $this->late_status_calculation_report_dashboard_billing($do['id'],'less_than_60'),
+                'more_than_60' => $this->late_status_calculation_report_dashboard_billing($do['id'],'more_than_60')           
+            ];
+            array_push($invoice_details,$data);
+        }
+        return $invoice_details;
+    }
 
+    public function amount_collected($ofc_id) {
+        $this->db->where('office_id',$ofc_id);
+        $amount_data = $this->db->get('report_dashboard_billing')->result_array();
+        return $amount_collected = array_sum(array_column($amount_data,'amount_collected'));
+    }
+
+    public function late_status_calculation_report_dashboard_billing($ofc_id,$late_span) {
+        $this->db->where('office_id',$ofc_id);
+        $reports_data = $this->db->get('report_dashboard_billing')->result_array();
+        $date_arr = array_column($reports_data,'created_date');
+        $date_arr_total = [];
+        foreach ($date_arr as $da) {
+            $current_date = date('Y-m-d');
+            $date_difference = abs(strtotime($current_date) - strtotime($da));
+            array_push($date_arr_total,$date_difference);
+        }
+        // return $date_difference;
+        if ($late_span == 'less_than_30') {
+            $x = 0;
+            foreach ($date_arr_total as $dat) {
+                if ($dat < 30) {
+                    $x++;
+                }
+            }
+            return $x;
+        }
+        if ($late_span == 'less_than_60') {
+            $y = 0;
+            foreach ($date_arr_total as $dat) {
+                if ($dat < 60) {
+                    $y++;
+                }
+            }
+            return $y;
+        }
+        if ($late_span == 'more_than_60') {
+            $z = 0;
+            foreach ($date_arr_total as $dat) {
+                if ($dat > 60) {
+                    $z++;
+                }
+            }
+            return $z;
+        }
+    }
 }
