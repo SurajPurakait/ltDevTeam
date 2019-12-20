@@ -174,7 +174,6 @@ function show_billing_data() {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_show_billing_data',
-        // data: {'category': category},
         success: function (result) {
             $("#billing_invoice_payments").html(result);
         },

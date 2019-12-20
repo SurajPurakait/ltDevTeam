@@ -1069,4 +1069,7 @@ ALTER TABLE `services` CHANGE `dept` `dept` VARCHAR(10) NULL DEFAULT NULL;
 /*import template_periodic_pattern */
 /*import project_periodic_pattern */
 
-ALTER TABLE `project_periodic_pattern` ADD `project_id` INT(4) NOT NULL AFTER `template_id`; 
+ALTER TABLE `project_periodic_pattern` ADD `project_id` INT(4) NOT NULL AFTER `template_id`;
+
+/*20.12.2019*/
+ALTER TABLE `service_request` ADD `quantity` INT(4) NOT NULL DEFAULT '1' AFTER `services_id`;
