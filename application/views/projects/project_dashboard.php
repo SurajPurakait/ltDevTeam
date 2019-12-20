@@ -80,10 +80,13 @@ if (!empty($project_list)) {
         $added_user_office=get_added_user_office($list['added_by_user']);
         $periodic_data=get_project_periodic_data($list['id']);
         if(!empty($periodic_data)){
-            $periodic_recurrence_date=$periodic_data->actual_due_month.'/'.$periodic_data->actual_due_day.'/'.$periodic_data->actual_due_year;
+            $periodic_recurrence_dates=$periodic_data->actual_due_month.'/'.$periodic_data->actual_due_day.'/'.$periodic_data->actual_due_year;
+            $generation_days = ((int) $pattern_details->generation_month * 30) + (int) $pattern_details->generation_day;
+            $periodic_recurrence_date = date('m/d/Y', strtotime('-' . $generation_days . ' days', strtotime($periodic_recurrence_dates)));
         }else{
             $periodic_recurrence_date='N/A';
         }
+        
         ?>
         <div class="panel panel-default service-panel type2 filter-active" id="action<?= $list['id'] ?>">
             <div class="panel-heading" onclick="load_project_tasks('<?php echo $list['id']; ?>', '<?php echo $list['created_at']; ?>', '<?php echo $dueDate; ?>');"> 
