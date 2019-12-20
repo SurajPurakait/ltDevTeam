@@ -157,25 +157,37 @@
                                                     $service_id = $services['service_id'];
                                                     ?>
                                                     <tr class="<?= $colors[$random_keys]; ?>">
-                                                        <td style="border: 1px solid #8ab645; padding-left: 8px;" width="300">
-                                                            <div class="row">
-                                                                <div class="col-lg-10" style="padding-top:8px">
+                                                        <td style="border: 1px solid #8ab645; padding-left: 8px;" width="500" class="p-t-10">
+                                                            <div class= "container w-100" >
+                                                                <div class="row" style="width: 500px;">
+                                                                <div class="col-sm-4" style=" align-self: right;" >
                                                                     <p>
-                                                                        <b>Category: <?= $services['service_category']; ?></b><br>
-                                                                        <b>Service:</b> <?= $services["service"]; ?><br>
-                                                                        <b>Retail Price:</b> $<?= $services["retail_price"]; ?>.00<br>
-                                                                        <b>Override Price:</b> $<?= $services["override_price"]; ?><br>
-                                                                        <b>Quantity:</b> <?= $services["quantity"]; ?><br>
-                                                                        <b>Total:</b> $<?= number_format((float) $services["override_price"] * $services["quantity"], 2, '.', ''); ?>
+                                                                        <b>Category:</b><br>
+                                                                        <b>Service:</b> <br>
+                                                                        <b>Retail Price:</b><br>
+                                                                        <b>Override Price:</b><br>
+                                                                        <b>Quantity:</b> <br>
+                                                                        <b>Total:</b>
                                                                     </p>
                                                                 </div>
+                                                                <div class="col-sm-8" style=" align-self: left;" >
+                                                                    <p>
+                                                                        <b> <?= $services['service_category']; ?></b><br>
+                                                                         <?= $services["service"]; ?><br>
+                                                                         $<?= $services["retail_price"]; ?>.00<br>
+                                                                         $<?= $services["override_price"]; ?><br>
+                                                                        <?= $services["quantity"]; ?><br>
+                                                                         $<?= number_format((float) $services["override_price"] * $services["quantity"], 2, '.', ''); ?>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
                                                             </div>
                                                         </td>
                                                         <td style="border: 1px solid #8ab645; padding-left: 8px;">
                                                             <div class="row">
                                                                 <div class="col-lg-12" style="padding-top:8px">
                                                                     <p><b>Tracking:</b>&nbsp;&nbsp;&nbsp;<span class="label <?= $tracking_class ?> invoice-tracking-span-<?= $services['invoice_id']; ?>"><b><?= $tracking[$services['status']]; ?></b></span><br>
-                                                                        <b>Notes</b><br>
+                                                                        <b>Notes :</b><br>
                                                                         <?php
                                                                         $note_list = invoice_notes($order_id, $service_id);
                                                                         foreach ($note_list as $note):
