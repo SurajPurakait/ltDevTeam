@@ -863,14 +863,15 @@ class Patch extends CI_Controller {
             $service_request_data = $this->db->get('service_request')->num_rows();
 
             if ($service_request_data > 1) {
-                echo "<pre>";
+                // echo "<pre>";
                 $this->db->where('order_id',$od['id']);
                 $this->db->where('services_id',$od['service_id']);
                 $service_request_data_inner = $this->db->get('service_request')->result_array();
 
+                // print_r($service_request_data_inner);
                 $id_arr = array_column($service_request_data_inner,'id');
                 $price_charged = array_sum(array_column($service_request_data_inner,'price_charged'));
-
+                $status_arr = array_column($service_request_data_inner,'status');
                 $data = array(
                     'quantity' => $service_request_data,
                     'price_charged' => $price_charged
