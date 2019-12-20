@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-10">
-        <table class="table table-bordered report-table table-striped text-center m-b-0">
+        <table class="table table-bordered billing-report-table table-striped text-center m-b-0">
             <thead>
                 <tr>
                     <th class="text-uppercase" style="white-space: nowrap;">Office</th>

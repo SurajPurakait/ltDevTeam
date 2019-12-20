@@ -2468,10 +2468,9 @@ class Billing_model extends CI_Model {
         $date_arr_total = [];
         foreach ($date_arr as $da) {
             $current_date = date('Y-m-d');
-            $date_difference = abs(strtotime($current_date) - strtotime($da));
+            $date_difference = (strtotime($current_date) - strtotime($da))/60/60/24;
             array_push($date_arr_total,$date_difference);
         }
-        // return $date_difference;
         if ($late_span == 'less_than_30') {
             $x = 0;
             foreach ($date_arr_total as $dat) {
