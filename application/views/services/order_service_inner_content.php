@@ -138,7 +138,6 @@
                                 <?php $dept_name = $row_inner->service_department_name;
                                 if($dept_name == ''){
                                    echo "Franchisee<br>";
-                                   echo $staff_requested_service['first_name'].' '.$staff_requested_service['last_name'];
                                 }else{
                                     echo $row_inner->service_department_name;
                                 } ?>
