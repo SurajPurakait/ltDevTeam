@@ -75,11 +75,11 @@
                                     </div>
                                     <div role="tabpanel" id="tab-billing" class="tab-pane">
                                         <div class="panel-body">
-                                            <div class="ibox m-t-25" id="billing_invoice_payments_section">
+                                            <div class="ibox m-t-25" id="billing_invoice_payments_section" onclick="show_billing_data()">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Invoice Payments</h5>
                                                     <div class="ibox-tools">
-                                                        <a class="" onclick="show_billing_data()">
+                                                        <a class="">
                                                             <i class="fa fa-chevron-up"></i>
                                                         </a>
                                                     </div>

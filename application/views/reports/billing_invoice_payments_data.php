@@ -32,6 +32,17 @@
                 <?php        
                     } 
                 ?>
+                <tr>
+                    <td>Total</td>
+                    <td><?= $totals['total_no_of_invoice'] ; ?></td>
+                    <td><?= $totals['total_amount_collected'] ; ?></td>
+                    <td><?= $totals['total_unpaid'] ; ?></td>
+                    <td><?= $totals['total_partial'] ; ?></td>
+                    <td><?= $totals['total_paid'] ; ?></td>
+                    <td><?= $totals['total_less_than_30'] ; ?></td>
+                    <td><?= $totals['total_less_than_60'] ; ?></td>
+                    <td><?= $totals['total_more_than_60'] ; ?></td>
+                </tr>
             </tbody>
         </table>
     </div>
