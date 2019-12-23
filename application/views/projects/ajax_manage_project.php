@@ -97,6 +97,13 @@
                             <!-- Add multiple service categories inside this div using ajax -->
                         </div>
                         <div class="col-md-12">
+                            <label class="col-lg-12 control-label">Creation Date:</label>
+                            <div class="form-group">
+                                <input placeholder="mm/dd/yyyy" id="creation_date" class="form-control datepicker_creation_date" type="text" title="Creation Date" name="project[created_at]">
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
                             <label class="col-lg-12 control-label">Notes:</label>
                             <div class="form-group" id="add_note_div">
                                 <div class="note-textarea">
@@ -122,6 +129,7 @@
 //        project_client_list(<? $project_dtls->office_id ?>,<? $project_dtls->client_id ?>, 'edit');
 <?php } ?>
     $(document).ready(function () {
+        $(".datepicker_creation_date").datepicker({format: 'mm/dd/yyyy', autoHide: true, startDate: new Date()});
 //        alert('hi');
         $('.add-task-note').click(function () {
 //            alert("hlw");

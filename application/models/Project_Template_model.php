@@ -947,6 +947,10 @@ class Project_Template_model extends CI_Model {
                         $ins_recurrence['actual_due_year']=date('Y');
                     } 
                 }
+                $periodic_day= json_decode($ins_recurrence['periodic_due_day']);
+                $periodic_month=json_decode($ins_recurrence['periodic_due_month']);
+                unset($ins_recurrence['periodic_due_day']);
+                unset($ins_recurrence['periodic_due_month']);
             }
             else {
                 $ins_recurrence['actual_due_day'] = '0';
@@ -955,6 +959,41 @@ class Project_Template_model extends CI_Model {
             }
 //            print_r($ins_recurrence);die;
             $this->db->insert('project_template_recurrence_main', $ins_recurrence);
+            if(isset($periodic_day) && !empty($periodic_day)){
+                $this->db->where('template_id',$template_id);
+                $this->db->delete('template_periodic_pattern');
+                $new_val= array_combine($periodic_day, $periodic_month);
+//                print_r($new_val);die;
+                foreach($new_val as $day=>$month){
+                    $periodic_data=array();
+                    $current_month = date('m');
+                    $actual_due_day = $day;
+                    $actual_due_month = $month;
+                    if($actual_due_day>=date('d')){
+                        if($actual_due_month<$current_month){
+                            $actual_due_year = date('Y', strtotime('+1 year'));
+                        }else{
+                            $actual_due_year=date('Y');
+                        }
+                    }else{
+                       if($actual_due_month<=$current_month){
+                            $actual_due_year = date('Y', strtotime('+1 year'));
+                        }else{
+                            $actual_due_year=date('Y');
+                        } 
+                    }
+                    $periodic_data=array(
+                        'template_id'=>$template_id,
+                        'due_day'=>$day,
+                        'due_month'=>$month,
+                        'actual_due_day'=>$actual_due_day,
+                        'actual_due_month'=>$actual_due_month,
+                        'actual_due_year'=>$actual_due_year
+                    );
+                    $this->db->insert('template_periodic_pattern',$periodic_data);
+                }
+                
+            }
         }
 
         if ($this->db->trans_status() === FALSE) {
@@ -1057,6 +1096,16 @@ class Project_Template_model extends CI_Model {
                     $post['project']['office_id']=$client_office->office;
                 }
                 $post['project']['client_id'] = $pcid;
+                if(isset($post['project']['created_at']) && $post['project']['created_at']!=''){
+                    $creation_date=$post['project']['created_at'];
+                    if(date('Y-m-d')!=date('Y-m-d',strtotime($creation_date))){
+                        $post['project']['created_at']=date('Y-m-d',strtotime($creation_date));
+                    }else{
+                        $post['project']['created_at']=date('Y-m-d',strtotime($creation_date));
+                    }
+                }else{
+                    $post['project']['created_at']=date('Y-m-d');
+                }
                 $this->db->insert('projects', $post['project']);
                 $insert_id = $this->db->insert_id();
                 $notedata = $this->input->post('project_note');
@@ -1073,7 +1122,7 @@ class Project_Template_model extends CI_Model {
 //                echo"<pre>";
 //                print_r($project_recurrence_periodic_data);
                 $project_staff_main_data = $this->db->get_where('project_template_staff_main', ['template_id' => $project_template_id])->result_array();
-//        print_r($project_staff_main_data);die;
+//              print_r($project_staff_main_data);die;
                 $end_array = end($project_staff_main_data);
                 $last_key = key($project_staff_main_data);
                 $new_key = (int) $last_key + 1;
@@ -1114,6 +1163,7 @@ class Project_Template_model extends CI_Model {
                     $project_staff_main_data[$new_key]['created_at'] = $project_staff_main_data[0]['created_at'];
                 }
                 //end finding partner or manager
+                $project_date=$this->db->get_where('projects',['id'=>$insert_id])->row()->created_at;
                 if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data)) {
                     if ($project_recurrence_main_data['client_fiscal_year_end'] == 1) {
                         $get_client_fye = get_client_fye($client_reference_id);
@@ -1146,10 +1196,130 @@ class Project_Template_model extends CI_Model {
                             }
                         }
                     }
+//                    day month and year creation
+                            unset($project_recurrence_main_data['actual_due_day']);
+                            unset($project_recurrence_main_data['actual_due_month']);
+                            unset($project_recurrence_main_data['actual_due_year']);
+                            if ($project_recurrence_main_data['pattern'] == 'annually' || $project_recurrence_main_data['pattern'] == 'none') {
+                                $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
+                                $project_recurrence_main_data['actual_due_month'] = $project_recurrence_main_data['due_month'];
+                                $current_month=date('m',strtotime($project_recurrence_main_data['created_at']));
+                                $current_day=date('d',strtotime($project_recurrence_main_data['created_at']));
+                                if($project_recurrence_main_data['due_month']>=$current_month && $project_recurrence_main_data['due_day']>=$current_day){
+                                    $project_recurrence_main_data['actual_due_year'] = date('Y');
+                                }else{
+                                    $project_recurrence_main_data['actual_due_year'] = date('Y')+1;
+                                }
+                            }
+                            
+                            elseif ($project_recurrence_main_data['pattern'] == 'monthly') {
+                                
+                                $current_month=date('m',strtotime($project_date));
+                                $current_day=date('d',strtotime($project_date));
+                                $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
+                                $project_recurrence_main_data['actual_due_month'] = (int) $current_month + (int) $project_recurrence_main_data['due_month'];
+                                 if($project_recurrence_main_data['due_day']>=$current_day){
+                                    
+                                    if($project_recurrence_main_data['actual_due_month']<=12){
+                                        $project_recurrence_main_data['actual_due_year'] = date('Y')+1;
+                                    }else{
+                                        $project_recurrence_main_data['actual_due_year']=date('Y');
+                                    }
+                                }else{
+                                    
+                                   if($project_recurrence_main_data['actual_due_month']<=12){
+                                        $project_recurrence_main_data['actual_due_year'] = date('Y');
+                                    }else{
+                                        $year=intdiv($project_recurrence_main_data['actual_due_month'],12);
+                                        $project_recurrence_main_data['actual_due_year']=date('Y')+$year;
+                                    } 
+                                }
+                            }
+                            
+                            elseif ($project_recurrence_main_data['pattern'] == 'weekly') {
+                                $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
+                                $current_day = $day_array[$project_recurrence_main_data['due_month']];
+                                $current_months=date('m',strtotime($project_recurrence_main_data['created_at']));
+                                $current_days=date('d',strtotime($project_recurrence_main_data['created_at']));
+                                $givenDate = date('Y-m-d', mktime(0, 0, 0, $current_months,$current_days + $project_recurrence_main_data['due_day'], date('Y')));
+                                $project_recurrence_main_data['actual_due_day'] = date('d', strtotime('next ' . $current_day, strtotime($givenDate)));
+                                $project_recurrence_main_data['actual_due_month'] = date('m', strtotime('next ' . $current_day, strtotime($givenDate)));
+                                $project_recurrence_main_data['actual_due_year'] = date('Y');
+                            } elseif ($project_recurrence_main_data['pattern'] == 'quarterly') {
+//                                $current_month = date('m');
+                                $current_month=date('m',strtotime($project_recurrence_main_data['created_at']));
+                                $current_day=date('d',strtotime($project_recurrence_main_data['created_at']));
+                                if ($current_month == '1' || $current_month == '2' || $current_month == '3') {
+                                    $next_quarter[1] = '4';
+                                    $next_quarter[2] = '5';
+                                    $next_quarter[3] = '6';
+                                    $due_year = date('Y');
+                                } elseif ($current_month == '4' || $current_month == '5' || $current_month == '6') {
+                                    $next_quarter[1] = '7';
+                                    $next_quarter[2] = '8';
+                                    $next_quarter[3] = '9';
+                                    $due_year = date('Y');
+                                } elseif ($current_month == '7' || $current_month == '8' || $current_month == '9') {
+                                    $next_quarter[1] = '10';
+                                    $next_quarter[2] = '11';
+                                    $next_quarter[3] = '12';
+                                    $due_year = date('Y');
+                                } else {
+                                    $next_quarter[1] = '1';
+                                    $next_quarter[2] = '2';
+                                    $next_quarter[3] = '3';
+                                    $due_year = date('Y', strtotime('+1 year'));
+                                }
+                                $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
+                                $project_recurrence_main_data['actual_due_month'] = $next_quarter[$project_recurrence_main_data['due_month']];
+                                $project_recurrence_main_data['actual_due_year'] = $due_year;
+                            }elseif($project_recurrence_main_data['pattern']=='periodic'){
+//                                $current_month = date('m');
+                                $current_month=date('m',strtotime($project_recurrence_main_data['created_at']));
+                                $current_day=date('d',strtotime($project_recurrence_main_data['created_at']));
+                                $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
+                                $project_recurrence_main_data['actual_due_month'] = (int) $project_recurrence_main_data['due_month'];
+                                if($project_recurrence_main_data['actual_due_day']>=$current_day){
+                                    if($project_recurrence_main_data['actual_due_month']<$current_month){
+                                        $project_recurrence_main_data['actual_due_year'] = date('Y', strtotime('+1 year'));
+                                    }else{
+                                        $project_recurrence_main_data['actual_due_year']=date('Y');
+                                    }
+                                }else{
+                                   if($project_recurrence_main_data['actual_due_month']<=$current_month){
+                                        $project_recurrence_main_data['actual_due_year'] = date('Y', strtotime('+1 year'));
+                                    }else{
+                                        $project_recurrence_main_data['actual_due_year']=date('Y');
+                                    } 
+                                }
+//                                $periodic_day= json_decode($project_recurrence_main_data['periodic_due_day']);
+//                                $periodic_month=json_decode($project_recurrence_main_data['periodic_due_month']);
+//                                unset($project_recurrence_main_data['periodic_due_day']);
+//                                unset($project_recurrence_main_data['periodic_due_month']);
+                            }
+                            else {
+                                $project_recurrence_main_data['actual_due_day'] = '0';
+                                $project_recurrence_main_data['actual_due_month'] = '0';
+                                $project_recurrence_main_data['actual_due_year'] = '0';
+                            }
+//                            end of new date 
+//                            echo $project_recurrence_main_data['actual_due_month'];die;
                     if ($project_recurrence_main_data['pattern'] == 'monthly') {
-                        $cur_day = date('d');
+//                        $cur_day = date('d');
+                        $cur_month=date('m',strtotime($project_date));
+                        $cur_day=date('d',strtotime($project_date));
                         if ($cur_day <= $project_recurrence_main_data['actual_due_day']) {
-                            $project_recurrence_main_data['actual_due_month'] = date('m');
+                            if($cur_month<=$project_recurrence_main_data['actual_due_month']){
+                                $project_recurrence_main_data['actual_due_month'] = $cur_month;
+                            }else{
+                                $project_recurrence_main_data['actual_due_month']=$project_recurrence_main_data['actual_due_month'];
+                            }
+                        }else{
+                            if($cur_month<=$project_recurrence_main_data['actual_due_month']){
+                                $project_recurrence_main_data['actual_due_month'] = $project_recurrence_main_data['actual_due_month'];
+                            }else{
+                                $project_recurrence_main_data['actual_due_month']=$cur_month;
+                            }
                         }
                     }
                     unset($project_recurrence_main_data['id']);
@@ -1158,7 +1328,6 @@ class Project_Template_model extends CI_Model {
                             }else{
                                 $due_date = $project_recurrence_main_data['actual_due_year'] . '-' .($project_recurrence_main_data['actual_due_month'] % 12).'-' . $project_recurrence_main_data['actual_due_day'];
                             }
-
                     if ($project_recurrence_main_data['generation_month'] == '') {
                         $project_recurrence_main_data['generation_month'] = '0';
                     }
@@ -1903,7 +2072,29 @@ class Project_Template_model extends CI_Model {
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = $next_quarter[$ins_recurrence['due_month']];
                 $ins_recurrence['actual_due_year'] = $due_year;
-            } else {
+            }elseif($ins_recurrence['pattern']=='periodic'){
+                $current_month = date('m');
+                $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                $ins_recurrence['actual_due_month'] = (int) $ins_recurrence['due_month'];
+                if($ins_recurrence['actual_due_day']>=date('d')){
+                    if($ins_recurrence['actual_due_month']<$current_month){
+                        $ins_recurrence['actual_due_year'] = date('Y', strtotime('+1 year'));
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y');
+                    }
+                }else{
+                   if($ins_recurrence['actual_due_month']<=$current_month){
+                        $ins_recurrence['actual_due_year'] = date('Y', strtotime('+1 year'));
+                    }else{
+                        $ins_recurrence['actual_due_year']=date('Y');
+                    } 
+                }
+                $periodic_day= json_decode($ins_recurrence['periodic_due_day']);
+                $periodic_month=json_decode($ins_recurrence['periodic_due_month']);
+                unset($ins_recurrence['periodic_due_day']);
+                unset($ins_recurrence['periodic_due_month']);
+            }
+            else {
                 $ins_recurrence['actual_due_day'] = '0';
                 $ins_recurrence['actual_due_month'] = '0';
                 $ins_recurrence['actual_due_year'] = '0';
@@ -1944,6 +2135,43 @@ class Project_Template_model extends CI_Model {
             $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($ins_recurrence['next_due_date'])));
             $ins_recurrence['generation_date'] = $generation_date;
             $this->db->insert('project_recurrence_main', $ins_recurrence);
+            
+            if(isset($periodic_day) && !empty($periodic_day)){
+                $this->db->where('project_id',$project_id);
+                $this->db->delete('project_periodic_pattern');
+                $new_val= array_combine($periodic_day, $periodic_month);
+//                print_r($new_val);die;
+                foreach($new_val as $day=>$month){
+                    $periodic_data=array();
+                    $current_month = date('m');
+                    $actual_due_day = $day;
+                    $actual_due_month = $month;
+                    if($actual_due_day>=date('d')){
+                        if($actual_due_month<$current_month){
+                            $actual_due_year = date('Y', strtotime('+1 year'));
+                        }else{
+                            $actual_due_year=date('Y');
+                        }
+                    }else{
+                       if($actual_due_month<=$current_month){
+                            $actual_due_year = date('Y', strtotime('+1 year'));
+                        }else{
+                            $actual_due_year=date('Y');
+                        } 
+                    }
+                    $periodic_data=array(
+                        'template_id'=>$template_id,
+                        'project_id'=>$project_id,
+                        'due_day'=>$day,
+                        'due_month'=>$month,
+                        'actual_due_day'=>$actual_due_day,
+                        'actual_due_month'=>$actual_due_month,
+                        'actual_due_year'=>$actual_due_year
+                    );
+                    $this->db->insert('project_periodic_pattern',$periodic_data);
+                }
+                
+            }
         }
 
         if ($this->db->trans_status() === FALSE) {
@@ -3047,6 +3275,12 @@ class Project_Template_model extends CI_Model {
     }
     public function getProjectPeriodicData($project_id){
         return $this->db->get_where('project_periodic_pattern',['project_id'=>$project_id])->row();
+    }
+    public function getTemplatePeriodicPattern($template_id){
+        return $this->db->get_where('template_periodic_pattern',['template_id'=>$template_id])->result_array();
+    }
+    public function getProjectMainPeriodicData($project_id){
+        return $this->db->get_where('project_periodic_pattern',['project_id'=>$project_id])->result_array();
     }
 }
 

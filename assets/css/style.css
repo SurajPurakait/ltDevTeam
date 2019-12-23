@@ -9250,3 +9250,8 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 #royaltyHeader .form-control, #salesHeader .form-control {
     font-size: 13px;
 }
+.slimScrollBar {
+    background: #4c7eb7 none repeat scroll 0% 0% !important;
+    width: 10px !important;
+    opacity: 0.7 !important;
+}
