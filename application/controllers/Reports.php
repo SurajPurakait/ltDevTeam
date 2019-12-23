@@ -123,6 +123,7 @@ class Reports extends CI_Controller {
     public function get_show_billing_data() {
         $render_data['section'] = "billing";
         $render_data['reports'] = array('report'=>'leafnet_report');
+        $render_data['billing_report_list'] = $this->billing_model->report_billing_list();
         $this->load->view('reports/billing_invoice_payments_data',$render_data);   
     }
 }

@@ -694,9 +694,10 @@ class Home extends CI_Controller {
     public function update_suborder_status() {
         $statusval = post('statusval');
         $suborderid = post('suborderid');
-        if (post('input_form_status') == 'incomplete') {
-            echo 'error_on_input_form';
-        } elseif ((post('sos_read_status') == 'not_cleared' && $statusval == '0') || (post('sos_read_status') == 'not_cleared' && $statusval == '7')) {
+        // if (post('input_form_status') == 'incomplete') {
+        //     echo 'error_on_input_form';
+        // }
+         if ((post('sos_read_status') == 'not_cleared' && $statusval == '0') || (post('sos_read_status') == 'not_cleared' && $statusval == '7')) {
             echo 'error_on_sos_read_status';
         } else {
             $this->load->model('service_model');
@@ -1598,7 +1599,6 @@ class Home extends CI_Controller {
         $render_data['reference_id'] = $order_info['company_id'];
         $render_data['service_id'] = $order_info['service_id'];
         $render_data['invoiced_id'] = $order_info['invoiced_id'];
-        $render_data['staff_requested_service'] = $this->service_model->get_manager_name_by_id($render_data['order_id']);
         $render_data['requested_staff_id'] = $order_info['staff_requested_service'];
         $all_staff_id_list = explode(',', $render_data['all_staffs']);
         $all_staff_id_list = array_merge($all_staff_id_list, [$render_data['requested_staff_id']]);
