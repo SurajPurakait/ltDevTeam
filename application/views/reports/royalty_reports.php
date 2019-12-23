@@ -5,7 +5,7 @@
                 <div class="royalty_header m-0" id="royaltyHeader">
                     <div class="row">
                         <div class="col-md-6" id="ofc-multiselect-div">
-                            <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" multiple>
+                            <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" data-placeholder="Select Office" multiple>
                                 <?php
                                     load_ddl_option("staff_office_list", "","");
                                 ?>
@@ -71,6 +71,7 @@
             var end = moment();
             function cb(start, end) {
                 $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                
             }
 
             $('#reportrange').daterangepicker({
