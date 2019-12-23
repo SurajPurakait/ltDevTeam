@@ -85,10 +85,12 @@ if (!empty($project_list)) {
             $periodic_recurrence_date = date('m/d/Y', strtotime('-' . $generation_days . ' days', strtotime($periodic_recurrence_dates)));
         }else{
             $generation_days = ((int) $pattern_details->generation_month * 30) + (int) $pattern_details->generation_day;
-            if($pattern_details->generation_type==2 ||$pattern_details->pattern=='periodic'){
+//            echo 'u'.$pattern_details->due_date;die;
+            if($pattern_details->generation_type==2){
                 $periodic_recurrence_date ='Manual';
             }else{
-                $periodic_recurrence_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($pattern_details->due_date)));
+                $new_recurrence_date = date('m/d/Y', strtotime('-' . $generation_days . ' days', strtotime($pattern_details->due_date)));
+                $periodic_recurrence_date=date('m/d/Y', strtotime('+1 year',strtotime($new_recurrence_date)));
             }
         }
         
