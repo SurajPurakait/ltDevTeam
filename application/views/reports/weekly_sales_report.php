@@ -5,7 +5,7 @@
                 <div class="sales_header m-0" id="salesHeader">
                     <div class="row">
                         <div class="col-md-6">        
-                            <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" multiple>
+                            <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" data-placeholder="Select Office" multiple>
                             	<?php
                             		load_ddl_option("users_office_list", "","");
                             	?>
