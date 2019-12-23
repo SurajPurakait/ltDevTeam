@@ -1170,7 +1170,7 @@ class Project_Template_model extends CI_Model {
                         if ($project_recurrence_main_data['fye_type'] == 1) {
 
                             $get_project_creation_date = $this->db->get_where('projects', ['id' => $insert_id])->row_array();
-                            $creation_date = strtotime($get_project_creation_date['created_at']);
+                            $creation_date = date('Y-m-d',strtotime($project_date));
 
                             $fye_day = $project_recurrence_main_data['fye_day'];
                             $fye_is_weekday = $project_recurrence_main_data['fye_is_weekday'];
