@@ -1,8 +1,13 @@
 <?php
-	$servername = "localhost";
-	$username = "root";
-	$password = "";
-	$db = 'leafnet';
+	// $servername = "localhost";
+	// $username = "root";
+	// $password = "";
+	// $db = 'leafnet';
+    $servername = "localhost";
+    $username = "leafnet_db_user";
+    $password = "leafnet@123";
+    $db = 'leafnet_staging';
+
 
 	// Create connection
 	$conn = mysqli_connect($servername, $username, $password, $db);

@@ -1073,3 +1073,6 @@ ALTER TABLE `project_periodic_pattern` ADD `project_id` INT(4) NOT NULL AFTER `t
 
 /*20.12.2019*/
 ALTER TABLE `service_request` ADD `quantity` INT(4) NOT NULL DEFAULT '1' AFTER `services_id`;
+
+ALTER TABLE `projects` CHANGE `created_at` `created_at` DATETIME on update CURRENT_TIMESTAMP NOT NULL; 
+ALTER TABLE `projects` CHANGE `created_at` `created_at` DATETIME NOT NULL; 
