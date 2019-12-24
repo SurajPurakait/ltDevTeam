@@ -36,6 +36,7 @@ class Home extends CI_Controller {
         $render_data['header_title'] = $title;
         $render_data['page_heading'] = 'Service Dashboard';
         $render_data['filter_category']='';
+        $render_data['filter_status'] = '';
         if($status != ''){
             $render_data['status'] = $status;
             if($status==2){
