@@ -12,6 +12,7 @@ class Reports extends CI_Controller {
         $this->load->model('administration');
         $this->load->model('billing_model');
         $this->load->model("service_model");
+        $this->load->model("lead_management");
     }
     public function index($type = 1) {
         $this->load->layout = 'dashboard';
@@ -140,5 +141,15 @@ class Reports extends CI_Controller {
             'total_more_than_60' => array_sum(array_column($render_data['billing_report_list'],'more_than_60'))   
         );
         $this->load->view('reports/billing_invoice_payments_data',$render_data);   
+    }
+
+    // report lead data
+    public function get_leads_data() {
+        $category = post('category');
+        $render_data['lead_list'] = $this->lead_management->get_lead_data(post());
+        $render_data['reports'] = array('report'=>'leafnet_report');
+        $render_data['category'] = $category;
+        // print_r($render_data['lead_list']);exit; 
+        $this->load->view('reports/report_lead_data',$render_data);    
     }
 }
