@@ -476,7 +476,7 @@ Class Lead_management extends CI_Model {
         unset($data["partner_creator"]);
         unset($data["fromval"]);
         $lead_management = $data;
-        $lead_management = array_merge($lead_management, ["staff_requested_by" => $this->session->userdata("user_id"), "status" => $status, "submission_date" => date('Y-m-d')]);
+        $lead_management = array_merge($lead_management, ["staff_requested_by" => $this->session->userdata("user_id"), "status" => $status, "submission_date" => date('Y-m-d'),"mail_campaign_status"=>'0']);
 //        print_r($lead_management);die;
         $this->db->trans_begin();
         $this->db->insert('lead_management', $lead_management);
