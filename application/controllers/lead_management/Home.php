@@ -29,6 +29,14 @@ class Home extends CI_Controller {
         $title = "Leads Dashboard";
         $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['main_menu'] = 'leads';
+        $render_data['filter_status']='';
+        if($stat!=''){
+            if($stat=='0'){
+                $render_data['filter_status']=$stat.'-New';
+            }else{
+                $render_data['filter_status']=$stat.'-Active';
+            }
+        }
         $render_data['menu'] = 'lead_dashboard';
         $render_data['header_title'] = $title;
         $render_data['stat'] = $stat;
