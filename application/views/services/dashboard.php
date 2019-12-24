@@ -928,7 +928,6 @@ if ($status == '') {
         });
     }
     function reflactFilterWithSummery(status, requestType) {
-    alert(requestType);
         clearFilter();
         element_array = [];
         variable_dd_array = [];
