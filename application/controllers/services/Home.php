@@ -1369,9 +1369,7 @@ class Home extends CI_Controller {
             $render_data['edit_data'] = $edit_data;
             $render_data['staffInfo'] = staff_info();
 
-            $reference_id = $this->rt6_model->get_sales_by_id($order_id)['reference_id'];
-
-
+            $reference_id = $this->rt6_model->get_sales_by_id($order_id['reference_id']);
             $render_data['all_driver_license'] = $this->rt6_model->get_salestax_driver_license_data_by_order_id($order_id);
 
             $render_data['get_override_price'] = $this->rt6_model->get_override_price($service_id, $edit_data['id']);
