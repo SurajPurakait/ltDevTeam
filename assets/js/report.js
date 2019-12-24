@@ -169,6 +169,18 @@ function show_service_franchise_result(category) {
     });
 }
 
+function show_billing_data() {
+    // $("#billing_invoice_payments").toggle();
+    $("#billing_invoice_payments").slideToggle(3000);
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/get_show_billing_data',
+        success: function (result) {
+            $("#billing_invoice_payments").html(result);
+        },
+    });
+}
+
 function pieChart(className) {
     $('.' + className).each(function () {
         var element = '#' + $(this).attr('id');

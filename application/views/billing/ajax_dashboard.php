@@ -47,6 +47,7 @@ foreach ($result as $row_count => $value):
     } elseif ($row->invoice_status == 3) {
         $tracking_class = 'label-primary';
     }
+    $is_recurrence=$value['is_recurrence'];
     ?>
     <div class="panel panel-default service-panel">
         <div class="panel-heading" style="padding-right: 0px">

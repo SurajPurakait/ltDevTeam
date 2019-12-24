@@ -118,4 +118,27 @@ class Reports extends CI_Controller {
         $render_data['category'] = $category; 
         $this->load->view('reports/service_by_franchise_data',$render_data);
     }
+
+    // report dashboard billing data
+    public function get_show_billing_data() {
+        $render_data['section'] = "billing";
+        $render_data['reports'] = array('report'=>'leafnet_report');
+        $render_data['billing_report_list'] = $this->billing_model->report_billing_list();
+        $total_invoice = array_sum(array_column($render_data['billing_report_list'],'total_invoice'));
+        // echo $total_invoice;exit;
+        $unpaid = (array_sum(array_column($render_data['billing_report_list'],'unpaid'))/$total_invoice) * 100;
+        $paid = (array_sum(array_column($render_data['billing_report_list'],'paid'))/$total_invoice) * 100;
+        $partial = (array_sum(array_column($render_data['billing_report_list'],'partial'))/$total_invoice) * 100;
+        $render_data['totals'] = array(
+            'total_no_of_invoice'=> array_sum(array_column($render_data['billing_report_list'],'total_invoice')),   
+            'total_amount_collected'=> array_sum(array_column($render_data['billing_report_list'],'amount_collected')),
+            'total_unpaid' => round($unpaid,2),  
+            'total_partial' => round($paid,2),   
+            'total_paid' => round($partial,2),
+            'total_less_than_30' => array_sum(array_column($render_data['billing_report_list'],'less_than_30')),  
+            'total_less_than_60' => array_sum(array_column($render_data['billing_report_list'],'less_than_60')),   
+            'total_more_than_60' => array_sum(array_column($render_data['billing_report_list'],'more_than_60'))   
+        );
+        $this->load->view('reports/billing_invoice_payments_data',$render_data);   
+    }
 }

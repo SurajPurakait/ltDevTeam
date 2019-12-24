@@ -1063,4 +1063,18 @@ ALTER TABLE `services` ADD `responsible_assign` INT(100) NULL DEFAULT NULL COMME
 ALTER TABLE `services` CHANGE `dept` `dept` INT(10) NULL DEFAULT NULL;
 ALTER TABLE `services` CHANGE `dept` `dept` VARCHAR(10) NULL DEFAULT NULL;
 
+
+
+/*19.12.2019*/
+/*import template_periodic_pattern */
+/*import project_periodic_pattern */
+
+ALTER TABLE `project_periodic_pattern` ADD `project_id` INT(4) NOT NULL AFTER `template_id`;
+
+/*20.12.2019*/
+ALTER TABLE `service_request` ADD `quantity` INT(4) NOT NULL DEFAULT '1' AFTER `services_id`;
+
+ALTER TABLE `projects` CHANGE `created_at` `created_at` DATETIME on update CURRENT_TIMESTAMP NOT NULL; 
+ALTER TABLE `projects` CHANGE `created_at` `created_at` DATETIME NOT NULL; 
+
 /*live end*/

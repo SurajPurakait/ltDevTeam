@@ -694,9 +694,10 @@ class Home extends CI_Controller {
     public function update_suborder_status() {
         $statusval = post('statusval');
         $suborderid = post('suborderid');
-        if (post('input_form_status') == 'incomplete') {
-            echo 'error_on_input_form';
-        } elseif ((post('sos_read_status') == 'not_cleared' && $statusval == '0') || (post('sos_read_status') == 'not_cleared' && $statusval == '7')) {
+        // if (post('input_form_status') == 'incomplete') {
+        //     echo 'error_on_input_form';
+        // }
+         if ((post('sos_read_status') == 'not_cleared' && $statusval == '0') || (post('sos_read_status') == 'not_cleared' && $statusval == '7')) {
             echo 'error_on_sos_read_status';
         } else {
             $this->load->model('service_model');

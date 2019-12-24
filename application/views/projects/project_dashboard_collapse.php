@@ -60,14 +60,14 @@
                     $start_date = $task->target_start_date . 'days';
                     $complete_date = $task->target_complete_date . 'days';
                     if ($task->target_start_day == 1) {
-                        $targetSstartDate = date("Y-m-d", strtotime(("-$start_date"), $due_date));
+                        $targetstartDate = date("Y-m-d", strtotime(("-$start_date"), $due_date));
                     } else {
-                        $targetSstartDate = date("Y-m-d", strtotime(("+$start_date"), $created_at));
+                        $targetstartDate = date("Y-m-d", strtotime(("+$start_date"), $created_at));
                     }
                     if ($task->target_complete_day == 1) {
-                        $targetCompleteDate = $targetSstartDate = date("Y-m-d", strtotime(("-$complete_date"), $due_date));
+                        $targetCompleteDate = $targetstartDate = date("Y-m-d", strtotime(("-$complete_date"), $due_date));
                     } else {
-                        $targetCompleteDate = date("Y-m-d", strtotime(("+$complete_date"), $created_at));
+                        $targetCompleteDate = date("Y-m-d", strtotime(("-$complete_date"), $due_date));
                     }
                     if (strlen($task->description) > 20) {
                         $description = substr($task->description, 0, 20) . '...';
@@ -93,7 +93,7 @@
                             </td> <?php } else { ?> 
                             <td title="Assign To" class="text-center"><span class="text-success"><?php echo get_assigned_project_task_staff($task->id); ?></span><br><?php echo get_assigned_project_task_department($task->id); ?></td>                                                     
                         <?php } ?>
-                        <td title="Start Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetSstartDate)) ?></td>
+                        <td title="Start Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetstartDate)) ?></td>
                         <td title="Complete Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetCompleteDate)) ?></td>
                         <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task->id; ?>,<?= $status; ?>, <?= $task->id ?>);'><span id="trackinner-<?= $task->id ?>" projectid="<?= $id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                         <td title="SOS" style="text-align: center;">

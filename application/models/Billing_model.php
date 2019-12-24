@@ -192,11 +192,11 @@ class Billing_model extends CI_Model {
         return $this->db->get_where('services', ['category_id' => $category_id])->result_array();
     }
 
-    public function get_service_list_by_category_id_for_billing($category_id, $invoice_type) {
+    public function get_service_list_by_category_id_for_billing($service_id,$category_id, $invoice_type) {
         if($invoice_type == 1){   
-            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '0' or client_type_assign = '2')")->result_array();
+            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '0' or client_type_assign = '2') and id !='$service_id'")->result_array();
         }else{         
-            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '1' or client_type_assign = '2')")->result_array();
+            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '1' or client_type_assign = '2') and id !='$service_id'")->result_array();
         }
     }
 
@@ -1986,10 +1986,6 @@ class Billing_model extends CI_Model {
         $order_data['status'] = 2;
         $order_data['quantity'] = 0;
         $order_data['reference'] = $invoice_info['type'] == 1 ? 'company' : 'individual';
-        $internal_data_info = $this->internal->get_internal_data($order_data['reference'],$invoice_info['client_id']);
-        if($internal_data_info[0]['manager'] != ""){
-        $order_data['staff_requested_service'] = $internal_data_info[0]['manager'];
-        }
 
         $this->db->select('date_started');
         $this->db->where_in('order_id', $order_ids);
@@ -2038,6 +2034,38 @@ class Billing_model extends CI_Model {
         }
         $this->db->insert_batch('service_request', $service_request_data);
 
+        $check_if_all_services_not_started = $this->db->query('select * from service_request where  order_id="' .  $order_id . '"')->result_array();
+//          
+            
+        if (!empty($check_if_all_services_not_started)) {
+            $k = 0;
+            $status_array = '';
+            $len = count($check_if_all_services_not_started);
+            foreach ($check_if_all_services_not_started as $val) {
+                if ($k == $len - 1) {
+                    $status_array .= $val['status'];
+                } else {
+                    $status_array .= $val['status'] . ',';
+                }
+                $k++;
+            }
+        }
+//            echo $status_array;die;
+        if($status_array == 2){
+            $this->db->where('id', $order_id);
+            $this->db->update('order', array('status' => 2));
+        }else if($status_array == '0,2'){
+            $this->db->where('id', $order_id);
+            $this->db->update('order', array('status' => 1));
+        }else{
+            $status_array_values = explode(",", $status_array);
+            if (count(array_unique($status_array_values)) == 1) {
+                $this->db->where('id', $order_id);
+                $this->db->update('order', array('status' => 0));
+            }
+        }
+        
+
         if ($save_type == 'create') {
             $this->db->where(['id' => $invoice_id]);
             $this->db->update('invoice_info', ['order_id' => $order_id]);
@@ -2071,6 +2099,7 @@ class Billing_model extends CI_Model {
             'inv.payment_status AS payment_status',
             'inv.total_amount AS sub_total',
             'inv.client_id as client_id',
+            'inv.is_recurrence as is_recurrence',
             '(CASE WHEN inv.type = 1 THEN (SELECT `company`.`name` FROM `company` WHERE `company`.`id` = `inv`.`client_id`) ELSE (SELECT CONCAT(individual.last_name,", ",individual.first_name) FROM `individual` WHERE `individual`.`id` = `inv`.`client_id`) END) as client_name',
             '(CASE WHEN inv.created_by = ' . sess('user_id') . ' THEN \'byme\' ELSE \'byothers\' END) as request_type',
             '(CASE WHEN inv.created_by = ' . sess('user_id') . ' THEN CONCAT(\'byme-\', inv.payment_status) ELSE CONCAT(\'byothers-\', inv.payment_status) END) as filter_value',
@@ -2436,5 +2465,70 @@ class Billing_model extends CI_Model {
     public function getInvoiceRecurringDetails($invoice_id) {
         return $this->db->get_where('invoice_recurence', ['invoice_id' => $invoice_id])->row();
     }
+    public function report_billing_list() {
+        $data_office = $this->system->get_staff_office_list();
+        $invoice_details = [];
+        
+        foreach ($data_office as $do) {    
+            $data = [
+                'id' => $do['id'],
+                'office' => $do['name'],
+                'total_invoice' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id']))->num_rows(),
+                'amount_collected' => $this->amount_collected($do['id']),
+                'unpaid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Unpaid'))->num_rows(),
+                'paid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Paid'))->num_rows(),
+                'partial' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Partial'))->num_rows(),
+                'less_than_30' => $this->late_status_calculation_report_dashboard_billing($do['id'],'less_than_30'),
+                'less_than_60' => $this->late_status_calculation_report_dashboard_billing($do['id'],'less_than_60'),
+                'more_than_60' => $this->late_status_calculation_report_dashboard_billing($do['id'],'more_than_60')           
+            ];
+            array_push($invoice_details,$data);
+        }
+        return $invoice_details;
+    }
 
+    public function amount_collected($ofc_id) {
+        $this->db->where('office_id',$ofc_id);
+        $amount_data = $this->db->get('report_dashboard_billing')->result_array();
+        return $amount_collected = array_sum(array_column($amount_data,'amount_collected'));
+    }
+
+    public function late_status_calculation_report_dashboard_billing($ofc_id,$late_span) {
+        $this->db->where('office_id',$ofc_id);
+        $reports_data = $this->db->get('report_dashboard_billing')->result_array();
+        $date_arr = array_column($reports_data,'created_date');
+        $date_arr_total = [];
+        foreach ($date_arr as $da) {
+            $current_date = date('Y-m-d');
+            $date_difference = (strtotime($current_date) - strtotime($da))/60/60/24;
+            array_push($date_arr_total,$date_difference);
+        }
+        if ($late_span == 'less_than_30') {
+            $x = 0;
+            foreach ($date_arr_total as $dat) {
+                if ($dat < 30) {
+                    $x++;
+                }
+            }
+            return $x;
+        }
+        if ($late_span == 'less_than_60') {
+            $y = 0;
+            foreach ($date_arr_total as $dat) {
+                if ($dat < 60) {
+                    $y++;
+                }
+            }
+            return $y;
+        }
+        if ($late_span == 'more_than_60') {
+            $z = 0;
+            foreach ($date_arr_total as $dat) {
+                if ($dat > 60) {
+                    $z++;
+                }
+            }
+            return $z;
+        }
+    }
 }

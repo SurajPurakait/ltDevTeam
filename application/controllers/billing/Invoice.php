@@ -97,6 +97,7 @@ class Invoice extends CI_Controller {
         }
 
         $render_data['invoice_type'] = post('invoice_type');
+        $render_data['service_id'] = post('service_id');
         $return['section_result'] = $this->load->view('billing/service_section_ajax', $render_data, TRUE);
         $return['section_id_hidden'] = $section_id_hidden;
         echo json_encode($return);
