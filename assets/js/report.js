@@ -22,6 +22,9 @@ function loadRoyaltyReportsData(office = '',date_range = '') {
             }
             }
         ],
+        'columnDefs': [
+            { width: '100px', targets: 0 }
+        ],
         'serverMethod': 'post',
         'serverMethod': 'post',
         'ajax': {
@@ -59,7 +62,10 @@ function loadRoyaltyReportsData(office = '',date_range = '') {
             {data: 'office_fee',render: $.fn.dataTable.render.number(',', '.', 0,'','%')},
             {data: 'fee_with_cost',render: $.fn.dataTable.render.number(',', '.', 2,'$')},
             {data: 'fee_without_cost',render: $.fn.dataTable.render.number(',', '.', 2,'$')}
-        ]
+        ],
+        'columnDefs': [
+            { width: '100px', targets: 0 }
+        ],
     });
 }
 /* royalty report total calculation */
@@ -95,6 +101,9 @@ function loadSalesReportsData(office = '',date_range = '') {
                             .css('font-size', 'inherit');
             }
             }
+        ],
+        'columnDefs': [
+            { width: '100px', targets: 0 }
         ],
         'serverMethod': 'post',
         'serverMethod': 'post',
@@ -179,6 +188,33 @@ function show_billing_data() {
             $("#billing_invoice_payments").html(result);
         },
     });
+}
+function show_lead_data(category) {
+    // alert(category);return false;
+    if (category == 'status') {
+        $("#leads_by_status").toggle();
+    } else if(category == 'type') {
+        $("#leads_by_type").toggle();
+    } else if (category == 'mail_campaign') {
+        $("#leads_email_campaign").toggle();
+    }
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/get_leads_data',
+        data: {'category': category},
+        success: function (result) {
+            // alert(result);return false;
+            // console.log(result);return false;
+            if (category == 'status') {
+                $("#leads_by_status").html(result);
+            } else if(category == 'type') {
+                $("#leads_by_type").html(result);
+            } else if (category == 'mail_campaign') {
+                $("#leads_email_campaign").html(result);
+            }
+        },
+    });    
+
 }
 
 function pieChart(className) {

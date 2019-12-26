@@ -167,6 +167,7 @@ $stat = ($stat == 'all') ? "" : $stat;
     </div>
 </div>
 <script>
+    reflactFilterWithSummery('<?= $filter_status ?>');
     loadLeadDashboard('<?= $type; ?>', '<?= $stat; ?>', '', '<?= $lead_type; ?>');
     var content = $(".filter-div").html();
     var variableArray = [];
@@ -288,7 +289,7 @@ $stat = ($stat == 'all') ? "" : $stat;
             }
         }
     }
-    var reflactFilterWithSummery = function (status, requestType) {
+    function reflactFilterWithSummery(status, requestType) {
         clearFilter();
         variableArray = [];
         elementArray = [];
