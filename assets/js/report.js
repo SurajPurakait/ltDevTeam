@@ -22,6 +22,9 @@ function loadRoyaltyReportsData(office = '',date_range = '') {
             }
             }
         ],
+        'columnDefs': [
+            { width: '100px', targets: 0 }
+        ],
         'serverMethod': 'post',
         'serverMethod': 'post',
         'ajax': {
@@ -59,7 +62,10 @@ function loadRoyaltyReportsData(office = '',date_range = '') {
             {data: 'office_fee',render: $.fn.dataTable.render.number(',', '.', 0,'','%')},
             {data: 'fee_with_cost',render: $.fn.dataTable.render.number(',', '.', 2,'$')},
             {data: 'fee_without_cost',render: $.fn.dataTable.render.number(',', '.', 2,'$')}
-        ]
+        ],
+        'columnDefs': [
+            { width: '100px', targets: 0 }
+        ],
     });
 }
 /* royalty report total calculation */
@@ -95,6 +101,9 @@ function loadSalesReportsData(office = '',date_range = '') {
                             .css('font-size', 'inherit');
             }
             }
+        ],
+        'columnDefs': [
+            { width: '100px', targets: 0 }
         ],
         'serverMethod': 'post',
         'serverMethod': 'post',
@@ -204,8 +213,18 @@ function show_lead_data(category) {
                 $("#leads_email_campaign").html(result);
             }
         },
-    });    
+    });
+}
 
+function show_partner_data() {
+    $("#partners_by_type").toggle();
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/get_partner_data',
+        success: function (result) {
+            $("#partners_by_type").html(result);
+        },
+    });    
 }
 
 function pieChart(className) {

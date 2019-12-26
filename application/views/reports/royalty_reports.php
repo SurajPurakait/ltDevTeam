@@ -22,7 +22,7 @@
                         <table id="reports-tab" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th style="white-space: nowrap;">Date</th>
+                                    <th style="white-space: nowrap; width: 100px;">Date</th>
                                     <th style="white-space: nowrap;">Client Id</th>
                                     <th style="white-space: nowrap;">Invoice Id</th>
                                     <th style="white-space: nowrap;">Service Id</th>
