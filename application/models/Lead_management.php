@@ -2254,7 +2254,7 @@ Class Lead_management extends CI_Model {
         $this->db->where('type !=','2');
         $this->db->where('referred_status !=','1');
         if ($key == 'new') {
-            $this->db->where('status','0');       
+            $this->db->where('status','0');    
         }
         if ($key == 'active') {
             $this->db->where('status','3');           
@@ -2288,6 +2288,32 @@ Class Lead_management extends CI_Model {
         }        
         return $this->db->get('lead_management')->num_rows();
                 
-    }    
-    
+    }
+
+    public function get_partner_data() {
+        // $type_of_contact_list = $this->db->get('type_of_contact_referral')->result_array();
+        // $type_of_contact_id = array_column($type_of_contact_list,'id');
+        // $type_of_contact_name = array_column($type_of_contact_list,'name');
+        // $type_of_contact_combine = array_combine($type_of_contact_id,$type_of_contact_name);
+        $data_office = $this->system->get_staff_office_list();
+        $partner_data = [];
+        foreach ($data_office as $do) {
+            $partner_data_list = [
+                'id' => $do['id'],
+                'office' => $do['name'],
+                'total_partner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id']))->num_rows(),
+                'banker' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'1'))->num_rows(),
+                'business_owner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'10'))->num_rows(),
+                'consultant' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'7'))->num_rows(),
+                'property_manager' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'5'))->num_rows(),
+                'insurance' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'2'))->num_rows(),
+                'lawyer' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'6'))->num_rows(),
+                'real_estate' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'3'))->num_rows(),
+                'vendor' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'9'))->num_rows(),
+                'other' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'11'))->num_rows()
+            ];
+            array_push($partner_data,$partner_data_list);
+        }
+        return $partner_data;
+    }
 }
