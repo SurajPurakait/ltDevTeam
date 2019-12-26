@@ -3,6 +3,8 @@ $user_info = staff_info();
 $user_department = $user_info['department'];
 $user_type = $user_info['type'];
 $role = $user_info['role'];
+//echo 'a'.$filter_val;
+//echo 'b'.$fileter_request_type;die;
 ?>
 <div class="wrapper wrapper-content">
     <div class="row">
@@ -470,9 +472,10 @@ $role = $user_info['role'];
         </div>
     </div>
 </div>
-
 <script>
+    reflactFilterWithSummery('<?= $filter_val ?>', '<?= $fileter_request_type ?>');
     loadActionDashboard('<?= $status; ?>', '<?= $request_type != '' ? $request_type : 'byme_tome_task'; ?>', '<?= $priority; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '');
+    
     $(document).ready(function () {
         $('.add-action-note').click(function () {
             var textnote = $(this).prev('.note-textarea').html();
@@ -621,24 +624,29 @@ $role = $user_info['role'];
         }
     }
 
-    var reflactFilterWithSummery = function (status, requestType) {
-        clearFilter();
-        variableArray = [];
-        elementArray = [];
-        $("select.variable-dropdown:first").val(2);
-        var statusArray = status.split('-');
-        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
-        $("select.criteria-dropdown:first").trigger("chosen:updated");
-        $("select.condition-dropdown:first").val(1).attr('disabled', true);
-        elementArray.push($("select.condition-dropdown:first"));
-        variableArray.push(2);
-        addFilterRow();
-        $("select.variable-dropdown:eq(1)").val(13);
-        var requestTypeArray = requestType.split('-');
-        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
-        $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
-        $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
-        elementArray.push($("select.condition-dropdown:eq(1)"));
-        variableArray.push(13);
+    function reflactFilterWithSummery(status, requestType) {
+//    alert(requestType);
+        if(status!=''){
+            clearFilter();
+            variableArray = [];
+            elementArray = [];
+            $("select.variable-dropdown:first").val(2);
+            var statusArray = status.split('-');
+            $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
+            $("select.criteria-dropdown:first").trigger("chosen:updated");
+            $("select.condition-dropdown:first").val(1).attr('disabled', true);
+            elementArray.push($("select.condition-dropdown:first"));
+            variableArray.push(2);
+            if (requestType != '') {
+                addFilterRow();
+                $("select.variable-dropdown:eq(1)").val(13);
+                var requestTypeArray = requestType.split('-');
+                $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
+                $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
+                $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
+                elementArray.push($("select.condition-dropdown:eq(1)"));
+                variableArray.push(13);
+            }
+        }
     }
 </script>

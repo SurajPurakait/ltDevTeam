@@ -9259,3 +9259,7 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 #dt-reports-wrap table.dataTable thead .sorting_asc{
     background: none;
 }
+#billing_invoice_payments table tr:last-child {
+    background: #63a7fd;
+    color: #fff;
+}
