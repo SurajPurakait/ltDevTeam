@@ -35,9 +35,57 @@ class Home extends CI_Controller {
         $render_data['menu'] = 'service_dashboard';
         $render_data['header_title'] = $title;
         $render_data['page_heading'] = 'Service Dashboard';
-        
+        $render_data['filter_category']='';
+        $render_data['filter_status'] = '';
         if($status != ''){
-        $render_data['status'] = $status;
+            $render_data['status'] = $status;
+            if($status==2){
+                $render_data['filter_status']=$status.'-Not Started';
+//                if($category_id!=''){
+//                    switch ($category_id){
+//                        case 1:
+//                            $render_data['filter_category']= $category_id.'-Incorporation';
+//                            break;
+//                        case 2:
+//                            $render_data['filter_category']= $category_id.'-Accounting Service';
+//                            break;
+//                        case 3:
+//                            $render_data['filter_category']= $category_id.'-Tax Services';
+//                            break;
+//                        case 4:
+//                            $render_data['filter_category']= $category_id.'-Business Services';
+//                            break;
+//                        case 5:
+//                            $render_data['filter_category']= $category_id.'-Partner Services';
+//                            break;
+//                        default :
+//                            $render_data['filter_category']='';  
+//                    }
+//                }
+            }elseif($status==1){
+                $render_data['filter_status']=$status.'-Started';
+//                if($category_id!=''){
+//                    switch ($category_id){
+//                        case 1:
+//                            $render_data['filter_category']= $category_id.'-Incorporation';
+//                            break;
+//                        case 2:
+//                            $render_data['filter_category']= $category_id.'-Accounting Service';
+//                            break;
+//                        case 3:
+//                            $render_data['filter_category']= $category_id.'-Tax Services';
+//                            break;
+//                        case 4:
+//                            $render_data['filter_category']= $category_id.'-Business Services';
+//                            break;
+//                        case 5:
+//                            $render_data['filter_category']= $category_id.'-Partner Services';
+//                            break;
+//                        default :
+//                            $render_data['filter_category']='';  
+//                    }
+//                }
+            }
         }else{
            $render_data['status'] = $status; 
         }
@@ -1322,9 +1370,7 @@ class Home extends CI_Controller {
             $render_data['edit_data'] = $edit_data;
             $render_data['staffInfo'] = staff_info();
 
-            $reference_id = $this->rt6_model->get_sales_by_id($order_id)['reference_id'];
-
-
+            $reference_id = $this->rt6_model->get_sales_by_id($order_id['reference_id']);
             $render_data['all_driver_license'] = $this->rt6_model->get_salestax_driver_license_data_by_order_id($order_id);
 
             $render_data['get_override_price'] = $this->rt6_model->get_override_price($service_id, $edit_data['id']);

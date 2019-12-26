@@ -69,8 +69,18 @@ class Home extends CI_Controller {
 //        if ($status == 'all') {
             // $status = '';
 //        }
+         $render_data['fileter_request_type']='';
+         $render_data['filter_val']='';
         if($status != ''){
-        $render_data['status'] = $status;
+            if($status=='0'){
+                $render_data['status'] = $status;
+                $render_data['filter_val']=$status.'-New';
+//                $render_data['fileter_request_type']='byme_tome_mytask-By ME,To Me,My Task';
+            }else{
+                $render_data['status'] = $status;
+                $render_data['filter_val']=$status.'-Started';
+//                $render_data['fileter_request_type']='byme_tome_mytask-By ME,To Me,My Task';
+            }
         }else{
         $render_data['status'] = $status;    
         }
@@ -82,6 +92,7 @@ class Home extends CI_Controller {
         $render_data['priority'] = $priority;
 //        $render_data['staff_list'] = $this->administration->get_all_staff_ajax();
 //        $render_data['department_list'] = $this->administration->get_all_departments();
+//        echo $render_data['status'];die;
         $render_data['filter_element_list'] = $this->filter_element;
         $this->load->template('action/dashboard', $render_data);
     }

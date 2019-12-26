@@ -478,7 +478,7 @@ function loadServiceDashboard(status, categoryID, requestType, officeID, pageNum
                 }
                 if(requestType=='on_load'){
                     $('#btn_service').hide();
-                    clearFilter();
+//                    clearFilter();
                 }
             }
             
