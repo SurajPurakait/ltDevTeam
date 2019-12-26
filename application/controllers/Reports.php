@@ -149,7 +149,12 @@ class Reports extends CI_Controller {
         $render_data['lead_list'] = $this->lead_management->get_lead_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
-        // print_r($render_data['lead_list']);exit; 
         $this->load->view('reports/report_lead_data',$render_data);    
+    }
+
+    public function get_partner_data() {
+        $render_data['partner_list'] = $this->lead_management->get_partner_data();
+        $render_data['reports'] = array('report'=>'leafnet_report');
+        $this->load->view('reports/report_partner_data',$render_data);    
     }
 }
