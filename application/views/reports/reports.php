@@ -222,19 +222,8 @@
                                         </div>
                                     </div>
                                     <div role="tabpanel" id="tab-partners" class="tab-pane">
-                                        <div class="panel-body">
-                                            <div class="ibox m-t-25" id="partners_by_status_section">
-                                                <div class="ibox-title p-t-15 p-b-40">
-                                                    <h5 class="m-0 f-s-16">Partners By Status</h5>
-                                                    <div class="ibox-tools">
-                                                        <a class="">
-                                                            <i class="fa fa-chevron-up"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="ibox-content p-0" id="partners_by_status" style="display: none;"></div>
-                                            </div>                                        
-                                            <div class="ibox m-t-25" id="partners_by_type_section">
+                                        <div class="panel-body">                
+                                            <div class="ibox m-t-25" id="partners_by_type_section" onclick="show_partner_data()">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Partners By Type</h5>
                                                     <div class="ibox-tools">

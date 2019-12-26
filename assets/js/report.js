@@ -213,8 +213,18 @@ function show_lead_data(category) {
                 $("#leads_email_campaign").html(result);
             }
         },
-    });    
+    });
+}
 
+function show_partner_data() {
+    $("#partners_by_type").toggle();
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/get_partner_data',
+        success: function (result) {
+            $("#partners_by_type").html(result);
+        },
+    });    
 }
 
 function pieChart(className) {
