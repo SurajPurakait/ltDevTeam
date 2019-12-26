@@ -375,7 +375,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6" id="paper_check">
                                     <div class="form-group">
                                         <label>Hourly Rate or Salary Per Pay Period<span class="text-danger">*</span></label>
                                         <input placeholder="" class="form-control" type="text" name="hourly_rate" id="hourly_rate" title="Pay Period" required="">
@@ -388,7 +388,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group" id="f_status">
                                         <label>Filing Status<span class="text-danger">*</span></label>
                                         <div class="radio">
                                             <label class="radio-inline"><input class="filing_status" type="radio" value="Single" name="filing_status" title="Filing Status" required="">Single</label>
@@ -529,6 +529,11 @@ if (isset($employee_details)) {
             $("#i9").removeAttr('required');
             $("#pdf2").hide();
             $("#form_id").hide();
+            $("#hourly_rate").removeAttr('required');
+            $("#irs_form").removeAttr('required');
+            $("#paper_check").hide();
+            $(".filing_status").removeAttr('required');
+            $("#f_status").hide();
         }
         if(document.getElementById('w2_id').checked == true)
         {
@@ -548,6 +553,11 @@ if (isset($employee_details)) {
              $("#pdf2").show();
              $("#i9").attr("required", "required");
              $("#form_id").show();
+             $("#paper_check").show();
+             $("#hourly_rate").attr("required", "required");
+             $("#irs_form").attr("required", "required");
+             $("#f_status").show();
+             $(".filing_status").attr("required", "required");
         }
     }
         
