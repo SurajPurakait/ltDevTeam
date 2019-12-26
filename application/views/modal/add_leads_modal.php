@@ -57,10 +57,13 @@
 
                         <select required class="form-control" id="language" name="language">
 
-                            <option value="<?= $selected_lang['id'] ?>"><?= $selected_lang['language'] ?></option>
-                                <?php foreach ($languages as $value): ?>
+                            <option><?= $selected_lang['language'] ?></option>
+                                <?php foreach ($languages as $value):
+                            if($value["id"] != 4 && $value["id"] != 5) { ?>
                                     <option value="<?= $value["id"]; ?>"><?= $value["language"]; ?></option>
+                                     <?php } ?>
                                 <?php endforeach; ?>
+                                  
                         </select>
                         
                     </div>
@@ -154,9 +157,12 @@
                     <div class="col-lg-9">
                         <!-- <input placeholder="" class="form-control" type="text" name="language" id="language" title="Language" value="" required> -->
                         <select required class="form-control" id="language" name="language">
-                                <?php foreach ($languages as $value): ?>
+                                <?php foreach ($languages as $value): 
+                                    if($value["id"] != 4 && $value["id"] != 5){ ?>
                                     <option value="<?= $value["id"]; ?>"><?= $value["language"]; ?></option>
+                                    <?php } ?>
                                 <?php endforeach; ?>
+                                   
                             </select>
                         <div class="errorMessage text-danger"></div>
                     </div>
