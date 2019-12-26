@@ -170,7 +170,8 @@ function show_service_franchise_result(category) {
 }
 
 function show_billing_data() {
-    $("#billing_invoice_payments").toggle();
+    // $("#billing_invoice_payments").toggle();
+    $("#billing_invoice_payments").slideToggle(3000);
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_show_billing_data',
@@ -178,6 +179,33 @@ function show_billing_data() {
             $("#billing_invoice_payments").html(result);
         },
     });
+}
+function show_lead_data(category) {
+    // alert(category);return false;
+    if (category == 'status') {
+        $("#leads_by_status").toggle();
+    } else if(category == 'type') {
+        $("#leads_by_type").toggle();
+    } else if (category == 'mail_campaign') {
+        $("#leads_email_campaign").toggle();
+    }
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/get_leads_data',
+        data: {'category': category},
+        success: function (result) {
+            // alert(result);return false;
+            // console.log(result);return false;
+            if (category == 'status') {
+                $("#leads_by_status").html(result);
+            } else if(category == 'type') {
+                $("#leads_by_type").html(result);
+            } else if (category == 'mail_campaign') {
+                $("#leads_email_campaign").html(result);
+            }
+        },
+    });    
+
 }
 
 function pieChart(className) {

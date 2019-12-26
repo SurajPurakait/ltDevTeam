@@ -12,6 +12,7 @@ class Reports extends CI_Controller {
         $this->load->model('administration');
         $this->load->model('billing_model');
         $this->load->model("service_model");
+        $this->load->model("lead_management");
     }
     public function index($type = 1) {
         $this->load->layout = 'dashboard';
@@ -124,6 +125,31 @@ class Reports extends CI_Controller {
         $render_data['section'] = "billing";
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['billing_report_list'] = $this->billing_model->report_billing_list();
+        $total_invoice = array_sum(array_column($render_data['billing_report_list'],'total_invoice'));
+        // echo $total_invoice;exit;
+        $unpaid = (array_sum(array_column($render_data['billing_report_list'],'unpaid'))/$total_invoice) * 100;
+        $paid = (array_sum(array_column($render_data['billing_report_list'],'paid'))/$total_invoice) * 100;
+        $partial = (array_sum(array_column($render_data['billing_report_list'],'partial'))/$total_invoice) * 100;
+        $render_data['totals'] = array(
+            'total_no_of_invoice'=> array_sum(array_column($render_data['billing_report_list'],'total_invoice')),   
+            'total_amount_collected'=> array_sum(array_column($render_data['billing_report_list'],'amount_collected')),
+            'total_unpaid' => round($unpaid,2),  
+            'total_partial' => round($paid,2),   
+            'total_paid' => round($partial,2),
+            'total_less_than_30' => array_sum(array_column($render_data['billing_report_list'],'less_than_30')),  
+            'total_less_than_60' => array_sum(array_column($render_data['billing_report_list'],'less_than_60')),   
+            'total_more_than_60' => array_sum(array_column($render_data['billing_report_list'],'more_than_60'))   
+        );
         $this->load->view('reports/billing_invoice_payments_data',$render_data);   
+    }
+
+    // report lead data
+    public function get_leads_data() {
+        $category = post('category');
+        $render_data['lead_list'] = $this->lead_management->get_lead_data(post());
+        $render_data['reports'] = array('report'=>'leafnet_report');
+        $render_data['category'] = $category;
+        // print_r($render_data['lead_list']);exit; 
+        $this->load->view('reports/report_lead_data',$render_data);    
     }
 }

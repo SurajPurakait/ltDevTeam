@@ -75,11 +75,11 @@
                                     </div>
                                     <div role="tabpanel" id="tab-billing" class="tab-pane">
                                         <div class="panel-body">
-                                            <div class="ibox m-t-25" id="billing_invoice_payments_section">
+                                            <div class="ibox m-t-25" id="billing_invoice_payments_section" onclick="show_billing_data()">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Invoice Payments</h5>
                                                     <div class="ibox-tools">
-                                                        <a class="" onclick="show_billing_data()">
+                                                        <a class="">
                                                             <i class="fa fa-chevron-up"></i>
                                                         </a>
                                                     </div>
@@ -249,7 +249,7 @@
                                     </div>
                                     <div role="tabpanel" id="tab-leads" class="tab-pane">
                                         <div class="panel-body">
-                                            <div class="ibox m-t-25" id="leads_by_status_section">
+                                            <div class="ibox m-t-25" id="leads_by_status_section" onclick="show_lead_data('status')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads By Status</h5>
                                                     <div class="ibox-tools">
@@ -260,7 +260,7 @@
                                                 </div>
                                                 <div class="ibox-content p-0" id="leads_by_status" style="display: none;"></div>
                                             </div>                                        
-                                            <div class="ibox m-t-25" id="leads_by_type_section">
+                                            <div class="ibox m-t-25" id="leads_by_type_section" onclick="show_lead_data('type')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads By Type</h5>
                                                     <div class="ibox-tools">
@@ -271,7 +271,7 @@
                                                 </div>
                                                 <div class="ibox-content p-0" id="leads_by_type" style="display: none;"></div>
                                             </div>
-                                            <div class="ibox m-t-25" id="leads_email_campaign_section">
+                                            <div class="ibox m-t-25" id="leads_email_campaign_section" onclick="show_lead_data('mail_campaign')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads Email Campaign</h5>
                                                     <div class="ibox-tools">

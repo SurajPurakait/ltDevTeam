@@ -476,7 +476,7 @@ Class Lead_management extends CI_Model {
         unset($data["partner_creator"]);
         unset($data["fromval"]);
         $lead_management = $data;
-        $lead_management = array_merge($lead_management, ["staff_requested_by" => $this->session->userdata("user_id"), "status" => $status, "submission_date" => date('Y-m-d')]);
+        $lead_management = array_merge($lead_management, ["staff_requested_by" => $this->session->userdata("user_id"), "status" => $status, "submission_date" => date('Y-m-d'),"mail_campaign_status"=>'0']);
 //        print_r($lead_management);die;
         $this->db->trans_begin();
         $this->db->insert('lead_management', $lead_management);
@@ -2201,5 +2201,93 @@ Class Lead_management extends CI_Model {
         $this->db->where('id',$data['lead_id']);
         return $this->db->get('lead_management')->num_rows();
     }
-
+    public function get_lead_data($data) {
+        $data_office = $this->system->get_staff_office_list();
+        $lead_details = [];
+        if ($data['category'] == 'status') {
+            foreach ($data_office as $do) {
+                $lead_data_status = [
+                    'id' => $do['id'],
+                    'office' => $do['name'],
+                    'total_lead' => $this->get_lead_data_report($do['id'],'total_lead'),
+                    'new' => $this->get_lead_data_report($do['id'],'new'),
+                    'active' => $this->get_lead_data_report($do['id'],'active'),
+                    'inactive' => $this->get_lead_data_report($do['id'],'inactive'),
+                    'completed' => $this->get_lead_data_report($do['id'],'completed')
+                ];
+            array_push($lead_details,$lead_data_status);        
+            }    
+            return $lead_details;    
+        }
+        if ($data['category'] == 'type') {
+            foreach ($data_office as $do) {
+                $lead_data_type = [
+                    'id' => $do['id'],
+                    'office' => $do['name'],
+                    'total_lead' => $this->get_lead_data_report($do['id'],'total_lead'),
+                    'client_lead' => $this->get_lead_data_report($do['id'],'client_lead'),
+                    'partner_lead' => $this->get_lead_data_report($do['id'],'partner_lead')
+                ];
+            array_push($lead_details,$lead_data_type);        
+            }    
+            return $lead_details;
+        }
+        if ($data['category'] = 'mail_campaign') {
+            foreach ($data_office as $do) {
+                $lead_data_mail = [
+                    'id' => $do['id'],
+                    'office' => $do['name'],
+                    'total_lead' => $this->get_lead_data_report($do['id'],'total_lead'),
+                    'day_0' => $this->get_lead_data_report($do['id'],'day_0'),
+                    'day_3' => $this->get_lead_data_report($do['id'],'day_3'),
+                    'day_6' => $this->get_lead_data_report($do['id'],'day_6'),
+                    'campaign_on' => $this->get_lead_data_report($do['id'],'campaign_on'),
+                    'campaign_off' => $this->get_lead_data_report($do['id'],'campaign_off')
+                ];
+            array_push($lead_details,$lead_data_mail);        
+            }    
+            return $lead_details;
+        }
+    }
+    public function get_lead_data_report($ofc_id,$key) {
+        $this->db->where('office',$ofc_id);
+        $this->db->where('type !=','2');
+        $this->db->where('referred_status !=','1');
+        if ($key == 'new') {
+            $this->db->where('status','0');       
+        }
+        if ($key == 'active') {
+            $this->db->where('status','3');           
+        }
+        if ($key == 'inactive') {
+            $this->db->where('status','2');       
+        }
+        if ($key == 'completed') {
+            $this->db->where('status','1');       
+        }
+        if ($key == 'client_lead') {
+            $this->db->where('type','1');       
+        }
+        if ($key == 'partner_lead') {
+            $this->db->where('type','3');       
+        }
+        if ($key == 'day_0') {
+            $this->db->where('day_0_mail_date !=','0000-00-00');       
+        }
+        if ($key == 'day_3') {
+            $this->db->where('day_3_mail_date !=','0000-00-00');       
+        }
+        if ($key == 'day_6') {
+            $this->db->where('day_6_mail_date !=','0000-00-00');       
+        }        
+        if ($key == 'campaign_on') {
+            $this->db->where('mail_campaign_status','1');       
+        }        
+        if ($key == 'campaign_off') {
+            $this->db->where('mail_campaign_status','0');       
+        }        
+        return $this->db->get('lead_management')->num_rows();
+                
+    }    
+    
 }
