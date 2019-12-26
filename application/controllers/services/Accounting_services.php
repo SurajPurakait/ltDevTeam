@@ -481,6 +481,9 @@ class Accounting_services extends CI_Controller {
                         $ssn_name = $data['ssn_name'];
                         unset($data['w4']);
                         unset($data['i9']); 
+                        unset($data['hourly_rate']); 
+                        unset($data['irs_form']); 
+                        unset($data['filing_status']); 
 //                        echo "Hi";exit;
                     } else {
                         $data['bank_file'] = $_FILES['bank_file']['name'];
