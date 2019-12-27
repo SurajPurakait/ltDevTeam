@@ -372,6 +372,7 @@ class Project_Template_model extends CI_Model {
     function get_project_template_list() {
         $added_user = sess('user_id');
         $this->db->order_by('id', 'DESC');
+        $this->db->where('status !=','4'); // 4 = inactivated as on 26.12.19
         return $this->db->get('project_template_main')->result_array();
     }
 
@@ -3298,6 +3299,11 @@ class Project_Template_model extends CI_Model {
     }
     public function getProjectMainPeriodicData($project_id){
         return $this->db->get_where('project_periodic_pattern',['project_id'=>$project_id])->result_array();
+    }
+    public function inactive_project_template($project_id) {
+        $this->db->set('status','4');
+        $this->db->where('id',$project_id);
+        return $this->db->update('project_template_main');
     }
 }
 
