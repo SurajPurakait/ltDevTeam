@@ -421,10 +421,10 @@ class Accounting_services extends CI_Controller {
         $this->load->model('employee');
         $data = post();
         $err = "";
-        if ($data['editval'] == "") {
+        if ($data['editval'] == "") {                   
             unset($data['editval']);
 //            if ($this->employee->check_add_employee_email($data["email"]) == 0) {
-            if ($data["payroll_check"] == "Direct Deposit") {
+            if ($data["payroll_check"] == "Direct Deposit") {                
                 if (empty($_FILES['bank_file']['name'])) {
                     $err = 2;
                 } else {
@@ -445,36 +445,59 @@ class Accounting_services extends CI_Controller {
                     }
                 }
             }
-            if (empty($_FILES['w4']['name'])) {
-                $err = 2;
-            } else {
-                $w4 = $this->uploadPayrollForms($_FILES['w4']);
-                if ($w4) {
-                    $data['w4_file'] = $w4;
-                } else {
+            if(!isset($data['ssn_name'])) {
+                if (empty($_FILES['w4']['name'])) {
                     $err = 2;
-                }
-            }
-
-            if (empty($_FILES['i9']['name'])) {
-                $err = 2;
-            } else {
-                $i9 = $this->uploadPayrollForms($_FILES['i9']);
-                if ($i9) {
-                    $data['i9_file'] = $i9;
                 } else {
-                    $err = 2;
+                    $w4 = $this->uploadPayrollForms($_FILES['w4']);
+                    if ($w4) {
+                        $data['w4_file'] = $w4;
+                    } else {
+                        $err = 2;
+                    }
                 }
-            }
+                if (!array_key_exists('ssn_name', $data)) {
+                    if (empty($_FILES['i9']['name'])) {
+                        $err = 2;
+                    } else {
+                        $i9 = $this->uploadPayrollForms($_FILES['i9']);
+                        if ($i9) {
+                            $data['i9_file'] = $i9;
+                        } else {
+                            $err = 2;
+                        }
+                    }
+                }
+            }             
             unset($data['action']);
             if ($err == 2) {
                 echo 2;
-            } else {
-                if ($this->employee->add_employee($data)) {
-                    echo 1;
-                } else {
-                    echo 0;
-                }
+            } else {    
+                if(isset($data['ssn_name']) && array_key_exists('ssn_name', $data))
+//                isset($data['salary_rate']) && isset($data['ssn_name']) && isset($data['w4']) && isset($data['bank_file']) && isset($data['bank_file']) && isset($data['bank_file'])
+                    {   
+                        $data['i9'] = $_FILES['i9']['name'];
+                        $salary_rate = $data['salary_rate'];
+                        $ssn_name = $data['ssn_name'];
+                        unset($data['w4']);
+                        unset($data['i9']); 
+//                        echo "Hi";exit;
+                    } else {
+                        $data['bank_file'] = $_FILES['bank_file']['name'];
+                        unset($data['salary_rate']);
+                        unset($data['ssn_name']); 
+                        $ss = $data['ss'];
+                        $email = $data['email'];
+                        $emp_type = $data['employee_type'];
+                        $bank_file = $data['bank_file'];
+//                        echo "Hello";exit;
+                    }
+                
+                    if ($this->employee->add_employee($data)) {
+                        echo 1;
+                    } else {
+                        echo 0;
+                    }
             }
 //            } else {
 //                echo 3;
