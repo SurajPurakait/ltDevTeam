@@ -227,6 +227,8 @@
                 <div class="row">
                     <div class="col-sm-12 b-r">
                         <h2 class="m-t-none m-b">Add Employee Info</h2>
+                        <input type="radio" id="w2_id" class="category" name="category" checked="" onclick="category()">W2 &nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="1099_id" class="category" name="category" onclick="category()">1099
                         <form role="form" id="form_employee" name="form_employee" onsubmit="save_employee(); return false;">
                             <div class="row">
                                 <div class="col-md-6">
@@ -263,8 +265,8 @@
                                     <div class="form-group">
                                         <label>Employee is paid<span class="text-danger">*</span></label>
                                         <div class="radio">
-                                            <label class="radio-inline"><input class="is_paid" type="radio" value="Hourly" name="is_paid" title="Employee is paid" required="">Hourly</label>
-                                            <label class="radio-inline"><input class="is_paid" type="radio" value="Salary" name="is_paid" title="Employee is paid" required="">Salary</label>
+                                            <label class="radio-inline"><input class="is_paid" type="radio" value="Hourly" name="is_paid" class="is_paid" title="Employee is paid" required="">Hourly</label>
+                                            <label class="radio-inline"><input class="is_paid" type="radio" value="Salary" name="is_paid" class="is_paid" title="Employee is paid" required="">Salary</label>
                                             <div class="errorMessage text-danger"></div>
                                         </div>
                                     </div>
@@ -293,12 +295,12 @@
                                         <div class="errorMessage text-danger"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group" id="xyz">
                                         <label>SS #<span class="text-danger">*</span></label> 
                                         <input placeholder="" class="form-control" type="text" id="emp_ss" name="ss" title="SS #" required="">
                                         <div class="errorMessage text-danger"></div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" id="email_div">
                                         <label>Email<span class="text-danger">*</span></label>
                                         <input placeholder="" class="form-control" type="email" name="email" id="email" title="Email" value="" required="">
                                         <div class="errorMessage text-danger"></div>
@@ -308,11 +310,11 @@
                                         <input class="form-control datepicker_mdy" type="text" title="Date of birth" id="date_of_birth" name="date_of_birth" value="" required="">
                                         <div class="errorMessage text-danger"></div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" id="e_type">
                                         <label>Employee Type<span class="text-danger">*</span></label>
                                         <div class="radio">
-                                            <label class="radio-inline"><input class="employee_type" type="radio" value="Full-Time" name="employee_type" title="Employee Type" required="">Full-Time</label>
-                                            <label class="radio-inline"><input class="employee_type" type="radio" value="Part-Time" name="employee_type" title="Employee Type" required="">Part-Time</label>
+                                            <label class="radio-inline"><input class="employee_type" type="radio" value="Full-Time" name="employee_type" class="employee_type" title="Employee Type" required="">Full-Time</label>
+                                            <label class="radio-inline"><input class="employee_type" type="radio" value="Part-Time" name="employee_type" class="employee_type" title="Employee Type" required="">Part-Time</label>
                                             <div class="errorMessage text-danger"></div>
                                         </div>
                                     </div>
@@ -331,7 +333,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" id="v_cheque">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Voided Cheque (pdf)<span class="text-danger">*</span></label>
@@ -395,7 +397,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" id="form_id">
                                     <div id="employee_data_div">
                                         <h3>W4 Form &nbsp;&nbsp; <a href="<?= base_url() ?>forms/w4.pdf" download="Form_W4.pdf">Download The PDF</a></h3><span class="employee-data"></span>
                                         <h3>I9 Form &nbsp;&nbsp;&nbsp;&nbsp; <a href="<?= base_url() ?>forms/i9.pdf" download="Form_I9.pdf">Download The PDF</a></h3><span class="employee-data"></span>
@@ -404,21 +406,30 @@
 
                             </div>
                             <div class="hr-line-dashed"></div>
-                            <div class="row">
+                            <div class="row" id="f_u_w4_i9_form">
                                 <div id="signer_data_div">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12" id="pdf1">
                                         <label>Fillup And Upload W4 From (Pdf)<span class="text-danger">*</span></label>
                                         <input placeholder="W4 Form" id="w4" class="form-control" type="file" name="w4" required="" title="W4 Form">
                                         <div class="errorMessage text-danger"></div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-12" id="pdf2">
                                         <label>Fillup And Upload I9 From (Pdf)<span class="text-danger">*</span></label>
                                         <input placeholder="I9 From" id="i9" class="form-control" type="file" name="i9" required="" title="I9 From">
                                         <div class="errorMessage text-danger"></div>
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="form-group" id="abc" hidden="">
+                                <label>SSN:<span class="text-danger">*</span></label>                                       
+                                <input data-mask="999-99-9999" placeholder="___-__-____" class="form-control" type="text" id="ssn_name" name="ssn_name" title="SSN" required="">
+                                <div class="errorMessage text-danger"></div>                                   
+                            </div>
+                            <div class="form-group" id="mno" hidden="">
+                                <label>Salary Rate<span class="text-danger">*</span></label>                                       
+                                <input placeholder="$" class="form-control" type="text" id="salary_rate" name="salary_rate" title="Salary Rate" required="">
+                                <div class="errorMessage text-danger"></div>                                   
+                            </div>
                             <div class="modal-footer">
                                 <input type="hidden" name="editval" id="employee_id" value="">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -485,4 +496,60 @@ if (isset($employee_details)) {
         $("#" + show).show();
         $("#" + hide).hide();
     }
+    
+        if(document.getElementById('w2_id').checked == true)
+        {
+             $("#ssn_name").removeAttr('required');
+             $("#salary_rate").removeAttr('required');
+             $("#abc").hide();
+             $("#mno").hide();
+             $("#xyz").show();
+             $("#email_div").show();
+             $("#email").attr("required", "required");
+             $("#e_type").show();
+             $("#v_cheque").show();
+             $("#f_u_w4_i9_form").show();    
+        }
+        function category() 
+        {
+        if(document.getElementById('1099_id').checked == true)
+        {
+            $("#abc").show();
+            $("#mno").show();
+            $("#emp_ss").removeAttr('required');
+            $("#xyz").hide();
+            $("#email").removeAttr('required');
+            $("#email_div").hide();
+            $(".employee_type").removeAttr('required');
+            $("#e_type").hide();
+            $("#bank_file").removeAttr('required');
+            $("#v_cheque").hide(); 
+            $("#w4").removeAttr('required');
+            $("#pdf1").hide();
+            $("#i9").removeAttr('required');
+            $("#pdf2").hide();
+            $("#form_id").hide();
+        }
+        if(document.getElementById('w2_id').checked == true)
+        {
+             $("#ssn_name").removeAttr('required');
+             $("#salary_rate").removeAttr('required');
+             $("#abc").hide();
+             $("#mno").hide();
+             $("#xyz").show();
+             $("#email_div").show();
+             $("#email").attr("required", "required");
+             $("#e_type").show();
+             $("#v_cheque").show();
+             $("#bank_file").attr("required", "required");
+             $("#f_u_w4_i9_form").show();  
+             $("#pdf1").show();
+             $("#w4").attr("required", "required");
+             $("#pdf2").show();
+             $("#i9").attr("required", "required");
+             $("#form_id").show();
+        }
+    }
+        
+    
 </script>
