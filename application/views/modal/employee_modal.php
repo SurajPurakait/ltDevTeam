@@ -245,10 +245,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label>State<span class="text-danger">*</span></label> 
-                                        <div class="ui-widget">
-                                            <input placeholder="" class="form-control" type="text" id="emp_state" name="state" title="State" required="">
-                                            <div class="errorMessage text-danger"></div>
-                                        </div>
+                                        <select class="form-control" name="state" required="" id="emp_state" onchange="select_other_state(this.value);">
+                                    <option value="">Select an option</option>
+                                     <?php load_ddl_option("all_state_list"); ?>
+                                    ?>
+                                    </select>
                                     </div>
                                     <div class="form-group">
                                         <label>Home Phone<span class="text-danger">*</span></label>
@@ -292,7 +293,7 @@
 
                                     <div class="form-group">
                                         <label>Zip<span class="text-danger">*</span></label> 
-                                        <input placeholder="" class="form-control" type="text" zipval="" id="emp_zip" name="zip" title="Zip" required="">
+                                        <input placeholder="" class="form-control" type="text" zipval="" id="emp_zip" name="zip" title="Zip" required="" maxlength="5">
                                         <div class="errorMessage text-danger"></div>
                                     </div>
 
