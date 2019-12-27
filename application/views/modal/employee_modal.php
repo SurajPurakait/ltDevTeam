@@ -113,7 +113,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Voided Cheque (pdf)<span class="text-danger">*</span></label>
+                                        <label>Voided Cheque <span class="text-danger">*</span></label>
                                         <input placeholder="" class="form-control" type="file" name="bank_file" title="Voided Cheque " id="bank_file" <?= $employee_details['bank_file'] != "" ? "required" : ""; ?>>
                                         <div class="errorMessage text-danger"></div>
                                     </div>
@@ -203,7 +203,7 @@
                                         <div class="errorMessage text-danger"></div>
                                     </div>
                                     <div class="col-md-12">
-                                        <label>Upload I9 From (Pdf)<span class="text-danger">*</span></label>
+                                        <label>Upload I9 From <span class="text-danger">*</span></label>
                                         <input placeholder="I9 From" id="i9" class="form-control" type="file" name="i9" title="I9 From">
                                         <div class="errorMessage text-danger"></div>
                                     </div>
@@ -227,11 +227,12 @@
                 <div class="row">
                     <div class="col-sm-12 b-r">
                         <h2 class="m-t-none m-b">Add Employee Info</h2>
+                        <h4 class="m-t-none m-b">Employee Type</h4>
                         <input type="radio" id="w2_id" class="category" name="category" checked="" onclick="category()">W2 &nbsp;&nbsp;&nbsp;
                         <input type="radio" id="1099_id" class="category" name="category" onclick="category()">1099
                         <form role="form" id="form_employee" name="form_employee" onsubmit="save_employee(); return false;">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6"><br>
                                     <div class="form-group">
                                         <label>First Name<span class="text-danger">*</span></label>
                                         <input placeholder="" class="form-control" type="text" id="emp_first_name" name="first_name" title="First Name" value="" required="" >
@@ -276,7 +277,7 @@
                                         <div class="errorMessage text-danger"></div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6"><br>
                                     <div class="form-group">
                                         <label>Last Name<span class="text-danger">*</span></label>
                                         <input placeholder="" class="form-control" type="text" id="emp_last_number" name="last_name" title="Last Name" value="" required="" >
@@ -336,7 +337,7 @@
                             <div class="row" id="v_cheque">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Voided Cheque (pdf)<span class="text-danger">*</span></label>
+                                        <label>Voided Cheque <span class="text-danger">*</span></label>
                                         <input placeholder="" class="form-control" type="file" name="bank_file" title="Voided Cheque" id="bank_file" required="">
                                         <div class="errorMessage text-danger"></div>
                                     </div>
@@ -409,12 +410,12 @@
                             <div class="row" id="f_u_w4_i9_form">
                                 <div id="signer_data_div">
                                     <div class="col-md-12" id="pdf1">
-                                        <label>Fillup And Upload W4 From (Pdf)<span class="text-danger">*</span></label>
+                                        <label>Fillup And Upload W4 From <span class="text-danger">*</span></label>
                                         <input placeholder="W4 Form" id="w4" class="form-control" type="file" name="w4" required="" title="W4 Form">
                                         <div class="errorMessage text-danger"></div>
                                     </div>
                                     <div class="col-md-12" id="pdf2">
-                                        <label>Fillup And Upload I9 From (Pdf)<span class="text-danger">*</span></label>
+                                        <label>Fillup And Upload I9 From <span class="text-danger">*</span></label>
                                         <input placeholder="I9 From" id="i9" class="form-control" type="file" name="i9" required="" title="I9 From">
                                         <div class="errorMessage text-danger"></div>
                                     </div>
