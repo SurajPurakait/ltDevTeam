@@ -14,16 +14,16 @@ $ci->load->model('system');
                         <table id="service-tab" class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th style="width: 15px;">Service Category</th>
-                            <th style="width: 15px;">Service Name</th>
+                            <th style="white-space: nowrap;">Service Category</th>
+                            <th style="white-space: nowrap;">Service Name</th>
                             <!-- <th>Department</th> -->
-                            <th style="width: 10px;">Responsible</th>
-                            <th style="width: 10px;">Input Form</th>
-                            <th style="width: 10px;">Days To Start</th>
-                            <th style="width: 10px;">Days To Complete</th>
-                            <th style="width: 10px;">Fixed Cost</th>
-                            <th style="width: 10px;">Retail Price</th>
-                            <th style="width: 10px;">Action</th>
+                            <th style="white-space: nowrap;">Responsible</th>
+                            <th style="white-space: nowrap;">Input Form</th>
+                            <th style="white-space: nowrap;">Days To Start</th>
+                            <th style="white-space: nowrap;">Days To Complete</th>
+                            <th style="white-space: nowrap;">Fixed Cost</th>
+                            <th style="white-space: nowrap;">Retail Price</th>
+                            <th style="white-space: nowrap;">Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -80,7 +80,9 @@ $ci->load->model('system');
     $(document).ready(function () {
         <?php if (isset($service_list) && count($service_list) > 0) { ?>
         if ($('#service-tab').length > 0) {
-            $("#service-tab").dataTable();
+            $("#service-tab").dataTable({
+                "scrollX": true
+            });
         }
         <?php } ?>
     });
