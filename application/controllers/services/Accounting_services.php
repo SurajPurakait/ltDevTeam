@@ -434,7 +434,7 @@ class Accounting_services extends CI_Controller {
                     }
                     $file_name = basename(time() . "_" . rand(111111, 99999) . "_" . str_replace(" ", "", $_FILES['bank_file']['name']));
                     $config['upload_path'] = $upload_path;
-                    $config['allowed_types'] = 'pdf';
+                    $config['allowed_types'] = 'pdf|jpg|phg|doc|jpeg|xls|tiff';
                     $config['file_name'] = $file_name;
                     $this->upload->initialize($config);
 
@@ -481,6 +481,9 @@ class Accounting_services extends CI_Controller {
                         $ssn_name = $data['ssn_name'];
                         unset($data['w4']);
                         unset($data['i9']); 
+                        unset($data['hourly_rate']); 
+                        unset($data['irs_form']); 
+                        unset($data['filing_status']); 
 //                        echo "Hi";exit;
                     } else {
                         $data['bank_file'] = $_FILES['bank_file']['name'];
