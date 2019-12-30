@@ -219,7 +219,7 @@ $office_id = get_office_id($staff_info['office']);
                             </div>
                             <a href="<?= base_url(); ?>services/partner_services">+ Partner</a>
                         </li>
-                        <?php if ($staff_info['type'] == '1') { ?>
+                        <?php if ($staff_info['type'] == '1' || $staff_info['department'] == '14') { ?>
                         <li <?= active_menu($menu, "service_setup"); ?>>
                                 <a class="admin-nav" href="<?= base_url('services/service_setup'); ?>">Service Setup</a>
                         </li>
@@ -260,9 +260,9 @@ $office_id = get_office_id($staff_info['office']);
                     </div>
                     
 <!--                    <div class="dashboard-icons pull-right">
-                        <a href="javascript:void(0)" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New" onclick="reflactFilterWithMenu('0-New', 'byme_tome_mytask-By ME,To Me,My Task');loadActionDashboard(0, 'byme_tome_mytask', '', '', '', '');"><?= action_list('byme_tome_task', '0'); ?></a>
+                        <a href="javascript:void(0)" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New" onclick="reflactFilterWithMenu('0-New', 'byme_tome_mytask-By ME,To Me,My Task');loadActionDashboard(0, 'byme_tome_mytask', '', '', '', '');"><?//= action_list('byme_tome_task', '0'); ?></a>
                         <a href="<//?= base_url(); ?>action/home/index/1/0/byme_tome_task" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= action_list('byme_tome_task', '1'); ?></a>
-                    <a href="javascript:void(0)" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithMenu('1-Started', 'byme_tome_mytask-By ME,To Me,My Task');loadActionDashboard(1, 'byme_tome_mytask', '', '', '', '');"><?= action_list('byme_tome_task', '1'); ?></a>
+                    <a href="javascript:void(0)" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithMenu('1-Started', 'byme_tome_mytask-By ME,To Me,My Task');loadActionDashboard(1, 'byme_tome_mytask', '', '', '', '');"><?//= action_list('byme_tome_task', '1'); ?></a>
                    
                     </div>-->
                     <a href="javascript:void(0);">
@@ -300,7 +300,7 @@ $office_id = get_office_id($staff_info['office']);
                                 <a href="javascript:void(0);" onclick="CreateProjectModal('add', '');">+ Add New Project</a>
                             </li>
                             <?php } ?>
-                            <?php if ($staff_info['type'] == '1') { ?>
+                            <?php if ($staff_info['type'] == '1' || $staff_info['department'] == '14') { ?>
                             <li <?= active_menu($menu, "template"); ?>>
                                 <a class="admin-nav" href="<?= base_url('projects/template'); ?>">Project Templates</a>
                             </li>
@@ -360,8 +360,8 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?= active_menu($menu, "add_individual"); ?> >
                             <a href="<?= base_url('clients/add_individual'); ?>">+ Add New Individual</a>
                         </li>
-                        <?php if ($staff_info['department'] == '1') { ?>
-                            <?php if ($staff_info['type'] == '1') { ?>
+                        <!-- <?php //if ($staff_info['department'] == '1') { ?> -->
+                            <?php if (($staff_info['type'] == '1' && $staff_info['department'] == '1') || $staff_info['department'] == '14') { ?>
                             <li <?= active_menu($menu, "import_clients"); ?> >
                                 <a class="admin-nav" href="<?= base_url('clients/import_clients'); ?>">Import Clients</a>
                             </li>
@@ -379,7 +379,7 @@ $office_id = get_office_id($staff_info['office']);
                                 <a class="admin-nav" href="<?= base_url('clients/lead_mail'); ?>">Promotion Mails</a>
                             </li>
 
-                        <?php } } ?>
+                        <?php } ?>
                     </ul>
                 </li>                    
                 
@@ -413,7 +413,7 @@ $office_id = get_office_id($staff_info['office']);
 <!--                         <li <?//= active_menu($menu, "partners"); ?>>
                             <a href="<?//= base_url(); ?>partners/create_referral_agent">- New Referral Agent</a>
                         </li> -->
-                        <?php if ($staff_info['type'] == '1') { ?>
+                        <?php if ($staff_info['type'] == '1' || $staff_info['department'] == '14') { ?>
                         <li <?= active_menu($menu, "partners"); ?>>
                             <a class="admin-nav" href="<?= base_url(); ?>partners/referral_agent_type">Referral Partner Type</a>  <!-- N.B : Referral Agent concept is deprecated from sept,19 and it moves into type section, and Referral Agent Type is converted into Referral Partner Type -->
                         </li>
@@ -460,8 +460,8 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?//= active_menu($menu, "new_event"); ?>>
                             <a href="<?//= base_url(); ?>lead_management/new_event">- New Event</a>
                         </li> -->
-                        <?php if ($staff_info['department'] == '1') { ?>
-                            <?php if ($staff_info['type'] == '1') { ?>
+                        <!-- <?php //if ($staff_info['department'] == '1') { ?> -->
+                            <?php if (($staff_info['type'] == '1' && $staff_info['department'] == '1') || $staff_info['department'] == '14') { ?>
                             <li <?= active_menu($menu, "lead_type"); ?>>
                                 <a class="admin-nav" href="<?= base_url(); ?>lead_management/lead_type">Lead Type</a>
                             </li>
@@ -480,7 +480,7 @@ $office_id = get_office_id($staff_info['office']);
                             <li <?= active_menu($menu, "get_leads"); ?>>
                                 <a class="admin-nav"  href="<?= base_url(); ?>administration/get_leads">Get Leads</a>
                             </li>
-                        <?php } } ?>
+                        <?php } ?>
                     </ul>
                 </li>
                 <!-- Events -->
@@ -557,7 +557,7 @@ $office_id = get_office_id($staff_info['office']);
                                         <a href="<?= base_url('corporate/training_materials/add_training_material') ?>">- Add Training Material</a>
                                     </li>
                                 <?php  } ?>
-                                <?php if ($staff_info['department'] == '1') { ?>
+                                <?php if ($staff_info['department'] == '1'|| $staff_info['department'] == '14') { ?>
                                     <li <?= active_menu($menu, "training_materials_category"); ?>>
                                         <a href="<?= base_url('corporate/training_materials/training_materials_category'); ?>">Main Category</a>
                                     </li>
@@ -565,7 +565,7 @@ $office_id = get_office_id($staff_info['office']);
                                         <a href="<?= base_url('corporate/training_materials/training_materials_subcategory'); ?>">Sub Category</a>
                                     </li>
                                 <?php } ?>
-                                <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '9') { ?>
+                                <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '9' || $staff_info['department'] == '14') { ?>
                                     <li <?= active_menu($menu, "training_materials_suggestions"); ?>>
                                         <a href="<?= base_url('corporate/training_materials/training_materials_suggestions'); ?>">Suggestions</a>
                                     </li>
@@ -587,7 +587,7 @@ $office_id = get_office_id($staff_info['office']);
                                 <li <?= active_menu($menu, "marketing_materials_purchase_list"); ?>>
                                     <a href="<?= base_url('corporate/marketing_materials/marketing_materials_purchase_list') ?>">Purchase List</a>
                                 </li>
-                                <?php if ($staff_info['department'] == '1') { ?>
+                                <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '14') { ?>
                                     <li <?= active_menu($menu, "marketing_materials_category"); ?>>
                                         <a href="<?= base_url('corporate/marketing_materials/marketing_materials_category'); ?>">Main Category</a>
                                     </li>
@@ -595,7 +595,7 @@ $office_id = get_office_id($staff_info['office']);
                                         <a href="<?= base_url('corporate/marketing_materials/marketing_materials_subcategory'); ?>">Sub Category</a>
                                     </li>
                                 <?php } ?>
-                                <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '9') { ?>
+                                <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '9' || $staff_info['department'] == '14') { ?>
                                     <li <?= active_menu($menu, "marketing_materials_suggestions"); ?>>
                                         <a href="<?= base_url('corporate/marketing_materials/marketing_materials_suggestions'); ?>">Suggestions</a>
                                     </li>
@@ -681,7 +681,7 @@ $office_id = get_office_id($staff_info['office']);
                         <li>
                             <a href="<?= base_url(); ?>news">Dashboard</a>
                         </li>
-                        <?php if ($staff_info['type'] == '1') { ?>
+                        <?php if ($staff_info['type'] == '1' || $staff_info['department'] == '14') { ?>
                         <li <?= active_menu($menu, ""); ?>>
                             <a class="admin-nav" href="#">+ Add New</a>
                         </li>
@@ -698,7 +698,7 @@ $office_id = get_office_id($staff_info['office']);
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse" style="height: 0px;"> 
-                    <?php if ($staff_info['type'] == '1') { ?>  
+                    <?php if ($staff_info['type'] == '1' || $staff_info['department'] == '14') { ?>  
                         <li <?= active_menu($menu, "report_1"); ?>>
                             <a class="admin-nav" href="<?= base_url() ?>reports/index/1">Admin</a>
                         </li>
