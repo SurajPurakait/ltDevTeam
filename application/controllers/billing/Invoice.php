@@ -546,7 +546,16 @@ class Invoice extends CI_Controller {
         if ($invoice_id != '') {
             $invoice_id = base64_decode($invoice_id);
             $this->load->layout = 'dashboard';
-            $title = "Edit Invoice";
+            $this->load->model('billing_model');
+            $value = $this->billing_model->recurring($invoice_id);
+//             print_r($value);die;
+            $value = $value[0]['is_recurrence'];          
+            if($value == 'y'){
+                $title = "New Recurring Billing";
+            }else if($value == 'n'){
+              $title = "Edit Invoice";  
+            }
+            
             $render_data['title'] = $title . ' | Tax Leaf';
             $render_data['main_menu'] = 'billing';
             $render_data['menu'] = 'billing_dashboard';
