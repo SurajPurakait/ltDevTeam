@@ -41,50 +41,50 @@ class Home extends CI_Controller {
             $render_data['status'] = $status;
             if($status==2){
                 $render_data['filter_status']=$status.'-Not Started';
-//                if($category_id!=''){
-//                    switch ($category_id){
-//                        case 1:
-//                            $render_data['filter_category']= $category_id.'-Incorporation';
-//                            break;
-//                        case 2:
-//                            $render_data['filter_category']= $category_id.'-Accounting Service';
-//                            break;
-//                        case 3:
-//                            $render_data['filter_category']= $category_id.'-Tax Services';
-//                            break;
-//                        case 4:
-//                            $render_data['filter_category']= $category_id.'-Business Services';
-//                            break;
-//                        case 5:
-//                            $render_data['filter_category']= $category_id.'-Partner Services';
-//                            break;
-//                        default :
-//                            $render_data['filter_category']='';  
-//                    }
-//                }
+               if($category_id!=''){
+                   switch ($category_id){
+                       case 1:
+                           $render_data['filter_category']= $category_id.'-Incorporation-category';
+                           break;
+                       case 2:
+                           $render_data['filter_category']= $category_id.'-Accounting Service-category';
+                           break;
+                       case 3:
+                           $render_data['filter_category']= $category_id.'-Tax Services-category';
+                           break;
+                       case 4:
+                           $render_data['filter_category']= $category_id.'-Business Services-category';
+                           break;
+                       case 5:
+                           $render_data['filter_category']= $category_id.'-Partner Services-category';
+                           break;
+                       default :
+                           $render_data['filter_category']='';  
+                   }
+               }
             }elseif($status==1){
                 $render_data['filter_status']=$status.'-Started';
-//                if($category_id!=''){
-//                    switch ($category_id){
-//                        case 1:
-//                            $render_data['filter_category']= $category_id.'-Incorporation';
-//                            break;
-//                        case 2:
-//                            $render_data['filter_category']= $category_id.'-Accounting Service';
-//                            break;
-//                        case 3:
-//                            $render_data['filter_category']= $category_id.'-Tax Services';
-//                            break;
-//                        case 4:
-//                            $render_data['filter_category']= $category_id.'-Business Services';
-//                            break;
-//                        case 5:
-//                            $render_data['filter_category']= $category_id.'-Partner Services';
-//                            break;
-//                        default :
-//                            $render_data['filter_category']='';  
-//                    }
-//                }
+               if($category_id!=''){
+                   switch ($category_id){
+                       case 1:
+                           $render_data['filter_category']= $category_id.'-Incorporation-category';
+                           break;
+                       case 2:
+                           $render_data['filter_category']= $category_id.'-Accounting Service-category';
+                           break;
+                       case 3:
+                           $render_data['filter_category']= $category_id.'-Tax Services-category';
+                           break;
+                       case 4:
+                           $render_data['filter_category']= $category_id.'-Business Services-category';
+                           break;
+                       case 5:
+                           $render_data['filter_category']= $category_id.'-Partner Services-category';
+                           break;
+                       default :
+                           $render_data['filter_category']='';  
+                   }
+               }
             }
         }else{
            $render_data['status'] = $status; 
