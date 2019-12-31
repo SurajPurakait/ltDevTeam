@@ -2533,4 +2533,8 @@ class Billing_model extends CI_Model {
             return $z;
         }
     }
+    public function recurring($invoice_id){
+      return $this->db->query("select is_recurrence from invoice_info where id = $invoice_id")->result_array(); 
+      
+    }
 }
