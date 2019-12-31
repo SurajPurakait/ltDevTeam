@@ -527,7 +527,7 @@ body.body-small .navbar-top-links li:last-child {
 .nav.nav-second-level > li.active {
     border: none;
     background: #606971;
-   /* background: #609dd2;*/
+    /* background: #609dd2;*/
 }
 .active-blue-bg.nav.nav-second-level > li.active a.bg-primary{
     background: #609dd2 !important;
@@ -2006,45 +2006,45 @@ table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc,
 table.dataTable thead .sorting_asc_disabled,
 table.dataTable thead .sorting_desc_disabled {
-  background: transparent;
+    background: transparent;
 }
 .dataTables_wrapper {
-  padding-bottom: 30px;
+    padding-bottom: 30px;
 }
 .dataTables_length {
-  float: left;
+    float: left;
 }
 .dataTables_filter label {
-  margin-right: 5px;
+    margin-right: 5px;
 }
 .html5buttons {
-  float: right;
+    float: right;
 }
 .html5buttons a {
-  border: 1px solid #e7eaec;
-  background: #fff;
-  color: #676a6c;
-  box-shadow: none;
-  padding: 6px 8px;
-  font-size: 12px;
+    border: 1px solid #e7eaec;
+    background: #fff;
+    color: #676a6c;
+    box-shadow: none;
+    padding: 6px 8px;
+    font-size: 12px;
 }
 .html5buttons a:hover,
 .html5buttons a:focus:active {
-  background-color: #eee;
-  color: inherit;
-  border-color: #d2d2d2;
+    background-color: #eee;
+    color: inherit;
+    border-color: #d2d2d2;
 }
 div.dt-button-info {
-  z-index: 100;
+    z-index: 100;
 }
 @media (max-width: 768px) {
-  .html5buttons {
-    float: none;
-    margin-top: 10px;
-  }
-  .dataTables_length {
-    float: none;
-  }
+    .html5buttons {
+        float: none;
+        margin-top: 10px;
+    }
+    .dataTables_length {
+        float: none;
+    }
 }
 /* CIRCLE */
 .img-circle {
@@ -4285,7 +4285,7 @@ table.table-mail tr td {
     margin-top: 0;
 }
 /* COLORS */
- .text-green{
+.text-green{
     color: #8ab645;
 }
 .text-navy {
@@ -7680,17 +7680,17 @@ body.skin-3 {
 }
 .service-panel .btn-service-delete {
 
- color:#fff;
+    color:#fff;
     float: right;
     margin-right: -15px;
     margin-top: -10px;
     margin-left: 3px;
     border-radius:3px;
 }
-    
+
 
 .service-panel .btn-service-view{
-   border-radius:5px; 
+    border-radius:5px; 
     color: #fff;
     float:right;
     margin-top: -10px;
@@ -7701,7 +7701,7 @@ body.skin-3 {
 }
 
 .service-panel .btn-service-edit {
-   border-radius:5px; 
+    border-radius:5px; 
     color: #fff;
     float:right;
     margin-top: -10px;
@@ -9222,16 +9222,16 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 }
 
 .sticky_report {
-  position: fixed;
-  top: 62px;
-  width: 78.5%;
-  z-index: 6;
-  background: #f3f3f4;
-  padding-top: 20px;
+    position: fixed;
+    top: 62px;
+    width: 78.5%;
+    z-index: 6;
+    background: #f3f3f4;
+    padding-top: 20px;
 }
 
 .sticky_report + .ajaxdiv-reports {
-  padding-top: 300px;
+    padding-top: 300px;
 }
 
 #dt-reports-wrap div.dataTables_wrapper div.dataTables_filter,
@@ -9247,7 +9247,7 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 }
 #dt-reports-wrap div.dataTables_wrapper div.dataTables_filter label,
 #dt-report-tab-wrap div.dataTables_wrapper div.dataTables_filter label{
-/*    margin-left: 10px;*/
+    /*    margin-left: 10px;*/
 }
 #dt-reports-wrap .dt-buttons .btn.btn-secondary.buttons-excel.buttons-html5 span,
 #dt-reports-wrap .btn.btn-secondary.buttons-print span,
@@ -9294,4 +9294,12 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 #billing_invoice_payments table tr:last-child {
     background: #63a7fd;
     color: #fff;
+}
+.col-sm-12.col-md-6.length-short-box {
+    width: inherit;
+    float: inherit;
+    display: inline-block;
+}
+.col-sm-12.col-md-6.filter-search-box {
+    width: inherit;
 }
