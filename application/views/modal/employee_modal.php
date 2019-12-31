@@ -5,6 +5,8 @@
                 <div class="row">
                     <div class="col-sm-12 b-r">
                         <h2 class="m-t-none m-b">Edit Employee Info</h2>
+                        <input type="radio" id="w2_id" class="category" name="category" checked="" onclick="category()">W2 &nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="1099_id" class="category" name="category" onclick="category()">1099
                         <form role="form" id="form_employee" name="form_employee" onsubmit="save_employee(); return false;">
                             <div class="row">
                                 <div class="col-md-6">
@@ -75,6 +77,11 @@
                                         <label>SS #<span class="text-danger">*</span></label> 
                                         <input placeholder="" class="form-control" type="text" name="ss" id="emp_ss" value="<?= $employee_details['ss']; ?>" title="SS #" required="">
                                         <div class="errorMessage text-danger"></div>
+                                    </div>
+                                    <div class="form-group" id="abc" hidden="">
+                                            <label>SSN:<span class="text-danger">*</span></label>                                       
+                                            <input data-mask="999-99-9999" placeholder="___-__-____" class="form-control" type="text" id="ssn_name"  value="<?= $employee_details['ssn_name']; ?>" name="ssn_name" title="SSN" required="">
+                                            <div class="errorMessage text-danger"></div>                                   
                                     </div>
                                     <div class="form-group">
                                         <label>Email:<span class="text-danger">*</span></label>

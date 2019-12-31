@@ -30,10 +30,47 @@ Class Internal extends CI_Model {
             $this->db->update('internal_data', $save_data);
             $this->system->log("update", "internal_data", $internal_data_id);
         } else {    // Insert section
-            $save_data['status'] = 1;
-            $this->db->insert('internal_data', $save_data);
-            $internal_data_id = $this->db->insert_id();
-            $this->system->log("insert", "internal_data", $internal_data_id);
+            // $save_data['status'] = 1;
+            
+            $check_duplicate_practice_id_1 = $this->db->get_where('internal_data', ['practice_id' => $save_data['practice_id']])->row_array();
+            if($save_data['practice_id'] == $check_duplicate_practice_id_1['practice_id']){
+                $save_data['practice_id'] = substr_replace($save_data['practice_id'], 1 , -1); 
+                
+                $check_duplicate_practice_id_2 = $this->db->get_where('internal_data', ['practice_id' => $save_data['practice_id']])->row_array();
+                if($save_data['practice_id'] == $check_duplicate_practice_id_2['practice_id']){
+                    $save_data['practice_id'] = substr_replace($save_data['practice_id'], 2 , -1); 
+
+                    $check_duplicate_practice_id_3 = $this->db->get_where('internal_data', ['practice_id' => $save_data['practice_id']])->row_array();
+                    if($save_data['practice_id'] == $check_duplicate_practice_id_3['practice_id']){
+                        $save_data['practice_id'] = substr_replace($save_data['practice_id'], 3 , -1); 
+
+                        $save_data['status'] = 1; 
+                        $this->db->insert('internal_data', $save_data);
+                        $internal_data_id = $this->db->insert_id();
+                        $this->system->log("insert", "internal_data", $internal_data_id); 
+
+                    }
+                    
+                    $save_data['status'] = 1; 
+                    $this->db->insert('internal_data', $save_data);
+                    $internal_data_id = $this->db->insert_id();
+                    $this->system->log("insert", "internal_data", $internal_data_id);    
+                }
+
+                $save_data['status'] = 1;
+                $this->db->insert('internal_data', $save_data);
+                $internal_data_id = $this->db->insert_id();
+                $this->system->log("insert", "internal_data", $internal_data_id);
+            }else{
+                $save_data['status'] = 1;
+                $this->db->insert('internal_data', $save_data);
+                $internal_data_id = $this->db->insert_id();
+                $this->system->log("insert", "internal_data", $internal_data_id);
+            }
+
+            // $this->db->insert('internal_data', $save_data);
+            // $internal_data_id = $this->db->insert_id();
+            // $this->system->log("insert", "internal_data", $internal_data_id);
         }
 
         if ($data['reference'] == 'company') { // Save company owner internal data
@@ -64,11 +101,50 @@ Class Internal extends CI_Model {
                 } else {    // Insert section
                     if ($save_data['practice_id'] == '') {
                         $save_data['practice_id'] = $this->system->generete_practice_id($save_data['reference_id'], $save_data['reference']);
+                        $check_duplicate_owner_practice_id_1 = $this->db->get_where('internal_data', ['practice_id' => $save_data['practice_id']])->row_array();
+                        if($save_data['practice_id'] == $check_duplicate_owner_practice_id_1['practice_id']){
+
+                            $save_data['practice_id'] = substr_replace($save_data['practice_id'], 1 , -1);
+
+                            $check_duplicate_owner_practice_id_2 = $this->db->get_where('internal_data', ['practice_id' => $save_data['practice_id']])->row_array();
+                            if($save_data['practice_id'] == $check_duplicate_owner_practice_id_2['practice_id']){
+
+                                $save_data['practice_id'] = substr_replace($save_data['practice_id'], 2 , -1);
+
+                                $check_duplicate_owner_practice_id_3 = $this->db->get_where('internal_data', ['practice_id' => $save_data['practice_id']])->row_array();
+
+                                if($save_data['practice_id'] == $check_duplicate_owner_practice_id_3['practice_id']){
+
+                                    $save_data['practice_id'] = substr_replace($save_data['practice_id'], 3 , -1);
+                                    
+                                    $save_data['status'] = 1;
+                                    $this->db->insert('internal_data', $save_data);
+                                    $internal_data_id = $this->db->insert_id();
+                                    $this->system->log("insert", "internal_data", $internal_data_id);
+
+                                } 
+                                $save_data['status'] = 1;
+                                $this->db->insert('internal_data', $save_data);
+                                $internal_data_id = $this->db->insert_id();
+                                $this->system->log("insert", "internal_data", $internal_data_id);
+                            }
+
+                            $save_data['status'] = 1;
+                            $this->db->insert('internal_data', $save_data);
+                            $internal_data_id = $this->db->insert_id();
+                            $this->system->log("insert", "internal_data", $internal_data_id);
+
+                        }else{
+                            $save_data['status'] = 1;
+                            $this->db->insert('internal_data', $save_data);
+                            $internal_data_id = $this->db->insert_id();
+                            $this->system->log("insert", "internal_data", $internal_data_id);
+                        }
                     }
-                    $save_data['status'] = 1;
-                    $this->db->insert('internal_data', $save_data);
-                    $internal_data_id = $this->db->insert_id();
-                    $this->system->log("insert", "internal_data", $internal_data_id);
+                    // $save_data['status'] = 1;
+                    // $this->db->insert('internal_data', $save_data);
+                    // $internal_data_id = $this->db->insert_id();
+                    // $this->system->log("insert", "internal_data", $internal_data_id);
                 }
             }
         }
