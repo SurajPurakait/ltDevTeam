@@ -1376,7 +1376,7 @@ class Project_Template_model extends CI_Model {
                         $current_month=date('m',strtotime($project_date));
                         $current_day=date('d',strtotime($project_date));
                         if($periodic_data['due_day']>=$current_day){
-                            if($$periodic_data['due_month']<$current_month){
+                            if($periodic_data['due_month']<$current_month){
                                 $periodic_data['actual_due_year'] = date('Y', strtotime('+1 year'));
                             }else{
                                 $periodic_data['actual_due_year']=date('Y');
