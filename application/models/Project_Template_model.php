@@ -965,11 +965,19 @@ class Project_Template_model extends CI_Model {
             if(isset($periodic_day) && !empty($periodic_day)){
                 $this->db->where('template_id',$template_id);
                 $this->db->delete('template_periodic_pattern');
-                $new_val= array_combine($periodic_day, $periodic_month);
-//                print_r($new_val);die;
+                $periodic_count=count($periodic_day);
+                $periodic_day_array=array();
+                $i=0;
+                foreach ($periodic_day as $value) {
+                    $periodic_day_array[]=$i.'_'.$value;
+                    $i++;
+                }
+                $new_val= array_combine($periodic_day_array,$periodic_month);
                 foreach($new_val as $day=>$month){
                     $periodic_data=array();
                     $current_month = date('m');
+                    $exp1=explode('_',$day);
+                    $day=$exp1[1];
                     $actual_due_day = $day;
                     $actual_due_month = $month;
                     if($actual_due_day>=date('d')){
