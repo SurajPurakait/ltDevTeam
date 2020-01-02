@@ -958,6 +958,8 @@ class Project_Template_model extends CI_Model {
                 $ins_recurrence['actual_due_month'] = '0';
                 $ins_recurrence['actual_due_year'] = '0';
             }
+            unset($ins_recurrence['periodic_due_day']);
+            unset($ins_recurrence['periodic_due_month']);
 //            print_r($ins_recurrence);die;
             $this->db->insert('project_template_recurrence_main', $ins_recurrence);
             if(isset($periodic_day) && !empty($periodic_day)){
