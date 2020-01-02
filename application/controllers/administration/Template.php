@@ -310,5 +310,9 @@ class Template extends CI_Controller {
             echo '-1';
         }
     }
+    public function delete_project_template() {
+        $template_id = post('id');
+        echo $this->Project_Template_model->DeleteProjectTemplate($template_id);
+    }
 
 }
