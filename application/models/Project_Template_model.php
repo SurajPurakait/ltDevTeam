@@ -3305,6 +3305,10 @@ class Project_Template_model extends CI_Model {
         $this->db->where('id',$project_id);
         return $this->db->update('project_template_main');
     }
+    public function DeleteProjectTemplate($template_id){
+        $this->db->where('id',$template_id);
+        return $this->db->delete('project_template_main');
+    }
 }
 
 ?>

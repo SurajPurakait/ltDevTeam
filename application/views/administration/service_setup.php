@@ -83,6 +83,9 @@ $ci->load->model('system');
             $("#service-tab").dataTable({
                 "scrollX": true
             });
+            //$('.col-md-6').addClass('pull-left');
+            $('.dataTables_length').parent('.col-md-6').addClass('length-short-box');
+            $('.dataTables_filter').parent('.col-md-6').addClass('filter-search-box');
         }
         <?php } ?>
     });
