@@ -186,7 +186,7 @@
                                     </div>
                                     <div role="tabpanel" id="tab-clients" class="tab-pane">
                                         <div class="panel-body">
-                                            <div class="ibox m-t-25" id="total_clients_by_office_section">
+                                            <div class="ibox m-t-25" id="total_clients_by_office_section" onclick="show_clients_data('clients_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Total Clients By Office</h5>
                                                     <div class="ibox-tools">
@@ -197,7 +197,7 @@
                                                 </div>
                                                 <div class="ibox-content p-0" id="total_clients_by_office" style="display: none;"></div>
                                             </div>                                        
-                                            <div class="ibox m-t-25" id="business_clients_by_office_section">
+                                            <div class="ibox m-t-25" id="business_clients_by_office_section" onclick="show_clients_data('business_clients_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Business Clients By Office</h5>
                                                     <div class="ibox-tools">
@@ -208,7 +208,7 @@
                                                 </div>
                                                 <div class="ibox-content p-0" id="business_clients_by_office" style="display: none;"></div>
                                             </div>
-                                            <div class="ibox m-t-25" id="individual_clients_by_office_section">
+                                            <div class="ibox m-t-25" id="individual_clients_by_office_section" onclick="show_clients_data('individual_clients_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Individual Clients By Office</h5>
                                                     <div class="ibox-tools">
