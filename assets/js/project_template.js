@@ -1706,8 +1706,40 @@ function inactive_project_template(project_id) {
         dataType: "html",
         success: function (result) {
             if (result != 0) {
-                swal("Success!", "Successfully Inactivated!", "success");
-                goURL(base_url + 'projects/template');
+                swal({
+                    title: "Success!",
+                    text: "Successfully Inactivated!",
+                    type: "success"
+                }, function () {
+                    goURL(base_url + 'projects/template');
+                });
+            } else {
+                swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });        
+}
+function delete_project_template(project_id) {
+    $.ajax({
+        type: "POST",
+        data: {id : project_id},
+        url: base_url + 'administration/template/delete_project_template',
+        dataType: "html",
+        success: function (result) {
+            if (result != 0) {
+                swal({
+                    title: "Success!",
+                    text: "Template deleted successfully!",
+                    type: "success"
+                }, function () {
+                    goURL(base_url + 'projects/template');
+                });
             } else {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
             }
