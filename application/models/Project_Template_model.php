@@ -1373,7 +1373,6 @@ class Project_Template_model extends CI_Model {
                     foreach($project_recurrence_periodic_data as $periodic_data){
                         unset($periodic_data['id']);
                         unset($periodic_data['template_id']);
-//                        periodic due date start
                         $current_month=date('m',strtotime($project_date));
                         $current_day=date('d',strtotime($project_date));
                         if($periodic_data['due_day']>=$current_day){
