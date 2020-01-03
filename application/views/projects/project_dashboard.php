@@ -163,12 +163,17 @@ if (!empty($project_list)) {
                                     </td>                                                  
                                     <td title="Tracking" class="text-center"><span id="trackouter-<?php echo $list['id']; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></td>
                                     <td title="Creation Date"><?= date('m/d/Y', strtotime($list['created_at'])) ?></td>
-                                    <td title="Due Date"><?= date('m/d/Y',strtotime($dueDate)) ?></td>
                                     <?php if($pattern_details->pattern=='periodic'){ ?>
-                                        <td title="Recurrence Date"><?= $periodic_recurrence_date ?></td>
-                                    <?php } else { ?>
-                                    <td title="Recurrence Date"><?= ($pattern_details->generation_date!=''?(date('m/d/Y',strtotime($pattern_details->generation_date))):'Manual'); ?></td>
+                                    <td title="Due Date"><?= date('m/d/Y',strtotime($pattern_details->due_date)) ?></td>
+                                    <?php } else {?>
+                                    <td title="Due Date"><?= date('m/d/Y',strtotime($dueDate)) ?></td>
                                     <?php } ?>
+                                    <?php //if($pattern_details->pattern=='periodic'){ ?>
+                                        <!--<td title="Recurrence Date"><= $periodic_recurrence_date ?></td>-->
+                                    <?php // }
+//                                    else { ?>
+                                    <td title="Recurrence Date"><?= ($pattern_details->generation_date!=''?(date('m/d/Y',strtotime($pattern_details->generation_date))):'Manual'); ?></td>
+                                    <?php // } ?>
                                             <!-- <td title='Note'><a id="notecount-<?//= $list['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_notes(<?//= $list["id"]; ?>)"><b> <?//= get_project_note_count($list['id']) ?></b></a> -->
 
 
