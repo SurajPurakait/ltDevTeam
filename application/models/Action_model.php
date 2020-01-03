@@ -3521,10 +3521,9 @@ class Action_model extends CI_Model {
     }
 
     public function get_clients_data($category) {
+        $data_office = $this->system->get_staff_office_list();
+        $all_client_details = [];
         if ($category == 'clients_by_office') {
-            $data_office = $this->system->get_staff_office_list();
-            $all_client_details = [];
-            
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
@@ -3537,8 +3536,8 @@ class Action_model extends CI_Model {
             }
             return $all_client_details;
         } else if($category == 'business_clients_by_office') {
-            $data_office = $this->system->get_staff_office_list();
-            $business_client_details = [];
+            // $data_office = $this->system->get_staff_office_list();
+            // $business_client_details = [];
             
             foreach ($data_office as $do) {    
                 $data = [
@@ -3554,12 +3553,12 @@ class Action_model extends CI_Model {
                     'active' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'company','status'=>'1'))->num_rows(),           
                     'inactive' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'company','status'=>'2'))->num_rows()           
                 ];
-                array_push($business_client_details,$data);
+                array_push($all_client_details,$data);
             }
-            return $business_client_details;
+            return $all_client_details;
         } else if ($category == 'individual_clients_by_office') {
-            $data_office = $this->system->get_staff_office_list();
-            $individual_client_details = [];
+            // $data_office = $this->system->get_staff_office_list();
+            // $individual_client_details = [];
             
             foreach ($data_office as $do) {    
                 $data = [
@@ -3571,9 +3570,9 @@ class Action_model extends CI_Model {
                     'active' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'individual','status'=>'1'))->num_rows(),           
                     'inactive' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'individual','status'=>'2'))->num_rows()           
                 ];
-                array_push($individual_client_details,$data);
+                array_push($all_client_details,$data);
             }
-            return $individual_client_details;
+            return $all_client_details;
         }
     }
 }
