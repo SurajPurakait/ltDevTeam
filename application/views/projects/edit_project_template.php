@@ -400,7 +400,7 @@
                                                                         <label class="">For Start</label>
                                                                         <input class="form-control" type="number" name="recurrence[target_start_days]" value="<?php echo $pattern_details->target_start_days; ?>" min="0" style="width: 100px" id="t_start_day">
                                                                         <label class="control-label"><input type="radio" name="recurrence[target_start_day]" value="1" <?php echo ($pattern_details->target_start_day == '1') ? 'checked' : ''; ?>>&nbsp; Days before due date</label>
-                                                                        <label class="control-label"><input type="radio" name="recurrence[target_start_day]" value="2" <?php echo ($pattern_details->target_start_day == '2') ? 'selected' : ''; ?>>&nbsp; Days after creation date</label>
+                                                                        <label class="control-label"><input type="radio" name="recurrence[target_start_day]" value="2" <?php echo ($pattern_details->target_start_day == '2') ? 'checked' : ''; ?>>&nbsp; Days after creation date</label>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6">

@@ -13,6 +13,7 @@ class Reports extends CI_Controller {
         $this->load->model('billing_model');
         $this->load->model("service_model");
         $this->load->model("lead_management");
+        $this->load->model("action_model");
     }
     public function index($type = 1) {
         $this->load->layout = 'dashboard';
@@ -156,5 +157,13 @@ class Reports extends CI_Controller {
         $render_data['partner_list'] = $this->lead_management->get_partner_data();
         $render_data['reports'] = array('report'=>'leafnet_report');
         $this->load->view('reports/report_partner_data',$render_data);    
+    }
+
+    public function get_clients_data() {
+        $category = post('category');
+        $render_data['client_list'] = $this->action_model->get_clients_data($category);
+        $render_data['reports'] = array('report'=>'leafnet_report');
+        $render_data['category'] = $category;
+        $this->load->view('reports/report_client_data',$render_data);    
     }
 }

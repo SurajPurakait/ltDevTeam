@@ -958,16 +958,26 @@ class Project_Template_model extends CI_Model {
                 $ins_recurrence['actual_due_month'] = '0';
                 $ins_recurrence['actual_due_year'] = '0';
             }
+            unset($ins_recurrence['periodic_due_day']);
+            unset($ins_recurrence['periodic_due_month']);
 //            print_r($ins_recurrence);die;
             $this->db->insert('project_template_recurrence_main', $ins_recurrence);
             if(isset($periodic_day) && !empty($periodic_day)){
                 $this->db->where('template_id',$template_id);
                 $this->db->delete('template_periodic_pattern');
-                $new_val= array_combine($periodic_day, $periodic_month);
-//                print_r($new_val);die;
+                $periodic_count=count($periodic_day);
+                $periodic_day_array=array();
+                $i=0;
+                foreach ($periodic_day as $value) {
+                    $periodic_day_array[]=$i.'_'.$value;
+                    $i++;
+                }
+                $new_val= array_combine($periodic_day_array,$periodic_month);
                 foreach($new_val as $day=>$month){
                     $periodic_data=array();
                     $current_month = date('m');
+                    $exp1=explode('_',$day);
+                    $day=$exp1[1];
                     $actual_due_day = $day;
                     $actual_due_month = $month;
                     if($actual_due_day>=date('d')){
@@ -1373,11 +1383,10 @@ class Project_Template_model extends CI_Model {
                     foreach($project_recurrence_periodic_data as $periodic_data){
                         unset($periodic_data['id']);
                         unset($periodic_data['template_id']);
-//                        periodic due date start
                         $current_month=date('m',strtotime($project_date));
                         $current_day=date('d',strtotime($project_date));
                         if($periodic_data['due_day']>=$current_day){
-                            if($$periodic_data['due_month']<$current_month){
+                            if($periodic_data['due_month']<$current_month){
                                 $periodic_data['actual_due_year'] = date('Y', strtotime('+1 year'));
                             }else{
                                 $periodic_data['actual_due_year']=date('Y');

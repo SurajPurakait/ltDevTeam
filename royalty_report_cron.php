@@ -1,8 +1,13 @@
 <?php
     $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $db = 'leafnet';
+    $username = "leafnet_db_user";
+    $password = "leafnet@123";
+    $db = 'leafnet_live';
+
+    // $servername = "localhost";
+    // $username = "root";
+    // $password = "";
+    // $db = 'leafnet';
 
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
@@ -193,6 +198,7 @@
                                     $update_sql .= "`office_id_name`='$office_id_name'";
                                 } 
                                 $update_sql .= "WHERE invoice_id = '".$invoice_id."'";
+                                // mysqli_query($conn,$update_sql);
                                 echo $update_sql;
                             }    
                         } else {                          
@@ -204,6 +210,7 @@
                             '$reference','$total_net','$office_fees',
                             '$fee_with_cost','$fee_without_cost','$office_id','$office_id_name',
                             '$created_by')";
+                            mysqli_query($conn,$sql_query)or die('insert error');
                             echo $sql_query;
                         }   
                         echo "<hr>";    
@@ -214,4 +221,3 @@
     } 
 
 ?>
-
