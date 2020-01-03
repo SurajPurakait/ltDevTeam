@@ -53,13 +53,13 @@
             $type = $rcr['reference'];
             $client_id = $rcr['practice_id'];
             $status = $rcr['status'];
-            if (isset($rcr['country_residence'])) {
+            if (isset($rcr['country_residence']) && $rcr['country_residence'] != '') {
                 $country_residence = $rcr['country_residence'];
             }else {
                 $country_residence = NULL;
             }
 
-            if (isset($rcr['country_residence_name'])) {
+            if (isset($rcr['country_residence_name']) && $rcr['country_residence_name'] != '') {
                 $country_residence_name = $rcr['country_residence_name'];
             }else {
                 $country_residence_name = NULL;
