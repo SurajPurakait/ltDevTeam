@@ -1,9 +1,13 @@
 <?php
     $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $db = 'leafnet';
-
+    $username = "leafnet_db_user";
+    $password = "leafnet@123";
+    $db = 'leafnet_live';
+    
+    // $servername = "localhost";
+    // $username = "root";
+    // $password = "";
+    // $db = 'leafnet';
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
 
@@ -112,16 +116,16 @@
                 $office_id = $rpd['office_id'];
                 $office_id_name = $rpd['officeid'];
                 $created_by = $rpd['created_by'];
-                $service_request_id = $rpd['service_request_id'];
+                // $service_request_id = $rpd['service_request_id'];
 
-                $sql_query = "INSERT INTO `royalty_report`(`date`, `client_id`, `invoice_id`, `service_id`, `service_name`, `retail_price`, `override_price`, `cost`, `payment_status`, `collected`, `payment_type`, `authorization_id`, `reference`, `total_net`, `office_fee`, `fee_with_cost`, `fee_without_cost`, `office_id`,`office_id_name` ,`created_by`,`service_request_id`) VALUES (
+                $sql_query = "INSERT INTO `royalty_report`(`date`, `client_id`, `invoice_id`, `service_id`, `service_name`, `retail_price`, `override_price`, `cost`, `payment_status`, `collected`, `payment_type`, `authorization_id`, `reference`, `total_net`, `office_fee`, `fee_with_cost`, `fee_without_cost`, `office_id`,`office_id_name` ,`created_by`) VALUES (
                 '$date_val', '$practice_id','$invoice_id',
                 '$services_ids','$service_details','$retail_price',
                 '$override_price','$service_cost','$payment_status',
                 '$collected','$payment_type','$authorization_id',
                 '$reference','$total_net','$office_fees',
                 '$fee_with_cost','$fee_without_cost','$office_id','$office_id_name',
-                '$created_by','$service_request_id')";
+                '$created_by')";
                 mysqli_query($conn,$sql_query)or die('insert error');
             }
             echo $sql_query;
@@ -131,4 +135,3 @@
     } 
 
 ?>
-
