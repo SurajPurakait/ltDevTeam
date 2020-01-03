@@ -243,6 +243,7 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?= active_menu($menu, "create_invoice"); ?>>
                             <a href="<?= base_url(); ?>billing/invoice">+ Add New Invoice</a>
                         </li>
+                         <?php if ($staff_info['type'] != 3) { ?> 
                         <li <?= active_menu($menu, "recurring_invoice"); ?>>                            
                             <a href="<?= base_url(); ?>billing/home/index/y">Recurring Invoice</a>
                         </li>
@@ -252,6 +253,7 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?= active_menu($menu, "documents"); ?>>
                             <a href="<?= base_url(); ?>billing/home/documents">Documents</a>
                         </li>
+                         <?php } ?>
                     </ul>
                 </li>
 
