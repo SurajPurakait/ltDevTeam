@@ -470,7 +470,8 @@ class Service_model extends CI_Model {
         $select[] = 'ord.target_complete_date AS target_complete_date';
         $select[] = 'ord.total_of_order AS total_of_order';
         $select[] = 'ord.tracking AS tracking';
-        $select[] = 'company.name AS client_name';
+        // $select[] = 'company.name AS client_name';
+        $select[] = '(CASE WHEN ord.reference = "individual" THEN (SELECT CONCAT(individual.first_name, \' \', individual.last_name) from individual WHERE individual.id = ord.client_id)  WHEN ord.reference = "company" THEN (SELECT company.name from company WHERE ord.reference_id = company.id) ELSE "" END) AS client_name';
         $select[] = 'ord.reference_id AS reference_id';
         $select[] = 'ord.reference AS reference';
         $select[] = 'ord.status AS status';
@@ -495,7 +496,7 @@ class Service_model extends CI_Model {
         $select[] = '(CASE WHEN ord.assign_user = 0 THEN \'unassigned\' ELSE \'assigned\' END) as assign_status';
         $select[] = "CONCAT(',', (SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = services.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = ord.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),''), ',') AS all_staffs";
         $sql = "SELECT " . implode(', ', $select) . "
-                FROM `order` AS ord INNER JOIN company ON ord.reference_id = company.id 
+                FROM `order` AS ord
                 INNER JOIN internal_data indt ON indt.reference_id = `ord`.`reference_id` AND indt.reference = `ord`.`reference` 
                 INNER JOIN services ON services.id = ord.service_id
                 LEFT OUTER JOIN service_request AS srv_rq ON srv_rq.order_id = ord.id
