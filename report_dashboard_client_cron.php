@@ -53,8 +53,19 @@
             $type = $rcr['reference'];
             $client_id = $rcr['practice_id'];
             $status = $rcr['status'];
-            $country_residence = $rcr['country_residence']; 
-            $country_residence_name = $rcr['country_residence_name']; 
+            if (!isset($rcr['country_residence'])) {
+                $country_residence = $rcr['country_residence'];
+            }else {
+                $country_residence = NULL;
+            }
+                
+            if (!isset($rcr['country_residence_name'])) {
+                $country_residence_name = $rcr['country_residence_name'];
+            }else {
+                $country_residence_name = NULL;
+            }
+
+             
             $office = $rcr['office'];
             $office_id = $rcr['office_id'];
 
@@ -63,6 +74,7 @@
             echo $ind_insert_sql;
             echo "<hr>";
             mysqli_query($conn,$ind_insert_sql)or die('Error : Insert Error');    
+            }
         }
     }
 
