@@ -1080,3 +1080,5 @@ ALTER TABLE `projects` CHANGE `created_at` `created_at` DATETIME NOT NULL;
 /*live end*/
 /* 26.12.2019 */
 ALTER TABLE `payroll_employee_info` ADD `ssn_name` VARCHAR(30) NOT NULL AFTER `i9_file`, ADD `salary_rate` VARCHAR(30) NOT NULL AFTER `ssn_name`; 
+/* 03.01.2020 */
+/*import report_client */
