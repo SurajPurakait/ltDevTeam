@@ -153,7 +153,7 @@ function get_total_sales_report(office = '',date_range = '') {
     });
 }
 
-// show franchisee result
+// report service section js
 function show_service_franchise_result(category) {
     if (category == 'franchise') {
         $("#service_by_franchise").toggle();
@@ -178,8 +178,8 @@ function show_service_franchise_result(category) {
     });
 }
 
+// report billing section js
 function show_billing_data() {
-    // $("#billing_invoice_payments").toggle();
     $("#billing_invoice_payments").slideToggle(3000);
     $.ajax({
         type: 'POST',
@@ -189,8 +189,9 @@ function show_billing_data() {
         },
     });
 }
+
+// report lead section js
 function show_lead_data(category) {
-    // alert(category);return false;
     if (category == 'status') {
         $("#leads_by_status").toggle();
     } else if(category == 'type') {
@@ -203,8 +204,6 @@ function show_lead_data(category) {
         url: base_url + 'reports/get_leads_data',
         data: {'category': category},
         success: function (result) {
-            // alert(result);return false;
-            // console.log(result);return false;
             if (category == 'status') {
                 $("#leads_by_status").html(result);
             } else if(category == 'type') {
@@ -216,6 +215,7 @@ function show_lead_data(category) {
     });
 }
 
+// report partner section js
 function show_partner_data() {
     $("#partners_by_type").toggle();
     $.ajax({
@@ -225,6 +225,31 @@ function show_partner_data() {
             $("#partners_by_type").html(result);
         },
     });    
+}
+
+// report service section js
+function show_clients_data(category) {
+    if (category == 'clients_by_office') {
+        $("#total_clients_by_office").toggle();
+    } else if(category == 'business_clients_by_office') {
+        $("#business_clients_by_office").toggle();
+    } else if (category == 'individual_clients_by_office') {
+        $("#individual_clients_by_office").toggle();
+    }  
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/get_clients_data',
+        data: {'category': category},
+        success: function (result) {
+            if (category == 'clients_by_office') {
+                $("#total_clients_by_office").html(result);
+            } else if(category == 'business_clients_by_office') {
+                $("#business_clients_by_office").html(result);
+            } else if (category == 'individual_clients_by_office') {
+                $("#individual_clients_by_office").html(result);
+            }
+        },
+    });
 }
 
 function pieChart(className) {
