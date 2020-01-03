@@ -1084,3 +1084,5 @@ ALTER TABLE `payroll_employee_info` ADD `ssn_name` VARCHAR(30) NOT NULL AFTER `i
 /*03.01.2020*/
 ALTER TABLE `project_periodic_pattern` ADD `is_created` ENUM('n','y') NOT NULL AFTER `actual_due_year`; 
 /*import report_client */
+
+ALTER TABLE `order` ADD `client_id` INT(100) NOT NULL COMMENT 'individual_id for individual client' AFTER `reference_id`;

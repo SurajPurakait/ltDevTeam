@@ -434,7 +434,7 @@ class Accounting_services extends CI_Controller {
                     }
                     $file_name = basename(time() . "_" . rand(111111, 99999) . "_" . str_replace(" ", "", $_FILES['bank_file']['name']));
                     $config['upload_path'] = $upload_path;
-                    $config['allowed_types'] = 'pdf|jpg|phg|doc|jpeg|xls|tiff';
+                    $config['allowed_types'] = 'pdf|jpg|png|doc|jpeg|xls|tiff|csv';
                     $config['file_name'] = $file_name;
                     $this->upload->initialize($config);
 
@@ -517,7 +517,7 @@ class Accounting_services extends CI_Controller {
                     }
                     $file_name = basename(time() . "_" . rand(111111, 99999) . "_" . str_replace(" ", "", $_FILES['bank_file']['name']));
                     $config['upload_path'] = $upload_path;
-                    $config['allowed_types'] = 'pdf';
+                    $config['allowed_types'] = 'pdf|jpg|png|doc|jpeg|xls|tiff|csv';
                     $config['file_name'] = $file_name;
                     $this->upload->initialize($config);
 
