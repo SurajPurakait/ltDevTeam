@@ -219,7 +219,7 @@
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label class="control-label">Pattern:</label>
-                                                                        <select class="form-control" id="pattern" name="recurrence[pattern]" onchange="change_due_pattern(this.value);">
+                                                                        <select class="form-control" id="pattern" name="recurrence[pattern]" onchange="change_due_pattern(this.value); " style="pointer-events:none" readonly>
                                                                             <option value="monthly" <?php echo ($pattern_details->pattern == 'monthly') ? 'selected' : ''; ?>>Monthly</option>     
                                                                             <option value="weekly" <?php echo ($pattern_details->pattern == 'weekly') ? 'selected' : ''; ?>>Weekly</option>
                                                                             <option value="quarterly" <?php echo ($pattern_details->pattern == 'quarterly') ? 'selected' : ''; ?>>Quarterly</option>
