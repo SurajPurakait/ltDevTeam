@@ -241,6 +241,7 @@ function show_clients_data(category) {
         url: base_url + 'reports/get_clients_data',
         data: {'category': category},
         success: function (result) {
+            // console.log(result);
             if (category == 'clients_by_office') {
                 $("#total_clients_by_office").html(result);
             } else if(category == 'business_clients_by_office') {
