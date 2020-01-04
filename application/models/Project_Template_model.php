@@ -1241,9 +1241,9 @@ class Project_Template_model extends CI_Model {
                                  if($project_recurrence_main_data['due_day']>=$current_day){
                                     
                                     if($project_recurrence_main_data['actual_due_month']<=12){
-                                        $project_recurrence_main_data['actual_due_year'] = date('Y')+1;
+                                        $project_recurrence_main_data['actual_due_year'] = date('Y');
                                     }else{
-                                        $project_recurrence_main_data['actual_due_year']=date('Y');
+                                        $project_recurrence_main_data['actual_due_year']=date('Y')+1;
                                     }
                                 }else{
                                     
