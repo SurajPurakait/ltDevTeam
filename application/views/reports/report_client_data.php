@@ -1,6 +1,5 @@
 <?php
     if ($category == 'clients_by_office') { 
-    // echo "<pre>";   
 ?>
 <div class="row">
     <div class="col-md-10">
