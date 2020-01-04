@@ -73,7 +73,7 @@
                                         <div class="errorMessage text-danger"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group" id="xyz">
                                         <label>SS #<span class="text-danger">*</span></label> 
                                         <input placeholder="" class="form-control" type="text" name="ss" id="emp_ss" value="<?= $employee_details['ss']; ?>" title="SS #" required="">
                                         <div class="errorMessage text-danger"></div>
@@ -83,7 +83,7 @@
                                             <input data-mask="999-99-9999" placeholder="___-__-____" class="form-control" type="text" id="ssn_name"  value="<?= $employee_details['ssn_name']; ?>" name="ssn_name" title="SSN" required="">
                                             <div class="errorMessage text-danger"></div>                                   
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" id="email_div">
                                         <label>Email:<span class="text-danger">*</span></label>
                                         <input placeholder="" class="form-control" type="email" name="email" id="email" value="<?= $employee_details['email']; ?>" id="email" title="Email" required="">
                                         <div class="errorMessage text-danger"></div>
@@ -93,7 +93,12 @@
                                         <input class="form-control datepicker_mdy" type="text" title="Date of Birth" id="date_of_birth" name="date_of_birth" value="<?= date('m/d/Y',strtotime($employee_details['date_of_birth'])); ?>" value="" required="">
                                         <div class="errorMessage text-danger"></div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" id="mno" hidden="">
+                                        <label>Salary Rate:<span class="text-danger">*</span></label>                                       
+                                        <input placeholder="$" class="form-control" type="text" id="salary_rate" name="salary_rate" title="Salary Rate" value="<?= $employee_details['salary_rate']; ?>" required="">
+                                        <div class="errorMessage text-danger"></div>                                   
+                                    </div>
+                                    <div class="form-group" id="e_type">
                                         <label>Employee Type:<span class="text-danger">*</span></label>
                                         <div class="radio">
                                             <label class="radio-inline"><input class="employee_type" type="radio" <?= $employee_details['employee_type'] == "Full-Time" ? "checked='checked'" : ""; ?> value="Full-Time" name="employee_type" title="Employee Type" required="">Full-Time</label>
@@ -117,7 +122,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row" id="v_cheque">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Voided Cheque:<span class="text-danger">*</span></label>
@@ -160,7 +165,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6" id="paper_check">
                                     <div class="form-group">
                                         <label>Hourly Rate or Salary Per Pay Period:<span class="text-danger">*</span></label>
                                         <input placeholder="" class="form-control" type="text" name="hourly_rate" id="hourly_rate" value="<?= $employee_details['hourly_rate']; ?>" title="Pay Period" required="">
@@ -173,7 +178,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group" id="f_status">
                                         <label>Filing Status:<span class="text-danger">*</span></label>
                                         <div class="radio">
                                             <label class="radio-inline"><input class="filing_status" type="radio" <?= $employee_details['filing_status'] == "Single" ? "checked='checked'" : ""; ?> value="Single" name="filing_status" title="Filing Status" required="">Single</label>
@@ -182,7 +187,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" id="form_id">
                                     <div id="employee_data_div">
                                         <?php if ($employee_details['w4_file'] != "") { ?>
                                             <h3>W4 Form &nbsp;&nbsp; <a href="<?= base_url() ?>uploads/<?= $employee_details['w4_file']; ?>" download="Form_W4.pdf">Download Previous PDF</a></h3><span class="employee-data"></span>
@@ -202,15 +207,15 @@
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
-                            <div class="row">
+                            <div class="row" id="f_u_w4_i9_form">
                                 <div id="signer_data_div">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12" id="pdf1">
                                         <label>Fillup And Upload Payroll Forms:<span class="text-danger">*</span></label>
                                         <input placeholder="W4 Form" id="w4" class="form-control" type="file" name="w4" title="W4 Form">
                                         <div class="errorMessage text-danger"></div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <label>Upload I9 From:<span class="text-danger">*</span></label>
+                                    <div class="col-md-12" id="pdf2">
+                                        <label>Fillup And Upload I9 From:<span class="text-danger">*</span></label>
                                         <input placeholder="I9 From" id="i9" class="form-control" type="file" name="i9" title="I9 From">
                                         <div class="errorMessage text-danger"></div>
                                     </div>

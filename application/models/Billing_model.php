@@ -1947,13 +1947,10 @@ class Billing_model extends CI_Model {
 //        if ($invoice_info['is_order'] == 'n') {
 //            return true;
 //        }
-        if ($invoice_info['type'] == 2) {
-            $this->db->where('id', $invoice_id);
-            $this->db->update('invoice_info', ['is_order' => 'n']);
-            return true;
-        }
         $this->db->trans_begin();
-        $service_request_columns = $this->db->list_fields('service_request');
+        if($invoice_info['type'] == 1){
+
+               $service_request_columns = $this->db->list_fields('service_request');
         unset($service_request_columns[0]);
 
         $this->db->select('id');
@@ -2072,6 +2069,126 @@ class Billing_model extends CI_Model {
             $this->db->where(['id' => $invoice_id]);
             $this->db->update('invoice_info', ['order_id' => $order_id]);
         }
+
+        }else if ($invoice_info['type'] == 2) {
+
+        $service_request_columns = $this->db->list_fields('service_request');
+        unset($service_request_columns[0]);
+
+        $this->db->select('id');
+        $order_id_list = $this->db->get_where('order', ['invoice_id' => $invoice_id])->result_array();
+        $order_ids = array_column($order_id_list, 'id');
+
+        $this->db->select(implode(', ', $service_request_columns));
+        $this->db->order_by('service_request.id');
+        $this->db->where_in('order_id', $order_ids);
+        $service_request_info = $this->db->get('service_request')->result_array();
+
+        $this->db->order_by('id');
+        $order_data = $this->db->get_where('order', ['invoice_id' => $invoice_id])->row_array();
+        unset($order_data['id']);
+        unset($order_data['new_existing']);
+        unset($order_data['invoice_id']);
+
+        $order_data['category_id'] = $this->service_model->get_service_by_id($service_request_info[0]['services_id'])['category_id'];
+        $order_data['service_id'] = $service_request_info[0]['services_id'];
+        $order_data['total_of_order'] = $invoice_info['total_amount'];
+        $order_data['status'] = 2;
+        $order_data['quantity'] = 0;
+        $order_data['reference'] = $invoice_info['type'] == 1 ? 'company' : 'individual';
+        $order_data['client_id'] = $invoice_info['client_id'];
+        $order_data['reference_id'] = $invoice_info['client_id'];
+
+        $this->db->select('date_started');
+        $this->db->where_in('order_id', $order_ids);
+        $this->db->order_by('date_started', 'ASC');
+        $target_start_date = $this->db->get('service_request')->row_array();
+
+        $this->db->select('date_completed');
+        $this->db->where_in('order_id', $order_ids);
+        $this->db->order_by('date_completed', 'DESC');
+        $target_end_date = $this->db->get('service_request')->row_array();
+
+        if (!empty($target_start_date)) {
+            $order_data['start_date'] = $target_start_date['date_started'];
+            $order_data['target_start_date'] = $target_start_date['date_started'];
+        }
+
+        if (!empty($target_end_date)) {
+            $order_data['complete_date'] = $target_end_date['date_completed'];
+            $order_data['target_complete_date'] = $target_end_date['date_completed'];
+        }
+        if ($save_type == 'create') {
+            $this->db->insert('order', $order_data);
+            $order_id = $this->db->insert_id();
+            $this->system->update_order_serial_id_by_order_id($order_id);
+        } else {
+            $order_update_data['category_id'] = $this->service_model->get_service_by_id($service_request_info[0]['services_id'])['category_id'];
+            $order_update_data['service_id'] = $service_request_info[0]['services_id'];
+            $order_update_data['total_of_order'] = $invoice_info['total_amount'];
+            $order_id = $invoice_info['order_id'];
+            $this->db->where(['id' => $order_id]);
+            $this->db->update('order', $order_update_data);
+            $this->db->where(['order_id' => $order_id]);
+            $this->db->delete('service_request');
+        }
+
+        $service_request_data = $service_request_info;
+        foreach ($service_request_data as $key => $srl) {
+            $target_query = $this->db->get_where("target_days", ["service_id" => $service_request_data[$key]['services_id']])->row_array();
+            $service_data = $this->db->get_where("services", ["id" => $service_request_data[$key]['services_id']])->row_array();
+            // print_r($service_data['responsible_assign']);exit;
+            $service_request_data[$key]['order_id'] = $order_id;
+            if(($target_query['input_form'] == 'n' && $target_query['service_id'] == $service_request_data[$key]['services_id']) || ($target_query['input_form'] == 'n' && $target_query['service_id'] == $service_request_data[$key]['services_id'] && $service_data['responsible_assign'] == 1 && $service_data['dept'] == 'NULL' ) || ($target_query['input_form'] == 'y' && $target_query['service_id'] == $service_request_data[$key]['services_id'] && $service_data['responsible_assign'] == 1 && $service_data['dept'] == 'NULL' )){
+                   $service_request_data[$key]['status'] = 0; 
+                }else{
+                    $service_request_data[$key]['status'] = 2;
+                }
+                
+        }
+        $this->db->insert_batch('service_request', $service_request_data);
+
+        $check_if_all_services_not_started = $this->db->query('select * from service_request where  order_id="' .  $order_id . '"')->result_array();
+//          
+            
+        if (!empty($check_if_all_services_not_started)) {
+            $k = 0;
+            $status_array = '';
+            $len = count($check_if_all_services_not_started);
+            foreach ($check_if_all_services_not_started as $val) {
+                if ($k == $len - 1) {
+                    $status_array .= $val['status'];
+                } else {
+                    $status_array .= $val['status'] . ',';
+                }
+                $k++;
+            }
+        }
+//            echo $status_array;die;
+        if($status_array == 2){
+            $this->db->where('id', $order_id);
+            $this->db->update('order', array('status' => 2));
+        }else if($status_array == '0,2' || $status_array == '2,0'){
+            $this->db->where('id', $order_id);
+            $this->db->update('order', array('status' => 1));
+        }else{
+            $status_array_values = explode(",", $status_array);
+            if (count(array_unique($status_array_values)) == 1) {
+                $this->db->where('id', $order_id);
+                $this->db->update('order', array('status' => 0));
+            }
+        }
+        
+
+        if ($save_type == 'create') {
+            $this->db->where(['id' => $invoice_id]);
+            $this->db->update('invoice_info', array('order_id' => $order_id,'is_order' => 'n'));
+        }
+
+        }
+        
+        // $this->db->trans_begin();
+     
 
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
