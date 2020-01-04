@@ -2818,7 +2818,8 @@ class Service_model extends CI_Model {
 
     public function get_service_by_franchise_data($data) {
         if ($data['category'] == 'franchise') { 
-            $data_office = $this->system->get_staff_office_list();
+            $data_office = $this->db->get('office')->result_array();
+            // $data_office = $this->system->get_staff_office_list();
             $office_details = [];
             
             foreach ($data_office as $do) {    
