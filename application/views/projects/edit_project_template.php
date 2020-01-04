@@ -361,7 +361,7 @@
                                                                                         <option value="10" <?php echo ($pattern_details->due_month == '10') ? 'selected' : ''; ?>>October</option>
                                                                                         <option value="11" <?php echo ($pattern_details->due_month == '11') ? 'selected' : ''; ?>>November</option>
                                                                                         <option value="12" <?php echo ($pattern_details->due_month == '12') ? 'selected' : ''; ?>>December</option>
-                                                                                    </select>&nbsp;<a href="javascript:void(0);" onclick="addPeriodicDate()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Periodic Date"> <i class="fa fa-plus" aria-hidden="true"></i> </a>
+                                                                                    </select>&nbsp;<a href="javascript:void(0);" onclick="addPeriodicDate()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Periodic Date" style="pointer-events:none" disabled> <i class="fa fa-plus" aria-hidden="true"></i> </a>
                                                                                     <?php if(!empty($periodic_pattern)){ 
                                                                                         foreach($periodic_pattern as $val){
                                                                                         ?><div class="row" id="clone-<?= $val['id'] ?>">
