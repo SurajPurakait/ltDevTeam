@@ -189,7 +189,7 @@
     <div class="form-group">
         <label class="col-lg-2 control-label">Existing Practice ID</label>
         <div class="col-lg-10">
-            <input placeholder="" id="existing_practice_id" class="form-control value_field" type="text" name="existing_practice_id" title="Existing Practice ID">
+            <input placeholder="" id="existing_practice_id" class="form-control value_field" type="text" name="existing_practice_id" title="Existing Practice ID" readonly>
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
