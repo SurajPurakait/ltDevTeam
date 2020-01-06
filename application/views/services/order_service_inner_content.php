@@ -31,9 +31,11 @@
                     if (trim($row_inner->service_name) == 'Rt6') {
                         $check_rt6_status = check_rt6_status($row_inner->order_id);
                         if ($check_rt6_status['rt6_availability'] == 'No') {
-                            $status_rt6_val = 'Yes';
-                        } else {
+                            // $status_rt6_val = 'Yes';
                             $status_rt6_val = 'No';
+                        } else {
+                            // $status_rt6_val = 'No';
+                            $status_rt6_val = 'Yes';
                         }
                     } else {
                         $status_rt6_val = 'Yes';
