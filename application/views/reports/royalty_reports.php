@@ -2,12 +2,12 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins form-inline">
-                <div class="royalty_header m-0" id="royaltyHeader">
+                <div class="royalty_header sticky_report_header m-0" id="royaltyHeader">
                     <div class="row">
                         <div class="col-md-6" id="ofc-multiselect-div">
                             <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" data-placeholder="Select Office" multiple>
                                 <?php
-                                    load_ddl_option("staff_office_list", "","");
+                                load_ddl_option("staff_office_list", "", "");
                                 ?>
                             </select>                        
                         </div>
@@ -50,54 +50,39 @@
     </div>
 </div>
 <script type="text/javascript">
+    loadRoyaltyReportsData();
+    $(function () {
+        $(".chosen-select").chosen();
+        var start = moment("<?= $start_date; ?>", "MM-DD-YYYY");
+        var end = moment();
+        function cb(start, end) {
+            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
 
-    window.onscroll = function() {royaltyFunction()};
+        }
 
-    var royalty_header = document.getElementById("royaltyHeader");
-    var sticky = royalty_header.offsetTop;
-
-    function royaltyFunction() {
-      if (window.pageYOffset > sticky) {
-        royalty_header.classList.add("sticky_report");
-      } else {
-        royalty_header.classList.remove("sticky_report");
-      }
-    }
-
-	loadRoyaltyReportsData();
-		$(function () {
-			$(".chosen-select").chosen();
-        	var start = moment("<?= $start_date; ?>", "MM-DD-YYYY");
-            var end = moment();
-            function cb(start, end) {
-                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-                
+        $('#reportrange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Select': [moment("<?= $start_date; ?>", "MM-DD-YYYY"), moment()],
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             }
+        }, cb);
+        cb(start, end);
 
-            $('#reportrange').daterangepicker({
-                startDate: start,
-                endDate: end,
-                ranges: {
-                	'Select' : [moment("<?= $start_date; ?>", "MM-DD-YYYY"), moment()],
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                }
-            }, cb);
-            cb(start, end);
+        $("#btn").click(function () {
+            var report_range = document.getElementById('reportrange').value;
+            var office = $('#ofc').val();
+            loadRoyaltyReportsData(office, report_range);
+            get_total_royalty_report(office, report_range);
+        });
 
+        get_total_royalty_report();
 
-            $("#btn").click(function(){
-            	var report_range = document.getElementById('reportrange').value;
-            	var office  = $('#ofc').val();
-            	loadRoyaltyReportsData(office,report_range);
-				get_total_royalty_report(office,report_range);            	
-            });
-
-            get_total_royalty_report();
-
-    	});	
+    });
 </script>
