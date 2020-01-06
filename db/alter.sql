@@ -1077,6 +1077,12 @@ ALTER TABLE `service_request` ADD `quantity` INT(4) NOT NULL DEFAULT '1' AFTER `
 ALTER TABLE `projects` CHANGE `created_at` `created_at` DATETIME on update CURRENT_TIMESTAMP NOT NULL; 
 ALTER TABLE `projects` CHANGE `created_at` `created_at` DATETIME NOT NULL; 
 
-/*live end*/
 /* 26.12.2019 */
 ALTER TABLE `payroll_employee_info` ADD `ssn_name` VARCHAR(30) NOT NULL AFTER `i9_file`, ADD `salary_rate` VARCHAR(30) NOT NULL AFTER `ssn_name`; 
+
+/*03.01.2020*/
+ALTER TABLE `project_periodic_pattern` ADD `is_created` ENUM('n','y') NOT NULL AFTER `actual_due_year`; 
+/*import report_client */
+
+ALTER TABLE `order` ADD `client_id` INT(100) NOT NULL COMMENT 'individual_id for individual client' AFTER `reference_id`;
+/*live end*/

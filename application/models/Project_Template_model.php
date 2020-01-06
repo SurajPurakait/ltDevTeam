@@ -236,11 +236,20 @@ class Project_Template_model extends CI_Model {
 //            print_r($periodic_day);echo '<br>';
 //            print_r($periodic_month);echo "<br>";
             if(isset($periodic_day) && !empty($periodic_day)){
-                $new_val= array_combine($periodic_day, $periodic_month);
+                $periodic_count=count($periodic_day);
+                $periodic_day_array=array();
+                $i=0;
+                foreach ($periodic_day as $value) {
+                    $periodic_day_array[]=$i.'_'.$value;
+                    $i++;
+                }
+                $new_val= array_combine($periodic_day_array,$periodic_month);
 //                print_r($new_val);die;
                 foreach($new_val as $day=>$month){
                     $periodic_data=array();
                     $current_month = date('m');
+                    $exp1=explode('_',$day);
+                    $day=$exp1[1];
                     $actual_due_day = $day;
                     $actual_due_month = $month;
                     if($actual_due_day>=date('d')){
@@ -1232,9 +1241,9 @@ class Project_Template_model extends CI_Model {
                                  if($project_recurrence_main_data['due_day']>=$current_day){
                                     
                                     if($project_recurrence_main_data['actual_due_month']<=12){
-                                        $project_recurrence_main_data['actual_due_year'] = date('Y')+1;
+                                        $project_recurrence_main_data['actual_due_year'] = date('Y');
                                     }else{
-                                        $project_recurrence_main_data['actual_due_year']=date('Y');
+                                        $project_recurrence_main_data['actual_due_year']=date('Y')+1;
                                     }
                                 }else{
                                     
@@ -1407,6 +1416,42 @@ class Project_Template_model extends CI_Model {
                         $recurrence_periodic_data['actual_due_month']=$periodic_data['actual_due_month'];
                         $recurrence_periodic_data['actual_due_year']=$periodic_data['actual_due_year'];
                         $this->db->insert('project_periodic_pattern',$recurrence_periodic_data);
+                        $periodic_id=$this->db->insert_id();
+                    }
+                }
+//                create due date for various periodic date
+                if(isset($project_recurrence_main_data) && !empty($project_recurrence_main_data) && isset($project_recurrence_periodic_data) && !empty($project_recurrence_periodic_data) && $project_recurrence_main_data['pattern'] == 'periodic'){
+                   $cur_year=date('Y',strtotime($project_date));
+                   $due_year=$project_recurrence_main_data['actual_due_year'];
+                   if($due_year > $cur_year){
+                        $due_date_details= $this->db->get_where('project_periodic_pattern',['project_id'=>$insert_id,'is_created'=>'n'])->row();
+                        $due_date=$due_date_details->actual_due_year.'-'.$due_date_details->actual_due_month.'-'.$due_date_details->actual_due_day;
+                        $this->db->where('project_id',$insert_id);
+                        $this->db->update('project_recurrence_main',['due_date'=>$due_date]);
+                        $this->db->where(['project_id'=>$insert_id,'id'=>$due_date_details->id]);
+                        $this->db->update('project_periodic_pattern',['is_created'=>'y']);
+                        $next_due_date_details= $this->db->get_where('project_periodic_pattern',['project_id'=>$insert_id,'is_created'=>'n'])->row();
+                        $next_due_date=$next_due_date_details->actual_due_year.'-'.$next_due_date_details->actual_due_month.'-'.$next_due_date_details->actual_due_day;
+                        if($project_recurrence_main_data['generation_type']==2){
+                            $generation_date =NULL;
+                        }else{
+                            $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($next_due_date)));
+                        }
+                        $this->db->where('project_id',$insert_id);
+                        $this->db->update('project_recurrence_main',['next_due_date'=>$next_due_date,'generation_date'=>$generation_date]);
+                    }
+                    else{
+                        $next_due_date_details= $this->db->get_where('project_periodic_pattern',['project_id'=>$insert_id,'is_created'=>'n'])->row();
+                        $next_due_date=$next_due_date_details->actual_due_year.'-'.$next_due_date_details->actual_due_month.'-'.$next_due_date_details->actual_due_day;
+                        if($project_recurrence_main_data['generation_type']==2){
+                            $generation_date =NULL;
+                        }else{
+                            $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($next_due_date)));
+                        }
+                        $this->db->where('project_id',$insert_id);
+                        $this->db->update('project_recurrence_main',['next_due_date'=>$next_due_date,'generation_date'=>$generation_date]);
+                        $this->db->where(['project_id'=>$insert_id,'id'=>$next_due_date_details->id]);
+                        $this->db->update('project_periodic_pattern',['is_created'=>'y']);
                     }
                 }
                 if (isset($project_task_data) && !empty($project_task_data)) {

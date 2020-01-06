@@ -180,7 +180,7 @@ function show_service_franchise_result(category) {
 
 // report billing section js
 function show_billing_data() {
-    $("#billing_invoice_payments").slideToggle(3000);
+    $("#billing_invoice_payments").toggle();
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_show_billing_data',
@@ -241,6 +241,7 @@ function show_clients_data(category) {
         url: base_url + 'reports/get_clients_data',
         data: {'category': category},
         success: function (result) {
+            // console.log(result);
             if (category == 'clients_by_office') {
                 $("#total_clients_by_office").html(result);
             } else if(category == 'business_clients_by_office') {

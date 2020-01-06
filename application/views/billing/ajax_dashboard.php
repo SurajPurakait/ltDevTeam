@@ -66,8 +66,8 @@ foreach ($result as $row_count => $value):
                             <th class="text-center" width="5%">Office&nbsp;ID</th>
                             <?php 
                             if($is_recurrence == 'y') { ?>                           
-                            <!--<th class="text-center" width="5%">Pattern</th>-->
-                            <th class="text-center" width="5%">Next&nbsp;Generation&nbsp;Date</th>
+                            <th class="text-center" width="5%" style="display:none">Partner</th>
+                            <th class="text-center" width="5%" style="display:none">Manager</th>
                             <?php } else{ ?>
                             <th class="text-center" width="5%">Partner</th>
                             <th class="text-center" width="5%">Manager</th>
@@ -76,7 +76,8 @@ foreach ($result as $row_count => $value):
                             <th class="text-center" width="10%">Requested&nbsp;by</th>
                             <th class="text-center" width="10%">Created&nbsp;Date</th>
                             <th class="text-center" width="5%">Due Date</th>
-                            <?php if($is_recurrence == 'y') { ?>                           
+                            <?php if($is_recurrence == 'y') { ?>
+                            <th class="text-center" width="5%">Recurrence&nbsp;Date</th>
                             <th class="text-center" width="5%">Pattern</th>
                             <?php } ?>
                             <th class="text-center" width="5%">Services</th>
@@ -88,12 +89,7 @@ foreach ($result as $row_count => $value):
                             <?php if($is_recurrence == 'y'){?>
                             <td title="Office"><?='<b>'. $row->officeid .'</b>'; ?><?= "<br>". $row->manager; ?></td>
                             <?php } else{ ?>
-                            <td title="Office"><?= $row->officeid ; ?></td>
-                            <?php } ?>
-                            <?php if($is_recurrence == 'y'){?>
-                            <!--<td title="Pattern"><//?= $row->pattern; ?></td>-->
-                            <td title="Next Generation Date"><?= $row->next_generation_date; ?></td>
-                            <?php } else { ?>
+                            <td title="Office"><?= $row->officeid ; ?></td>                           
                             <td title="Partner"><?= $row->partner; ?></td>
                             <td title="Manager"><?= $row->manager; ?></td>
                             <?php } ?>
@@ -102,6 +98,7 @@ foreach ($result as $row_count => $value):
                             <td title="Create Time"><?= date('m/d/Y', strtotime($row->created_time)); ?></td>
                             <td title="Create Time"><?= date('m/d/Y', strtotime('+30 days', strtotime($row->created_time))); ?></td>  
                             <?php if($is_recurrence == 'y'){?>
+                            <td title="Recurrence Date"><?= date('m/d/Y', strtotime($row->next_generation_date)); ?></td>
                             <td title="Pattern"><?= $row->pattern; ?></td>                          
                             <?php } ?>
                             <td align="center" title="Services"><span class="label label-success"><b><?= (substr_count($row->all_services, ',') - 1); ?></b></span></td>

@@ -25,11 +25,11 @@
                                             <?php 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
                                             ?>
-                                            <div class="ibox m-t-25" id="service_by_franchise_1">
+                                            <div class="ibox m-t-25" id="service_by_franchise_1" onclick="show_service_franchise_result('franchise')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Franchisee</h5>
                                                     <div class="ibox-tools">
-                                                        <a class="" onclick="show_service_franchise_result('franchise')">
+                                                        <a class="">
                                                             <i class="fa fa-chevron-up"></i>
                                                         </a>
                                                     </div>
@@ -40,11 +40,11 @@
                                                 } 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
                                             ?>
-                                            <div class="ibox" id="service_by_department_1">
+                                            <div class="ibox" id="service_by_department_1" onclick="show_service_franchise_result('department')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Department</h5>
                                                     <div class="ibox-tools">
-                                                        <a class="" onclick="show_service_franchise_result('department')">
+                                                        <a class="">
                                                             <i class="fa fa-chevron-up"></i>
                                                         </a>
                                                     </div>
@@ -55,11 +55,11 @@
                                                 } 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2) {
                                             ?>
-                                            <div class="ibox" id="service_by_category_1">
+                                            <div class="ibox" id="service_by_category_1" onclick="show_service_franchise_result('service_category')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Category</h5>
                                                     <div class="ibox-tools">
-                                                        <a class="" onclick="show_service_franchise_result('service_category')">
+                                                        <a class="">
                                                             <i class="fa fa-chevron-up"></i>
                                                         </a>
                                                     </div>

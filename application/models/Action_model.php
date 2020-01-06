@@ -3519,57 +3519,54 @@ class Action_model extends CI_Model {
         $this->db->where('ac.id',$id);
         return $this->db->get()->row_array();
     }
-
-    public function get_clients_data($category) {
+        public function get_clients_data($category) {
+        $data_office = $this->db->get('office')->result_array();
+        // $data_office = $this->system->get_staff_office_list();
         if ($category == 'clients_by_office') {
-            $data_office = $this->system->get_staff_office_list();
             $all_client_details = [];
-            
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_clients' => 0,           
-                    'business' => 0,           
-                    'individuals' => 0           
+                    'total_clients' => $this->db->get_where('report_client',array('office'=>$do['id']))->num_rows(),           
+                    'business' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'company'))->num_rows(),           
+                    'individuals' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'individual'))->num_rows()           
                 ];
                 array_push($all_client_details,$data);
             }
             return $all_client_details;
         } else if($category == 'business_clients_by_office') {
-            $data_office = $this->system->get_staff_office_list();
             $business_client_details = [];
             
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_clients' => 0,           
-                    'llc' => 0,                  
-                    'singlellc' => 0,           
-                    'ccrop' => 0,       
-                    'fcrop' => 0,           
-                    'scrop' => 0,           
-                    'nonprofit' => 0,           
-                    'active' => 0,           
-                    'inactive' => 0           
+                    'total_clients' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'company'))->num_rows(),           
+                    'llc' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'company','type_of_company'=>'LLC'))->num_rows(),                  
+                    'singlellc' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'company','type_of_company'=>'Single Member LLC'))->num_rows(),           
+                    'ccrop' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'company','type_of_company'=>'C Corporation'))->num_rows(),       
+                    'fcrop' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'company','type_of_company'=>'F Corporation'))->num_rows(),           
+                    'scrop' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'company','type_of_company'=>'S Corporation'))->num_rows(),           
+                    'nonprofit' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'company','type_of_company'=>'Non Profit Corporation'))->num_rows(),           
+                    'active' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'company','status'=>'1'))->num_rows(),           
+                    'inactive' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'company','status'=>'2'))->num_rows()           
                 ];
                 array_push($business_client_details,$data);
             }
             return $business_client_details;
         } else if ($category == 'individual_clients_by_office') {
-            $data_office = $this->system->get_staff_office_list();
             $individual_client_details = [];
             
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_clients' => 0,           
-                    'usresidents' => 0,           
-                    'nonresidents' => 0,           
-                    'active' => 0,           
-                    'inactive' => 0           
+                    'total_clients' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'individual'))->num_rows(),           
+                    'usresidents' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'individual','country_residence'=>'230'))->num_rows(),           
+                    'nonresidents' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'individual','country_residence!='=>'230'))->num_rows(),           
+                    'active' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'individual','status'=>'1'))->num_rows(),           
+                    'inactive' => $this->db->get_where('report_client',array('office'=>$do['id'],'type'=>'individual','status'=>'2'))->num_rows()           
                 ];
                 array_push($individual_client_details,$data);
             }
