@@ -9224,14 +9224,14 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 .sticky_report {
     position: fixed;
     top: 62px;
-    width: 78.5%;
+    width: calc(100% - 290px);
     z-index: 6;
     background: #f3f3f4;
     padding-top: 20px;
 }
 
 .sticky_report + .ajaxdiv-reports {
-    padding-top: 300px;
+    padding-top: 200px;
 }
 
 #dt-reports-wrap div.dataTables_wrapper div.dataTables_filter,
