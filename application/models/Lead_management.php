@@ -2202,7 +2202,8 @@ Class Lead_management extends CI_Model {
         return $this->db->get('lead_management')->num_rows();
     }
     public function get_lead_data($data) {
-        $data_office = $this->system->get_staff_office_list();
+        // $data_office = $this->system->get_staff_office_list();
+        $data_office = $this->db->get('office')->result_array();
         $lead_details = [];
         if ($data['category'] == 'status') {
             foreach ($data_office as $do) {
@@ -2295,7 +2296,8 @@ Class Lead_management extends CI_Model {
         // $type_of_contact_id = array_column($type_of_contact_list,'id');
         // $type_of_contact_name = array_column($type_of_contact_list,'name');
         // $type_of_contact_combine = array_combine($type_of_contact_id,$type_of_contact_name);
-        $data_office = $this->system->get_staff_office_list();
+        // $data_office = $this->system->get_staff_office_list();
+        $data_office = $this->db->get('office')->result_array();
         $partner_data = [];
         foreach ($data_office as $do) {
             $partner_data_list = [

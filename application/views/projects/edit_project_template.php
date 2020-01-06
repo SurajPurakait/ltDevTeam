@@ -219,7 +219,7 @@
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label class="control-label">Pattern:</label>
-                                                                        <select class="form-control" id="pattern" name="recurrence[pattern]" onchange="change_due_pattern(this.value);">
+                                                                        <select class="form-control" id="pattern" name="recurrence[pattern]" onchange="change_due_pattern(this.value); " style="pointer-events:none" readonly>
                                                                             <option value="monthly" <?php echo ($pattern_details->pattern == 'monthly') ? 'selected' : ''; ?>>Monthly</option>     
                                                                             <option value="weekly" <?php echo ($pattern_details->pattern == 'weekly') ? 'selected' : ''; ?>>Weekly</option>
                                                                             <option value="quarterly" <?php echo ($pattern_details->pattern == 'quarterly') ? 'selected' : ''; ?>>Quarterly</option>
@@ -361,7 +361,7 @@
                                                                                         <option value="10" <?php echo ($pattern_details->due_month == '10') ? 'selected' : ''; ?>>October</option>
                                                                                         <option value="11" <?php echo ($pattern_details->due_month == '11') ? 'selected' : ''; ?>>November</option>
                                                                                         <option value="12" <?php echo ($pattern_details->due_month == '12') ? 'selected' : ''; ?>>December</option>
-                                                                                    </select>&nbsp;<a href="javascript:void(0);" onclick="addPeriodicDate()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Periodic Date"> <i class="fa fa-plus" aria-hidden="true"></i> </a>
+                                                                                    </select>&nbsp;<a href="javascript:void(0);" onclick="addPeriodicDate()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Periodic Date" style="pointer-events:none" disabled> <i class="fa fa-plus" aria-hidden="true"></i> </a>
                                                                                     <?php if(!empty($periodic_pattern)){ 
                                                                                         foreach($periodic_pattern as $val){
                                                                                         ?><div class="row" id="clone-<?= $val['id'] ?>">

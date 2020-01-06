@@ -3519,12 +3519,11 @@ class Action_model extends CI_Model {
         $this->db->where('ac.id',$id);
         return $this->db->get()->row_array();
     }
-
-    public function get_clients_data($category) {
+        public function get_clients_data($category) {
+        $data_office = $this->db->get('office')->result_array();
+        // $data_office = $this->system->get_staff_office_list();
         if ($category == 'clients_by_office') {
-            $data_office = $this->system->get_staff_office_list();
             $all_client_details = [];
-            
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
@@ -3537,7 +3536,6 @@ class Action_model extends CI_Model {
             }
             return $all_client_details;
         } else if($category == 'business_clients_by_office') {
-            $data_office = $this->system->get_staff_office_list();
             $business_client_details = [];
             
             foreach ($data_office as $do) {    
@@ -3558,7 +3556,6 @@ class Action_model extends CI_Model {
             }
             return $business_client_details;
         } else if ($category == 'individual_clients_by_office') {
-            $data_office = $this->system->get_staff_office_list();
             $individual_client_details = [];
             
             foreach ($data_office as $do) {    
