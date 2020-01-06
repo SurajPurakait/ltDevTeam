@@ -20,8 +20,9 @@
                     $task_staff = ProjectTaskStaffList($task->id);
                     $stf = array_column($task_staff, 'staff_id');
                     $new_staffs = implode(',', $stf);
-                    $created_at = $task->created_at;
+                    // $created_at = $task->created_at;
 //                                                            print_r($task);die;
+                    $created_at=get_project_created_date($task->project_id);
                     $status = $task->tracking_description;
                     if ($status == 2) {
                         $tracking = 'Resolved';

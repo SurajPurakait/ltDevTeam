@@ -422,7 +422,7 @@ class Project_Template_model extends CI_Model {
 
             $query = 'select staff_id '
                     . 'from project_staff_main '
-                    . 'where project_id=' . $id . ' and type=1';
+                    . 'where project_id=' . $id ;
             $data2 = $this->db->query($query)->row_array();
 
             $query = 'select CONCAT(last_name, ", ",first_name) as full_name '
@@ -3362,6 +3362,10 @@ class Project_Template_model extends CI_Model {
     public function DeleteProjectTemplate($template_id){
         $this->db->where('id',$template_id);
         return $this->db->delete('project_template_main');
+    }
+
+    public function getProjectCreatedDate($project_id){
+        return $this->db->get_where('projects',['id'=>$project_id])->row()->created_at;
     }
 }
 
