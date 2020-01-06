@@ -2,18 +2,18 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins form-inline">
-                <div class="sales_header m-0" id="salesHeader">
+                <div class="sales_header sticky_report_header m-0" id="salesHeader">
                     <div class="row">
                         <div class="col-md-6">        
                             <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" data-placeholder="Select Office" multiple>
-                            	<?php
-                            		load_ddl_option("users_office_list", "","");
-                            	?>
+                                <?php
+                                load_ddl_option("users_office_list", "", "");
+                                ?>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">
-                           	<button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>
+                            <button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>
                         </div>
                     </div>
                     <div id="total_sales_data" class="m-t-25"></div>
@@ -39,7 +39,6 @@
                                 </tr>
                             </thead>
                         </table>
-                            
                     </div>
                 </div>
             </div>
@@ -47,19 +46,6 @@
     </div>
 </div>
 <script type="text/javascript">
-    window.onscroll = function() {royaltyFunction()};
-
-    var sales_header = document.getElementById("salesHeader");
-    var sticky = sales_header.offsetTop;
-
-    function royaltyFunction() {
-      if (window.pageYOffset > sticky) {
-        sales_header.classList.add("sticky_report");
-      } else {
-        sales_header.classList.remove("sticky_report");
-      }
-    }
-
     loadSalesReportsData();
     $(function () {
         $(".chosen-select").chosen();
@@ -73,7 +59,7 @@
             startDate: start,
             endDate: end,
             ranges: {
-                'Select' : [moment("<?= $start_date; ?>", "MM-DD-YYYY"), moment()],
+                'Select': [moment("<?= $start_date; ?>", "MM-DD-YYYY"), moment()],
                 'Today': [moment(), moment()],
                 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                 'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -84,13 +70,13 @@
         }, cb);
         cb(start, end);
 
-        $("#btn").click(function(){
+        $("#btn").click(function () {
             var report_range = document.getElementById('reportrange').value;
-            var office  = $('#ofc').val();
-            loadSalesReportsData(office,report_range);
-            get_total_sales_report(office,report_range);                
+            var office = $('#ofc').val();
+            loadSalesReportsData(office, report_range);
+            get_total_sales_report(office, report_range);
         });
 
-        get_total_sales_report('','');
+        get_total_sales_report('', '');
     });
 </script>

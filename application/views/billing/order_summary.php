@@ -137,6 +137,7 @@
                                                 <?php
                                                 $colors = array('bg-light-green', 'bg-blue');
                                                 $tracking = [
+                                                            0 => 'Not Started',
                                                             1 => 'Not Started',
                                                             2 => 'Started',
                                                             3 => 'Completed',
@@ -145,7 +146,9 @@
                                                 foreach ($os as $key => $services) :
 
                                                     $tracking_class = 'label-danger';
-                                                if ($services['status'] == 1) {
+                                                if ($services['status'] == 0) {
+                                                    $tracking_class = 'label-success';
+                                                }elseif ($services['status'] == 1) {
                                                     $tracking_class = 'label-success';
                                                 } elseif ($services['status'] == 2) {
                                                     $tracking_class = 'label-yellow';
