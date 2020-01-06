@@ -196,7 +196,10 @@ class Template extends CI_Controller {
         $render_data["task_list"] = $this->Project_Template_model->project_template_task_list($template_id);
         $this->load->template('administration/project_template/edit_template', $render_data);
     }
-
+    public function inactive_project_template() {
+        $template_id = post('id');
+        echo $this->Project_Template_model->inactive_project_template($template_id);
+    }
     public function addTaskNotesmodal() {
         $notes = $this->input->post('task_note');
         $id = $this->input->post('taskid');
@@ -306,6 +309,10 @@ class Template extends CI_Controller {
         } else {
             echo '-1';
         }
+    }
+    public function delete_project_template() {
+        $template_id = post('id');
+        echo $this->Project_Template_model->DeleteProjectTemplate($template_id);
     }
 
 }

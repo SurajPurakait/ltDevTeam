@@ -148,8 +148,8 @@ $office_id = get_office_id($staff_info['office']);
                 <!-- Services -->
                 <li <?= active_menu($main_menu, "services"); ?>>
                     <div class="dashboard-icons pull-right">
-<!--                        <a href="<//?= base_url(); ?>services/home/index/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started">-->
-                            <a href="javascript:void(0)" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService1('2-Not Started');loadServiceDashboard('2','','','',1);">
+                        <a href="<?= base_url(); ?>services/home/index/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started">
+                            <!--<a href="javascript:void(0)" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService1('2-Not Started');loadServiceDashboard('2','','','',1);">-->
                             <?php
                             if ($staff_info['type'] == 2) {
                                 echo count_services(2, 'tome');
@@ -160,8 +160,8 @@ $office_id = get_office_id($staff_info['office']);
                             }
                             ?>
                         </a>
-                        <!--<a href="<//?= base_url(); ?>services/home/index/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started">-->
-                        <a href="javascript:void(0)" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService1('1-Started');loadServiceDashboard('1','','','',1);">
+                        <a href="<?= base_url(); ?>services/home/index/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started">
+                        <!--<a href="javascript:void(0)" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService1('1-Started');loadServiceDashboard('1','','','',1);">-->
                             <?php
                             if ($staff_info['type'] == 2) {
                                 echo count_services(1, 'tome');
@@ -184,53 +184,42 @@ $office_id = get_office_id($staff_info['office']);
                         </li>
                         <li <?= active_menu($menu, "incorporation"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <!--<a href="<//?= base_url(); ?>services/home/index/2/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><//?= count_services(2, '', 1); ?></a>-->
-                                <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService('2-Not Started','1-Incorporation');loadServiceDashboard('2','1','','',1);"><?= count_services(2, '', 1); ?></a>
-                                <!--<a href="<//?= base_url(); ?>services/home/index/1/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= count_services(1, '', 1); ?></a>-->
-                                 <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService('1-Started','1-Incorporation');loadServiceDashboard('1','1','','',1);"><?= count_services(1, '', 1); ?></a>
+                                <a href="<?= base_url(); ?>services/home/index/2/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 1); ?></a>
+                                <a href="<?= base_url(); ?>services/home/index/1/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 1); ?></a>
                             </div>
                             <a href="<?= base_url(); ?>services/incorporation">+ Incorporation</a>
                         </li>
                         <li <?= active_menu($menu, "accounting_services"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <!--<a href="<//?= base_url(); ?>services/home/index/2/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><//?= count_services(2, '', 2); ?></a>-->
-                                 <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService('2-Not Started','2-Accounting Service');loadServiceDashboard('2','2','','',1);"><?= count_services(2, '', 2); ?></a>                              
-                                <!--<a href="<//?= base_url(); ?>services/home/index/1/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= count_services(1, '', 2); ?></a>-->
-                                 <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService('1-Started','2-Accounting Service');loadServiceDashboard('1','2','','',1);"><?= count_services(1, '', 2); ?></a>
+                                <a href="<?= base_url(); ?>services/home/index/2/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 2); ?></a>
+                                <a href="<?= base_url(); ?>services/home/index/1/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 2); ?></a>
                                
                             </div>
                             <a href="<?= base_url(); ?>services/accounting_services">+ Accounting</a>
                         </li>
                         <li <?= active_menu($menu, "tax_services"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <!--<a href="<//?= base_url(); ?>services/home/index/2/3" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><//?= count_services(2, '', 3); ?></a>-->
-                                <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService('2-Not Started','3-Tax Services');loadServiceDashboard('2','3','','',1);"><?= count_services(2, '', 3); ?></a>
-                                <!--<a href="<//?= base_url(); ?>services/home/index/1/3" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= count_services(1, '', 3); ?></a>-->
-                               <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService('1-Started','3-Tax Services');loadServiceDashboard('1','3','','',1);"><?= count_services(1, '', 3); ?></a>
+                                <a href="<?= base_url(); ?>services/home/index/2/3" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 3); ?></a>
+                                <a href="<?= base_url(); ?>services/home/index/1/3" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 3); ?></a>
                             </div>
                             <a href="<?= base_url(); ?>services/tax_services">+ Taxes</a>
                         </li>
                         <li <?= active_menu($menu, "business_services"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <!--<a href="<//?= base_url(); ?>services/home/index/2/4" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><//?= count_services(2, '', 4); ?></a>-->
-                                <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService('2-Not Started','4-Business Services');loadServiceDashboard('2','4','','',1);" ><?= count_services(2, '', 4); ?></a>
-                                <!--<a href="<//?= base_url(); ?>services/home/index/1/4" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= count_services(1, '', 4); ?></a>-->
-                                <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService('1-Started','4-Business Services');loadServiceDashboard('1','4','','',1);"><?= count_services(1, '', 4); ?></a>
+                                <a href="<?= base_url(); ?>services/home/index/2/4" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 4); ?></a>
+                                <a href="<?= base_url(); ?>services/home/index/1/4" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 4); ?></a>
                             </div>
                             <a href="<?= base_url(); ?>services/business_services">+ Business</a>
                         </li>
                         <li <?= active_menu($menu, "partner_services"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <!--<a href="<//?= base_url(); ?>services/home/index/2/5" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><//?= count_services(2, '', 5); ?></a>-->
-                                <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService('2-Not Started','5-Partner Services');loadServiceDashboard('2','5','','',1);"><?= count_services(2, '', 5); ?></a>
-                                
-                                <!--<a href="<//?= base_url(); ?>services/home/index/1/5" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= count_services(1, '', 5); ?></a>-->
-                            <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService('1-Started','5-Partner Services');loadServiceDashboard('1','5','','',1);"><?= count_services(1, '', 5); ?></a>
+                                <a href="<?= base_url(); ?>services/home/index/2/5" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 5); ?></a>
+                                <a href="<?= base_url(); ?>services/home/index/1/5" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 5); ?></a>
                           
                             </div>
                             <a href="<?= base_url(); ?>services/partner_services">+ Partner</a>
                         </li>
-                        <?php if ($staff_info['type'] == '1') { ?>
+                        <?php if ($staff_info['type'] == '1' || $staff_info['department'] == '14') { ?>
                         <li <?= active_menu($menu, "service_setup"); ?>>
                                 <a class="admin-nav" href="<?= base_url('services/service_setup'); ?>">Service Setup</a>
                         </li>
@@ -254,23 +243,34 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?= active_menu($menu, "create_invoice"); ?>>
                             <a href="<?= base_url(); ?>billing/invoice">+ Add New Invoice</a>
                         </li>
+                         <?php if ($staff_info['type'] != 3) { ?> 
                         <li <?= active_menu($menu, "recurring_invoice"); ?>>                            
                             <a href="<?= base_url(); ?>billing/home/index/y">Recurring Invoice</a>
                         </li>
+                        <li <?= active_menu($menu, "create_invoice"); ?>>                            
+                            <a href="<?= base_url(); ?>billing/invoice/index/y">+ Add New Recurring</a>
+                        </li>
+                         <?php } ?>
                         <li <?= active_menu($menu, "documents"); ?>>
                             <a href="<?= base_url(); ?>billing/home/documents">Documents</a>
                         </li>
+                        
                     </ul>
                 </li>
 
                 <!-- Actions -->
                 <li <?= active_menu($main_menu, "action"); ?> >
                     <div class="dashboard-icons pull-right">
-                        <a href="javascript:void(0)" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New" onclick="reflactFilterWithMenu('0-New', 'byme_tome_mytask-By ME,To Me,My Task');loadActionDashboard(0, 'byme_tome_mytask', '', '', '', '');"><?= action_list('byme_tome_task', '0'); ?></a>
-                        <!--<a href="<//?= base_url(); ?>action/home/index/1/0/byme_tome_task" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= action_list('byme_tome_task', '1'); ?></a>-->
-                    <a href="javascript:void(0)" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithMenu('1-Started', 'byme_tome_mytask-By ME,To Me,My Task');loadActionDashboard(1, 'byme_tome_mytask', '', '', '', '');"><?= action_list('byme_tome_task', '1'); ?></a>
-                   
+                        <a href="<?= base_url(); ?>action/home/index/0/0/byme_tome_mytask" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?= action_list('byme_tome_task', '0'); ?></a>
+                        <a href="<?= base_url(); ?>action/home/index/1/0/byme_tome_mytask" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= action_list('byme_tome_task', '1'); ?></a>
                     </div>
+                    
+<!--                    <div class="dashboard-icons pull-right">
+                        <a href="javascript:void(0)" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New" onclick="reflactFilterWithMenu('0-New', 'byme_tome_mytask-By ME,To Me,My Task');loadActionDashboard(0, 'byme_tome_mytask', '', '', '', '');"><?//= action_list('byme_tome_task', '0'); ?></a>
+                        <a href="<//?= base_url(); ?>action/home/index/1/0/byme_tome_task" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><//?= action_list('byme_tome_task', '1'); ?></a>
+                    <a href="javascript:void(0)" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithMenu('1-Started', 'byme_tome_mytask-By ME,To Me,My Task');loadActionDashboard(1, 'byme_tome_mytask', '', '', '', '');"><?//= action_list('byme_tome_task', '1'); ?></a>
+                   
+                    </div>-->
                     <a href="javascript:void(0);">
                         <i class="fa fa-flash"></i>
                         <span class="nav-label">Actions</span>
@@ -306,7 +306,7 @@ $office_id = get_office_id($staff_info['office']);
                                 <a href="javascript:void(0);" onclick="CreateProjectModal('add', '');">+ Add New Project</a>
                             </li>
                             <?php } ?>
-                            <?php if ($staff_info['type'] == '1') { ?>
+                            <?php if ($staff_info['type'] == '1' || $staff_info['department'] == '14') { ?>
                             <li <?= active_menu($menu, "template"); ?>>
                                 <a class="admin-nav" href="<?= base_url('projects/template'); ?>">Project Templates</a>
                             </li>
@@ -366,8 +366,8 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?= active_menu($menu, "add_individual"); ?> >
                             <a href="<?= base_url('clients/add_individual'); ?>">+ Add New Individual</a>
                         </li>
-                        <?php if ($staff_info['department'] == '1') { ?>
-                            <?php if ($staff_info['type'] == '1') { ?>
+                        <!-- <?php //if ($staff_info['department'] == '1') { ?> -->
+                            <?php if (($staff_info['type'] == '1' && $staff_info['department'] == '1') || $staff_info['department'] == '14') { ?>
                             <li <?= active_menu($menu, "import_clients"); ?> >
                                 <a class="admin-nav" href="<?= base_url('clients/import_clients'); ?>">Import Clients</a>
                             </li>
@@ -385,7 +385,7 @@ $office_id = get_office_id($staff_info['office']);
                                 <a class="admin-nav" href="<?= base_url('clients/lead_mail'); ?>">Promotion Mails</a>
                             </li>
 
-                        <?php } } ?>
+                        <?php } ?>
                     </ul>
                 </li>                    
                 
@@ -419,7 +419,7 @@ $office_id = get_office_id($staff_info['office']);
 <!--                         <li <?//= active_menu($menu, "partners"); ?>>
                             <a href="<?//= base_url(); ?>partners/create_referral_agent">- New Referral Agent</a>
                         </li> -->
-                        <?php if ($staff_info['type'] == '1') { ?>
+                        <?php if ($staff_info['type'] == '1' || $staff_info['department'] == '14') { ?>
                         <li <?= active_menu($menu, "partners"); ?>>
                             <a class="admin-nav" href="<?= base_url(); ?>partners/referral_agent_type">Referral Partner Type</a>  <!-- N.B : Referral Agent concept is deprecated from sept,19 and it moves into type section, and Referral Agent Type is converted into Referral Partner Type -->
                         </li>
@@ -432,11 +432,8 @@ $office_id = get_office_id($staff_info['office']);
                 <!-- Leads -->
                 <li <?= active_menu($main_menu, "leads"); ?> >
                     <div class="dashboard-icons pull-right">
-                        <a href="javascript:void(0);" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New" onclick="reflactFilterWithLead('0-New'); loadLeadDashboard(1, 0)"><?php echo get_new_lead_count(); ?></a>
-                        <a href="javascript:void(0);" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active" onclick="reflactFilterWithLead('3-Active'); loadLeadDashboard('', 3)"><?php echo get_active_lead_count(); ?></a>
-                        <!-- <div class="clearfix"></div> -->
-                        <!-- <a href="<?//= base_url(); ?>lead_management/home/index/0/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php// echo get_new_lead_count(2); ?></a>
-                        <a href="<?//= base_url(); ?>lead_management/home/index/3/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php //echo get_active_lead_count(2); ?></a> -->
+                        <a href="<?= base_url(); ?>lead_management/home/index/0/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="New"><?php echo get_new_lead_count(); ?></a>
+                        <a href="<?= base_url(); ?>lead_management/home/index/3/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Active"><?php echo get_active_lead_count(); ?></a>
                     </div>
                     <a href="javascript:void(0);"> <!-- class="four-noti" removed -->
                         <i class="fa fa-user-plus"></i>
@@ -469,8 +466,8 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?//= active_menu($menu, "new_event"); ?>>
                             <a href="<?//= base_url(); ?>lead_management/new_event">- New Event</a>
                         </li> -->
-                        <?php if ($staff_info['department'] == '1') { ?>
-                            <?php if ($staff_info['type'] == '1') { ?>
+                        <!-- <?php //if ($staff_info['department'] == '1') { ?> -->
+                            <?php if (($staff_info['type'] == '1' && $staff_info['department'] == '1') || $staff_info['department'] == '14') { ?>
                             <li <?= active_menu($menu, "lead_type"); ?>>
                                 <a class="admin-nav" href="<?= base_url(); ?>lead_management/lead_type">Lead Type</a>
                             </li>
@@ -489,7 +486,7 @@ $office_id = get_office_id($staff_info['office']);
                             <li <?= active_menu($menu, "get_leads"); ?>>
                                 <a class="admin-nav"  href="<?= base_url(); ?>administration/get_leads">Get Leads</a>
                             </li>
-                        <?php } } ?>
+                        <?php } ?>
                     </ul>
                 </li>
                 <!-- Events -->
@@ -566,7 +563,7 @@ $office_id = get_office_id($staff_info['office']);
                                         <a href="<?= base_url('corporate/training_materials/add_training_material') ?>">- Add Training Material</a>
                                     </li>
                                 <?php  } ?>
-                                <?php if ($staff_info['department'] == '1') { ?>
+                                <?php if ($staff_info['department'] == '1'|| $staff_info['department'] == '14') { ?>
                                     <li <?= active_menu($menu, "training_materials_category"); ?>>
                                         <a href="<?= base_url('corporate/training_materials/training_materials_category'); ?>">Main Category</a>
                                     </li>
@@ -574,7 +571,7 @@ $office_id = get_office_id($staff_info['office']);
                                         <a href="<?= base_url('corporate/training_materials/training_materials_subcategory'); ?>">Sub Category</a>
                                     </li>
                                 <?php } ?>
-                                <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '9') { ?>
+                                <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '9' || $staff_info['department'] == '14') { ?>
                                     <li <?= active_menu($menu, "training_materials_suggestions"); ?>>
                                         <a href="<?= base_url('corporate/training_materials/training_materials_suggestions'); ?>">Suggestions</a>
                                     </li>
@@ -596,7 +593,7 @@ $office_id = get_office_id($staff_info['office']);
                                 <li <?= active_menu($menu, "marketing_materials_purchase_list"); ?>>
                                     <a href="<?= base_url('corporate/marketing_materials/marketing_materials_purchase_list') ?>">Purchase List</a>
                                 </li>
-                                <?php if ($staff_info['department'] == '1') { ?>
+                                <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '14') { ?>
                                     <li <?= active_menu($menu, "marketing_materials_category"); ?>>
                                         <a href="<?= base_url('corporate/marketing_materials/marketing_materials_category'); ?>">Main Category</a>
                                     </li>
@@ -604,7 +601,7 @@ $office_id = get_office_id($staff_info['office']);
                                         <a href="<?= base_url('corporate/marketing_materials/marketing_materials_subcategory'); ?>">Sub Category</a>
                                     </li>
                                 <?php } ?>
-                                <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '9') { ?>
+                                <?php if ($staff_info['department'] == '1' || $staff_info['department'] == '9' || $staff_info['department'] == '14') { ?>
                                     <li <?= active_menu($menu, "marketing_materials_suggestions"); ?>>
                                         <a href="<?= base_url('corporate/marketing_materials/marketing_materials_suggestions'); ?>">Suggestions</a>
                                     </li>
@@ -690,7 +687,7 @@ $office_id = get_office_id($staff_info['office']);
                         <li>
                             <a href="<?= base_url(); ?>news">Dashboard</a>
                         </li>
-                        <?php if ($staff_info['type'] == '1') { ?>
+                        <?php if ($staff_info['type'] == '1' || $staff_info['department'] == '14') { ?>
                         <li <?= active_menu($menu, ""); ?>>
                             <a class="admin-nav" href="#">+ Add New</a>
                         </li>
@@ -707,7 +704,7 @@ $office_id = get_office_id($staff_info['office']);
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse" style="height: 0px;"> 
-                    <?php if ($staff_info['type'] == '1') { ?>  
+                    <?php if ($staff_info['type'] == '1' || $staff_info['department'] == '14') { ?>  
                         <li <?= active_menu($menu, "report_1"); ?>>
                             <a class="admin-nav" href="<?= base_url() ?>reports/index/1">Admin</a>
                         </li>
@@ -862,38 +859,6 @@ $office_id = get_office_id($staff_info['office']);
             }
         });
     });
-    var reflactFilterWithMenu = function (status, requestType) {
-        clearFilter();
-        variableArray = [];
-        elementArray = [];
-        $("select.variable-dropdown:first").val(2);
-        var statusArray = status.split('-');
-        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
-        $("select.criteria-dropdown:first").trigger("chosen:updated");
-        $("select.condition-dropdown:first").val(1).attr('disabled', true);
-        elementArray.push($("select.condition-dropdown:first"));
-        variableArray.push(2);
-        addFilterRow();
-        $("select.variable-dropdown:eq(1)").val(13);
-        var requestTypeArray = requestType.split('-');
-        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
-        $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
-        $("select.condition-dropdown:eq(1)").val(2).attr('disabled', true);
-        elementArray.push($("select.condition-dropdown:eq(1)"));
-        variableArray.push(13);
-    }
-     var reflactFilterWithLead = function (status, requestType) {
-        clearFilter();
-        variableArray = [];
-        elementArray = [];
-        $("select.variable-dropdown:first").val(2);
-        var statusArray = status.split('-');
-        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
-        $("select.criteria-dropdown:first").trigger("chosen:updated");
-        $("select.condition-dropdown:first").val(1).attr('disabled', true);
-        elementArray.push($("select.condition-dropdown:first"));
-        variableArray.push(2);
-    }
     
     var reflactFilterWithService = function (status, categoryID) {
         clearFilter();

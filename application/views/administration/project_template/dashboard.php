@@ -40,7 +40,10 @@
                                 ?>
                                 <div class="panel panel-default service-panel type2 filter-active" id="action<?= $list['id'] ?>">
                                     <div class="panel-heading">  
-                                        <a target="_blank" href="<?= base_url().'administration/template/edit_project_template/'.$list['id'] ?>" class="btn btn-primary btn-xs btn-service-edit project-btn-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>                                
+                                        <a target="_blank" href="<?= base_url().'administration/template/edit_project_template/'.$list['id'] ?>" class="btn btn-primary btn-xs btn-service-edit project-btn-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+                                        <a href="javascript:void(0)" class="btn btn-warning btn-xs btn-service-edit project-btn-edit" onclick="inactive_project_template('<?= $list['id']; ?>')"><i class="fa fa-ban" aria-hidden="true"></i> Inactive</a>
+                                        <a href="javascript:void(0)" class="btn btn-danger btn-xs btn-service-edit project-btn-edit" onclick="delete_project_template('<?= $list['id']; ?>')"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
+                                        <?//= base_url().'administration/template/inactive_project_template/'.$list['id'] ?>                                
                                         <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $list['id']; ?>" aria-expanded="false" class="collapsed">
                                             <div class="table-responsive">
                                                 <table class="table table-borderless text-center" style="margin-bottom: 0px;">

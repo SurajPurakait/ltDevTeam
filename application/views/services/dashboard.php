@@ -406,6 +406,7 @@ if ($status == '') {
 </div>
 <script type="text/javascript">
     loadServiceDashboard('<?= $status == '' ? 4 : $status; ?>', '<?= $category_id ?>', 'on_load', '<?= $office_id; ?>', 1);
+    reflactFilterWithSummery('<?= $filter_status ?>','<?= $filter_category ?>');
     var content = $(".filter-div").html();
     var variable_dd_array = [];
     var element_array = [];
@@ -926,24 +927,42 @@ if ($status == '') {
             }
         });
     }
-    var reflactFilterWithSummery = function (status, requestType) {
-        clearFilter();
-        element_array = [];
-        variable_dd_array = [];
-        $("select.variable-dropdown:first").val(4);
-        var statusArray = status.split('-');
-        $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
-        $("select.criteria-dropdown:first").trigger("chosen:updated");
-        $("select.condition-dropdown:first").val(1).attr('disabled', true);
-        element_array.push($("select.condition-dropdown:first"));
-        variable_dd_array.push(4);
-        add_new_filter_row();
-        $("select.variable-dropdown:eq(1)").val(15);
-        var requestTypeArray = requestType.split('-');
-        $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
-        $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
-        $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
-        element_array.push($("select.condition-dropdown:eq(1)"));
-        variable_dd_array.push(15);
+    function reflactFilterWithSummery(status, requestType) {
+        // alert(status);
+        // alert(requestType);
+        if (status != '') {
+            clearFilter();
+            element_array = [];
+            variable_dd_array = [];
+            $("select.variable-dropdown:first").val(4);
+            var statusArray = status.split('-');
+            $('select.criteria-dropdown:first').empty().html('<option value="' + statusArray[0] + '">' + statusArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[tracking][]'});
+            $("select.criteria-dropdown:first").trigger("chosen:updated");
+            $("select.condition-dropdown:first").val(1).attr('disabled', true);
+            element_array.push($("select.condition-dropdown:first"));
+            variable_dd_array.push(4);
+            if(requestType!=''){
+                if(requestType.split('-')[2] == 'category') {
+                    // add_new_filter_row();
+                    // $("select.variable-dropdown:eq(1)").val(1);
+                    // var requestTypeArray = requestType.split('-');
+                    // $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
+                    // $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
+                    // $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
+                    // // alert(element_array);
+                    // element_array.push($("select.condition-dropdown:eq(1)"));
+                    // variable_dd_array.push(1);
+                } else {
+                    add_new_filter_row();
+                    $("select.variable-dropdown:eq(1)").val(15);
+                    var requestTypeArray = requestType.split('-');
+                    $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
+                    $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
+                    $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
+                    element_array.push($("select.condition-dropdown:eq(1)"));
+                    variable_dd_array.push(15);
+                }
+            }
+        }
     }
 </script>

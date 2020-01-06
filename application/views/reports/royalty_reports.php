@@ -11,7 +11,7 @@
                                 ?>
                             </select>                        
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">
                             <button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>                      </div>
                     </div>
@@ -22,7 +22,7 @@
                         <table id="reports-tab" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th style="white-space: nowrap;">Date</th>
+                                    <th style="white-space: nowrap; width: 100px;">Date</th>
                                     <th style="white-space: nowrap;">Client Id</th>
                                     <th style="white-space: nowrap;">Invoice Id</th>
                                     <th style="white-space: nowrap;">Service Id</th>

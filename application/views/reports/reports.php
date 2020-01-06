@@ -25,11 +25,11 @@
                                             <?php 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
                                             ?>
-                                            <div class="ibox m-t-25" id="service_by_franchise_1">
+                                            <div class="ibox m-t-25" id="service_by_franchise_1" onclick="show_service_franchise_result('franchise')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Franchisee</h5>
                                                     <div class="ibox-tools">
-                                                        <a class="" onclick="show_service_franchise_result('franchise')">
+                                                        <a class="">
                                                             <i class="fa fa-chevron-up"></i>
                                                         </a>
                                                     </div>
@@ -40,11 +40,11 @@
                                                 } 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
                                             ?>
-                                            <div class="ibox" id="service_by_department_1">
+                                            <div class="ibox" id="service_by_department_1" onclick="show_service_franchise_result('department')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Department</h5>
                                                     <div class="ibox-tools">
-                                                        <a class="" onclick="show_service_franchise_result('department')">
+                                                        <a class="">
                                                             <i class="fa fa-chevron-up"></i>
                                                         </a>
                                                     </div>
@@ -55,11 +55,11 @@
                                                 } 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2) {
                                             ?>
-                                            <div class="ibox" id="service_by_category_1">
+                                            <div class="ibox" id="service_by_category_1" onclick="show_service_franchise_result('service_category')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Category</h5>
                                                     <div class="ibox-tools">
-                                                        <a class="" onclick="show_service_franchise_result('service_category')">
+                                                        <a class="">
                                                             <i class="fa fa-chevron-up"></i>
                                                         </a>
                                                     </div>
@@ -186,7 +186,7 @@
                                     </div>
                                     <div role="tabpanel" id="tab-clients" class="tab-pane">
                                         <div class="panel-body">
-                                            <div class="ibox m-t-25" id="total_clients_by_office_section">
+                                            <div class="ibox m-t-25" id="total_clients_by_office_section" onclick="show_clients_data('clients_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Total Clients By Office</h5>
                                                     <div class="ibox-tools">
@@ -197,7 +197,7 @@
                                                 </div>
                                                 <div class="ibox-content p-0" id="total_clients_by_office" style="display: none;"></div>
                                             </div>                                        
-                                            <div class="ibox m-t-25" id="business_clients_by_office_section">
+                                            <div class="ibox m-t-25" id="business_clients_by_office_section" onclick="show_clients_data('business_clients_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Business Clients By Office</h5>
                                                     <div class="ibox-tools">
@@ -208,7 +208,7 @@
                                                 </div>
                                                 <div class="ibox-content p-0" id="business_clients_by_office" style="display: none;"></div>
                                             </div>
-                                            <div class="ibox m-t-25" id="individual_clients_by_office_section">
+                                            <div class="ibox m-t-25" id="individual_clients_by_office_section" onclick="show_clients_data('individual_clients_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Individual Clients By Office</h5>
                                                     <div class="ibox-tools">
@@ -222,19 +222,8 @@
                                         </div>
                                     </div>
                                     <div role="tabpanel" id="tab-partners" class="tab-pane">
-                                        <div class="panel-body">
-                                            <div class="ibox m-t-25" id="partners_by_status_section">
-                                                <div class="ibox-title p-t-15 p-b-40">
-                                                    <h5 class="m-0 f-s-16">Partners By Status</h5>
-                                                    <div class="ibox-tools">
-                                                        <a class="">
-                                                            <i class="fa fa-chevron-up"></i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div class="ibox-content p-0" id="partners_by_status" style="display: none;"></div>
-                                            </div>                                        
-                                            <div class="ibox m-t-25" id="partners_by_type_section">
+                                        <div class="panel-body">                
+                                            <div class="ibox m-t-25" id="partners_by_type_section" onclick="show_partner_data()">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Partners By Type</h5>
                                                     <div class="ibox-tools">
@@ -249,7 +238,7 @@
                                     </div>
                                     <div role="tabpanel" id="tab-leads" class="tab-pane">
                                         <div class="panel-body">
-                                            <div class="ibox m-t-25" id="leads_by_status_section">
+                                            <div class="ibox m-t-25" id="leads_by_status_section" onclick="show_lead_data('status')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads By Status</h5>
                                                     <div class="ibox-tools">
@@ -260,7 +249,7 @@
                                                 </div>
                                                 <div class="ibox-content p-0" id="leads_by_status" style="display: none;"></div>
                                             </div>                                        
-                                            <div class="ibox m-t-25" id="leads_by_type_section">
+                                            <div class="ibox m-t-25" id="leads_by_type_section" onclick="show_lead_data('type')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads By Type</h5>
                                                     <div class="ibox-tools">
@@ -271,7 +260,7 @@
                                                 </div>
                                                 <div class="ibox-content p-0" id="leads_by_type" style="display: none;"></div>
                                             </div>
-                                            <div class="ibox m-t-25" id="leads_email_campaign_section">
+                                            <div class="ibox m-t-25" id="leads_email_campaign_section" onclick="show_lead_data('mail_campaign')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads Email Campaign</h5>
                                                     <div class="ibox-tools">
