@@ -1085,4 +1085,5 @@ ALTER TABLE `project_periodic_pattern` ADD `is_created` ENUM('n','y') NOT NULL A
 /*import report_client */
 
 ALTER TABLE `order` ADD `client_id` INT(100) NOT NULL COMMENT 'individual_id for individual client' AFTER `reference_id`;
+
 /*live end*/
