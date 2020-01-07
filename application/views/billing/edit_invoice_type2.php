@@ -181,7 +181,7 @@
     <div class="form-group">
         <label class="col-lg-2 control-label">Existing Practice ID</label>
         <div class="col-lg-10">
-            <input placeholder="" class="form-control value_field" id="existing_practice_id" type="text" name="existing_practice_id" title="Existing Practice ID" value="<?= $order_summary['existing_practice_ID']; ?>">
+            <input placeholder="" class="form-control value_field" id="existing_practice_id" type="text" name="existing_practice_id" title="Existing Practice ID" value="<?= $order_summary['existing_practice_ID']; ?>" readonly>
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
