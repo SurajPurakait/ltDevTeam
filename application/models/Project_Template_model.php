@@ -1343,11 +1343,20 @@ class Project_Template_model extends CI_Model {
                         }
                     }
                     unset($project_recurrence_main_data['id']);
-                    if($project_recurrence_main_data['actual_due_month']<=12){
-                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
-                            }else{
-                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' .($project_recurrence_main_data['actual_due_month'] % 12).'-' . $project_recurrence_main_data['actual_due_day'];
-                            }
+                    if($project_recurrence_main_data['pattern']!='annually'){
+                        if($project_recurrence_main_data['actual_due_month']<=12){
+                            $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                        }else{
+                            $due_date = $project_recurrence_main_data['actual_due_year'] . '-' .($project_recurrence_main_data['actual_due_month'] % 12).'-' . $project_recurrence_main_data['actual_due_day'];
+                        }
+                    }else{
+                        $current_month=date('m',strtotime($project_date));
+                        if($project_recurrence_main_data['actual_due_month']>$current_month){
+                            $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                        }else{
+                            $due_date = $project_recurrence_main_data['actual_due_year']+1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                        }
+                    }
                     if ($project_recurrence_main_data['generation_month'] == '') {
                         $project_recurrence_main_data['generation_month'] = '0';
                     }
@@ -3363,7 +3372,6 @@ class Project_Template_model extends CI_Model {
         $this->db->where('id',$template_id);
         return $this->db->delete('project_template_main');
     }
-
     public function getProjectCreatedDate($project_id){
         return $this->db->get_where('projects',['id'=>$project_id])->row()->created_at;
     }
