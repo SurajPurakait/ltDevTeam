@@ -54,7 +54,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">Start Date:</label>
-                                                        <input placeholder="mm/dd/yyyy" id="start_date" class="form-control datepicker_mdy_due" type="text" title="Start Date" name="recurrence[start_date]" value="<?= isset($invoice_recurrence->start_date)?($invoice_recurrence->start_date != '0000-00-00' ? date('m/d/Y', strtotime($invoice_recurrence->start_date)) : ''):''; ?>">
+                                                        <input placeholder="mm/dd/yyyy" id="start_date" class="form-control datepicker_mdy_due" type="text" title="Start Date" name="recurrence[start_date]" disabled="" value="<?= isset($invoice_recurrence->start_date)?($invoice_recurrence->start_date != '0000-00-00' ? date('m/d/Y', strtotime($invoice_recurrence->start_date)) : ''):''; ?>">
                                                         <div class="errorMessage text-danger"></div>
                                                     </div>
                                                 </div>

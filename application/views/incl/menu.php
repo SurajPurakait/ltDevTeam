@@ -247,9 +247,9 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?= active_menu($menu, "recurring_invoice"); ?>>                            
                             <a href="<?= base_url(); ?>billing/home/index/y">Recurring Invoice</a>
                         </li>
-                        <li <?= active_menu($menu, "create_invoice"); ?>>                            
+<!--                        <li <?= active_menu($menu, "create_invoice"); ?>>                            
                             <a href="<?= base_url(); ?>billing/invoice/index/y">+ Add New Recurring</a>
-                        </li>
+                        </li>-->
                          <?php } ?>
                         <li <?= active_menu($menu, "documents"); ?>>
                             <a href="<?= base_url(); ?>billing/home/documents">Documents</a>
