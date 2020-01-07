@@ -1087,3 +1087,6 @@ ALTER TABLE `project_periodic_pattern` ADD `is_created` ENUM('n','y') NOT NULL A
 ALTER TABLE `order` ADD `client_id` INT(100) NOT NULL COMMENT 'individual_id for individual client' AFTER `reference_id`;
 
 /*live end*/
+
+/*07.01.2020*/
+ALTER TABLE `invoice_recurence` ADD `due_date` VARCHAR(20) NOT NULL AFTER `status`; 
