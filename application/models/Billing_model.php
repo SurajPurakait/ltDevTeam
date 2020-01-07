@@ -414,7 +414,7 @@ class Billing_model extends CI_Model {
                     $invoice_info_data['created_time'] = $today;
                     if (isset($data['is_create_order']) && $data['is_create_order'] == 'yes') {
                         $invoice_info_data['is_order'] = 'y';
-                        $invoice_info_data['status'] = 1;
+                        $invoice_info_data['status'] = 0;
                     }
                     $this->db->insert('invoice_info', $invoice_info_data);
                     $invoice_id = $this->db->insert_id();
@@ -677,7 +677,7 @@ class Billing_model extends CI_Model {
                         $invoice_info_data['created_time'] = $today;
                         if (isset($data['is_create_order']) && $data['is_create_order'] == 'yes') {
                             $invoice_info_data['is_order'] = 'y';
-                            $invoice_info_data['status'] = 1;
+                            $invoice_info_data['status'] = 0;
                         }
                         $this->db->insert('invoice_info', $invoice_info_data);
                         $invoice_id = $this->db->insert_id();
@@ -2278,7 +2278,7 @@ class Billing_model extends CI_Model {
                     $where['inv.created_by'] = 'AND `inv`.`created_by` = "' . $staff_id . '" ';
                 }
             } else {
-                $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (7) AND inv.is_recurrence="' . $is_recurrence . '")';
+                $where_or = 'OR (`inv`.`created_by` = "' . $staff_id . '" AND `inv`.`status` NOT IN (0,7) AND inv.is_recurrence="' . $is_recurrence . '")';
             }
         }
 
