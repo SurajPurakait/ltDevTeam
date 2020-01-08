@@ -166,7 +166,7 @@ if (!empty($project_list)) {
                                     <?php if($pattern_details->pattern=='periodic'){ ?>
                                     <td title="Due Date"><?= date('m/d/Y',strtotime($pattern_details->due_date)) ?></td>
                                     <?php } else {?>
-                                    <td title="Due Date"><?= date('m/d/Y',strtotime($dueDate)) ?></td>
+                                    <td title="Due Date"><?= date('m/d/Y',strtotime($pattern_details->due_date)) ?></td>
                                     <?php } ?>
                                     <?php //if($pattern_details->pattern=='periodic'){ ?>
                                         <!--<td title="Recurrence Date"><= $periodic_recurrence_date ?></td>-->

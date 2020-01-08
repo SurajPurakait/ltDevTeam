@@ -96,7 +96,7 @@ foreach ($result as $row_count => $value):
                             <td title="Tracking"><a href="javascript:void(0)" onclick="billingDashboardTrackingModal(<?= $row->invoice_id; ?>, <?= $row->invoice_status; ?>);"><span class="label <?= $tracking_class ?> invoice-tracking-span-<?= $row->invoice_id; ?>"><b><?= $tracking[$row->invoice_status]; ?></b></span></a></td>
                             <td title="Requested by"><?= $row->created_by_name; ?></td>
                             <td title="Create Time"><?= date('m/d/Y', strtotime($row->created_time)); ?></td>
-                            <td title="Create Time"><?= date('m/d/Y', strtotime('+30 days', strtotime($row->created_time))); ?></td>  
+                            <td title="Due Date"><?= date('m/d/Y', strtotime($row->due_date)); ?></td>  
                             <?php if($is_recurrence == 'y'){?>
                             <td title="Recurrence Date"><?= date('m/d/Y', strtotime($row->next_generation_date)); ?></td>
                             <td title="Pattern"><?= $row->pattern; ?></td>                          
