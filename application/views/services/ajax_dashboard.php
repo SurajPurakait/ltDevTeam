@@ -178,7 +178,7 @@ if (!empty($result)):
                         </a>
                         <?php
                     } else {
-                        if (!empty($invoice_info) && ($invoice_info['is_order'] == 'y' || $invoice_info['is_order'] == 'n')) {
+                        if (!empty($invoice_info) && ($invoice_info['is_order'] == 'y')) {
                             $url = 'billing/invoice/edit/' . base64_encode($invoice_info['id']);
                         }
                         ?>

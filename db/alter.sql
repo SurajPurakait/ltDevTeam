@@ -1090,3 +1090,7 @@ ALTER TABLE `order` ADD `client_id` INT(100) NOT NULL COMMENT 'individual_id for
 
 /*07.01.2020*/
 ALTER TABLE `invoice_recurence` ADD `due_date` VARCHAR(20) NOT NULL AFTER `status`; 
+
+/* 08.01.2020 */
+-- import report_dashboard_action
+ALTER TABLE `report_dashboard_action` CHANGE `due_date` `due_date` DATE NULL DEFAULT NULL;

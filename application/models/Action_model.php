@@ -3519,7 +3519,8 @@ class Action_model extends CI_Model {
         $this->db->where('ac.id',$id);
         return $this->db->get()->row_array();
     }
-        public function get_clients_data($category) {
+    // report dashboard's client data
+    public function get_clients_data($category) {
         $data_office = $this->db->get('office')->result_array();
         // $data_office = $this->system->get_staff_office_list();
         if ($category == 'clients_by_office') {
@@ -3573,4 +3574,126 @@ class Action_model extends CI_Model {
             return $individual_client_details;
         }
     }
+    // report dashboard's action data
+    public function get_action_data($category) {
+        $data_office = $this->db->get('office')->result_array();
+        $data_department = $this->db->get('department')->result_array();
+
+        $all_actions_data = [];
+        if ($category == 'action_by_office') {
+            foreach ($data_office as $do) {    
+                $data = [
+                    'id' => $do['id'],
+                    'office_name' => $do['name'],
+                    'total_actions' => $this->db->get_where('report_dashboard_action',array('by_office'=>$do['id']))->num_rows(),           
+                    'new' => $this->db->get_where('report_dashboard_action',array('by_office'=>$do['id'],'status'=> '0'))->num_rows(),           
+                    'started' => $this->db->get_where('report_dashboard_action',array('by_office'=>$do['id'],'status'=> '1'))->num_rows(),           
+                    'resolved' => $this->db->get_where('report_dashboard_action',array('by_office'=>$do['id'],'status'=> '6'))->num_rows(),           
+                    'completed' => $this->db->get_where('report_dashboard_action',array('by_office'=>$do['id'],'status'=> '2'))->num_rows(),
+                    'less_then_30' => $this->action_late_status('action_by_office','less_then_30',$do['id']),
+                    'less_then_60' => $this->action_late_status('action_by_office','less_then_60',$do['id']),
+                    'more_then_60' => $this->action_late_status('action_by_office','more_then_60',$do['id']),
+                    'sos' => $this->db->get_where('report_dashboard_action',array('by_office'=>$do['id'],'sos!='=> ''))->num_rows(),           
+                ];
+                array_push($all_actions_data,$data);
+            }
+            return $all_actions_data;
+
+        } else if($category == 'action_to_office') {
+            foreach ($data_office as $do) {    
+                $data = [
+                    'id' => $do['id'],
+                    'office_name' => $do['name'],
+                    'total_actions' => $this->db->get_where('report_dashboard_action',array('to_office'=>$do['id']))->num_rows(),           
+                    'new' => $this->db->get_where('report_dashboard_action',array('to_office'=>$do['id'],'status'=> '0'))->num_rows(),           
+                    'started' => $this->db->get_where('report_dashboard_action',array('to_office'=>$do['id'],'status'=> '1'))->num_rows(),           
+                    'resolved' => $this->db->get_where('report_dashboard_action',array('to_office'=>$do['id'],'status'=> '6'))->num_rows(),           
+                    'completed' => $this->db->get_where('report_dashboard_action',array('to_office'=>$do['id'],'status'=> '2'))->num_rows(),
+                    'less_then_30' => $this->action_late_status('action_to_office','less_then_30',$do['id']),
+                    'less_then_60' => $this->action_late_status('action_to_office','less_then_60',$do['id']),
+                    'more_then_60' => $this->action_late_status('action_to_office','more_then_60',$do['id']),
+                    'sos' => $this->db->get_where('report_dashboard_action',array('to_office'=>$do['id'],'sos!='=> ''))->num_rows(),           
+                ];
+                array_push($all_actions_data,$data);
+            }
+            return $all_actions_data;
+
+        } else if ($category == 'action_by_department') {
+            foreach ($data_department as $dd) {    
+                $data = [
+                    'id' => $dd['id'],
+                    'department_name' => $dd['name'],
+                    'total_actions' => $this->db->get_where('report_dashboard_action',array('by_department'=>$dd['id']))->num_rows(),           
+                    'new' => $this->db->get_where('report_dashboard_action',array('by_department'=>$dd['id'],'status'=> '0'))->num_rows(),           
+                    'started' => $this->db->get_where('report_dashboard_action',array('by_department'=>$dd['id'],'status'=> '1'))->num_rows(),           
+                    'resolved' => $this->db->get_where('report_dashboard_action',array('by_department'=>$dd['id'],'status'=> '6'))->num_rows(),           
+                    'completed' => $this->db->get_where('report_dashboard_action',array('by_department'=>$dd['id'],'status'=> '2'))->num_rows(),
+                    'less_then_30' => $this->action_late_status('action_by_department','less_then_30','',$dd['id']),
+                    'less_then_60' => $this->action_late_status('action_by_department','less_then_60','',$dd['id']),
+                    'more_then_60' => $this->action_late_status('action_by_department','more_then_60','',$dd['id']),
+                    'sos' => $this->db->get_where('report_dashboard_action',array('by_department'=>$dd['id'],'sos!='=> ''))->num_rows(),           
+                ];
+                array_push($all_actions_data,$data);
+            }
+            return $all_actions_data;
+
+        } else if ($category == 'action_to_department') {
+            foreach ($data_department as $dd) {    
+                $data = [
+                    'id' => $dd['id'],
+                    'department_name' => $dd['name'],
+                    'total_actions' => $this->db->get_where('report_dashboard_action',array('to_department'=>$dd['id']))->num_rows(),           
+                    'new' => $this->db->get_where('report_dashboard_action',array('to_department'=>$dd['id'],'status'=> '0'))->num_rows(),           
+                    'started' => $this->db->get_where('report_dashboard_action',array('to_department'=>$dd['id'],'status'=> '1'))->num_rows(),           
+                    'resolved' => $this->db->get_where('report_dashboard_action',array('to_department'=>$dd['id'],'status'=> '6'))->num_rows(),           
+                    'completed' => $this->db->get_where('report_dashboard_action',array('to_department'=>$dd['id'],'status'=> '2'))->num_rows(),
+                    'less_then_30' => $this->action_late_status('action_to_department','less_then_30','',$dd['id']),
+                    'less_then_60' => $this->action_late_status('action_to_department','less_then_60','',$dd['id']),
+                    'more_then_60' => $this->action_late_status('action_to_department','more_then_60','',$dd['id']),
+                    'sos' => $this->db->get_where('report_dashboard_action',array('to_department'=>$dd['id'],'sos!='=> ''))->num_rows(),           
+                ];
+                array_push($all_actions_data,$data);
+            }
+            return $all_actions_data;
+
+        }        
+    }
+
+    public function action_late_status($related_section="",$duration="",$office_id="",$department="") {
+        if ($related_section == 'action_by_office') {            
+            if ($duration == 'less_then_30') {
+                $sql = "SELECT * FROM `report_dashboard_action` WHERE `by_office` = '".$office_id."' AND `due_date` != \"NULL\" AND DATEDIFF(CURDATE(),STR_TO_DATE(due_date, '%Y-%m-%d')) < 30";
+            } elseif ($duration == 'less_then_60') {
+                $sql = "SELECT * FROM `report_dashboard_action` WHERE `by_office` = '".$office_id."' AND `due_date` != \"NULL\" AND DATEDIFF(CURDATE(),STR_TO_DATE(due_date, '%Y-%m-%d')) < 60";
+            } elseif ($duration == 'more_then_60') {
+                $sql = "SELECT * FROM `report_dashboard_action` WHERE `by_office` = '".$office_id."' AND `due_date` != \"NULL\" AND DATEDIFF(CURDATE(),STR_TO_DATE(due_date, '%Y-%m-%d')) > 60";
+            }
+        } elseif ($related_section == 'action_to_office') {
+            if ($duration == 'less_then_30') {
+                $sql = "SELECT * FROM `report_dashboard_action` WHERE `to_office` = '".$office_id."' AND `due_date` != \"NULL\" AND DATEDIFF(CURDATE(),STR_TO_DATE(due_date, '%Y-%m-%d')) < 30";
+            } elseif ($duration == 'less_then_60') {
+                $sql = "SELECT * FROM `report_dashboard_action` WHERE `to_office` = '".$office_id."' AND `due_date` != \"NULL\" AND DATEDIFF(CURDATE(),STR_TO_DATE(due_date, '%Y-%m-%d')) < 60";
+            } elseif ($duration == 'more_then_60') {
+                $sql = "SELECT * FROM `report_dashboard_action` WHERE `to_office` = '".$office_id."' AND `due_date` != \"NULL\" AND DATEDIFF(CURDATE(),STR_TO_DATE(due_date, '%Y-%m-%d')) > 60";
+            }
+        } elseif ($related_section == 'action_by_department') {
+            if ($duration == 'less_then_30') {
+                $sql = "SELECT * FROM `report_dashboard_action` WHERE `by_department` = '".$department."' AND `due_date` != \"NULL\" AND DATEDIFF(CURDATE(),STR_TO_DATE(due_date, '%Y-%m-%d')) < 30";
+            } elseif ($duration == 'less_then_60') {
+                $sql = "SELECT * FROM `report_dashboard_action` WHERE `by_department` = '".$department."' AND `due_date` != \"NULL\" AND DATEDIFF(CURDATE(),STR_TO_DATE(due_date, '%Y-%m-%d')) < 60";
+            } elseif ($duration == 'more_then_60') {
+                $sql = "SELECT * FROM `report_dashboard_action` WHERE `by_department` = '".$department."' AND `due_date` != \"NULL\" AND DATEDIFF(CURDATE(),STR_TO_DATE(due_date, '%Y-%m-%d')) > 60";
+            }
+        } elseif ($related_section == 'action_to_department') {
+            if ($duration == 'less_then_30') {
+                $sql = "SELECT * FROM `report_dashboard_action` WHERE `to_department` = '".$department."' AND `due_date` != \"NULL\" AND DATEDIFF(CURDATE(),STR_TO_DATE(due_date, '%Y-%m-%d')) < 30";
+            } elseif ($duration == 'less_then_60') {
+                $sql = "SELECT * FROM `report_dashboard_action` WHERE `to_department` = '".$department."' AND `due_date` != \"NULL\" AND DATEDIFF(CURDATE(),STR_TO_DATE(due_date, '%Y-%m-%d')) < 60";
+            } elseif ($duration == 'more_then_60') {
+                $sql = "SELECT * FROM `report_dashboard_action` WHERE `to_department` = '".$department."' AND `due_date` != \"NULL\" AND DATEDIFF(CURDATE(),STR_TO_DATE(due_date, '%Y-%m-%d')) > 60";
+            }
+        }
+        return $this->db->query($sql)->num_rows();
+    }
+
 }

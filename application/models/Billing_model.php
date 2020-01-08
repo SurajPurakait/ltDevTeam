@@ -2010,7 +2010,7 @@ class Billing_model extends CI_Model {
 //            return true;
 //        }
         $this->db->trans_begin();
-        if($invoice_info['type'] == 1){
+        if($invoice_info['type'] == 1){ //Business client
 
                $service_request_columns = $this->db->list_fields('service_request');
         unset($service_request_columns[0]);
@@ -2132,7 +2132,7 @@ class Billing_model extends CI_Model {
             $this->db->update('invoice_info', ['order_id' => $order_id]);
         }
 
-        }else if ($invoice_info['type'] == 2) {
+        }else if ($invoice_info['type'] == 2) { //Individual client
 
         $service_request_columns = $this->db->list_fields('service_request');
         unset($service_request_columns[0]);
@@ -2244,7 +2244,7 @@ class Billing_model extends CI_Model {
 
         if ($save_type == 'create') {
             $this->db->where(['id' => $invoice_id]);
-            $this->db->update('invoice_info', array('order_id' => $order_id,'is_order' => 'n'));
+            $this->db->update('invoice_info', array('order_id' => $order_id));
         }
 
         }
