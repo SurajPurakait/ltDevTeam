@@ -335,6 +335,9 @@ class Billing_model extends CI_Model {
                         $ins_recurrence['actual_due_month'] = '0';
                         $ins_recurrence['actual_due_year'] = '0';
                     }
+                    $ins_recurrence['due_date'] = $ins_recurrence['actual_due_year']."-".$ins_recurrence['actual_due_month']."-".$ins_recurrence['actual_due_day'];
+                    $ins_recurrence['due_date'] = date('Y-m-d', strtotime($ins_recurrence['due_date']));  
+
                     if ($ins_recurrence['start_date'] != '') {
                         $ins_recurrence['start_date'] = date('Y-m-d', strtotime($ins_recurrence['start_date']));
                     }
@@ -589,6 +592,8 @@ class Billing_model extends CI_Model {
                                 $ins_recurrence['actual_due_month'] = '0';
                                 $ins_recurrence['actual_due_year'] = '0';
                             }
+                            $ins_recurrence['due_date'] = $ins_recurrence['actual_due_year']."-".$ins_recurrence['actual_due_month']."-".$ins_recurrence['actual_due_day'];
+                            $ins_recurrence['due_date'] = date('Y-m-d', strtotime($ins_recurrence['due_date'])); 
                             if ($ins_recurrence['start_date'] != '') {
                                 $ins_recurrence['start_date'] = date('Y-m-d', strtotime($ins_recurrence['start_date']));
                             }
@@ -826,7 +831,9 @@ class Billing_model extends CI_Model {
                         $ins_recurrence['actual_due_day'] = '0';
                         $ins_recurrence['actual_due_month'] = '0';
                         $ins_recurrence['actual_due_year'] = '0';
-                    }                                                   
+                    }   
+                    $ins_recurrence['due_date'] = $ins_recurrence['actual_due_year']."-".$ins_recurrence['actual_due_month']."-".$ins_recurrence['actual_due_day'];
+                    $ins_recurrence['due_date'] = date('Y-m-d', strtotime($ins_recurrence['due_date']));  
                     if ($ins_recurrence['start_date'] != '') {
                         $ins_recurrence['start_date'] = date('Y-m-d', strtotime($ins_recurrence['start_date']));
                     }                                                       
@@ -1015,6 +1022,8 @@ class Billing_model extends CI_Model {
                     $ins_recurrence['actual_due_month'] = '0';
                     $ins_recurrence['actual_due_year'] = '0';
                 }
+                $ins_recurrence['due_date'] = $ins_recurrence['actual_due_year']."-".$ins_recurrence['actual_due_month']."-".$ins_recurrence['actual_due_day'];
+                $ins_recurrence['due_date'] = date('Y-m-d', strtotime($ins_recurrence['due_date']));  
                 if ($ins_recurrence['start_date'] != '') {
                     $ins_recurrence['start_date'] = date('Y-m-d', strtotime($ins_recurrence['start_date']));
                 }
