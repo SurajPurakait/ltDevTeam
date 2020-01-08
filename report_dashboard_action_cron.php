@@ -4,7 +4,7 @@
     $password = "leafnet@123";
     $db = 'leafnet_stagings';
 
-	// $servername = "localhost";
+    // $servername = "localhost";
     // $username = "root";
     // $password = "";
     // $db = 'leafnet';
@@ -42,26 +42,31 @@
      
     if ($action_data_count > 0) {
         while ($actd = mysqli_fetch_assoc($action_query_response)) {
-        	$action_id = $actd['action_id'];
-        	$by_office = $actd['by_office'];
-        	$to_office = $actd['to_office'];
-        	$by_department = $actd['by_department'];
-        	$to_department = $actd['to_department'];
-        	$by_office_name = $actd['by_office_name'];
-        	$to_office_name = $actd['to_office_name'];
-        	$by_department_name = $actd['by_department_name'];
-        	$to_department_name = $actd['to_department_name'];
-        	$status = $actd['status'];
-        	$due_date = $actd['due_date'];
-        	$sos = addslashes($actd['sos']);
+            $action_id = $actd['action_id'];
+            $by_office = $actd['by_office'];
+            $to_office = $actd['to_office'];
+            $by_department = $actd['by_department'];
+            $to_department = $actd['to_department'];
+            $by_office_name = $actd['by_office_name'];
+            $to_office_name = $actd['to_office_name'];
+            $by_department_name = $actd['by_department_name'];
+            $to_department_name = $actd['to_department_name'];
+            $status = $actd['status'];
+            if($actd['due_date'] == '0000-00-00' || $actd['due_date'] == '') {
+                $due_date = '0001-01-01';
+            } else {
+                $due_date = $actd['due_date'];
+            }
+            
+            $sos = addslashes($actd['sos']);
 
-        	$action_insert_sql = "INSERT INTO `report_dashboard_action`(`action_id`, `by_office`, `by_office_name`, `to_office`, `to_office_name`, `by_department`, `by_department_name`, `to_department`, `to_department_name`, `status`, `due_date`, `sos`) VALUES ('$action_id',' $by_office', '$by_office_name', '$to_office', '$to_office_name', '$by_department', '$by_department_name', '$to_department', '$to_department_name', '$status', '$due_date', '$sos')";
+            $action_insert_sql = "INSERT INTO `report_dashboard_action`(`action_id`, `by_office`, `by_office_name`, `to_office`, `to_office_name`, `by_department`, `by_department_name`, `to_department`, `to_department_name`, `status`, `due_date`, `sos`) VALUES ('$action_id',' $by_office', '$by_office_name', '$to_office', '$to_office_name', '$by_department', '$by_department_name', '$to_department', '$to_department_name', '$status', '$due_date', '$sos')";
       
-        	echo $action_insert_sql;
-      		echo "<hr>";  	
-        	mysqli_query($conn,$action_insert_sql)or die('Insert Error!');
+            echo $action_insert_sql;
+            echo "<hr>";    
+            mysqli_query($conn,$action_insert_sql)or die('Insert Error!');
         }
         echo "Success";
         exit;
-    }    	
+    }       
 ?>
