@@ -1090,3 +1090,6 @@ ALTER TABLE `order` ADD `client_id` INT(100) NOT NULL COMMENT 'individual_id for
 
 /*07.01.2020*/
 ALTER TABLE `invoice_recurence` ADD `due_date` VARCHAR(20) NOT NULL AFTER `status`; 
+
+/*08.01.2020*/
+ALTER TABLE `payroll_employee_info` ADD `ssn_name` VARCHAR(30) NOT NULL AFTER `i9_file`, ADD `salary_rate` VARCHAR(30) NOT NULL AFTER `ssn_name`; 
