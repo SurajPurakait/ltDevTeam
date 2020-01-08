@@ -220,7 +220,7 @@ function show_action_data(category) {
 }
 
 // report project section js
-function show_clients_data() {
+function show_project_data(category) {
     if (category == 'projects_by_office') {
         $("#projects_by_office").toggle();
     } else if(category == 'tasks_by_office') {
