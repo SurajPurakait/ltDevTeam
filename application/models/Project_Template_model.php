@@ -1291,7 +1291,11 @@ class Project_Template_model extends CI_Model {
                                     $due_year = date('Y', strtotime('+1 year'));
                                 }
                                 $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
-                                $project_recurrence_main_data['actual_due_month'] = $next_quarter[$project_recurrence_main_data['due_month']];
+                                if($project_recurrence_main_data['due_month']>$current_month){
+                                    $project_recurrence_main_data['actual_due_month'] =$project_recurrence_main_data['due_month'];
+                                }else{
+                                    $project_recurrence_main_data['actual_due_month'] = $next_quarter[$project_recurrence_main_data['due_month']];
+                                }
                                 $project_recurrence_main_data['actual_due_year'] = $due_year;
                             }elseif($project_recurrence_main_data['pattern']=='periodic'){
 //                                $current_month = date('m');
