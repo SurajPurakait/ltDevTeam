@@ -1668,6 +1668,7 @@ function save_task_account(section) {
     var form_data = new FormData(document.getElementById('form_accounts'));
     var company_id = $("#company_id").val();
     var order_id = $("#editval").val();
+    var client_id=$("#client_id").val();
     form_data.append('section', section);
     $.ajax({
         type: "POST",

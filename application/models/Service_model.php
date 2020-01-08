@@ -1611,9 +1611,9 @@ class Service_model extends CI_Model {
         }
     }
 
-    public function update_account_order_id_by_new_reference_id($new_reference_id, $order_id) {
+    public function update_account_order_id_by_new_reference_id($new_reference_id, $order_id,$client_id='') {
         $this->db->where('company_id', $new_reference_id);
-        return $this->db->update('financial_accounts', ['order_id' => $order_id]);
+        return $this->db->update('financial_accounts', ['order_id' => $order_id,'client_id'=>$client_id]);
     }
 
     public function get_service_request($order_id, $service_id) {
