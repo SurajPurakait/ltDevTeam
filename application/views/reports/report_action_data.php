@@ -226,7 +226,7 @@
 	        <table class="table table-bordered report-table table-striped text-center m-b-0">
 	            <thead>
 	                <tr>
-	                    <th class="text-uppercase">Offices</th>
+	                    <th class="text-uppercase">Departments</th>
 	                    <th class="text-uppercase">Total Actions</th>
 	                    <th class="text-uppercase">% New</th>
 	                    <th class="text-uppercase">% Started</th>
@@ -326,7 +326,7 @@
 	        <table class="table table-bordered report-table table-striped text-center m-b-0">
 	            <thead>
 	                <tr>
-	                    <th class="text-uppercase">Offices</th>
+	                    <th class="text-uppercase">Departments</th>
 	                    <th class="text-uppercase">Total Actions</th>
 	                    <th class="text-uppercase">% New</th>
 	                    <th class="text-uppercase">% Started</th>

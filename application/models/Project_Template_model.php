@@ -3380,10 +3380,6 @@ class Project_Template_model extends CI_Model {
         return $this->db->get_where('projects',['id'=>$project_id])->row()->created_at;
     }
 
-    if ($category == '') {
-        $("#tasks_to_department").toggle();
-    }
-
     public function get_projects_data($category) {
         $data_office = $this->db->get('office')->result_array();
         $data_department = $this->db->get('department')->result_array();
