@@ -76,7 +76,7 @@
             mysqli_query($conn,$ind_insert_sql)or die('Error : Insert Error');    
             }
         }
-    }
+    
 
     /* inserting data for business client */
     $select_b = [
