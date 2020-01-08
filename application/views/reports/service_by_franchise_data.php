@@ -100,9 +100,9 @@
     <script>
          pieChart('service-tracking-donut-<?= $key ?>');
     </script>
-<?php
-    }
-?>    
+    <?php
+        }
+    ?>    
 </div>
 </div>
 <?php

@@ -190,6 +190,34 @@ function show_billing_data() {
     });
 }
 
+// report billing section js
+function show_action_data(category) {
+    if (category == 'action_by_office') {
+        $("#action_by_office").toggle();
+    } else if(category == 'action_to_office') {
+        $("#action_to_office").toggle();
+    } else if (category == 'action_by_department') {
+        $("#action_by_department").toggle();
+    } else if (category == 'action_to_department') {
+        $("#action_to_department").toggle();
+    }
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/get_action_data',
+        data: {'category': category},
+        success: function (result) {
+            if (category == 'action_by_office') {
+                $("#action_by_office").html(result);
+            } else if(category == 'action_to_office') {
+                $("#action_to_office").html(result);
+            } else if (category == 'action_by_department') {
+                $("#action_by_department").html(result);
+            } else if (category == 'action_to_department') {
+                $("#action_to_department").html(result);
+            }
+        },
+    });
+}
 // report lead section js
 function show_lead_data(category) {
     if (category == 'status') {
