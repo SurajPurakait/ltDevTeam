@@ -90,7 +90,7 @@
                                     </div>
                                     <div role="tabpanel" id="tab-action" class="tab-pane">
                                         <div class="panel-body">
-                                            <div class="ibox m-t-25" id="action_by_office_section">
+                                            <div class="ibox m-t-25" id="action_by_office_section" onclick="show_action_data('action_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions By Office</h5>
                                                     <div class="ibox-tools">
@@ -101,7 +101,7 @@
                                                 </div>
                                                 <div class="ibox-content p-0" id="action_by_office" style="display: none;"></div>
                                             </div>                                        
-                                            <div class="ibox m-t-25" id="action_to_office_section">
+                                            <div class="ibox m-t-25" id="action_to_office_section" onclick="show_action_data('action_to_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions To Office</h5>
                                                     <div class="ibox-tools">
@@ -112,7 +112,7 @@
                                                 </div>
                                                 <div class="ibox-content p-0" id="action_to_office" style="display: none;"></div>
                                             </div>
-                                            <div class="ibox m-t-25" id="action_by_department_section">
+                                            <div class="ibox m-t-25" id="action_by_department_section" onclick="show_action_data('action_by_department')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions By Department</h5>
                                                     <div class="ibox-tools">
@@ -123,7 +123,7 @@
                                                 </div>
                                                 <div class="ibox-content p-0" id="action_by_department" style="display: none;"></div>
                                             </div>
-                                            <div class="ibox m-t-25" id="action_to_department_section">
+                                            <div class="ibox m-t-25" id="action_to_department_section" onclick="show_action_data('action_to_department')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions To Department</h5>
                                                     <div class="ibox-tools">

@@ -116,7 +116,6 @@ class Reports extends CI_Controller {
         $category = post('category');
         $render_data['service_by_franchise_list'] = $this->service_model->get_service_by_franchise_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
-        // $render_data['tracking'] = array('tracking'=>'tracking');
         $render_data['category'] = $category; 
         $this->load->view('reports/service_by_franchise_data',$render_data);
     }
@@ -143,6 +142,30 @@ class Reports extends CI_Controller {
         );
         $this->load->view('reports/billing_invoice_payments_data',$render_data);   
     }
+    // report action data
+    public function get_action_data() {
+        $category = post('category');
+        $render_data['action_list'] = $this->action_model->get_action_data($category);
+        $render_data['reports'] = array('report'=>'leafnet_report');
+        $render_data['category'] = $category;
+        $this->load->view('reports/report_action_data',$render_data);
+    }
+
+    // report client data
+    public function get_clients_data() {
+        $category = post('category');
+        $render_data['client_list'] = $this->action_model->get_clients_data($category);
+        $render_data['reports'] = array('report'=>'leafnet_report');
+        $render_data['category'] = $category;
+        $this->load->view('reports/report_client_data',$render_data);    
+    }
+    
+    // report partner data
+    public function get_partner_data() {
+        $render_data['partner_list'] = $this->lead_management->get_partner_data();
+        $render_data['reports'] = array('report'=>'leafnet_report');
+        $this->load->view('reports/report_partner_data',$render_data);    
+    }
 
     // report lead data
     public function get_leads_data() {
@@ -151,19 +174,5 @@ class Reports extends CI_Controller {
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
         $this->load->view('reports/report_lead_data',$render_data);    
-    }
-
-    public function get_partner_data() {
-        $render_data['partner_list'] = $this->lead_management->get_partner_data();
-        $render_data['reports'] = array('report'=>'leafnet_report');
-        $this->load->view('reports/report_partner_data',$render_data);    
-    }
-
-    public function get_clients_data() {
-        $category = post('category');
-        $render_data['client_list'] = $this->action_model->get_clients_data($category);
-        $render_data['reports'] = array('report'=>'leafnet_report');
-        $render_data['category'] = $category;
-        $this->load->view('reports/report_client_data',$render_data);    
     }
 }
