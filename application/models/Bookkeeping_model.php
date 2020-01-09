@@ -216,7 +216,7 @@ class Bookkeeping_model extends CI_Model {
             }
             $data->order_id = $order_id;
             $this->save_bookkeeping_data($data);
-
+            $client_id=$this->db->get_where('order',['id'=>$order_id])->row()->reference_id;
             // Create the service request
 //            if ($data->retail_price_override) {
 //                $data->retail_price = $data->retail_price_override;
@@ -325,7 +325,7 @@ class Bookkeeping_model extends CI_Model {
             $this->billing_model->insert_invoice_data($invoice_data);
             $this->System->save_general_notification('order', $order_id, 'insert');
             $data = (object) $data;
-            $this->service_model->update_account_order_id_by_new_reference_id($data->new_reference_id, $order_id);
+            $this->service_model->update_account_order_id_by_new_reference_id($data->new_reference_id, $order_id,$client_id);
             /* mail section */
             $this->System->update_order_serial_id_by_order_id($order_id);
             $user_id = $_SESSION['user_id'];
