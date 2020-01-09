@@ -218,6 +218,36 @@ function show_action_data(category) {
         },
     });
 }
+
+// report project section js
+function show_project_data(category) {
+    if (category == 'projects_by_office') {
+        $("#projects_by_office").toggle();
+    } else if(category == 'tasks_by_office') {
+        $("#tasks_by_office").toggle();
+    } else if (category == 'projects_to_department') {
+        $("#projects_to_department").toggle();
+    } else if (category == 'tasks_to_department') {
+        $("#tasks_to_department").toggle();
+    }
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/get_project_data',
+        data: {'category': category},
+        success: function (result) {
+            if (category == 'projects_by_office') {
+                $("#projects_by_office").html(result);
+            } else if(category == 'tasks_by_office') {
+                $("#tasks_by_office").html(result);
+            } else if (category == 'projects_to_department') {
+                $("#projects_to_department").html(result);
+            } else if (category == 'tasks_to_department') {
+                $("#tasks_to_department").html(result);
+            }
+        },
+    });    
+}
+
 // report lead section js
 function show_lead_data(category) {
     if (category == 'status') {

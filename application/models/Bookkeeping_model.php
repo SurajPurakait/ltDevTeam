@@ -107,6 +107,7 @@ class Bookkeeping_model extends CI_Model {
             }
         } else { // Account
             if ($edit_id == "") { //Add account
+                
                 $security_questions = $data["security_question"];
                 unset($data["security_question"]);
                 $security_answers = $data["security_answer"];
@@ -574,6 +575,7 @@ class Bookkeeping_model extends CI_Model {
             } else {
                 return false;
             }
+            $client_id=$this->db->get_where('order',['id'=>$order_id])->row()->reference_id;
 
             $data->order_id = $order_id;
             $this->save_bookkeeping_data($data);
@@ -683,7 +685,7 @@ class Bookkeeping_model extends CI_Model {
             $this->billing_model->insert_invoice_data($invoice_data);
             $data = (object) $data;
             // Update the total amount of order            
-            $this->service_model->update_account_order_id_by_new_reference_id($data->new_reference_id, $order_id);
+            $this->service_model->update_account_order_id_by_new_reference_id($data->new_reference_id, $order_id,$client_id);
             $this->System->update_order_serial_id_by_order_id($order_id);
             $this->System->save_general_notification('order', $order_id, 'insert');
             $this->System->log("insert", "order", $order_id);

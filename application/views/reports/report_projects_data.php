@@ -1,5 +1,5 @@
 <?php
-    if ($category == 'action_by_office') {
+    if ($category == 'projects_by_office') {
 ?>
 	<div class="row">
 	    <div class="col-md-10">
@@ -7,10 +7,9 @@
 	            <thead>
 	                <tr>
 	                    <th class="text-uppercase">Offices</th>
-	                    <th class="text-uppercase">Total Actions</th>
+	                    <th class="text-uppercase">Total Projects</th>
 	                    <th class="text-uppercase">% New</th>
 	                    <th class="text-uppercase">% Started</th>
-	                    <th class="text-uppercase">% Resolved</th>
 	                    <th class="text-uppercase">% Completed</th>
 	                    <th class="text-uppercase">< 30 Days</th>
 	                    <th class="text-uppercase">< 60 Days</th>
@@ -20,14 +19,13 @@
 	            </thead>
 	            <tbody>
 	                <?php 
-	                    foreach ($action_list as $value) {
+	                    foreach ($projects_list as $value) {
 	                ?>
 	                <tr>   
 	                    <td><?= $value['office_name']; ?></td>
-	                    <td><?= $value['total_actions']; ?></td>
+	                    <td><?= $value['total_projects']; ?></td>
 	                    <td><?= $value['new']; ?></td>
 	                    <td><?= $value['started']; ?></td>
-	                    <td><?= $value['resolved']; ?></td>
 	                    <td><?= $value['completed']; ?></td>
 	                    <td><?= $value['less_then_30']; ?></td>
 	                    <td><?= $value['less_then_60']; ?></td>
@@ -44,14 +42,14 @@
 	    	<h4 class="text-center m-t-40">Offices</h4>
 	        <?php 
 	            foreach ($reports as $key => $value) {
-	                $data_id = array_column($action_list,'id');        
-	                $data_total = array_column($action_list,'total_actions');
+	                $data_id = array_column($projects_list,'id');        
+	                $data_total = array_column($projects_list,'total_projects');
 	                $data = array_combine($data_id, $data_total);        
 	        ?>
-	        <div class="byoffice-action-donut-<?= $key ?> text-center" data-size="100" id="byoffice_action_donut_<?= $key ?>" data-json="byoffice_action_data_<?= $key ?>"></div>
+	        <div class="byoffice-projects-donut-<?= $key ?> text-center" data-size="100" id="byoffice_projects_donut_<?= $key ?>" data-json="byoffice_projects_data_<?= $key ?>"></div>
 	        
 	        <script>
-	            var byoffice_action_data_<?= $key ?> = [
+	            var byoffice_projects_data_<?= $key ?> = [
 	                {'section_label': 'Contador Fort Lauderdale ', 'value': <?= $data[34]; ?>, 'color': '#FFB046'}, 
 	                {'section_label': 'Contador Miami ', 'value': <?= $data[1]; ?>, 'color': '#06a0d6'}, 
 	                {'section_label': 'Contador Orlando', 'value': <?= $data[44]; ?>, 'color': '#ff8c1a'},
@@ -75,7 +73,7 @@
 	            ];                    
 	        </script>
 	        <script>
-	             pieChart('byoffice-action-donut-<?= $key ?>');
+	             pieChart('byoffice-projects-donut-<?= $key ?>');
 	        </script>
 	        <?php
 	             }
@@ -84,10 +82,9 @@
 	        <h4 class="m-t-40 text-center">Tracking</h4>
 		    <?php 
 		        foreach ($reports as $key => $value) {
-		            $new = array_sum(array_column($action_list,'new'));
-		            $started = array_sum(array_column($action_list,'started')); 
-		            $resolved = array_sum(array_column($action_list,'resolved')); 
-		            $completed = array_sum(array_column($action_list,'completed'));          
+		            $new = array_sum(array_column($projects_list,'new'));
+		            $started = array_sum(array_column($projects_list,'started')); 
+		            $completed = array_sum(array_column($projects_list,'completed'));          
 		    ?>
 		    <div class="byoffice-tracking-donut-<?= $key ?> text-center" data-size="100" id="byoffice_tracking_donut_<?= $key ?>" data-json="byoffice_tracking_data_<?= $key ?>"></div>
 		    
@@ -95,7 +92,6 @@
 		        var byoffice_tracking_data_<?= $key ?> = [
 		            {'section_label': 'New ', 'value': <?= $new; ?>, 'color': '#1c84c6'}, 
 		            {'section_label': 'Started ', 'value': <?= $started; ?>, 'color': '#f8ac59'}, 
-		            {'section_label': 'Started ', 'value': <?= $resolved; ?>, 'color': '#ff8c66'}, 
 		            {'section_label': 'Completed', 'value': <?= $completed; ?>, 'color': '#1ab394'},
 		        ];                    
 		    </script>
@@ -109,7 +105,7 @@
     </div>    
 
 <?php
-    } elseif ($category == 'action_to_office') {
+    } elseif ($category == 'tasks_by_office') {
 ?>
 		<div class="row">
 	    <div class="col-md-10">
@@ -117,10 +113,9 @@
 	            <thead>
 	                <tr>
 	                    <th class="text-uppercase">Offices</th>
-	                    <th class="text-uppercase">Total Actions</th>
+	                    <th class="text-uppercase">Total Tasks</th>
 	                    <th class="text-uppercase">% New</th>
 	                    <th class="text-uppercase">% Started</th>
-	                    <th class="text-uppercase">% Resolved</th>
 	                    <th class="text-uppercase">% Completed</th>
 	                    <th class="text-uppercase">< 30 Days</th>
 	                    <th class="text-uppercase">< 60 Days</th>
@@ -130,14 +125,13 @@
 	            </thead>
 	            <tbody>
 	                <?php 
-	                    foreach ($action_list as $value) {
+	                    foreach ($projects_list as $value) {
 	                ?>
 	                <tr>   
 	                    <td><?= $value['office_name']; ?></td>
-	                    <td><?= $value['total_actions']; ?></td>
+	                    <td><?= $value['total_tasks']; ?></td>
 	                    <td><?= $value['new']; ?></td>
 	                    <td><?= $value['started']; ?></td>
-	                    <td><?= $value['resolved']; ?></td>
 	                    <td><?= $value['completed']; ?></td>
 	                    <td><?= $value['less_then_30']; ?></td>
 	                    <td><?= $value['less_then_60']; ?></td>
@@ -154,14 +148,14 @@
 	    	<h4 class="text-center m-t-40">Offices</h4>
 	        <?php 
 	            foreach ($reports as $key => $value) {
-	                $data_id = array_column($action_list,'id');        
-	                $data_total = array_column($action_list,'total_actions');
+	                $data_id = array_column($projects_list,'id');        
+	                $data_total = array_column($projects_list,'total_tasks');
 	                $data = array_combine($data_id, $data_total);        
 	        ?>
-	        <div class="tooffice-action-donut-<?= $key ?> text-center" data-size="100" id="tooffice_action_donut_<?= $key ?>" data-json="tooffice_action_data_<?= $key ?>"></div>
+	        <div class="byoffice-tasks-donut-<?= $key ?> text-center" data-size="100" id="byoffice_tasks_donut_<?= $key ?>" data-json="byoffice_tasks_data_<?= $key ?>"></div>
 	        
 	        <script>
-	            var tooffice_action_data_<?= $key ?> = [
+	            var byoffice_tasks_data_<?= $key ?> = [
 	                {'section_label': 'Contador Fort Lauderdale ', 'value': <?= $data[34]; ?>, 'color': '#FFB046'}, 
 	                {'section_label': 'Contador Miami ', 'value': <?= $data[1]; ?>, 'color': '#06a0d6'}, 
 	                {'section_label': 'Contador Orlando', 'value': <?= $data[44]; ?>, 'color': '#ff8c1a'},
@@ -185,7 +179,7 @@
 	            ];                    
 	        </script>
 	        <script>
-	             pieChart('tooffice-action-donut-<?= $key ?>');
+	             pieChart('byoffice-tasks-donut-<?= $key ?>');
 	        </script>
 	        <?php
 	             }
@@ -194,23 +188,21 @@
 	        <h4 class="m-t-40 text-center">Tracking</h4>
 		    <?php 
 		        foreach ($reports as $key => $value) {
-		            $new = array_sum(array_column($action_list,'new'));
-		            $started = array_sum(array_column($action_list,'started')); 
-		            $resolved = array_sum(array_column($action_list,'resolved')); 
-		            $completed = array_sum(array_column($action_list,'completed'));          
+		            $new = array_sum(array_column($projects_list,'new'));
+		            $started = array_sum(array_column($projects_list,'started')); 
+		            $completed = array_sum(array_column($projects_list,'completed'));          
 		    ?>
-		    <div class="tooffice-tracking-donut-<?= $key ?> text-center" data-size="100" id="tooffice_tracking_donut_<?= $key ?>" data-json="tooffice_tracking_data_<?= $key ?>"></div>
+		    <div class="byoffice-tracking-donut-<?= $key ?> text-center" data-size="100" id="byoffice_tracking_donut_<?= $key ?>" data-json="byoffice_tracking_data_<?= $key ?>"></div>
 		    
 		    <script>
-		        var tooffice_tracking_data_<?= $key ?> = [
+		        var byoffice_tracking_data_<?= $key ?> = [
 		            {'section_label': 'New ', 'value': <?= $new; ?>, 'color': '#1c84c6'}, 
 		            {'section_label': 'Started ', 'value': <?= $started; ?>, 'color': '#f8ac59'}, 
-		            {'section_label': 'Started ', 'value': <?= $resolved; ?>, 'color': '#ff8c66'}, 
 		            {'section_label': 'Completed', 'value': <?= $completed; ?>, 'color': '#1ab394'},
 		        ];                    
 		    </script>
 		    <script>
-		         pieChart('tooffice-tracking-donut-<?= $key ?>');
+		         pieChart('byoffice-tracking-donut-<?= $key ?>');
 		    </script>
 		    <?php
 		        }
@@ -219,7 +211,7 @@
     </div>  
 
 <?php
-    } elseif ($category == 'action_by_department') {
+    } elseif ($category == 'projects_to_department') {
 ?>
 		<div class="row">
 	    <div class="col-md-10">
@@ -227,10 +219,9 @@
 	            <thead>
 	                <tr>
 	                    <th class="text-uppercase">Departments</th>
-	                    <th class="text-uppercase">Total Actions</th>
+	                    <th class="text-uppercase">Total Projects</th>
 	                    <th class="text-uppercase">% New</th>
 	                    <th class="text-uppercase">% Started</th>
-	                    <th class="text-uppercase">% Resolved</th>
 	                    <th class="text-uppercase">% Completed</th>
 	                    <th class="text-uppercase">< 30 Days</th>
 	                    <th class="text-uppercase">< 60 Days</th>
@@ -240,14 +231,13 @@
 	            </thead>
 	            <tbody>
 	                <?php 
-	                    foreach ($action_list as $value) {
+	                    foreach ($projects_list as $value) {
 	                ?>
 	                <tr>   
 	                    <td><?= $value['department_name']; ?></td>
-	                    <td><?= $value['total_actions']; ?></td>
+	                    <td><?= $value['total_projects']; ?></td>
 	                    <td><?= $value['new']; ?></td>
 	                    <td><?= $value['started']; ?></td>
-	                    <td><?= $value['resolved']; ?></td>
 	                    <td><?= $value['completed']; ?></td>
 	                    <td><?= $value['less_then_30']; ?></td>
 	                    <td><?= $value['less_then_60']; ?></td>
@@ -264,14 +254,14 @@
 	    	<h4 class="m-t-40 text-center">Department</h4>
         <?php 
             foreach ($reports as $key => $value) {
-                $data_id = array_column($action_list,'id');        
-                $data_total = array_column($action_list,'total_actions');
+                $data_id = array_column($projects_list,'id');        
+                $data_total = array_column($projects_list,'total_projects');
                 $data = array_combine($data_id,$data_total);        
             ?>
-            <div class="bydepartment-action-donut-<?= $key ?> text-center" data-size="100" id="bydepartment_action_donut_<?= $key ?>" data-json="bydepartment_action_data_<?= $key ?>"></div>
+            <div class="todepartment-projects-donut-<?= $key ?> text-center" data-size="100" id="todepartment_projects_donut_<?= $key ?>" data-json="todepartment_projects_data_<?= $key ?>"></div>
             
             <script>
-                var bydepartment_action_data_<?= $key ?> = [
+                var todepartment_projects_data_<?= $key ?> = [
                     {'section_label': 'Billing ', 'value': <?= $data[3]; ?>, 'color': '#cc6600'}, 
                     {'section_label': 'Payroll ', 'value': <?= $data[4]; ?>, 'color': '#06a0d6'}, 
                     {'section_label': 'Bookkeeping', 'value': <?= $data[5]; ?>, 'color': '#ff8c1a'},
@@ -286,7 +276,7 @@
                 ];                    
             </script>
             <script>
-                 pieChart('bydepartment-action-donut-<?= $key ?>');
+                 pieChart('todepartment-projects-donut-<?= $key ?>');
             </script>
             <h4 class="m-t-40 text-center">Tracking</h4>
             <?php
@@ -294,23 +284,21 @@
             ?>
             <?php 
                 foreach ($reports as $key => $value) {
-                    $new = array_sum(array_column($action_list,'new'));
-		            $started = array_sum(array_column($action_list,'started')); 
-		            $resolved = array_sum(array_column($action_list,'resolved')); 
-		            $completed = array_sum(array_column($action_list,'completed'));          
+                    $new = array_sum(array_column($projects_list,'new'));
+		            $started = array_sum(array_column($projects_list,'started')); 
+		            $completed = array_sum(array_column($projects_list,'completed'));          
             ?>
-            <div class="bydepartment-tracking-donut-<?= $key ?> text-center" data-size="100" id="bydepartment_tracking_donut_<?= $key ?>" data-json="bydepartment_tracking_data_<?= $key ?>"></div>
+            <div class="todepartment-tracking-donut-<?= $key ?> text-center" data-size="100" id="todepartment_tracking_donut_<?= $key ?>" data-json="todepartment_tracking_data_<?= $key ?>"></div>
             
             <script>
-                var bydepartment_tracking_data_<?= $key ?> = [
+                var todepartment_tracking_data_<?= $key ?> = [
                     {'section_label': 'New ', 'value': <?= $new; ?>, 'color': '#1c84c6'}, 
 		            {'section_label': 'Started ', 'value': <?= $started; ?>, 'color': '#f8ac59'}, 
-		            {'section_label': 'Started ', 'value': <?= $resolved; ?>, 'color': '#ff8c66'}, 
 		            {'section_label': 'Completed', 'value': <?= $completed; ?>, 'color': '#1ab394'},
                 ];                    
             </script>
             <script>
-                 pieChart('bydepartment-tracking-donut-<?= $key ?>');
+                 pieChart('todepartment-tracking-donut-<?= $key ?>');
             </script>
             <?php
                  }
@@ -319,18 +307,17 @@
     </div>  
 
 <?php
-    } elseif ($category == 'action_to_department') {
+    } elseif ($category == 'tasks_to_department') {
 ?>
 		<div class="row">
 	    <div class="col-md-10">
 	        <table class="table table-bordered report-table table-striped text-center m-b-0">
 	            <thead>
 	                <tr>
-	                    <th class="text-uppercase">Departments</th>
-	                    <th class="text-uppercase">Total Actions</th>
+	                    <th class="text-uppercase">Department</th>
+	                    <th class="text-uppercase">Total Tasks</th>
 	                    <th class="text-uppercase">% New</th>
 	                    <th class="text-uppercase">% Started</th>
-	                    <th class="text-uppercase">% Resolved</th>
 	                    <th class="text-uppercase">% Completed</th>
 	                    <th class="text-uppercase">< 30 Days</th>
 	                    <th class="text-uppercase">< 60 Days</th>
@@ -340,14 +327,13 @@
 	            </thead>
 	            <tbody>
 	                <?php 
-	                    foreach ($action_list as $value) {
+	                    foreach ($projects_list as $value) {
 	                ?>
 	                <tr>   
 	                    <td><?= $value['department_name']; ?></td>
-	                    <td><?= $value['total_actions']; ?></td>
+	                    <td><?= $value['total_tasks']; ?></td>
 	                    <td><?= $value['new']; ?></td>
 	                    <td><?= $value['started']; ?></td>
-	                    <td><?= $value['resolved']; ?></td>
 	                    <td><?= $value['completed']; ?></td>
 	                    <td><?= $value['less_then_30']; ?></td>
 	                    <td><?= $value['less_then_60']; ?></td>
@@ -364,14 +350,14 @@
 	    	<h4 class="m-t-40 text-center">Department</h4>
         <?php 
             foreach ($reports as $key => $value) {
-                $data_id = array_column($action_list,'id');        
-                $data_total = array_column($action_list,'total_actions');
+                $data_id = array_column($projects_list,'id');        
+                $data_total = array_column($projects_list,'total_tasks');
                 $data = array_combine($data_id,$data_total);        
             ?>
-            <div class="todepartment-action-donut-<?= $key ?> text-center" data-size="100" id="todepartment_action_donut_<?= $key ?>" data-json="todepartment_action_data_<?= $key ?>"></div>
+            <div class="todepartment-tasks-donut-<?= $key ?> text-center" data-size="100" id="todepartment_tasks_donut_<?= $key ?>" data-json="todepartment_tasks_data_<?= $key ?>"></div>
             
             <script>
-                var todepartment_action_data_<?= $key ?> = [
+                var todepartment_tasks_data_<?= $key ?> = [
                     {'section_label': 'Billing ', 'value': <?= $data[3]; ?>, 'color': '#cc6600'}, 
                     {'section_label': 'Payroll ', 'value': <?= $data[4]; ?>, 'color': '#06a0d6'}, 
                     {'section_label': 'Bookkeeping', 'value': <?= $data[5]; ?>, 'color': '#ff8c1a'},
@@ -386,7 +372,7 @@
                 ];                    
             </script>
             <script>
-                 pieChart('todepartment-action-donut-<?= $key ?>');
+                 pieChart('todepartment-tasks-donut-<?= $key ?>');
             </script>
             <h4 class="m-t-40 text-center">Tracking</h4>
             <?php
@@ -394,23 +380,21 @@
             ?>
             <?php 
                 foreach ($reports as $key => $value) {
-					$new = array_sum(array_column($action_list,'new'));
-		            $started = array_sum(array_column($action_list,'started')); 
-		            $resolved = array_sum(array_column($action_list,'resolved')); 
-		            $completed = array_sum(array_column($action_list,'completed'));          
+					$new = array_sum(array_column($projects_list,'new'));
+		            $started = array_sum(array_column($projects_list,'started')); 
+		            $completed = array_sum(array_column($projects_list,'completed'));          
             ?>
-            <div class="todepartment-tracking-donut-<?= $key ?> text-center" data-size="100" id="todepartment_tracking_donut_<?= $key ?>" data-json="todepartment_tracking_data_<?= $key ?>"></div>
+            <div class="todepartmenttasks-tracking-donut-<?= $key ?> text-center" data-size="100" id="todepartmenttasks_tracking_donut_<?= $key ?>" data-json="todepartmenttasks_tracking_data_<?= $key ?>"></div>
             
             <script>
-                var todepartment_tracking_data_<?= $key ?> = [
+                var todepartmenttasks_tracking_data_<?= $key ?> = [
                     {'section_label': 'New ', 'value': <?= $new; ?>, 'color': '#1c84c6'}, 
 		            {'section_label': 'Started ', 'value': <?= $started; ?>, 'color': '#f8ac59'}, 
-		            {'section_label': 'Started ', 'value': <?= $resolved; ?>, 'color': '#ff8c66'}, 
 		            {'section_label': 'Completed', 'value': <?= $completed; ?>, 'color': '#1ab394'},
                 ];                    
             </script>
             <script>
-                 pieChart('todepartment-tracking-donut-<?= $key ?>');
+                 pieChart('todepartmenttasks-tracking-donut-<?= $key ?>');
             </script>
             <?php
                  }
