@@ -45,9 +45,9 @@
     // echo $ind_query;exit;
     mysqli_query($conn, 'SET SQL_BIG_SELECTS=1');    
     $report_client_query = mysqli_query($conn,$ind_query);
-    $report_client_result = mysqli_fetch_assoc($report_client_query);
+    $report_client_count = mysqli_num_rows($report_client_query);
 
-    if (!empty($report_client_result)) {
+    if ($report_client_count > 0) {
         while ($rcr = mysqli_fetch_assoc($report_client_query)) {
             // Collecting Data for Report Client Table
             $type = $rcr['reference'];
@@ -76,7 +76,7 @@
             mysqli_query($conn,$ind_insert_sql)or die('Error : Insert Error');    
             }
         }
-    }
+    
 
     /* inserting data for business client */
     $select_b = [

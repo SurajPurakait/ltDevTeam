@@ -1085,4 +1085,16 @@ ALTER TABLE `project_periodic_pattern` ADD `is_created` ENUM('n','y') NOT NULL A
 /*import report_client */
 
 ALTER TABLE `order` ADD `client_id` INT(100) NOT NULL COMMENT 'individual_id for individual client' AFTER `reference_id`;
+
 /*live end*/
+
+/*07.01.2020*/
+ALTER TABLE `invoice_recurence` ADD `due_date` VARCHAR(20) NOT NULL AFTER `status`; 
+
+/* 08.01.2020 */
+-- import report_dashboard_action
+ALTER TABLE `report_dashboard_action` CHANGE `due_date` `due_date` DATE NULL DEFAULT NULL;
+
+ALTER TABLE `financial_accounts` ADD `client_id` INT(5) NULL DEFAULT NULL AFTER `order_id`; 
+
+ALTER TABLE `payroll_account_numbers` ADD `client_id` INT(5) NULL DEFAULT NULL AFTER `order_id`; 

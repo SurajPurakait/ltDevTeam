@@ -311,12 +311,18 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                                 <td <?= $style; ?>><strong>Account Info</strong></td>
                                 <td <?= $style; ?> >
                                     <?php foreach ($account_details as $ad) { ?>
+                                        <b>Type of Account: </b>
+                                        <?php echo (isset($ad['type_of_account']) && $ad['type_of_account']!=''?$ad['type_of_account']:'') ?><br>
                                         <b>Bank Name:</b>
                                         <?php echo $ad['bank_name'] ?><br>
                                         <b>Bank Account Number:</b>
                                         <?php echo $ad['ban_account_number'] ?><br>
                                         <b>Bank Routing Number:</b>
-                                        <?php echo $ad['bank_routing_number'] ?><hr />
+                                        <?php echo $ad['bank_routing_number'] ?><br>
+                                        <b>Website: </b>
+                                        <?php echo (isset($ad['bank_website']) && $ad['bank_website']!=''?$ad['bank_website']:'') ?><br>
+                                        <b>User: </b>
+                                        <?php echo (isset($ad['user']) && $ad['user']!=''?$ad['user']:'') ?><hr />
                                     <?php } ?>
                                 </td>
                             <?php } else { ?>

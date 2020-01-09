@@ -468,7 +468,8 @@ class Service_model extends CI_Model {
         $select[] = 'ord.complete_date AS complete_date';
         $select[] = 'ord.target_start_date AS target_start_date';
         $select[] = 'ord.target_complete_date AS target_complete_date';
-        $select[] = 'ord.total_of_order AS total_of_order';
+        // $select[] = 'ord.total_of_order AS total_of_order';
+        $select[] = 'inv.total_amount AS total_of_order';
         $select[] = 'ord.tracking AS tracking';
         // $select[] = 'company.name AS client_name';
         $select[] = '(CASE WHEN ord.reference = "individual" THEN (SELECT CONCAT(individual.first_name, \' \', individual.last_name) from individual WHERE individual.id = ord.client_id)  WHEN ord.reference = "company" THEN (SELECT company.name from company WHERE ord.reference_id = company.id) ELSE "" END) AS client_name';
@@ -500,7 +501,8 @@ class Service_model extends CI_Model {
                 INNER JOIN internal_data indt ON indt.reference_id = `ord`.`reference_id` AND indt.reference = `ord`.`reference` 
                 INNER JOIN services ON services.id = ord.service_id
                 LEFT OUTER JOIN service_request AS srv_rq ON srv_rq.order_id = ord.id
-                INNER JOIN staff st ON st.id = ord.staff_requested_service";
+                INNER JOIN staff st ON st.id = ord.staff_requested_service
+                LEFT OUTER JOIN invoice_info AS inv ON inv.order_id = ord.id";
         if (isset($form_data)) {
             if (isset($form_data['variable_dropdown'])) {
                 if (in_array('9', $form_data['variable_dropdown'])) {
@@ -1609,9 +1611,9 @@ class Service_model extends CI_Model {
         }
     }
 
-    public function update_account_order_id_by_new_reference_id($new_reference_id, $order_id) {
+    public function update_account_order_id_by_new_reference_id($new_reference_id, $order_id,$client_id='') {
         $this->db->where('company_id', $new_reference_id);
-        return $this->db->update('financial_accounts', ['order_id' => $order_id]);
+        return $this->db->update('financial_accounts', ['order_id' => $order_id,'client_id'=>$client_id]);
     }
 
     public function get_service_request($order_id, $service_id) {

@@ -988,7 +988,7 @@ class Company_model extends CI_Model {
            $oid[]= $val['id'];
         }
         if(!empty($oid)){
-            $this->db->select("bank_name, account_number as ban_account_number, routing_number as bank_routing_number");
+            $this->db->select("bank_name, account_number as ban_account_number, routing_number as bank_routing_number,type_of_account,user,bank_website");
             $this->db->from('financial_accounts');
             $this->db->where_in('order_id',$oid);
             return $this->db->get()->result_array();
@@ -997,18 +997,19 @@ class Company_model extends CI_Model {
         }
     }
 
-    public function get_account_details_bookkeeping($reference_id,$reference='') {
+    public function get_account_details_bookkeeping($reference_id,$reference='',$client_id='') {
         if($reference==''){
-            $order_list = $this->db->get_where('order', ['reference_id' => $reference_id, 'reference' => 'company'])->result_array();
-            if (!empty($order_list)) {
-                $this->db->where_in("order_id", array_column($order_list, 'id'));
-                $this->db->group_by("account_number");
-                return $this->db->get('financial_accounts')->result_array();
-            } else {
-                return [];
-            }
+            return $this->db->get_where('financial_accounts',['client_id'=>$client_id])->result_array();
+//            $order_list = $this->db->get_where('order', ['reference_id' => $reference_id, 'reference' => 'company'])->result_array();
+//            if (!empty($order_list)) {
+//                $this->db->where_in("order_id", array_column($order_list, 'id'));
+//                $this->db->group_by("account_number");
+//                return $this->db->get('financial_accounts')->result_array();
+//            } else {
+//                return [];
+//            }
         }else{
-            return $this->db->get_where('financial_accounts',['order_id'=>$reference_id,'reference'=>'project'])->result_array();
+            return $this->db->get_where('financial_accounts',['client_id'=>$client_id])->result_array();
         }
     }
 
