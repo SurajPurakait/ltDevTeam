@@ -1094,3 +1094,10 @@ ALTER TABLE `invoice_recurence` ADD `due_date` VARCHAR(20) NOT NULL AFTER `statu
 /* 08.01.2020 */
 -- import report_dashboard_action
 ALTER TABLE `report_dashboard_action` CHANGE `due_date` `due_date` DATE NULL DEFAULT NULL;
+
+ALTER TABLE `financial_accounts` ADD `client_id` INT(5) NULL DEFAULT NULL AFTER `order_id`; 
+
+ALTER TABLE `payroll_account_numbers` ADD `client_id` INT(5) NULL DEFAULT NULL AFTER `order_id`; 
+
+/* 10.01.2020 */
+-- import report_dashboard_project

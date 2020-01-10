@@ -14,6 +14,7 @@ class Reports extends CI_Controller {
         $this->load->model("service_model");
         $this->load->model("lead_management");
         $this->load->model("action_model");
+        $this->load->model('Project_Template_model');
     }
     public function index($type = 1) {
         $this->load->layout = 'dashboard';
@@ -150,7 +151,14 @@ class Reports extends CI_Controller {
         $render_data['category'] = $category;
         $this->load->view('reports/report_action_data',$render_data);
     }
-
+    // report project data
+    public function get_project_data() {
+        $category = post('category');
+        $render_data['projects_list'] = $this->Project_Template_model->get_projects_data($category);
+        $render_data['reports'] = array('report'=>'leafnet_report');
+        $render_data['category'] = $category;
+        $this->load->view('reports/report_projects_data',$render_data);    
+    }
     // report client data
     public function get_clients_data() {
         $category = post('category');

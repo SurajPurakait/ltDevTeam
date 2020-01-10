@@ -376,6 +376,7 @@
                         <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
                                 <input type="hidden" name="reference_id" id="reference_id" value="<?= $reference_id; ?>">
+                                <input type="hidden" name="client_id" id="client_id" value="<?= $reference_id; ?>">
                                 <input type="hidden" name="reference" id="reference" value="<?= $reference; ?>">
                                 <input type="hidden" name="service_id" id="service_id" value="<?= isset($company_order_data[0]['service_id']) ? $company_order_data[0]['service_id'] : 0; ?>">
                                 <input type="hidden" name="action" id="action" value="create_new_company">
