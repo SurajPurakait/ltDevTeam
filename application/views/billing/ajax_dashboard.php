@@ -65,10 +65,12 @@ foreach ($result as $row_count => $value):
                             <th class="text-center" width="15%">Client&nbsp;Name</th>
                             <th class="text-center" width="5%">Office&nbsp;ID</th>
                             <?php 
-                            if($is_recurrence == 'y') { ?>                           
+                            if($is_recurrence == 'y') { ?> 
+                            <th class="text-center" width="5%" style="display:none">Client&nbsp;ID</th>
                             <th class="text-center" width="5%" style="display:none">Partner</th>
                             <th class="text-center" width="5%" style="display:none">Manager</th>
                             <?php } else{ ?>
+                            <th class="text-center" width="5%">Client&nbsp;ID</th>
                             <th class="text-center" width="5%">Partner</th>
                             <th class="text-center" width="5%">Manager</th>
                             <?php } ?>
@@ -89,7 +91,9 @@ foreach ($result as $row_count => $value):
                             <?php if($is_recurrence == 'y'){?>
                             <td title="Office"><?='<b>'. $row->officeid .'</b>'; ?><?= "<br>". $row->manager; ?></td>
                             <?php } else{ ?>
-                            <td title="Office"><?= $row->officeid ; ?></td>                           
+                            <td title="Office"><?= $row->officeid ; ?></td> 
+                            <!--<td title="Client Id"><a target="_blank" href="<?= base_url(); ?>action/home/view_business/<?= ($row->reference_id); ?>/<?= ($row->company_id); ?>"> <span><?= $row->clientid; ?></span></a></td>-->
+                            <td title="Client Id"><?= $row->clientid; ?></td>
                             <td title="Partner"><?= $row->partner; ?></td>
                             <td title="Manager"><?= $row->manager; ?></td>
                             <?php } ?>
