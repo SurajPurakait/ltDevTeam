@@ -2150,7 +2150,10 @@ class Billing_model extends CI_Model {
             // print_r($service_data['responsible_assign']);exit;
             $service_request_data[$key]['order_id'] = $order_id;
             if(($target_query['input_form'] == 'n' && $target_query['service_id'] == $service_request_data[$key]['services_id'] && $service_data['responsible_assign'] == 1 && $service_data['dept'] == 'NULL' ) || ($target_query['input_form'] == 'y' && $target_query['service_id'] == $service_request_data[$key]['services_id'] && $service_data['responsible_assign'] == 1 && $service_data['dept'] == 'NULL' )){
-                   $service_request_data[$key]['status'] = 0; 
+                   $service_request_data[$key]['status'] = 0;
+
+                   $this->db->where('id', $order_id);
+                   $this->db->update('order', array('status' => 0)); 
                 }else{
                     $service_request_data[$key]['status'] = 2;
                 }
@@ -2265,7 +2268,10 @@ class Billing_model extends CI_Model {
             // print_r($service_data['responsible_assign']);exit;
             $service_request_data[$key]['order_id'] = $order_id;
             if(($target_query['input_form'] == 'n' && $target_query['service_id'] == $service_request_data[$key]['services_id'] && $service_data['responsible_assign'] == 1 && $service_data['dept'] == 'NULL' ) || ($target_query['input_form'] == 'y' && $target_query['service_id'] == $service_request_data[$key]['services_id'] && $service_data['responsible_assign'] == 1 && $service_data['dept'] == 'NULL' )){
-                   $service_request_data[$key]['status'] = 0; 
+                   $service_request_data[$key]['status'] = 0;
+
+                   $this->db->where('id', $order_id);
+                   $this->db->update('order', array('status' => 0)); 
                 }else{
                     $service_request_data[$key]['status'] = 2;
                 }
