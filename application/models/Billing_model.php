@@ -2364,6 +2364,7 @@ class Billing_model extends CI_Model {
             '(SELECT pattern FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as pattern',
             '(SELECT due_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as due_date',
             '(SELECT next_occurance_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as next_generation_date',
+            '(SELECT total_generation_time FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as total_generation_time',
 //            '(SELECT company_id FROM company WHERE company.id = inv.reference_id) as company_id',
             ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
