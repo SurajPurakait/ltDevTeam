@@ -3473,13 +3473,13 @@ class Project_Template_model extends CI_Model {
             } elseif ($sub_category == 'completed') {
                 $this->db->where('project_status','2');
             } elseif ($sub_category == 'less_then_30') {
-                $this->db->where('project_status','2');
+                $this->db->where('project_status !=','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','30');
             } elseif ($sub_category == 'less_then_60') {
-                $this->db->where('project_status','2');
+                $this->db->where('project_status !=','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','60');
             } elseif ($sub_category == 'more_then_60') {
-                $this->db->where('project_status','2');
+                $this->db->where('project_status !=','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
@@ -3496,13 +3496,13 @@ class Project_Template_model extends CI_Model {
             } elseif ($sub_category == 'completed') {
                 $this->db->where('task_status','2');
             } elseif ($sub_category == 'less_then_30') {
-                $this->db->where('task_status','2');
+                $this->db->where('task_status !=','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','30');
             } elseif ($sub_category == 'less_then_60') {
-                $this->db->where('task_status','2');
+                $this->db->where('task_status !=','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','60');
             } elseif ($sub_category == 'more_then_60') {
-                $this->db->where('task_status','2');
+                $this->db->where('task_status !=','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
@@ -3520,13 +3520,13 @@ class Project_Template_model extends CI_Model {
             } elseif ($sub_category == 'completed') {
                 $this->db->where('project_status','2');
             } elseif ($sub_category == 'less_then_30') {
-                $this->db->where('project_status','2');
+                $this->db->where('project_status !=','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','30');
             } elseif ($sub_category == 'less_then_60') {
-                $this->db->where('project_status','2');
+                $this->db->where('project_status !=','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','60');
             } elseif ($sub_category == 'more_then_60') {
-                $this->db->where('project_status','2');
+                $this->db->where('project_status !=','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
@@ -3543,13 +3543,13 @@ class Project_Template_model extends CI_Model {
             } elseif ($sub_category == 'completed') {
                 $this->db->where('task_status','2');
             } elseif ($sub_category == 'less_then_30') {
-                $this->db->where('task_status','2');
+                $this->db->where('task_status !=','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
             } elseif ($sub_category == 'less_then_60') {
-                $this->db->where('task_status','2');
+                $this->db->where('task_status !=','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
             } elseif ($sub_category == 'more_then_60') {
-                $this->db->where('task_status','2');
+                $this->db->where('task_status !=','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
