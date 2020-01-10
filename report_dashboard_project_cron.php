@@ -51,7 +51,13 @@
             $project_office = $prod['project_office'];
             $task_department = $prod['task_department'];
             $project_department = $prod['project_department'];
-            $project_due_date = $prod['project_due_date'];
+            
+            if($prod['project_due_date'] == '0000-00-00' || $prod['project_due_date'] == '') {
+                $project_due_date = '0001-01-01';
+            } else {
+                $project_due_date = $prod['project_due_date'];
+            }
+   
             if (!empty($prod['project_creation_date'])) {
                 $project_creation_date = date('Y-m-d',strtotime($prod['project_creation_date']));
             } else {
