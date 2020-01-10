@@ -1,14 +1,14 @@
 <?php
 
-    // $servername = "localhost";
-    // $username = "leafnet_db_user";
-    // $password = "leafnet@123";
-    // $db = 'leafnet_stagings';
-
     $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $db = 'leafnet';
+    $username = "leafnet_db_user";
+    $password = "leafnet@123";
+    $db = 'leafnet_stagings';
+
+    // $servername = "localhost";
+    // $username = "root";
+    // $password = "";
+    // $db = 'leafnet';
 
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
