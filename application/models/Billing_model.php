@@ -390,10 +390,17 @@ class Billing_model extends CI_Model {
                         $next_month=$ins_recurrence['actual_due_month']-12;
                         $ins_recurrence['next_occurance_date']=($ins_recurrence['actual_due_year']+1).'-'.$next_month.'-'.$ins_recurrence['actual_due_day'];
                     }
-                    
+                    if($ins_recurrence['duration_time'] == 1)
+                    {
+                       $ins_recurrence['due_date'] = ''; 
+                       $ins_recurrence['next_occurance_date'] = '';
+                    } else {
+                        $ins_recurrence['due_date'] = $ins_recurrence['due_date'];
+                        $ins_recurrence['next_occurance_date'] = $ins_recurrence['next_occurance_date'];
+                    }
                     
     //            if(isset($ins_recurrence['pattern']))
-    //            print_r($ins_recurrence);die;
+                print_r($ins_recurrence);die;
                     $this->db->insert('invoice_recurence', $ins_recurrence);
                     $recurrence_id= $this->db->insert_id();
     //                 echo $this->db->last_query();die;
@@ -657,7 +664,14 @@ class Billing_model extends CI_Model {
                                 $next_month=$ins_recurrence['actual_due_month']-12;
                                 $ins_recurrence['next_occurance_date']=($ins_recurrence['actual_due_year']+1).'-'.$next_month.'-'.$ins_recurrence['actual_due_day'];
                             }
-                    
+                            if($ins_recurrence['duration_time'] == 1)
+                            {
+                               $ins_recurrence['due_date'] = ''; 
+                               $ins_recurrence['next_occurance_date'] = '';
+                            } else {
+                                $ins_recurrence['due_date'] = $ins_recurrence['due_date'];
+                                $ins_recurrence['next_occurance_date'] = $ins_recurrence['next_occurance_date'];
+                            }
             //            print_r($ins_recurrence);die;
                             $this->db->insert('invoice_recurence', $ins_recurrence);
                             $recurrence_id= $this->db->insert_id();
