@@ -991,6 +991,7 @@ class Company_model extends CI_Model {
             $this->db->select("bank_name, account_number as ban_account_number, routing_number as bank_routing_number,type_of_account,user,bank_website");
             $this->db->from('financial_accounts');
             $this->db->where_in('order_id',$oid);
+            $this->db->group_by('account_number');
             return $this->db->get()->result_array();
         }else{
             return array();
@@ -999,7 +1000,10 @@ class Company_model extends CI_Model {
 
     public function get_account_details_bookkeeping($reference_id,$reference='',$client_id='') {
         if($reference==''){
-            return $this->db->get_where('financial_accounts',['client_id'=>$client_id])->result_array();
+            $this->db->where('client_id',$client_id);
+            $this->db->group_by("account_number");
+            return $this->db->get('financial_accounts')->result_array();
+//            return $this->db->get_where('financial_accounts',['client_id'=>$client_id])->result_array();
 //            $order_list = $this->db->get_where('order', ['reference_id' => $reference_id, 'reference' => 'company'])->result_array();
 //            if (!empty($order_list)) {
 //                $this->db->where_in("order_id", array_column($order_list, 'id'));
