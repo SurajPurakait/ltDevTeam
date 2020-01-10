@@ -1291,7 +1291,11 @@ class Project_Template_model extends CI_Model {
                                     $due_year = date('Y', strtotime('+1 year'));
                                 }
                                 $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
-                                $project_recurrence_main_data['actual_due_month'] = $next_quarter[$project_recurrence_main_data['due_month']];
+                                if($project_recurrence_main_data['due_month']>$current_month){
+                                    $project_recurrence_main_data['actual_due_month'] =$project_recurrence_main_data['due_month'];
+                                }else{
+                                    $project_recurrence_main_data['actual_due_month'] = $next_quarter[$project_recurrence_main_data['due_month']];
+                                }
                                 $project_recurrence_main_data['actual_due_year'] = $due_year;
                             }elseif($project_recurrence_main_data['pattern']=='periodic'){
 //                                $current_month = date('m');
@@ -3375,6 +3379,88 @@ class Project_Template_model extends CI_Model {
     public function getProjectCreatedDate($project_id){
         return $this->db->get_where('projects',['id'=>$project_id])->row()->created_at;
     }
+
+    public function get_projects_data($category) {
+        $data_office = $this->db->get('office')->result_array();
+        $data_department = $this->db->get('department')->result_array();
+
+        $all_projects_data = [];
+        $all_tasks_data = [];
+        if ($category == 'projects_by_office') {
+            foreach ($data_office as $do) {    
+                $data = [
+                    'id' => $do['id'],
+                    'office_name' => $do['name'],
+                    'total_projects' => 0,           
+                    'new' => 0,           
+                    'started' => 0,                     
+                    'completed' => 0,
+                    'less_then_30' => 0,
+                    'less_then_60' => 0,
+                    'more_then_60' => 0,
+                    'sos' => 0,           
+                ];
+                array_push($all_projects_data,$data);
+            }
+            return $all_projects_data;
+
+        } else if($category == 'tasks_by_office') {
+            foreach ($data_office as $do) {    
+                $data = [
+                    'id' => $do['id'],
+                    'office_name' => $do['name'],
+                    'total_tasks' => 0,           
+                    'new' => 0,           
+                    'started' => 0,                      
+                    'completed' => 0,
+                    'less_then_30' => 0,
+                    'less_then_60' => 0,
+                    'more_then_60' => 0,
+                    'sos' => 0,           
+                ];
+                array_push($all_tasks_data,$data);
+            }
+            return $all_tasks_data;
+
+        } else if ($category == 'projects_to_department') {
+            foreach ($data_department as $dd) {    
+                $data = [
+                    'id' => $dd['id'],
+                    'department_name' => $dd['name'],
+                    'total_projects' => 0,           
+                    'new' => 0,           
+                    'started' => 0,                      
+                    'completed' => 0,
+                    'less_then_30' => 0,
+                    'less_then_60' => 0,
+                    'more_then_60' => 0,
+                    'sos' => 0,           
+                ];
+                array_push($all_projects_data,$data);
+            }
+            return $all_projects_data;
+
+        } else if ($category == 'tasks_to_department') {
+            foreach ($data_department as $dd) {    
+                $data = [
+                    'id' => $dd['id'],
+                    'department_name' => $dd['name'],
+                    'total_tasks' => 0,           
+                    'new' => 0,           
+                    'started' => 0,           
+                    'completed' => 0,
+                    'less_then_30' => 0,
+                    'less_then_60' => 0,
+                    'more_then_60' => 0,
+                    'sos' => 0,           
+                ];
+                array_push($all_tasks_data,$data);
+            }
+            return $all_tasks_data;
+
+        }
+    }
+
 }
 
 ?>

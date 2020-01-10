@@ -1091,5 +1091,13 @@ ALTER TABLE `order` ADD `client_id` INT(100) NOT NULL COMMENT 'individual_id for
 /*07.01.2020*/
 ALTER TABLE `invoice_recurence` ADD `due_date` VARCHAR(20) NOT NULL AFTER `status`; 
 
-/*08.01.2020*/
-ALTER TABLE `payroll_employee_info` ADD `ssn_name` VARCHAR(30) NOT NULL AFTER `i9_file`, ADD `salary_rate` VARCHAR(30) NOT NULL AFTER `ssn_name`; 
+/* 08.01.2020 */
+-- import report_dashboard_action
+ALTER TABLE `report_dashboard_action` CHANGE `due_date` `due_date` DATE NULL DEFAULT NULL;
+
+ALTER TABLE `financial_accounts` ADD `client_id` INT(5) NULL DEFAULT NULL AFTER `order_id`; 
+
+ALTER TABLE `payroll_account_numbers` ADD `client_id` INT(5) NULL DEFAULT NULL AFTER `order_id`; 
+
+/* 10.01.2020 */
+-- import report_dashboard_project
