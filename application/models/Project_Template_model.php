@@ -3477,7 +3477,7 @@ class Project_Template_model extends CI_Model {
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','30');
             } elseif ($sub_category == 'less_then_60') {
                 $this->db->where('project_status','2');
-                $$this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','60');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','60');
             } elseif ($sub_category == 'more_then_60') {
                 $this->db->where('project_status','2');
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
