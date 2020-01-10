@@ -81,7 +81,7 @@ foreach ($result as $row_count => $value):
                             <th class="text-center" width="5%">Due Date</th>
                             <?php if($is_recurrence == 'y') { ?>
                             <th class="text-center" width="5%">Recurrence&nbsp;Date</th>
-                            <th class="text-center" width="5%">Generation</th>
+                            <th class="text-center" width="5%">Due Generation</th>
                             <th class="text-center" width="5%">Pattern</th>
                             <?php } ?>
                             <th class="text-center" width="5%">Services</th>
