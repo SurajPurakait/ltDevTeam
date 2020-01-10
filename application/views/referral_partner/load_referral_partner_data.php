@@ -34,12 +34,12 @@ if (count($referral_data) != 0): ?>
                         <table class="table table-borderless" style="margin-bottom: 0px;">
                             <tbody>
                                 <tr>
-                                    <th width="20%">Type</th>
-                                    <th width="20%">Name</th>
-                                    <th width="20%">Requested By</th>
-                                    <th width="20%">Language</th>
-                                    <th width="20%">Requested Date</th>
-                                    <th width="20%">Source</th>
+                                    <th width="10%">Type</th>
+                                    <th width="15%">Name</th>
+                                    <th width="15%">Requested By</th>
+                                    <th width="15%">Language</th>
+                                    <th width="15%">Requested Date</th>
+                                    <th width="10%">Source</th>
                                     <th width="10%">Leads</th>
                                     <th width="10%">Notes</th>
                                 </tr>
