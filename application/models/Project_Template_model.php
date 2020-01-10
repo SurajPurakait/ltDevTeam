@@ -3391,14 +3391,14 @@ class Project_Template_model extends CI_Model {
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_projects' => 0,           
-                    'new' => 0,           
-                    'started' => 0,                     
-                    'completed' => 0,
-                    'less_then_30' => 0,
-                    'less_then_60' => 0,
-                    'more_then_60' => 0,
-                    'sos' => 0,           
+                    'total_projects' => $this->report_data_calculation('projects_by_office','total_projects',$do['id']),           
+                    'new' => $this->report_data_calculation('projects_by_office','new',$do['id']),           
+                    'started' => $this->report_data_calculation('projects_by_office','started',$do['id']),                     
+                    'completed' => $this->report_data_calculation('projects_by_office','completed',$do['id']),
+                    'less_then_30' => $this->report_data_calculation('projects_by_office','less_then_30',$do['id']),
+                    'less_then_60' => $this->report_data_calculation('projects_by_office','less_then_60',$do['id']),
+                    'more_then_60' => $this->report_data_calculation('projects_by_office','more_then_60',$do['id']),
+                    'sos' => $this->report_data_calculation('projects_by_office','sos',$do['id']),           
                 ];
                 array_push($all_projects_data,$data);
             }
@@ -3409,14 +3409,14 @@ class Project_Template_model extends CI_Model {
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_tasks' => 0,           
-                    'new' => 0,           
-                    'started' => 0,                      
-                    'completed' => 0,
-                    'less_then_30' => 0,
-                    'less_then_60' => 0,
-                    'more_then_60' => 0,
-                    'sos' => 0,           
+                    'total_tasks' => $this->report_data_calculation('tasks_by_office','total_tasks',$do['id']),           
+                    'new' => $this->report_data_calculation('tasks_by_office','new',$do['id']),           
+                    'started' => $this->report_data_calculation('tasks_by_office','started',$do['id']),                     
+                    'completed' => $this->report_data_calculation('tasks_by_office','completed',$do['id']),
+                    'less_then_30' => $this->report_data_calculation('tasks_by_office','less_then_30',$do['id']),
+                    'less_then_60' => $this->report_data_calculation('tasks_by_office','less_then_60',$do['id']),
+                    'more_then_60' => $this->report_data_calculation('tasks_by_office','more_then_60',$do['id']),
+                    'sos' => $this->report_data_calculation('tasks_by_office','sos',$do['id']),           
                 ];
                 array_push($all_tasks_data,$data);
             }
@@ -3427,14 +3427,14 @@ class Project_Template_model extends CI_Model {
                 $data = [
                     'id' => $dd['id'],
                     'department_name' => $dd['name'],
-                    'total_projects' => 0,           
-                    'new' => 0,           
-                    'started' => 0,                      
-                    'completed' => 0,
-                    'less_then_30' => 0,
-                    'less_then_60' => 0,
-                    'more_then_60' => 0,
-                    'sos' => 0,           
+                    'total_projects' => $this->report_data_calculation('projects_to_department','total_projects','',$dd['id']),           
+                    'new' => $this->report_data_calculation('projects_to_department','new','',$dd['id']),           
+                    'started' => $this->report_data_calculation('projects_to_department','started','',$dd['id']),                     
+                    'completed' => $this->report_data_calculation('projects_to_department','completed','',$dd['id']),
+                    'less_then_30' => $this->report_data_calculation('projects_to_department','less_then_30','',$dd['id']),
+                    'less_then_60' => $this->report_data_calculation('projects_to_department','less_then_60','',$dd['id']),
+                    'more_then_60' => $this->report_data_calculation('projects_to_department','more_then_60','',$dd['id']),
+                    'sos' => $this->report_data_calculation('projects_to_department','sos','',$dd['id']),           
                 ];
                 array_push($all_projects_data,$data);
             }
@@ -3445,21 +3445,108 @@ class Project_Template_model extends CI_Model {
                 $data = [
                     'id' => $dd['id'],
                     'department_name' => $dd['name'],
-                    'total_tasks' => 0,           
-                    'new' => 0,           
-                    'started' => 0,           
-                    'completed' => 0,
-                    'less_then_30' => 0,
-                    'less_then_60' => 0,
-                    'more_then_60' => 0,
-                    'sos' => 0,           
+                    'total_tasks' => $this->report_data_calculation('tasks_to_department','total_tasks','',$dd['id']),           
+                    'new' => $this->report_data_calculation('tasks_to_department','new','',$dd['id']),           
+                    'started' => $this->report_data_calculation('tasks_to_department','started','',$dd['id']),                     
+                    'completed' => $this->report_data_calculation('tasks_to_department','completed','',$dd['id']),
+                    'less_then_30' => $this->report_data_calculation('tasks_to_department','less_then_30','',$dd['id']),
+                    'less_then_60' => $this->report_data_calculation('tasks_to_department','less_then_60','',$dd['id']),
+                    'more_then_60' => $this->report_data_calculation('tasks_to_department','more_then_60','',$dd['id']),
+                    'sos' => $this->report_data_calculation('tasks_to_department','sos','',$dd['id']),           
                 ];
                 array_push($all_tasks_data,$data);
             }
             return $all_tasks_data;
-
         }
     }
+
+    public function report_data_calculation($category="",$sub_category="",$office="",$department="") {
+        if ($category == 'projects_by_office') {
+            $this->db->distinct();
+            $this->db->select('project_id');
+            $this->db->where('project_office',$office);
+            
+            if ($sub_category == 'new') {
+                $this->db->where('project_status','0');    
+            } elseif ($sub_category == 'started') {
+                $this->db->where('project_status','1');
+            } elseif ($sub_category == 'completed') {
+                $this->db->where('project_status','2');
+            } elseif ($sub_category == 'less_then_30') {
+                // $this->db->where('project_office',$office);
+            } elseif ($sub_category == 'less_then_60') {
+                // $this->db->where('project_office',$office);
+            } elseif ($sub_category == 'more_then_60') {
+                // $this->db->where('project_office',$office);
+            } elseif ($sub_category == 'sos') {
+                $this->db->where('sos !=','');
+            }
+            return $this->db->get('report_dashboard_project')->num_rows();
+        } elseif ($category == 'tasks_by_office') {
+            $this->db->select('task_id');
+            $this->db->where('task_office',$office);
+            
+            if ($sub_category == 'new') {
+                $this->db->where('task_status','0');
+            } elseif ($sub_category == 'started') {
+                $this->db->where('task_status','1');
+            } elseif ($sub_category == 'completed') {
+                $this->db->where('task_status','2');
+            } elseif ($sub_category == 'less_then_30') {
+                # code...
+            } elseif ($sub_category == 'less_then_60') {
+                # code...
+            } elseif ($sub_category == 'more_then_60') {
+                # code...
+            } elseif ($sub_category == 'sos') {
+                $this->db->where('sos !=','');
+            }
+            return $this->db->get('report_dashboard_project')->num_rows();
+        } elseif ($category == 'projects_to_department') {
+            $this->db->distinct();
+            $this->db->select('project_id');
+            $this->db->where('project_department',$department);
+
+            if ($sub_category == 'new') {
+                $this->db->where('project_status','0');
+            } elseif ($sub_category == 'started') {
+                $this->db->where('project_status','1');
+            } elseif ($sub_category == 'completed') {
+                $this->db->where('project_status','2');
+            } elseif ($sub_category == 'less_then_30') {
+                # code...
+            } elseif ($sub_category == 'less_then_60') {
+                # code...
+            } elseif ($sub_category == 'more_then_60') {
+                # code...
+            } elseif ($sub_category == 'sos') {
+                $this->db->where('sos !=','');
+            }
+            return $this->db->get('report_dashboard_project')->num_rows();
+        } elseif ($category == 'tasks_to_department') {
+            $this->db->select('task_id');
+            $this->db->where('task_department',$department);
+
+            if ($sub_category == 'new') {
+                $this->db->where('task_status','0');
+            } elseif ($sub_category == 'started') {
+                $this->db->where('task_status','1');
+            } elseif ($sub_category == 'completed') {
+                $this->db->where('task_status','2');
+            } elseif ($sub_category == 'less_then_30') {
+                # code...
+            } elseif ($sub_category == 'less_then_60') {
+                # code...
+            } elseif ($sub_category == 'more_then_60') {
+                # code...
+            } elseif ($sub_category == 'sos') {
+                $this->db->where('sos !=','');
+            }
+            return $this->db->get('report_dashboard_project')->num_rows();
+        }
+
+    }
+
 
 }
 
