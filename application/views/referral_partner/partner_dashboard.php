@@ -62,15 +62,31 @@
                                 <input id="hiddenflag" value="" type="hidden">
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-4 col-lg-offset-1 text-center m-t-8">
+                        <div class="col-md-12 col-lg-5 text-center m-t-8">
                             <div class="bg-aqua table-responsive">
                                 <table class="table table-borderless">
                                     <tbody>
+                                        <tr>
+                                            <th></th>
+                                            <th class="text-center">Total Partner</th>
+                                            <th class="text-center">Leads Given</th>
+                                            <th class="text-center">Leads Received</th>
+                                        </tr>
                                         <tr id="byme">
                                             <th>My Partners</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-0">
                                                     <span class="label label-warning" id="requested_by_me_new" onclick="load_partners_dashboard('','',1); "><?= get_partner_count(1); ?></span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0)">
+                                                    <span class="label label-success"><?= $referral_leads_count['leads_given_by_my_partner']; ?></span>
+                                                </a>             
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0)">
+                                                    <span class="label label-primary"><?= $referral_leads_count['leads_given_by_team_partner']; ?></span>
                                                 </a>
                                             </td>
                                         </tr>
@@ -87,6 +103,16 @@
                                                     <span class="label label-warning" id="requested_to_me_new" onclick="load_partners_dashboard('','',2);"><?= get_partner_count(2); ?></span>
                                                 </a>
                                             </td>
+                                            <td>
+                                                <a href="javascript:void(0)">
+                                                    <span class="label label-success"><?= $referral_leads_count['leads_received_by_my_partner']; ?></span>
+                                                </a>             
+                                            </td>
+                                            <td>
+                                                <a href="javascript:void(0)">
+                                                    <span class="label label-primary"><?= $referral_leads_count['leads_received_by_team_partner']; ?></span>
+                                                </a>
+                                            </td>
                                         </tr>
                                         <?php 
                                             } else {
@@ -99,7 +125,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-4 col-lg-offset-1 m-t-8">
+                        <div class="col-md-12 col-lg-4 col-lg-offset-7 m-t-8">
                             <a class="btn notification-btn" href="javascript:void(0);" title="Partner Notifications">Notifications <span class="label label-danger"><?= get_partner_notifications_count('partner'); ?></span></a>
                         </div>
                     </div>

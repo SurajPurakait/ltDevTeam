@@ -26,6 +26,7 @@ class Referral_partners extends CI_Controller {
         $render_data['req_by'] = $req_by;
         $render_data['lead_type'] = $lead_type;
         $render_data['header_title'] = $title;
+        $render_data['referral_leads_count'] = $this->referral_partner->getReferralLeadsCount();
         $this->load->template('referral_partner/partner_dashboard', $render_data);
     }
 
