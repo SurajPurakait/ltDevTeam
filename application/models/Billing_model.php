@@ -2354,7 +2354,7 @@ class Billing_model extends CI_Model {
             'indt.office as office_id',
             '(SELECT ofc.name FROM office as ofc WHERE ofc.id = indt.office) as office',
             '(SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as officeid',
-            '(CASE WHEN inv.type = 1 THEN (SELECT DISTINCT internal_data.practice_id FROM internal_data WHERE internal_data.reference_id = inv.client_id AND internal_data.reference = "company") ELSE (SELECT DISTINCT internal_data.practice_id FROM internal_data WHERE internal_data.reference_id = inv.client_id AND internal_data.reference = "individual" ) End) as clientid',
+//            '(CASE WHEN inv.type = 1 THEN (SELECT DISTINCT internal_data.practice_id FROM internal_data WHERE internal_data.reference_id = inv.client_id AND internal_data.reference = "company") ELSE (SELECT DISTINCT internal_data.practice_id FROM internal_data WHERE internal_data.reference_id = inv.client_id AND internal_data.reference = "individual" ) End) as clientid',
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = indt.partner) as partner',
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = indt.manager) as manager',
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = inv.created_by) as created_by_name',
