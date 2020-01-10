@@ -1101,5 +1101,3 @@ ALTER TABLE `payroll_account_numbers` ADD `client_id` INT(5) NULL DEFAULT NULL A
 
 /* 10.01.2020 */
 -- import report_dashboard_project
-ALTER TABLE `report_dashboard_project` ADD `sos` LONGTEXT NULL DEFAULT NULL AFTER `project_creation_date`;
-ALTER TABLE `report_dashboard_project` ADD `project_due_date` DATE NOT NULL AFTER `project_creation_date`;
