@@ -43,14 +43,14 @@
 
     if ($project_data_count > 0) {
         while ($prod = mysqli_fetch_assoc($project_query_response)) {
-            $task_id = $prod['task_id'];
-            $project_id = $prod['project_id'];
+            $task_id = ($prod['task_id'] != 0) ? $prod['task_id']:'0';
+            $project_id = ($prod['project_id'] != 0) ? $prod['project_id']:'0';
             $task_status = $prod['task_status'];
             $project_status = $prod['project_status'];
-            $task_office = $prod['task_office'];
-            $project_office = $prod['project_office'];
-            $task_department = $prod['task_department'];
-            $project_department = $prod['project_department'];
+            $task_office = ($prod['task_office'] != 0) ? $prod['task_office']:'0';
+            $project_office = ($prod['project_office'] != 0) ? $prod['project_office'] : '0';
+            $task_department = ($prod['task_department'] != 0) ? $prod['task_department'] : '0';
+            $project_department = ($prod['project_department'] != 0) ? $prod['project_department'] : '0';
             
             if($prod['project_due_date'] == '0000-00-00' || $prod['project_due_date'] == '') {
                 $project_due_date = '0001-01-01';
