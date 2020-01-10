@@ -27,13 +27,15 @@
         'pro.office_id as project_office',
         'prt.department_id as task_department',
         'prm.department_id as project_department',
-        'pro.created_at as project_creation_date'
+        'pro.created_at as project_creation_date',
+        'snf.msg AS sos',
+        '(SELECT prom.due_date FROM project_recurrence_main as prom WHERE prom.project_id = pro.id) as project_due_date'
     ];
 
-    $table = ' `project_task` as prt INNER JOIN projects as pro ON prt.project_id = pro.id INNER JOIN project_main as prm ON pro.id = prm.project_id ';
+    $table = ' `project_task` as prt INNER JOIN projects as pro ON prt.project_id = pro.id INNER JOIN project_main as prm ON pro.id = prm.project_id LEFT JOIN sos_notification AS snf ON pro.id = snf.reference_id and `snf`.reference="projects"';
 
     $project_get_query = 'SELECT ' . implode(', ', $select) . ' FROM ' . $table . ' GROUP BY prt.id ORDER BY prt.id ASC';
-
+    // echo $project_get_query;exit;
     mysqli_query($conn,'TRUNCATE `report_dashboard_project`');
     mysqli_query($conn, 'SET SQL_BIG_SELECTS=1');
     $project_query_response = mysqli_query($conn,$project_get_query);
@@ -49,13 +51,15 @@
             $project_office = $prod['project_office'];
             $task_department = $prod['task_department'];
             $project_department = $prod['project_department'];
+            $project_due_date = $prod['project_due_date'];
             if (!empty($prod['project_creation_date'])) {
                 $project_creation_date = date('Y-m-d',strtotime($prod['project_creation_date']));
             } else {
                 $project_creation_date = '0001-01-01';
             }    
+            $sos = $prod['sos'];
             
-            $insert_sql = "INSERT INTO `report_dashboard_project`(`task_id`, `project_id`, `task_status`, `project_status`, `task_office`, `project_office`, `task_department`, `project_department`, `project_creation_date`) VALUES ('$task_id', '$project_id', '$task_status', '$project_status', '$task_office', '$project_office', '$task_department', '$project_department', '$project_creation_date')";
+            $insert_sql = "INSERT INTO `report_dashboard_project`(`task_id`, `project_id`, `task_status`, `project_status`, `task_office`, `project_office`, `task_department`, `project_department`, `project_creation_date`,`project_due_date`,`sos`) VALUES ('$task_id', '$project_id', '$task_status', '$project_status', '$task_office', '$project_office', '$task_department', '$project_department', '$project_creation_date','$project_due_date','$sos')";
 
             echo $insert_sql;
             echo "<hr>";
