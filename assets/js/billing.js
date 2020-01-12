@@ -282,7 +282,12 @@ if(pattern!=''){
             if (editval == '') {
                 if (result != 0) {
                     //alert(result);
-                    goURL(base_url + 'billing/invoice/place/' + result);
+                    if ($("#recurring").val() == 'y') {
+                         goURL(base_url + 'billing/home/index/y');
+                    }else{
+                         goURL(base_url + 'billing/invoice/place/' + result);
+                    }
+                   
                 } else {
                     swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
                 }

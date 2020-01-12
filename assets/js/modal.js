@@ -457,6 +457,7 @@ function set_exist_bookkeeping_value(account_type,bank_name,account_no,routing_n
         $("#website").val(bank_url)
         $("#user_id").val(user);
         $("#password").val(password);
+        $("#sub_btn").html('Update');
     }else{
         $("#acc_type").val('');
         $("#bank_name").val('');
@@ -465,6 +466,7 @@ function set_exist_bookkeeping_value(account_type,bank_name,account_no,routing_n
         $("#website").val('');
         $("#user_id").val('');
         $("#password").val('');
+        $("#sub_btn").html('Save changes');
     }
 }
 

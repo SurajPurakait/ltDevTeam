@@ -31,7 +31,11 @@ class Invoice extends CI_Controller {
 
     public function index($is_recurrence = "",$client_id = "", $client_type = "") {
         $this->load->layout = 'dashboard';
+        if($is_recurrence == 'y'){
+        $title = "Create Recurring Invoice";
+        }else{
         $title = "Create Invoice";
+        }
         $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['main_menu'] = 'billing';
         $render_data['menu'] = 'create_invoice';
