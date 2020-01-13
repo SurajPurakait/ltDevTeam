@@ -49,7 +49,10 @@ class Bookkeeping_model extends CI_Model {
 //    }
 
     public function save_account($data) {
+//        print_r($data);die;
         $section = $data['section'];
+        $modal_type=$data['modal_type'];
+        unset($data['modal_type']);
         unset($data['section']);
         if ($_FILES['acc_file']['name'] != "") {
             $status = common_upload("acc_file");
@@ -66,6 +69,9 @@ class Bookkeeping_model extends CI_Model {
                 unset($data["security_question"]);
                 $security_answers = $data["security_answer"];
                 unset($data["security_answer"]);
+                if(isset($modal_type) && $modal_type=='add_account'){
+                    $data['client_id']=$data['company_id'];
+                }
                 $this->db->insert("financial_accounts", $data);
                 $edit_id = $this->db->insert_id();
 
