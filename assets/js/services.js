@@ -966,6 +966,7 @@ function save_account(section) {
     var form_data = new FormData(document.getElementById('form_accounts'));
     var company_id = $("#company_id").val();
     var order_id = $("#editval").val();
+    var modal_type=$("#modal_type").val();
     form_data.append('section', section);
     $.ajax({
         type: "POST",
