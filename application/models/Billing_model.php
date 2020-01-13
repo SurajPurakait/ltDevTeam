@@ -400,7 +400,6 @@ class Billing_model extends CI_Model {
                     }
                     
     //            if(isset($ins_recurrence['pattern']))
-                print_r($ins_recurrence);die;
                     $this->db->insert('invoice_recurence', $ins_recurrence);
                     $recurrence_id= $this->db->insert_id();
     //                 echo $this->db->last_query();die;
@@ -2150,7 +2149,11 @@ class Billing_model extends CI_Model {
             // print_r($service_data['responsible_assign']);exit;
             $service_request_data[$key]['order_id'] = $order_id;
             if(($target_query['input_form'] == 'n' && $target_query['service_id'] == $service_request_data[$key]['services_id'] && $service_data['responsible_assign'] == 1 && $service_data['dept'] == 'NULL' ) || ($target_query['input_form'] == 'y' && $target_query['service_id'] == $service_request_data[$key]['services_id'] && $service_data['responsible_assign'] == 1 && $service_data['dept'] == 'NULL' )){
+                   
                    $service_request_data[$key]['status'] = 0; 
+
+                   $this->db->where('id', $order_id);
+                   $this->db->update('order', array('status' => 0)); 
                 }else{
                     $service_request_data[$key]['status'] = 2;
                 }
@@ -2265,7 +2268,11 @@ class Billing_model extends CI_Model {
             // print_r($service_data['responsible_assign']);exit;
             $service_request_data[$key]['order_id'] = $order_id;
             if(($target_query['input_form'] == 'n' && $target_query['service_id'] == $service_request_data[$key]['services_id'] && $service_data['responsible_assign'] == 1 && $service_data['dept'] == 'NULL' ) || ($target_query['input_form'] == 'y' && $target_query['service_id'] == $service_request_data[$key]['services_id'] && $service_data['responsible_assign'] == 1 && $service_data['dept'] == 'NULL' )){
+                   
                    $service_request_data[$key]['status'] = 0; 
+
+                   $this->db->where('id', $order_id);
+                   $this->db->update('order', array('status' => 0)); 
                 }else{
                     $service_request_data[$key]['status'] = 2;
                 }
@@ -2354,7 +2361,6 @@ class Billing_model extends CI_Model {
             'indt.office as office_id',
             '(SELECT ofc.name FROM office as ofc WHERE ofc.id = indt.office) as office',
             '(SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as officeid',
-//            '(CASE WHEN inv.type = 1 THEN (SELECT DISTINCT internal_data.practice_id FROM internal_data WHERE internal_data.reference_id = inv.client_id AND internal_data.reference = "company") ELSE (SELECT DISTINCT internal_data.practice_id FROM internal_data WHERE internal_data.reference_id = inv.client_id AND internal_data.reference = "individual" ) End) as clientid',
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = indt.partner) as partner',
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = indt.manager) as manager',
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = inv.created_by) as created_by_name',
@@ -2364,7 +2370,7 @@ class Billing_model extends CI_Model {
             '(SELECT pattern FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as pattern',
             '(SELECT due_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as due_date',
             '(SELECT next_occurance_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as next_generation_date',
-//            '(SELECT company_id FROM company WHERE company.id = inv.reference_id) as company_id',
+            '(SELECT total_generation_time FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as total_generation_time',
             ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
         $where['status'] = 'AND `inv`.`status` != 0 ';
