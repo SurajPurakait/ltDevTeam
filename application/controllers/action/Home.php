@@ -604,7 +604,7 @@ class Home extends CI_Controller {
     }
 
     public function view_business($reference_id, $company_id) {
-
+        
         $this->load->model('Contacts');
         $this->load->model('Administration');
         $this->load->model('Pdf');
@@ -640,9 +640,9 @@ class Home extends CI_Controller {
             }
         }
         $render_data['notes'] = $this->individual->get_business_notes($render_data['company_data'][0]['id']);
-        $payroll_account_details = $this->company_model->get_account_details($render_data['company_data'][0]['id']);
+        $payroll_account_details = $this->company_model->get_account_details($render_data['company_data'][0]['id'],$reference_id);
         $orderid=$this->company_model->getOrderID($render_data['company_data'][0]['id']);
-        $financial_account_details=$this->company_model->getFinancialAccountDetails($orderid);
+        $financial_account_details=$this->company_model->getFinancialAccountDetails($orderid,$reference_id);
         $render_data['account_details']=array_merge($payroll_account_details,$financial_account_details);
         $this->load->template('action/view_business', $render_data);
     }
@@ -661,8 +661,8 @@ class Home extends CI_Controller {
         $render_data['company_name_option_data'] = $this->company_model->get_company_name_option_data($reference_id);
         $render_data['company_order_data'] = $this->company_model->get_company_order_data($reference_id);
         $render_data['company_internal_data'] = $this->company_model->get_company_internal_data($reference_id);
-        $render_data['account_details'] = $this->company_model->get_account_details($render_data['company_data'][0]['id']);
-        $render_data['account_details_bookkeeping'] = $this->company_model->get_account_details_bookkeeping($render_data['company_data'][0]['id']);
+        $render_data['account_details'] = $this->company_model->get_account_details($render_data['company_data'][0]['id'],$reference_id);
+        $render_data['account_details_bookkeeping'] = $this->company_model->get_account_details_bookkeeping($render_data['company_data'][0]['id'],'',$reference_id);
 //        $render_data['documents']= $this->company_model->get_business_attachment($reference_id);
         $this->load->template('action/edit_business', $render_data);
     }
