@@ -106,7 +106,9 @@
                     if ($status_rt6_val == 'Yes') { //check rt6 start
                         ?>
                         <tr <?= ( strtotime($row_inner->date_completed) < strtotime(date('Y-m-d')) ) ? "class='text-danger'" : ""; ?>>
-                            <td title="Service ID" style="text-align: center;">#<?= $invoiced_id; ?>-<?= $keysval ?></td>
+
+                            <?php $invoiced_id = get_invoice_id($row_inner->order_id); ?>
+                            <td title="Service ID" style="text-align: center;">#<?= $invoiced_id['id']; ?>-<?= $keysval ?></td>
                             <td title="Assign" style="text-align: center;" class="">
                                 <?php if ($row_inner->assign_user_id == 0): ?>
                                     <?php

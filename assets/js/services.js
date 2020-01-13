@@ -16,7 +16,7 @@ function county_ajax(state_id, county_id) {
     }
 }
 
-function load_partner_manager_ddl(office_id, partner_id, manager_id) {
+function load_partner_manager_ddl(office_id, partner_id = "", manager_id = "") {
     $.ajax({
         type: "POST",
         data: {
