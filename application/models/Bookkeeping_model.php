@@ -51,7 +51,10 @@ class Bookkeeping_model extends CI_Model {
     public function save_account($data) {
 //        print_r($data);die;
         $section = $data['section'];
+        $modal_type='';
+        if(isset($data['modal_type'])){
         $modal_type=$data['modal_type'];
+        }
         unset($data['modal_type']);
         unset($data['section']);
         if ($_FILES['acc_file']['name'] != "") {
