@@ -987,7 +987,7 @@ class Company_model extends CI_Model {
         foreach($orderid as $val){
            $oid[]= $val['id'];
         }
-        if(!empty($oid)){
+        if(!empty($client_id)){
             $this->db->select("bank_name, account_number as ban_account_number, routing_number as bank_routing_number,type_of_account,user,bank_website");
             $this->db->from('financial_accounts');
             $this->db->where('client_id',$client_id);
