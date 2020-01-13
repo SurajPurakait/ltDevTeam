@@ -2930,4 +2930,8 @@ class Service_model extends CI_Model {
         }   
     }
 
+    public function get_invoice_id($order_id){
+        return $this->db->get_where('invoice_info',['order_id'=>$order_id])->row_array();
+    }
+
 }

@@ -3576,3 +3576,11 @@ if(!function_exists('get_project_created_date')){
         return $ci->Project_Template_model->getProjectCreatedDate($project_id);
     }
 }
+
+if(!function_exists('get_invoice_id')){
+    function get_invoice_id($order_id){
+        $ci = &get_instance();
+        $ci->load->model('Service_model');
+        return $ci->Service_model->get_invoice_id($order_id);
+    }
+}

@@ -80,7 +80,7 @@
                                     </div>
                                     <div class="form-group" id="abc" hidden="">
                                             <label>SSN:<span class="text-danger">*</span></label>                                       
-                                            <input data-mask="999-99-9999" placeholder="___-__-____" class="form-control" type="text" id="ssn_name"  value="<?= $employee_details['ssn_name']; ?>" name="ssn_name" title="SSN" required="">
+                                            <input placeholder="ssn" data-mask="999-99-9999" placeholder="___-__-____" class="form-control" type="text" id="ssn_name"  value="<?= $employee_details['ssn_name']; ?>" name="ssn_name" title="SSN" required>
                                             <div class="errorMessage text-danger"></div>                                   
                                     </div>
                                     <div class="form-group" id="email_div">
