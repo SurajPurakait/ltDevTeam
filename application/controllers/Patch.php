@@ -909,5 +909,20 @@ class Patch extends CI_Controller {
             }
         }
     }
+    public function update_financial_account(){
+        $order_id=$this->db->get('financial_accounts')->result_array();
+        if(!empty($order_id)){
+            foreach($order_id as $val){
+                $o_id=$val['order_id'];
+                if(!empty($o_id) && $o_id!=0){
+                    $client_id=$this->db->get_where('order',['id'=>$val['order_id']])->row()->reference_id;
+                    if(!empty($client_id)){
+                        $this->db->where('order_id',$val['order_id']);
+                        $this->db->update('financial_accounts',['client_id'=>$client_id]);
+                    }
+                }
+            }
+        }
+    }
 }
     
