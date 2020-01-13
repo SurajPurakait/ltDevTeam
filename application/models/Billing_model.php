@@ -77,6 +77,7 @@ class Billing_model extends CI_Model {
             '(SELECT concat(st.last_name, ", ", st.first_name) FROM staff as st WHERE st.id = indt.manager) as manager',
             'indt.client_association as client_association',
             '(SELECT rbs.source FROM referred_by_source as rbs WHERE rbs.id = indt.referred_by_source) as referred_by_source',
+            '(SELECT rbs.id FROM referred_by_source as rbs WHERE rbs.id = indt.referred_by_source) as referred_by_source_id',
             'indt.referred_by_name as referred_by_name',
 //            '(SELECT lng.language FROM languages as lng WHERE lng.id = indt.language) as language',
             'inv.existing_practice_id as existing_practice_ID',
@@ -1537,6 +1538,8 @@ class Billing_model extends CI_Model {
             $select[] = 'ind.first_name as individual_first_name';
             $select[] = 'ind.middle_name as individual_middle_name';
             $select[] = 'ind.last_name as individual_last_name';
+            $select[] = 'indt.partner as partner_id';
+            $select[] = 'indt.manager as manager_id';
             $this->db->select(implode(', ', $select));
             $this->db->from('invoice_info inv');
             $this->db->join('title t', 't.company_id = inv.reference_id');
