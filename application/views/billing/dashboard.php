@@ -47,9 +47,11 @@ $staffrole = $staff_info['role'];
                                     <div class="form-group filter-inner">
                                         <div class="row">
                                             <div class="m-b-8 pull-left col-md-8">
-                                                <?php if($is_recurrence == 'y'){ ?>
+                                                <?php if($is_recurrence == 'y'){
+                                                    if($stafftype!=3){
+                                                    ?>
                                                 <a href="<?= base_url(); ?>billing/invoice/index/y" title="Create Invoice" class="btn btn-primary dropdown-toggle"><i class="fa fa-plus"></i> Create Invoice</a>
-                                                <?php } else{ ?>
+                                                <?php } } else{ ?>
                                                 <a href="<?= base_url(); ?>billing/invoice/index" title="Create Invoice" class="btn btn-primary dropdown-toggle"><i class="fa fa-plus"></i> Create Invoice</a>
                                             <?php } ?>
                                             </div>                                            
