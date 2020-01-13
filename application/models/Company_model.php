@@ -1013,7 +1013,9 @@ class Company_model extends CI_Model {
 //                return [];
 //            }
         }else{
-            return $this->db->get_where('financial_accounts',['client_id'=>$client_id])->result_array();
+            $this->db->where('client_id',$client_id);
+            $this->db->group_by("account_number");
+            return $this->db->get('financial_accounts')->result_array();
         }
     }
 
