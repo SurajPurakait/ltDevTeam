@@ -276,7 +276,7 @@
                 </div>
                 <div class="tab-pane" role="tabpanel" id="account_info">
                     <div class="panel-body"> 
-                        <h3>Financial Accounts<span class="text-danger">*</span>&nbsp; (<a href="javascript:void(0);" onclick="account_modal('add_account', '', 'month_diff');">Add Financial Account</a>)</h3>
+                        <!--<h3>Financial Accounts<span class="text-danger">*</span>&nbsp; (<a href="javascript:void(0);" onclick="account_modal('add_account', '', 'month_diff');">Add Financial Account</a>)</h3>-->
                         <?php foreach ($account_details as $ad) { ?> 
                             Payroll #<?= $ad['order_id'] ?>
                             <div class="form-group">
