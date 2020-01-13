@@ -276,6 +276,7 @@
                 </div>
                 <div class="tab-pane" role="tabpanel" id="account_info">
                     <div class="panel-body"> 
+                        <!--<h3>Financial Accounts<span class="text-danger">*</span>&nbsp; (<a href="javascript:void(0);" onclick="account_modal('add_account', '', 'month_diff');">Add Financial Account</a>)</h3>-->
                         <?php foreach ($account_details as $ad) { ?> 
                             Payroll #<?= $ad['order_id'] ?>
                             <div class="form-group">
@@ -417,6 +418,7 @@
 </div>
 <div id="contact-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="document-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
+<div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script type="text/javascript">
     loadBillingDashboard('', '', '', '', '<?= $reference_id . '-company'; ?>');
     get_contact_list('<?= $reference_id; ?>', 'company');

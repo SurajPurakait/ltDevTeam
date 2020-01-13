@@ -56,7 +56,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">SSN/ITIN<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input data-mask="999-99-9999" placeholder="___-__-____" class="form-control" type="text" id="ssn_itin" required name="ssn_itin" title="SSN/ITIN" value="<?= !empty($title_val) ? $title_val->ssn_itin : "" ?>">
+                                <input data-mask="999-99-9999" placeholder="___-__-____" class="form-control" type="text" id="ssn_itin" required name="ssn_itin" title="SSN/ITIN" placeholder="ssn" value="<?= !empty($title_val) ? $title_val->ssn_itin : "" ?>">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
