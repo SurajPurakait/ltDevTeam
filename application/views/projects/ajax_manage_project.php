@@ -15,6 +15,7 @@
                                     <option value="">Select Template</option>
                                     <?php
                                     if (!empty($template_list)) {
+                                        asort($template_list);
                                         foreach ($template_list as $template) {
                                             ?>
                                             <option value="<?= $template['id'] ?>" <?= $template['id'] == $project_dtls->template_id ? 'selected' : '' ?> ><?= $template['title'] ?></option>
@@ -69,6 +70,7 @@
                                     <option value="">Select Template</option>
                                     <?php
                                     if (!empty($template_list)) {
+                                        asort($template_list);
                                         foreach ($template_list as $template) {
                                             ?>
                                             <option value="<?= $template['id'] ?>"><?= $template['title'] ?></option>
@@ -129,7 +131,7 @@
 //        project_client_list(<? $project_dtls->office_id ?>,<? $project_dtls->client_id ?>, 'edit');
 <?php } ?>
     $(document).ready(function () {
-        $(".datepicker_creation_date").datepicker({format: 'mm/dd/yyyy', autoHide: true, startDate: new Date()});
+        $(".datepicker_creation_date").datepicker({format: 'mm/dd/yyyy', autoHide: true});
 //        alert('hi');
         $('.add-task-note').click(function () {
 //            alert("hlw");
