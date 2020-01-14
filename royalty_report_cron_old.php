@@ -62,8 +62,9 @@
     // echo $query;exit; 
     mysqli_query($conn, 'SET SQL_BIG_SELECTS=1');
     $reports_data = mysqli_query($conn,$query); 
+    $reports_data_count = mysqli_num_rows($reports_data);
     mysqli_query($conn,'TRUNCATE royalty_report');
-    if (!empty(mysqli_fetch_assoc($reports_data))) {
+    if ($reports_data_count > 0) {
         while ($rpd = mysqli_fetch_assoc($reports_data)) { 
             for($i=1; $i <= $rpd['services']; $i++) {
                 $services_id = explode(',',$rpd['all_services'])[$i];
