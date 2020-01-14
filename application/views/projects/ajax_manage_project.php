@@ -70,7 +70,9 @@
                                     <option value="">Select Template</option>
                                     <?php
                                     if (!empty($template_list)) {
-                                        asort($template_list);
+                                        usort($template_list, function($a, $b) {
+                                            return $a['title'] <=> $b['title'];
+                                        });
                                         foreach ($template_list as $template) {
                                             ?>
                                             <option value="<?= $template['id'] ?>"><?= $template['title'] ?></option>
