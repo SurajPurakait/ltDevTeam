@@ -119,15 +119,16 @@
                 <div class="row">
                     <div class="col-md-12" id="category_div" style="display:none">
                         <?php if($template_category_id==1){
-                            $get_exist_input=get_project_exist_bookkeeping_input_type($task_details->template_main_id);
-                            $exist_type= array_column($get_exist_input,'bookkeeping_input_type');
+//                            $get_exist_input=get_project_exist_bookkeeping_input_type($task_details->template_main_id);
+//                            $exist_type= array_column($get_exist_input,'bookkeeping_input_type');
                             ?>
                             <label class="control-label">Allow Bookkeeping:</label>
                             <select class="form-control" id="bookkeeping_input_type" name="task[bookkeeping_input_type]" title='Bookkeeping Input Type'>
                                 <option value="">Select Bookkeeping Input Form</option>
-                                <option value="1" <?= (in_array('1', $exist_type)?'disabled':'') ?> <?= $task_details->bookkeeping_input_type==1?'selected':''  ?> >BANK STATEMENT RETRIEVAL LEAFCLOUD DEPARTMENT</option>
-                                <option value="2" <?= (in_array('2', $exist_type)?'disabled':'') ?> <?= $task_details->bookkeeping_input_type==2?'selected':'' ?> >BOOKKEEPING BOOKKEEPER DEPARTMENT</option>
-                                <option value="3" <?= (in_array('3', $exist_type)?'disabled':'') ?> <?= $task_details->bookkeeping_input_type==3?'selected':'' ?> >REVIEW CLIENT MANAGER</option>
+                                <!--<= (in_array('1', $exist_type)?'disabled':'') ?>-->
+                                <option value="1" <?= $task_details->bookkeeping_input_type==1?'selected':''  ?> >BANK STATEMENT RETRIEVAL LEAFCLOUD DEPARTMENT</option>
+                                <option value="2" <?= $task_details->bookkeeping_input_type==2?'selected':'' ?> >BOOKKEEPING BOOKKEEPER DEPARTMENT</option>
+                                <option value="3" <?= $task_details->bookkeeping_input_type==3?'selected':'' ?> >REVIEW CLIENT MANAGER</option>
                             </select>
                         <?php }elseif($template_category_id==3){ ?>
                             <label>Allow sales tax processing</label>
