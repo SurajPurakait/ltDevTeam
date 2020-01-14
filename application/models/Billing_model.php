@@ -395,9 +395,20 @@ class Billing_model extends CI_Model {
                     {
                        $ins_recurrence['due_date'] = ''; 
                        $ins_recurrence['next_occurance_date'] = '';
-                    } else {
-                        $ins_recurrence['due_date'] = $ins_recurrence['due_date'];
-                        $ins_recurrence['next_occurance_date'] = $ins_recurrence['next_occurance_date'];
+                    } 
+                    elseif($ins_recurrence['duration_time'] == 2)
+                    {
+                       $ins_recurrence['next_occurance_date'] = ''; 
+                    }else {
+                        $next_due_month = $due_month+(int) $ins_recurrence['due_month'];
+                        $next_due_day = $due_day;
+                        $next_due_year = $due_year;
+                        if($next_due_month >12){
+                            $next_due_month = $next_due_month-12;
+                            $next_due_year = $next_due_year+1;
+                              } 
+                        $ins_recurrence['next_occurance_date'] = $next_due_year."-".$next_due_month."-".$next_due_day;
+                        $ins_recurrence['next_occurance_date'] = date('Y-m-d', strtotime($ins_recurrence['next_occurance_date']));
                     }
                     
     //            if(isset($ins_recurrence['pattern']))
@@ -668,9 +679,20 @@ class Billing_model extends CI_Model {
                             {
                                $ins_recurrence['due_date'] = ''; 
                                $ins_recurrence['next_occurance_date'] = '';
-                            } else {
-                                $ins_recurrence['due_date'] = $ins_recurrence['due_date'];
-                                $ins_recurrence['next_occurance_date'] = $ins_recurrence['next_occurance_date'];
+                            }
+                            elseif($ins_recurrence['duration_time'] == 2)
+                            {
+                               $ins_recurrence['next_occurance_date'] = ''; 
+                            }else {
+                                $next_due_month = $due_month+(int) $ins_recurrence['due_month'];
+                                $next_due_day = $due_day;
+                                $next_due_year = $due_year;
+                                if($next_due_month >12){
+                                    $next_due_month = $next_due_month-12;
+                                    $next_due_year = $next_due_year+1;
+                                      } 
+                                $ins_recurrence['next_occurance_date'] = $next_due_year."-".$next_due_month."-".$next_due_day;
+                                $ins_recurrence['next_occurance_date'] = date('Y-m-d', strtotime($ins_recurrence['next_occurance_date']));
                             }
             //            print_r($ins_recurrence);die;
                             $this->db->insert('invoice_recurence', $ins_recurrence);
@@ -2374,6 +2396,7 @@ class Billing_model extends CI_Model {
             '(SELECT due_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as due_date',
             '(SELECT next_occurance_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as next_generation_date',
             '(SELECT total_generation_time FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as total_generation_time',
+            '(SELECT duration_time FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as total_duration_time',
             ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
         $where['status'] = 'AND `inv`.`status` != 0 ';
