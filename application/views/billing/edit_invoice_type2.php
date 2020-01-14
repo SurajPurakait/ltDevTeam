@@ -71,6 +71,8 @@
     </div>
     <div class="hr-line-dashed"></div>
 </div>
+
+<?php if($is_recurrence != 'y'){ ?>
 <div id="contact_info_div">    
     <h3>Contact Info<span class="text-danger">*</span><span class="display_div">&nbsp; (<a href="javascript:void(0);" class="contactadd" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $individual_id; ?>'); return false;">Add Contact</a>)</span></h3>
     <div id="contact-list">
@@ -79,6 +81,7 @@
     </div>
     <div class="hr-line-dashed"></div>
 </div>
+<?php } ?>
 
 <div id="documents_div" class="display_div">
     <h3>Documents &nbsp; (<a data-toggle="modal" class="documentadd" onclick="document_modal('add', '<?= $reference ?>', '<?= $individual_id ?>');" href="javascript:void(0);">Add document</a>)</h3> 

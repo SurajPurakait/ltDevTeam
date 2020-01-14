@@ -9,7 +9,7 @@
             <tbody>
                 <?php
                 if (!empty($order_summary)):
-                    $skip = ['invoice_id', 'reference_id', 'new_existing', 'existing_reference_id', 'contact_info', 'owners', 'documents', 'services', 'total_price', 'individual_id', 'invoice_status', 'invoice_type_id', 'invoice_notes', 'office_photo', 'sub_total', 'office_id', 'is_order', 'order_ID'];
+                    $skip = ['invoice_id', 'reference_id', 'new_existing', 'existing_reference_id', 'contact_info', 'owners', 'documents', 'services', 'total_price', 'individual_id', 'invoice_status', 'invoice_type_id', 'invoice_notes', 'office_photo', 'sub_total', 'office_id', 'is_order', 'order_ID','referred_by_source_id'];
                     foreach ($order_summary as $column => $os):
                         if ($os != ''):
                             if ($column == 'order_id'):
