@@ -1403,7 +1403,8 @@ Class System extends CI_Model {
     public function clear_notification_list($userid, $type, $reference = '') {
         if ($type == 'sos') {
 //        $this->db->query("UPDATE `sos_notification_staff` JOIN sos_notification ON(sos_notification.id=sos_notification_staff.sos_notification_id) SET `read_status` = '1' WHERE sos_notification_staff.staff_id = " . sess('user_id') . " and sos_notification.reference IN "."('action','order')");
-            return $this->db->query("UPDATE `sos_notification_staff` SET `read_status` = '1' WHERE staff_id = " . sess('user_id') . "");
+//            return $this->db->query("UPDATE `sos_notification_staff` SET `read_status` = '1' WHERE staff_id = " . sess('user_id') . "");
+             return $this->db->query("UPDATE `sos_notification_staff` SET `notification_read` = '1' WHERE staff_id = " . sess('user_id') . "");
         } elseif ($type == 'notification') {
             if ($reference != '') {
                 return $this->db->query("UPDATE general_notifications SET read_status='y' WHERE (added_by='$userid' || user_id='$userid') AND reference='$reference'");
