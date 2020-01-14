@@ -89,12 +89,12 @@ if (!empty($task_list)) {
         $start_date = $task['target_start_date'] . 'days';
         $complete_date = $task['target_complete_date'] . 'days';
         if ($task['target_start_day'] == 1) {
-            $targetSstartDate = date("Y-m-d", strtotime(("-$start_date"), $due_date));
-        } else {
             $targetSstartDate = date("Y-m-d", strtotime(("+$start_date"), $created_at));
+        } else {
+            $targetSstartDate = date("Y-m-d", strtotime(("-$start_date"),$due_date));
         }
         if ($task['target_complete_day'] == 1) {
-            $targetCompleteDate = $targetSstartDate = date("Y-m-d", strtotime(("-$complete_date"), $due_date));
+            $targetCompleteDate = date("Y-m-d", strtotime(("+$complete_date"), $created_at));
         } else {
             $targetCompleteDate = date("Y-m-d", strtotime(("-$complete_date"), $due_date));
         }
