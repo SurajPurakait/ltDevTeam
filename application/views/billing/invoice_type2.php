@@ -73,7 +73,7 @@
     <div class="form-group">
         <label class="col-lg-2 control-label">SSN/ITIN<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <input placeholder="ssn" class="form-control value_field required_field" type="text" id="individual_ssn_itin" name="ssn_itin" title="SSN/ITIN" required>
+            <input data-mask="999-99-9999" placeholder="___-__-____" class="form-control value_field required_field" type="text" id="individual_ssn_itin" name="ssn_itin" title="SSN/ITIN" required>
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
