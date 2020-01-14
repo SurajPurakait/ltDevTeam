@@ -174,7 +174,7 @@
                                     $ssn = '';
                                 }                                
                                 ?>
-                                <input placeholder="ssn" class="form-control" type="text" id="ssn_itin" name="ssn_itin" title="SSN/ITIN" data-mask="999-99-9999" placeholder="___-__-____" required value="<?= $ssn; ?>">
+                                <input class="form-control" type="text" id="ssn_itin" name="ssn_itin" title="SSN/ITIN" data-mask="999-99-9999" placeholder="___-__-____" required value="<?= $ssn; ?>">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>

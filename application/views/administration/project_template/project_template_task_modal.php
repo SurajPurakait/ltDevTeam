@@ -59,7 +59,7 @@
                             <label class="">For Complete</label>
                             <input class="form-control" type="number" name="task[target_complete_date]" value="0" min="0" style="width: 100px" id="target_complete_date" required>
                             <!--<label class="control-label"><input type="radio" name="task[target_complete_day]" value="1" checked="">&nbsp; Days before due date</label>-->
-                            <label class="control-label"><input type="radio" name="task[target_complete_day]" value="2" checked>&nbsp; Days before project due date</label>
+                            <label class="control-label"><input type="radio" name="task[target_complete_day]" value="2" checked>&nbsp; Days before due date</label>
                         </div>
                     </div>
                     <div class="errorMessage text-danger"></div>
