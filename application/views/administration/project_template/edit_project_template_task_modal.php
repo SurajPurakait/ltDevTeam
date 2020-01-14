@@ -50,8 +50,8 @@
                         <div class="form-group">
                             <label class="">For Start</label>
                             <input class="form-control" type="number" name="task[target_start_date]" value="<?= $task_details->target_start_date ?>" min="0" style="width: 100px" id="target_start_date" required>
-                            <!--<label class="control-label"><input type="radio" <?php // echo ($task_details->target_start_day==1) ? 'checked' : ''; ?> name="task[target_start_day]" value="1">&nbsp; Days before due date</label>-->
-                            <label class="control-label"><input type="radio" <?php echo ($task_details->target_start_day==2) ? 'checked' : ''; ?> name="task[target_start_day]" value="2" required>&nbsp; Days after creation date</label>
+                            <label class="control-label"><input type="radio" <?php echo ($task_details->target_start_day==1) ? 'checked' : ''; ?> name="task[target_start_day]" value="1">&nbsp; Days after creation date</label>
+                            <label class="control-label"><input type="radio" <?php echo ($task_details->target_start_day==2) ? 'checked' : ''; ?> name="task[target_start_day]" value="2" required>&nbsp; Days before due date</label>
                             <div class="errorMessage text-danger"></div>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                         <div class="form-group">
                             <label class="">For Complete</label>
                             <input class="form-control" type="number" name="task[target_complete_date]" value="<?= $task_details->target_complete_date ?>" min="0" style="width: 100px" id="target_complete_date" required>
-                            <!--<label class="control-label"><input type="radio" <?php // echo ($task_details->target_complete_day==1) ? 'checked' : ''; ?> name="task[target_complete_day]" value="1">&nbsp; Days before due date</label>-->
+                            <label class="control-label"><input type="radio" <?php echo ($task_details->target_complete_day==1) ? 'checked' : ''; ?> name="task[target_complete_day]" value="1">&nbsp; Days after creation date</label>
                             <label class="control-label"><input type="radio" <?php echo ($task_details->target_complete_day==2) ? 'checked' : ''; ?> name="task[target_complete_day]" value="2" required>&nbsp; Days before due date</label>
                             <div class="errorMessage text-danger"></div>
                         </div>

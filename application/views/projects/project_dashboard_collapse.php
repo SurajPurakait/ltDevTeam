@@ -61,12 +61,12 @@
                     $start_date = $task->target_start_date . 'days';
                     $complete_date = $task->target_complete_date . 'days';
                     if ($task->target_start_day == 1) {
-                        $targetstartDate = date("Y-m-d", strtotime(("-$start_date"), $due_date));
-                    } else {
                         $targetstartDate = date("Y-m-d", strtotime(("+$start_date"), $created_at));
+                    } else {
+                        $targetstartDate = date("Y-m-d", strtotime(("-$start_date"),$due_date));
                     }
                     if ($task->target_complete_day == 1) {
-                        $targetCompleteDate = $targetstartDate = date("Y-m-d", strtotime(("-$complete_date"), $due_date));
+                        $targetCompleteDate = date("Y-m-d", strtotime(("+$complete_date"), $created_at));
                     } else {
                         $targetCompleteDate = date("Y-m-d", strtotime(("-$complete_date"), $due_date));
                     }
