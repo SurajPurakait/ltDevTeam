@@ -1104,3 +1104,4 @@ ALTER TABLE `report_dashboard_project` ADD `project_due_date` DATE NOT NULL AFTE
 /*live end*/
 /* 15.01.2020 */
 ALTER TABLE `report_dashboard_service` ADD `order_date` DATE NULL DEFAULT NULL AFTER `status`;
+ALTER TABLE `report_dashboard_service` CHANGE `department` `department` VARCHAR(10) NOT NULL;
