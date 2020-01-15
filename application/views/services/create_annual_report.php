@@ -118,7 +118,7 @@
                             <div id="document-list"></div>
                         </div>
 
-                        <div id="contact_info_div">
+                        <div id="contact_info_div" class="display_div">
                             <div class="hr-line-dashed"></div>
                             <h3>Contact Info<span class="text-danger">*</span><span class="display_div">&nbsp; (<a href="javascript:void(0);" class="contactadd" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>');return false;">Add Contact</a>)</span></h3>
                             <div id="contact-list">
@@ -318,17 +318,34 @@
                 if (state == 8) {
                     $('#service_delaware').prop("checked", true);
                     $('#service_florida').prop("checked", false);
+                    $('#service_new_york').prop("checked", false);
+                    $('#service_new_jersey').prop("checked", false);
+                    $('#service_texas').prop("checked", false);
+                    $('#service_michigan').prop("checked", false);
+                    $('#service_wyoming').prop("checked", false);
+                    $('#service_arizona').prop("checked", false);
 //                    $("#service_florida, #service_delaware").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_delaware'), $('#service_delaware').attr('retail_price'));
                 } else if (state == 10) {
                     $('#service_florida').prop("checked", true);
                     $('#service_delaware').prop("checked", false);
+                    $('#service_new_york').prop("checked", false);
+                    $('#service_new_jersey').prop("checked", false);
+                    $('#service_texas').prop("checked", false);
+                    $('#service_michigan').prop("checked", false);
+                    $('#service_wyoming').prop("checked", false);
+                    $('#service_arizona').prop("checked", false);
 //                    $("#service_florida, #service_delaware").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_florida'), $('#service_florida').attr('retail_price'));
                 }else if (state == 3) {
                     $('#service_arizona').prop("checked", true);
                     $('#service_florida').prop("checked", false);
                     $('#service_delaware').prop("checked", false);
+                    $('#service_new_york').prop("checked", false);
+                    $('#service_new_jersey').prop("checked", false);
+                    $('#service_texas').prop("checked", false);
+                    $('#service_michigan').prop("checked", false);
+                    $('#service_wyoming').prop("checked", false);
 //                    $("#service_florida, #service_delaware").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_arizona'), $('#service_arizona').attr('retail_price'));
                 }else if (state == 51) {
@@ -336,6 +353,10 @@
                     $('#service_arizona').prop("checked", false);
                     $('#service_florida').prop("checked", false);
                     $('#service_delaware').prop("checked", false);
+                    $('#service_new_york').prop("checked", false);
+                    $('#service_new_jersey').prop("checked", false);
+                    $('#service_texas').prop("checked", false);
+                    $('#service_michigan').prop("checked", false);
 //                    $("#service_florida, #service_delaware, #service_arizona").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_wyoming'), $('#service_wyoming').attr('retail_price'));
                 }else if (state == 23) {
@@ -344,6 +365,9 @@
                     $('#service_arizona').prop("checked", false);
                     $('#service_florida').prop("checked", false);
                     $('#service_delaware').prop("checked", false);
+                    $('#service_new_york').prop("checked", false);
+                    $('#service_new_jersey').prop("checked", false);
+                    $('#service_texas').prop("checked", false);
 //                    $("#service_florida, #service_delaware, #service_arizona, #service_wyoming").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_michigan'), $('#service_michigan').attr('retail_price'));
                 }else if (state == 44) {
@@ -353,6 +377,8 @@
                     $('#service_arizona').prop("checked", false);
                     $('#service_florida').prop("checked", false);
                     $('#service_delaware').prop("checked", false);
+                    $('#service_new_york').prop("checked", false);
+                    $('#service_new_jersey').prop("checked", false);
 //                    $("#service_florida, #service_delaware, #service_arizona, #service_wyoming, #service_michigan, #service_texas ").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_texas'), $('#service_texas').attr('retail_price'));
                 }else if (state == 31) {
@@ -363,6 +389,7 @@
                     $('#service_arizona').prop("checked", false);
                     $('#service_florida').prop("checked", false);
                     $('#service_delaware').prop("checked", false);
+                    $('#service_new_york').prop("checked", false);
 //                    $("#service_florida, #service_delaware, #service_arizona, #service_wyoming, service_michigan, #service_texas,  ").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_new_jersey'), $('#service_new_jersey').attr('retail_price'));
                 }else if (state == 33) {

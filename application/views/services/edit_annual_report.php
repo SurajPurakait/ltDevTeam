@@ -354,7 +354,7 @@
 //        $('.related_service').hide();
 //        setIdHTML('related_service_container', '');
     }
-    function change_due_date(state, type) {
+   function change_due_date(state, type) {
         $.ajax({
             type: 'POST',
             url: base_url + 'services/home/change_due_date',
@@ -366,17 +366,34 @@
                 if (state == 8) {
                     $('#service_delaware').prop("checked", true);
                     $('#service_florida').prop("checked", false);
-//                    $("#service_florida, #service_delaware").prop("disabled", true);
+                    $('#service_new_york').prop("checked", false);
+                    $('#service_new_jersey').prop("checked", false);
+                    $('#service_texas').prop("checked", false);
+                    $('#service_michigan').prop("checked", false);
+                    $('#service_wyoming').prop("checked", false);
+                    $('#service_arizona').prop("checked", false);
+//                    $("#service_florida, #service_delaware").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_delaware'), $('#service_delaware').attr('retail_price'));
                 } else if (state == 10) {
                     $('#service_florida').prop("checked", true);
                     $('#service_delaware').prop("checked", false);
-//                    $("#service_florida, #service_delaware").prop("disabled", true);
+                    $('#service_new_york').prop("checked", false);
+                    $('#service_new_jersey').prop("checked", false);
+                    $('#service_texas').prop("checked", false);
+                    $('#service_michigan').prop("checked", false);
+                    $('#service_wyoming').prop("checked", false);
+                    $('#service_arizona').prop("checked", false);
+//                    $("#service_florida, #service_delaware").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_florida'), $('#service_florida').attr('retail_price'));
                 }else if (state == 3) {
                     $('#service_arizona').prop("checked", true);
                     $('#service_florida').prop("checked", false);
                     $('#service_delaware').prop("checked", false);
+                    $('#service_new_york').prop("checked", false);
+                    $('#service_new_jersey').prop("checked", false);
+                    $('#service_texas').prop("checked", false);
+                    $('#service_michigan').prop("checked", false);
+                    $('#service_wyoming').prop("checked", false);
 //                    $("#service_florida, #service_delaware").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_arizona'), $('#service_arizona').attr('retail_price'));
                 }else if (state == 51) {
@@ -384,6 +401,10 @@
                     $('#service_arizona').prop("checked", false);
                     $('#service_florida').prop("checked", false);
                     $('#service_delaware').prop("checked", false);
+                    $('#service_new_york').prop("checked", false);
+                    $('#service_new_jersey').prop("checked", false);
+                    $('#service_texas').prop("checked", false);
+                    $('#service_michigan').prop("checked", false);
 //                    $("#service_florida, #service_delaware, #service_arizona").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_wyoming'), $('#service_wyoming').attr('retail_price'));
                 }else if (state == 23) {
@@ -392,6 +413,9 @@
                     $('#service_arizona').prop("checked", false);
                     $('#service_florida').prop("checked", false);
                     $('#service_delaware').prop("checked", false);
+                    $('#service_new_york').prop("checked", false);
+                    $('#service_new_jersey').prop("checked", false);
+                    $('#service_texas').prop("checked", false);
 //                    $("#service_florida, #service_delaware, #service_arizona, #service_wyoming").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_michigan'), $('#service_michigan').attr('retail_price'));
                 }else if (state == 44) {
@@ -401,6 +425,8 @@
                     $('#service_arizona').prop("checked", false);
                     $('#service_florida').prop("checked", false);
                     $('#service_delaware').prop("checked", false);
+                    $('#service_new_york').prop("checked", false);
+                    $('#service_new_jersey').prop("checked", false);
 //                    $("#service_florida, #service_delaware, #service_arizona, #service_wyoming, #service_michigan, #service_texas ").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_texas'), $('#service_texas').attr('retail_price'));
                 }else if (state == 31) {
@@ -411,6 +437,7 @@
                     $('#service_arizona').prop("checked", false);
                     $('#service_florida').prop("checked", false);
                     $('#service_delaware').prop("checked", false);
+                    $('#service_new_york').prop("checked", false);
 //                    $("#service_florida, #service_delaware, #service_arizona, #service_wyoming, service_michigan, #service_texas,  ").prop("disabled", false);
                     changeServiceRadio(getIdVal('service_new_jersey'), $('#service_new_jersey').attr('retail_price'));
                 }else if (state == 33) {
@@ -429,61 +456,6 @@
                 }
                 $('#due_date').val(result);
             }
-        });
-    }
-    $(function () {
-        var client_type = $('#type_of_client_ddl').val();
-        if (client_type == '0') {
-            fetchExistingClientData('<?= $reference_id; ?>', <?= $reference_id; ?>, '<?= $reference; ?>', 1);
-            $('.display_div').hide();
-            annual_date('<?= $reference_id; ?>');
-        } else {
-            get_contact_list('<?= $company_id; ?>', 'company');
-            reload_owner_list('<?= $company_id; ?>', 'main');
-            get_document_list('<?= $company_id; ?>', 'company');
-            getInternalData('<?= $reference_id; ?>', 'company');
-            setIdVal('state', '<?= $edit_data['state_opened']; ?>');
-            setIdVal('type', '<?= $edit_data['company_type']; ?>');
-            setIdVal('business_description', '<?= urlencode($edit_data['business_description']); ?>');
-            setIdVal('fye', '<?= $edit_data['fiscal_year_end']; ?>');
-            setIdVal('business_name', '<?= $edit_data['company_name']; ?>');
-            setIdVal('dba', '<?= $edit_data['dba']; ?>');
-            setIdVal('fein', '<?= $edit_data['fein']; ?>');
-            setIdVal('start_month_year', "<?= $edit_data['start_month_year']; ?>");
-            change_due_date('<?= $edit_data['state_opened']; ?>', '<?= $edit_data['company_type']; ?>');
-        }
-    });
-    var config = {
-        '.chosen-select': {},
-        '.chosen-select-deselect': {allow_single_deselect: true},
-        '.chosen-select-no-single': {disable_search_threshold: 10},
-        '.chosen-select-no-results': {no_results_text: 'Oops, nothing found!'},
-        '.chosen-select-width': {width: "95%"}
-    }
-    for (var selector in config) {
-        $(selector).chosen(config[selector]);
-        $(selector).on('change', function (evt, params) {
-            var selVal = $(this).val();
-            var field_name = $(this).attr('name');
-            $that = $(this);
-            var prevselected = $("#hiddenrelatedvalues").val();
-            var prevselectedarray = prevselected.split(",");
-            if (field_name == 'related_services[]') {
-                if (selVal == null) {
-                    $('.related_service').hide();
-                } else {
-                    $('.related_service').each(function () {
-                        var currentId = $(this).attr('data-serviceid');
-                        if (jQuery.inArray(currentId, selVal) == -1) {
-                            $('#related_service_' + currentId).hide();
-                        } else {
-                            $('#related_service_' + currentId).show();
-                        }
-                    });
-                }
-                $("#hiddenrelatedvalues").val(selVal);
-            }
-
         });
     }
 </script>
