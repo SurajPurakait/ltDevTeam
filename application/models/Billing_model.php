@@ -843,7 +843,7 @@ class Billing_model extends CI_Model {
             if ($data['invoice_type'] == 1) {        # Business Client Section
 //                echo '<pre>';
 //                print_r($data);die;
-                if($data['is_recurrence'] == 'y'){  // Update recurring invoice for business client
+                if(isset($data['is_recurrence']) && $data['is_recurrence'] == 'y'){  // Update recurring invoice for business client
 //                    echo '<pre>';
 //                print_r($data);die;
                 if ($data['type_of_client'] == 1) {
