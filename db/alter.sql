@@ -1103,7 +1103,6 @@ ALTER TABLE `report_dashboard_project` ADD `sos` LONGTEXT NULL DEFAULT NULL AFTE
 ALTER TABLE `report_dashboard_project` ADD `project_due_date` DATE NOT NULL AFTER `project_creation_date`;
 /*live end*/
 /* 15.01.2020 */
-ALTER TABLE `report_dashboard_service` ADD `order_date` DATE NOT NULL AFTER `status`;
 UPDATE `services` SET `retail_price` = '450.00', `responsible_assign` = '' WHERE `services`.`id` = 48;
 
 INSERT INTO `renewal_dates` (`id`, `state`, `type`, `date`) VALUES (NULL, '3', '6', '2020/01/01');
@@ -1122,3 +1121,4 @@ INSERT INTO `services` (`id`, `category_id`, `description`, `ideas`, `tutorials`
 
 INSERT INTO `services` (`id`, `category_id`, `description`, `ideas`, `tutorials`, `fixed_cost`, `retail_price`, `dept`, `status`, `responsible_assign`, `client_type_assign`, `note`, `is_active`) VALUES (NULL, '1', 'New York Annual Report', 'inc_n_y_a_r', 'NULL', '0.00', '250.00', '6', '1', '2', '0', '', 'y');
 
+ALTER TABLE `report_dashboard_service` ADD `order_date` DATE NULL DEFAULT NULL AFTER `status`;
