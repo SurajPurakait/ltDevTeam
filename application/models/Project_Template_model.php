@@ -2193,6 +2193,8 @@ class Project_Template_model extends CI_Model {
                 $ins_recurrence['actual_due_month'] = '0';
                 $ins_recurrence['actual_due_year'] = '0';
             }
+            unset($ins_recurrence['periodic_due_day']);
+            unset($ins_recurrence['periodic_due_month']);
             if ($ins_recurrence['pattern'] == 'monthly') {
                 $cur_day = date('d');
                 if ($cur_day <= $ins_recurrence['actual_due_day']) {
