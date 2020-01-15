@@ -1,13 +1,13 @@
 <?php
-    $servername = "localhost";
-    $username = "leafnet_db_user";
-    $password = "leafnet@123";
-    $db = 'leafnet_stagings';
-
     // $servername = "localhost";
-    // $username = "root";
-    // $password = "";
-    // $db = 'leafnet';
+    // $username = "leafnet_db_user";
+    // $password = "leafnet@123";
+    // $db = 'leafnet_stagings';
+
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $db = 'leafnet';
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
 
@@ -147,6 +147,7 @@
                 $royalty_query_run = mysqli_query($conn,$royalty_sql);
                 $rqr = mysqli_fetch_assoc($royalty_query_run);
                     if ($invoice_id_inner == $rqr['service_id']) {
+                        unset($rqr['id']);
                         if (empty(array_diff($comparison_array,$rqr))) {
                             echo "No Difference with previous values";
                         } else {
@@ -175,7 +176,7 @@
                             if ($payment_type != $rqr['payment_type']) {
                                 $update_sql .= "`payment_type`='$payment_type', ";
                             }
-                            if ($authorization_id != $rqr['authorization_id']) {
+                            if ($authorization_id_without_slash != $rqr['authorization_id']) {
                                 $update_sql .= "`authorization_id`='$authorization_id', ";
                             }
                             if ($reference != $rqr['reference']) {
