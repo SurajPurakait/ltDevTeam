@@ -8,7 +8,7 @@
             <ul class="dropdown-menu">
                 <li><a id="order_serial_id-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.order_serial_id')">ID</a></li>
                 <li><a id="client_name-val" href="javascript:void(0);" onclick="sort_service_dashboard('client_name')">Client Name</a></li>
-                <li><a id="office_id-val" href="javascript:void(0);" onclick="sort_service_dashboard('office_id')">Office ID</a></li>
+                <li><a id="office_id-val" href="javascript:void(0);" onclick="sort_service_dashboard('office')">Office ID</a></li>
                 <li><a id="status-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.status')">Tracking</a></li>
                 <li><a id="order_date-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.order_date')">Requested Date</a></li>
                 <li><a id="start_date-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.start_date')">Start Date</a></li>
