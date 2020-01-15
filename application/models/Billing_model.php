@@ -1019,6 +1019,19 @@ class Billing_model extends CI_Model {
                     } else {
                         $ins_recurrence['due_type'] = null;
                     }
+                    
+                    if($ins_recurrence['duration_time'] == 1)
+                    {
+                       $ins_recurrence['due_date'] = ''; 
+                       $ins_recurrence['next_occurance_date'] = '';
+                    } 
+                    elseif($ins_recurrence['duration_time'] == 2)
+                    {
+                       $ins_recurrence['next_occurance_date'] = ''; 
+                    }else {
+                        $ins_recurrence['next_occurance_date'] = $ins_recurrence['next_occurance_date'];                                                          
+                    }
+                    
                     if(!empty($ins_recurrence['start_date']) && empty($ins_recurrence['due_date']) && empty($ins_recurrence['next_occurance_date']))
                     {
                         $ins_recurrence['total_generation_time'] = '1';
@@ -1029,8 +1042,8 @@ class Billing_model extends CI_Model {
                     {
                         $ins_recurrence['total_generation_time'] = '3';
                     }
-                    
 
+                    
     //            if(isset($ins_recurrence['pattern']))
 //                print_r($ins_recurrence);die;
                     $this->db->where('invoice_id', $invoice_id);
@@ -1272,6 +1285,19 @@ class Billing_model extends CI_Model {
                 } else {
                     $ins_recurrence['due_type'] = null;
                 }
+                
+                if($ins_recurrence['duration_time'] == 1)
+                {
+                    $ins_recurrence['due_date'] = ''; 
+                    $ins_recurrence['next_occurance_date'] = '';
+                } 
+                elseif($ins_recurrence['duration_time'] == 2)
+                {
+                    $ins_recurrence['next_occurance_date'] = ''; 
+                }else {
+                    $ins_recurrence['next_occurance_date'] = $ins_recurrence['next_occurance_date'];                                                          
+                }
+                
                 if(!empty($ins_recurrence['start_date']) && empty($ins_recurrence['due_date']) && empty($ins_recurrence['next_occurance_date']))
                 {
                     $ins_recurrence['total_generation_time'] = '1';
