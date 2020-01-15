@@ -21,9 +21,20 @@
                                 <div class="tab-content" id="tab-content-div">
                                     <div role="tabpanel" id="tab-1" class="tab-pane active">
                                         <div class="panel-body">
-                                            <h4 class="m-b-15"> Period Time : <span class="btn-sm btn-default text-dark">Last 30 Days</span></h4>
+                                            <div class="row">
+                                                <div class="col-md-2 m-t-5" style="width: 120px;">
+                                                    <h4>Select Period</h4> 
+                                                </div>
+                                                <div class="col-md-3 p-r-0 p-l-0">
+                                                    <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">    
+                                                </div>
+                                                <div class="col-md-2 p-l-0">
+                                                    <button type="button" class="btn btn-success" id="report-service-range-btn" style="border-radius: 0;">Apply</button>    
+                                                </div>
+                                            </div>
                                             <?php 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
+                                                // $date_range_service_report    
                                             ?>
                                             <div class="ibox m-t-25" id="service_by_franchise_1" onclick="show_service_franchise_result('franchise')">
                                                 <div class="ibox-title p-t-15 p-b-40">
@@ -303,5 +314,10 @@
                 }
             }, cb);
             cb(start, end);
+
+            $("#report-service-range-btn").click(function () {
+                var report_range = document.getElementById('reportrange').value;
+                show_service_franchise_result('franchise',report_range);       
+            });
         }); 
 </script>
