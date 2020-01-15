@@ -503,13 +503,13 @@ class Service_model extends CI_Model {
                 LEFT OUTER JOIN service_request AS srv_rq ON srv_rq.order_id = ord.id
                 INNER JOIN staff st ON st.id = ord.staff_requested_service
                 LEFT OUTER JOIN invoice_info AS inv ON inv.order_id = ord.id";
-        if (isset($form_data)) {
-            if (isset($form_data['variable_dropdown'])) {
-                if (in_array('9', $form_data['variable_dropdown'])) {
-                    $sql .= " INNER JOIN invoice_info inv ON inv.order_id=ord.id";
-                }
-            }
-        }
+        // if (isset($form_data)) {
+        //     if (isset($form_data['variable_dropdown'])) {
+        //         if (in_array('9', $form_data['variable_dropdown'])) {
+        //             $sql .= " INNER JOIN invoice_info inv ON inv.order_id=ord.id";
+        //         }
+        //     }
+        // }
         if (isset($sos_value) && $sos_value != '') {
             $sql .= " INNER JOIN sos_notification AS sos ON sos.reference_id=ord.id INNER JOIN sos_notification_staff sns ON sns.sos_notification_id=sos.id";
         }
@@ -1611,9 +1611,9 @@ class Service_model extends CI_Model {
         }
     }
 
-    public function update_account_order_id_by_new_reference_id($new_reference_id, $order_id) {
+    public function update_account_order_id_by_new_reference_id($new_reference_id, $order_id,$client_id='') {
         $this->db->where('company_id', $new_reference_id);
-        return $this->db->update('financial_accounts', ['order_id' => $order_id]);
+        return $this->db->update('financial_accounts', ['order_id' => $order_id,'client_id'=>$client_id]);
     }
 
     public function get_service_request($order_id, $service_id) {
@@ -2928,6 +2928,10 @@ class Service_model extends CI_Model {
             
             return $this->db->query($sql)->num_rows();
         }   
+    }
+
+    public function get_invoice_id($order_id){
+        return $this->db->get_where('invoice_info',['order_id'=>$order_id])->row_array();
     }
 
 }

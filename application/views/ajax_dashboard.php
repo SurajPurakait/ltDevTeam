@@ -380,7 +380,8 @@ if ($section == 'sos') {
             if ($snl['reference'] == 'order') {
                 $action_type = 'Service';
                 $class1 = 'bg-yellow';
-                $view_url = base_url() . 'services/home/view/' . $snl['reference_id'];
+//                $view_url = base_url() . 'services/home/view/' . $snl['reference_id'];
+                $view_url = base_url() . 'services/home/view/' . base64_encode($snl['reference_id']);
             }
             if ($snl['reference'] == 'projects') {
                 $action_type = 'Project';
@@ -453,7 +454,8 @@ if ($section == 'notification') {
                     $reference_type = "Service";
                     $class = 'order';
                     $class1 = 'bg-yellow';
-                    $view_url = base_url() . 'services/home/view/' . $gnl['reference_id'];
+//                    $view_url = base_url() . 'services/home/view/' . $gnl['reference_id'];
+                    $view_url = base_url() . 'services/home/view/' . base64_encode($gnl['reference_id']);
                 }
                 if ($gnl['reference'] == 'lead') {
                     $reference_type = "Lead";

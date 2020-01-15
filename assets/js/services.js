@@ -16,7 +16,7 @@ function county_ajax(state_id, county_id) {
     }
 }
 
-function load_partner_manager_ddl(office_id, partner_id, manager_id) {
+function load_partner_manager_ddl(office_id, partner_id = "", manager_id = "") {
     $.ajax({
         type: "POST",
         data: {
@@ -469,6 +469,13 @@ function loadServiceDashboard(status, categoryID, requestType, officeID, pageNum
                 if (pageNumber == 1 || pageNumber == 0) {
                     $(".ajaxdiv").html(result);
                     $("a.filter-button span:contains('-')").html(0);
+                    $(".variable-dropdown").val('');
+                    $(".condition-dropdown").val('').removeAttr('disabled');
+                    $(".criteria-dropdown").val('');
+                    $('.criteria-dropdown').removeAttr('readonly').empty().append('<option value="">All Criteria</option>');
+                    $(".criteria-dropdown").trigger("chosen:updated");
+                    $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
+                    $('#btn_service').css('display', 'none');
                 } else {
                     $(".ajaxdiv").append(result);
                     $('.result-header').not(':first').remove();
@@ -966,6 +973,7 @@ function save_account(section) {
     var form_data = new FormData(document.getElementById('form_accounts'));
     var company_id = $("#company_id").val();
     var order_id = $("#editval").val();
+    var modal_type=$("#modal_type").val();
     form_data.append('section', section);
     $.ajax({
         type: "POST",

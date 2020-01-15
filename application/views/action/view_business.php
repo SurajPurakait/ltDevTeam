@@ -311,12 +311,23 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                                 <td <?= $style; ?>><strong>Account Info</strong></td>
                                 <td <?= $style; ?> >
                                     <?php foreach ($account_details as $ad) { ?>
+                                        <b>Type of Account: </b>
+                                        <?php echo (isset($ad['type_of_account']) && $ad['type_of_account']!=''?$ad['type_of_account']:'') ?><br>
                                         <b>Bank Name:</b>
                                         <?php echo $ad['bank_name'] ?><br>
                                         <b>Bank Account Number:</b>
                                         <?php echo $ad['ban_account_number'] ?><br>
                                         <b>Bank Routing Number:</b>
-                                        <?php echo $ad['bank_routing_number'] ?><hr />
+                                        <?php echo $ad['bank_routing_number'] ?><br>
+                                        <b>Website: </b>
+                                        <?php echo (isset($ad['bank_website']) && $ad['bank_website']!=''?$ad['bank_website']:'') ?><br>
+                                        <b>User: </b>
+                                        <?php echo (isset($ad['user']) && $ad['user']!=''?$ad['user']:'') ?><br>
+                                        <p>
+                                            <i class="fa fa-edit" style="cursor:pointer" onclick="account_modal('edit', '<?= $ad['id'] ?>', 'month_diff');" title="Edit this account"></i>
+                                            &nbsp;&nbsp;<i class="fa fa-trash" style="cursor:pointer" onclick="delete_account(<?= $ad['id'] ?>)" title="Remove this account"></i>
+                                        </p>
+                                        <hr />
                                     <?php } ?>
                                 </td>
                             <?php } else { ?>
@@ -364,6 +375,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
             </div>
         </div>
     </div>
+    <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
     <script>
         function loadbusinesstab(tab_value, projectval = '') {
             if (tab_value == 'invoice') {

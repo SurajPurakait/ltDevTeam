@@ -6,7 +6,7 @@
                 <li class="nav-link"><a href="#contact_info" aria-controls="#contact_info" role="tab" data-toggle="tab">CONTACT </a></li>
                 <li class="nav-link"><a href="#owner_info" aria-controls="#owner_info" role="tab" data-toggle="tab">OWNER</a></li>
                 <li class="nav-link"><a href="#other_info" aria-controls="#other_info" role="tab" data-toggle="tab">OTHER</a></li>                    
-                <li class="nav-link"><a href="#account_info" aria-controls="#account_info" role="tab" data-toggle="tab">ACCOUNT</a></li>
+                <!--<li class="nav-link"><a href="#account_info" aria-controls="#account_info" role="tab" data-toggle="tab">ACCOUNT</a></li>-->
                 <li class="nav-link"><a href="#billing_info" aria-controls="#billing_info" role="tab" data-toggle="tab">INVOICE</a></li>                    
             </ul>
             <div class="tab-content">
@@ -274,122 +274,7 @@
                         </div>                                           
                     </div>
                 </div>
-                <div class="tab-pane" role="tabpanel" id="account_info">
-                    <div class="panel-body"> 
-                        <?php foreach ($account_details as $ad) { ?> 
-                            Payroll #<?= $ad['order_id'] ?>
-                            <div class="form-group">
-                                <label id="referred-label" class="col-lg-2 control-label">Bank Name</label>
-
-                                <div class="col-lg-10">
-                                    <input type="text" name="bank_name" id="bank_name" class="form-control" value="<?= $ad['bank_name'] ?>" disabled>
-                                    <div class="errorMessage text-danger"></div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-
-                                <label id="referred-label" class="col-lg-2 control-label"> Account Number</label>
-                                <div class="col-lg-10">
-                                    <input type="text" name="account_number" id="account_number" 
-                                           class="form-control" value="<?= $ad['ban_account_number'] ?>" disabled>
-                                    <div class="errorMessage text-danger"></div>
-                                </div>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label id="referred-label" class="col-lg-2 control-label"> Routing Number</label>
-                                <div class="col-lg-10">
-                                    <input type="text" name="routing_number" id="routing_number"  class="form-control" value="<?= $ad['bank_routing_number'] ?>" disabled>
-                                    <div class="errorMessage text-danger"></div>
-                                </div>
-                            </div>
-
-                        <?php } ?>
-
-                        <?php foreach ($account_details_bookkeeping as $bk) { ?> 
-                            Bookkeeping #<?= $bk['order_id']; ?>
-                            <div class="form-group">
-                                <label id="referred-label" class="col-lg-2 control-label">Bank Name</label>
-
-                                <div class="col-lg-10">
-                                    <input type="text" name="bank_name" id="bank_name" class="form-control" value="<?= $bk['bank_name'] ?>" disabled>
-                                    <div class="errorMessage text-danger"></div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label id="referred-label" class="col-lg-2 control-label">Account Type</label>
-                                <div class="col-lg-10">
-                                    <input type="text" name="account_type" id="account_type" class="form-control" value="<?= $bk['type_of_account'] ?>" disabled>
-                                    <div class="errorMessage text-danger"></div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-
-                                <label id="referred-label" class="col-lg-2 control-label"> Account Number</label>
-                                <div class="col-lg-10">
-                                    <input type="text" name="account_number" id="account_number" 
-                                           class="form-control" value="<?= $bk['account_number'] ?>" disabled>
-                                    <div class="errorMessage text-danger"></div>
-                                </div>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label id="referred-label" class="col-lg-2 control-label"> Routing Number</label>
-                                <div class="col-lg-10">
-                                    <input type="text" name="routing_number" id="routing_number"  class="form-control" value="<?= $bk['routing_number'] ?>" disabled>
-                                    <div class="errorMessage text-danger"></div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label id="referred-label" class="col-lg-2 control-label">Bank URL</label>
-                                <div class="col-lg-10">
-                                    <input type="text" name="bank_url" id="bank_url"  class="form-control" value="<?= $bk['bank_website'] ?>" disabled>
-                                   <!--  <p placeholder="Bank URL" type="text" id="bank_url" name="bank_url" title="Bank URL"></p> -->
-                                    <div class="errorMessage text-danger"></div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label id="referred-label" class="col-lg-2 control-label">User</label>
-                                <div class="col-lg-10">
-                                    <input type="text" name="user" id="user" class="form-control" value="<?= $bk['user'] ?>" disabled>
-                                    <div class="errorMessage text-danger"></div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label id="referred-label" class="col-lg-2 control-label">Password</label>
-                                <div class="col-lg-10">
-                                    <input type="text" name="password" id="password" class="form-control" value="<?= $bk['password'] ?>" disabled>
-                                    <div class="errorMessage text-danger"></div>
-                                </div>
-                            </div> 
-
-                        <?php } ?>
-
-                        <div class="form-group">
-                            <div class="col-lg-offset-2 col-lg-10">
-                                <input type="hidden" name="reference_id" id="reference_id" value="<?= $reference_id; ?>">
-                                <input type="hidden" name="reference" id="reference" value="<?= $reference; ?>">
-                                <input type="hidden" name="service_id" id="service_id" value="<?= isset($company_order_data[0]['service_id']) ? $company_order_data[0]['service_id'] : 0; ?>">
-                                <input type="hidden" name="action" id="action" value="create_new_company">
-                                <input type="hidden" name="quant_title" id="quant_title" value="">
-                                <input type="hidden" name="quant_contact" id="quant_contact" value="">
-                                <input type="hidden" name="quant_documents" id="quant_documents" value="">
-                                <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>"/>
-                                <input type="hidden" name="editval" id="editval" value="<?= isset($company_order_data[0]['id']) ? $company_order_data[0]['id'] : ''; ?>">
-                                <button class="btn btn-success" type="button" onclick="request_create_business()">Save</button> &nbsp;&nbsp;&nbsp;
-                                <button class="btn btn-default" type="button" onclick="go('action/home/business_dashboard')">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div> 
+                
                 <div class="tab-pane" role="tabpanel" id="billing_info">
                     <div class="panel-body">
                         <div class="ajaxdiv" id="dashboard_result_div"></div>
@@ -416,6 +301,7 @@
 </div>
 <div id="contact-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="document-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
+<div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script type="text/javascript">
     loadBillingDashboard('', '', '', '', '<?= $reference_id . '-company'; ?>');
     get_contact_list('<?= $reference_id; ?>', 'company');

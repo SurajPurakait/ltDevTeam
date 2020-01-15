@@ -84,19 +84,19 @@ if (!empty($task_list)) {
         $dueDate = $actual_yr . '-' . $actual_mnth . '-' . $actual_day;
 //                                                             start date and complete date calculation
 
-        $created_at = strtotime(date('Y-m-d', strtotime($task['created_at'])));
+        $created_at =strtotime(get_project_created_date($task['project_id']));
         $due_date = strtotime($dueDate);
         $start_date = $task['target_start_date'] . 'days';
         $complete_date = $task['target_complete_date'] . 'days';
         if ($task['target_start_day'] == 1) {
-            $targetSstartDate = date("Y-m-d", strtotime(("-$start_date"), $due_date));
-        } else {
             $targetSstartDate = date("Y-m-d", strtotime(("+$start_date"), $created_at));
+        } else {
+            $targetSstartDate = date("Y-m-d", strtotime(("-$start_date"),$due_date));
         }
         if ($task['target_complete_day'] == 1) {
-            $targetCompleteDate = $targetSstartDate = date("Y-m-d", strtotime(("-$complete_date"), $due_date));
-        } else {
             $targetCompleteDate = date("Y-m-d", strtotime(("+$complete_date"), $created_at));
+        } else {
+            $targetCompleteDate = date("Y-m-d", strtotime(("-$complete_date"), $due_date));
         }
         if (strlen($task['description']) > 20) {
             $description = substr($task['description'], 0, 20) . '...';

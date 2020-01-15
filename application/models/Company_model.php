@@ -966,7 +966,7 @@ class Company_model extends CI_Model {
         $this->db->update('documents', ['reference_id' => $reference_id]);
     }
 
-    public function get_account_details($reference_id) {
+    public function get_account_details($reference_id,$client_id='') {
 //        echo $reference_id;die;
         $this->db->select("*");
         $this->db->from("payroll_account_numbers");
@@ -982,33 +982,41 @@ class Company_model extends CI_Model {
         $this->db->where(['reference_id'=>$reference_id,'reference'=>'company']);
         return $this->db->get()->result_array();
     }
-    public function getFinancialAccountDetails($orderid){
+    public function getFinancialAccountDetails($orderid,$client_id){
         $oid=array();
         foreach($orderid as $val){
            $oid[]= $val['id'];
         }
-        if(!empty($oid)){
-            $this->db->select("bank_name, account_number as ban_account_number, routing_number as bank_routing_number");
+        if(!empty($client_id)){
+            $this->db->select("id,client_id,bank_name, account_number as ban_account_number, routing_number as bank_routing_number,type_of_account,user,bank_website");
             $this->db->from('financial_accounts');
-            $this->db->where_in('order_id',$oid);
+            $this->db->where('client_id',$client_id);
+//            $this->db->where_in('order_id',$oid);
+            $this->db->group_by('account_number');
             return $this->db->get()->result_array();
         }else{
             return array();
         }
     }
 
-    public function get_account_details_bookkeeping($reference_id,$reference='') {
+    public function get_account_details_bookkeeping($reference_id,$reference='',$client_id='') {
         if($reference==''){
-            $order_list = $this->db->get_where('order', ['reference_id' => $reference_id, 'reference' => 'company'])->result_array();
-            if (!empty($order_list)) {
-                $this->db->where_in("order_id", array_column($order_list, 'id'));
-                $this->db->group_by("account_number");
-                return $this->db->get('financial_accounts')->result_array();
-            } else {
-                return [];
-            }
+            $this->db->where('client_id',$client_id);
+            $this->db->group_by("account_number");
+            return $this->db->get('financial_accounts')->result_array();
+//            return $this->db->get_where('financial_accounts',['client_id'=>$client_id])->result_array();
+//            $order_list = $this->db->get_where('order', ['reference_id' => $reference_id, 'reference' => 'company'])->result_array();
+//            if (!empty($order_list)) {
+//                $this->db->where_in("order_id", array_column($order_list, 'id'));
+//                $this->db->group_by("account_number");
+//                return $this->db->get('financial_accounts')->result_array();
+//            } else {
+//                return [];
+//            }
         }else{
-            return $this->db->get_where('financial_accounts',['order_id'=>$reference_id,'reference'=>'project'])->result_array();
+            $this->db->where('client_id',$client_id);
+            $this->db->group_by("account_number");
+            return $this->db->get('financial_accounts')->result_array();
         }
     }
 

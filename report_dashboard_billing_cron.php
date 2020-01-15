@@ -6,7 +6,7 @@
     $servername = "localhost";
     $username = "leafnet_db_user";
     $password = "leafnet@123";
-    $db = 'leafnet_staging';
+    $db = 'leafnet_stagings';
 
 
 	// Create connection

@@ -2,7 +2,13 @@
     $servername = "localhost";
     $username = "leafnet_db_user";
     $password = "leafnet@123";
-    $db = 'leafnet_staging';
+    $db = 'leafnet_stagings';
+    
+    // $servername = "localhost";
+    // $username = "root";
+    // $password = "";
+    // $db = 'leafnet';
+
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
 
@@ -39,10 +45,10 @@
     mysqli_query($conn,'TRUNCATE report_dashboard_service');
     mysqli_query($conn, 'SET SQL_BIG_SELECTS=1');
     $report_service_query = mysqli_query($conn,$query);
-    $report_service_result = mysqli_fetch_assoc($report_service_query);
+    $report_service_count = mysqli_num_rows($report_service_query);
+    // $report_service_result = mysqli_fetch_assoc($report_service_query);
     
-
-    if (!empty($report_service_result)) {
+    if ($report_service_count > 0) {
         while($rsd = mysqli_fetch_assoc($report_service_query)) {
             $service_request_id = $rsd['service_request_id'];
             
@@ -51,7 +57,6 @@
             $sql_q_d_c_run = mysqli_query($conn,$sql_q_d_c);
             $sql_q_d_c_result = mysqli_fetch_assoc($sql_q_d_c_run);
             
-                        
             $get_service_end_days_query = "select * from target_days where service_id='" . $rsd['services_id'] . "'";
             $get_service_end_days_query_run = mysqli_query($conn,$get_service_end_days_query);
             $get_service_end_days = mysqli_fetch_assoc($get_service_end_days_query_run);
@@ -80,8 +85,14 @@
             $category = $rsd['category_id'];
             $department = $rsd['department_id'];
             $office = $rsd['office_id'];
-            $insert_sql = "INSERT INTO `report_dashboard_service`(`service_name`, `status`, `date_completed`, `date_complete_actual`, `late_status`, `sos`, `category`, `department`, `office`)
-            VALUES ('$service_name','$status',$date_completed, '$date_complete_actual', '$late_status', '$sos', '$category', '$department', '$office')";
+            if (!empty($rsd['order_date']) || date('Y-m-d', strtotime($rsd['order_date'])) != '0000-00-00') {
+                $order_date = $rsd['order_date'];
+            } else {
+                $order_date = '0001-01-01';
+            }
+
+            $insert_sql = "INSERT INTO `report_dashboard_service`(`service_name`, `status`,`order_date` ,`date_completed`, `date_complete_actual`, `late_status`, `sos`, `category`, `department`, `office`)
+            VALUES ('$service_name','$status','$order_date','$date_completed', '$date_complete_actual', '$late_status', '$sos', '$category', '$department', '$office')";
             mysqli_query($conn,$insert_sql)or die('Insert Error');
         }
     }

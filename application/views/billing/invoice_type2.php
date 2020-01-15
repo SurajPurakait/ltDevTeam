@@ -71,9 +71,9 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="col-lg-2 control-label">SSN/ITIN</label>
+        <label class="col-lg-2 control-label">SSN/ITIN<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <input placeholder="" class="form-control value_field" type="text" id="individual_ssn_itin" name="ssn_itin" title="SSN/ITIN">
+            <input data-mask="999-99-9999" placeholder="___-__-____" class="form-control value_field required_field" type="text" id="individual_ssn_itin" name="ssn_itin" title="SSN/ITIN" required>
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
@@ -181,7 +181,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" style="display:none;">
         <label class="col-lg-2 control-label">Practice Id</label>
         <div class="col-lg-10">
             <input placeholder="Practice Id" class="form-control" type="text" name="internal_data[practice_id]" id="practice_id" title="Practice Id">

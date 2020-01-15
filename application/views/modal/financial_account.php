@@ -108,7 +108,7 @@ if ($modal_type != "edit"):
                     <input type="hidden" name="company_id" id="company_id" value="<?= $reference_id; ?>">
                     <input type="hidden" name="edit_id" value="">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="save_account('');">Save changes</button>
+                    <button type="button" class="btn btn-primary" id="sub_btn" onclick="save_account('');">Save changes</button>
                 </div>
             </form>
         </div>

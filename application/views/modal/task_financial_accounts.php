@@ -106,9 +106,10 @@ if ($modal_type != "edit"):
                 <div class="modal-footer">
                     <input type="hidden" name="order_id" id="order_id" value="<?= $task_id; ?>">
                     <input type="hidden" name="company_id" id="company_id" value="<?= $client_id; ?>">
+                    <input type="hidden" name="client_id" id="client_id" value="<?= $client_id; ?>">
                     <input type="hidden" name="edit_id" value="">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="save_task_account('project');">Save changes</button>
+                    <button type="button" class="btn btn-primary" id="sub_btn" onclick="save_task_account('project');">Save changes</button>
                 </div>
             </form>
         </div>

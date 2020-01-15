@@ -1291,7 +1291,11 @@ class Project_Template_model extends CI_Model {
                                     $due_year = date('Y', strtotime('+1 year'));
                                 }
                                 $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
-                                $project_recurrence_main_data['actual_due_month'] = $next_quarter[$project_recurrence_main_data['due_month']];
+                                if($project_recurrence_main_data['due_month']>$current_month){
+                                    $project_recurrence_main_data['actual_due_month'] =$project_recurrence_main_data['due_month'];
+                                }else{
+                                    $project_recurrence_main_data['actual_due_month'] = $next_quarter[$project_recurrence_main_data['due_month']];
+                                }
                                 $project_recurrence_main_data['actual_due_year'] = $due_year;
                             }elseif($project_recurrence_main_data['pattern']=='periodic'){
 //                                $current_month = date('m');
@@ -1343,11 +1347,29 @@ class Project_Template_model extends CI_Model {
                         }
                     }
                     unset($project_recurrence_main_data['id']);
-                    if($project_recurrence_main_data['actual_due_month']<=12){
+                    if($project_recurrence_main_data['pattern']!='annually'){
+                        if($project_recurrence_main_data['actual_due_month']<=12){
+                            $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                        }else{
+                            $due_date = $project_recurrence_main_data['actual_due_year'] . '-' .($project_recurrence_main_data['actual_due_month'] % 12).'-' . $project_recurrence_main_data['actual_due_day'];
+                        }
+                    }else{
+                        $current_month=date('m',strtotime($project_date));
+                        $current_day=date('d',strtotime($project_date));
+                        if($project_recurrence_main_data['actual_due_day']>$current_day){
+                            if($project_recurrence_main_data['actual_due_month']>$current_month){
                                 $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
                             }else{
-                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' .($project_recurrence_main_data['actual_due_month'] % 12).'-' . $project_recurrence_main_data['actual_due_day'];
+                                $due_date = $project_recurrence_main_data['actual_due_year']+1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
                             }
+                        }else{
+                            if($project_recurrence_main_data['actual_due_month']>=$current_month){
+                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            }else{
+                                $due_date = $project_recurrence_main_data['actual_due_year']+1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            }
+                        }
+                    }
                     if ($project_recurrence_main_data['generation_month'] == '') {
                         $project_recurrence_main_data['generation_month'] = '0';
                     }
@@ -2171,6 +2193,8 @@ class Project_Template_model extends CI_Model {
                 $ins_recurrence['actual_due_month'] = '0';
                 $ins_recurrence['actual_due_year'] = '0';
             }
+            unset($ins_recurrence['periodic_due_day']);
+            unset($ins_recurrence['periodic_due_month']);
             if ($ins_recurrence['pattern'] == 'monthly') {
                 $cur_day = date('d');
                 if ($cur_day <= $ins_recurrence['actual_due_day']) {
@@ -3363,6 +3387,190 @@ class Project_Template_model extends CI_Model {
         $this->db->where('id',$template_id);
         return $this->db->delete('project_template_main');
     }
+    public function getProjectCreatedDate($project_id){
+        return $this->db->get_where('projects',['id'=>$project_id])->row()->created_at;
+    }
+
+    public function get_projects_data($category) {
+        $data_office = $this->db->get('office')->result_array();
+        $data_department = $this->db->get('department')->result_array();
+
+        $all_projects_data = [];
+        $all_tasks_data = [];
+        if ($category == 'projects_by_office') {
+            foreach ($data_office as $do) {    
+                $data = [
+                    'id' => $do['id'],
+                    'office_name' => $do['name'],
+                    'total_projects' => $this->report_data_calculation('projects_by_office','total_projects',$do['id']),           
+                    'new' => $this->report_data_calculation('projects_by_office','new',$do['id']),           
+                    'started' => $this->report_data_calculation('projects_by_office','started',$do['id']),                     
+                    'completed' => $this->report_data_calculation('projects_by_office','completed',$do['id']),
+                    'less_then_30' => $this->report_data_calculation('projects_by_office','less_then_30',$do['id']),
+                    'less_then_60' => $this->report_data_calculation('projects_by_office','less_then_60',$do['id']),
+                    'more_then_60' => $this->report_data_calculation('projects_by_office','more_then_60',$do['id']),
+                    'sos' => $this->report_data_calculation('projects_by_office','sos',$do['id']),           
+                ];
+                array_push($all_projects_data,$data);
+            }
+            return $all_projects_data;
+
+        } else if($category == 'tasks_by_office') {
+            foreach ($data_office as $do) {    
+                $data = [
+                    'id' => $do['id'],
+                    'office_name' => $do['name'],
+                    'total_tasks' => $this->report_data_calculation('tasks_by_office','total_tasks',$do['id']),           
+                    'new' => $this->report_data_calculation('tasks_by_office','new',$do['id']),           
+                    'started' => $this->report_data_calculation('tasks_by_office','started',$do['id']),                     
+                    'completed' => $this->report_data_calculation('tasks_by_office','completed',$do['id']),
+                    'less_then_30' => $this->report_data_calculation('tasks_by_office','less_then_30',$do['id']),
+                    'less_then_60' => $this->report_data_calculation('tasks_by_office','less_then_60',$do['id']),
+                    'more_then_60' => $this->report_data_calculation('tasks_by_office','more_then_60',$do['id']),
+                    'sos' => $this->report_data_calculation('tasks_by_office','sos',$do['id']),           
+                ];
+                array_push($all_tasks_data,$data);
+            }
+            return $all_tasks_data;
+
+        } else if ($category == 'projects_to_department') {
+            foreach ($data_department as $dd) {    
+                $data = [
+                    'id' => $dd['id'],
+                    'department_name' => $dd['name'],
+                    'total_projects' => $this->report_data_calculation('projects_to_department','total_projects','',$dd['id']),           
+                    'new' => $this->report_data_calculation('projects_to_department','new','',$dd['id']),           
+                    'started' => $this->report_data_calculation('projects_to_department','started','',$dd['id']),                     
+                    'completed' => $this->report_data_calculation('projects_to_department','completed','',$dd['id']),
+                    'less_then_30' => $this->report_data_calculation('projects_to_department','less_then_30','',$dd['id']),
+                    'less_then_60' => $this->report_data_calculation('projects_to_department','less_then_60','',$dd['id']),
+                    'more_then_60' => $this->report_data_calculation('projects_to_department','more_then_60','',$dd['id']),
+                    'sos' => $this->report_data_calculation('projects_to_department','sos','',$dd['id']),           
+                ];
+                array_push($all_projects_data,$data);
+            }
+            return $all_projects_data;
+
+        } else if ($category == 'tasks_to_department') {
+            foreach ($data_department as $dd) {    
+                $data = [
+                    'id' => $dd['id'],
+                    'department_name' => $dd['name'],
+                    'total_tasks' => $this->report_data_calculation('tasks_to_department','total_tasks','',$dd['id']),           
+                    'new' => $this->report_data_calculation('tasks_to_department','new','',$dd['id']),           
+                    'started' => $this->report_data_calculation('tasks_to_department','started','',$dd['id']),                     
+                    'completed' => $this->report_data_calculation('tasks_to_department','completed','',$dd['id']),
+                    'less_then_30' => $this->report_data_calculation('tasks_to_department','less_then_30','',$dd['id']),
+                    'less_then_60' => $this->report_data_calculation('tasks_to_department','less_then_60','',$dd['id']),
+                    'more_then_60' => $this->report_data_calculation('tasks_to_department','more_then_60','',$dd['id']),
+                    'sos' => $this->report_data_calculation('tasks_to_department','sos','',$dd['id']),           
+                ];
+                array_push($all_tasks_data,$data);
+            }
+            return $all_tasks_data;
+        }
+    }
+
+    public function report_data_calculation($category="",$sub_category="",$office="",$department="") {
+        if ($category == 'projects_by_office') {
+            $this->db->distinct();
+            $this->db->select('project_id');
+            $this->db->where('project_office',$office);
+            
+            if ($sub_category == 'new') {
+                $this->db->where('project_status','0');    
+            } elseif ($sub_category == 'started') {
+                $this->db->where('project_status','1');
+            } elseif ($sub_category == 'completed') {
+                $this->db->where('project_status','2');
+            } elseif ($sub_category == 'less_then_30') {
+                $this->db->where('project_status !=','2');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','30');
+            } elseif ($sub_category == 'less_then_60') {
+                $this->db->where('project_status !=','2');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','60');
+            } elseif ($sub_category == 'more_then_60') {
+                $this->db->where('project_status !=','2');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
+            } elseif ($sub_category == 'sos') {
+                $this->db->where('sos !=','');
+            }
+            return $this->db->get('report_dashboard_project')->num_rows();
+        } elseif ($category == 'tasks_by_office') {
+            $this->db->select('task_id');
+            $this->db->where('task_office',$office);
+            
+            if ($sub_category == 'new') {
+                $this->db->where('task_status','0');
+            } elseif ($sub_category == 'started') {
+                $this->db->where('task_status','1');
+            } elseif ($sub_category == 'completed') {
+                $this->db->where('task_status','2');
+            } elseif ($sub_category == 'less_then_30') {
+                $this->db->where('task_status !=','2');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','30');
+            } elseif ($sub_category == 'less_then_60') {
+                $this->db->where('task_status !=','2');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','60');
+            } elseif ($sub_category == 'more_then_60') {
+                $this->db->where('task_status !=','2');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
+            } elseif ($sub_category == 'sos') {
+                $this->db->where('sos !=','');
+            }
+            return $this->db->get('report_dashboard_project')->num_rows();
+        } elseif ($category == 'projects_to_department') {
+            $this->db->distinct();
+            $this->db->select('project_id');
+            $this->db->where('project_department',$department);
+
+            if ($sub_category == 'new') {
+                $this->db->where('project_status','0');
+            } elseif ($sub_category == 'started') {
+                $this->db->where('project_status','1');
+            } elseif ($sub_category == 'completed') {
+                $this->db->where('project_status','2');
+            } elseif ($sub_category == 'less_then_30') {
+                $this->db->where('project_status !=','2');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','30');
+            } elseif ($sub_category == 'less_then_60') {
+                $this->db->where('project_status !=','2');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) <','60');
+            } elseif ($sub_category == 'more_then_60') {
+                $this->db->where('project_status !=','2');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
+            } elseif ($sub_category == 'sos') {
+                $this->db->where('sos !=','');
+            }
+            return $this->db->get('report_dashboard_project')->num_rows();
+        } elseif ($category == 'tasks_to_department') {
+            $this->db->select('task_id');
+            $this->db->where('task_department',$department);
+
+            if ($sub_category == 'new') {
+                $this->db->where('task_status','0');
+            } elseif ($sub_category == 'started') {
+                $this->db->where('task_status','1');
+            } elseif ($sub_category == 'completed') {
+                $this->db->where('task_status','2');
+            } elseif ($sub_category == 'less_then_30') {
+                $this->db->where('task_status !=','2');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
+            } elseif ($sub_category == 'less_then_60') {
+                $this->db->where('task_status !=','2');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
+            } elseif ($sub_category == 'more_then_60') {
+                $this->db->where('task_status !=','2');
+                $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
+            } elseif ($sub_category == 'sos') {
+                $this->db->where('sos !=','');
+            }
+            return $this->db->get('report_dashboard_project')->num_rows();
+        }
+
+    }
+
+
 }
 
 ?>

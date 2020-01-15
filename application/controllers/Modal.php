@@ -285,9 +285,10 @@ class Modal extends CI_Controller {
     public function show_financial_account() {
         $render_data['modal_type'] = post('modal_type');
         $render_data['reference_id'] = post('reference_id');
+        $render_data['client_id']=post('client_id');
         $render_data['order_id'] = post('order_id');
         $section = post('section');
-        $render_data['account_details']=$this->company_model->get_account_details_bookkeeping(post('client_id'));
+        $render_data['account_details']=$this->company_model->get_account_details_bookkeeping('','',post('client_id'));
 //        $this->load->view('modal/financial_account',$data);
         if ($render_data['modal_type'] == "edit") {
             $render_data["id"] = post("id");
@@ -781,7 +782,7 @@ class Modal extends CI_Controller {
         $render_data['client_id'] = post('client_id');
         $render_data['task_id'] = post('task_id');
         $section = post('section');
-        $render_data['account_details']=$this->company_model->get_account_details_bookkeeping(post('task_id'),'project');
+        $render_data['account_details']=$this->company_model->get_account_details_bookkeeping(post('task_id'),'project',post('client_id'));
 //        $this->load->view('modal/financial_account',$data);
         if ($render_data['modal_type'] == "edit") {
             $render_data["id"] = post("id");

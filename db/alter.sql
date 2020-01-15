@@ -1086,4 +1086,21 @@ ALTER TABLE `project_periodic_pattern` ADD `is_created` ENUM('n','y') NOT NULL A
 
 ALTER TABLE `order` ADD `client_id` INT(100) NOT NULL COMMENT 'individual_id for individual client' AFTER `reference_id`;
 
+/*07.01.2020*/
+ALTER TABLE `invoice_recurence` ADD `due_date` VARCHAR(20) NOT NULL AFTER `status`; 
+
+/* 08.01.2020 */
+-- import report_dashboard_action
+ALTER TABLE `report_dashboard_action` CHANGE `due_date` `due_date` DATE NULL DEFAULT NULL;
+
+ALTER TABLE `financial_accounts` ADD `client_id` INT(5) NULL DEFAULT NULL AFTER `order_id`; 
+
+ALTER TABLE `payroll_account_numbers` ADD `client_id` INT(5) NULL DEFAULT NULL AFTER `order_id`; 
+
+/* 10.01.2020 */
+-- import report_dashboard_project
+ALTER TABLE `report_dashboard_project` ADD `sos` LONGTEXT NULL DEFAULT NULL AFTER `project_creation_date`;
+ALTER TABLE `report_dashboard_project` ADD `project_due_date` DATE NOT NULL AFTER `project_creation_date`;
 /*live end*/
+/* 15.01.2020 */
+ALTER TABLE `report_dashboard_service` ADD `order_date` DATE NOT NULL AFTER `status`;
