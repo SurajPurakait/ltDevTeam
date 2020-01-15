@@ -2,7 +2,12 @@
     $servername = "localhost";
     $username = "leafnet_db_user";
     $password = "leafnet@123";
-    $db = 'leafnet_staging';
+    $db = 'leafnet_stagings';
+    
+    // $servername = "localhost";
+    // $username = "root";
+    // $password = "";
+    // $db = 'leafnet';
 
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
@@ -20,8 +25,7 @@
         'indt.office as office_id',
         'srv.responsible_staff as created_by',
         '(SELECT CONCAT(",",GROUP_CONCAT(`service_id`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_services',
-        '(SELECT CONCAT(",",GROUP_CONCAT(`total_of_order`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_override_price',        
-        // '(SELECT CONCAT(",",GROUP_CONCAT(`pay_amount`),",") FROM `payment_history` WHERE `order_id` = ord.id AND `type` = "payment" AND `is_cancel`="0") AS all_collection',
+        '(SELECT CONCAT(",",GROUP_CONCAT(`total_of_order`), ",") FROM `order` WHERE `invoice_id` = inv.id AND `reference` = "invoice") AS all_override_price',
         '(SELECT COUNT(*) FROM `order` WHERE invoice_id = inv.id AND reference = \'invoice\') as services_count'
     ];
     
@@ -32,14 +36,13 @@
             'INNER JOIN `order` AS `ord` ON `ord`.`invoice_id` = `inv`.`id` ' .
             'INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END)'.
             'INNER JOIN `service_request` AS `srv` ON `srv`.`order_id` = `inv`.`order_id`'; 
-            // 'INNER JOIN `payment_history` AS `pyh` ON `pyh`.`invoice_id` = `inv`.`id`';
     $query = 'SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where)  . ' GROUP BY `ord`.`invoice_id`';
-    // echo $query;exit;
+
     mysqli_query($conn, 'SET SQL_BIG_SELECTS=1');
     $reports_data = mysqli_query($conn,$query);
-    $sales_reports_data = mysqli_fetch_assoc($reports_data);
-    mysqli_query($conn,'TRUNCATE weekly_sales_report');
-    if (!empty($sales_reports_data)) {
+    $reports_data_count = mysqli_num_rows($reports_data);
+
+    if ($reports_data_count > 0) {
         while($srd = mysqli_fetch_assoc($reports_data)) {
             for ($i=1; $i <= $srd['services_count'] ; $i++) {
                 $services_id = explode(',',$srd['all_services'])[$i];
@@ -63,15 +66,7 @@
                 $retail_price = $service_detail['retail_price'];
                 $override_price = explode(',',$srd['all_override_price'])[$i];
                 $cost = $service_detail['cost'];
-                // $payment_collection = explode(',',$srd['all_collection']);
-                
 
-
-                // if (count($payment_collection) > 1 && !empty($payment_collection)) {
-                //     $collected = explode(',',$srd['all_collection'])[$i];
-                // } else {
-                //     $collected = 0;
-                // }
                 $total_net = (int)$override_price - (int)$cost;
                 $franchisee_fee = ((int)$override_price * 20) / 100;
                 $gross_profit = (int)$total_net - (int)$franchisee_fee;
@@ -101,12 +96,91 @@
                 } elseif($status == 3) {
                     $status = 'Late';
                 }
-                $sql_query = "INSERT INTO `weekly_sales_report`(`date`, `client_id`, `service_id`, `service_name`, `status`, `retail_price`, `override_price`, `cost`, `collected`, `total_net`, `franchisee_fee`, `gross_profit`, `notes`,`office_id`,`created_by`) VALUES (
-                    '" . $date . "','" . $client_id . "','".$service_id."','".$service_name."','".$status."','".$retail_price."','".$override_price."','".$cost."','".$collected."','".$total_net."','".$franchisee_fee."','".$gross_profit."','".$notes."','".$office_id."','".$created_by."')";
-                echo $sql_query;
-                echo "<hr>";
 
-                mysqli_query($conn,$sql_query)or die('insert error');
+                $comparison_array = array(
+                    'date' => $date,
+                    'client_id' => $client_id,
+                    'service_id' => $service_id,
+                    'service_name' => $service_name,
+                    'status' => $status,
+                    'retail_price' => $retail_price,
+                    'override_price' => $override_price,
+                    'cost' => $cost,
+                    'collected' => $collected,
+                    'total_net' => $total_net,
+                    'franchisee_fee' => $franchisee_fee,
+                    'gross_profit' => $gross_profit,
+                    'notes' => $notes,
+                    'office_id' => $office_id,
+                    'created_by' => $created_by
+                );
+
+                // fetching data from weekly sales report table
+                $weekly_sales_sql = "SELECT * FROM `weekly_sales_report` WHERE service_id = '".$service_id."'";
+                $weekly_sales_query_run = mysqli_query($conn,$weekly_sales_sql);
+                $wsr = mysqli_fetch_assoc($weekly_sales_query_run);
+
+                if ($service_id == $wsr['service_id']) {
+                    unset($wsr['id']);
+                    if (empty(array_diff($comparison_array,$wsr))) {
+                        echo "No Difference with previous values";
+                        echo "<hr>";
+                    } else {
+                        $update_sql = "UPDATE `weekly_sales_report` SET ";
+                        if ($date != $wsr['date']) {
+                            $update_sql .= "`date`='$date', ";
+                        } 
+                        if ($client_id != $wsr['client_id']) {
+                            $update_sql .= "`client_id`='$client_id', ";
+                        }
+                        if ($service_name != $wsr['service_name']) {
+                            $update_sql .= "`service_name`='$service_name', ";
+                        }
+                        if ($status != $wsr['status']) {
+                            $update_sql .= "`status`= '$status', ";
+                        }
+                        if ($retail_price != $wsr['retail_price']) {
+                            $update_sql .= "`retail_price`='$retail_price', ";
+                        }
+                        if ($override_price != $wsr['override_price']) {
+                            $update_sql .= "`override_price` = '$override_price', ";
+                        }
+                        if ($cost != $wsr['cost']) {
+                            $update_sql .= "`cost`='$cost', "; 
+                        }
+                        if ($collected != $wsr['collected']) {
+                            $update_sql .= "`collected`='$collected', "; 
+                        }
+                        if ($total_net != $wsr['total_net']) {
+                            $total_net_modified = (int)$override_price - (int)$wsr['cost']; 
+                            // this logic is done because service cost would not be change for already purchased service  
+                            $update_sql .= "`total_net`='$total_net_modified', ";
+                        }
+
+                        if ($franchisee_fee != $wsr['franchisee_fee']) {
+                            $update_sql .= "`franchisee_fee`='$franchisee_fee', ";
+                        }
+                        if ($gross_profit != $wsr['gross_profit']) {
+                            $update_sql .= "`gross_profit`='$gross_profit', ";
+                        }
+                        if ($notes != $wsr['notes']) {
+                            $update_sql .= "`notes`='$notes', ";
+                        }
+                        if($office_id != $wsr['office_id']) {
+                            $update_sql .= "`office_id`='$office_id'";
+                        } 
+                        $update_sql .= "WHERE service_id = '".$service_id."'";
+                        mysqli_query($conn,$update_sql);
+                        echo $update_sql;
+                        echo "<hr>";
+                    }
+                } else {    
+                    $sql_query = "INSERT INTO `weekly_sales_report`(`date`, `client_id`, `service_id`, `service_name`, `status`, `retail_price`, `override_price`, `cost`, `collected`, `total_net`, `franchisee_fee`, `gross_profit`, `notes`,`office_id`,`created_by`) VALUES (
+                        '" . $date . "','" . $client_id . "','".$service_id."','".$service_name."','".$status."','".$retail_price."','".$override_price."','".$cost."','".$collected."','".$total_net."','".$franchisee_fee."','".$gross_profit."','".$notes."','".$office_id."','".$created_by."')";
+                    echo $sql_query;
+                    mysqli_query($conn,$sql_query)or die('insert error');
+                    echo "<hr>";
+                }
             }
         }
     }
