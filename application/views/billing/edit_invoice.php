@@ -7,7 +7,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label" style="font: 24px;">Invoice Type<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select disabled="" class="form-control disabled_field" onchange="invoiceContainerAjax(this.value, <?= $reference_id; ?>, '');" name="invoice_type" id="invoice_type" title="Invoice Type" required="">
+                                <select disabled="" class="form-control disabled_field" onchange="invoiceContainerAjax(this.value, <?= $reference_id; ?>, '','');" name="invoice_type" id="invoice_type" title="Invoice Type" required="">
                                     <option <?= $order_summary['invoice_type'] == 1 ? 'selected=\'selected\'' : ''; ?> value="1">Business Client</option>
                                     <option <?= $order_summary['invoice_type'] == 2 ? 'selected=\'selected\'' : ''; ?> value="2">Individual</option>
                                 </select>
@@ -217,5 +217,10 @@
     $(function () {
         $(".datepicker_mdy_due").datepicker({format: 'mm/dd/yyyy', autoHide: true, startDate: new Date()});
     });
-    invoiceContainerAjax(<?= $order_summary['invoice_type']; ?>, <?= $reference_id; ?>, <?= $invoice_id; ?>);
+
+    <?php if($is_recurrence != ''){ ?>
+        invoiceContainerAjax(<?= $order_summary['invoice_type']; ?>, <?= $reference_id; ?>, <?= $invoice_id; ?>,'y');
+    <?php }else{ ?>
+        invoiceContainerAjax(<?= $order_summary['invoice_type']; ?>, <?= $reference_id; ?>, <?= $invoice_id; ?>,'');
+    <?php } ?>   
 </script>

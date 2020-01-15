@@ -56,9 +56,9 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="col-lg-2 control-label">SSN/ITIN</label>
+        <label class="col-lg-2 control-label">SSN/ITIN<span class="text-danger">*</span></label>
        <div class="col-lg-10">
-            <input placeholder="ssn" class="form-control value_field" type="text" id="individual_ssn_itin" name="ssn_itin" title="SSN/ITIN" required>
+            <input data-mask="999-99-9999" placeholder="___-__-____" class="form-control value_field required_field" type="text" id="individual_ssn_itin" name="ssn_itin" title="SSN/ITIN" required>
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
@@ -71,6 +71,8 @@
     </div>
     <div class="hr-line-dashed"></div>
 </div>
+
+<?php if($is_recurrence != 'y'){ ?>
 <div id="contact_info_div">    
     <h3>Contact Info<span class="text-danger">*</span><span class="display_div">&nbsp; (<a href="javascript:void(0);" class="contactadd" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $individual_id; ?>'); return false;">Add Contact</a>)</span></h3>
     <div id="contact-list">
@@ -79,6 +81,7 @@
     </div>
     <div class="hr-line-dashed"></div>
 </div>
+<?php } ?>
 
 <div id="documents_div" class="display_div">
     <h3>Documents &nbsp; (<a data-toggle="modal" class="documentadd" onclick="document_modal('add', '<?= $reference ?>', '<?= $individual_id ?>');" href="javascript:void(0);">Add document</a>)</h3> 

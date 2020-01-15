@@ -643,7 +643,8 @@ class Home extends CI_Controller {
         $payroll_account_details = $this->company_model->get_account_details($render_data['company_data'][0]['id'],$reference_id);
         $orderid=$this->company_model->getOrderID($render_data['company_data'][0]['id']);
         $financial_account_details=$this->company_model->getFinancialAccountDetails($orderid,$reference_id);
-        $render_data['account_details']=array_merge($payroll_account_details,$financial_account_details);
+//        $render_data['account_details']=array_merge($payroll_account_details,$financial_account_details);
+        $render_data['account_details']=$financial_account_details;
         $this->load->template('action/view_business', $render_data);
     }
 
