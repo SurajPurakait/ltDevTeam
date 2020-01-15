@@ -50,15 +50,15 @@
                         <div class="form-group">
                             <label class="">For Start</label>
                             <input class="form-control" type="number" name="task[target_start_date]" value="0" min="0" style="width: 100px" id="target_start_date" required>
-                            <!--<label class="control-label"><input type="radio" name="task[target_start_day]" value="1" checked="">&nbsp; Days before due date</label>-->
-                            <label class="control-label"><input type="radio" name="task[target_start_day]" value="2" checked>&nbsp; Days after creation date</label>
+                            <label class="control-label"><input type="radio" name="task[target_start_day]" value="1" checked="">&nbsp; Days after creation date</label>
+                            <label class="control-label"><input type="radio" name="task[target_start_day]" value="2" checked>&nbsp; Days before due date</label>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="">For Complete</label>
                             <input class="form-control" type="number" name="task[target_complete_date]" value="0" min="0" style="width: 100px" id="target_complete_date" required>
-                            <!--<label class="control-label"><input type="radio" name="task[target_complete_day]" value="1" checked="">&nbsp; Days before due date</label>-->
+                            <label class="control-label"><input type="radio" name="task[target_complete_day]" value="1" checked="">&nbsp; Days after creation date</label>
                             <label class="control-label"><input type="radio" name="task[target_complete_day]" value="2" checked>&nbsp; Days before due date</label>
                         </div>
                     </div>
@@ -122,15 +122,16 @@
                 <div class="row">
                     <div class="col-md-12" id="category_div" style="display:none">
                         <?php if($template_category_id==1){ 
-                        $get_exist_input=get_exist_bookkeeping_input_type($template_id);
-                        $exist_type= array_column($get_exist_input,'bookkeeping_input_type');
+//                        $get_exist_input=get_exist_bookkeeping_input_type($template_id);
+//                        $exist_type= array_column($get_exist_input,'bookkeeping_input_type');
                         ?>
                         <label class="control-label">Allow Bookkeeping:</label>
                             <select class="form-control" id="bookkeeping_input_type" name="task[bookkeeping_input_type]" title='Bookkeeping Input Type'>
-                                <option value="">Select Bookkeeping Input Form</option>
-                                <option value="1" <?= (in_array('1', $exist_type)?'disabled':'') ?> >BANK STATEMENT RETRIEVAL LEAFCLOUD DEPARTMENT</option>
-                                <option value="2" <?= (in_array('2', $exist_type)?'disabled':'') ?> >BOOKKEEPING BOOKKEEPER DEPARTMENT</option>
-                                <option value="3" <?= (in_array('3', $exist_type)?'disabled':'') ?> >REVIEW CLIENT MANAGER</option>
+                                <option value="">Select Bookkeeping Input Form</option> 
+                            <!--<= (in_array('1', $exist_type)?'disabled':'') ?>-->
+                                <option value="1">BANK STATEMENT RETRIEVAL LEAFCLOUD DEPARTMENT</option>
+                                <option value="2">BOOKKEEPING BOOKKEEPER DEPARTMENT</option>
+                                <option value="3">REVIEW CLIENT MANAGER</option>
                             </select>
                         <?php }elseif($template_category_id==3){ ?>
                             <label>Allow sales tax processing</label>

@@ -188,7 +188,7 @@
                                         $dob = '';
                                     }
                                  ?>
-                                <input placeholder="dd/mm/yyyy" id="dob" class="form-control datepicker_mdy" type="text" title="Date of Birth" name="birth_date" value="<?= $dob; ?>">
+                                <input placeholder="mm/dd/yyyy" id="dob" class="form-control datepicker_mdy" type="text" title="Date of Birth" name="birth_date" value="<?= $dob; ?>">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>

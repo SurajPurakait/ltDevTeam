@@ -469,6 +469,13 @@ function loadServiceDashboard(status, categoryID, requestType, officeID, pageNum
                 if (pageNumber == 1 || pageNumber == 0) {
                     $(".ajaxdiv").html(result);
                     $("a.filter-button span:contains('-')").html(0);
+                    $(".variable-dropdown").val('');
+                    $(".condition-dropdown").val('').removeAttr('disabled');
+                    $(".criteria-dropdown").val('');
+                    $('.criteria-dropdown').removeAttr('readonly').empty().append('<option value="">All Criteria</option>');
+                    $(".criteria-dropdown").trigger("chosen:updated");
+                    $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
+                    $('#btn_service').css('display', 'none');
                 } else {
                     $(".ajaxdiv").append(result);
                     $('.result-header').not(':first').remove();
