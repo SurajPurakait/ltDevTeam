@@ -66,7 +66,7 @@
                 $date_completed_b_c = $sql_q_d_c_result['created_time'];
                 $date_completed = '"'.date('Y-m-d', strtotime($date_completed_b_c. '+' .$end_days)).'"';
             } else {
-                $date_completed = "NULL";
+                $date_completed = "0001-01-01";
                 $date_completed = addslashes($date_completed);
             }
             // actual date completed calculation 
@@ -83,16 +83,30 @@
             $late_status = $rsd['late_status'];
             $sos = addslashes($rsd['sos']);
             $category = $rsd['category_id'];
-            $department = $rsd['department_id'];
+            // $department = 0;
+            if($rsd['department_id'] != NULL) {
+                $department = $rsd['department_id'];    
+            } else {
+                $department = 0;
+            }
+            
             $office = $rsd['office_id'];
-            if (!empty($rsd['order_date']) || date('Y-m-d', strtotime($rsd['order_date'])) != '0000-00-00') {
-                $order_date = $rsd['order_date'];
+            
+            if(!empty($rsd['order_date'])) {
+                if(date('Y-m-d', strtotime($rsd['order_date'])) == '0000-00-00' || str_split(date('Y-m-d', strtotime($rsd['order_date'])))[0] == '-') {
+                    $order_date = '0001-01-01';
+                } else {
+                    $order_date = date('Y-m-d', strtotime($rsd['order_date']));    
+                }
             } else {
                 $order_date = '0001-01-01';
             }
+            
 
             $insert_sql = "INSERT INTO `report_dashboard_service`(`service_name`, `status`,`order_date` ,`date_completed`, `date_complete_actual`, `late_status`, `sos`, `category`, `department`, `office`)
             VALUES ('$service_name','$status','$order_date','$date_completed', '$date_complete_actual', '$late_status', '$sos', '$category', '$department', '$office')";
+            echo $insert_sql;
+            echo "<hr>";
             mysqli_query($conn,$insert_sql)or die('Insert Error');
         }
     }
