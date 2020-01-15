@@ -1105,4 +1105,4 @@ ALTER TABLE `report_dashboard_project` ADD `sos` LONGTEXT NULL DEFAULT NULL AFTE
 ALTER TABLE `report_dashboard_project` ADD `project_due_date` DATE NOT NULL AFTER `project_creation_date`;
 
 /* 15.01.2020 */
-ALTER TABLE `report_dashboard_service` ADD `order_date` DATE NOT NULL AFTER `status`;
+ALTER TABLE `report_dashboard_service` ADD `order_date` DATE NULL DEFAULT NULL AFTER `status`;
