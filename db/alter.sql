@@ -1104,3 +1104,6 @@ ALTER TABLE `report_dashboard_project` ADD `project_due_date` DATE NOT NULL AFTE
 /*live end*/
 /* 15.01.2020 */
 ALTER TABLE `report_dashboard_service` ADD `order_date` DATE NOT NULL AFTER `status`;
+UPDATE `services` SET `retail_price` = '450.00', `responsible_assign` = '' WHERE `services`.`id` = 48;
+INSERT INTO `renewal_dates` (`id`, `state`, `type`, `date`) VALUES (NULL, '3', '6', '2020/01/01');
+INSERT INTO `renewal_dates` (`id`, `state`, `type`, `date`) VALUES (NULL, '51', '6', '2020/10/06');
