@@ -297,12 +297,12 @@ class Billing_model extends CI_Model {
                         $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                         $ins_recurrence['actual_due_month'] = date('m', strtotime($ins_recurrence['start_date'])) + (int) $ins_recurrence['due_month'];
                         $ins_recurrence['actual_due_year'] = date('Y', strtotime($ins_recurrence['start_date']));
-//                                         ------ due date -------
+//                                            ------ due date -------
                         if(($ins_recurrence['actual_due_day'] > date('d', strtotime($ins_recurrence['start_date']))) && $ins_recurrence['due_month'] == date('m', strtotime($ins_recurrence['start_date'])))
                         {
                            $ins_recurrence['due_date'] = $ins_recurrence['actual_due_year']."-".date('m', strtotime($ins_recurrence['start_date']))."-".$ins_recurrence['actual_due_day'];
                         } else {
-                            $due_month =  $ins_recurrence['actual_due_month'];
+                            $due_month =  $ins_recurrence['actual_due_month'];                           
                             $due_day = $ins_recurrence['actual_due_day'];
                             $due_year = $ins_recurrence['actual_due_year'];
                             if($due_month >12){
@@ -603,23 +603,23 @@ class Billing_model extends CI_Model {
                                 
                             } elseif ($ins_recurrence['pattern'] == 'monthly') {
                             $current_month = date('m');
-                            $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
-                            $ins_recurrence['actual_due_month'] = date('m', strtotime($ins_recurrence['start_date'])) + (int) $ins_recurrence['due_month'];
-                            $ins_recurrence['actual_due_year'] = date('Y');
-//                                                    ------ due date -------
-                            if(($ins_recurrence['actual_due_day'] > date('d', strtotime($ins_recurrence['start_date']))) && $ins_recurrence['due_month'] == date('m', strtotime($ins_recurrence['start_date'])))
-                            {
-                               $ins_recurrence['due_date'] = $ins_recurrence['actual_due_year']."-".date('m', strtotime($ins_recurrence['start_date']))."-".$ins_recurrence['actual_due_day'];
-                            } else {
-                                $due_month =  $ins_recurrence['actual_due_month'];
-                                $due_day = $ins_recurrence['actual_due_day'];
-                                $due_year = $ins_recurrence['actual_due_year'];
-                                if($due_month >12){
-                                $due_month = $due_month-12;
-                                $due_year = $due_year+1;
-                                  }                 
-                                $ins_recurrence['due_date'] = $due_year."-".$due_month."-".$due_day;
-                            }
+                        $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
+                        $ins_recurrence['actual_due_month'] = date('m', strtotime($ins_recurrence['start_date'])) + (int) $ins_recurrence['due_month'];
+                        $ins_recurrence['actual_due_year'] = date('Y', strtotime($ins_recurrence['start_date']));
+//                                            ------ due date -------
+                        if(($ins_recurrence['actual_due_day'] > date('d', strtotime($ins_recurrence['start_date']))) && $ins_recurrence['due_month'] == date('m', strtotime($ins_recurrence['start_date'])))
+                        {
+                           $ins_recurrence['due_date'] = $ins_recurrence['actual_due_year']."-".date('m', strtotime($ins_recurrence['start_date']))."-".$ins_recurrence['actual_due_day'];
+                        } else {
+                            $due_month =  $ins_recurrence['actual_due_month'];                           
+                            $due_day = $ins_recurrence['actual_due_day'];
+                            $due_year = $ins_recurrence['actual_due_year'];
+                            if($due_month >12){
+                            $due_month = $due_month-12;
+                            $due_year = $due_year+1;
+                              }                 
+                            $ins_recurrence['due_date'] = $due_year."-".$due_month."-".$due_day;
+                        }
                             $ins_recurrence['due_date'] = date('Y-m-d', strtotime($ins_recurrence['due_date']));
      //                                         ----------------- recurrence date -----------
                             $next_due_month = date('m', strtotime($ins_recurrence['due_date'])) +  $ins_recurrence['due_month'];
@@ -905,7 +905,7 @@ class Billing_model extends CI_Model {
                         {
                            $ins_recurrence['due_date'] = $ins_recurrence['actual_due_year']."-".date('m', strtotime($ins_recurrence['start_date']))."-".$ins_recurrence['actual_due_day'];
                         } else {
-                            $due_month =  $ins_recurrence['actual_due_month'];
+                            $due_month =  $ins_recurrence['actual_due_month'];                           
                             $due_day = $ins_recurrence['actual_due_day'];
                             $due_year = $ins_recurrence['actual_due_year'];
                             if($due_month >12){
@@ -930,7 +930,6 @@ class Billing_model extends CI_Model {
                         $ins_recurrence['next_occurance_date'] = $next_due_year."-".$next_due_month."-".$next_due_day;
                         $ins_recurrence['next_occurance_date'] = date('Y-m-d', strtotime($ins_recurrence['next_occurance_date']));   
                         
-                           
                     } elseif ($ins_recurrence['pattern'] == 'weekly') {
                         $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
                         $current_day = $day_array[$ins_recurrence['due_month']];
