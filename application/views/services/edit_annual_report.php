@@ -48,7 +48,7 @@
                             <div class="col-lg-10">
                                 <select class="form-control value_field required_field disabled_field" name="state" id="state" title="State of Incorporation" required="" onchange="select_other_state(this.value);">
                                     <option value="">Select an option</option>
-                                    <?php load_ddl_option("state_list"); ?>
+                                    <?php load_ddl_option("state_list_annual_report"); ?>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
@@ -213,7 +213,31 @@
                                 <label class="radio-inline">
                                     <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $delaware['id'] ? 'checked' : ''; ?> name="service_id" id="service_delaware" onchange="changeServiceRadio(this.value, '<?= $delaware['retail_price']; ?>');" retail_price="<?= $delaware['retail_price']; ?>" value="<?= $delaware['id']; ?>">
                                     <label for="service_delaware"><?= $delaware['description']; ?></label>
-                                </label>
+                                </label><br>
+                                <label class="radio-inline">
+                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $arizona['id'] ? 'checked' : ''; ?> name="service_id" id="service_arizona" onchange="changeServiceRadio(this.value, '<?= $arizona['retail_price']; ?>');" retail_price="<?= $arizona['retail_price']; ?>" value="<?= $arizona['id']; ?>">
+                                    <label for="service_arizona"><?= $arizona['description']; ?></label>
+                                </label><br>
+                                <label class="radio-inline">
+                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $wyoming['id'] ? 'checked' : ''; ?> name="service_id" id="service_wyoming" onchange="changeServiceRadio(this.value, '<?= $wyoming['retail_price']; ?>');" retail_price="<?= $wyoming['retail_price']; ?>" value="<?= $wyoming['id']; ?>">
+                                    <label for="service_wyoming"><?= $wyoming['description']; ?></label>
+                                </label><br>
+                                <label class="radio-inline">
+                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $michigan['id'] ? 'checked' : ''; ?> name="service_id" id="service_michigan" onchange="changeServiceRadio(this.value, '<?= $michigan['retail_price']; ?>');" retail_price="<?= $michigan['retail_price']; ?>" value="<?= $michigan['id']; ?>">
+                                    <label for="service_michigan"><?= $michigan['description']; ?></label>
+                                </label><br>
+                                <label class="radio-inline">
+                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $texas['id'] ? 'checked' : ''; ?> name="service_id" id="service_texas" onchange="changeServiceRadio(this.value, '<?= $texas['retail_price']; ?>');" retail_price="<?= $texas['retail_price']; ?>" value="<?= $texas['id']; ?>">
+                                    <label for="service_texas"><?= $texas['description']; ?></label>
+                                </label><br>
+                                <label class="radio-inline">
+                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id  == $new_jersey['id'] ? 'checked' : ''; ?> name="service_id" id="service_new_jersey" onchange="changeServiceRadio(this.value, '<?= $new_jersey['retail_price']; ?>');" retail_price="<?= $new_jersey['retail_price']; ?>" value="<?= $new_jersey['id']; ?>">
+                                    <label for="service_new_jersey"><?= $new_jersey['description']; ?></label>
+                                </label><br>
+                                <label class="radio-inline">
+                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $new_york['id'] ? 'checked' : ''; ?> name="service_id" id="service_new_york" onchange="changeServiceRadio(this.value, '<?= $new_york['retail_price']; ?>');" retail_price="<?= $new_york['retail_price']; ?>" value="<?= $new_york['id']; ?>">
+                                    <label for="service_new_york"><?= $new_york['description']; ?></label>
+                                </label><br>
                                 <div class="errorMessage text-danger" id="service_id_error"></div>
                             </div>
                         </div>
@@ -342,15 +366,66 @@
                 if (state == 8) {
                     $('#service_delaware').prop("checked", true);
                     $('#service_florida').prop("checked", false);
-                    $("#service_florida, #service_delaware").prop("disabled", true);
+//                    $("#service_florida, #service_delaware").prop("disabled", true);
                     changeServiceRadio(getIdVal('service_delaware'), $('#service_delaware').attr('retail_price'));
                 } else if (state == 10) {
                     $('#service_florida').prop("checked", true);
                     $('#service_delaware').prop("checked", false);
-                    $("#service_florida, #service_delaware").prop("disabled", true);
+//                    $("#service_florida, #service_delaware").prop("disabled", true);
                     changeServiceRadio(getIdVal('service_florida'), $('#service_florida').attr('retail_price'));
+                }else if (state == 3) {
+                    $('#service_arizona').prop("checked", true);
+                    $('#service_florida').prop("checked", false);
+                    $('#service_delaware').prop("checked", false);
+//                    $("#service_florida, #service_delaware").prop("disabled", false);
+                    changeServiceRadio(getIdVal('service_arizona'), $('#service_arizona').attr('retail_price'));
+                }else if (state == 51) {
+                    $('#service_wyoming').prop("checked", true);
+                    $('#service_arizona').prop("checked", false);
+                    $('#service_florida').prop("checked", false);
+                    $('#service_delaware').prop("checked", false);
+//                    $("#service_florida, #service_delaware, #service_arizona").prop("disabled", false);
+                    changeServiceRadio(getIdVal('service_wyoming'), $('#service_wyoming').attr('retail_price'));
+                }else if (state == 23) {
+                    $('#service_michigan').prop("checked", true);
+                    $('#service_wyoming').prop("checked", false);
+                    $('#service_arizona').prop("checked", false);
+                    $('#service_florida').prop("checked", false);
+                    $('#service_delaware').prop("checked", false);
+//                    $("#service_florida, #service_delaware, #service_arizona, #service_wyoming").prop("disabled", false);
+                    changeServiceRadio(getIdVal('service_michigan'), $('#service_michigan').attr('retail_price'));
+                }else if (state == 44) {
+                    $('#service_texas').prop("checked", true);
+                    $('#service_michigan').prop("checked", false);
+                    $('#service_wyoming').prop("checked", false);
+                    $('#service_arizona').prop("checked", false);
+                    $('#service_florida').prop("checked", false);
+                    $('#service_delaware').prop("checked", false);
+//                    $("#service_florida, #service_delaware, #service_arizona, #service_wyoming, #service_michigan, #service_texas ").prop("disabled", false);
+                    changeServiceRadio(getIdVal('service_texas'), $('#service_texas').attr('retail_price'));
+                }else if (state == 31) {
+                    $('#service_new_jersey').prop("checked", true);
+                    $('#service_texas').prop("checked", false);
+                    $('#service_michigan').prop("checked", false);
+                    $('#service_wyoming').prop("checked", false);
+                    $('#service_arizona').prop("checked", false);
+                    $('#service_florida').prop("checked", false);
+                    $('#service_delaware').prop("checked", false);
+//                    $("#service_florida, #service_delaware, #service_arizona, #service_wyoming, service_michigan, #service_texas,  ").prop("disabled", false);
+                    changeServiceRadio(getIdVal('service_new_jersey'), $('#service_new_jersey').attr('retail_price'));
+                }else if (state == 33) {
+                    $('#service_new_york').prop("checked", true);
+                    $('#service_new_jersey').prop("checked", false);
+                    $('#service_texas').prop("checked", false);
+                    $('#service_michigan').prop("checked", false);
+                    $('#service_wyoming').prop("checked", false);
+                    $('#service_arizona').prop("checked", false);
+                    $('#service_florida').prop("checked", false);
+                    $('#service_delaware').prop("checked", false);
+//                    $("#service_florida, #service_delaware, #service_arizona, #service_wyoming, service_michigan, #service_texas,  ").prop("disabled", false);
+                    changeServiceRadio(getIdVal('service_new_york'), $('#service_new_york').attr('retail_price'));
                 } else {
-                    $("#service_florida, #service_delaware").prop("disabled", false);
+                    $("#service_florida, #service_delaware, #service_arizona, #service_wyoming, #service_michigan, #service_texas, #service_new_jersey, #service_new_york ").prop("disabled", false);
                 }
                 $('#due_date').val(result);
             }
