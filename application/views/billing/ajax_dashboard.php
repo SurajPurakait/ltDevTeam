@@ -103,7 +103,7 @@ foreach ($result as $row_count => $value):
                             <?php } ?>
                             <td title="Tracking"><a href="javascript:void(0)" onclick="billingDashboardTrackingModal(<?= $row->invoice_id; ?>, <?= $row->invoice_status; ?>);"><span class="label <?= $tracking_class ?> invoice-tracking-span-<?= $row->invoice_id; ?>"><b><?= $tracking[$row->invoice_status]; ?></b></span></a></td>
                             <td title="Requested by"><?= $row->created_by_name; ?></td>
-                            <td title="Create Time"><?= date('m/d/Y', strtotime($row->created_time)); ?></td>
+                            <td title="Create Time"><?= date('m/d/Y', strtotime($row->created_date)); ?></td>
                             <?php 
                             if($row->due_date != 0){
                                 ?>
@@ -126,7 +126,7 @@ foreach ($result as $row_count => $value):
                             <?php
                                 }
                             ?>
-                            <td title="Generation"><?= $row->total_generation_time; ?></td> 
+                            <td title="Generation"><?= ($row->total_generation_time); ?>/<?= ($row->total_duration_time); ?></td> 
                             <td title="Pattern"><?= $row->pattern; ?></td>                          
                             <?php } ?>
                             <td align="center" title="Services"><span class="label label-success"><b><?= (substr_count($row->all_services, ',') - 1); ?></b></span></td>

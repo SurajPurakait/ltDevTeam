@@ -279,7 +279,7 @@
                                                                 <h3 class="m-0 p-b-20">Generation:</h3>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
-                                                                        <label class="control-label"><input type="radio" disabled name="recurrence[generation_type]" value="0" onclick="//check_generation_type(this.value)">&nbsp; When the current Schedule Item is Complete</label>
+                                                                        <label class="control-label"><input type="radio" disabled name="recurrence[generation_type]" value="0" onclick="//check_generation_type(this.value)">&nbsp; When previous project is Complete</label>
                                                                     </div>
                                                                     <div class="col-md-12">
                                                                         <div class="form-inline">
@@ -291,7 +291,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-12">
-                                                                        <label class="control-label"><input type="radio" name="recurrence[generation_type]" value="2" checked="" onclick="//check_generation_type(this.value)">&nbsp; When I manually create it</label>
+                                                                        <label class="control-label"><input type="radio" name="recurrence[generation_type]" value="2" checked="" onclick="//check_generation_type(this.value)">&nbsp; None</label>
                                                                     </div>
 
                                                                 </div> <!-- ./row -->

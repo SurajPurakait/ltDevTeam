@@ -583,6 +583,7 @@ class Invoice extends CI_Controller {
     }
 
     public function get_edit_invoice_container_ajax() {
+        $is_recurrence = post('is_recurrence');
         $invoice_id = post('invoice_id');
         $render_data['service_category_list'] = $this->billing_model->get_service_category();
         $order_summary = $this->billing_model->get_invoice_edit_data_by_id($invoice_id);
@@ -607,6 +608,7 @@ class Invoice extends CI_Controller {
             $render_data['order_summary']['sub_total'] = number_format((float) array_sum(array_column($render_data['order_summary']['services'], 'sub_total')), 2, '.', '');
             $render_data['reference_id'] = $reference_id;
             $render_data['invoice_id'] = $invoice_id;
+            $render_data['is_recurrence'] = $is_recurrence;
             if ($invoice_type == '1') {
                 $render_data['reference'] = 'company';
                 $render_data['completed_orders'] = $this->service->completed_orders();

@@ -1355,10 +1355,19 @@ class Project_Template_model extends CI_Model {
                         }
                     }else{
                         $current_month=date('m',strtotime($project_date));
-                        if($project_recurrence_main_data['actual_due_month']>$current_month){
-                            $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                        $current_day=date('d',strtotime($project_date));
+                        if($project_recurrence_main_data['actual_due_day']>$current_day){
+                            if($project_recurrence_main_data['actual_due_month']>$current_month){
+                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            }else{
+                                $due_date = $project_recurrence_main_data['actual_due_year']+1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            }
                         }else{
-                            $due_date = $project_recurrence_main_data['actual_due_year']+1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            if($project_recurrence_main_data['actual_due_month']>=$current_month){
+                                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            }else{
+                                $due_date = $project_recurrence_main_data['actual_due_year']+1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+                            }
                         }
                     }
                     if ($project_recurrence_main_data['generation_month'] == '') {
@@ -2184,6 +2193,8 @@ class Project_Template_model extends CI_Model {
                 $ins_recurrence['actual_due_month'] = '0';
                 $ins_recurrence['actual_due_year'] = '0';
             }
+            unset($ins_recurrence['periodic_due_day']);
+            unset($ins_recurrence['periodic_due_month']);
             if ($ins_recurrence['pattern'] == 'monthly') {
                 $cur_day = date('d');
                 if ($cur_day <= $ins_recurrence['actual_due_day']) {
