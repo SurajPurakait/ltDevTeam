@@ -340,6 +340,13 @@ if (!function_exists('load_ddl_option')) {
                     echo "<option $select value='" . $item['id'] . "'>" . $item['state_name'] . "</option>";
                 }
                 break;
+                case "state_list_annual_report":
+                    $item_list = $ci->system->get_all_state(['FL', 'AZ', 'WY', 'DE', 'MI', 'TX', 'NJ', 'NY', 'OTH']);
+                foreach ($item_list as $item) {
+                    $select = ($selected != "" && $item['id'] == $selected) ? "selected = 'selected'" : "";
+                    echo "<option $select value='" . $item['id'] . "'>" . $item['state_name'] . "</option>";
+                }
+                break;
             case "all_state_list":
                 $item_list = $ci->system->get_all_state();
                 foreach ($item_list as $item) {

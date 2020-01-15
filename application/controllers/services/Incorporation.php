@@ -79,6 +79,13 @@ class Incorporation extends CI_Controller {
         $render_data['header_title'] = $title;
         $render_data['florida'] = $this->service_model->get_service_by_shortname('inc_f_a_r');
         $render_data['delaware'] = $this->service_model->get_service_by_shortname('inc_d_a_r');
+        $render_data['arizona'] = $this->service_model->get_service_by_shortname('inc_a_a_r');
+        $render_data['wyoming'] = $this->service_model->get_service_by_shortname('inc_w_a_r');
+        $render_data['michigan'] = $this->service_model->get_service_by_shortname('inc_m_a_r_c');
+        $render_data['texas'] = $this->service_model->get_service_by_shortname('inc_t_a_r');
+        $render_data['new_jersey'] = $this->service_model->get_service_by_shortname('inc_n_j_a_r');
+        $render_data['new_york'] = $this->service_model->get_service_by_shortname('inc_n_y_a_r');
+//        print_r($render_data['michigan']);exit;
         $render_data['service_id'] = $render_data['florida']['id'];
         $render_data['reference_id'] = $this->system->create_reference_id();
         $render_data['reference'] = 'company';

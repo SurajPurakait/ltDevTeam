@@ -4,14 +4,15 @@
             <?php if (!empty($task_list)) { ?>
                 <tr>
                     <th style='width:8%;  text-align: center;'>Task ID</th>
+                    <th style='width:8%;  text-align: center;'>Task Title</th>
                     <th style='width:8%;  text-align: center;'>Description</th>
                     <th style='width:8%;  text-align: center;'>Assign To</th>
-                    <th style='width:8%;  text-align: center;'>Start Date</th>
-                    <th style='width:8%;  text-align: center;'>Complete Date</th>
+                    <th style='width:10%;  text-align: center;'>Start Date</th>
+                    <th style='width:10%;  text-align: center;'>Complete Date</th>
                     <th style='width:8%;  text-align: center;'>Tracking Description</th>
                     <th style="width:8%;  text-align: center;">SOS</th>
-                    <th style="width:8%;  text-align: center;">Notes</th>
-                    <th style="width:8%;  text-align: center;">Files</th>
+                    <th style="width:7%;  text-align: center;">Notes</th>
+                    <th style="width:7%;  text-align: center;">Files</th>
                     <th style="width:8%;  text-align: center;">Input Form</th>
                 </tr>
                 <?php
@@ -80,6 +81,7 @@
                     ?>
                     <tr>
                         <td title="Task Id" class="text-center"><?= $task->project_id.'-'.$taskId; ?></td>
+                        <td title="Task Id" class="text-center"><?= $task->task_title; ?></td>
                         <td title="Description" class="text-center"><a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $data_description ?>" data-trigger="hover" title="" data-original-title=""><?= $description ?></a></td>
                         <!--<td title="Order" class="text-center"><?//= date('Y-m-d', strtotime($task->created_at)); ?></td>-->
         <!--                                                                <td title="Target Start Date" class="text-center"><? $task->target_start_date; ?></td>
@@ -94,8 +96,8 @@
                             </td> <?php } else { ?> 
                             <td title="Assign To" class="text-center"><span class="text-success"><?php echo get_assigned_project_task_staff($task->id); ?></span><br><?php echo get_assigned_project_task_department($task->id); ?></td>                                                     
                         <?php } ?>
-                        <td title="Start Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetstartDate)) ?></td>
-                        <td title="Complete Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetCompleteDate)) ?></td>
+                            <td title="Start Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetstartDate)) ?> <br /> <?= ($task->date_started !=''?'A: '.date('m-d-Y',strtotime($task->date_started)):'') ?></td>
+                        <td title="Complete Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetCompleteDate)) ?> <br /><?= ($task->date_completed!=''?'A: '.date('m-d-Y',strtotime($task->date_completed)):'') ?></td>
                         <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task->id; ?>,<?= $status; ?>, <?= $task->id ?>);'><span id="trackinner-<?= $task->id ?>" projectid="<?= $id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                         <td title="SOS" style="text-align: center;">
                             <span>
