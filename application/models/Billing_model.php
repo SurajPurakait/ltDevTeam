@@ -916,13 +916,17 @@ class Billing_model extends CI_Model {
                         }
                         $ins_recurrence['due_date'] = date('Y-m-d', strtotime($ins_recurrence['due_date']));
      //                             ----------------- recurrence date -----------
-                        $next_due_month = $due_month+(int) $ins_recurrence['due_month'];
-                        $next_due_day = $due_day;
-                        $next_due_year = $due_year;
+                        $next_due_month = date('m', strtotime($ins_recurrence['due_date'])) + (int) $ins_recurrence['due_month'];
+                        $next_due_day = date('d', strtotime($ins_recurrence['due_date']));
+                        $next_due_year = date('y', strtotime($ins_recurrence['due_date']));
                         if($next_due_month >12){
                             $next_due_month = $next_due_month-12;
                             $next_due_year = $next_due_year+1;
                               } 
+                        else{
+                            $next_due_month = $next_due_month;
+                            $next_due_year = $next_due_year;
+                            }
                         $ins_recurrence['next_occurance_date'] = $next_due_year."-".$next_due_month."-".$next_due_day;
                         $ins_recurrence['next_occurance_date'] = date('Y-m-d', strtotime($ins_recurrence['next_occurance_date']));   
                         
@@ -1014,6 +1018,16 @@ class Billing_model extends CI_Model {
                         $ins_recurrence['due_type'] = $ins_recurrence['due_type'];
                     } else {
                         $ins_recurrence['due_type'] = null;
+                    }
+                    if(!empty($ins_recurrence['start_date']) && empty($ins_recurrence['due_date']) && empty($ins_recurrence['next_occurance_date']))
+                    {
+                        $ins_recurrence['total_generation_time'] = '1';
+                    } elseif(!empty($ins_recurrence['start_date']) && !empty($ins_recurrence['due_date']) && empty($ins_recurrence['next_occurance_date']))
+                    {
+                        $ins_recurrence['total_generation_time'] = '2';
+                    } elseif(!empty($ins_recurrence['start_date']) && !empty($ins_recurrence['due_date']) && !empty($ins_recurrence['next_occurance_date']))
+                    {
+                        $ins_recurrence['total_generation_time'] = '3';
                     }
                     
 
@@ -1157,13 +1171,17 @@ class Billing_model extends CI_Model {
                 }
                 $ins_recurrence['due_date'] = date('Y-m-d', strtotime($ins_recurrence['due_date']));
      //                       ----------------- recurrence date -----------
-                    $next_due_month = $due_month+(int) $ins_recurrence['due_month'];
-                    $next_due_day = $due_day;
-                    $next_due_year = $due_year;
+                    $next_due_month = date('m', strtotime($ins_recurrence['due_date'])) +  $ins_recurrence['due_month'];
+                    $next_due_day = date('d', strtotime($ins_recurrence['due_date']));
+                    $next_due_year = date('Y', strtotime($ins_recurrence['due_date']));
                     if($next_due_month >12){
                     $next_due_month = $next_due_month-12;
                     $next_due_year = $next_due_year+1;
                        } 
+                    else{
+                    $next_due_month = $next_due_month;
+                    $next_due_year = $next_due_year;
+                    }
                     $ins_recurrence['next_occurance_date'] = $next_due_year."-".$next_due_month."-".$next_due_day;
                     $ins_recurrence['next_occurance_date'] = date('Y-m-d', strtotime($ins_recurrence['next_occurance_date']));
                 } elseif ($ins_recurrence['pattern'] == 'weekly') {
@@ -1253,6 +1271,16 @@ class Billing_model extends CI_Model {
                     $ins_recurrence['due_type'] = $ins_recurrence['due_type'];
                 } else {
                     $ins_recurrence['due_type'] = null;
+                }
+                if(!empty($ins_recurrence['start_date']) && empty($ins_recurrence['due_date']) && empty($ins_recurrence['next_occurance_date']))
+                {
+                    $ins_recurrence['total_generation_time'] = '1';
+                } elseif(!empty($ins_recurrence['start_date']) && !empty($ins_recurrence['due_date']) && empty($ins_recurrence['next_occurance_date']))
+                {
+                    $ins_recurrence['total_generation_time'] = '2';
+                } elseif(!empty($ins_recurrence['start_date']) && !empty($ins_recurrence['due_date']) && !empty($ins_recurrence['next_occurance_date']))
+                {
+                    $ins_recurrence['total_generation_time'] = '3';
                 }
                 
 
