@@ -17,8 +17,6 @@ $tracking = [
 ];
 $i = 0;
 $row_number = 0;
-echo '<pre>';
-print_r($result);die;
 foreach ($result as $row_count => $value):
     if (isset($page_number)) {
         if ($page_number != 1) {
