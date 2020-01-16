@@ -47,9 +47,11 @@ $staffrole = $staff_info['role'];
                                     <div class="form-group filter-inner">
                                         <div class="row">
                                             <div class="m-b-8 pull-left col-md-8">
-                                                <?php if($is_recurrence == 'y'){ ?>
+                                                <?php if($is_recurrence == 'y'){
+                                                    if($stafftype!=3){
+                                                    ?>
                                                 <a href="<?= base_url(); ?>billing/invoice/index/y" title="Create Invoice" class="btn btn-primary dropdown-toggle"><i class="fa fa-plus"></i> Create Invoice</a>
-                                                <?php } else{ ?>
+                                                <?php } } else{ ?>
                                                 <a href="<?= base_url(); ?>billing/invoice/index" title="Create Invoice" class="btn btn-primary dropdown-toggle"><i class="fa fa-plus"></i> Create Invoice</a>
                                             <?php } ?>
                                             </div>                                            
@@ -104,15 +106,15 @@ $staffrole = $staff_info['role'];
                                     <thead>
                                         <tr>
                                             <td></td>
-                                            <th class="text-center">Unpaid</th>
-                                            <th class="text-center">Partial</th>
-                                            <th class="text-center">Paid</th>
-                                            <th class="text-center">Late</th>
+                                            <th class="text-center"><span class="label label-danger">Unpaid</span></th>
+                                            <th class="text-center"><span class="label label-success">Partial</span></th>
+                                            <th class="text-center"><span class="label label-primary">Paid</span></th>
+                                            <th class="text-center"><span>Late</span></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <th>By Me</th>
+                                            <th>My Orders</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-1" onclick="reflactFilterWithSummery('1-Unpaid', 'byme-By ME');loadBillingDashboard('', 'byme', '', 1, '');">
                                                     <span class="label label-warning filter-byme-1">-</span>
@@ -136,7 +138,7 @@ $staffrole = $staff_info['role'];
                                         </tr>
                                         <?php if ($stafftype == 1 || $stafftype == 2 || ($stafftype == 3 && $staffrole == 2)) { ?>
                                             <tr>
-                                                <th>By Others</th>
+                                                <th>My Team Orders</th>
                                                 <td class="text-center">
                                                     <a href="javascript:void(0)" class="filter-button" id="filter-byothers-1" onclick="reflactFilterWithSummery('1-Unpaid', 'tome-By Others');loadBillingDashboard('', 'tome', '', 1, '');">
                                                         <span class="label label-warning filter-byothers-1">-</span>

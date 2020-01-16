@@ -8,7 +8,7 @@
             <ul class="dropdown-menu">
                 <li><a id="order_serial_id-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.order_serial_id')">ID</a></li>
                 <li><a id="client_name-val" href="javascript:void(0);" onclick="sort_service_dashboard('client_name')">Client Name</a></li>
-                <li><a id="office_id-val" href="javascript:void(0);" onclick="sort_service_dashboard('office_id')">Office ID</a></li>
+                <li><a id="office_id-val" href="javascript:void(0);" onclick="sort_service_dashboard('office')">Office ID</a></li>
                 <li><a id="status-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.status')">Tracking</a></li>
                 <li><a id="order_date-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.order_date')">Requested Date</a></li>
                 <li><a id="start_date-val" href="javascript:void(0);" onclick="sort_service_dashboard('ord.start_date')">Start Date</a></li>
@@ -166,9 +166,14 @@ if (!empty($result)):
         ?>
         <div id="order<?= $row->id; ?>" class="panel panel-default service-panel category<?= $row->category_id; ?> filter-<?= $row->department_id . '-' . $status . ' ' . $late_class; ?>">
             <div class="panel-heading">
+                <?php if (!empty($invoice_info) && ($invoice_info['is_order'] == 'y')) { ?>
+                <a href="<?= base_url("billing/invoice/place/" . base64_encode($invoice_info['id']) . "/" . base64_encode('view')); ?>" target="_blank" class="btn btn-primary btn-xs btn-service-view"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
+            <?php }else{?>
                 <a title="<?= $row->service_name; ?>" href="<?= base_url('services/home/view/' . base64_encode($row->id)); ?>" class="btn btn-primary btn-xs btn-service-view" target="_blank">
                     <i class="fa fa-eye" aria-hidden="true"></i> View
                 </a>
+
+            <?php } ?>
                 <?php
                 if ($url != ''):
                     if ($tracking == 'Started') {

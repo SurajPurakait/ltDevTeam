@@ -511,4 +511,15 @@ class Referral_partner extends CI_Model {
     public function getPartnerData() {
         return $this->db->get_where('lead_management',array('type'=>'2'))->result_array();
     }
+
+    public function getReferralLeadsCount() {
+        $data = [];
+        
+        $data['leads_given_by_my_partner'] = $this->db->get_where('referred_lead', ['referred_by'=>sess('user_id')])->num_rows();
+        $data['leads_given_by_team_partner'] = $this->db->get_where('referred_lead', ['referred_to'=>sess('user_id')])->num_rows(); 
+        $data['leads_received_by_my_partner'] = $this->db->get_where('referred_lead', ['referred_by!='=>sess('user_id')])->num_rows();
+        $data['leads_received_by_team_partner'] = $this->db->get_where('referred_lead', ['referred_to!='=>sess('user_id')])->num_rows();
+
+        return $data;
+    }
 }

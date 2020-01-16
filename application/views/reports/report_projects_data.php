@@ -192,17 +192,17 @@
 		            $started = array_sum(array_column($projects_list,'started')); 
 		            $completed = array_sum(array_column($projects_list,'completed'));          
 		    ?>
-		    <div class="byoffice-tracking-donut-<?= $key ?> text-center" data-size="100" id="byoffice_tracking_donut_<?= $key ?>" data-json="byoffice_tracking_data_<?= $key ?>"></div>
+		    <div class="byofficetask-tracking-donut-<?= $key ?> text-center" data-size="100" id="byofficetask_tracking_donut_<?= $key ?>" data-json="byofficetask_tracking_data_<?= $key ?>"></div>
 		    
 		    <script>
-		        var byoffice_tracking_data_<?= $key ?> = [
+		        var byofficetask_tracking_data_<?= $key ?> = [
 		            {'section_label': 'New ', 'value': <?= $new; ?>, 'color': '#1c84c6'}, 
 		            {'section_label': 'Started ', 'value': <?= $started; ?>, 'color': '#f8ac59'}, 
 		            {'section_label': 'Completed', 'value': <?= $completed; ?>, 'color': '#1ab394'},
 		        ];                    
 		    </script>
 		    <script>
-		         pieChart('byoffice-tracking-donut-<?= $key ?>');
+		         pieChart('byofficetask-tracking-donut-<?= $key ?>');
 		    </script>
 		    <?php
 		        }

@@ -1,4 +1,4 @@
-<!--<pre><?php //print_r($order_summary);     ?></pre>-->
+<!-- <pre><?php //print_r($order_summary);     ?></pre> -->
 <h3>Individual Information</h3>
 <input type="hidden" value="0" id="type" name="type">
 <div class="form-group">
@@ -56,9 +56,9 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="col-lg-2 control-label">SSN/ITIN</label>
-        <div class="col-lg-10">
-            <input placeholder="" class="form-control value_field" type="text" id="individual_ssn_itin" name="ssn_itin" title="SSN/ITIN">
+        <label class="col-lg-2 control-label">SSN/ITIN<span class="text-danger">*</span></label>
+       <div class="col-lg-10">
+            <input data-mask="999-99-9999" placeholder="___-__-____" class="form-control value_field required_field" type="text" id="individual_ssn_itin" name="ssn_itin" title="SSN/ITIN" required>
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
@@ -71,6 +71,8 @@
     </div>
     <div class="hr-line-dashed"></div>
 </div>
+
+<?php if($is_recurrence != 'y'){ ?>
 <div id="contact_info_div">    
     <h3>Contact Info<span class="text-danger">*</span><span class="display_div">&nbsp; (<a href="javascript:void(0);" class="contactadd" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $individual_id; ?>'); return false;">Add Contact</a>)</span></h3>
     <div id="contact-list">
@@ -79,6 +81,7 @@
     </div>
     <div class="hr-line-dashed"></div>
 </div>
+<?php } ?>
 
 <div id="documents_div" class="display_div">
     <h3>Documents &nbsp; (<a data-toggle="modal" class="documentadd" onclick="document_modal('add', '<?= $reference ?>', '<?= $individual_id ?>');" href="javascript:void(0);">Add document</a>)</h3> 
@@ -128,9 +131,10 @@
     <div class="form-group office-internal">
         <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <select class="form-control value_field required_field" name="office" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required="">
+            <!-- <select class="form-control value_field required_field" name="office" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required=""> -->
+            <select class="form-control required_field" name="office" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required="">
                 <option value="">Select an option</option>
-                <?php load_ddl_option("staff_office_list"); ?>
+                <?php load_ddl_option("staff_office_list",$order_summary['office_id']); ?>
             </select>
             <div class="errorMessage text-danger"></div>                                    
         </div>
@@ -164,9 +168,10 @@
     <div class="form-group">
         <label class="col-lg-2 control-label">Referred By Source<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <select class="form-control value_field required_field" name="referred_by_source" id="referred_by_source" onchange="change_referred_name_status(this.value);" title="Referred By Source" required>
+            <!-- <select class="form-control value_field required_field" name="referred_by_source" id="referred_by_source" onchange="change_referred_name_status(this.value);" title="Referred By Source" required> -->
+            <select class="form-control required_field" name="referred_by_source" id="referred_by_source" onchange="change_referred_name_status(this.value);" title="Referred By Source" required>
                 <option value="">Select an option</option>
-                <?php load_ddl_option("referer_by_source"); ?>
+                <?php load_ddl_option("referer_by_source",$order_summary['referred_by_source_id']); ?>
             </select>
             <div class="errorMessage text-danger"></div>
         </div>
@@ -192,6 +197,7 @@
 <input type="hidden" name="reference_id" id="reference_id" value="<?= $reference_id; ?>">
 <input type="hidden" name="individual_id" value="<?= $individual_id; ?>">
 <script>
+    load_partner_manager_ddl(<?= $order_summary['office_id'] ?>,<?= $order_summary['partner_id'] ?>,<?= $order_summary['manager_id'] ?>);
     individualTypeChange(<?= $order_summary['new_existing']; ?>, <?= $reference_id; ?>, '<?= $reference; ?>');
 <?php if ($order_summary['new_existing'] == 0): ?>
         fetchExistingIndividualData(<?= $title_id; ?>, <?= $reference_id; ?>, '<?= $reference; ?>');

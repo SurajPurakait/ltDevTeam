@@ -340,6 +340,13 @@ if (!function_exists('load_ddl_option')) {
                     echo "<option $select value='" . $item['id'] . "'>" . $item['state_name'] . "</option>";
                 }
                 break;
+                case "state_list_annual_report":
+                    $item_list = $ci->system->get_all_state(['FL', 'AZ', 'WY', 'DE', 'MI', 'TX', 'NJ', 'NY', 'OTH']);
+                foreach ($item_list as $item) {
+                    $select = ($selected != "" && $item['id'] == $selected) ? "selected = 'selected'" : "";
+                    echo "<option $select value='" . $item['id'] . "'>" . $item['state_name'] . "</option>";
+                }
+                break;
             case "all_state_list":
                 $item_list = $ci->system->get_all_state();
                 foreach ($item_list as $item) {
@@ -3574,5 +3581,13 @@ if(!function_exists('get_project_created_date')){
         $ci = &get_instance();
         $ci->load->model('Project_Template_model');
         return $ci->Project_Template_model->getProjectCreatedDate($project_id);
+    }
+}
+
+if(!function_exists('get_invoice_id')){
+    function get_invoice_id($order_id){
+        $ci = &get_instance();
+        $ci->load->model('Service_model');
+        return $ci->Service_model->get_invoice_id($order_id);
     }
 }

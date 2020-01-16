@@ -115,9 +115,12 @@ class Reports extends CI_Controller {
     /* service_by_franchisee */
     public function get_service_by_franchise_data() {
         $category = post('category');
+        // print_r(post());exit;
         $render_data['service_by_franchise_list'] = $this->service_model->get_service_by_franchise_data(post());
+        // print_r($render_data['service_by_franchise_list']);exit;
         $render_data['reports'] = array('report'=>'leafnet_report');
-        $render_data['category'] = $category; 
+        $render_data['category'] = $category;
+        $render_data['date_range_service_report'] = post('date_range'); 
         $this->load->view('reports/service_by_franchise_data',$render_data);
     }
 
