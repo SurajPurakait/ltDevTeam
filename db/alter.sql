@@ -1122,3 +1122,5 @@ INSERT INTO `services` (`id`, `category_id`, `description`, `ideas`, `tutorials`
 INSERT INTO `services` (`id`, `category_id`, `description`, `ideas`, `tutorials`, `fixed_cost`, `retail_price`, `dept`, `status`, `responsible_assign`, `client_type_assign`, `note`, `is_active`) VALUES (NULL, '1', 'New York Annual Report', 'inc_n_y_a_r', 'NULL', '0.00', '250.00', '6', '1', '2', '0', '', 'y');
 
 ALTER TABLE `report_dashboard_service` ADD `order_date` DATE NULL DEFAULT NULL AFTER `status`;
+
+ALTER TABLE `report_dashboard_service` CHANGE `department` `department` VARCHAR(10) NOT NULL;
