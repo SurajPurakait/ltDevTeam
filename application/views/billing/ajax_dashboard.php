@@ -103,7 +103,12 @@ foreach ($result as $row_count => $value):
                             <?php } ?>
                             <td title="Tracking"><a href="javascript:void(0)" onclick="billingDashboardTrackingModal(<?= $row->invoice_id; ?>, <?= $row->invoice_status; ?>);"><span class="label <?= $tracking_class ?> invoice-tracking-span-<?= $row->invoice_id; ?>"><b><?= $tracking[$row->invoice_status]; ?></b></span></a></td>
                             <td title="Requested by"><?= $row->created_by_name; ?></td>
+                            <?php if($is_recurrence != 'y'){?>
+                            <td title="Create Time"><?= date('m/d/Y', strtotime($row->created_time)); ?></td>
+                            <?php }else {?>
                             <td title="Create Time"><?= date('m/d/Y', strtotime($row->created_date)); ?></td>
+                            <?php }?>
+                            <?php if($is_recurrence == 'y'){?>
                             <?php 
                             if($row->due_date != 0){
                                 ?>
@@ -114,8 +119,12 @@ foreach ($result as $row_count => $value):
                                    <td title="Due Date">N/A</td>  
                            <?php
                                 }
+                            } else{
                             ?>
-                             
+                             <td title="Due Date"><?php $month= date('m', strtotime($row->created_time))+1;
+                                     $date = date('Y', strtotime($row->created_time))."-".$month."-".date('d', strtotime($row->created_time)); 
+                                     echo date('m/d/Y', strtotime($date)); ?></td>
+                            <?php }?>
                             <?php if($is_recurrence == 'y'){
                                 if($row->next_generation_date != 0){?>
                             <td title="Recurrence Date"><?= date('m/d/Y', strtotime($row->next_generation_date)); ?></td>
@@ -126,7 +135,7 @@ foreach ($result as $row_count => $value):
                             <?php
                                 }
                             ?>
-                            <td title="Generation"><?= ($row->total_generation_time); ?>/<?= ($row->total_duration_time); ?></td> 
+                            <td title="Generation"><?= ($row->duration_type); ?>/<?= ($row->total_duration_time); ?></td> 
                             <td title="Pattern"><?= $row->pattern; ?></td>                          
                             <?php } ?>
                             <td align="center" title="Services"><span class="label label-success"><b><?= (substr_count($row->all_services, ',') - 1); ?></b></span></td>

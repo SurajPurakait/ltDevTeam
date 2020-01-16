@@ -2052,8 +2052,9 @@ function fetchExistingClientData(reference_id, new_reference_id, reference, serv
         getCompanyData(reference_id);
         get_state_of_incorporation_value(reference_id);
         get_company_type(reference_id);
-        $('.disabled_field').prop('disabled', true);
-        //get_state_county_val(reference_id)
+//        $('.disabled_field').prop('disabled', true);
+          $('.disabled_field').prop('disabled', false);
+ //get_state_county_val(reference_id)
         payroll_account_details(reference_id);
         $('#exist_client_id').val(reference_id);
     } else {
