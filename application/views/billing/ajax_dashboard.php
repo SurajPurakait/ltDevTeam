@@ -108,6 +108,7 @@ foreach ($result as $row_count => $value):
                             <?php }else {?>
                             <td title="Create Time"><?= date('m/d/Y', strtotime($row->created_date)); ?></td>
                             <?php }?>
+                            <?php if($is_recurrence == 'y'){?>
                             <?php 
                             if($row->due_date != 0){
                                 ?>
@@ -118,8 +119,12 @@ foreach ($result as $row_count => $value):
                                    <td title="Due Date">N/A</td>  
                            <?php
                                 }
+                            } else{
                             ?>
-                             
+                             <td title="Due Date"><?php $month= date('m', strtotime($row->created_time))+1;
+                                     $date = date('Y', strtotime($row->created_time))."-".$month."-".date('d', strtotime($row->created_time)); 
+                                     echo date('m/d/Y', strtotime($date)); ?></td>
+                            <?php }?>
                             <?php if($is_recurrence == 'y'){
                                 if($row->next_generation_date != 0){?>
                             <td title="Recurrence Date"><?= date('m/d/Y', strtotime($row->next_generation_date)); ?></td>
