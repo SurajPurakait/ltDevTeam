@@ -2582,6 +2582,7 @@ class Billing_model extends CI_Model {
             '(SELECT total_generation_time FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as total_generation_time',
             '(SELECT duration_time FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as total_duration_time',
             '(SELECT start_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as created_date',
+            '(SELECT duration_type FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as duration_type',
             ];
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
         $where['status'] = 'AND `inv`.`status` != 0 ';

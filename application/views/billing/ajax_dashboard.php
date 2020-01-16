@@ -135,7 +135,7 @@ foreach ($result as $row_count => $value):
                             <?php
                                 }
                             ?>
-                            <td title="Generation"><?= ($row->total_generation_time); ?>/<?= ($row->total_duration_time); ?></td> 
+                            <td title="Generation"><?= ($row->duration_type); ?>/<?= ($row->total_duration_time); ?></td> 
                             <td title="Pattern"><?= $row->pattern; ?></td>                          
                             <?php } ?>
                             <td align="center" title="Services"><span class="label label-success"><b><?= (substr_count($row->all_services, ',') - 1); ?></b></span></td>
