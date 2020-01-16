@@ -155,6 +155,7 @@ function get_total_sales_report(office = '',date_range = '') {
 
 // report service section js
 function show_service_franchise_result(category='',date_range = '') {
+    // alert(date_range);return false;
     if (category == 'franchise') {
         $("#service_by_franchise").toggle();
     } else if(category == 'department') {
@@ -167,7 +168,7 @@ function show_service_franchise_result(category='',date_range = '') {
         url: base_url + 'reports/get_service_by_franchise_data',
         data: {'category': category,'date_range':date_range},
         success: function (result) {
-            console.log(result);
+            // console.log(result);
             if (category == 'franchise') {
                 $("#service_by_franchise").html(result);
             } else if(category == 'department') {

@@ -2839,9 +2839,9 @@ class Service_model extends CI_Model {
                     'new' => $this->get_service_report_data_by_category('franchise',$do['id'],'new','','',$daterange),
                     'started' => $this->get_service_report_data_by_category('franchise',$do['id'],'started','','',$daterange),
                     'completed' => $this->get_service_report_data_by_category('franchise',$do['id'],'completed','','',$daterange),
-                    'less_than_30' => $this->late_status_calculation_report_dashboard_service('franchise',$do['id'],'less_than_30'),
-                    'less_than_60' => $this->late_status_calculation_report_dashboard_service('franchise',$do['id'],'less_than_60'),
-                    'more_than_60' => $this->late_status_calculation_report_dashboard_service('franchise',$do['id'],'more_than_60'),           
+                    'less_than_30' => $this->late_status_calculation_report_dashboard_service('franchise',$do['id'],'less_than_30',$daterange),
+                    'less_than_60' => $this->late_status_calculation_report_dashboard_service('franchise',$do['id'],'less_than_60',$daterange),
+                    'more_than_60' => $this->late_status_calculation_report_dashboard_service('franchise',$do['id'],'more_than_60',$daterange),           
                     'sos' => $this->get_service_report_data_by_category('franchise',$do['id'],'sos','','',$daterange)           
                 ];
                 array_push($office_details,$data);
@@ -2859,9 +2859,9 @@ class Service_model extends CI_Model {
                     'new' => $this->get_service_report_data_by_category('department','','new',$dd['id'],'',$daterange),
                     'started' => $this->get_service_report_data_by_category('department','','started',$dd['id'],'',$daterange),
                     'completed' => $this->get_service_report_data_by_category('department','','completed',$dd['id'],'',$daterange),
-                    'less_than_30' => $this->late_status_calculation_report_dashboard_service('department',$dd['id'],'less_than_30'),
-                    'less_than_60' => $this->late_status_calculation_report_dashboard_service('department',$dd['id'],'less_than_60'),
-                    'more_than_60' => $this->late_status_calculation_report_dashboard_service('department',$dd['id'],'more_than_60'),           
+                    'less_than_30' => $this->late_status_calculation_report_dashboard_service('department',$dd['id'],'less_than_30',$daterange),
+                    'less_than_60' => $this->late_status_calculation_report_dashboard_service('department',$dd['id'],'less_than_60',$daterange),
+                    'more_than_60' => $this->late_status_calculation_report_dashboard_service('department',$dd['id'],'more_than_60',$daterange),           
                     'sos' => $this->get_service_report_data_by_category('department','','sos',$dd['id'],'',$daterange)
                 ];
                 array_push($department_details,$data);
@@ -2879,9 +2879,9 @@ class Service_model extends CI_Model {
                     'new' => $this->get_service_report_data_by_category('service_category','','new','',$dc['id'],$daterange),
                     'started' => $this->get_service_report_data_by_category('service_category','','started','',$dc['id'],$daterange),
                     'completed' => $this->get_service_report_data_by_category('service_category','','completed','',$dc['id'],$daterange),
-                    'less_than_30' => $this->late_status_calculation_report_dashboard_service('service_category',$dc['id'],'less_than_30'),
-                    'less_than_60' => $this->late_status_calculation_report_dashboard_service('service_category',$dc['id'],'less_than_60'),
-                    'more_than_60' => $this->late_status_calculation_report_dashboard_service('service_category',$dc['id'],'more_than_60'),           
+                    'less_than_30' => $this->late_status_calculation_report_dashboard_service('service_category',$dc['id'],'less_than_30',$daterange),
+                    'less_than_60' => $this->late_status_calculation_report_dashboard_service('service_category',$dc['id'],'less_than_60',$daterange),
+                    'more_than_60' => $this->late_status_calculation_report_dashboard_service('service_category',$dc['id'],'more_than_60',$daterange),           
                     'sos' => $this->get_service_report_data_by_category('service_category','','sos','',$dc['id'],$daterange),           
                 ];
                 array_push($category_details,$data);
@@ -2890,7 +2890,7 @@ class Service_model extends CI_Model {
         }   
     }
 
-    public function late_status_calculation_report_dashboard_service($category,$id,$late_span) {
+    public function late_status_calculation_report_dashboard_service($category,$id,$late_span,$date_range="") {
         if ($category == 'franchise') {
             if ($late_span == 'less_than_30') {
                 $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 30 AND `date_complete_actual` > `date_completed`";
@@ -2899,7 +2899,14 @@ class Service_model extends CI_Model {
             } elseif ($late_span == 'more_than_60') {
                 $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) > 60 AND `date_complete_actual` > `date_completed`";
             }
-            
+            if ($date_range != "") {
+                $date_value = explode("-", $date_range);
+                $start_date = date("Y-m-d", strtotime($date_value[0]));
+                $end_date = date("Y-m-d", strtotime($date_value[1]));
+                
+                $this->db->where('order_date >=',$start_date);
+                $this->db->where('order_date <=',$end_date);
+            }
             return $this->db->query($sql)->num_rows();
             
             // $this->db->where('office',$ofc_id);
@@ -2923,7 +2930,14 @@ class Service_model extends CI_Model {
             } elseif ($late_span == 'more_than_60') {
                 $sql = "SELECT * FROM `report_dashboard_service` WHERE `department` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) > 60 AND `date_complete_actual` > `date_completed`";
             }
-            
+            if ($date_range != "") {
+                $date_value = explode("-", $date_range);
+                $start_date = date("Y-m-d", strtotime($date_value[0]));
+                $end_date = date("Y-m-d", strtotime($date_value[1]));
+                
+                $this->db->where('order_date >=',$start_date);
+                $this->db->where('order_date <=',$end_date);
+            }
             return $this->db->query($sql)->num_rows();
         } elseif ($category == 'service_category') {
             if ($late_span == 'less_than_30') {
@@ -2933,7 +2947,14 @@ class Service_model extends CI_Model {
             } elseif ($late_span == 'more_than_60') {
                 $sql = "SELECT * FROM `report_dashboard_service` WHERE `category` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) > 60 AND `date_complete_actual` > `date_completed`";
             }
-            
+            if ($date_range != "") {
+                $date_value = explode("-", $date_range);
+                $start_date = date("Y-m-d", strtotime($date_value[0]));
+                $end_date = date("Y-m-d", strtotime($date_value[1]));
+                
+                $this->db->where('order_date >=',$start_date);
+                $this->db->where('order_date <=',$end_date);
+            }
             return $this->db->query($sql)->num_rows();
         }   
     }
