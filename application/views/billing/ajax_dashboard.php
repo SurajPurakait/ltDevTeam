@@ -17,6 +17,8 @@ $tracking = [
 ];
 $i = 0;
 $row_number = 0;
+echo '<pre>';
+print_r($result);die;
 foreach ($result as $row_count => $value):
     if (isset($page_number)) {
         if ($page_number != 1) {
@@ -103,7 +105,11 @@ foreach ($result as $row_count => $value):
                             <?php } ?>
                             <td title="Tracking"><a href="javascript:void(0)" onclick="billingDashboardTrackingModal(<?= $row->invoice_id; ?>, <?= $row->invoice_status; ?>);"><span class="label <?= $tracking_class ?> invoice-tracking-span-<?= $row->invoice_id; ?>"><b><?= $tracking[$row->invoice_status]; ?></b></span></a></td>
                             <td title="Requested by"><?= $row->created_by_name; ?></td>
+                            <?php if($is_recurrence != 'y'){?>
+                            <td title="Create Time"><?= date('m/d/Y', strtotime($row->created_time)); ?></td>
+                            <?php }else {?>
                             <td title="Create Time"><?= date('m/d/Y', strtotime($row->created_date)); ?></td>
+                            <?php }?>
                             <?php 
                             if($row->due_date != 0){
                                 ?>
