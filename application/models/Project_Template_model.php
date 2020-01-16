@@ -2620,7 +2620,6 @@ class Project_Template_model extends CI_Model {
 //            $having[] = 'all_project_staffs LIKE "%,' . $staff_id . ',%" AND added_by_user != "' . $staff_id . '"';
 //        }
         if ($request != '') {
-            echo "aaa";die;
             if ($request == 'byme') {
                 $this->db->where(['pm.added_by_user' => $staff_id]);
             } elseif ($request == 'tome') {
