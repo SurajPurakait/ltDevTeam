@@ -1416,6 +1416,9 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
     if(year==''){
         var year =$('#due_year').val();
     }
+    if(month==''){
+        var month=$("#due_month").val();
+    }
     $.ajax({
         type: "POST",
         data: {

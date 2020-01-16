@@ -2620,7 +2620,7 @@ class Project_Template_model extends CI_Model {
 //            $having[] = 'all_project_staffs LIKE "%,' . $staff_id . ',%" AND added_by_user != "' . $staff_id . '"';
 //        }
         if ($request != '') {
-//            echo "aaa";die;
+            echo "aaa";die;
             if ($request == 'byme') {
                 $this->db->where(['pm.added_by_user' => $staff_id]);
             } elseif ($request == 'tome') {
@@ -2718,7 +2718,12 @@ class Project_Template_model extends CI_Model {
                     if($filter_data=='clear'){
                         $this->db->where_in('pm.status', [0,1]);
                     }else{
-                        $this->db->where_in('pm.status', [0,1,2,4]);
+                        if(!is_array($filter_data)){
+                            $this->db->where_in('pm.status', [0,1,2,4]);
+                        }
+//                        else{
+//                            $this->db->where_in('pm.status', [0,1]);
+//                        }
                     }
                 }else{
                     $this->db->where_in('pm.status', [0,1]);
