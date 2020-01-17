@@ -2123,12 +2123,12 @@ function annual_date(reference_id) {
                 if (state == 8) {
                     $('#service_delaware').prop("checked", true);
                     $('#service_florida').prop("checked", false);
-                    $("#service_florida, #service_delaware").prop("disabled", true);
+                    // $("#service_florida, #service_delaware").prop("disabled", true);
                     changeServiceRadio(getIdVal('service_delaware'), $('#service_delaware').attr('retail_price'));
                 } else if (state == 10) {
                     $('#service_florida').prop("checked", true);
                     $('#service_delaware').prop("checked", false);
-                    $("#service_florida, #service_delaware").prop("disabled", true);
+                    // $("#service_florida, #service_delaware").prop("disabled", true);
                     changeServiceRadio(getIdVal('service_florida'), $('#service_florida').attr('retail_price'));
                 } else {
                     $("#service_florida, #service_delaware").prop("disabled", false);
