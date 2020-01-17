@@ -238,7 +238,18 @@
                                         </div>
                                     </div>
                                     <div role="tabpanel" id="tab-partners" class="tab-pane">
-                                        <div class="panel-body">                
+                                        <div class="panel-body"> 
+                                            <div class="row">
+                                                <div class="col-md-2 m-t-5" style="width: 120px;">
+                                                    <h4>Select Period</h4> 
+                                                </div>
+                                                <div class="col-md-3 p-r-0 p-l-0">
+                                                    <input type="text" class="form-control" id="reportrange2" name="daterange" placeholder="Select Period">    
+                                                </div>
+                                                <div class="col-md-2 p-l-0">
+                                                    <button type="button" class="btn btn-success" id="report-service-range-btn2" style="border-radius: 0;">Apply</button>    
+                                                </div>
+                                            </div> 
                                             <div class="ibox m-t-25" id="partners_by_type_section" onclick="show_partner_data()">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Partners By Type</h5>
@@ -254,6 +265,17 @@
                                     </div>
                                     <div role="tabpanel" id="tab-leads" class="tab-pane">
                                         <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-md-2 m-t-5" style="width: 120px;">
+                                                    <h4>Select Period</h4> 
+                                                </div>
+                                                <div class="col-md-3 p-r-0 p-l-0">
+                                                    <input type="text" class="form-control" id="reportrange1" name="daterange" placeholder="Select Period">    
+                                                </div>
+                                                <div class="col-md-2 p-l-0">
+                                                    <button type="button" class="btn btn-success" id="report-service-range-btn1" style="border-radius: 0;">Apply</button>    
+                                                </div>
+                                            </div>    
                                             <div class="ibox m-t-25" id="leads_by_status_section" onclick="show_lead_data('status')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads By Status</h5>
@@ -323,6 +345,60 @@
             $("#report-service-range-btn").click(function () {
                 var report_range = document.getElementById('reportrange').value;
                 show_service_franchise_result('franchise',report_range);       
+            });
+        }); 
+        
+        $(function () {
+            var start = moment();
+            var end = moment();
+            function cb(start, end) {
+                $('#reportrange1 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+
+            $('#reportrange1').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+            cb(start, end);
+
+            $("#report-service-range-btn1").click(function () {
+                var report_range1 = document.getElementById('reportrange1').value;
+                show_lead_data('status',report_range1);       
+            });
+        }); 
+        
+        $(function () {
+            var start = moment();
+            var end = moment();
+            function cb(start, end) {
+                $('#reportrange2 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+
+            $('#reportrange2').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+            cb(start, end);
+
+            $("#report-service-range-btn2").click(function () {
+                var report_range2 = document.getElementById('reportrange2').value;
+                show_partner_data(report_range2);       
             });
         }); 
 </script>

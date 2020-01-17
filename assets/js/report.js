@@ -251,7 +251,7 @@ function show_project_data(category) {
 }
 
 // report lead section js
-function show_lead_data(category) {
+function show_lead_data(category,date_range = '') {   
     if (category == 'status') {
         $("#leads_by_status").toggle();
     } else if(category == 'type') {
@@ -262,7 +262,7 @@ function show_lead_data(category) {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_leads_data',
-        data: {'category': category},
+        data: {'category': category,'date_range':date_range},
         success: function (result) {
             if (category == 'status') {
                 $("#leads_by_status").html(result);
@@ -276,11 +276,12 @@ function show_lead_data(category) {
 }
 
 // report partner section js
-function show_partner_data() {
+function show_partner_data(date_range = '') {  
     $("#partners_by_type").toggle();
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_partner_data',
+        data: {'date_range':date_range},
         success: function (result) {
             $("#partners_by_type").html(result);
         },

@@ -39,11 +39,33 @@ $role = $user_info['role'];
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="pull-right">
-                                        <label class="col-lg-2 m-t-5 control-label">Year: </label>
-                                        <div class="col-lg-10">
-                                            <?php 
+                                <div class="col-md-2 col-md-offset-8">
+                                    <div>
+                                        <label class="text-left control-label">Month: </label>
+                                        <?php 
+                                            if($select_month!=''){
+                                                $presenet_month=$select_month;
+                                            }else{
+                                                $presenet_month=''; 
+                                            }
+                                            ?>
+                                            <!--<input placeholder="January" readonly="" class="form-control" type="text" value="January" name="" id="" required="" title="">-->
+                                            <select class="form-control month-dropdown" id="due_month" name="due_month" onchange="change_project_month(this.value)">
+                                                <option value="">Select Month</option>
+                                                <?php foreach ($months as $key => $month): ?>
+                                                    <option value="<?= $key ?>" <?= $presenet_month== $key?'selected':'' ?>>
+                                                        <?= $month ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                            <div class="errorMessage text-danger"></div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div>
+                                        <label class="text-left control-label">Year: </label>
+                                        <?php 
                                             if($select_year!=''){
                                                 $presenet_year=$select_year;
                                             }else{
@@ -59,7 +81,7 @@ $role = $user_info['role'];
                                                 <?php endforeach; ?>
                                             </select>
                                             <div class="errorMessage text-danger"></div>
-                                        </div>
+                                        
                                     </div>
 <!--                                    <div class="pull-right">
                                         <label class="col-lg-2 m-t-5 control-label">Month: </label>
@@ -95,7 +117,7 @@ $role = $user_info['role'];
                                                             <?php endforeach; ?>
                                                         </select>
                                                     </div>
-                                                    <div class="col-sm-3 m-t-10">
+                                                    <div class="col-sm-4 m-t-10">
                                                         <select class="form-control condition-dropdown" id='project_condition' name="condition_dropdown[]" onchange="changeCondition(this)">
                                                             <option value="">All Condition</option>
                                                             <option value="1">Is</option>
@@ -104,7 +126,7 @@ $role = $user_info['role'];
                                                             <option value="4">Is not in the list</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col-sm-4 m-t-10 criteria-div">
+                                                    <div class="col-sm-3 m-t-10 criteria-div">
                                                         <select class="form-control criteria-dropdown chosen-select" placeholder="All Criteria" name="criteria_dropdown[][]">
                                                             <option value="">All Criteria</option>
                                                         </select>
@@ -112,7 +134,7 @@ $role = $user_info['role'];
                                                     <div class="col-sm-1 m-t-10 p-l-0">
                                                         <div class="add_filter_div text-center"> <a href="javascript:void(0);" onclick="addProjectFilterRow()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Filter"> <i class="fa fa-plus" aria-hidden="true"></i> </a> </div>
                                                     </div>
-
+                                                    
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -792,12 +814,23 @@ $role = $user_info['role'];
         var category=$('#cat').val();
         var statusArray = category.split('-');
         $("#due_year").val(year);
+        var month=$('#due_month').val();
+        $('#due_month').val(month)
         reflactProjectFilterWithCategory(category,'');
 //        if(statusArray[0]==1){
 //            pieChart('project-bookkeeping-campaigns-donut-1');
 //        }
 //        go('Project/index/'+'t'+'uk');
-        go('Project/index/'+'n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/'+statusArray[0]+'/'+year+'/'+category);
+        go('Project/index/'+'n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/'+statusArray[0]+'/'+year+'/'+category+'/'+month);
 //        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, statusArray[0],'',year)
+    }
+    function change_project_month(month){
+        var category=$('#cat').val();
+        var statusArray = category.split('-');
+        var year=$("#due_year").val();
+        $("#due_year").val(year);
+        $('#due_month').val(month)
+        reflactProjectFilterWithCategory(category,'');
+        go('Project/index/'+'n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/'+statusArray[0]+'/'+year+'/'+category+'/'+month);
     }
 </script> 
