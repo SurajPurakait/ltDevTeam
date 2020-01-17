@@ -1579,8 +1579,6 @@ class Action_model extends CI_Model {
 
         $totalRecords = $res_for_all;
         $totalRecordwithFilter = $res_for_all;
-        echo $this->db->last_query();
-        exit;
         ## Response
         $response = array(
             "draw" => intval($draw),
