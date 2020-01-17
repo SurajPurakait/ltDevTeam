@@ -34,7 +34,7 @@ class Project extends CI_Controller {
         ];
     }
 
-    function index($status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '', $template_cat_id = '',$year='',$category='') {
+    function index($status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '', $template_cat_id = '',$year='',$category='',$month='') {
 //        echo $category;die;
         $this->load->layout = 'dashboard';
         $title = "Project Dashboard";
@@ -78,6 +78,7 @@ class Project extends CI_Controller {
         $render_data['template_id'] = $template_id;
         $render_data['template_cat_id'] = $template_cat_id;
         $render_data['select_year']=$year;
+        $render_data['select_month']=$month;
         $render_data['category']=$category;
         $render_data['filter_element_list'] = $this->filter_element;
         $render_data['templateIds'] = $this->Project_Template_model->getTemplateIds();

@@ -1007,7 +1007,6 @@ function insert_excel_form(type) {
                     contentType: false,
                     processData: false,
                     success: function (result) {
-                        //console.log(result); return false;
                         if (result == 1) {
                             swal({
                                 title: "Success!",
