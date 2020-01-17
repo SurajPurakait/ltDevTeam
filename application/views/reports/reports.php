@@ -91,6 +91,17 @@
                                     </div>
                                     <div role="tabpanel" id="tab-billing" class="tab-pane">
                                         <div class="panel-body">
+                                         <div class="row">
+                                                <div class="col-md-2 m-t-5" style="width: 120px;">
+                                                    <h4>Select Period</h4> 
+                                                </div>
+                                                <div class="col-md-3 p-r-0 p-l-0">
+                                                    <input type="text" class="form-control" id="reportrange6" name="daterange" placeholder="Select Period">    
+                                                </div>
+                                                <div class="col-md-2 p-l-0">
+                                                    <button type="button" class="btn btn-success" id="report-service-range-btn6" style="border-radius: 0;">Apply</button>    
+                                                </div>
+                                          </div>    
                                             <div class="ibox m-t-25" id="billing_invoice_payments_section" onclick="show_billing_data()">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Invoice Payments</h5>
@@ -106,6 +117,17 @@
                                     </div>
                                     <div role="tabpanel" id="tab-action" class="tab-pane">
                                         <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-md-2 m-t-5" style="width: 120px;">
+                                                    <h4>Select Period</h4> 
+                                                </div>
+                                                <div class="col-md-3 p-r-0 p-l-0">
+                                                    <input type="text" class="form-control" id="reportrange4" name="daterange" placeholder="Select Period">    
+                                                </div>
+                                                <div class="col-md-2 p-l-0">
+                                                    <button type="button" class="btn btn-success" id="report-service-range-btn4" style="border-radius: 0;">Apply</button>    
+                                                </div>
+                                            </div> 
                                             <div class="ibox m-t-25" id="action_by_office_section" onclick="show_action_data('action_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions By Office</h5>
@@ -154,6 +176,17 @@
                                     </div>
                                     <div role="tabpanel" id="tab-projects" class="tab-pane">
                                         <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-md-2 m-t-5" style="width: 120px;">
+                                                    <h4>Select Period</h4> 
+                                                </div>
+                                                <div class="col-md-3 p-r-0 p-l-0">
+                                                    <input type="text" class="form-control" id="reportrange3" name="daterange" placeholder="Select Period">    
+                                                </div>
+                                                <div class="col-md-2 p-l-0">
+                                                    <button type="button" class="btn btn-success" id="report-service-range-btn3" style="border-radius: 0;">Apply</button>    
+                                                </div>
+                                            </div>  
                                             <div class="ibox m-t-25" id="projects_by_office_section" onclick="show_project_data('projects_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Projects By Office</h5>
@@ -401,4 +434,85 @@
                 show_partner_data(report_range2);       
             });
         }); 
+        
+        $(function () {
+            var start = moment();
+            var end = moment();
+            function cb(start, end) {
+                $('#reportrange3 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+
+            $('#reportrange3').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+            cb(start, end);
+
+            $("#report-service-range-btn3").click(function () {
+                var report_range3 = document.getElementById('reportrange3').value;
+                show_project_data('projects_by_office',report_range3);    
+            });
+        }); 
+        
+        $(function () {
+            var start = moment();
+            var end = moment();
+            function cb(start, end) {
+                $('#reportrange4 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+
+            $('#reportrange4').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+            cb(start, end);
+
+            $("#report-service-range-btn4").click(function () {
+                var report_range4 = document.getElementById('reportrange4').value;
+                show_action_data('action_by_office',report_range4);    
+            });
+        });
+        
+        $(function () {
+            var start = moment();
+            var end = moment();
+            function cb(start, end) {
+                $('#reportrange6 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+
+            $('#reportrange6').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, cb);
+            cb(start, end);
+
+            $("#report-service-range-btn6").click(function () {
+                var report_range6 = document.getElementById('reportrange6').value;
+                show_billing_data(report_range6);    
+            });
+        });
 </script>

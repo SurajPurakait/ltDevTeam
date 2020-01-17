@@ -3394,79 +3394,84 @@ class Project_Template_model extends CI_Model {
         return $this->db->get_where('projects',['id'=>$project_id])->row()->created_at;
     }
 
-    public function get_projects_data($category) {
+    public function get_projects_data($data) {      
+        if ($data['date_range'] != '') {
+            $daterange = $data['date_range'];
+        } else {
+            $daterange = '';
+        }
         $data_office = $this->db->get('office')->result_array();
         $data_department = $this->db->get('department')->result_array();
 
         $all_projects_data = [];
         $all_tasks_data = [];
-        if ($category == 'projects_by_office') {
+        if ($data['category'] == 'projects_by_office') {           
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_projects' => $this->report_data_calculation('projects_by_office','total_projects',$do['id']),           
-                    'new' => $this->report_data_calculation('projects_by_office','new',$do['id']),           
-                    'started' => $this->report_data_calculation('projects_by_office','started',$do['id']),                     
-                    'completed' => $this->report_data_calculation('projects_by_office','completed',$do['id']),
-                    'less_then_30' => $this->report_data_calculation('projects_by_office','less_then_30',$do['id']),
-                    'less_then_60' => $this->report_data_calculation('projects_by_office','less_then_60',$do['id']),
-                    'more_then_60' => $this->report_data_calculation('projects_by_office','more_then_60',$do['id']),
-                    'sos' => $this->report_data_calculation('projects_by_office','sos',$do['id']),           
+                    'total_projects' => $this->report_data_calculation('projects_by_office','total_projects',$do['id'],$daterange),           
+                    'new' => $this->report_data_calculation('projects_by_office','new',$do['id'],$daterange),           
+                    'started' => $this->report_data_calculation('projects_by_office','started',$do['id'],$daterange),                     
+                    'completed' => $this->report_data_calculation('projects_by_office','completed',$do['id'],$daterange),
+                    'less_then_30' => $this->report_data_calculation('projects_by_office','less_then_30',$do['id'],$daterange),
+                    'less_then_60' => $this->report_data_calculation('projects_by_office','less_then_60',$do['id'],$daterange),
+                    'more_then_60' => $this->report_data_calculation('projects_by_office','more_then_60',$do['id'],$daterange),
+                    'sos' => $this->report_data_calculation('projects_by_office','sos',$do['id'],$daterange),           
                 ];
                 array_push($all_projects_data,$data);
             }
             return $all_projects_data;
 
-        } else if($category == 'tasks_by_office') {
+        } else if($data['category'] == 'tasks_by_office') {
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_tasks' => $this->report_data_calculation('tasks_by_office','total_tasks',$do['id']),           
-                    'new' => $this->report_data_calculation('tasks_by_office','new',$do['id']),           
-                    'started' => $this->report_data_calculation('tasks_by_office','started',$do['id']),                     
-                    'completed' => $this->report_data_calculation('tasks_by_office','completed',$do['id']),
-                    'less_then_30' => $this->report_data_calculation('tasks_by_office','less_then_30',$do['id']),
-                    'less_then_60' => $this->report_data_calculation('tasks_by_office','less_then_60',$do['id']),
-                    'more_then_60' => $this->report_data_calculation('tasks_by_office','more_then_60',$do['id']),
-                    'sos' => $this->report_data_calculation('tasks_by_office','sos',$do['id']),           
+                    'total_tasks' => $this->report_data_calculation('tasks_by_office','total_tasks',$do['id'],$daterange),           
+                    'new' => $this->report_data_calculation('tasks_by_office','new',$do['id'],$daterange),           
+                    'started' => $this->report_data_calculation('tasks_by_office','started',$do['id'],$daterange),                     
+                    'completed' => $this->report_data_calculation('tasks_by_office','completed',$do['id'],$daterange),
+                    'less_then_30' => $this->report_data_calculation('tasks_by_office','less_then_30',$do['id'],$daterange),
+                    'less_then_60' => $this->report_data_calculation('tasks_by_office','less_then_60',$do['id'],$daterange),
+                    'more_then_60' => $this->report_data_calculation('tasks_by_office','more_then_60',$do['id'],$daterange),
+                    'sos' => $this->report_data_calculation('tasks_by_office','sos',$do['id'],$daterange),           
                 ];
                 array_push($all_tasks_data,$data);
             }
             return $all_tasks_data;
 
-        } else if ($category == 'projects_to_department') {
+        } else if ($data['category'] == 'projects_to_department') {
             foreach ($data_department as $dd) {    
                 $data = [
                     'id' => $dd['id'],
                     'department_name' => $dd['name'],
-                    'total_projects' => $this->report_data_calculation('projects_to_department','total_projects','',$dd['id']),           
-                    'new' => $this->report_data_calculation('projects_to_department','new','',$dd['id']),           
-                    'started' => $this->report_data_calculation('projects_to_department','started','',$dd['id']),                     
-                    'completed' => $this->report_data_calculation('projects_to_department','completed','',$dd['id']),
-                    'less_then_30' => $this->report_data_calculation('projects_to_department','less_then_30','',$dd['id']),
-                    'less_then_60' => $this->report_data_calculation('projects_to_department','less_then_60','',$dd['id']),
-                    'more_then_60' => $this->report_data_calculation('projects_to_department','more_then_60','',$dd['id']),
-                    'sos' => $this->report_data_calculation('projects_to_department','sos','',$dd['id']),           
+                    'total_projects' => $this->report_data_calculation('projects_to_department','total_projects','',$dd['id'],$daterange),           
+                    'new' => $this->report_data_calculation('projects_to_department','new','',$dd['id'],$daterange),           
+                    'started' => $this->report_data_calculation('projects_to_department','started','',$dd['id'],$daterange),                     
+                    'completed' => $this->report_data_calculation('projects_to_department','completed','',$dd['id'],$daterange),
+                    'less_then_30' => $this->report_data_calculation('projects_to_department','less_then_30','',$dd['id'],$daterange),
+                    'less_then_60' => $this->report_data_calculation('projects_to_department','less_then_60','',$dd['id'],$daterange),
+                    'more_then_60' => $this->report_data_calculation('projects_to_department','more_then_60','',$dd['id'],$daterange),
+                    'sos' => $this->report_data_calculation('projects_to_department','sos','',$dd['id'],$daterange),           
                 ];
                 array_push($all_projects_data,$data);
             }
             return $all_projects_data;
 
-        } else if ($category == 'tasks_to_department') {
+        } else if ($data['category'] == 'tasks_to_department') {
             foreach ($data_department as $dd) {    
                 $data = [
                     'id' => $dd['id'],
                     'department_name' => $dd['name'],
-                    'total_tasks' => $this->report_data_calculation('tasks_to_department','total_tasks','',$dd['id']),           
-                    'new' => $this->report_data_calculation('tasks_to_department','new','',$dd['id']),           
-                    'started' => $this->report_data_calculation('tasks_to_department','started','',$dd['id']),                     
-                    'completed' => $this->report_data_calculation('tasks_to_department','completed','',$dd['id']),
-                    'less_then_30' => $this->report_data_calculation('tasks_to_department','less_then_30','',$dd['id']),
-                    'less_then_60' => $this->report_data_calculation('tasks_to_department','less_then_60','',$dd['id']),
-                    'more_then_60' => $this->report_data_calculation('tasks_to_department','more_then_60','',$dd['id']),
-                    'sos' => $this->report_data_calculation('tasks_to_department','sos','',$dd['id']),           
+                    'total_tasks' => $this->report_data_calculation('tasks_to_department','total_tasks','',$dd['id'],$daterange),           
+                    'new' => $this->report_data_calculation('tasks_to_department','new','',$dd['id'],$daterange),           
+                    'started' => $this->report_data_calculation('tasks_to_department','started','',$dd['id'],$daterange),                     
+                    'completed' => $this->report_data_calculation('tasks_to_department','completed','',$dd['id'],$daterange),
+                    'less_then_30' => $this->report_data_calculation('tasks_to_department','less_then_30','',$dd['id'],$daterange),
+                    'less_then_60' => $this->report_data_calculation('tasks_to_department','less_then_60','',$dd['id'],$daterange),
+                    'more_then_60' => $this->report_data_calculation('tasks_to_department','more_then_60','',$dd['id'],$daterange),
+                    'sos' => $this->report_data_calculation('tasks_to_department','sos','',$dd['id'],$daterange),           
                 ];
                 array_push($all_tasks_data,$data);
             }
@@ -3474,8 +3479,16 @@ class Project_Template_model extends CI_Model {
         }
     }
 
-    public function report_data_calculation($category="",$sub_category="",$office="",$department="") {
-        if ($category == 'projects_by_office') {
+    public function report_data_calculation($category="",$sub_category="",$office="",$date_range="") {
+        if ($date_range != "") {
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            
+            $this->db->where('project_creation_date >=',$start_date);
+            $this->db->where('project_creation_date <=',$end_date);
+        }
+        if ($category == 'projects_by_office') {             
             $this->db->distinct();
             $this->db->select('project_id');
             $this->db->where('project_office',$office);
@@ -3498,7 +3511,7 @@ class Project_Template_model extends CI_Model {
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
             }
-            return $this->db->get('report_dashboard_project')->num_rows();
+            return $this->db->get('report_dashboard_project')->num_rows();                
         } elseif ($category == 'tasks_by_office') {
             $this->db->select('task_id');
             $this->db->where('task_office',$office);

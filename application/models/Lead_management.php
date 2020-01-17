@@ -2322,7 +2322,7 @@ Class Lead_management extends CI_Model {
             $partner_data_list = [
                 'id' => $do['id'],
                 'office' => $do['name'],
-                'total_partner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id']))->num_rows(),
+                'total_partner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
                 'banker' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'1','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
                 'business_owner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'10','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
                 'consultant' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'7','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),

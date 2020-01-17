@@ -2946,12 +2946,34 @@ class Billing_model extends CI_Model {
     public function getInvoiceRecurringDetails($invoice_id) {
         return $this->db->get_where('invoice_recurence', ['invoice_id' => $invoice_id])->row();
     }
-    public function report_billing_list() {
+    public function report_billing_list($data) {       
         $data_office = $this->db->get('office')->result_array();
         // $data_office = $this->system->get_staff_office_list();
         $invoice_details = [];
+        if($data['date_range'] != "") {
+            $daterange = $data['date_range'];
+            $date_value = explode("-", $daterange);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            foreach ($data_office as $do) {    
+            $data = [
+                'id' => $do['id'],
+                'office' => $do['name'],
+                'total_invoice' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'], 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
+                'amount_collected' => $this->amount_collected($do['id']),
+                'unpaid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Unpaid', 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
+                'paid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Paid', 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
+                'partial' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Partial', 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
+                'less_than_30' => $this->late_status_calculation_report_dashboard_billing($do['id'],'less_than_30'),
+                'less_than_60' => $this->late_status_calculation_report_dashboard_billing($do['id'],'less_than_60'),
+                'more_than_60' => $this->late_status_calculation_report_dashboard_billing($do['id'],'more_than_60')           
+            ];
+            array_push($invoice_details,$data);
+        }
         
-        foreach ($data_office as $do) {    
+        return $invoice_details;
+        } else {
+            foreach ($data_office as $do) {    
             $data = [
                 'id' => $do['id'],
                 'office' => $do['name'],
@@ -2967,6 +2989,7 @@ class Billing_model extends CI_Model {
             array_push($invoice_details,$data);
         }
         return $invoice_details;
+        }                 
     }
 
     public function amount_collected($ofc_id) {
