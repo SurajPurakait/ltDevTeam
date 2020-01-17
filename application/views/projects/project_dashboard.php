@@ -13,12 +13,12 @@ $role = $user_info['role'];
             <a href="javascript:void(0);" id="sort-by-dropdown" data-toggle="dropdown" class="dropdown-toggle btn btn-success">Sort By <span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li><a id="id-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.id')">Project ID</a></li>
-                <li><a id="project_template-val" href="javascript:void(0);" onclick="sort_project_dashboard('pm.template_id')">Project Template</a></li>
+                <li><a id="template_id-val" href="javascript:void(0);" onclick="sort_project_dashboard('pm.template_id')">Project Template</a></li>
                 <li><a id="pattern-val" href="javascript:void(0);" onclick="sort_project_dashboard('prm.pattern')">Pattern</a></li> 
                 <li><a id="client_type-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.client_type')">Client Type</a></li>
                 <li><a id="client_id-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.client_id')">Client</a></li>
-                <li><a id="responsible-val" href="javascript:void(0);" onclick="sort_project_dashboard('pm.responsible')">Responsible</a></li>
-                <li><a id="assign_to-val" href="javascript:void(0);" onclick="sort_project_dashboard('pm.assign_to')">Assign To</a></li>
+                <li><a id="all_project_staffs-val" href="javascript:void(0);" onclick="sort_project_dashboard('all_project_staffs')">Responsible</a></li>
+                <li><a id="all_project_staffs-val" href="javascript:void(0);" onclick="sort_project_dashboard('all_project_staffs')">Assign To</a></li>
                 <li><a id="status-val" href="javascript:void(0);" onclick="sort_project_dashboard('pm.status')">Tracking</a></li>
                 <li><a id="created_at-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.created_at')">Creation Date</a></li>
                 <!--<li><a id="due_date-val" href="javascript:void(0);" onclick="sort_project_dashboard('pro.due_date')">Due Date</a></li>-->
