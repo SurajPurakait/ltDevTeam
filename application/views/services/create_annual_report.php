@@ -31,6 +31,17 @@
                             </div>
                         </div>
 
+                        <div class="form-group client_type_div0">
+                            <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <select class="form-control chosen-select client_type_field0" name="client_office" id="client_office" onchange="refresh_existing_client_list(this.value, '');" title="Office" required="">
+                                    <option value="">Select Office</option>
+                                    <?php load_ddl_option("staff_office_list",'', (staff_info()['type'] != 1) ? "client_office" : ""); ?>
+                                </select>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
+
                         <div class="form-group client_type_div0" id="client_list">
                             <label class="col-lg-2 control-label">Existing Client List<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
