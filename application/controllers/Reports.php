@@ -131,9 +131,11 @@ class Reports extends CI_Controller {
         $render_data['billing_report_list'] = $this->billing_model->report_billing_list(post());
         $total_invoice = array_sum(array_column($render_data['billing_report_list'],'total_invoice'));
         // echo $total_invoice;exit;
+        if($total_invoice != '' || $total_invoice !=0) {
         $unpaid = (array_sum(array_column($render_data['billing_report_list'],'unpaid'))/$total_invoice) * 100;
         $paid = (array_sum(array_column($render_data['billing_report_list'],'paid'))/$total_invoice) * 100;
         $partial = (array_sum(array_column($render_data['billing_report_list'],'partial'))/$total_invoice) * 100;
+        }
         $render_data['totals'] = array(
             'total_no_of_invoice'=> array_sum(array_column($render_data['billing_report_list'],'total_invoice')),   
             'total_amount_collected'=> array_sum(array_column($render_data['billing_report_list'],'amount_collected')),
