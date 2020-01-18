@@ -3607,7 +3607,7 @@ class Action_model extends CI_Model {
                     'less_then_30' => $this->action_late_status('action_by_office', 'less_then_30', $do['id']),
                     'less_then_60' => $this->action_late_status('action_by_office', 'less_then_60', $do['id']),
                     'more_then_60' => $this->action_late_status('action_by_office', 'more_then_60', $do['id']),
-                    'sos' => $this->db->get_where('report_dashboard_action', array('by_office' => $do['id'], 'sos!=' => '', 'due_date >=' =>$start_date, 'due_date <=' =>$end_date))->num_rows(),
+                    'sos' => $this->db->get_where('report_dashboard_action', array('by_office' => $do['id'], 'sos!=' => ''))->num_rows(),
                 ];
                 array_push($all_actions_data, $data);
             }        
@@ -3648,7 +3648,7 @@ class Action_model extends CI_Model {
                     'less_then_30' => $this->action_late_status('action_to_office', 'less_then_30', $do['id']),
                     'less_then_60' => $this->action_late_status('action_to_office', 'less_then_60', $do['id']),
                     'more_then_60' => $this->action_late_status('action_to_office', 'more_then_60', $do['id']),
-                    'sos' => $this->db->get_where('report_dashboard_action', array('to_office' => $do['id'], 'sos!=' => '', 'due_date >=' =>$start_date, 'due_date <=' =>$end_date))->num_rows(),
+                    'sos' => $this->db->get_where('report_dashboard_action', array('to_office' => $do['id'], 'sos!=' => ''))->num_rows(),
                 ];
                 array_push($all_actions_data, $data);
                     }                     
