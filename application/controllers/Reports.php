@@ -147,19 +147,21 @@ class Reports extends CI_Controller {
         $this->load->view('reports/billing_invoice_payments_data',$render_data);   
     }
     // report action data
-    public function get_action_data() {
+    public function get_action_data() {       
         $category = post('category');
-        $render_data['action_list'] = $this->action_model->get_action_data($category);
+        $render_data['action_list'] = $this->action_model->get_action_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
+        $render_data['date_range_service_report'] = post('date_range'); 
         $this->load->view('reports/report_action_data',$render_data);
     }
     // report project data
-    public function get_project_data() {
+    public function get_project_data() {        
         $category = post('category');
-        $render_data['projects_list'] = $this->Project_Template_model->get_projects_data($category);
+        $render_data['projects_list'] = $this->Project_Template_model->get_projects_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
+        $render_data['date_range_service_report'] = post('date_range'); 
         $this->load->view('reports/report_projects_data',$render_data);    
     }
     // report client data
