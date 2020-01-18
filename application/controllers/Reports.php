@@ -125,10 +125,10 @@ class Reports extends CI_Controller {
     }
 
     // report dashboard billing data
-    public function get_show_billing_data() {
+    public function get_show_billing_data() {       
         $render_data['section'] = "billing";
         $render_data['reports'] = array('report'=>'leafnet_report');
-        $render_data['billing_report_list'] = $this->billing_model->report_billing_list();
+        $render_data['billing_report_list'] = $this->billing_model->report_billing_list(post());
         $total_invoice = array_sum(array_column($render_data['billing_report_list'],'total_invoice'));
         // echo $total_invoice;exit;
         $unpaid = (array_sum(array_column($render_data['billing_report_list'],'unpaid'))/$total_invoice) * 100;

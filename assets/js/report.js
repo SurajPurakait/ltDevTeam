@@ -181,11 +181,12 @@ function show_service_franchise_result(category='',date_range = '') {
 }
 
 // report billing section js
-function show_billing_data() {
+function show_billing_data(date_range = '') {
     $("#billing_invoice_payments").toggle();
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_show_billing_data',
+        data: {'date_range':date_range},
         success: function (result) {
             $("#billing_invoice_payments").html(result);
         },
