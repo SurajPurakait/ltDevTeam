@@ -30,7 +30,8 @@ class Project extends CI_Controller {
             9 => "Creation Date",
             10 => "Requested By",
             11 => "Due Date",
-            12 => "Template Category"
+            12 => "Template Category",
+            13 => "Input Form"
         ];
     }
 

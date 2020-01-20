@@ -3584,12 +3584,34 @@ class Action_model extends CI_Model {
     }
 
     // report dashboard's action data
-    public function get_action_data($category) {
+    public function get_action_data($data) { 
         $data_office = $this->db->get('office')->result_array();
         $data_department = $this->db->get('department')->result_array();
-
+        
         $all_actions_data = [];
-        if ($category == 'action_by_office') {
+        if ($data['category'] == 'action_by_office') {
+            if($data['date_range'] != "") {
+            $daterange = $data['date_range'];
+            $date_value = explode("-", $daterange);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));                
+            foreach ($data_office as $do) {
+                $data = [
+                    'id' => $do['id'],
+                    'office_name' => $do['name'],
+                    'total_actions' => $this->db->get_where('report_dashboard_action', array('by_office' => $do['id'], 'due_date >=' =>$start_date, 'due_date <=' =>$end_date))->num_rows(),
+                    'new' => $this->db->get_where('report_dashboard_action', array('by_office' => $do['id'], 'status' => '0', 'due_date >=' =>$start_date, 'due_date <=' =>$end_date))->num_rows(),
+                    'started' => $this->db->get_where('report_dashboard_action', array('by_office' => $do['id'], 'status' => '1', 'due_date >=' =>$start_date, 'due_date <=' =>$end_date))->num_rows(),
+                    'resolved' => $this->db->get_where('report_dashboard_action', array('by_office' => $do['id'], 'status' => '6', 'due_date >=' =>$start_date, 'due_date <=' =>$end_date))->num_rows(),
+                    'completed' => $this->db->get_where('report_dashboard_action', array('by_office' => $do['id'], 'status' => '2', 'due_date >=' =>$start_date, 'due_date <=' =>$end_date))->num_rows(),
+                    'less_then_30' => $this->action_late_status('action_by_office', 'less_then_30', $do['id']),
+                    'less_then_60' => $this->action_late_status('action_by_office', 'less_then_60', $do['id']),
+                    'more_then_60' => $this->action_late_status('action_by_office', 'more_then_60', $do['id']),
+                    'sos' => $this->db->get_where('report_dashboard_action', array('by_office' => $do['id'], 'sos!=' => ''))->num_rows(),
+                ];
+                array_push($all_actions_data, $data);
+            }        
+        } else {
             foreach ($data_office as $do) {
                 $data = [
                     'id' => $do['id'],
@@ -3606,10 +3628,33 @@ class Action_model extends CI_Model {
                 ];
                 array_push($all_actions_data, $data);
             }
+        }           
             return $all_actions_data;
-        } else if ($category == 'action_to_office') {
-            foreach ($data_office as $do) {
+        } else if ($data['category'] == 'action_to_office') {   
+            if($data['date_range'] != "") {
+            $daterange = $data['date_range'];
+            $date_value = explode("-", $daterange);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1])); 
+               foreach ($data_office as $do) {
                 $data = [
+                    'id' => $do['id'],
+                    'office_name' => $do['name'],
+                    'total_actions' => $this->db->get_where('report_dashboard_action', array('to_office' => $do['id'], 'due_date >=' =>$start_date, 'due_date <=' =>$end_date))->num_rows(),
+                    'new' => $this->db->get_where('report_dashboard_action', array('to_office' => $do['id'], 'status' => '0', 'due_date >=' =>$start_date, 'due_date <=' =>$end_date))->num_rows(),
+                    'started' => $this->db->get_where('report_dashboard_action', array('to_office' => $do['id'], 'status' => '1', 'due_date >=' =>$start_date, 'due_date <=' =>$end_date))->num_rows(),
+                    'resolved' => $this->db->get_where('report_dashboard_action', array('to_office' => $do['id'], 'status' => '6', 'due_date >=' =>$start_date, 'due_date <=' =>$end_date))->num_rows(),
+                    'completed' => $this->db->get_where('report_dashboard_action', array('to_office' => $do['id'], 'status' => '2', 'due_date >=' =>$start_date, 'due_date <=' =>$end_date))->num_rows(),
+                    'less_then_30' => $this->action_late_status('action_to_office', 'less_then_30', $do['id']),
+                    'less_then_60' => $this->action_late_status('action_to_office', 'less_then_60', $do['id']),
+                    'more_then_60' => $this->action_late_status('action_to_office', 'more_then_60', $do['id']),
+                    'sos' => $this->db->get_where('report_dashboard_action', array('to_office' => $do['id'], 'sos!=' => ''))->num_rows(),
+                ];
+                array_push($all_actions_data, $data);
+                    }                     
+            } else {
+                 foreach ($data_office as $do) {
+                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
                     'total_actions' => $this->db->get_where('report_dashboard_action', array('to_office' => $do['id']))->num_rows(),
@@ -3623,9 +3668,10 @@ class Action_model extends CI_Model {
                     'sos' => $this->db->get_where('report_dashboard_action', array('to_office' => $do['id'], 'sos!=' => ''))->num_rows(),
                 ];
                 array_push($all_actions_data, $data);
-            }
+                    } 
+            }    
             return $all_actions_data;
-        } else if ($category == 'action_by_department') {
+        } else if ($data['category'] == 'action_by_department') {
             foreach ($data_department as $dd) {
                 $data = [
                     'id' => $dd['id'],
@@ -3643,7 +3689,7 @@ class Action_model extends CI_Model {
                 array_push($all_actions_data, $data);
             }
             return $all_actions_data;
-        } else if ($category == 'action_to_department') {
+        } else if ($data['category'] == 'action_to_department') {
             foreach ($data_department as $dd) {
                 $data = [
                     'id' => $dd['id'],

@@ -23,6 +23,17 @@ class Reports extends CI_Controller {
         $render_data['main_menu'] = 'reports';
         $render_data['menu'] = 'report_' . $type;
         $render_data['header_title'] = $title;
+        $render_data['order_start_date'] = $this->service_model->get_start_date_sales_report();
+        
+        if (!empty(post('range_btn'))) {
+            if ($this->session->userdata('date_range_service')) {
+                $this->session->unset_userdata('date_range_service');
+            }
+            $this->session->set_userdata('date_range_service',post('date_range'));
+        }
+        // if (!empty($this->session->userdata('date_range_service'))) {
+        //     $render_data['date_range_service_report'] = $this->session->userdata('date_range_service');
+        // }
         $this->load->template('reports/reports', $render_data);
     }
     /* royalty_reports */
@@ -115,25 +126,34 @@ class Reports extends CI_Controller {
     /* service_by_franchisee */
     public function get_service_by_franchise_data() {
         $category = post('category');
-        // print_r(post());exit;
+        // echo post('date_range');
+        // if (!empty(post('range_btn'))) {
+        //     $this->session->unset_userdata('date_range_service');
+        //     $this->session->set_userdata('date_range_service',post('date_range'));
+        // }
+        // echo post('date_range');exit;
+        // $render_data['date_range_service_report'] = $this->session->userdata('date_range_service'); 
+        // print_r(post());die;
+        // echo $this->session->userdata('date_range_service');exit;
         $render_data['service_by_franchise_list'] = $this->service_model->get_service_by_franchise_data(post());
-        // print_r($render_data['service_by_franchise_list']);exit;
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
-        $render_data['date_range_service_report'] = post('date_range'); 
+         
         $this->load->view('reports/service_by_franchise_data',$render_data);
     }
 
     // report dashboard billing data
-    public function get_show_billing_data() {
+    public function get_show_billing_data() {       
         $render_data['section'] = "billing";
         $render_data['reports'] = array('report'=>'leafnet_report');
-        $render_data['billing_report_list'] = $this->billing_model->report_billing_list();
+        $render_data['billing_report_list'] = $this->billing_model->report_billing_list(post());
         $total_invoice = array_sum(array_column($render_data['billing_report_list'],'total_invoice'));
         // echo $total_invoice;exit;
+        if($total_invoice != '' || $total_invoice !=0) {
         $unpaid = (array_sum(array_column($render_data['billing_report_list'],'unpaid'))/$total_invoice) * 100;
         $paid = (array_sum(array_column($render_data['billing_report_list'],'paid'))/$total_invoice) * 100;
         $partial = (array_sum(array_column($render_data['billing_report_list'],'partial'))/$total_invoice) * 100;
+        }
         $render_data['totals'] = array(
             'total_no_of_invoice'=> array_sum(array_column($render_data['billing_report_list'],'total_invoice')),   
             'total_amount_collected'=> array_sum(array_column($render_data['billing_report_list'],'amount_collected')),
@@ -147,19 +167,21 @@ class Reports extends CI_Controller {
         $this->load->view('reports/billing_invoice_payments_data',$render_data);   
     }
     // report action data
-    public function get_action_data() {
+    public function get_action_data() {       
         $category = post('category');
-        $render_data['action_list'] = $this->action_model->get_action_data($category);
+        $render_data['action_list'] = $this->action_model->get_action_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
+        $render_data['date_range_service_report'] = post('date_range'); 
         $this->load->view('reports/report_action_data',$render_data);
     }
     // report project data
-    public function get_project_data() {
+    public function get_project_data() {        
         $category = post('category');
-        $render_data['projects_list'] = $this->Project_Template_model->get_projects_data($category);
+        $render_data['projects_list'] = $this->Project_Template_model->get_projects_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
+        $render_data['date_range_service_report'] = post('date_range'); 
         $this->load->view('reports/report_projects_data',$render_data);    
     }
     // report client data

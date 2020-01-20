@@ -154,7 +154,7 @@ function get_total_sales_report(office = '',date_range = '') {
 }
 
 // report service section js
-function show_service_franchise_result(category='',date_range = '') {
+function show_service_franchise_result(category='',date_range = '',range_btn='') {
     // alert(date_range);return false;
     if (category == 'franchise') {
         $("#service_by_franchise").toggle();
@@ -166,9 +166,9 @@ function show_service_franchise_result(category='',date_range = '') {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_service_by_franchise_data',
-        data: {'category': category,'date_range':date_range},
+        data: {'category': category,'date_range':date_range,'range_btn':range_btn},
         success: function (result) {
-            // console.log(result);
+            // console.log(result);return false;
             if (category == 'franchise') {
                 $("#service_by_franchise").html(result);
             } else if(category == 'department') {
@@ -179,13 +179,23 @@ function show_service_franchise_result(category='',date_range = '') {
         },
     });
 }
-
+function show_service_franchise_date(date_range = '',range_btn='') {
+    $.ajax({
+        type: 'POST',
+        url : base_url + 'reports/index',
+        data : {'date_range':date_range,'range_btn':range_btn},
+        success: function (result) {
+            console.log(result);
+        }
+    })
+}
 // report billing section js
-function show_billing_data() {
+function show_billing_data(date_range = '') {
     $("#billing_invoice_payments").toggle();
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_show_billing_data',
+        data: {'date_range':date_range},
         success: function (result) {
             $("#billing_invoice_payments").html(result);
         },
@@ -193,7 +203,7 @@ function show_billing_data() {
 }
 
 // report billing section js
-function show_action_data(category) {
+function show_action_data(category,date_range = '') {
     if (category == 'action_by_office') {
         $("#action_by_office").toggle();
     } else if(category == 'action_to_office') {
@@ -206,7 +216,7 @@ function show_action_data(category) {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_action_data',
-        data: {'category': category},
+        data: {'category': category,'date_range':date_range},
         success: function (result) {
             if (category == 'action_by_office') {
                 $("#action_by_office").html(result);
@@ -222,7 +232,7 @@ function show_action_data(category) {
 }
 
 // report project section js
-function show_project_data(category) {
+function show_project_data(category,date_range = '') {
     if (category == 'projects_by_office') {
         $("#projects_by_office").toggle();
     } else if(category == 'tasks_by_office') {
@@ -235,7 +245,7 @@ function show_project_data(category) {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_project_data',
-        data: {'category': category},
+        data: {'category': category,'date_range':date_range},
         success: function (result) {
             if (category == 'projects_by_office') {
                 $("#projects_by_office").html(result);
