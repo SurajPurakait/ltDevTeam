@@ -179,7 +179,16 @@ function show_service_franchise_result(category='',date_range = '',range_btn='')
         },
     });
 }
-
+function show_service_franchise_date(date_range = '',range_btn='') {
+    $.ajax({
+        type: 'POST',
+        url : base_url + 'reports/index',
+        data : {'date_range':date_range,'range_btn':range_btn},
+        success: function (result) {
+            console.log(result);
+        }
+    })
+}
 // report billing section js
 function show_billing_data(date_range = '') {
     $("#billing_invoice_payments").toggle();
