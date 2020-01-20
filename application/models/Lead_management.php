@@ -2201,7 +2201,7 @@ Class Lead_management extends CI_Model {
         $this->db->where('id',$data['lead_id']);
         return $this->db->get('lead_management')->num_rows();
     }
-    public function get_lead_data($data) {
+    public function get_lead_data($data) {       
         if ($data['date_range'] != '') {
             $daterange = $data['date_range'];
         } else {
@@ -2230,32 +2230,32 @@ Class Lead_management extends CI_Model {
                 $lead_data_type = [
                     'id' => $do['id'],
                     'office' => $do['name'],
-                    'total_lead' => $this->get_lead_data_report($do['id'],'total_lead'),
-                    'client_lead' => $this->get_lead_data_report($do['id'],'client_lead'),
-                    'partner_lead' => $this->get_lead_data_report($do['id'],'partner_lead')
+                    'total_lead' => $this->get_lead_data_report($do['id'],'total_lead',$daterange),
+                    'client_lead' => $this->get_lead_data_report($do['id'],'client_lead',$daterange),
+                    'partner_lead' => $this->get_lead_data_report($do['id'],'partner_lead',$daterange)
                 ];
             array_push($lead_details,$lead_data_type);        
             }    
             return $lead_details;
         }
-        if ($data['category'] = 'mail_campaign') {
+        if ($data['category'] = 'mail_campaign') {            
             foreach ($data_office as $do) {
                 $lead_data_mail = [
                     'id' => $do['id'],
                     'office' => $do['name'],
-                    'total_lead' => $this->get_lead_data_report($do['id'],'total_lead'),
-                    'day_0' => $this->get_lead_data_report($do['id'],'day_0'),
-                    'day_3' => $this->get_lead_data_report($do['id'],'day_3'),
-                    'day_6' => $this->get_lead_data_report($do['id'],'day_6'),
-                    'campaign_on' => $this->get_lead_data_report($do['id'],'campaign_on'),
-                    'campaign_off' => $this->get_lead_data_report($do['id'],'campaign_off')
+                    'total_lead' => $this->get_lead_data_report($do['id'],'total_lead',$daterange),
+                    'day_0' => $this->get_lead_data_report($do['id'],'day_0',$daterange),
+                    'day_3' => $this->get_lead_data_report($do['id'],'day_3',$daterange),
+                    'day_6' => $this->get_lead_data_report($do['id'],'day_6',$daterange),
+                    'campaign_on' => $this->get_lead_data_report($do['id'],'campaign_on',$daterange),
+                    'campaign_off' => $this->get_lead_data_report($do['id'],'campaign_off',$daterange)
                 ];
             array_push($lead_details,$lead_data_mail);        
             }    
             return $lead_details;
         }
     }
-    public function get_lead_data_report($ofc_id,$key,$date_range) {                       
+    public function get_lead_data_report($ofc_id,$key,$date_range) {        
         $this->db->where('office',$ofc_id);
         $this->db->where('type !=','2');
         $this->db->where('referred_status !=','1');
@@ -2299,9 +2299,9 @@ Class Lead_management extends CI_Model {
         $end_date = date("Y-m-d H:i:s", strtotime($date_value[1]));
         $this->db->where('referred_date >=',$start_date);
         $this->db->where('referred_date <=',$end_date);   
-        } 
+        }         
         return $this->db->get('lead_management')->num_rows();
-                                       
+                                                        
     }
 
     public function get_partner_data($data) {
