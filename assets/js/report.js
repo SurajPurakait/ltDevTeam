@@ -338,6 +338,26 @@ function show_lead_data(category,date_range = '') {
     });
 }
 
+function get_partner_date_range(date_range ='',range_btn ='') {
+    // alert(range_btn);return false;
+    $.ajax({
+        type: 'POST',
+        url : base_url + 'reports/index',
+        data : {'date_range_partner':date_range,'range_btn_partner':range_btn},
+        success: function (result) {
+            goURL(base_url + 'reports/index');
+            // $("#tab-1").removeClass('active');
+            // $("#tab-billing").addClass('active');
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    })    
+}
+
 // report partner section js
 function show_partner_data(date_range = '') {  
     $("#partners_by_type").toggle();
