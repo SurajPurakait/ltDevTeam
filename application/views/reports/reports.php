@@ -405,7 +405,9 @@
 
             $("#report-service-range-btn1").click(function () {
                 var report_range1 = document.getElementById('reportrange1').value;
-                show_lead_data('status',report_range1);       
+                show_lead_data('status',report_range1);    
+                show_lead_data('type',report_range1);
+                show_lead_data('mail_campaign',report_range1);
             });
         }); 
         
