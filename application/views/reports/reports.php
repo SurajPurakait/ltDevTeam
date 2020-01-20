@@ -11,7 +11,7 @@
                             <div class="tabs-container">
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="active"><a class="nav-link" data-toggle="tab" href="#tab-1">Services</a></li>
-                                    <li><a class="nav-link" data-toggle="tab" href="#tab-billing">Billings</a></li>
+                                    <li><a class="nav-link" data-toggle="tab" href="#tab-billing" id="report_billing">Billings</a></li>
                                     <li><a class="nav-link" data-toggle="tab" href="#tab-action">Actions</a></li>
                                     <li><a class="nav-link" data-toggle="tab" href="#tab-projects">Projects</a></li>
                                     <li><a class="nav-link" data-toggle="tab" href="#tab-clients">Clients</a></li>
@@ -101,10 +101,20 @@
                                                     <input type="text" class="form-control" id="reportrange6" name="daterange" placeholder="Select Period">    
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
-                                                    <button type="button" class="btn btn-success" id="report-service-range-btn6" style="border-radius: 0;">Apply</button>    
+                                                    <button type="button" class="btn btn-success" id="report-service-range-btn6" style="border-radius: 0;">Apply</button>
                                                 </div>
-                                          </div>    
-                                            <div class="ibox m-t-25" id="billing_invoice_payments_section" onclick="show_billing_data()">
+                                            </div>
+                                            <?php 
+                                                $date_range_billing = $this->session->userdata('date_range_billing');    
+                                                if (!empty($date_range_billing)) {
+                                                    $dateRangeBilling = $date_range_billing;
+                                                } 
+                                                else {
+                                                    $date_service = date('m/d/Y');
+                                                    $dateRangeBilling = $order_start_date.' - '.$date_service;
+                                                }    
+                                            ?>    
+                                            <div class="ibox m-t-25" id="billing_invoice_payments_section" onclick="show_billing_data('<?= $dateRangeBilling ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Invoice Payments</h5>
                                                     <div class="ibox-tools">
@@ -395,6 +405,7 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
+                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -424,6 +435,7 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
+                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -451,6 +463,7 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
+                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -478,6 +491,7 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
+                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -505,6 +519,7 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
+                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -517,7 +532,7 @@
 
             $("#report-service-range-btn6").click(function () {
                 var report_range6 = document.getElementById('reportrange6').value;
-                show_billing_data(report_range6);    
+                get_billing_date_range(report_range6,'range_btn_billing');    
             });
         });
 </script>

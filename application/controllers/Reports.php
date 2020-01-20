@@ -25,12 +25,21 @@ class Reports extends CI_Controller {
         $render_data['header_title'] = $title;
         $render_data['order_start_date'] = $this->service_model->get_start_date_sales_report();
         
-        if (!empty(post('range_btn'))) {
+        if (!empty(post('range_btn_service'))) {
             if ($this->session->userdata('date_range_service')) {
                 $this->session->unset_userdata('date_range_service');
             }
-            $this->session->set_userdata('date_range_service',post('date_range'));
+            $this->session->set_userdata('date_range_service',post('date_range_service'));
         }
+
+        if (!empty(post('range_btn_billing'))) {
+            if ($this->session->userdata('date_range_billing')) {
+                $this->session->unset_userdata('date_range_billing');
+            }
+            $this->session->set_userdata('date_range_billing',post('date_range_billing'));
+        }
+        // echo post('date_range');
+        // echo $this->session->userdata('date_range_service');die;
         // if (!empty($this->session->userdata('date_range_service'))) {
         //     $render_data['date_range_service_report'] = $this->session->userdata('date_range_service');
         // }
@@ -150,9 +159,13 @@ class Reports extends CI_Controller {
         $total_invoice = array_sum(array_column($render_data['billing_report_list'],'total_invoice'));
         // echo $total_invoice;exit;
         if($total_invoice != '' || $total_invoice !=0) {
-        $unpaid = (array_sum(array_column($render_data['billing_report_list'],'unpaid'))/$total_invoice) * 100;
-        $paid = (array_sum(array_column($render_data['billing_report_list'],'paid'))/$total_invoice) * 100;
-        $partial = (array_sum(array_column($render_data['billing_report_list'],'partial'))/$total_invoice) * 100;
+            $unpaid = (array_sum(array_column($render_data['billing_report_list'],'unpaid'))/$total_invoice) * 100;
+            $paid = (array_sum(array_column($render_data['billing_report_list'],'paid'))/$total_invoice) * 100;
+            $partial = (array_sum(array_column($render_data['billing_report_list'],'partial'))/$total_invoice) * 100;
+        }else {
+            $unpaid = 0;
+            $paid = 0;
+            $partial = 0;
         }
         $render_data['totals'] = array(
             'total_no_of_invoice'=> array_sum(array_column($render_data['billing_report_list'],'total_invoice')),   
