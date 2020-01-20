@@ -126,7 +126,7 @@
                                                     <input type="text" class="form-control" id="reportrange4" name="daterange" placeholder="Select Period">    
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
-                                                    <button type="button" class="btn btn-success" id="report-service-range-btn4" style="border-radius: 0;">Apply</button>    
+                                                    <button type="button" class="btn btn-success" id="report-actions-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
                                             </div> 
                                             <div class="ibox m-t-25" id="action_by_office_section" onclick="show_action_data('action_by_office')">
@@ -185,7 +185,7 @@
                                                     <input type="text" class="form-control" id="reportrange3" name="daterange" placeholder="Select Period">    
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
-                                                    <button type="button" class="btn btn-success" id="report-service-range-btn3" style="border-radius: 0;">Apply</button>    
+                                                    <button type="button" class="btn btn-success" id="report-projects-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
                                             </div>  
                                             <div class="ibox m-t-25" id="projects_by_office_section" onclick="show_project_data('projects_by_office')">
@@ -281,7 +281,7 @@
                                                     <input type="text" class="form-control" id="reportrange2" name="daterange" placeholder="Select Period">    
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
-                                                    <button type="button" class="btn btn-success" id="report-service-range-btn2" style="border-radius: 0;">Apply</button>    
+                                                    <button type="button" class="btn btn-success" id="report-partners-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
                                             </div> 
                                             <div class="ibox m-t-25" id="partners_by_type_section" onclick="show_partner_data()">
@@ -307,7 +307,7 @@
                                                     <input type="text" class="form-control" id="reportrange1" name="daterange" placeholder="Select Period">    
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
-                                                    <button type="button" class="btn btn-success" id="report-service-range-btn1" style="border-radius: 0;">Apply</button>    
+                                                    <button type="button" class="btn btn-success" id="report-leads-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
                                             </div>    
                                             <div class="ibox m-t-25" id="leads_by_status_section" onclick="show_lead_data('status')">
@@ -403,7 +403,7 @@
             }, cb);
             cb(start, end);
 
-            $("#report-service-range-btn1").click(function () {
+            $("#report-leads-range-btn").click(function () {
                 var report_range1 = document.getElementById('reportrange1').value;
                 show_lead_data('status',report_range1);    
                 show_lead_data('type',report_range1);
@@ -432,7 +432,7 @@
             }, cb);
             cb(start, end);
 
-            $("#report-service-range-btn2").click(function () {
+            $("#report-partners-range-btn").click(function () {
                 var report_range2 = document.getElementById('reportrange2').value;
                 show_partner_data(report_range2);       
             });
@@ -459,7 +459,7 @@
             }, cb);
             cb(start, end);
 
-            $("#report-service-range-btn3").click(function () {
+            $("#report-projects-range-btn").click(function () {
                 var report_range3 = document.getElementById('reportrange3').value;
                 show_project_data('projects_by_office',report_range3);    
             });
@@ -486,7 +486,7 @@
             }, cb);
             cb(start, end);
 
-            $("#report-service-range-btn4").click(function () {
+            $("#report-actions-range-btn").click(function () {
                 var report_range4 = document.getElementById('reportrange4').value;
                 show_action_data('action_by_office',report_range4);    
             });
