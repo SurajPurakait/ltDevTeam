@@ -177,6 +177,12 @@ function show_service_franchise_result(category='',date_range = '',range_btn='')
                 $("#service_by_category").html(result);
             }
         },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
     });
 }
 function show_service_franchise_date(date_range = '',range_btn='') {
@@ -185,7 +191,13 @@ function show_service_franchise_date(date_range = '',range_btn='') {
         url : base_url + 'reports/index',
         data : {'date_range':date_range,'range_btn':range_btn},
         success: function (result) {
-            console.log(result);
+            goURL(base_url + 'reports/index');
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
         }
     })
 }
@@ -199,6 +211,12 @@ function show_billing_data(date_range = '') {
         success: function (result) {
             $("#billing_invoice_payments").html(result);
         },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
     });
 }
 
@@ -228,6 +246,12 @@ function show_action_data(category,date_range = '') {
                 $("#action_to_department").html(result);
             }
         },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
     });
 }
 
@@ -257,6 +281,12 @@ function show_project_data(category,date_range = '') {
                 $("#tasks_to_department").html(result);
             }
         },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
     });    
 }
 
@@ -282,6 +312,12 @@ function show_lead_data(category,date_range = '') {
                 $("#leads_email_campaign").html(result);
             }
         },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
     });
 }
 
@@ -295,6 +331,12 @@ function show_partner_data(date_range = '') {
         success: function (result) {
             $("#partners_by_type").html(result);
         },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
     });    
 }
 
@@ -321,6 +363,12 @@ function show_clients_data(category) {
                 $("#individual_clients_by_office").html(result);
             }
         },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
     });
 }
 

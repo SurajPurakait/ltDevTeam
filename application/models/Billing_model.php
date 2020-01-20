@@ -2947,7 +2947,7 @@ class Billing_model extends CI_Model {
         return $this->db->get_where('invoice_recurence', ['invoice_id' => $invoice_id])->row();
     }
     public function report_billing_list($data) {       
-        $data_office = $this->db->get('office')->result_array();
+        $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
         // $data_office = $this->system->get_staff_office_list();
         $invoice_details = [];
         if($data['date_range'] != "") {

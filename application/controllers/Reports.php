@@ -31,6 +31,8 @@ class Reports extends CI_Controller {
             }
             $this->session->set_userdata('date_range_service',post('date_range'));
         }
+        // echo post('date_range');
+        // echo $this->session->userdata('date_range_service');die;
         // if (!empty($this->session->userdata('date_range_service'))) {
         //     $render_data['date_range_service_report'] = $this->session->userdata('date_range_service');
         // }
