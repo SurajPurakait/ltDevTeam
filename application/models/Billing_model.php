@@ -2950,8 +2950,8 @@ class Billing_model extends CI_Model {
         $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
         // $data_office = $this->system->get_staff_office_list();
         $invoice_details = [];
-        if($data['date_range'] != "") {
-            $daterange = $data['date_range'];
+        if($data['date_range_billing'] != "") {
+            $daterange = $data['date_range_billing'];
             $date_value = explode("-", $daterange);
             $start_date = date("Y-m-d", strtotime($date_value[0]));
             $end_date = date("Y-m-d", strtotime($date_value[1]));
@@ -2960,13 +2960,13 @@ class Billing_model extends CI_Model {
                 'id' => $do['id'],
                 'office' => $do['name'],
                 'total_invoice' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'], 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
-                'amount_collected' => $this->amount_collected($do['id']),
+                'amount_collected' => $this->amount_collected($do['id'],$daterange),
                 'unpaid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Unpaid', 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
                 'paid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Paid', 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
                 'partial' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Partial', 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
-                'less_than_30' => $this->late_status_calculation_report_dashboard_billing($do['id'],'less_than_30'),
-                'less_than_60' => $this->late_status_calculation_report_dashboard_billing($do['id'],'less_than_60'),
-                'more_than_60' => $this->late_status_calculation_report_dashboard_billing($do['id'],'more_than_60')           
+                'less_than_30' => $this->late_status_calculation_report_dashboard_billing($do['id'],'less_than_30',$daterange),
+                'less_than_60' => $this->late_status_calculation_report_dashboard_billing($do['id'],'less_than_60',$daterange),
+                'more_than_60' => $this->late_status_calculation_report_dashboard_billing($do['id'],'more_than_60',$daterange)           
             ];
             array_push($invoice_details,$data);
         }
@@ -2992,14 +2992,31 @@ class Billing_model extends CI_Model {
         }                 
     }
 
-    public function amount_collected($ofc_id) {
+    public function amount_collected($ofc_id,$date_range = "") {
+        if (!empty($date_range)) {
+            $daterange = $date_range;
+            $date_value = explode("-", $daterange);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            $this->db->where('created_date >=',$start_date);
+            $this->db->where('created_date <=',$end_date);
+        }
         $this->db->where('office_id',$ofc_id);
         $amount_data = $this->db->get('report_dashboard_billing')->result_array();
         return $amount_collected = array_sum(array_column($amount_data,'amount_collected'));
     }
 
-    public function late_status_calculation_report_dashboard_billing($ofc_id,$late_span) {
+    public function late_status_calculation_report_dashboard_billing($ofc_id,$late_span,$date_range = "") {
+        if (!empty($date_range)) {
+            $daterange = $date_range;
+            $date_value = explode("-", $daterange);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            $this->db->where('created_date >=',$start_date);
+            $this->db->where('created_date <=',$end_date);
+        }
         $this->db->where('office_id',$ofc_id);
+
         $reports_data = $this->db->get('report_dashboard_billing')->result_array();
         $date_arr = array_column($reports_data,'created_date');
         $date_arr_total = [];

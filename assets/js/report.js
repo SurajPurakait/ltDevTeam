@@ -189,7 +189,7 @@ function show_service_franchise_date(date_range = '',range_btn='') {
     $.ajax({
         type: 'POST',
         url : base_url + 'reports/index',
-        data : {'date_range':date_range,'range_btn':range_btn},
+        data : {'date_range_service':date_range,'range_btn_service':range_btn},
         success: function (result) {
             goURL(base_url + 'reports/index');
         },
@@ -207,7 +207,7 @@ function show_billing_data(date_range = '') {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_show_billing_data',
-        data: {'date_range':date_range},
+        data: {'date_range_billing':date_range},
         success: function (result) {
             $("#billing_invoice_payments").html(result);
         },
@@ -219,8 +219,25 @@ function show_billing_data(date_range = '') {
         }
     });
 }
-
-// report billing section js
+function get_billing_date_range(date_range = '',range_btn='') {
+    $.ajax({
+        type: 'POST',
+        url : base_url + 'reports/index',
+        data : {'date_range_billing':date_range,'range_btn_billing':range_btn},
+        success: function (result) {
+            goURL(base_url + 'reports/index');
+            // $("#tab-1").removeClass('active');
+            // $("#tab-billing").addClass('active');
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    })
+}
+// report action section js
 function show_action_data(category,date_range = '') {
     if (category == 'action_by_office') {
         $("#action_by_office").toggle();
