@@ -2319,22 +2319,22 @@ Class Lead_management extends CI_Model {
             $start_date = date("Y-m-d H:i:s", strtotime($date_value[0]));
             $end_date = date("Y-m-d H:i:s", strtotime($date_value[1]));              
             foreach ($data_office as $do) {               
-            $partner_data_list = [
-                'id' => $do['id'],
-                'office' => $do['name'],
-                'total_partner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                'banker' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'1','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                'business_owner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'10','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                'consultant' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'7','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                'property_manager' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'5','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                'insurance' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'2','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                'lawyer' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'6','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                'real_estate' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'3','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                'vendor' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'9','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                'other' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'11','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows()
-            ];
-            array_push($partner_data,$partner_data_list);
-        }
+                $partner_data_list = [
+                    'id' => $do['id'],
+                    'office' => $do['name'],
+                    'total_partner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
+                    'banker' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'1','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
+                    'business_owner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'10','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
+                    'consultant' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'7','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
+                    'property_manager' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'5','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
+                    'insurance' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'2','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
+                    'lawyer' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'6','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
+                    'real_estate' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'3','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
+                    'vendor' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'9','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
+                    'other' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'11','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows()
+                ];
+                array_push($partner_data,$partner_data_list);
+            }
         } else{
             $start_date = '';
             $end_date = '';
@@ -2342,7 +2342,7 @@ Class Lead_management extends CI_Model {
             $partner_data_list = [
                 'id' => $do['id'],
                 'office' => $do['name'],
-                'total_partner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id']))->num_rows(),
+                'total_partner' => $this->db->get_where('lead_management1',array('type'=>'2','office'=>$do['id']))->num_rows(),
                 'banker' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'1'))->num_rows(),
                 'business_owner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'10'))->num_rows(),
                 'consultant' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'7'))->num_rows(),

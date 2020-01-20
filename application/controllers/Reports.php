@@ -38,6 +38,13 @@ class Reports extends CI_Controller {
             }
             $this->session->set_userdata('date_range_billing',post('date_range_billing'));
         }
+
+        if (!empty(post('range_btn_partner'))) {
+            if ($this->session->userdata('date_range_partner')) {
+                $this->session->unset_userdata('date_range_partner');
+            }
+            $this->session->set_userdata('date_range_partner',post('date_range_partner'));
+        }
         // echo post('date_range');
         // echo $this->session->userdata('date_range_service');die;
         // if (!empty($this->session->userdata('date_range_service'))) {

@@ -294,8 +294,18 @@
                                                 <div class="col-md-2 p-l-0">
                                                     <button type="button" class="btn btn-success" id="report-partners-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
-                                            </div> 
-                                            <div class="ibox m-t-25" id="partners_by_type_section" onclick="show_partner_data()">
+                                            </div>
+                                            <?php 
+                                                $date_range_partner = $this->session->userdata('date_range_partner');    
+                                                if (!empty($date_range_partner)) {
+                                                    $dateRangePartner = $date_range_partner;
+                                                } 
+                                                else {
+                                                    $date_service = date('m/d/Y');
+                                                    $dateRangePartner = $order_start_date.' - '.$date_service;
+                                                }    
+                                            ?>
+                                            <div class="ibox m-t-25" id="partners_by_type_section" onclick="show_partner_data('<?= $dateRangePartner ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Partners By Type</h5>
                                                     <div class="ibox-tools">
@@ -367,10 +377,21 @@
 </div>
 <script type="text/javascript">
         $(function () {
-            var start = moment();
-            var end = moment();
+            if('<?= $dateRangeService; ?>' != '') {
+                var range = '<?= $dateRangeService ?>';
+                var start = range.split("-")[0];
+                var end = range.split("-")[1];
+            } else {
+                var start = moment();
+                var end = moment();    
+            }
+            
             function cb(start, end) {
-                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                if('<?= $dateRangeService; ?>' != '') {
+                    $('#reportrange span').html(start + ' - ' + end);
+                } else {
+                    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
             }
 
             $('#reportrange').daterangepicker({
@@ -425,10 +446,20 @@
         }); 
         
         $(function () {
-            var start = moment();
-            var end = moment();
+            if('<?= $dateRangePartner; ?>' != '') {
+                var range = '<?= $dateRangePartner ?>';
+                var start = range.split("-")[0];
+                var end = range.split("-")[1];
+            } else {
+                var start = moment();
+                var end = moment();    
+            }
             function cb(start, end) {
-                $('#reportrange2 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                if ('<?= $dateRangePartner; ?>' != '') {
+                    $('#reportrange2 span').html(start + ' - ' + end);
+                } else {
+                    $('#reportrange2 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
             }
 
             $('#reportrange2').daterangepicker({
@@ -448,7 +479,7 @@
 
             $("#report-partners-range-btn").click(function () {
                 var report_range2 = document.getElementById('reportrange2').value;
-                show_partner_data(report_range2);       
+                get_partner_date_range(report_range2,'range_btn_partner');       
             });
         }); 
         
@@ -509,10 +540,20 @@
         });
         
         $(function () {
-            var start = moment();
-            var end = moment();
+            if('<?= $dateRangeBilling; ?>' != '') {
+                var range = '<?= $dateRangeBilling ?>';
+                var start = range.split("-")[0];
+                var end = range.split("-")[1];
+            } else {
+                var start = moment();
+                var end = moment();    
+            }
             function cb(start, end) {
-                $('#reportrange6 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                if ('<?= $dateRangeBilling; ?>' != '') {
+                    $('#reportrange6 span').html(start + ' - ' + end);
+                } else {
+                    $('#reportrange6 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
             }
 
             $('#reportrange6').daterangepicker({
