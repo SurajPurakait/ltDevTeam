@@ -34,7 +34,8 @@
                                             </div>
                                             <?php 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
-                                                if (isset($date_range_service_report)) {
+                                                $date_range_service_report = $this->session->userdata('date_range_service');    
+                                                if (!empty($date_range_service_report)) {
                                                     $dateRangeService = $date_range_service_report;
                                                 } else {
                                                     $date_service = date('m/d/Y');
@@ -377,7 +378,7 @@
 
             $("#report-service-range-btn").click(function () {
                 var report_range = document.getElementById('reportrange').value;
-                show_service_franchise_result('franchise',report_range);       
+                show_service_franchise_result('',report_range,'range_btn');       
             });
         }); 
         
