@@ -1318,13 +1318,19 @@ function refresh_existing_client_list(office_id = '', client_id = '') {
 }
 function sort_project_dashboard(sort_criteria = '', sort_type = '') {
     var form_data = new FormData(document.getElementById('filter-form'));
-//    alert(form_data.value);return false;
     if (sort_criteria == '') {
         var sc = $('.dropdown-menu li.active').find('a').attr('id');
         var ex = sc.split('-');
         if (ex[0] == 'project_template') {
             var sort_criteria = ex[0];
-        } else {
+        } else if(ex[0] == 'pattern'){
+            var sort_criteria ='prm.'+ex[0];
+        } else if(ex[0]=='all_project_staffs'){
+            var sort_criteria = ex[0];
+        }else if(ex[0]=='status'){
+            var sort_criteria = 'pm.' + ex[0];
+        }
+        else {
             var sort_criteria = 'pro.' + ex[0];
         }
     }
@@ -1415,6 +1421,9 @@ function projectFilter(select_year) {
 function loadProjectDashboard(status = '', request = '', templateID = '', officeID = '', departmentID = '', filter_assign = '', filter_data = '', sos_value = '', sort_criteria = '', sort_type = '', client_type = '', client_id = '', clients = '', pageNumber = 0,template_cat_id='',month='',year='') {
     if(year==''){
         var year =$('#due_year').val();
+    }
+    if(month==''){
+        var month=$("#due_month").val();
     }
     $.ajax({
         type: "POST",

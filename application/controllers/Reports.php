@@ -131,15 +131,17 @@ class Reports extends CI_Controller {
     }
 
     // report dashboard billing data
-    public function get_show_billing_data() {
+    public function get_show_billing_data() {       
         $render_data['section'] = "billing";
         $render_data['reports'] = array('report'=>'leafnet_report');
-        $render_data['billing_report_list'] = $this->billing_model->report_billing_list();
+        $render_data['billing_report_list'] = $this->billing_model->report_billing_list(post());
         $total_invoice = array_sum(array_column($render_data['billing_report_list'],'total_invoice'));
         // echo $total_invoice;exit;
+        if($total_invoice != '' || $total_invoice !=0) {
         $unpaid = (array_sum(array_column($render_data['billing_report_list'],'unpaid'))/$total_invoice) * 100;
         $paid = (array_sum(array_column($render_data['billing_report_list'],'paid'))/$total_invoice) * 100;
         $partial = (array_sum(array_column($render_data['billing_report_list'],'partial'))/$total_invoice) * 100;
+        }
         $render_data['totals'] = array(
             'total_no_of_invoice'=> array_sum(array_column($render_data['billing_report_list'],'total_invoice')),   
             'total_amount_collected'=> array_sum(array_column($render_data['billing_report_list'],'amount_collected')),
@@ -153,19 +155,21 @@ class Reports extends CI_Controller {
         $this->load->view('reports/billing_invoice_payments_data',$render_data);   
     }
     // report action data
-    public function get_action_data() {
+    public function get_action_data() {       
         $category = post('category');
-        $render_data['action_list'] = $this->action_model->get_action_data($category);
+        $render_data['action_list'] = $this->action_model->get_action_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
+        $render_data['date_range_service_report'] = post('date_range'); 
         $this->load->view('reports/report_action_data',$render_data);
     }
     // report project data
-    public function get_project_data() {
+    public function get_project_data() {        
         $category = post('category');
-        $render_data['projects_list'] = $this->Project_Template_model->get_projects_data($category);
+        $render_data['projects_list'] = $this->Project_Template_model->get_projects_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
+        $render_data['date_range_service_report'] = post('date_range'); 
         $this->load->view('reports/report_projects_data',$render_data);    
     }
     // report client data
@@ -178,18 +182,21 @@ class Reports extends CI_Controller {
     }
     
     // report partner data
-    public function get_partner_data() {
-        $render_data['partner_list'] = $this->lead_management->get_partner_data();
+    public function get_partner_data() {        
+        $render_data['partner_list'] = $this->lead_management->get_partner_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
+        $render_data['date_range_service_report'] = post('date_range');
         $this->load->view('reports/report_partner_data',$render_data);    
     }
 
     // report lead data
     public function get_leads_data() {
+//        print_r(post());die;
         $category = post('category');
         $render_data['lead_list'] = $this->lead_management->get_lead_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
+        $render_data['date_range_service_report'] = post('date_range');         
         $this->load->view('reports/report_lead_data',$render_data);    
     }
 }

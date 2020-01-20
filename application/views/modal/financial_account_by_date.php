@@ -209,7 +209,7 @@
                     </div>
                     <div class="form-group">
                         <label>Number Of Transactions<span class="text-danger">*</span></label>
-                        <select class="form-control" name="number_of_transactions" id="no_of_transactions" title="Number Of Transactions" required>
+                        <select class="form-control" disabled="" name="number_of_transactions" id="no_of_transactions" title="Number Of Transactions" required>
                             <option value="">Select</option>
                             <option value="0-100" <?= ($data["number_of_transactions"] == "0-100") ? "selected" : ""; ?>>0-100</option>
                             <option value="101-200" <?= ($data["number_of_transactions"] == "101-200") ? "selected" : ""; ?>>101-200</option>
@@ -220,27 +220,27 @@
                     <div class="form-group">
                         <label>Upload</label><br>
                         <span id="uploadifle"></span>
-                        <input class="m-t-5" type="file" name="acc_file" id="acc_file">
+                        <input class="m-t-5" type="file" disabled="" name="acc_file" id="acc_file">
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
                         <label>Start Month</label><span class="text-danger">*</span></label>
-                        <input placeholder="mm/yyyy" required="" class="form-control datepicker" type="text" title="Start Month" name="start_date" id="start_month" value="<?= date('m/d/Y', strtotime($data["start_date"])); ?>">
+                    <input placeholder="mm/yyyy" required="" class="form-control datepicker" type="text" title="Start Month" disabled="" name="start_date" id="start_month" value="<?= date('m/d/Y', strtotime($data["start_date"])); ?>">
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
                         <label>Complete Month</label><span class="text-danger">*</span></label>
-                        <input placeholder="mm/yyyy" required="" class="form-control datepicker_my" type="text" title="Complete Month" name="complete_date" id="complete_month" value="<?= date('m/d/Y', strtotime($data["complete_date"])); ?>">
+                        <input placeholder="mm/yyyy" required="" class="form-control datepicker_my" type="text" disabled="" title="Complete Month" name="complete_date" id="complete_month" value="<?= date('m/d/Y', strtotime($data["complete_date"])); ?>">
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
                         <label>Total Amount (in $) Per Month</label>
-                        <input class="form-control" type="text" readonly id="total_amount" name="total_amount" value="<?= $data["total_amount"]; ?>">
+                        <input class="form-control" type="text" disabled="" id="total_amount" name="total_amount" value="<?= $data["total_amount"]; ?>">
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
                         <label>Grand Total (in $)</label>
-                        <input class="form-control" type="text" readonly id="grand_total_amount" name="grand_total" value="<?= $data["grand_total"]; ?>">
+                        <input class="form-control" type="text" disabled="" id="grand_total_amount" name="grand_total" value="<?= $data["grand_total"]; ?>">
                         <div class="errorMessage text-danger"></div>
                     </div>                          
 
