@@ -18,7 +18,8 @@ class Project_Template_model extends CI_Model {
             9 => "created_at",
             10 => "added_by_user",
             11 => "due_date",
-            12 => "template_cat_id"
+            12 => "template_cat_id",
+            13 => 'input_form_status'
         ];
 
         // $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id),(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts left join project_task AS pt on pt.id=pts.task_id WHERE pt.project_id = pro.id),","), " ", "") AS all_project_staffs';
@@ -30,6 +31,7 @@ class Project_Template_model extends CI_Model {
         $this->project_select[] = 'pm.department_id as department_id';
         $this->project_select[] = 'prm.due_date as due_date';
         $this->project_select[] = 'pm.template_cat_id as template_cat_id';
+        $this->project_select[] = "pt.input_form_status as input_form_status";
 
 //        $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT case when (pm.office_id=1 then GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id )),",")," "," ") AS responsible_staff';
     }
@@ -2588,20 +2590,6 @@ class Project_Template_model extends CI_Model {
         $staff_id = sess('user_id');
         $role = $user_info['role'];
         $user_office = $user_info['office'];
-        
-//        $office_staff = $department_staff = $departments = $action_id = [];
-//        if ($user_type == 3 && $role == 2) {
-//            $office_staff = explode(",", $user_info['office_staff']);
-//            $office_staff = array_unique($office_staff);
-//        }
-//        if ($user_type == 2 && $role == 4) {
-//            if ($user_department != '14') {
-//                $departments = $user_department;
-//                $department_staff = explode(",", $user_info['department_staff']);
-//                $department_staff = array_unique($department_staff);
-//                //$action_id = $this->get_request_to_others_action_by_staff_id($staff_id);
-//            }
-//        }
         $select = implode(', ', $this->project_select);
         $this->db->select($select);
         //$this->db->select('pro.*,pm.office_id as project_office_id,pm.department_id as project_department_id');
@@ -2625,33 +2613,6 @@ class Project_Template_model extends CI_Model {
             } elseif ($request == 'tome') {
                 $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%") AND added_by_user != "' . $staff_id . '"';
             }
-
-//            elseif ($request == 'byother') {
-//                echo "c";die;
-//                if ($user_type == 1 || ($user_type == 2 && $user_department == 14)) {
-//                    $this->db->where(['my_task' => 0, 'added_by_user!=' => $staff_id]);
-//                }
-//                if ($user_type == 3 && $role == 2) {
-//                    unset($office_staff[array_search(sess('user_id'), $office_staff)]);
-//                    $this->db->where(['my_task' => 0]);
-//                    if (!empty($office_staff)) {
-//                        $this->db->where_in('added_by_user', $office_staff);
-//                    } else {
-//                        $this->db->where('act.id', 0);
-//                    }
-//                }
-//                if ($user_type == 2 && $role == 4) {
-//                    if($user_department != 14){
-//                    // unset($department_staff[array_search(sess('user_id'), $department_staff)]);
-//                    $this->db->where(['my_task' => 0]);
-//                    if (!empty($department_staff)) {
-//                        $this->db->where_in('added_by_user', $department_staff);
-//                    } else {
-//                        $this->db->where('act.id', 0);
-//                    }
-//                   }
-//                }
-//            } 
             elseif ($request == 'toother') {
 //                echo "d";die;
                 if ($user_type == 3 && $role == 2) {
@@ -2717,12 +2678,12 @@ class Project_Template_model extends CI_Model {
                     if($filter_data=='clear'){
                         $this->db->where_in('pm.status', [0,1]);
                     }else{
-                        if(!is_array($filter_data)){
+                        if(is_array($filter_data)){
                             $this->db->where_in('pm.status', [0,1,2,4]);
                         }
-//                        else{
-//                            $this->db->where_in('pm.status', [0,1]);
-//                        }
+                        else{
+                            $this->db->where_in('pm.status', [0,1]);
+                        }
                     }
                 }else{
                     $this->db->where_in('pm.status', [0,1]);
@@ -2838,11 +2799,16 @@ class Project_Template_model extends CI_Model {
                 ["id" => "weekly", "name" => "weekly"],
                 ["id" => "quarterly", "name" => "quarterly"],
                 ["id" => "annually", "name" => "annually"],
+                ["id" => "periodic", "name" => "periodic"],
                 ["id" => "none", "name" => "none"]
         ];
         $client_type_array = [
                 ['id' => 1, 'name' => 'Business'],
                 ['id' => 2, 'name' => 'Individual']
+        ];
+        $input_form_array=[
+            ['id'=>'y', 'name'=>'Complete'],
+            ['id'=>'n', 'name'=>'Incomplete']
         ];
         switch ($element_key):
             case 1: {
@@ -2914,6 +2880,11 @@ class Project_Template_model extends CI_Model {
                 break;
             case 12:{
                 return $this->db->get('template_category')->result_array();
+                break;
+            }
+            case 13:{
+                return $input_form_array;
+                break;
             }
                 
             default: {
@@ -2929,7 +2900,7 @@ class Project_Template_model extends CI_Model {
     }
 
     public function build_filter_query($variable_value, $condition_value, $criteria, $column_name) {
-//        print_r($criteria);die;
+//        echo $variable_value;echo "<br>";echo $condition_value;echo "<br>";echo $column_name; echo "<br>";print_r($criteria);
         $query = '';
         if ($variable_value == 1) {
             $criteria_value = $criteria['id'];
@@ -2957,34 +2928,15 @@ class Project_Template_model extends CI_Model {
         elseif ($variable_value == 12) {
             $criteria_value = $criteria['template_cat_id'];
         }
-
-//        elseif ($variable_value == 10) {
-//            $criteria_value = $criteria['client_id'];
-//        }elseif ($variable_value == 11) {
-//            $criteria_value = $criteria['creation_date'];
-//        }elseif ($variable_value == 12) {
-//            $criteria_value = $criteria['due_date'];
-//        }
-//        echo 'uuu'.$variable_value.', '.$condition_value.', '.$column_name.', '.$criteria_value[0].', ';
-//            echo 'd';die;
-        if ($variable_value == 9 || $variable_value == 11) { // dates
-//            echo 'a';die;
-//            print_r($criteria_value);die;
-//            echo 'uuu'.$variable_value.', '.$condition_value.', '.$column_name.', '.$criteria_value[0].', ';
-//            echo 'd';die;
+        elseif ($variable_value == 13) {
+            $criteria_value = $criteria['input_form'];
+        }
+        if ($variable_value == 9 || $variable_value == 11) { 
             if ($condition_value == 1 || $condition_value == 3) {
                 $date_value = date("Y-m-d", strtotime($criteria_value[0]));
                 $query = $column_name . (($condition_value == 1) ? ' like ' : ' not like ') . '"%' . $date_value . '%"';
             } elseif ($condition_value == 2 || $condition_value == 4) {
-//             
                 $criterias = explode(" - ", $criteria_value[0]);
-//                elseif ($variable_value == 6) {
-//                    $criterias = explode(" - ", $criteria_value[0]);
-//                } elseif ($variable_value == 11) {
-//                    $criterias = explode(" - ", $criteria_value[0]);
-//                } elseif ($variable_value == 12) {
-//                    $criterias = explode(" - ", $criteria_value[0]);
-//                }
                 foreach ($criterias as $key => $c) {
                     $criterias[$key] = "'" . date("Y-m-d", strtotime($c)) . "'";
                 }
@@ -3000,16 +2952,15 @@ class Project_Template_model extends CI_Model {
                 $query = implode(' OR ', $criterias);
             }
         } else {
-
-//            print_r($criteria_value);die;
-//            echo 'uuu'.$condition_value.', '.$column_name.', '.$criteria_value[0].', ';
-//            echo 'd';die;
             if ($condition_value == 1 || $condition_value == 3) {
                 if ($column_name == 'pattern') {
                     $query = 'prm.' . $column_name . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
                 } elseif ($column_name == 'status') {
                     $query = 'pm.' . $column_name . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
-                } else {
+                } elseif($column_name=='input_form_status'){
+                    $query = 'pt.'.$column_name. (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
+                }
+                else {
                     $query = $column_name . (($condition_value == 1) ? ' = ' : ' != ') . "'" . $criteria_value[0] . "'";
                 }
 
@@ -3033,9 +2984,6 @@ class Project_Template_model extends CI_Model {
                 }elseif ($variable_value == 12) {
                     $criterias = implode(",", $criteria_value);
                 }
-//                elseif ($variable_value == 9) {
-//                    $criterias = implode(",", $criteria_value);
-//                }
                 $query = $column_name . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
             }
         }
@@ -3394,84 +3342,79 @@ class Project_Template_model extends CI_Model {
         return $this->db->get_where('projects',['id'=>$project_id])->row()->created_at;
     }
 
-    public function get_projects_data($data) {      
-        if ($data['date_range'] != '') {
-            $daterange = $data['date_range'];
-        } else {
-            $daterange = '';
-        }
+    public function get_projects_data($category) {
         $data_office = $this->db->get('office')->result_array();
         $data_department = $this->db->get('department')->result_array();
 
         $all_projects_data = [];
         $all_tasks_data = [];
-        if ($data['category'] == 'projects_by_office') {           
+        if ($category == 'projects_by_office') {
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_projects' => $this->report_data_calculation('projects_by_office','total_projects',$do['id'],$daterange),           
-                    'new' => $this->report_data_calculation('projects_by_office','new',$do['id'],$daterange),           
-                    'started' => $this->report_data_calculation('projects_by_office','started',$do['id'],$daterange),                     
-                    'completed' => $this->report_data_calculation('projects_by_office','completed',$do['id'],$daterange),
-                    'less_then_30' => $this->report_data_calculation('projects_by_office','less_then_30',$do['id'],$daterange),
-                    'less_then_60' => $this->report_data_calculation('projects_by_office','less_then_60',$do['id'],$daterange),
-                    'more_then_60' => $this->report_data_calculation('projects_by_office','more_then_60',$do['id'],$daterange),
-                    'sos' => $this->report_data_calculation('projects_by_office','sos',$do['id'],$daterange),           
+                    'total_projects' => $this->report_data_calculation('projects_by_office','total_projects',$do['id']),           
+                    'new' => $this->report_data_calculation('projects_by_office','new',$do['id']),           
+                    'started' => $this->report_data_calculation('projects_by_office','started',$do['id']),                     
+                    'completed' => $this->report_data_calculation('projects_by_office','completed',$do['id']),
+                    'less_then_30' => $this->report_data_calculation('projects_by_office','less_then_30',$do['id']),
+                    'less_then_60' => $this->report_data_calculation('projects_by_office','less_then_60',$do['id']),
+                    'more_then_60' => $this->report_data_calculation('projects_by_office','more_then_60',$do['id']),
+                    'sos' => $this->report_data_calculation('projects_by_office','sos',$do['id']),           
                 ];
                 array_push($all_projects_data,$data);
             }
             return $all_projects_data;
 
-        } else if($data['category'] == 'tasks_by_office') {
+        } else if($category == 'tasks_by_office') {
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_tasks' => $this->report_data_calculation('tasks_by_office','total_tasks',$do['id'],$daterange),           
-                    'new' => $this->report_data_calculation('tasks_by_office','new',$do['id'],$daterange),           
-                    'started' => $this->report_data_calculation('tasks_by_office','started',$do['id'],$daterange),                     
-                    'completed' => $this->report_data_calculation('tasks_by_office','completed',$do['id'],$daterange),
-                    'less_then_30' => $this->report_data_calculation('tasks_by_office','less_then_30',$do['id'],$daterange),
-                    'less_then_60' => $this->report_data_calculation('tasks_by_office','less_then_60',$do['id'],$daterange),
-                    'more_then_60' => $this->report_data_calculation('tasks_by_office','more_then_60',$do['id'],$daterange),
-                    'sos' => $this->report_data_calculation('tasks_by_office','sos',$do['id'],$daterange),           
+                    'total_tasks' => $this->report_data_calculation('tasks_by_office','total_tasks',$do['id']),           
+                    'new' => $this->report_data_calculation('tasks_by_office','new',$do['id']),           
+                    'started' => $this->report_data_calculation('tasks_by_office','started',$do['id']),                     
+                    'completed' => $this->report_data_calculation('tasks_by_office','completed',$do['id']),
+                    'less_then_30' => $this->report_data_calculation('tasks_by_office','less_then_30',$do['id']),
+                    'less_then_60' => $this->report_data_calculation('tasks_by_office','less_then_60',$do['id']),
+                    'more_then_60' => $this->report_data_calculation('tasks_by_office','more_then_60',$do['id']),
+                    'sos' => $this->report_data_calculation('tasks_by_office','sos',$do['id']),           
                 ];
                 array_push($all_tasks_data,$data);
             }
             return $all_tasks_data;
 
-        } else if ($data['category'] == 'projects_to_department') {
+        } else if ($category == 'projects_to_department') {
             foreach ($data_department as $dd) {    
                 $data = [
                     'id' => $dd['id'],
                     'department_name' => $dd['name'],
-                    'total_projects' => $this->report_data_calculation('projects_to_department','total_projects','',$dd['id'],$daterange),           
-                    'new' => $this->report_data_calculation('projects_to_department','new','',$dd['id'],$daterange),           
-                    'started' => $this->report_data_calculation('projects_to_department','started','',$dd['id'],$daterange),                     
-                    'completed' => $this->report_data_calculation('projects_to_department','completed','',$dd['id'],$daterange),
-                    'less_then_30' => $this->report_data_calculation('projects_to_department','less_then_30','',$dd['id'],$daterange),
-                    'less_then_60' => $this->report_data_calculation('projects_to_department','less_then_60','',$dd['id'],$daterange),
-                    'more_then_60' => $this->report_data_calculation('projects_to_department','more_then_60','',$dd['id'],$daterange),
-                    'sos' => $this->report_data_calculation('projects_to_department','sos','',$dd['id'],$daterange),           
+                    'total_projects' => $this->report_data_calculation('projects_to_department','total_projects','',$dd['id']),           
+                    'new' => $this->report_data_calculation('projects_to_department','new','',$dd['id']),           
+                    'started' => $this->report_data_calculation('projects_to_department','started','',$dd['id']),                     
+                    'completed' => $this->report_data_calculation('projects_to_department','completed','',$dd['id']),
+                    'less_then_30' => $this->report_data_calculation('projects_to_department','less_then_30','',$dd['id']),
+                    'less_then_60' => $this->report_data_calculation('projects_to_department','less_then_60','',$dd['id']),
+                    'more_then_60' => $this->report_data_calculation('projects_to_department','more_then_60','',$dd['id']),
+                    'sos' => $this->report_data_calculation('projects_to_department','sos','',$dd['id']),           
                 ];
                 array_push($all_projects_data,$data);
             }
             return $all_projects_data;
 
-        } else if ($data['category'] == 'tasks_to_department') {
+        } else if ($category == 'tasks_to_department') {
             foreach ($data_department as $dd) {    
                 $data = [
                     'id' => $dd['id'],
                     'department_name' => $dd['name'],
-                    'total_tasks' => $this->report_data_calculation('tasks_to_department','total_tasks','',$dd['id'],$daterange),           
-                    'new' => $this->report_data_calculation('tasks_to_department','new','',$dd['id'],$daterange),           
-                    'started' => $this->report_data_calculation('tasks_to_department','started','',$dd['id'],$daterange),                     
-                    'completed' => $this->report_data_calculation('tasks_to_department','completed','',$dd['id'],$daterange),
-                    'less_then_30' => $this->report_data_calculation('tasks_to_department','less_then_30','',$dd['id'],$daterange),
-                    'less_then_60' => $this->report_data_calculation('tasks_to_department','less_then_60','',$dd['id'],$daterange),
-                    'more_then_60' => $this->report_data_calculation('tasks_to_department','more_then_60','',$dd['id'],$daterange),
-                    'sos' => $this->report_data_calculation('tasks_to_department','sos','',$dd['id'],$daterange),           
+                    'total_tasks' => $this->report_data_calculation('tasks_to_department','total_tasks','',$dd['id']),           
+                    'new' => $this->report_data_calculation('tasks_to_department','new','',$dd['id']),           
+                    'started' => $this->report_data_calculation('tasks_to_department','started','',$dd['id']),                     
+                    'completed' => $this->report_data_calculation('tasks_to_department','completed','',$dd['id']),
+                    'less_then_30' => $this->report_data_calculation('tasks_to_department','less_then_30','',$dd['id']),
+                    'less_then_60' => $this->report_data_calculation('tasks_to_department','less_then_60','',$dd['id']),
+                    'more_then_60' => $this->report_data_calculation('tasks_to_department','more_then_60','',$dd['id']),
+                    'sos' => $this->report_data_calculation('tasks_to_department','sos','',$dd['id']),           
                 ];
                 array_push($all_tasks_data,$data);
             }
@@ -3479,16 +3422,8 @@ class Project_Template_model extends CI_Model {
         }
     }
 
-    public function report_data_calculation($category="",$sub_category="",$office="",$date_range="") {
-        if ($date_range != "") {
-            $date_value = explode("-", $date_range);
-            $start_date = date("Y-m-d", strtotime($date_value[0]));
-            $end_date = date("Y-m-d", strtotime($date_value[1]));
-            
-            $this->db->where('project_creation_date >=',$start_date);
-            $this->db->where('project_creation_date <=',$end_date);
-        }
-        if ($category == 'projects_by_office') {             
+    public function report_data_calculation($category="",$sub_category="",$office="",$department="") {
+        if ($category == 'projects_by_office') {
             $this->db->distinct();
             $this->db->select('project_id');
             $this->db->where('project_office',$office);
@@ -3511,7 +3446,7 @@ class Project_Template_model extends CI_Model {
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
             }
-            return $this->db->get('report_dashboard_project')->num_rows();                
+            return $this->db->get('report_dashboard_project')->num_rows();
         } elseif ($category == 'tasks_by_office') {
             $this->db->select('task_id');
             $this->db->where('task_office',$office);
