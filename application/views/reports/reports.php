@@ -34,12 +34,13 @@
                                             </div>
                                             <?php 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
-                                                $date_range_service_report = $this->session->userdata('date_range_service');    
-                                                if (!empty($date_range_service_report)) {
-                                                    $dateRangeService = $date_range_service_report;
-                                                } else {
+                                                $date_range_service = $this->session->userdata('date_range_service');    
+                                                if (!empty($date_range_service)) {
+                                                    $dateRangeService = $date_range_service;
+                                                } 
+                                                else {
                                                     $date_service = date('m/d/Y');
-                                                    $dateRangeService = '01/01/1970 - '.$date_service;
+                                                    $dateRangeService = $order_start_date.' - '.$date_service;
                                                 }    
                                             ?>
                                             <div class="ibox m-t-25" id="service_by_franchise_1" onclick="show_service_franchise_result('franchise','<?= $dateRangeService ?>')">
@@ -366,6 +367,7 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
+                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -378,7 +380,7 @@
 
             $("#report-service-range-btn").click(function () {
                 var report_range = document.getElementById('reportrange').value;
-                show_service_franchise_result('',report_range,'range_btn');       
+                show_service_franchise_date(report_range,'range_btn');       
             });
         }); 
         
