@@ -29,272 +29,308 @@ $role = $user_info['role'];
                     <div class="clearfix"></div>
                     <div class="row"> 
                         <div class="col-md-12">
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-tabs tab" role="tablist">
-                            <li role="presentation" class="<?= ($category=='1-bookkeeping')?'active':'' ?>"><a href="#bookkeeping" aria-controls="bookkeeping" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '', );loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1)">Bookkeeping</a></li>
-                            <li role="presentation" class="<?= ($category=='2-tax_returns')?'active':'' ?>" ><a href="#tax_returns" aria-controls="tax_returns" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('2-tax_returns', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 2)">Tax Returns</a></li>
-                            <li role="presentation" class="<?= ($category=='3-sales_tax')?'active':'' ?>"><a href="#sales_tax" aria-controls="sales_tax" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('3-sales_tax', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 3)">Sales Tax</a></li>
-                            <li role="presentation" class="<?= ($category=='4-annual_report')?'active':'' ?>"><a href="#annual_report" aria-controls="annual_report" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('4-annual_report', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 4)">Annual Report</a></li>
-                        </ul>
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            <div class="row">
-                                <div class="col-md-2 col-md-offset-8">
-                                    <div>
-                                        <label class="text-left control-label">Month: </label>
-                                        <?php 
-                                            if($select_month!=''){
-                                                $presenet_month=$select_month;
-                                            }else{
-                                                $presenet_month=''; 
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs tab" role="tablist">
+                                <li role="presentation" class="<?= ($category == '1-bookkeeping') ? 'active' : '' ?>"><a href="#bookkeeping" aria-controls="bookkeeping" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '', );loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 1)">Bookkeeping</a></li>
+                                <li role="presentation" class="<?= ($category == '2-tax_returns') ? 'active' : '' ?>" ><a href="#tax_returns" aria-controls="tax_returns" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('2-tax_returns', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 2)">Tax Returns</a></li>
+                                <li role="presentation" class="<?= ($category == '3-sales_tax') ? 'active' : '' ?>"><a href="#sales_tax" aria-controls="sales_tax" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('3-sales_tax', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 3)">Sales Tax</a></li>
+                                <li role="presentation" class="<?= ($category == '4-annual_report') ? 'active' : '' ?>"><a href="#annual_report" aria-controls="annual_report" role="tab" data-toggle="tab" onclick="reflactProjectFilterWithCategory('4-annual_report', '');loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, 4)">Annual Report</a></li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="row">
+                                    <div class="col-md-2 col-md-offset-8">
+                                        <div>
+                                            <label class="text-left control-label">Month: </label>
+                                            <?php
+                                            if ($select_month != '') {
+                                                $presenet_month = $select_month;
+                                            } else {
+                                                $presenet_month = '';
                                             }
                                             ?>
-                                            <!--<input placeholder="January" readonly="" class="form-control" type="text" value="January" name="" id="" required="" title="">-->
+                                                <!--<input placeholder="January" readonly="" class="form-control" type="text" value="January" name="" id="" required="" title="">-->
                                             <select class="form-control month-dropdown" id="due_month" name="due_month" onchange="change_project_month(this.value)">
                                                 <option value="">Select Month</option>
                                                 <?php foreach ($months as $key => $month): ?>
-                                                    <option value="<?= $key ?>" <?= $presenet_month== $key?'selected':'' ?>>
+                                                    <option value="<?= $key ?>" <?= $presenet_month == $key ? 'selected' : '' ?>>
                                                         <?= $month ?>
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
                                             <div class="errorMessage text-danger"></div>
-                                        
+
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div>
-                                        <label class="text-left control-label">Year: </label>
-                                        <?php 
-                                            if($select_year!=''){
-                                                $presenet_year=$select_year;
-                                            }else{
-                                                $presenet_year=date('Y'); 
+                                    <div class="col-md-2">
+                                        <div>
+                                            <label class="text-left control-label">Year: </label>
+                                            <?php
+                                            if ($select_year != '') {
+                                                $presenet_year = $select_year;
+                                            } else {
+                                                $presenet_year = date('Y');
                                             }
                                             ?>
-                                            <!--<input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">-->
+                                                <!--<input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">-->
                                             <select class="form-control year-dropdown" id="due_year" name="due_year" onchange="change_project_year(this.value)">
                                                 <?php foreach ($due_years as $key => $year): ?>
-                                                    <option value="<?= $year['due_year'] ?>" <?= $presenet_year== $year['due_year']?'selected':'' ?>>
+                                                    <option value="<?= $year['due_year'] ?>" <?= $presenet_year == $year['due_year'] ? 'selected' : '' ?>>
                                                         <?= $year['due_year'] ?>
                                                     </option>
                                                 <?php endforeach; ?>
                                             </select>
                                             <div class="errorMessage text-danger"></div>
-                                        
-                                    </div>
-<!--                                    <div class="pull-right">
-                                        <label class="col-lg-2 m-t-5 control-label">Month: </label>
-                                        <div class="col-lg-10">
-                                            <?php // $presenet_month=date('m'); ?>
-                                            <input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">
-                                            <select class="form-control year-dropdown" name="due_year" onchange="change_project_year(this.value)" readonly style="pointer-events: none;">
-                                                <option value="">All Months</option>
-                                                <?php // foreach ($months as $key => $month): ?>
-                                                    <option value="<? $key ?>" <? $presenet_month== $key?'selected':'' ?> >
-                                                        <? $month ?>
-                                                    </option>
-                                                <?php // endforeach; ?>
-                                            </select>
-                                            <div class="errorMessage text-danger"></div>
+
                                         </div>
-                                    </div>-->
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="filter-outer">
-                                        <form name="filter_form" id="filter-form"  method="post" onsubmit="projectFilter()">
-                                            <div class="form-group filter-inner">
+                                        <!--                                    <div class="pull-right">
+                                                                                <label class="col-lg-2 m-t-5 control-label">Month: </label>
+                                                                                <div class="col-lg-10">
+                                        <?php // $presenet_month=date('m'); ?>
+                                                                                    <input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">
+                                                                                    <select class="form-control year-dropdown" name="due_year" onchange="change_project_year(this.value)" readonly style="pointer-events: none;">
+                                                                                        <option value="">All Months</option>
+                                        <?php // foreach ($months as $key => $month): ?>
+                                                                                            <option value="<? $key ?>" <? $presenet_month== $key?'selected':'' ?> >
+                                                                                                <? $month ?>
+                                                                                            </option>
+                                        <?php // endforeach; ?>
+                                                                                    </select>
+                                                                                    <div class="errorMessage text-danger"></div>
+                                                                                </div>
+                                                                            </div>-->
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="filter-outer">
+                                            <form name="filter_form" id="filter-form"  method="post" onsubmit="projectFilter()">
+                                                <div class="form-group filter-inner">
 
-                                                <div class="filter-div m-b-10 row" id="original-filter">
-                                                    <div class="col-sm-4 m-t-10">
-                                                        <?php asort($filter_element_list); ?>
-                                                        <select class="form-control variable-dropdown" name="variable_dropdown[]" onchange="changeVariableProject(this)">
-                                                            <option value="">All Variable</option>
-                                                            <?php foreach ($filter_element_list as $key => $fel): ?>
-                                                                <option value="<?= $key ?>">
-                                                                    <?= $fel ?>
-                                                                </option>
-                                                            <?php endforeach; ?>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-4 m-t-10">
-                                                        <select class="form-control condition-dropdown" id='project_condition' name="condition_dropdown[]" onchange="changeCondition(this)">
-                                                            <option value="">All Condition</option>
-                                                            <option value="1">Is</option>
-                                                            <option value="2">Is in the list</option>
-                                                            <option value="3">Is not</option>
-                                                            <option value="4">Is not in the list</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3 m-t-10 criteria-div">
-                                                        <select class="form-control criteria-dropdown chosen-select" placeholder="All Criteria" name="criteria_dropdown[][]">
-                                                            <option value="">All Criteria</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-1 m-t-10 p-l-0">
-                                                        <div class="add_filter_div text-center"> <a href="javascript:void(0);" onclick="addProjectFilterRow()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Filter"> <i class="fa fa-plus" aria-hidden="true"></i> </a> </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 m-b-10">
-                                                    <div class="" style="display: inline-block;">
-                                                        <button class="btn btn-success" type="button" onclick="projectFilter(<?= $presenet_year ?>)">Apply Filter</button>
-                                                    </div>
-                                                    <!--                                                    <div class="" style="display: inline-block;"> col-lg-1 row clear-project-btn-one 
-                                                                                                            <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1);" class="btn btn-ghost" id="bookkeeping_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
-                                                                                                        </div>-->
-                                                </div>
-                                                <div class="col-sm-2">
+                                                    <div class="filter-div m-b-10 row" id="original-filter">
+                                                        <div class="col-sm-4 m-t-10">
+                                                            <?php asort($filter_element_list); ?>
+                                                            <select class="form-control variable-dropdown" name="variable_dropdown[]" onchange="changeVariableProject(this)">
+                                                                <option value="">All Variable</option>
+                                                                <?php foreach ($filter_element_list as $key => $fel): ?>
+                                                                    <option value="<?= $key ?>">
+                                                                        <?= $fel ?>
+                                                                    </option>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-4 m-t-10">
+                                                            <select class="form-control condition-dropdown" id='project_condition' name="condition_dropdown[]" onchange="changeCondition(this)">
+                                                                <option value="">All Condition</option>
+                                                                <option value="1">Is</option>
+                                                                <option value="2">Is in the list</option>
+                                                                <option value="3">Is not</option>
+                                                                <option value="4">Is not in the list</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-3 m-t-10 criteria-div">
+                                                            <select class="form-control criteria-dropdown chosen-select" placeholder="All Criteria" name="criteria_dropdown[][]">
+                                                                <option value="">All Criteria</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-1 m-t-10 p-l-0">
+                                                            <div class="add_filter_div text-center"> <a href="javascript:void(0);" onclick="addProjectFilterRow()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Filter"> <i class="fa fa-plus" aria-hidden="true"></i> </a> </div>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </form>
+                                                <div class="row">
+                                                    <div class="col-sm-12 m-b-10">
+                                                        <div class="" style="display: inline-block;">
+                                                            <button class="btn btn-success" type="button" onclick="projectFilter(<?= $presenet_year ?>)">Apply Filter</button>
+                                                        </div>
+                                                        <!--                                                    <div class="" style="display: inline-block;"> col-lg-1 row clear-project-btn-one 
+                                                                                                                <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1);" class="btn btn-ghost" id="bookkeeping_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
+                                                                                                            </div>-->
+                                                    </div>
+                                                    <div class="col-sm-2">
+
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane <?= ($category=='1-bookkeeping')?'active':'' ?>" id="bookkeeping">
-                                <div class="project-clear-filter"><!-- col-lg-1 row clear-project-btn-one -->
-                                    <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 1);" class="btn btn-ghost" id="bookkeeping_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row">
-                                    <?php
+                                <div role="tabpanel" class="tab-pane <?= ($category == '1-bookkeeping') ? 'active' : '' ?>" id="bookkeeping">
+                                    <div class="project-clear-filter"><!-- col-lg-1 row clear-project-btn-one -->
+                                        <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 1);" class="btn btn-ghost" id="bookkeeping_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="row">
+                                        <?php
 //                                    echo "<pre>";
 //                                    print_r($due_m);
-                                    foreach ($due_m as $key => $value) {
-                                        $projects_list = getTemplateCategoryProjectList('', 1, $key,$select_year);
-                                        $status_array = array_count_values(array_column($projects_list, 'status'));
-                                        if (!empty($projects_list)) {
-                                            ?>
-                                            <div class="col-md-3 m-b-15">
-                                                <div class="alert-primar">
-                                                    <h3 class="col-md-3 m-t-15 f-s-14"> <?= $value ?> </h3>
-                                                    <div class="col-md-4 m-t-10"> <span class="label label-primary label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '2-Completed');loadProjectDashboard(2, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '1-Started');loadProjectDashboard(1, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '0-Not Started');loadProjectDashboard(0, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span> </div>
-                                                    <div class="col-md-5 m-t-3  p-l-0">
-                                                        <div class="project-bookkeeping-campaigns-donut-<?= $key ?> text-center" data-size="65" id="project_bookkeeping_donut_<?= $key ?>" data-json="project_bookkeeping_data_<?= $key ?>"></div>
-                                                        <script>
-                                                            var project_bookkeeping_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': '#309f77'}];
-                                                        </script>
+                                        foreach ($due_m as $key => $value) {
+                                            $projects_list = getTemplateCategoryProjectList('', 1, $key, $select_year);
+                                            $status_array = array_count_values(array_column($projects_list, 'status'));
+                                            if (!empty($projects_list)) {
+                                                ?>
+                                                <div class="col-md-3 m-b-15">
+                                                    <div class="alert-primar">
+                                                        <h3 class="p-l-15 p-r-15 f-s-14"> <?= $value ?> </h3>
+                                                        <div class="row m-l-15 m-r-15">
+                                                            <div class="col-md-7 m-t-5">
+                                                                <table>
+                                                                    <tr>
+                                                                        <td style="text-align: right; padding-right: 5px;">New</td>
+                                                                        <td><span class="label label-success label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '2-Completed');loadProjectDashboard(2, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="text-align: right; padding-right: 5px;">Started</td>
+                                                                        <td><span class="label label-warning label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '1-Started');loadProjectDashboard(1, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="text-align: right; padding-right: 5px;">Completed</td>
+                                                                        <td><span class="label label-primary label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '0-Not Started');loadProjectDashboard(0, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span></td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                            <div class="col-md-5 m-t-3 p-l-0">
+                                                                <div class="project-bookkeeping-campaigns-donut-<?= $key ?> text-center" data-size="65" id="project_bookkeeping_donut_<?= $key ?>" data-json="project_bookkeeping_data_<?= $key ?>"></div>
+                                                                <script>
+                                                                    var project_bookkeeping_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': '#309f77'}];
+                                                                </script>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <script>
-                                                pieChart('project-bookkeeping-campaigns-donut-<?= $key ?>');
-                                            </script>
-                                            <?php
+                                                <script>
+                                                    pieChart('project-bookkeeping-campaigns-donut-<?= $key ?>');
+                                                </script>
+                                                <?php
+                                            }
                                         }
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane <?= $category=='2-tax_returns'?'active':'' ?>" id="tax_returns" >
-                                <div class="project-clear-filter">
-                                    <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 2);" class="btn btn-ghost" id="tax_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row">
-                                    <?php
-                                    foreach ($templateIds as $key => $value) {
-                                        $projects_list2 = getTemplateCategoryProjectList($value['template_id'], 2,'',$select_year);
-                                        $status_array = array_count_values(array_column($projects_list2, 'status'));
-                                        if (!empty($projects_list2)) {
-                                            ?>
-                                            <div class="col-md-3 m-b-15">
-                                                <div class="alert-primar">
-                                                    <h4 class="col-md-4 m-t-10 f-s-14"> <a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $value['title'] ?>" data-trigger="hover" title="" data-original-title=""><?= (strlen($value['title']) > 10 ? substr_replace($value['title'], '..', 10) : $value['title']) ?></a> </h4>
-                                                    <div class="col-md-3 m-t-5"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('2-tax_returns', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 2);"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('2-tax_returns', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 2);"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('2-tax_returns', '0-Not Started');loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 2);"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span> </div>
-                                                    <div class="col-md-5 m-t-3">
-                                                        <div class="project-tax-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_tax_donut_<?= $key ?>" data-json="project_tax_data_<?= $key ?>"></div>
-                                                        <script>
-                                                            var project_tax_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': '#309f77'}];
-                                                        </script>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <script>
-                                                pieChart('project-tax-campaigns-donut-<?= $key ?>');
-                                            </script>
-                                            <?php
-                                        }
-                                    }
-                                    ?>
-                                </div>                                
-                            </div>
-                            <div role="tabpanel" class="tab-pane <?= ($category=='3-sales_tax')?'active':'' ?>" id="sales_tax" >
-                                <div class="project-clear-filter">
-                                    <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 3);" class="btn btn-ghost" id="sales_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row">
-                                    <?php
-                                    foreach ($templateIds as $key => $value) {
-                                        $projects_list3 = getTemplateCategoryProjectList($value['template_id'], 3,'',$select_year);
-                                        $status_array1 = array_count_values(array_column($projects_list3, 'status'));
-                                        if (!empty($projects_list3)) {
-                                            ?>
-                                            <div class="col-md-3 m-b-15">
-                                                <div class="alert-primar">
-                                                    <h4 class="col-md-4 m-t-10 f-s-14"><a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $value['title'] ?>" data-trigger="hover" title="" data-original-title=""><?= (strlen($value['title']) > 10 ? substr_replace($value['title'], '..', 10) : $value['title']) ?></a></h4>
-                                                    <div class="col-md-3"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[1]) ? $status_array1[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '0-Not Started');loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?> </span> </div>
-                                                    <div class="col-md-4">
-                                                        <div class="project-sales-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_sales_donut_<?= $key ?>" data-json="project_sales_data_<?= $key ?>"></div>
-                                                        <script>
-                                                            var project_sales_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': '#309f77'}];
-                                                        </script>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <script>
-                                                pieChart('project-sales-campaigns-donut-<?= $key ?>');
-                                            </script>
-                                            <?php
-                                        }
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane <?= $category=='4-annual_report'?'active':'' ?>" id="annual_report" >
-                                <div class="project-clear-filter">
-                                    <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 4);" class="btn btn-ghost" id="annual_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="row">
-                                    <?php
-                                    foreach ($templateIds as $key => $value) {
-                                        $projects_list4 = getTemplateCategoryProjectList($value['template_id'], 4,'',$select_year);
-                                        $status_array1 = array_count_values(array_column($projects_list4, 'status'));
-                                        if (!empty($projects_list4)) {
-                                            ?>
-                                            <div class="col-md-3 m-b-15">
-                                                <div class="alert-primar">
-                                                    <h4 class="col-md-4 m-t-10 f-s-14"> <?= (strlen($value['title']) > 10 ? substr_replace($value['title'], '..', 10) : $value['title']) ?> </h4>
-                                                    <div class="col-md-3"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('4-annual_report', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 4);"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('4-annual_report', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 4);"> <?= isset($status_array1[1]) ? $status_array1[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('4-sales_tax', '0-Not Started');loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 4);"> <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?> </span> </div>
-                                                    <div class="col-md-4">
-                                                        <div class="project-annual-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_annual_donut_<?= $key ?>" data-json="project_annual_data_<?= $key ?>"></div>
-                                                        <script>
-                                                            var project_annual_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': '#309f77'}];
-                                                        </script>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <script>
-                                                pieChart('project-annual-campaigns-donut-<?= $key ?>');
-                                            </script>
-                                            <?php
-                                        }
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                            <input type="hidden" id="cat">
-                        </div>
+                                        ?>
+                                    </div>
 
-                        <hr class="hr-line-dashed  m-t-5 m-b-5">
-                        <div class="ajaxdiv" id="action_dashboard_div"> 
+                                </div>
+                                <div role="tabpanel" class="tab-pane <?= $category == '2-tax_returns' ? 'active' : '' ?>" id="tax_returns" >
+                                    <div class="project-clear-filter">
+                                        <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 2);" class="btn btn-ghost" id="tax_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="row">
+                                        <?php
+                                        foreach ($templateIds as $key => $value) {
+                                            $projects_list2 = getTemplateCategoryProjectList($value['template_id'], 2, '', $select_year);
+                                            $status_array = array_count_values(array_column($projects_list2, 'status'));
+                                            if (!empty($projects_list2)) {
+                                                ?>
+                                                <div class="col-md-3 m-b-15">
+                                                    <div class="alert-primar">
+                                                        <h4 class="col-md-4 m-t-10 f-s-14"> <a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $value['title'] ?>" data-trigger="hover" title="" data-original-title=""><?= (strlen($value['title']) > 10 ? substr_replace($value['title'], '..', 10) : $value['title']) ?></a> </h4>
+                                                        <div class="col-md-3 m-t-5"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('2-tax_returns', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 2);"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('2-tax_returns', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 2);"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('2-tax_returns', '0-Not Started');loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 2);"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span> </div>
+                                                        <div class="col-md-5 m-t-3">
+                                                            <div class="project-tax-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_tax_donut_<?= $key ?>" data-json="project_tax_data_<?= $key ?>"></div>
+                                                            <script>
+                                                                var project_tax_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': '#309f77'}];
+                                                            </script>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    pieChart('project-tax-campaigns-donut-<?= $key ?>');
+                                                </script>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                    </div>                                
+                                </div>
+                                <div role="tabpanel" class="tab-pane <?= ($category == '3-sales_tax') ? 'active' : '' ?>" id="sales_tax" >
+                                    <div class="project-clear-filter">
+                                        <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 3);" class="btn btn-ghost" id="sales_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="row">
+                                        <?php
+                                        foreach ($templateIds as $key => $value) {
+                                            $projects_list3 = getTemplateCategoryProjectList($value['template_id'], 3, '', $select_year);
+                                            $status_array1 = array_count_values(array_column($projects_list3, 'status'));
+                                            if (!empty($projects_list3)) {
+                                                ?>
+                                                <div class="col-md-3 m-b-15">
+                                                    <div class="alert-primar">
+                                                        <h4 class="p-l-15 p-r-15 f-s-14"><a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $value['title'] ?>" data-trigger="hover" title="" data-original-title=""><?= (strlen($value['title']) > 10 ? substr_replace($value['title'], '..', 10) : $value['title']) ?></a></h4>
+                                                        <div class="row m-l-15 m-r-15">
+                                                            <div class="col-md-7"> 
+                                                                <table>
+                                                                    <tr>
+                                                                        <td style="text-align: right; padding-right: 5px;">New</td>
+                                                                        <td><span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="text-align: right; padding-right: 5px;">Started</td>
+                                                                        <td><span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[1]) ? $status_array1[1] : 0; ?> </span></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="text-align: right; padding-right: 5px;">Completed</td>
+                                                                        <td><span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '0-Not Started');loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?> </span></td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                            <div class="col-md-5">
+                                                                <div class="project-sales-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_sales_donut_<?= $key ?>" data-json="project_sales_data_<?= $key ?>"></div>
+                                                                <script>
+                                                                    var project_sales_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': '#309f77'}];
+                                                                </script>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    pieChart('project-sales-campaigns-donut-<?= $key ?>');
+                                                </script>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane <?= $category == '4-annual_report' ? 'active' : '' ?>" id="annual_report" >
+                                    <div class="project-clear-filter">
+                                        <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1, 4);" class="btn btn-ghost" id="annual_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="row">
+                                        <?php
+                                        foreach ($templateIds as $key => $value) {
+                                            $projects_list4 = getTemplateCategoryProjectList($value['template_id'], 4, '', $select_year);
+                                            $status_array1 = array_count_values(array_column($projects_list4, 'status'));
+                                            if (!empty($projects_list4)) {
+                                                ?>
+                                                <div class="col-md-3 m-b-15">
+                                                    <div class="alert-primar">
+                                                        <h4 class="col-md-4 m-t-10 f-s-14"> <?= (strlen($value['title']) > 10 ? substr_replace($value['title'], '..', 10) : $value['title']) ?> </h4>
+                                                        <div class="col-md-3"> <span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('4-annual_report', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 4);"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span> <span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('4-annual_report', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 4);"> <?= isset($status_array1[1]) ? $status_array1[1] : 0; ?> </span> <span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('4-sales_tax', '0-Not Started');loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 4);"> <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?> </span> </div>
+                                                        <div class="col-md-4">
+                                                            <div class="project-annual-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_annual_donut_<?= $key ?>" data-json="project_annual_data_<?= $key ?>"></div>
+                                                            <script>
+                                                                var project_annual_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': '#309f77'}];
+                                                            </script>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    pieChart('project-annual-campaigns-donut-<?= $key ?>');
+                                                </script>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="cat">
+                            </div>
+
+                            <hr class="hr-line-dashed  m-t-5 m-b-5">
+                            <div class="ajaxdiv" id="action_dashboard_div"> 
+                            </div>
                         </div>
-                    </div>
                     </div>
 
                 </div>
@@ -519,30 +555,28 @@ $role = $user_info['role'];
             $("#changeStatusinner #rad4").prop('checked', false);
         } else if (status == 1) {
             $("#changeStatusinner #rad1").prop('checked', true);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad3").prop('checked', false);
             $("#changeStatusinner #rad4").prop('checked', false);
         } else if (status == 2) {
             $("#changeStatusinner #rad2").prop('checked', true);
             $("#changeStatusinner #rad1").prop('checked', false);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
-            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
+            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled', true);
             $("#changeStatusinner #rad4").prop('checked', false);
-        }
-        else if (status == 3) {
+        } else if (status == 3) {
             $("#changeStatusinner #rad3").prop('checked', true);
             $("#changeStatusinner #rad4").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad1").prop('checked', false);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
-        }
-        else if (status == 4) {
+            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
+        } else if (status == 4) {
             $("#changeStatusinner #rad4").prop('checked', true);
-            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
-            $("#changeStatusinner #rad2").prop('checked', false).attr('disabled',true);
-            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled',true);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled', true);
+            $("#changeStatusinner #rad2").prop('checked', false).attr('disabled', true);
+            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled', true);
+            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
         }
         $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
             $("#status_log > tbody > tr").remove();
@@ -569,61 +603,61 @@ $role = $user_info['role'];
             dataType: "html",
             success: function (result) {
 //                alert(result.trim());return false;
-                var res=JSON.parse(result.trim());
+                var res = JSON.parse(result.trim());
 //                    alert(res.task_status+','+res.project_status);return false;
-                    if (res.task_status == '0') {
-                        var tracking = 'New';
-                        var trk_class = 'label label-success';
-                    } else if (res.task_status == 1) {
-                        var tracking = 'Started';
-                        var trk_class = 'label label-yellow';
-                    } else if (res.task_status == 2) {
-                        var tracking = 'Resolved';
-                        var trk_class = 'label label-primary';
-                    } else if (res.task_status == 3) {
-                        var tracking = 'Ready';
-                        var trk_class = 'label label-info';
-                    }else if (res.task_status == 4) {
-                        var tracking = 'Canceled';
-                        var trk_class = 'label label-danger';
-                    }
+                if (res.task_status == '0') {
+                    var tracking = 'New';
+                    var trk_class = 'label label-success';
+                } else if (res.task_status == 1) {
+                    var tracking = 'Started';
+                    var trk_class = 'label label-yellow';
+                } else if (res.task_status == 2) {
+                    var tracking = 'Resolved';
+                    var trk_class = 'label label-primary';
+                } else if (res.task_status == 3) {
+                    var tracking = 'Ready';
+                    var trk_class = 'label label-info';
+                } else if (res.task_status == 4) {
+                    var tracking = 'Canceled';
+                    var trk_class = 'label label-danger';
+                }
 
-                    if (res.project_status == 0) {
-                        var tracking_main = 'Not Started';
-                        var trk_class_main = 'label label-success';
-                    } else if (res.project_status == 1) {
-                        var tracking_main = 'Started';
-                        var trk_class_main = 'label label-yellow';
-                    } else if (res.project_status == 2) {
-                        var tracking_main = 'Completed';
-                        var trk_class_main = 'label label-primary';
-                    }else if (res.project_status == 4) {
-                        var tracking_main = 'Canceled';
-                        var trk_class_main = 'label label-danger';
-                    } 
-                    
-                    if(res.sub_taskid_status == 3){
-                        var tracking_sub = 'Ready';
-                        var trk_class_sub = 'label label-secondary';
-                        $("#trackinner-" + res.sub_taskid).removeClass().addClass(trk_class_sub);
-                        $("#trackinner-" + res.sub_taskid).html(tracking_sub);
-                    }
-                    if(res.sub_taskid_status == 0){
-                        var tracking_sub = 'New';
-                        var trk_class_sub = 'label label-success';
-                        $("#trackinner-" + res.sub_taskid).removeClass().addClass(trk_class_sub);
-                        $("#trackinner-" + res.sub_taskid).html(tracking_sub);
-                    }
-                    
-                    $("#trackinner-" + prosubid).removeClass().addClass(trk_class);
-                    $("#trackinner-" + prosubid).parent('a').removeAttr('onclick');
-                    $("#trackinner-" + prosubid).parent('a').attr('onclick', 'change_project_status_inner(' + prosubid + ',' + statusval + ', ' + prosubid + ');');
-                    $("#trackinner-" + prosubid).html(tracking);
-                    var projectid = $("#trackinner-" + prosubid).attr('projectid');
-                    $("#trackouter-" + projectid).removeClass().addClass(trk_class_main);
-                    $("#trackouter-" + projectid).html(tracking_main);
-                    $('#changeStatusinner').modal('hide');
-                    
+                if (res.project_status == 0) {
+                    var tracking_main = 'Not Started';
+                    var trk_class_main = 'label label-success';
+                } else if (res.project_status == 1) {
+                    var tracking_main = 'Started';
+                    var trk_class_main = 'label label-yellow';
+                } else if (res.project_status == 2) {
+                    var tracking_main = 'Completed';
+                    var trk_class_main = 'label label-primary';
+                } else if (res.project_status == 4) {
+                    var tracking_main = 'Canceled';
+                    var trk_class_main = 'label label-danger';
+                }
+
+                if (res.sub_taskid_status == 3) {
+                    var tracking_sub = 'Ready';
+                    var trk_class_sub = 'label label-secondary';
+                    $("#trackinner-" + res.sub_taskid).removeClass().addClass(trk_class_sub);
+                    $("#trackinner-" + res.sub_taskid).html(tracking_sub);
+                }
+                if (res.sub_taskid_status == 0) {
+                    var tracking_sub = 'New';
+                    var trk_class_sub = 'label label-success';
+                    $("#trackinner-" + res.sub_taskid).removeClass().addClass(trk_class_sub);
+                    $("#trackinner-" + res.sub_taskid).html(tracking_sub);
+                }
+
+                $("#trackinner-" + prosubid).removeClass().addClass(trk_class);
+                $("#trackinner-" + prosubid).parent('a').removeAttr('onclick');
+                $("#trackinner-" + prosubid).parent('a').attr('onclick', 'change_project_status_inner(' + prosubid + ',' + statusval + ', ' + prosubid + ');');
+                $("#trackinner-" + prosubid).html(tracking);
+                var projectid = $("#trackinner-" + prosubid).attr('projectid');
+                $("#trackouter-" + projectid).removeClass().addClass(trk_class_main);
+                $("#trackouter-" + projectid).html(tracking_main);
+                $('#changeStatusinner').modal('hide');
+
 //                }
             },
             beforeSend: function () {
@@ -791,18 +825,18 @@ $role = $user_info['role'];
             variableArray.push(8);
         }
         if (statusArray[1] == 'bookkeeping') {
-            $('#cat').val(statusArray[0]+'-'+statusArray[1]);
+            $('#cat').val(statusArray[0] + '-' + statusArray[1]);
             $('#bookkeeping_btn_clear_filter').show();
         } else if (statusArray[1] == 'tax_returns') {
-            $('#cat').val(statusArray[0]+'-'+statusArray[1]);
+            $('#cat').val(statusArray[0] + '-' + statusArray[1]);
             $('#tax_btn_clear_filter').show();
         } else if (statusArray[1] == 'sales_tax') {
-            $('#cat').val(statusArray[0]+'-'+statusArray[1]);
+            $('#cat').val(statusArray[0] + '-' + statusArray[1]);
             $('#sales_btn_clear_filter').show();
         } else if (statusArray[1] == 'annual_report') {
-            $('#cat').val(statusArray[0]+'-'+statusArray[1]);
+            $('#cat').val(statusArray[0] + '-' + statusArray[1]);
             $('#annual_btn_clear_filter').show();
-        }
+    }
 //        $("#due_year").val(new Date().getFullYear());
     }
     function clearProjectFilter() {
@@ -810,27 +844,27 @@ $role = $user_info['role'];
         $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
         $('#btn_clear_filter').css('display', 'none');
     }
-    function change_project_year(year){
-        var category=$('#cat').val();
+    function change_project_year(year) {
+        var category = $('#cat').val();
         var statusArray = category.split('-');
         $("#due_year").val(year);
-        var month=$('#due_month').val();
+        var month = $('#due_month').val();
         $('#due_month').val(month)
-        reflactProjectFilterWithCategory(category,'');
+        reflactProjectFilterWithCategory(category, '');
 //        if(statusArray[0]==1){
 //            pieChart('project-bookkeeping-campaigns-donut-1');
 //        }
 //        go('Project/index/'+'t'+'uk');
-        go('Project/index/'+'n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/'+statusArray[0]+'/'+year+'/'+category+'/'+month);
+        go('Project/index/' + 'n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/' + statusArray[0] + '/' + year + '/' + category + '/' + month);
 //        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, statusArray[0],'',year)
     }
-    function change_project_month(month){
-        var category=$('#cat').val();
+    function change_project_month(month) {
+        var category = $('#cat').val();
         var statusArray = category.split('-');
-        var year=$("#due_year").val();
+        var year = $("#due_year").val();
         $("#due_year").val(year);
         $('#due_month').val(month)
-        reflactProjectFilterWithCategory(category,'');
-        go('Project/index/'+'n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/n'+'/'+statusArray[0]+'/'+year+'/'+category+'/'+month);
+        reflactProjectFilterWithCategory(category, '');
+        go('Project/index/' + 'n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/' + statusArray[0] + '/' + year + '/' + category + '/' + month);
     }
 </script> 
