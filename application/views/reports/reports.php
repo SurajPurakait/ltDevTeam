@@ -11,7 +11,7 @@
                             <div class="tabs-container">
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="active"><a class="nav-link" data-toggle="tab" href="#tab-1">Services</a></li>
-                                    <li><a class="nav-link" data-toggle="tab" href="#tab-billing">Billings</a></li>
+                                    <li><a class="nav-link" data-toggle="tab" href="#tab-billing" id="report_billing">Billings</a></li>
                                     <li><a class="nav-link" data-toggle="tab" href="#tab-action">Actions</a></li>
                                     <li><a class="nav-link" data-toggle="tab" href="#tab-projects">Projects</a></li>
                                     <li><a class="nav-link" data-toggle="tab" href="#tab-clients">Clients</a></li>
@@ -34,16 +34,13 @@
                                             </div>
                                             <?php 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
-                                                $date_range_service = $this->session->userdata('date_range_service');    
-                                                if (!empty($date_range_service)) {
-                                                    $dateRangeService = $date_range_service;
-                                                } 
-                                                else {
-                                                    $date_service = date('m/d/Y');
-                                                    $dateRangeService = $order_start_date.' - '.$date_service;
-                                                }    
+                                                
+                                                $current_date = date('m/d/Y');
+                                                $dateRangeService = $order_start_date.' - '.$current_date;
+                                                    
                                             ?>
-                                            <div class="ibox m-t-25" id="service_by_franchise_1" onclick="show_service_franchise_result('franchise','<?= $dateRangeService ?>')">
+                                            <input type="hidden" name="service_range_report_value" id="service_range_report">
+                                            <div class="ibox m-t-25" id="service_by_franchise_1" onclick="show_service_franchise_result('franchise','')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Franchisee</h5>
                                                     <div class="ibox-tools">
@@ -58,7 +55,7 @@
                                                 } 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
                                             ?>
-                                            <div class="ibox" id="service_by_department_1" onclick="show_service_franchise_result('department','<?= $dateRangeService ?>')">
+                                            <div class="ibox" id="service_by_department_1" onclick="show_service_franchise_result('department','')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Department</h5>
                                                     <div class="ibox-tools">
@@ -73,7 +70,7 @@
                                                 } 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2) {
                                             ?>
-                                            <div class="ibox" id="service_by_category_1" onclick="show_service_franchise_result('service_category','<?= $dateRangeService ?>')">
+                                            <div class="ibox" id="service_by_category_1" onclick="show_service_franchise_result('service_category','')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Category</h5>
                                                     <div class="ibox-tools">
@@ -98,12 +95,17 @@
                                                     <h4>Select Period</h4> 
                                                 </div>
                                                 <div class="col-md-3 p-r-0 p-l-0">
-                                                    <input type="text" class="form-control" id="reportrange6" name="daterange" placeholder="Select Period">    
+                                                    <input type="text" class="form-control" id="reportrangebilling" name="daterange" placeholder="Select Period">    
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
-                                                    <button type="button" class="btn btn-success" id="report-service-range-btn6" style="border-radius: 0;">Apply</button>    
+                                                    <button type="button" class="btn btn-success" id="report-billing-range-btn" style="border-radius: 0;">Apply</button>
                                                 </div>
-                                          </div>    
+                                            </div>
+                                            <?php 
+                                                $current_date = date('m/d/Y');
+                                                $dateRangeBilling = $order_start_date.' - '.$current_date;
+                                            ?>    
+                                            <input type="hidden" name="billing_range_report_value" id="billing_range_report">
                                             <div class="ibox m-t-25" id="billing_invoice_payments_section" onclick="show_billing_data()">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Invoice Payments</h5>
@@ -279,12 +281,17 @@
                                                     <h4>Select Period</h4> 
                                                 </div>
                                                 <div class="col-md-3 p-r-0 p-l-0">
-                                                    <input type="text" class="form-control" id="reportrange2" name="daterange" placeholder="Select Period">    
+                                                    <input type="text" class="form-control" id="reportrangepartners" name="daterange" placeholder="Select Period">    
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
                                                     <button type="button" class="btn btn-success" id="report-partners-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
-                                            </div> 
+                                            </div>
+                                            <?php 
+                                                $current_date = date('m/d/Y');
+                                                $dateRangePartner = $order_start_date.' - '.$current_date;
+                                            ?>
+                                            <input type="hidden" name="partners_range_report_value" id="partners_range_report">
                                             <div class="ibox m-t-25" id="partners_by_type_section" onclick="show_partner_data()">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Partners By Type</h5>
@@ -305,12 +312,17 @@
                                                     <h4>Select Period</h4> 
                                                 </div>
                                                 <div class="col-md-3 p-r-0 p-l-0">
-                                                    <input type="text" class="form-control" id="reportrange1" name="daterange" placeholder="Select Period">    
+                                                    <input type="text" class="form-control" id="reportrangelead" name="daterange" placeholder="Select Period">    
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
                                                     <button type="button" class="btn btn-success" id="report-leads-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
-                                            </div>    
+                                            </div> 
+                                            <?php 
+                                                $current_date = date('m/d/Y');
+                                                $dateRangeLead = $order_start_date.' - '.$current_date;
+                                            ?>
+                                            <input type="hidden" name="leads_range_report_value" id="leads_range_report">   
                                             <div class="ibox m-t-25" id="leads_by_status_section" onclick="show_lead_data('status')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads By Status</h5>
@@ -357,10 +369,21 @@
 </div>
 <script type="text/javascript">
         $(function () {
-            var start = moment();
-            var end = moment();
+            if('<?= $dateRangeService; ?>' != '') {
+                var range = '<?= $dateRangeService ?>';
+                var start = range.split("-")[0];
+                var end = range.split("-")[1];
+            } else {
+                var start = moment();
+                var end = moment();    
+            }
+            
             function cb(start, end) {
-                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                if('<?= $dateRangeService; ?>' != '') {
+                    $('#reportrange span').html(start + ' - ' + end);
+                } else {
+                    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
             }
 
             $('#reportrange').daterangepicker({
@@ -385,16 +408,27 @@
         }); 
         
         $(function () {
-            var start = moment();
-            var end = moment();
+            if('<?= $dateRangeLead; ?>' != '') {
+                var range = '<?= $dateRangeLead ?>';
+                var start = range.split("-")[0];
+                var end = range.split("-")[1];
+            } else {
+                var start = moment();
+                var end = moment();    
+            }
             function cb(start, end) {
-                $('#reportrange1 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                if ('<?= $dateRangeLead; ?>' != '') {
+                    $('#reportrangelead span').html(start + ' - ' + end);
+                } else {
+                    $('#reportrangelead span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
             }
 
-            $('#reportrange1').daterangepicker({
+            $('#reportrangelead').daterangepicker({
                 startDate: start,
                 endDate: end,
                 ranges: {
+                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -406,24 +440,33 @@
             cb(start, end);
 
             $("#report-leads-range-btn").click(function () {
-                var report_range1 = document.getElementById('reportrange1').value;
-                show_lead_data('status',report_range1);    
-                show_lead_data('type',report_range1);
-                show_lead_data('mail_campaign',report_range1);
+                var report_range_lead = document.getElementById('reportrangelead').value;
+                get_lead_range(report_range_lead);
             });
         }); 
         
         $(function () {
-            var start = moment();
-            var end = moment();
+            if('<?= $dateRangePartner; ?>' != '') {
+                var range = '<?= $dateRangePartner ?>';
+                var start = range.split("-")[0];
+                var end = range.split("-")[1];
+            } else {
+                var start = moment();
+                var end = moment();    
+            }
             function cb(start, end) {
-                $('#reportrange2 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                if ('<?= $dateRangePartner; ?>' != '') {
+                    $('#reportrangepartners span').html(start + ' - ' + end);
+                } else {
+                    $('#reportrangepartners span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
             }
 
-            $('#reportrange2').daterangepicker({
+            $('#reportrangepartners').daterangepicker({
                 startDate: start,
                 endDate: end,
                 ranges: {
+                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -435,8 +478,8 @@
             cb(start, end);
 
             $("#report-partners-range-btn").click(function () {
-                var report_range2 = document.getElementById('reportrange2').value;
-                show_partner_data(report_range2);       
+                var report_range_partners = document.getElementById('reportrangepartners').value;
+                get_partner_date_range(report_range_partners);
             });
         }); 
         
@@ -451,6 +494,7 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
+                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -478,6 +522,7 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
+                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -495,16 +540,27 @@
         });
         
         $(function () {
-            var start = moment();
-            var end = moment();
+            if('<?= $dateRangeBilling; ?>' != '') {
+                var range = '<?= $dateRangeBilling ?>';
+                var start = range.split("-")[0];
+                var end = range.split("-")[1];
+            } else {
+                var start = moment();
+                var end = moment();    
+            }
             function cb(start, end) {
-                $('#reportrange6 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                if ('<?= $dateRangeBilling; ?>' != '') {
+                    $('#reportrangebilling span').html(start + ' - ' + end);
+                } else {
+                    $('#reportrangebilling span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
             }
 
-            $('#reportrange6').daterangepicker({
+            $('#reportrangebilling').daterangepicker({
                 startDate: start,
                 endDate: end,
                 ranges: {
+                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -515,9 +571,9 @@
             }, cb);
             cb(start, end);
 
-            $("#report-service-range-btn6").click(function () {
-                var report_range6 = document.getElementById('reportrange6').value;
-                show_billing_data(report_range6);    
+            $("#report-billing-range-btn").click(function () {
+                var report_range_billing = document.getElementById('reportrangebilling').value;
+                get_billing_date_range(report_range_billing);    
             });
         });
 </script>
