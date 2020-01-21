@@ -160,6 +160,8 @@ $role = $user_info['role'];
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="alert-primar-wrap">
                                         <?php
 //                                    echo "<pre>";
 //                                    print_r($due_m);
@@ -168,11 +170,12 @@ $role = $user_info['role'];
                                             $status_array = array_count_values(array_column($projects_list, 'status'));
                                             if (!empty($projects_list)) {
                                                 ?>
-                                                <div class="col-md-3 m-b-15">
+                                                
+                                                    
                                                     <div class="alert-primar">
                                                         <h3 class="p-l-15 p-r-15 f-s-14"> <?= $value ?> </h3>
-                                                        <div class="row m-l-15 m-r-15">
-                                                            <div class="col-md-7 m-t-5">
+                                                        <div class="alert-primar-grid-container">
+                                                            <div class="alert-primar-grid m-t-5">
                                                                 <table>
                                                                     <tr>
                                                                         <td style="text-align: right; padding-right: 5px;">New</td>
@@ -188,7 +191,7 @@ $role = $user_info['role'];
                                                                     </tr>
                                                                 </table>
                                                             </div>
-                                                            <div class="col-md-5 m-t-3 p-l-0">
+                                                            <div class="alert-primar-grid">
                                                                 <div class="project-bookkeeping-campaigns-donut-<?= $key ?> text-center" data-size="65" id="project_bookkeeping_donut_<?= $key ?>" data-json="project_bookkeeping_data_<?= $key ?>"></div>
                                                                 <script>
                                                                     var project_bookkeeping_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': '#309f77'}];
@@ -196,7 +199,7 @@ $role = $user_info['role'];
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                
                                                 <script>
                                                     pieChart('project-bookkeeping-campaigns-donut-<?= $key ?>');
                                                 </script>
@@ -204,7 +207,9 @@ $role = $user_info['role'];
                                             }
                                         }
                                         ?>
-                                    </div>
+                                          </div><!-- ./alert-primar-wrap -->
+                                       </div><!-- ./col-md-12 -->
+                                    </div><!-- ./row -->
 
                                 </div>
                                 <div role="tabpanel" class="tab-pane <?= $category == '2-tax_returns' ? 'active' : '' ?>" id="tax_returns" >
@@ -246,17 +251,19 @@ $role = $user_info['role'];
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="alert-primar-wrap">
                                         <?php
                                         foreach ($templateIds as $key => $value) {
                                             $projects_list3 = getTemplateCategoryProjectList($value['template_id'], 3, '', $select_year);
                                             $status_array1 = array_count_values(array_column($projects_list3, 'status'));
                                             if (!empty($projects_list3)) {
                                                 ?>
-                                                <div class="col-md-3 m-b-15">
+                                                
                                                     <div class="alert-primar">
                                                         <h4 class="p-l-15 p-r-15 f-s-14"><a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $value['title'] ?>" data-trigger="hover" title="" data-original-title=""><?= (strlen($value['title']) > 10 ? substr_replace($value['title'], '..', 10) : $value['title']) ?></a></h4>
-                                                        <div class="row m-l-15 m-r-15">
-                                                            <div class="col-md-7"> 
+                                                        <div class="alert-primar-grid-container">
+                                                            <div class="alert-primar-grid m-t-5"> 
                                                                 <table>
                                                                     <tr>
                                                                         <td style="text-align: right; padding-right: 5px;">New</td>
@@ -272,7 +279,7 @@ $role = $user_info['role'];
                                                                     </tr>
                                                                 </table>
                                                             </div>
-                                                            <div class="col-md-5">
+                                                            <div class="alert-primar-grid">
                                                                 <div class="project-sales-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_sales_donut_<?= $key ?>" data-json="project_sales_data_<?= $key ?>"></div>
                                                                 <script>
                                                                     var project_sales_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': '#309f77'}];
@@ -281,7 +288,7 @@ $role = $user_info['role'];
                                                         </div>
 
                                                     </div>
-                                                </div>
+                                                
                                                 <script>
                                                     pieChart('project-sales-campaigns-donut-<?= $key ?>');
                                                 </script>
@@ -289,7 +296,9 @@ $role = $user_info['role'];
                                             }
                                         }
                                         ?>
-                                    </div>
+                                            </div><!--./alert-primar-wrap -->
+                                        </div><!--./col-md-12-->
+                                    </div><!--./row-->
                                 </div>
                                 <div role="tabpanel" class="tab-pane <?= $category == '4-annual_report' ? 'active' : '' ?>" id="annual_report" >
                                     <div class="project-clear-filter">
