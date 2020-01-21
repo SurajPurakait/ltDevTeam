@@ -2207,8 +2207,7 @@ Class Lead_management extends CI_Model {
         } else {
             $daterange = '';
         }                 
-        // $data_office = $this->system->get_staff_office_list();
-        $data_office = $this->db->get('office')->result_array();
+        $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
         $lead_details = [];
         if ($data['category'] == 'status') {
             foreach ($data_office as $do) {
@@ -2294,24 +2293,31 @@ Class Lead_management extends CI_Model {
             $this->db->where('mail_campaign_status','0');       
         }                
         if ($date_range != "") {
-        $date_value = explode("-", $date_range);
-        $start_date = date("Y-m-d H:i:s", strtotime($date_value[0]));
-        $end_date = date("Y-m-d H:i:s", strtotime($date_value[1]));
-        $this->db->where('referred_date >=',$start_date);
-        $this->db->where('referred_date <=',$end_date);   
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d H:i:s", strtotime($date_value[0]));
+            $end_date = date("Y-m-d H:i:s", strtotime($date_value[1]));
+            $this->db->where('referred_date >=',$start_date);
+            $this->db->where('referred_date <=',$end_date);   
         }         
         return $this->db->get('lead_management')->num_rows();
                                                         
     }
-
-    public function get_partner_data($data) {
-        
-        // $type_of_contact_list = $this->db->get('type_of_contact_referral')->result_array();
-        // $type_of_contact_id = array_column($type_of_contact_list,'id');
-        // $type_of_contact_name = array_column($type_of_contact_list,'name');
-        // $type_of_contact_combine = array_combine($type_of_contact_id,$type_of_contact_name);
-        // $data_office = $this->system->get_staff_office_list();              
-        $data_office = $this->db->get('office')->result_array();
+    public function get_lead_start_date() {
+        $this->db->select_min('referred_date');
+        $this->db->where('type !=','2');
+        $this->db->order_by('referred_date', 'ASC');
+        $lead_date = $this->db->get('lead_management')->row_array()['referred_date'];
+        return date('m/d/Y' ,strtotime($lead_date));
+    }
+    public function get_partner_start_date() {
+        $this->db->select_min('referred_date');
+        $this->db->where('type','2');
+        $this->db->order_by('referred_date', 'ASC');
+        $partner_date = $this->db->get('lead_management')->row_array()['referred_date'];    
+        return date('m/d/Y' ,strtotime($partner_date)); 
+    }
+    public function get_partner_data($data) {              
+        $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
         $partner_data = [];
         if ($data['date_range'] != '') {            
             $daterange = $data['date_range'];
@@ -2342,7 +2348,7 @@ Class Lead_management extends CI_Model {
             $partner_data_list = [
                 'id' => $do['id'],
                 'office' => $do['name'],
-                'total_partner' => $this->db->get_where('lead_management1',array('type'=>'2','office'=>$do['id']))->num_rows(),
+                'total_partner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id']))->num_rows(),
                 'banker' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'1'))->num_rows(),
                 'business_owner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'10'))->num_rows(),
                 'consultant' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'7'))->num_rows(),

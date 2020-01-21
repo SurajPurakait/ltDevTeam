@@ -1189,6 +1189,7 @@ class Project_Template_model extends CI_Model {
                 if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data)) {
                     if ($project_recurrence_main_data['client_fiscal_year_end'] == 1) {
                         $get_client_fye = get_client_fye($client_reference_id);
+                        $current_year=date('Y',strtotime($project_date));
                         if ($project_recurrence_main_data['fye_type'] == 1) {
 
                             $get_project_creation_date = $this->db->get_where('projects', ['id' => $insert_id])->row_array();
@@ -1215,6 +1216,8 @@ class Project_Template_model extends CI_Model {
 
                             if ($due_date <= $creation_date) {
                                 $project_recurrence_main_data['actual_due_year'] = $project_recurrence_main_data['actual_due_year'] + 1;
+                            }else{
+                                $project_recurrence_main_data['actual_due_year'] = $project_recurrence_main_data['actual_due_year'];
                             }
                         }
                     }
@@ -1225,12 +1228,13 @@ class Project_Template_model extends CI_Model {
                             if ($project_recurrence_main_data['pattern'] == 'annually' || $project_recurrence_main_data['pattern'] == 'none') {
                                 $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
                                 $project_recurrence_main_data['actual_due_month'] = $project_recurrence_main_data['due_month'];
-                                $current_month=date('m',strtotime($project_recurrence_main_data['created_at']));
-                                $current_day=date('d',strtotime($project_recurrence_main_data['created_at']));
+                                $current_month=date('m',strtotime($project_date));
+                                $current_day=date('d',strtotime($project_date));
+                                $current_year=date('Y',strtotime($project_date));
                                 if($project_recurrence_main_data['due_month']>=$current_month && $project_recurrence_main_data['due_day']>=$current_day){
-                                    $project_recurrence_main_data['actual_due_year'] = date('Y');
+                                    $project_recurrence_main_data['actual_due_year'] = ($current_year==date('Y')?date('Y'):$current_year);
                                 }else{
-                                    $project_recurrence_main_data['actual_due_year'] = date('Y')+1;
+                                    $project_recurrence_main_data['actual_due_year'] = ($current_year==date('Y')?date('Y'):$current_year);
                                 }
                             }
                             
@@ -1238,22 +1242,23 @@ class Project_Template_model extends CI_Model {
                                 
                                 $current_month=date('m',strtotime($project_date));
                                 $current_day=date('d',strtotime($project_date));
+                                $current_year=date('Y',strtotime($project_date));
                                 $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
                                 $project_recurrence_main_data['actual_due_month'] = (int) $current_month + (int) $project_recurrence_main_data['due_month'];
                                  if($project_recurrence_main_data['due_day']>=$current_day){
                                     
                                     if($project_recurrence_main_data['actual_due_month']<=12){
-                                        $project_recurrence_main_data['actual_due_year'] = date('Y');
+                                        $project_recurrence_main_data['actual_due_year'] = ($current_year==date('Y')?date('Y'):$current_year);
                                     }else{
-                                        $project_recurrence_main_data['actual_due_year']=date('Y')+1;
+                                        $project_recurrence_main_data['actual_due_year']=($current_year==date('Y')?date('Y'):$current_year)+1;
                                     }
                                 }else{
                                     
                                    if($project_recurrence_main_data['actual_due_month']<=12){
-                                        $project_recurrence_main_data['actual_due_year'] = date('Y');
+                                        $project_recurrence_main_data['actual_due_year'] = ($current_year==date('Y')?date('Y'):$current_year);
                                     }else{
                                         $year=intdiv($project_recurrence_main_data['actual_due_month'],12);
-                                        $project_recurrence_main_data['actual_due_year']=date('Y')+$year;
+                                        $project_recurrence_main_data['actual_due_year']=($current_year==date('Y')?date('Y'):$current_year)+$year;
                                     } 
                                 }
                             }
@@ -1263,34 +1268,36 @@ class Project_Template_model extends CI_Model {
                                 $current_day = $day_array[$project_recurrence_main_data['due_month']];
                                 $current_months=date('m',strtotime($project_date));
                                 $current_days=date('d',strtotime($project_date));
-                                $givenDate = date('Y-m-d', mktime(0, 0, 0, $current_months,$current_days + $project_recurrence_main_data['due_day'], date('Y')));
+                                $current_year=date('Y',strtotime($project_date));
+                                $givenDate = date('Y-m-d', mktime(0, 0, 0, $current_months,$current_days + $project_recurrence_main_data['due_day'], ($current_year==date('Y')?date('Y'):$current_year)));
                                 $project_recurrence_main_data['actual_due_day'] = date('d', strtotime('next ' . $current_day, strtotime($givenDate)));
                                 $project_recurrence_main_data['actual_due_month'] = date('m', strtotime('next ' . $current_day, strtotime($givenDate)));
-                                $project_recurrence_main_data['actual_due_year'] = date('Y');
+                                $project_recurrence_main_data['actual_due_year'] = ($current_year==date('Y')?date('Y'):$current_year);
                             } elseif ($project_recurrence_main_data['pattern'] == 'quarterly') {
 //                                $current_month = date('m');
                                 $current_month=date('m',strtotime($project_date));
                                 $current_day=date('d',strtotime($project_date));
+                                $current_year=date('Y',strtotime($project_date));
                                 if ($current_month == '1' || $current_month == '2' || $current_month == '3') {
                                     $next_quarter[1] = '4';
                                     $next_quarter[2] = '5';
                                     $next_quarter[3] = '6';
-                                    $due_year = date('Y');
+                                    $due_year = ($current_year==date('Y')?date('Y'):$current_year);
                                 } elseif ($current_month == '4' || $current_month == '5' || $current_month == '6') {
                                     $next_quarter[1] = '7';
                                     $next_quarter[2] = '8';
                                     $next_quarter[3] = '9';
-                                    $due_year = date('Y');
+                                    $due_year = ($current_year==date('Y')?date('Y'):$current_year);
                                 } elseif ($current_month == '7' || $current_month == '8' || $current_month == '9') {
                                     $next_quarter[1] = '10';
                                     $next_quarter[2] = '11';
                                     $next_quarter[3] = '12';
-                                    $due_year = date('Y');
+                                    $due_year = ($current_year==date('Y')?date('Y'):$current_year);
                                 } else {
                                     $next_quarter[1] = '1';
                                     $next_quarter[2] = '2';
                                     $next_quarter[3] = '3';
-                                    $due_year = date('Y', strtotime('+1 year'));
+                                    $due_year = date(($current_year==date('Y')?date('Y'):$current_year))+1;
                                 }
                                 $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
                                 if($project_recurrence_main_data['due_month']>$current_month){
@@ -1303,19 +1310,20 @@ class Project_Template_model extends CI_Model {
 //                                $current_month = date('m');
                                 $current_month=date('m',strtotime($project_date));
                                 $current_day=date('d',strtotime($project_date));
+                                $current_year=date('Y',strtotime($project_date));
                                 $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
                                 $project_recurrence_main_data['actual_due_month'] = (int) $project_recurrence_main_data['due_month'];
                                 if($project_recurrence_main_data['actual_due_day']>=$current_day){
                                     if($project_recurrence_main_data['actual_due_month']<$current_month){
-                                        $project_recurrence_main_data['actual_due_year'] = date('Y', strtotime('+1 year'));
+                                        $project_recurrence_main_data['actual_due_year'] = ($current_year==date('Y')?date('Y'):$current_year)+1;
                                     }else{
-                                        $project_recurrence_main_data['actual_due_year']=date('Y');
+                                        $project_recurrence_main_data['actual_due_year']=($current_year==date('Y')?date('Y'):$current_year);
                                     }
                                 }else{
                                    if($project_recurrence_main_data['actual_due_month']<=$current_month){
-                                        $project_recurrence_main_data['actual_due_year'] = date('Y', strtotime('+1 year'));
+                                        $project_recurrence_main_data['actual_due_year'] = ($current_year==date('Y')?date('Y'):$current_year)+1;
                                     }else{
-                                        $project_recurrence_main_data['actual_due_year']=date('Y');
+                                        $project_recurrence_main_data['actual_due_year']=($current_year==date('Y')?date('Y'):$current_year);
                                     } 
                                 }
 //                                $periodic_day= json_decode($project_recurrence_main_data['periodic_due_day']);
@@ -1334,6 +1342,7 @@ class Project_Template_model extends CI_Model {
 //                        $cur_day = date('d');
                         $cur_month=date('m',strtotime($project_date));
                         $cur_day=date('d',strtotime($project_date));
+                        $current_year=date('Y',strtotime($project_date));
                         if ($cur_day <= $project_recurrence_main_data['actual_due_day']) {
                             if($cur_month<=$project_recurrence_main_data['actual_due_month']){
                                 $project_recurrence_main_data['actual_due_month'] = $cur_month;
@@ -1358,14 +1367,15 @@ class Project_Template_model extends CI_Model {
                     }else{
                         $current_month=date('m',strtotime($project_date));
                         $current_day=date('d',strtotime($project_date));
+                        $current_year=date('Y',strtotime($project_date));
                         if($project_recurrence_main_data['actual_due_day']>$current_day){
-                            if($project_recurrence_main_data['actual_due_month']>$current_month){
+                            if($project_recurrence_main_data['actual_due_month']>=$current_month){
                                 $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
                             }else{
                                 $due_date = $project_recurrence_main_data['actual_due_year']+1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
                             }
                         }else{
-                            if($project_recurrence_main_data['actual_due_month']>=$current_month){
+                            if($project_recurrence_main_data['actual_due_month']>$current_month){
                                 $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
                             }else{
                                 $due_date = $project_recurrence_main_data['actual_due_year']+1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
@@ -1418,17 +1428,18 @@ class Project_Template_model extends CI_Model {
                         unset($periodic_data['template_id']);
                         $current_month=date('m',strtotime($project_date));
                         $current_day=date('d',strtotime($project_date));
+                        $current_year=date('Y',strtotime($project_date));
                         if($periodic_data['due_day']>=$current_day){
                             if($periodic_data['due_month']<$current_month){
-                                $periodic_data['actual_due_year'] = date('Y', strtotime('+1 year'));
+                                $periodic_data['actual_due_year'] = date(($current_year==date('Y')?date('Y'):$current_year), strtotime('+1 year'));
                             }else{
-                                $periodic_data['actual_due_year']=date('Y');
+                                $periodic_data['actual_due_year']=($current_year==date('Y')?date('Y'):$current_year);
                             }
                         }else{
                            if($periodic_data['due_month']<=$current_month){
-                                $periodic_data['actual_due_year'] = date('Y', strtotime('+1 year'));
+                                $periodic_data['actual_due_year'] = date(($current_year==date('Y')?date('Y'):$current_year), strtotime('+1 year'));
                             }else{
-                                $periodic_data['actual_due_year']=date('Y');
+                                $periodic_data['actual_due_year']=($current_year==date('Y')?date('Y'):$current_year);
                             } 
                         }
                         if($periodic_data['due_day'])
@@ -3342,8 +3353,8 @@ class Project_Template_model extends CI_Model {
         return $this->db->get_where('projects',['id'=>$project_id])->row()->created_at;
     }
 
-    public function get_projects_data($category) {
-        $data_office = $this->db->get('office')->result_array();
+    public function get_projects_data($category,$date_range="") {
+        $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
         $data_department = $this->db->get('department')->result_array();
 
         $all_projects_data = [];
@@ -3353,14 +3364,14 @@ class Project_Template_model extends CI_Model {
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_projects' => $this->report_data_calculation('projects_by_office','total_projects',$do['id']),           
-                    'new' => $this->report_data_calculation('projects_by_office','new',$do['id']),           
-                    'started' => $this->report_data_calculation('projects_by_office','started',$do['id']),                     
-                    'completed' => $this->report_data_calculation('projects_by_office','completed',$do['id']),
-                    'less_then_30' => $this->report_data_calculation('projects_by_office','less_then_30',$do['id']),
-                    'less_then_60' => $this->report_data_calculation('projects_by_office','less_then_60',$do['id']),
-                    'more_then_60' => $this->report_data_calculation('projects_by_office','more_then_60',$do['id']),
-                    'sos' => $this->report_data_calculation('projects_by_office','sos',$do['id']),           
+                    'total_projects' => $this->report_data_calculation($date_range,'projects_by_office','total_projects',$do['id']),           
+                    'new' => $this->report_data_calculation($date_range,'projects_by_office','new',$do['id']),           
+                    'started' => $this->report_data_calculation($date_range,'projects_by_office','started',$do['id']),                     
+                    'completed' => $this->report_data_calculation($date_range,'projects_by_office','completed',$do['id']),
+                    'less_then_30' => $this->report_data_calculation($date_range,'projects_by_office','less_then_30',$do['id']),
+                    'less_then_60' => $this->report_data_calculation($date_range,'projects_by_office','less_then_60',$do['id']),
+                    'more_then_60' => $this->report_data_calculation($date_range,'projects_by_office','more_then_60',$do['id']),
+                    'sos' => $this->report_data_calculation($date_range,'projects_by_office','sos',$do['id']),           
                 ];
                 array_push($all_projects_data,$data);
             }
@@ -3371,14 +3382,14 @@ class Project_Template_model extends CI_Model {
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_tasks' => $this->report_data_calculation('tasks_by_office','total_tasks',$do['id']),           
-                    'new' => $this->report_data_calculation('tasks_by_office','new',$do['id']),           
-                    'started' => $this->report_data_calculation('tasks_by_office','started',$do['id']),                     
-                    'completed' => $this->report_data_calculation('tasks_by_office','completed',$do['id']),
-                    'less_then_30' => $this->report_data_calculation('tasks_by_office','less_then_30',$do['id']),
-                    'less_then_60' => $this->report_data_calculation('tasks_by_office','less_then_60',$do['id']),
-                    'more_then_60' => $this->report_data_calculation('tasks_by_office','more_then_60',$do['id']),
-                    'sos' => $this->report_data_calculation('tasks_by_office','sos',$do['id']),           
+                    'total_tasks' => $this->report_data_calculation($date_range,'tasks_by_office','total_tasks',$do['id']),           
+                    'new' => $this->report_data_calculation($date_range,'tasks_by_office','new',$do['id']),           
+                    'started' => $this->report_data_calculation($date_range,'tasks_by_office','started',$do['id']),                     
+                    'completed' => $this->report_data_calculation($date_range,'tasks_by_office','completed',$do['id']),
+                    'less_then_30' => $this->report_data_calculation($date_range,'tasks_by_office','less_then_30',$do['id']),
+                    'less_then_60' => $this->report_data_calculation($date_range,'tasks_by_office','less_then_60',$do['id']),
+                    'more_then_60' => $this->report_data_calculation($date_range,'tasks_by_office','more_then_60',$do['id']),
+                    'sos' => $this->report_data_calculation($date_range,'tasks_by_office','sos',$do['id']),           
                 ];
                 array_push($all_tasks_data,$data);
             }
@@ -3389,14 +3400,14 @@ class Project_Template_model extends CI_Model {
                 $data = [
                     'id' => $dd['id'],
                     'department_name' => $dd['name'],
-                    'total_projects' => $this->report_data_calculation('projects_to_department','total_projects','',$dd['id']),           
-                    'new' => $this->report_data_calculation('projects_to_department','new','',$dd['id']),           
-                    'started' => $this->report_data_calculation('projects_to_department','started','',$dd['id']),                     
-                    'completed' => $this->report_data_calculation('projects_to_department','completed','',$dd['id']),
-                    'less_then_30' => $this->report_data_calculation('projects_to_department','less_then_30','',$dd['id']),
-                    'less_then_60' => $this->report_data_calculation('projects_to_department','less_then_60','',$dd['id']),
-                    'more_then_60' => $this->report_data_calculation('projects_to_department','more_then_60','',$dd['id']),
-                    'sos' => $this->report_data_calculation('projects_to_department','sos','',$dd['id']),           
+                    'total_projects' => $this->report_data_calculation($date_range,'projects_to_department','total_projects','',$dd['id']),           
+                    'new' => $this->report_data_calculation($date_range,'projects_to_department','new','',$dd['id']),           
+                    'started' => $this->report_data_calculation($date_range,'projects_to_department','started','',$dd['id']),                     
+                    'completed' => $this->report_data_calculation($date_range,'projects_to_department','completed','',$dd['id']),
+                    'less_then_30' => $this->report_data_calculation($date_range,'projects_to_department','less_then_30','',$dd['id']),
+                    'less_then_60' => $this->report_data_calculation($date_range,'projects_to_department','less_then_60','',$dd['id']),
+                    'more_then_60' => $this->report_data_calculation($date_range,'projects_to_department','more_then_60','',$dd['id']),
+                    'sos' => $this->report_data_calculation($date_range,'projects_to_department','sos','',$dd['id']),           
                 ];
                 array_push($all_projects_data,$data);
             }
@@ -3407,14 +3418,14 @@ class Project_Template_model extends CI_Model {
                 $data = [
                     'id' => $dd['id'],
                     'department_name' => $dd['name'],
-                    'total_tasks' => $this->report_data_calculation('tasks_to_department','total_tasks','',$dd['id']),           
-                    'new' => $this->report_data_calculation('tasks_to_department','new','',$dd['id']),           
-                    'started' => $this->report_data_calculation('tasks_to_department','started','',$dd['id']),                     
-                    'completed' => $this->report_data_calculation('tasks_to_department','completed','',$dd['id']),
-                    'less_then_30' => $this->report_data_calculation('tasks_to_department','less_then_30','',$dd['id']),
-                    'less_then_60' => $this->report_data_calculation('tasks_to_department','less_then_60','',$dd['id']),
-                    'more_then_60' => $this->report_data_calculation('tasks_to_department','more_then_60','',$dd['id']),
-                    'sos' => $this->report_data_calculation('tasks_to_department','sos','',$dd['id']),           
+                    'total_tasks' => $this->report_data_calculation($date_range,'tasks_to_department','total_tasks','',$dd['id']),           
+                    'new' => $this->report_data_calculation($date_range,'tasks_to_department','new','',$dd['id']),           
+                    'started' => $this->report_data_calculation($date_range,'tasks_to_department','started','',$dd['id']),                     
+                    'completed' => $this->report_data_calculation($date_range,'tasks_to_department','completed','',$dd['id']),
+                    'less_then_30' => $this->report_data_calculation($date_range,'tasks_to_department','less_then_30','',$dd['id']),
+                    'less_then_60' => $this->report_data_calculation($date_range,'tasks_to_department','less_then_60','',$dd['id']),
+                    'more_then_60' => $this->report_data_calculation($date_range,'tasks_to_department','more_then_60','',$dd['id']),
+                    'sos' => $this->report_data_calculation($date_range,'tasks_to_department','sos','',$dd['id']),           
                 ];
                 array_push($all_tasks_data,$data);
             }
@@ -3422,7 +3433,7 @@ class Project_Template_model extends CI_Model {
         }
     }
 
-    public function report_data_calculation($category="",$sub_category="",$office="",$department="") {
+    public function report_data_calculation($date_range="",$category="",$sub_category="",$office="",$department="") {
         if ($category == 'projects_by_office') {
             $this->db->distinct();
             $this->db->select('project_id');
@@ -3446,6 +3457,14 @@ class Project_Template_model extends CI_Model {
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
             }
+            if ($date_range != "") {
+                $date_value = explode("-", $date_range);
+                $start_date = date("Y-m-d", strtotime($date_value[0]));
+                $end_date = date("Y-m-d", strtotime($date_value[1]));
+                
+                $this->db->where('project_creation_date >=',$start_date);
+                $this->db->where('project_creation_date <=',$end_date);
+            }
             return $this->db->get('report_dashboard_project')->num_rows();
         } elseif ($category == 'tasks_by_office') {
             $this->db->select('task_id');
@@ -3468,6 +3487,14 @@ class Project_Template_model extends CI_Model {
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
+            }
+            if ($date_range != "") {
+                $date_value = explode("-", $date_range);
+                $start_date = date("Y-m-d", strtotime($date_value[0]));
+                $end_date = date("Y-m-d", strtotime($date_value[1]));
+                
+                $this->db->where('project_creation_date >=',$start_date);
+                $this->db->where('project_creation_date <=',$end_date);
             }
             return $this->db->get('report_dashboard_project')->num_rows();
         } elseif ($category == 'projects_to_department') {
@@ -3493,6 +3520,14 @@ class Project_Template_model extends CI_Model {
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
             }
+            if ($date_range != "") {
+                $date_value = explode("-", $date_range);
+                $start_date = date("Y-m-d", strtotime($date_value[0]));
+                $end_date = date("Y-m-d", strtotime($date_value[1]));
+                
+                $this->db->where('project_creation_date >=',$start_date);
+                $this->db->where('project_creation_date <=',$end_date);
+            }
             return $this->db->get('report_dashboard_project')->num_rows();
         } elseif ($category == 'tasks_to_department') {
             $this->db->select('task_id');
@@ -3516,9 +3551,24 @@ class Project_Template_model extends CI_Model {
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
             }
+            if ($date_range != "") {
+                $date_value = explode("-", $date_range);
+                $start_date = date("Y-m-d", strtotime($date_value[0]));
+                $end_date = date("Y-m-d", strtotime($date_value[1]));
+                
+                $this->db->where('project_creation_date >=',$start_date);
+                $this->db->where('project_creation_date <=',$end_date);
+            }
             return $this->db->get('report_dashboard_project')->num_rows();
         }
 
+    }
+
+    public function get_project_start_date() {
+        $this->db->select_min('project_creation_date');
+        $this->db->order_by('project_creation_date', 'ASC');
+        $project_date = $this->db->get('report_dashboard_project')->row_array()['project_creation_date'];
+        return date('m/d/Y' ,strtotime($project_date));
     }
 
 
