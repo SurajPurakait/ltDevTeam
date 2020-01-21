@@ -178,7 +178,7 @@
     </script>
 </head>
 <body>
-    <div class="modal_loading" id="loading_modal" style="display: none;">
+    <div class="modal_loading" id="loading_modal" style="display: block;">
         <div class="cssload-thecube">
             <div class="cssload-cube cssload-c1"></div>
             <div class="cssload-cube cssload-c2"></div>
