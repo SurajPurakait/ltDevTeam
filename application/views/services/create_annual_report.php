@@ -62,7 +62,7 @@
                         <div class="form-group" id="state_div">
                             <label class="col-lg-2 control-label">State of Incorporation<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control value_field required_field disabled_field" name="istate" id="state" title="State of Incorporation" required=""  onchange="change_due_date(this.value, document.getElementById('type').value);select_other_state(this.value);">
+                                <select class="form-control value_field required_field" name="istate" id="state" title="State of Incorporation" required=""  onchange="change_due_date(this.value, document.getElementById('type').value);select_other_state(this.value);">
                                     <option value="">Select an option</option>
                                     <?php load_ddl_option("state_list_annual_report"); ?>
                                 </select>
