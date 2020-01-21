@@ -24,20 +24,11 @@ class Reports extends CI_Controller {
         $render_data['menu'] = 'report_' . $type;
         $render_data['header_title'] = $title;
         $render_data['order_start_date'] = $this->service_model->get_start_date_sales_report();
-    
-        if (!empty(post('range_btn_billing'))) {
-            if ($this->session->userdata('date_range_billing')) {
-                $this->session->unset_userdata('date_range_billing');
-            }
-            $this->session->set_userdata('date_range_billing',post('date_range_billing'));
-        }
-
-        if (!empty(post('range_btn_partner'))) {
-            if ($this->session->userdata('date_range_partner')) {
-                $this->session->unset_userdata('date_range_partner');
-            }
-            $this->session->set_userdata('date_range_partner',post('date_range_partner'));
-        }
+        $render_data['project_start_date'] = '';
+        $render_data['action_start_date'] = '';
+        $render_data['lead_start_date'] = $this->lead_management->get_lead_start_date();
+        $render_data['partner_start_date'] = $this->lead_management->get_partner_start_date();
+        $render_data['client_start_date'] = '';
         $this->load->template('reports/reports', $render_data);
     }
     /* royalty_reports */
