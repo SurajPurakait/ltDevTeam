@@ -102,16 +102,11 @@
                                                 </div>
                                             </div>
                                             <?php 
-                                                $date_range_billing = $this->session->userdata('date_range_billing');    
-                                                if (!empty($date_range_billing)) {
-                                                    $dateRangeBilling = $date_range_billing;
-                                                } 
-                                                else {
-                                                    $date_service = date('m/d/Y');
-                                                    $dateRangeBilling = $order_start_date.' - '.$date_service;
-                                                }    
+                                                $current_date = date('m/d/Y');
+                                                $dateRangeBilling = $order_start_date.' - '.$current_date;
                                             ?>    
-                                            <div class="ibox m-t-25" id="billing_invoice_payments_section" onclick="show_billing_data('<?= $dateRangeBilling ?>')">
+                                            <input type="hidden" name="billing_range_report_value" id="billing_range_report">
+                                            <div class="ibox m-t-25" id="billing_invoice_payments_section" onclick="show_billing_data()">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Invoice Payments</h5>
                                                     <div class="ibox-tools">

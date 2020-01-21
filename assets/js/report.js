@@ -221,12 +221,15 @@ function show_service_franchise_date(date_range = '',range_btn='',category='') {
     })
 }
 // report billing section js
-function show_billing_data(date_range = '') {
+function show_billing_data() {
     $("#billing_invoice_payments").toggle();
+    
+    var date_range_billing = $("#billing_range_report").val();
+
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_show_billing_data',
-        data: {'date_range_billing':date_range},
+        data: {'date_range_billing':date_range_billing},
         success: function (result) {
             $("#billing_invoice_payments").html(result);
         },
@@ -241,10 +244,12 @@ function show_billing_data(date_range = '') {
 function get_billing_date_range(date_range = '',range_btn='') {
     $.ajax({
         type: 'POST',
-        url : base_url + 'reports/index',
-        data : {'date_range_billing':date_range,'range_btn_billing':range_btn},
+        url : base_url + 'reports/get_range_billing_report',
+        data : {'date_range_billing':date_range },
         success: function (result) {
-            goURL(base_url + 'reports/index');
+            $("#billing_range_report").val(result);
+            show_billing_data();
+            $("#billing_invoice_payments").show();        
         },
         beforeSend: function () {
             openLoading();

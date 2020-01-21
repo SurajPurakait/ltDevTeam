@@ -167,6 +167,9 @@ class Reports extends CI_Controller {
         );
         $this->load->view('reports/billing_invoice_payments_data',$render_data);   
     }
+    public function get_range_billing_report() {
+        echo post('date_range_billing');
+    }
     // report action data
     public function get_action_data() {       
         $category = post('category');
