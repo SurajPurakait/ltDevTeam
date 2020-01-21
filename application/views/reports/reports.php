@@ -34,16 +34,13 @@
                                             </div>
                                             <?php 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
-                                                $date_range_service = $this->session->userdata('date_range_service');    
-                                                if (!empty($date_range_service)) {
-                                                    $dateRangeService = $date_range_service;
-                                                } 
-                                                else {
-                                                    $date_service = date('m/d/Y');
-                                                    $dateRangeService = $order_start_date.' - '.$date_service;
-                                                }    
+                                                
+                                                $current_date = date('m/d/Y');
+                                                $dateRangeService = $order_start_date.' - '.$current_date;
+                                                    
                                             ?>
-                                            <div class="ibox m-t-25" id="service_by_franchise_1" onclick="show_service_franchise_result('franchise','<?= $dateRangeService ?>')">
+                                            <input type="hidden" name="service_range_report_value" id="service_range_report">
+                                            <div class="ibox m-t-25" id="service_by_franchise_1" onclick="show_service_franchise_result('franchise','')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Franchisee</h5>
                                                     <div class="ibox-tools">
@@ -58,7 +55,7 @@
                                                 } 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
                                             ?>
-                                            <div class="ibox" id="service_by_department_1" onclick="show_service_franchise_result('department','<?= $dateRangeService ?>')">
+                                            <div class="ibox" id="service_by_department_1" onclick="show_service_franchise_result('department','')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Department</h5>
                                                     <div class="ibox-tools">
@@ -73,7 +70,7 @@
                                                 } 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2) {
                                             ?>
-                                            <div class="ibox" id="service_by_category_1" onclick="show_service_franchise_result('service_category','<?= $dateRangeService ?>')">
+                                            <div class="ibox" id="service_by_category_1" onclick="show_service_franchise_result('service_category','')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Category</h5>
                                                     <div class="ibox-tools">
