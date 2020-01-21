@@ -241,7 +241,7 @@ function show_billing_data() {
         }
     });
 }
-function get_billing_date_range(date_range = '',range_btn='') {
+function get_billing_date_range(date_range = '') {
     $.ajax({
         type: 'POST',
         url : base_url + 'reports/get_range_billing_report',
@@ -359,17 +359,53 @@ function show_lead_data(category,date_range = '') {
         }
     });
 }
-
-function get_partner_date_range(date_range ='',range_btn ='') {
-    // alert(range_btn);return false;
+function get_lead_range(date_range = '') {
+    // alert(date_range);return false;
+    if ($("#leads_by_status").css('display') == 'block') {
+        category = 'status';
+    }else if ($("#leads_by_type").css('display') == 'block') {
+        category = 'type';
+    }else if ($("#leads_email_campaign").css('display') == 'block') {
+        category = 'mail_campaign';
+    } else {
+        category = 'status';
+    }
     $.ajax({
         type: 'POST',
-        url : base_url + 'reports/index',
-        data : {'date_range_partner':date_range,'range_btn_partner':range_btn},
+        url : base_url + 'reports/get_range_lead_report',
+        data : { 'date_range_lead':date_range },
         success: function (result) {
-            goURL(base_url + 'reports/index');
-            // $("#tab-1").removeClass('active');
-            // $("#tab-billing").addClass('active');
+            // alert(result);return false;
+            $("#leads_range_report").val(result);
+            if (category == 'status') {
+                show_lead_data(category,result);
+                $("#leads_by_status").show();
+            } else if (category == 'type') {
+                show_lead_data(category,result);
+                $("#leads_by_type").show();
+            } else if (category == 'mail_campaign') {
+                show_lead_data(category,result);
+                $("#leads_email_campaign").show();
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    })    
+}
+
+function get_partner_date_range(date_range ='') { 
+    $.ajax({
+        type: 'POST',
+        url : base_url + 'reports/get_range_partners_report',
+        data : {'date_range_partner':date_range},
+        success: function (result) {
+            $("#partners_range_report").val(result);
+            show_partner_data();
+            $("#partners_by_type").show();            
         },
         beforeSend: function () {
             openLoading();
@@ -381,12 +417,14 @@ function get_partner_date_range(date_range ='',range_btn ='') {
 }
 
 // report partner section js
-function show_partner_data(date_range = '') {  
+function show_partner_data() {  
     $("#partners_by_type").toggle();
+    var date_range_partner = $("#partners_range_report").val();
+
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_partner_data',
-        data: {'date_range':date_range},
+        data: {'date_range':date_range_partner},
         success: function (result) {
             $("#partners_by_type").html(result);
         },

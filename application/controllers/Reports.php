@@ -204,7 +204,9 @@ class Reports extends CI_Controller {
         $render_data['date_range_service_report'] = post('date_range');
         $this->load->view('reports/report_partner_data',$render_data);    
     }
-
+    public function get_range_partners_report() {
+        echo post('date_range_partner');
+    }
     // report lead data
     public function get_leads_data() {
         $category = post('category');
@@ -213,5 +215,9 @@ class Reports extends CI_Controller {
         $render_data['category'] = $category;
         $render_data['date_range_service_report'] = post('date_range');         
         $this->load->view('reports/report_lead_data',$render_data);    
+    }
+
+    public function get_range_lead_report() {
+        echo post('date_range_lead');
     }
 }
