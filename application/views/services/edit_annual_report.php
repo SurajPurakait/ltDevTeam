@@ -246,7 +246,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Due Date</label>
                             <div class="col-lg-10">
-                                <input placeholder="dd/mm/yyyy" readonly="" class="form-control" type="text" title="Due Date" name="due_date" id="due_date" value="" required>
+                                <input placeholder="mm/dd/yyyy" class="form-control" type="text" title="Due Date" name="due_date" id="due_date" value="" required>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
