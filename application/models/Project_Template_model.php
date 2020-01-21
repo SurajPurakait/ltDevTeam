@@ -1234,7 +1234,7 @@ class Project_Template_model extends CI_Model {
                                 if($project_recurrence_main_data['due_month']>=$current_month && $project_recurrence_main_data['due_day']>=$current_day){
                                     $project_recurrence_main_data['actual_due_year'] = ($current_year==date('Y')?date('Y'):$current_year);
                                 }else{
-                                    $project_recurrence_main_data['actual_due_year'] = ($current_year==date('Y')?date('Y'):$current_year)+1;
+                                    $project_recurrence_main_data['actual_due_year'] = ($current_year==date('Y')?date('Y'):$current_year);
                                 }
                             }
                             
@@ -1375,7 +1375,7 @@ class Project_Template_model extends CI_Model {
                                 $due_date = $project_recurrence_main_data['actual_due_year']+1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
                             }
                         }else{
-                            if($project_recurrence_main_data['actual_due_month']>=$current_month){
+                            if($project_recurrence_main_data['actual_due_month']>$current_month){
                                 $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
                             }else{
                                 $due_date = $project_recurrence_main_data['actual_due_year']+1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
