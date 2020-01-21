@@ -172,14 +172,14 @@ $role = $user_info['role'];
                                                 ?>
                                                 
                                                     
-                                                    <div class="alert-primar">
+                                                    <div class="alert-primar m-b-15">
                                                         <h3 class="p-l-15 p-r-15 f-s-14"> <?= $value ?> </h3>
                                                         <div class="alert-primar-grid-container">
                                                             <div class="alert-primar-grid m-t-5">
                                                                 <table>
                                                                     <tr>
                                                                         <td style="text-align: right; padding-right: 5px;">New</td>
-                                                                        <td><span class="label label-success label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '2-Completed');loadProjectDashboard(2, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span></td>
+                                                                        <td><span class="label label-success label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '0-Not Started');loadProjectDashboard(0, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="text-align: right; padding-right: 5px;">Started</td>
@@ -187,7 +187,7 @@ $role = $user_info['role'];
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="text-align: right; padding-right: 5px;">Completed</td>
-                                                                        <td><span class="label label-primary label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '0-Not Started');loadProjectDashboard(0, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span></td>
+                                                                        <td><span class="label label-primary label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '2-Completed');loadProjectDashboard(2, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span></td>
                                                                     </tr>
                                                                 </table>
                                                             </div>
@@ -260,14 +260,14 @@ $role = $user_info['role'];
                                             if (!empty($projects_list3)) {
                                                 ?>
                                                 
-                                                    <div class="alert-primar">
+                                                    <div class="alert-primar m-b-15">
                                                         <h4 class="p-l-15 p-r-15 f-s-14"><a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $value['title'] ?>" data-trigger="hover" title="" data-original-title=""><?= (strlen($value['title']) > 10 ? substr_replace($value['title'], '..', 10) : $value['title']) ?></a></h4>
                                                         <div class="alert-primar-grid-container">
                                                             <div class="alert-primar-grid m-t-5"> 
                                                                 <table>
                                                                     <tr>
                                                                         <td style="text-align: right; padding-right: 5px;">New</td>
-                                                                        <td><span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span></td>
+                                                                        <td><span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '0-Not Started');loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?> </span></td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="text-align: right; padding-right: 5px;">Started</td>
@@ -275,8 +275,9 @@ $role = $user_info['role'];
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="text-align: right; padding-right: 5px;">Completed</td>
-                                                                        <td><span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '0-Not Started');loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?> </span></td>
+                                                                        <td><span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span></td>
                                                                     </tr>
+                                                                   
                                                                 </table>
                                                             </div>
                                                             <div class="alert-primar-grid">
