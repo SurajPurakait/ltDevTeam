@@ -23,6 +23,33 @@ class Reports extends CI_Controller {
         $render_data['main_menu'] = 'reports';
         $render_data['menu'] = 'report_' . $type;
         $render_data['header_title'] = $title;
+        $render_data['order_start_date'] = $this->service_model->get_start_date_sales_report();
+        
+        if (!empty(post('range_btn_service'))) {
+            if ($this->session->userdata('date_range_service')) {
+                $this->session->unset_userdata('date_range_service');
+            }
+            $this->session->set_userdata('date_range_service',post('date_range_service'));
+        }
+
+        if (!empty(post('range_btn_billing'))) {
+            if ($this->session->userdata('date_range_billing')) {
+                $this->session->unset_userdata('date_range_billing');
+            }
+            $this->session->set_userdata('date_range_billing',post('date_range_billing'));
+        }
+
+        if (!empty(post('range_btn_partner'))) {
+            if ($this->session->userdata('date_range_partner')) {
+                $this->session->unset_userdata('date_range_partner');
+            }
+            $this->session->set_userdata('date_range_partner',post('date_range_partner'));
+        }
+        // echo post('date_range');
+        // echo $this->session->userdata('date_range_service');die;
+        // if (!empty($this->session->userdata('date_range_service'))) {
+        //     $render_data['date_range_service_report'] = $this->session->userdata('date_range_service');
+        // }
         $this->load->template('reports/reports', $render_data);
     }
     /* royalty_reports */
@@ -115,14 +142,15 @@ class Reports extends CI_Controller {
     /* service_by_franchisee */
     public function get_service_by_franchise_data() {
         $category = post('category');
-
-        if (!empty(post('range_btn'))) {
-            $this->session->unset_userdata('date_range_service');
-            $this->session->set_userdata('date_range_service',post('date_range'));
-        }
-        
-        $render_data['date_range_service_report'] = $this->session->userdata('date_range_service'); 
-        // echo $this->session->userdata('date_range_service');   
+        // echo post('date_range');
+        // if (!empty(post('range_btn'))) {
+        //     $this->session->unset_userdata('date_range_service');
+        //     $this->session->set_userdata('date_range_service',post('date_range'));
+        // }
+        // echo post('date_range');exit;
+        // $render_data['date_range_service_report'] = $this->session->userdata('date_range_service'); 
+        // print_r(post());die;
+        // echo $this->session->userdata('date_range_service');exit;
         $render_data['service_by_franchise_list'] = $this->service_model->get_service_by_franchise_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
@@ -138,9 +166,13 @@ class Reports extends CI_Controller {
         $total_invoice = array_sum(array_column($render_data['billing_report_list'],'total_invoice'));
         // echo $total_invoice;exit;
         if($total_invoice != '' || $total_invoice !=0) {
-        $unpaid = (array_sum(array_column($render_data['billing_report_list'],'unpaid'))/$total_invoice) * 100;
-        $paid = (array_sum(array_column($render_data['billing_report_list'],'paid'))/$total_invoice) * 100;
-        $partial = (array_sum(array_column($render_data['billing_report_list'],'partial'))/$total_invoice) * 100;
+            $unpaid = (array_sum(array_column($render_data['billing_report_list'],'unpaid'))/$total_invoice) * 100;
+            $paid = (array_sum(array_column($render_data['billing_report_list'],'paid'))/$total_invoice) * 100;
+            $partial = (array_sum(array_column($render_data['billing_report_list'],'partial'))/$total_invoice) * 100;
+        }else {
+            $unpaid = 0;
+            $paid = 0;
+            $partial = 0;
         }
         $render_data['totals'] = array(
             'total_no_of_invoice'=> array_sum(array_column($render_data['billing_report_list'],'total_invoice')),   

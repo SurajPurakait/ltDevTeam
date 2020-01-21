@@ -2827,7 +2827,7 @@ class Service_model extends CI_Model {
         }
 
         if ($data['category'] == 'franchise') { 
-            $data_office = $this->db->get('office')->result_array();
+            $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
             // $data_office = $this->system->get_staff_office_list();
             $office_details = [];
             
@@ -2891,72 +2891,46 @@ class Service_model extends CI_Model {
     }
 
     public function late_status_calculation_report_dashboard_service($category,$id,$late_span,$date_range="") {
-        if ($category == 'franchise') {
-            if ($late_span == 'less_than_30') {
-                $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 30 AND `date_complete_actual` > `date_completed`";
-            } elseif ($late_span == 'less_than_60') {
-                $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 60 AND `date_complete_actual` > `date_completed`";
-            } elseif ($late_span == 'more_than_60') {
-                $sql = "SELECT * FROM `report_dashboard_service` WHERE `office` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) > 60 AND `date_complete_actual` > `date_completed`";
-            }
-            if ($date_range != "") {
-                $date_value = explode("-", $date_range);
-                $start_date = date("Y-m-d", strtotime($date_value[0]));
-                $end_date = date("Y-m-d", strtotime($date_value[1]));
-                
-                $this->db->where('order_date >=',$start_date);
-                $this->db->where('order_date <=',$end_date);
-            }
-            return $this->db->query($sql)->num_rows();
+        if ($date_range != "") {
+            $date_value = explode("-", $date_range);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
             
-            // $this->db->where('office',$ofc_id);
-            // $this->db->where('date_completed !=','0000-00-00 00:00:00');            
-            // $this->db->where(`date_complete_actual >`, `date_completed`);
-
-            // if ($late_span == 'less_than_30') {
-            //     $this->db->where('DATEDIFF(`date_complete_actual`,`date_completed`) <', 30);
-            // } elseif ($late_span == 'less_than_60') {
-            //     $this->db->where('DATEDIFF(`date_complete_actual`,`date_completed`) <', 60);
-            // } elseif ($late_span == 'more_than_60') {
-            //     $this->db->where('DATEDIFF(`date_complete_actual`,`date_completed`) >', 60);
-            // }
-            // $this->db->get('report_dashboard_service')->num_rows();
-            // return $this->db->last_query();
+            $this->db->where('order_date >=',$start_date);
+            $this->db->where('order_date <=',$end_date);
+        }
+        if ($category == 'franchise') {
+            $this->db->where('office',$id);
+            $this->db->where('date_completed !=',NULL);
+            if ($late_span == 'less_than_30') {
+                $this->db->where('DATEDIFF(date_complete_actual,date_completed) <','30');
+            } elseif ($late_span == 'less_than_60') {
+                $this->db->where('DATEDIFF(date_complete_actual,date_completed) <','60');
+            } elseif ($late_span == 'more_than_60') {
+                $this->db->where('DATEDIFF(date_complete_actual,date_completed) >','60');
+            }
         } elseif ($category == 'department') {
+            $this->db->where('department',$id);
+            $this->db->where('date_completed !=',NULL);
             if ($late_span == 'less_than_30') {
-                $sql = "SELECT * FROM `report_dashboard_service` WHERE `department` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 30 AND `date_complete_actual` > `date_completed`";
+                $this->db->where('DATEDIFF(date_complete_actual,date_completed) <','30');
             } elseif ($late_span == 'less_than_60') {
-                $sql = "SELECT * FROM `report_dashboard_service` WHERE `department` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 60 AND `date_complete_actual` > `date_completed`";
+                $this->db->where('DATEDIFF(date_complete_actual,date_completed) <','60');
             } elseif ($late_span == 'more_than_60') {
-                $sql = "SELECT * FROM `report_dashboard_service` WHERE `department` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) > 60 AND `date_complete_actual` > `date_completed`";
+                $this->db->where('DATEDIFF(date_complete_actual,date_completed) >','60');
             }
-            if ($date_range != "") {
-                $date_value = explode("-", $date_range);
-                $start_date = date("Y-m-d", strtotime($date_value[0]));
-                $end_date = date("Y-m-d", strtotime($date_value[1]));
-                
-                $this->db->where('order_date >=',$start_date);
-                $this->db->where('order_date <=',$end_date);
-            }
-            return $this->db->query($sql)->num_rows();
         } elseif ($category == 'service_category') {
+            $this->db->where('category',$id);
+            $this->db->where('date_completed !=',NULL);
             if ($late_span == 'less_than_30') {
-                $sql = "SELECT * FROM `report_dashboard_service` WHERE `category` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 30 AND `date_complete_actual` > `date_completed`";
+                $this->db->where('DATEDIFF(date_complete_actual,date_completed) <','30');
             } elseif ($late_span == 'less_than_60') {
-                $sql = "SELECT * FROM `report_dashboard_service` WHERE `category` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) < 60 AND `date_complete_actual` > `date_completed`";
+                $this->db->where('DATEDIFF(date_complete_actual,date_completed) <','60');
             } elseif ($late_span == 'more_than_60') {
-                $sql = "SELECT * FROM `report_dashboard_service` WHERE `category` = '".$id."' AND `date_completed` != \"NULL\" AND DATEDIFF(`date_complete_actual`,`date_completed`) > 60 AND `date_complete_actual` > `date_completed`";
+                $this->db->where('DATEDIFF(date_complete_actual,date_completed) >','60');
             }
-            if ($date_range != "") {
-                $date_value = explode("-", $date_range);
-                $start_date = date("Y-m-d", strtotime($date_value[0]));
-                $end_date = date("Y-m-d", strtotime($date_value[1]));
-                
-                $this->db->where('order_date >=',$start_date);
-                $this->db->where('order_date <=',$end_date);
-            }
-            return $this->db->query($sql)->num_rows();
         }   
+        return $this->db->get('report_dashboard_service')->num_rows();
     }
 
     public function get_invoice_id($order_id){
