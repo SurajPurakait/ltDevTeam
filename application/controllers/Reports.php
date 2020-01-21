@@ -207,7 +207,6 @@ class Reports extends CI_Controller {
 
     // report lead data
     public function get_leads_data() {
-//        print_r(post());die;
         $category = post('category');
         $render_data['lead_list'] = $this->lead_management->get_lead_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');

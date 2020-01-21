@@ -95,10 +95,10 @@
                                                     <h4>Select Period</h4> 
                                                 </div>
                                                 <div class="col-md-3 p-r-0 p-l-0">
-                                                    <input type="text" class="form-control" id="reportrange6" name="daterange" placeholder="Select Period">    
+                                                    <input type="text" class="form-control" id="reportrangebilling" name="daterange" placeholder="Select Period">    
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
-                                                    <button type="button" class="btn btn-success" id="report-service-range-btn6" style="border-radius: 0;">Apply</button>
+                                                    <button type="button" class="btn btn-success" id="report-billing-range-btn" style="border-radius: 0;">Apply</button>
                                                 </div>
                                             </div>
                                             <?php 
@@ -542,13 +542,13 @@
             }
             function cb(start, end) {
                 if ('<?= $dateRangeBilling; ?>' != '') {
-                    $('#reportrange6 span').html(start + ' - ' + end);
+                    $('#reportrangebilling span').html(start + ' - ' + end);
                 } else {
-                    $('#reportrange6 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    $('#reportrangebilling span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
                 }
             }
 
-            $('#reportrange6').daterangepicker({
+            $('#reportrangebilling').daterangepicker({
                 startDate: start,
                 endDate: end,
                 ranges: {
@@ -563,9 +563,9 @@
             }, cb);
             cb(start, end);
 
-            $("#report-service-range-btn6").click(function () {
-                var report_range6 = document.getElementById('reportrange6').value;
-                get_billing_date_range(report_range6,'range_btn_billing');    
+            $("#report-billing-range-btn").click(function () {
+                var report_range_billing = document.getElementById('reportrangebilling').value;
+                get_billing_date_range(report_range_billing,'range_btn_billing');    
             });
         });
 </script>
