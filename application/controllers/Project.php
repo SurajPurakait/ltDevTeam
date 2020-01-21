@@ -83,10 +83,10 @@ class Project extends CI_Controller {
         $render_data['category']=$category;
         $render_data['filter_element_list'] = $this->filter_element;
         $render_data['templateIds'] = $this->Project_Template_model->getTemplateIds();
-        $render_data['due_m'] = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'Jun', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'Dececmber');
+        $render_data['due_m'] = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'Dececmber');
         $render_data['due_years']=$this->Project_Template_model->getDueYear();
         $render_data['due_months']=$this->Project_Template_model->getDueMonth();
-        $render_data['months']=array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'Jun', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'Dececmber');
+        $render_data['months']=array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'Dececmber');
         $this->load->template('projects/project', $render_data);
     }
 
