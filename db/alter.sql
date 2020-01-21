@@ -1124,3 +1124,7 @@ INSERT INTO `services` (`id`, `category_id`, `description`, `ideas`, `tutorials`
 ALTER TABLE `report_dashboard_service` ADD `order_date` DATE NULL DEFAULT NULL AFTER `status`;
 
 ALTER TABLE `report_dashboard_service` CHANGE `department` `department` VARCHAR(10) NOT NULL;
+
+
+/* 21.01.2020 */
+ALTER TABLE `report_dashboard_action` ADD `creation_date` DATE NOT NULL AFTER `sos`;

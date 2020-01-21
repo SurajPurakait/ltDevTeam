@@ -24,20 +24,11 @@ class Reports extends CI_Controller {
         $render_data['menu'] = 'report_' . $type;
         $render_data['header_title'] = $title;
         $render_data['order_start_date'] = $this->service_model->get_start_date_sales_report();
-    
-        if (!empty(post('range_btn_billing'))) {
-            if ($this->session->userdata('date_range_billing')) {
-                $this->session->unset_userdata('date_range_billing');
-            }
-            $this->session->set_userdata('date_range_billing',post('date_range_billing'));
-        }
-
-        if (!empty(post('range_btn_partner'))) {
-            if ($this->session->userdata('date_range_partner')) {
-                $this->session->unset_userdata('date_range_partner');
-            }
-            $this->session->set_userdata('date_range_partner',post('date_range_partner'));
-        }
+        $render_data['project_start_date'] = '';
+        $render_data['action_start_date'] = '';
+        $render_data['lead_start_date'] = $this->lead_management->get_lead_start_date();
+        $render_data['partner_start_date'] = $this->lead_management->get_partner_start_date();
+        $render_data['client_start_date'] = '';
         $this->load->template('reports/reports', $render_data);
     }
     /* royalty_reports */
@@ -167,6 +158,9 @@ class Reports extends CI_Controller {
         );
         $this->load->view('reports/billing_invoice_payments_data',$render_data);   
     }
+    public function get_range_billing_report() {
+        echo post('date_range_billing');
+    }
     // report action data
     public function get_action_data() {       
         $category = post('category');
@@ -201,15 +195,20 @@ class Reports extends CI_Controller {
         $render_data['date_range_service_report'] = post('date_range');
         $this->load->view('reports/report_partner_data',$render_data);    
     }
-
+    public function get_range_partners_report() {
+        echo post('date_range_partner');
+    }
     // report lead data
     public function get_leads_data() {
-//        print_r(post());die;
         $category = post('category');
         $render_data['lead_list'] = $this->lead_management->get_lead_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
         $render_data['date_range_service_report'] = post('date_range');         
         $this->load->view('reports/report_lead_data',$render_data);    
+    }
+
+    public function get_range_lead_report() {
+        echo post('date_range_lead');
     }
 }
