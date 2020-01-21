@@ -34,8 +34,6 @@
                                             </div>
                                             <?php 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
-                                                
-                                                $current_date = date('m/d/Y');
                                                 $dateRangeService = $order_start_date.' - '.$current_date;  
                                             ?>
                                             <input type="hidden" name="service_range_report_value" id="service_range_report">
@@ -78,9 +76,7 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="service_by_category" style="display: none;">
-                                                    
-                                                </div>
+                                                <div class="ibox-content p-0" id="service_by_category" style="display: none;"></div>
                                             </div>
                                             <?php 
                                                 }
@@ -101,7 +97,6 @@
                                                 </div>
                                             </div>
                                             <?php 
-                                                $current_date = date('m/d/Y');
                                                 $dateRangeBilling = $order_start_date.' - '.$current_date;
                                             ?>    
                                             <input type="hidden" name="billing_range_report_value" id="billing_range_report">
@@ -184,12 +179,16 @@
                                                     <h4>Select Period</h4> 
                                                 </div>
                                                 <div class="col-md-3 p-r-0 p-l-0">
-                                                    <input type="text" class="form-control" id="reportrange3" name="daterange" placeholder="Select Period">    
+                                                    <input type="text" class="form-control" id="reportrangeproject" name="daterange" placeholder="Select Period">    
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
                                                     <button type="button" class="btn btn-success" id="report-projects-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
-                                            </div>  
+                                            </div>
+                                            <?php 
+                                                $dateRangeProject = $project_start_date.' - '.$current_date;
+                                            ?>  
+                                            <input type="hidden" name="project_range_report_value" id="project_range_report">
                                             <div class="ibox m-t-25" id="projects_by_office_section" onclick="show_project_data('projects_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Projects By Office</h5>
@@ -287,7 +286,6 @@
                                                 </div>
                                             </div>
                                             <?php 
-                                                $current_date = date('m/d/Y');
                                                 $dateRangePartner = $partner_start_date.' - '.$current_date;
                                             ?>
                                             <input type="hidden" name="partners_range_report_value" id="partners_range_report">
@@ -318,7 +316,6 @@
                                                 </div>
                                             </div> 
                                             <?php 
-                                                $current_date = date('m/d/Y');
                                                 $dateRangeLead = $lead_start_date.' - '.$current_date;
                                             ?>
                                             <input type="hidden" name="leads_range_report_value" id="leads_range_report">   
@@ -483,17 +480,29 @@
         }); 
         
         $(function () {
-            var start = moment();
-            var end = moment();
+
+            
+            if('<?= $dateRangeProject; ?>' != '') {
+                var range = '<?= $dateRangeProject ?>';
+                var start = range.split("-")[0];
+                var end = range.split("-")[1];
+            } else {
+                var start = moment();
+                var end = moment();    
+            }
             function cb(start, end) {
-                $('#reportrange3 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                if ('<?= $dateRangeProject; ?>' != '') {
+                    $('#reportrangeproject span').html(start + ' - ' + end);
+                } else {
+                    $('#reportrangeproject span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
             }
 
-            $('#reportrange3').daterangepicker({
+            $('#reportrangeproject').daterangepicker({
                 startDate: start,
                 endDate: end,
                 ranges: {
-                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
+                    'All data': [moment("<?= $project_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -505,8 +514,8 @@
             cb(start, end);
 
             $("#report-projects-range-btn").click(function () {
-                var report_range3 = document.getElementById('reportrange3').value;
-                show_project_data('projects_by_office',report_range3);    
+                var report_range_project = document.getElementById('reportrangeproject').value;
+                get_project_date(report_range_project);    
             });
         }); 
         

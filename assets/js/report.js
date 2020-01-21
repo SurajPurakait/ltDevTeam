@@ -295,7 +295,9 @@ function show_action_data(category,date_range = '') {
 }
 
 // report project section js
-function show_project_data(category,date_range = '') {
+function show_project_data(category ='') {
+    var date_range_project = $("#project_range_report").val();
+
     if (category == 'projects_by_office') {
         $("#projects_by_office").toggle();
     } else if(category == 'tasks_by_office') {
@@ -308,7 +310,7 @@ function show_project_data(category,date_range = '') {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_project_data',
-        data: {'category': category,'date_range':date_range},
+        data: {'category': category,'date_range':date_range_project},
         success: function (result) {
             if (category == 'projects_by_office') {
                 $("#projects_by_office").html(result);
@@ -327,6 +329,48 @@ function show_project_data(category,date_range = '') {
             closeLoading();
         }
     });    
+}
+
+function get_project_date(date_range = '') {
+    if ($("#projects_by_office").css('display') == 'block') {
+        category = 'projects_by_office';
+    } else if ($("#tasks_by_office").css('display') == 'block') {
+        category = 'tasks_by_office';
+    } else if ($("#projects_to_department").css('display') == 'block') {
+        category = 'projects_to_department';
+    } else if ($("#tasks_to_department").css('display') == 'block') {
+        category = 'tasks_to_department';
+    } else {
+        category = 'projects_by_office';
+    }
+
+    $.ajax({
+        type: 'POST',
+        url : base_url + 'reports/get_range_project_report',
+        data : {'date_range_project':date_range},
+        success: function (result) {
+            $("#project_range_report").val(result);
+            if (category == 'projects_by_office') {
+                show_project_data(category,result);
+                $("#projects_by_office").show();
+            } else if (category == 'tasks_by_office') {
+                show_project_data(category,result);
+                $("#tasks_by_office").show();
+            } else if (category == 'projects_to_department') {
+                show_project_data(category,result);
+                $("#projects_to_department").show();
+            } else if (category == 'tasks_to_department') {
+                show_project_data(category,result);
+                $("#tasks_to_department").show();
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    })
 }
 
 // report lead section js
