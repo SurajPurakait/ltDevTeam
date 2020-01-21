@@ -155,20 +155,20 @@ function get_total_sales_report(office = '',date_range = '') {
 
 // report service section js
 function show_service_franchise_result(category='',date_range = '',range_btn='') {
-    // alert(date_range);return false;
     if (category == 'franchise') {
         $("#service_by_franchise").toggle();
     } else if(category == 'department') {
         $("#service_by_department").toggle();
     } else if (category == 'service_category') {
         $("#service_by_category").toggle();
-    }  
+    }   
+    var date_range_service = $("#service_range_report").val();
+
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_service_by_franchise_data',
-        data: {'category': category,'date_range':date_range,'range_btn':range_btn},
+        data: {'category': category,'date_range':date_range_service,'range_btn':range_btn},
         success: function (result) {
-            // console.log(result);return false;
             if (category == 'franchise') {
                 $("#service_by_franchise").html(result);
             } else if(category == 'department') {
@@ -185,13 +185,32 @@ function show_service_franchise_result(category='',date_range = '',range_btn='')
         }
     });
 }
-function show_service_franchise_date(date_range = '',range_btn='') {
+function show_service_franchise_date(date_range = '',range_btn='',category='') {
+    if ($("#service_by_franchise").css('display') == 'block') {
+        category = 'franchise';
+    }else if ($("#service_by_department").css('display') == 'block') {
+        category = 'department';
+    }else if ($("#service_by_category").css('display') == 'block') {
+        category = 'service_category';
+    } else {
+        category = 'franchise';
+    }
     $.ajax({
         type: 'POST',
-        url : base_url + 'reports/index',
+        url : base_url + 'reports/get_range_service_report',
         data : {'date_range_service':date_range,'range_btn_service':range_btn},
         success: function (result) {
-            goURL(base_url + 'reports/index');
+            $("#service_range_report").val(result);
+            if (category == 'franchise') {
+                show_service_franchise_result(category,result);
+                $("#service_by_franchise").show();
+            } else if (category == 'department') {
+                show_service_franchise_result(category,result);
+                $("#service_by_department").show();
+            } else if (category == 'service_category') {
+                show_service_franchise_result(category,result);
+                $("#service_by_category").show();
+            }
         },
         beforeSend: function () {
             openLoading();
@@ -226,8 +245,6 @@ function get_billing_date_range(date_range = '',range_btn='') {
         data : {'date_range_billing':date_range,'range_btn_billing':range_btn},
         success: function (result) {
             goURL(base_url + 'reports/index');
-            // $("#tab-1").removeClass('active');
-            // $("#tab-billing").addClass('active');
         },
         beforeSend: function () {
             openLoading();
@@ -336,6 +353,26 @@ function show_lead_data(category,date_range = '') {
             closeLoading();
         }
     });
+}
+
+function get_partner_date_range(date_range ='',range_btn ='') {
+    // alert(range_btn);return false;
+    $.ajax({
+        type: 'POST',
+        url : base_url + 'reports/index',
+        data : {'date_range_partner':date_range,'range_btn_partner':range_btn},
+        success: function (result) {
+            goURL(base_url + 'reports/index');
+            // $("#tab-1").removeClass('active');
+            // $("#tab-billing").addClass('active');
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    })    
 }
 
 // report partner section js
