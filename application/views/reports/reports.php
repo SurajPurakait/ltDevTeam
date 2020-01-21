@@ -36,8 +36,7 @@
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
                                                 
                                                 $current_date = date('m/d/Y');
-                                                $dateRangeService = $order_start_date.' - '.$current_date;
-                                                    
+                                                $dateRangeService = $order_start_date.' - '.$current_date;  
                                             ?>
                                             <input type="hidden" name="service_range_report_value" id="service_range_report">
                                             <div class="ibox m-t-25" id="service_by_franchise_1" onclick="show_service_franchise_result('franchise','')">
@@ -289,7 +288,7 @@
                                             </div>
                                             <?php 
                                                 $current_date = date('m/d/Y');
-                                                $dateRangePartner = $order_start_date.' - '.$current_date;
+                                                $dateRangePartner = $partner_start_date.' - '.$current_date;
                                             ?>
                                             <input type="hidden" name="partners_range_report_value" id="partners_range_report">
                                             <div class="ibox m-t-25" id="partners_by_type_section" onclick="show_partner_data()">
@@ -320,7 +319,7 @@
                                             </div> 
                                             <?php 
                                                 $current_date = date('m/d/Y');
-                                                $dateRangeLead = $order_start_date.' - '.$current_date;
+                                                $dateRangeLead = $lead_start_date.' - '.$current_date;
                                             ?>
                                             <input type="hidden" name="leads_range_report_value" id="leads_range_report">   
                                             <div class="ibox m-t-25" id="leads_by_status_section" onclick="show_lead_data('status')">
@@ -428,7 +427,7 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
-                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
+                    'All data': [moment("<?= $lead_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -466,7 +465,7 @@
                 startDate: start,
                 endDate: end,
                 ranges: {
-                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
+                    'All data': [moment("<?= $partner_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],

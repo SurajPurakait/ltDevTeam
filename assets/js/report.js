@@ -360,7 +360,6 @@ function show_lead_data(category,date_range = '') {
     });
 }
 function get_lead_range(date_range = '') {
-    // alert(date_range);return false;
     if ($("#leads_by_status").css('display') == 'block') {
         category = 'status';
     }else if ($("#leads_by_type").css('display') == 'block') {
@@ -375,7 +374,6 @@ function get_lead_range(date_range = '') {
         url : base_url + 'reports/get_range_lead_report',
         data : { 'date_range_lead':date_range },
         success: function (result) {
-            // alert(result);return false;
             $("#leads_range_report").val(result);
             if (category == 'status') {
                 show_lead_data(category,result);

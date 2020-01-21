@@ -2302,7 +2302,20 @@ Class Lead_management extends CI_Model {
         return $this->db->get('lead_management')->num_rows();
                                                         
     }
-
+    public function get_lead_start_date() {
+        $this->db->select_min('referred_date');
+        $this->db->where('type !=','2');
+        $this->db->order_by('referred_date', 'ASC');
+        $lead_date = $this->db->get('lead_management')->row_array()['referred_date'];
+        return date('m/d/Y' ,strtotime($lead_date));
+    }
+    public function get_partner_start_date() {
+        $this->db->select_min('referred_date');
+        $this->db->where('type','2');
+        $this->db->order_by('referred_date', 'ASC');
+        $partner_date = $this->db->get('lead_management')->row_array()['referred_date'];    
+        return date('m/d/Y' ,strtotime($partner_date)); 
+    }
     public function get_partner_data($data) {              
         $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
         $partner_data = [];
