@@ -1318,13 +1318,19 @@ function refresh_existing_client_list(office_id = '', client_id = '') {
 }
 function sort_project_dashboard(sort_criteria = '', sort_type = '') {
     var form_data = new FormData(document.getElementById('filter-form'));
-//    alert(form_data.value);return false;
     if (sort_criteria == '') {
         var sc = $('.dropdown-menu li.active').find('a').attr('id');
         var ex = sc.split('-');
         if (ex[0] == 'project_template') {
             var sort_criteria = ex[0];
-        } else {
+        } else if(ex[0] == 'pattern'){
+            var sort_criteria ='prm.'+ex[0];
+        } else if(ex[0]=='all_project_staffs'){
+            var sort_criteria = ex[0];
+        }else if(ex[0]=='status'){
+            var sort_criteria = 'pm.' + ex[0];
+        }
+        else {
             var sort_criteria = 'pro.' + ex[0];
         }
     }
