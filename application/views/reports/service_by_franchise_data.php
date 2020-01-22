@@ -306,7 +306,7 @@
 
     //     $('#'+id_text).DataTable().destroy();
     //     $('#'+id_text).DataTable({
-            
+
     //         'dom': '<"html5buttons"B>lTfgitp',
     //         'buttons': [ 
     //             {extend: 'excel', title: 'RoyaltyReport'},
@@ -330,12 +330,11 @@
          
     // });
 
-
     $('#report-service-franchise').DataTable().destroy();
     $('#report-service-franchise').DataTable({
         'dom': '<"html5buttons"B>lTfgitp',
         'buttons': [ 
-            {extend: 'excel', title: 'RoyaltyReport'},
+            {extend: 'excel', title: 'ServiceByFranchiseReport'},
             {extend: 'print',
                 customize: function (win){
                     $(win.document.body).addClass('white-bg');
@@ -344,7 +343,11 @@
                     $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
-            }
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Service By Franchise Report</h2>';
+                }
             }
         ],
         "bFilter": false,
@@ -359,7 +362,7 @@
     $('#report-service-department').DataTable({
         'dom': '<"html5buttons"B>lTfgitp',
         'buttons': [ 
-            {extend: 'excel', title: 'RoyaltyReport'},
+            {extend: 'excel', title: 'ServiceByDepartmentReport'},
             {extend: 'print',
                 customize: function (win){
                     $(win.document.body).addClass('white-bg');
@@ -368,7 +371,11 @@
                     $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
-            }
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Service By Department Report</h2>';
+                },
             }
         ],
         "bFilter": false,
@@ -382,7 +389,7 @@
     $('#report-service-category').DataTable({
         'dom': '<"html5buttons"B>lTfgitp',
         'buttons': [ 
-            {extend: 'excel', title: 'RoyaltyReport'},
+            {extend: 'excel', title: 'ServiceByCategoryReport'},
             {extend: 'print',
                 customize: function (win){
                     $(win.document.body).addClass('white-bg');
@@ -391,7 +398,11 @@
                     $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
-            }
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Service By Category Report</h2>';
+                }
             }
         ],
         "bFilter": false,

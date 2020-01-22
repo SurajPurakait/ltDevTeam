@@ -109,8 +109,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="billing_invoice_payments" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="billing_invoice_payments" style="display: none;"></div>
                                         </div>
                                     </div>
                                     <div role="tabpanel" id="tab-action" class="tab-pane">
@@ -138,9 +138,9 @@
                                                             <i class="fa fa-chevron-up"></i>
                                                         </a>
                                                     </div>
-                                                </div>
-                                                <div class="ibox-content p-0" id="action_by_office" style="display: none;"></div>
-                                            </div>                                        
+                                                </div>    
+                                            </div>
+                                            <div class="ibox-content p-0" id="action_by_office" style="display: none;"></div>                                        
                                             <div class="ibox m-t-25" id="action_to_office_section" onclick="show_action_data('action_to_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions To Office</h5>
@@ -150,8 +150,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="action_to_office" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="action_to_office" style="display: none;"></div>
                                             <div class="ibox m-t-25" id="action_by_department_section" onclick="show_action_data('action_by_department')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions By Department</h5>
@@ -161,8 +161,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="action_by_department" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="action_by_department" style="display: none;"></div>
                                             <div class="ibox m-t-25" id="action_to_department_section" onclick="show_action_data('action_to_department')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions To Department</h5>
@@ -172,8 +172,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="action_to_department" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="action_to_department" style="display: none;"></div>
                                         </div>
                                     </div>
                                     <div role="tabpanel" id="tab-projects" class="tab-pane">
@@ -202,8 +202,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="projects_by_office" style="display: none;"></div>
-                                            </div>                                        
+                                            </div>
+                                            <div class="ibox-content p-0" id="projects_by_office" style="display: none;"></div>                              
                                             <div class="ibox m-t-25" id="tasks_by_office_section" onclick="show_project_data('tasks_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Tasks By Office</h5>
@@ -213,8 +213,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="tasks_by_office" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="tasks_by_office" style="display: none;"></div>
                                             <div class="ibox m-t-25" id="projects_to_department_section" onclick="show_project_data('projects_to_department')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Projects To Department</h5>
@@ -224,8 +224,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="projects_to_department" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="projects_to_department" style="display: none;"></div>
                                             <div class="ibox m-t-25" id="tasks_to_department_section" onclick="show_project_data('tasks_to_department')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Tasks To Department</h5>
@@ -235,8 +235,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="tasks_to_department" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="tasks_to_department" style="display: none;"></div>
                                         </div>
                                     </div>
                                     <div role="tabpanel" id="tab-clients" class="tab-pane">
@@ -261,8 +261,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="business_clients_by_office" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="business_clients_by_office" style="display: none;"></div>
                                             <div class="ibox m-t-25" id="individual_clients_by_office_section" onclick="show_clients_data('individual_clients_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Individual Clients By Office</h5>
@@ -272,8 +272,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="individual_clients_by_office" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="individual_clients_by_office" style="display: none;"></div>
                                         </div>
                                     </div>
                                     <div role="tabpanel" id="tab-partners" class="tab-pane">
@@ -302,8 +302,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="partners_by_type" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="partners_by_type" style="display: none;"></div>
                                         </div>
                                     </div>
                                     <div role="tabpanel" id="tab-leads" class="tab-pane">
@@ -332,8 +332,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="leads_by_status" style="display: none;"></div>
-                                            </div>                                        
+                                            </div>
+                                            <div class="ibox-content p-0" id="leads_by_status" style="display: none;"></div>                                     
                                             <div class="ibox m-t-25" id="leads_by_type_section" onclick="show_lead_data('type')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads By Type</h5>
@@ -343,8 +343,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="leads_by_type" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="leads_by_type" style="display: none;"></div>
                                             <div class="ibox m-t-25" id="leads_email_campaign_section" onclick="show_lead_data('mail_campaign')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads Email Campaign</h5>
@@ -354,8 +354,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="leads_email_campaign" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="leads_email_campaign" style="display: none;"></div>
                                         </div>
                                     </div>
                                 </div>
