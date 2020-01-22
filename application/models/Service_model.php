@@ -2985,4 +2985,46 @@ class Service_model extends CI_Model {
         }
         return $this->db->get('report_dashboard_service')->num_rows();
     }
+
+
+    public function payer_recipient_data_fields($data,$order_id){
+        $extra_data = [
+                'reference_id' => $data["reference_id"],
+                'order_id' => $order_id,
+                'payer_first_name' => $data['payer_first_name'],
+                'payer_last_name' => $data['payer_last_name'],
+                'payer_phone_number' => $data['payer_phone_number'],
+                'payer_address' => $data['payer_address'],
+                'payer_city' => $data['payer_city'],
+                'payer_state' => $data['payer_state'],
+                'payer_country' => $data['payer_country'],
+                'payer_zip' => $data['payer_zip_code'],
+                'payer_tin' => $data['payer_tin'],
+                'recipient_first_name' => $data['recipient_first_name'],
+                'recipient_last_name' => $data['recipient_last_name'],
+                'recipient_phone_number' => $data['recipient_phone_number'],
+                'recipient_address' => $data['recipient_address'],
+                'recipient_city' => $data['recipient_city'],
+                'recipient_state' => $data['recipient_state'],
+                'recipient_country' => $data['recipient_country'],
+                'recipient_zip' => $data['recipient_zip_code'],
+                'recipient_tin' => $data['recipient_tin']
+            ];
+            
+            return $this->db->insert('payer_recipient_information', $extra_data);
+    }
+
+    public function order_extra_data_compensation_fields($data,$order_id){
+        $order_extra_data = [
+                'compensation' => $data['compensation'],
+                'order_id' => $order_id
+            ];
+            
+            return $this->db->insert('order_extra_data', $order_extra_data);
+    }
+
+    public function get_payer_recipient_info($order_id) {
+        return $this->db->get_where('payer_recipient_information', ['order_id' => $order_id])->row_array();
+    }
+
 }

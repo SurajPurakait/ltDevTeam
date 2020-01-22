@@ -890,6 +890,7 @@ function request_create_project() {
         success: function (result) {
 //            alert(result);return false;
             if (result.trim() == "1") {
+                $('#projectModal').hide();
                 swal({
                     title: "Success!",
                     text: "Project Successfully Added!",
@@ -1761,4 +1762,25 @@ function delete_project_template(project_id) {
             closeLoading();
         }
     });        
+}
+function get_pattern_detais(template_id){
+    $.ajax({
+        type: "POST",
+        data: {id : template_id},
+        url: base_url + 'project/get_template_pattern_details',
+        cache:false,
+        success: function (result) {
+//            alert(result);return false;
+            if (result != '0') {
+                $("#template_recurrence").html(result);
+                $("#template_recurrence").show();
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    }); 
 }

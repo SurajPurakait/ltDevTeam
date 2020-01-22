@@ -380,6 +380,12 @@ class Home extends CI_Controller {
                     $render_data['salestax_employee_notes'] = $this->payroll->get_payroll_employee_notes_by_reference_id($render_data['reference_id']);
                 }
                 break;
+
+            case 'acc_1_w_u': {   // 1099 Write Up
+                
+                   $render_data['order_extra_data_for_compensation'] = $this->service_model->get_extra_data($order_id); 
+                   $render_data['payer_recipient_info'] = $this->service_model->get_payer_recipient_info($order_id); 
+            }
         endswitch;
 //        echo '<pre>';print_r($render_data);exit;
 //        if ($service_id == '14') {
