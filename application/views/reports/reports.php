@@ -46,8 +46,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="service_by_franchise" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="service_by_franchise" style="display: none;"></div>
                                             <?php   
                                                 } 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
@@ -61,8 +61,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="service_by_department" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="service_by_department" style="display: none;"></div>
                                             <?php
                                                 } 
                                                 if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2) {
@@ -76,8 +76,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <div class="ibox-content p-0" id="service_by_category" style="display: none;"></div>
                                             </div>
+                                            <div class="ibox-content p-0" id="service_by_category" style="display: none;"></div>
                                             <?php 
                                                 }
                                             ?>
