@@ -1386,9 +1386,9 @@ class Project_Template_model extends CI_Model {
                     }
 //                    checking user date vs calculated pattern due date
                     if($due_date==$user_due_date){
-                        $due_date=$user_due_date;
-                    }else{
                         $due_date=$due_date;
+                    }else{
+                        $due_date=$user_due_date;
                     }
                     
                     if ($project_recurrence_main_data['generation_month'] == '') {
