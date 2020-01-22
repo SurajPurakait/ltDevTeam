@@ -80,5 +80,13 @@
                 </h3>
             </a>
         </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <a class="widget p-lg text-center ibox-content link-panel" href="<?php echo base_url(); ?>services/accounting_services/create_1099_write_up">
+                <img src="<?php echo base_url() ?>assets/img/audit.svg" alt="1099_write_up image" class="svg-icon m-b-md"/>
+                <h3 class="font-bold no-margins">
+                    1099 Write Up
+                </h3>
+            </a>
+        </div>
     </div>
 </div>
