@@ -350,5 +350,9 @@ class Project extends CI_Controller {
         $render_data['task_list'] = getProjectTaskList($id);
         $this->load->view('projects/project_dashboard_collapse', $render_data);
     }
-
+    public function get_template_pattern_details(){
+        $template_id=post('id');
+        $render_data['pattern_details']=$this->Project_Template_model->getTemplatePatternValue($template_id);
+        $this->load->view('projects/template_pattern_details',$render_data);
+    }
 }
