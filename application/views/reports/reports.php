@@ -120,12 +120,16 @@
                                                     <h4>Select Period</h4> 
                                                 </div>
                                                 <div class="col-md-3 p-r-0 p-l-0">
-                                                    <input type="text" class="form-control" id="reportrange4" name="daterange" placeholder="Select Period">    
+                                                    <input type="text" class="form-control" id="reportrangeaction" name="daterange" placeholder="Select Period">    
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
                                                     <button type="button" class="btn btn-success" id="report-actions-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
-                                            </div> 
+                                            </div>
+                                            <?php 
+                                                $dateRangeAction = $action_start_date.' - '.$current_date;
+                                            ?>
+                                            <input type="hidden" name="action_range_report_value" id="action_range_report">
                                             <div class="ibox m-t-25" id="action_by_office_section" onclick="show_action_data('action_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions By Office</h5>
@@ -480,8 +484,6 @@
         }); 
         
         $(function () {
-
-            
             if('<?= $dateRangeProject; ?>' != '') {
                 var range = '<?= $dateRangeProject ?>';
                 var start = range.split("-")[0];
@@ -520,17 +522,32 @@
         }); 
         
         $(function () {
-            var start = moment();
-            var end = moment();
-            function cb(start, end) {
-                $('#reportrange4 span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            if('<?= $dateRangeAction; ?>' != '') {
+                var range = '<?= $dateRangeAction ?>';
+                // var start = range.split("-")[0];
+                // var end = range.split("-")[1];
+            } else {
+                var start = moment();
+                var end = moment();    
             }
+            function cb(start, end) {
+                if ('<?= $dateRangeAction; ?>' != '') {
+                    $('#reportrangeaction span').html(range);
+                } else {
+                    $('#reportrangeaction span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
+            }
+            // var start = moment();
+            // var end = moment();
+            // function cb(start, end) {
+            //     $('#reportrangeaction span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            // }
 
-            $('#reportrange4').daterangepicker({
+            $('#reportrangeaction').daterangepicker({
                 startDate: start,
                 endDate: end,
                 ranges: {
-                    'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
+                    'All data': [moment("<?= $action_start_date; ?>", "MM-DD-YYYY"), moment()],
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -542,8 +559,8 @@
             cb(start, end);
 
             $("#report-actions-range-btn").click(function () {
-                var report_range4 = document.getElementById('reportrange4').value;
-                show_action_data('action_by_office',report_range4);    
+                var report_range_action = document.getElementById('reportrangeaction').value;
+                get_action_range_date(report_range_action);    
             });
         });
         

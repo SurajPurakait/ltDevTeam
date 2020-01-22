@@ -26,7 +26,7 @@ class Reports extends CI_Controller {
         $render_data['current_date'] = date('m/d/Y');
         $render_data['order_start_date'] = $this->service_model->get_start_date_sales_report();
         $render_data['project_start_date'] = $this->Project_Template_model->get_project_start_date();
-        // $render_data['action_start_date'] = '';
+        $render_data['action_start_date'] = $this->action_model->get_action_start_date();
         $render_data['lead_start_date'] = $this->lead_management->get_lead_start_date();
         $render_data['partner_start_date'] = $this->lead_management->get_partner_start_date();
         // $render_data['client_start_date'] = '';
@@ -170,6 +170,10 @@ class Reports extends CI_Controller {
         $render_data['category'] = $category;
         $render_data['date_range_service_report'] = post('date_range'); 
         $this->load->view('reports/report_action_data',$render_data);
+    }
+
+    public function get_range_action_report() {
+        echo post('date_range_action');
     }
     // report project data
     public function get_project_data() {        
