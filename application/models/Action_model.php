@@ -3529,7 +3529,7 @@ class Action_model extends CI_Model {
 
     // report dashboard's client data
     public function get_clients_data($category) {
-        $data_office = $this->db->get('office')->result_array();
+        $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
         // $data_office = $this->system->get_staff_office_list();
         if ($category == 'clients_by_office') {
             $all_client_details = [];
