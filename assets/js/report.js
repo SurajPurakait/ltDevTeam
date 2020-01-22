@@ -260,7 +260,8 @@ function get_billing_date_range(date_range = '') {
     })
 }
 // report action section js
-function show_action_data(category,date_range = '') {
+function show_action_data(category='') {
+    var date_range = $("#action_range_report").val();
     if (category == 'action_by_office') {
         $("#action_by_office").toggle();
     } else if(category == 'action_to_office') {
@@ -292,6 +293,49 @@ function show_action_data(category,date_range = '') {
             closeLoading();
         }
     });
+}
+
+function get_action_range_date(date_range="") {
+    // alert($date_range);return false;
+    if ($("#action_by_office").css('display') == 'block') {
+        category = 'action_by_office';
+    } else if ($("#action_to_office").css('display') == 'block') {
+        category = 'action_to_office';
+    } else if ($("#action_by_department").css('display') == 'block') {
+        category = 'action_by_department';
+    } else if ($("#action_to_department").css('display') == 'block') {
+        category = 'action_to_department';
+    } else {
+        category = 'action_by_office';
+    }
+
+    $.ajax({
+        type: 'POST',
+        url : base_url + 'reports/get_range_action_report',
+        data : {'date_range_action':date_range},
+        success: function (result) {
+            $("#action_range_report").val(result);
+            if (category == 'action_by_office') {
+                show_action_data(category,result);
+                $("#action_by_office").show();
+            } else if (category == 'action_to_office') {
+                show_action_data(category,result);
+                $("#action_to_office").show();
+            } else if (category == 'action_by_department') {
+                show_action_data(category,result);
+                $("#action_by_department").show();
+            } else if (category == 'action_to_department') {
+                show_action_data(category,result);
+                $("#action_to_department").show();
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    })
 }
 
 // report project section js

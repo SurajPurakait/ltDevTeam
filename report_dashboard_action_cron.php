@@ -1,13 +1,13 @@
 <?php
-    // $servername = "localhost";
-    // $username = "leafnet_db_user";
-    // $password = "leafnet@123";
-    // $db = 'leafnet_stagings';
-
     $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $db = 'leafnet';
+    $username = "leafnet_db_user";
+    $password = "leafnet@123";
+    $db = 'leafnet_stagings';
+
+    // $servername = "localhost";
+    // $username = "root";
+    // $password = "";
+    // $db = 'leafnet';
 
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
@@ -25,6 +25,7 @@
         'act.department AS to_department',  
         'act.status AS status',  
         'act.due_date AS due_date',  
+        'act.creation_date AS creation_date',  
         'snf.msg AS sos',
         '(SELECT ofc.name FROM office as ofc WHERE ofc.id = act.created_office) as by_office_name',
         '(SELECT ofc.name FROM office as ofc WHERE ofc.id = act.office) as to_office_name',
@@ -57,10 +58,14 @@
             } else {
                 $due_date = $actd['due_date'];
             }
-            
+            $creation_date = date('Y-m-d', strtotime($actd['creation_date']));
+            if ($creation_date == '0000-00-00' || $creation_date == '' || $creation_date == '1970-01-01') {
+                $creation_date = '0001-01-01';
+            }
+
             $sos = addslashes($actd['sos']);
 
-            $action_insert_sql = "INSERT INTO `report_dashboard_action`(`action_id`, `by_office`, `by_office_name`, `to_office`, `to_office_name`, `by_department`, `by_department_name`, `to_department`, `to_department_name`, `status`, `due_date`, `sos`) VALUES ('$action_id',' $by_office', '$by_office_name', '$to_office', '$to_office_name', '$by_department', '$by_department_name', '$to_department', '$to_department_name', '$status', '$due_date', '$sos')";
+            $action_insert_sql = "INSERT INTO `report_dashboard_action`(`action_id`, `by_office`, `by_office_name`, `to_office`, `to_office_name`, `by_department`, `by_department_name`, `to_department`, `to_department_name`, `status`, `due_date`, `sos`,`creation_date`) VALUES ('$action_id',' $by_office', '$by_office_name', '$to_office', '$to_office_name', '$by_department', '$by_department_name', '$to_department', '$to_department_name', '$status', '$due_date', '$sos','$creation_date')";
       
             echo $action_insert_sql;
             echo "<hr>";    
