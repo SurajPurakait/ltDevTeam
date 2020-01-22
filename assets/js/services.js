@@ -3350,3 +3350,40 @@ function deactive_service(service_id, is_active = '') {
         }
     });
 }
+
+
+function request_create_1099_write_up() {
+    if (!requiredValidation('form_create_1099_write_up')) {
+        return false;
+    }
+    if ($("#editval").val() != '') {
+        $('.disabled_field, .client_type_field0, .type_of_client').removeAttr('disabled');
+    }
+    $('#type').removeAttr('disabled');
+    var formData = new FormData(document.getElementById('form_create_1099_write_up'));
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'services/accounting_services/request_create_1099_write_up',
+        data: formData,
+        enctype: 'multipart/form-data',
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (result) {
+            // console.log("Result: " + result);
+            // alert(result);return false;
+            if (result != 0) {
+                swal("Success!", "Successfully saved!", "success");
+                goURL(base_url + 'services/home/view/' + result.trim());
+            } else {
+                swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}

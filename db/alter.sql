@@ -1129,6 +1129,9 @@ ALTER TABLE `report_dashboard_service` CHANGE `department` `department` VARCHAR(
 /* 21.01.2020 */
 ALTER TABLE `report_dashboard_action` ADD `creation_date` DATE NOT NULL AFTER `sos`;
 
-/* 22.01.2010 */
+/* 22.01.2020 */
 
-ALTER TABLE `projects` CHANGE `created_at` `created_at` TIMESTAMP NOT NULL; 
+ALTER TABLE `projects` CHANGE `created_at` `created_at` TIMESTAMP NOT NULL;
+
+-- import payer_recipient_information
+ALTER TABLE `order_extra_data` ADD `compensation` VARCHAR(100) NOT NULL AFTER `closing_date`; 

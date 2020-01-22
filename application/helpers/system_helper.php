@@ -1057,6 +1057,16 @@ if (!function_exists('state_info')) {
 
 }
 
+if (!function_exists('country_info')) {
+
+    function country_info($country_id) {
+        $ci = &get_instance();
+        $ci->load->model('system');
+        return $ci->system->get_country_by_id($country_id);
+    }
+
+}
+
 if (!function_exists('county_info')) {
 
     function county_info($county_id) {
