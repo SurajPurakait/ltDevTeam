@@ -3,7 +3,7 @@
 ?>
 <div class="row">
     <div class="col-md-10">
-        <table class="table table-bordered report-table table-striped text-center m-b-0">
+        <table class="table table-bordered report-table table-striped text-center m-b-0" id="client-report-byoffice">
             <thead>
                 <tr>
                     <th class="text-uppercase">Offices</th>
@@ -98,7 +98,7 @@
 
 <div class="row">
     <div class="col-md-10">
-        <table class="table table-bordered report-table table-striped text-center m-b-0">
+        <table class="table table-bordered report-table table-striped text-center m-b-0" id="businessclient-report-byoffice">
             <thead>
                 <tr>
                     <th class="text-uppercase">Offices</th>
@@ -212,7 +212,7 @@
 ?>
 <div class="row">
     <div class="col-md-10">
-        <table class="table table-bordered report-table table-striped text-center m-b-0">
+        <table class="table table-bordered report-table table-striped text-center m-b-0" id="individualclient-report-byoffice">
             <thead>
                 <tr>
                     <th class="text-uppercase">Offices</th>
@@ -308,3 +308,85 @@
 <?php
     }
 ?>
+<script type="text/javascript">
+    $('#client-report-byoffice').DataTable().destroy();
+    $('#client-report-byoffice').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'TotalClientByOfficeReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Total Client By Office Report</h2>';
+                }
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+
+    $('#individualclient-report-byoffice').DataTable().destroy();
+    $('#individualclient-report-byoffice').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'IndividualClientByOfficeReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Individual Client By Office Report</h2>';
+                },
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+
+    $('#businessclient-report-byoffice').DataTable().destroy();
+    $('#businessclient-report-byoffice').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'BusinessClientByOfficeReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Business Client By Office Report</h2>';
+                }
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+</script>
