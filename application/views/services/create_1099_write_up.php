@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
-                <form class="form-horizontal" method="post" id="form_create_fein_application" onsubmit="">
+                <form class="form-horizontal" method="post" id="form_create_1099_write_up" onsubmit="request_create_1099_write_up(); return false;">
                     <div class="ibox-content">
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Your Office<span class="text-danger">*</span></label>
@@ -205,67 +205,82 @@
                         </div>
                         <div class="hr-line-dashed"></div>
 
-                        <h3>Payer's Information :</h3>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">First Name</label>
-                            <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="payer_first_name" name="payer_first_name" title="First Name" value="">
-                                <div class="errorMessage text-danger"></div>        
+                        <h3>Payer's Information : <span class="text-danger">*</span></h3>
+
+                        <div class="link-content m-b-10">
+                                <input type="hidden" id="payer_information_quantity" value="0">
+                                <button class="btn btn-success btn-xs" id="copy-contact" ref_id="<?= $reference_id; ?>">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Main Contact</button>&nbsp;
+                        </div>
+
+                        <div id="payer_information_div">
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="First Name" class="form-control" type="text" id="payer_first_name" name="payer_first_name" title="First Name" value="" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="Last Name" class="form-control" type="text" id="payer_last_name" name="payer_last_name" title="Last Name" value="" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Phone Number<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="Phone Number" phoneval class="form-control" type="text" id="payer_phone_number" name="payer_phone_number" title="Phone Number" value="" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Address<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="Address" class="form-control" type="text" id="payer_address" name="payer_address" title="Address" value="" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">City<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="City" class="form-control" type="text" id="payer_city" name="payer_city" title="City" value="" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">State<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <select title="State" class="form-control" name="payer_state" id="payer_state" required="">
+                                            <option value="">Select an option</option>
+                                            <?php load_ddl_option("all_state_list"); ?>
+                                    </select>
+                                    <div class="errorMessage text-danger"></div>   
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Country<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <select title="Country" class="form-control" name="payer_country" id="payer_country" required="">
+                                        <option value="">Select an option</option>
+                                        <?php load_ddl_option("get_countries"); ?>
+                                    </select>
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Zip<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="Zip Code" class="form-control" type="text" id="payer_zip_code" name="payer_zip_code" title="Zip Code" zipval value="" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Last Name</label>
-                            <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="payer_last_name" name="payer_last_name" title="Last Name" value="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Phone Number</label>
-                            <div class="col-lg-10">
-                                <input placeholder="" phoneval class="form-control" type="text" id="payer_phone_number" name="payer_phone_number" title="Phone Number" value="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Address</label>
-                            <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="payer_address" name="payer_address" title="Address" value="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">City</label>
-                            <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="payer_city" name="payer_city" title="City" value="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">State</label>
-                            <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="payer_state" name="payer_state" title="State" value="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Country</label>
-                            <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="payer_country" name="payer_country" title="Country" value="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Zip</label>
-                            <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="payer_zip_code" name="payer_zip_code" title="Zip Code" zipval value="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
+
                         <div class="form-group">
                             <label class="col-lg-2 control-label">TIN (Tax Identification Number)</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="payer_tin" name="payer_tin" title="TIN" value="">
+                                <input placeholder="TIN" class="form-control" type="text" id="payer_tin" name="payer_tin" title="TIN" value="">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
@@ -273,65 +288,72 @@
 
                         <h3>Recipient's Information :</h3>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">First Name</label>
+                            <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="recipient_first_name" name="recipient_first_name" title="First Name" value="">
+                                <input placeholder="First Name" class="form-control" type="text" id="recipient_first_name" name="recipient_first_name" title="First Name" value="" required="">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Last Name</label>
+                            <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="recipient_last_name" name="recipient_last_name" title="Last Name" value="">
+                                <input placeholder="Last Name" class="form-control" type="text" id="recipient_last_name" name="recipient_last_name" title="Last Name" value="" required="">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Phone Number</label>
+                            <label class="col-lg-2 control-label">Phone Number<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="" phoneval class="form-control" type="text" id="recipient_phone_number" name="recipient_phone_number" title="Phone Number" value="">
+                                <input placeholder="Phone Number" phoneval class="form-control" type="text" id="recipient_phone_number" name="recipient_phone_number" title="Phone Number" value="" required="">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Address</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="recipient_address" name="recipient_address" title="Address" value="">
+                                <input placeholder="Address" class="form-control" type="text" id="recipient_address" name="recipient_address" title="Address" value="">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">City</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="recipient_city" name="recipient_city" title="City" value="">
+                                <input placeholder="City" class="form-control" type="text" id="recipient_city" name="recipient_city" title="City" value="">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">State</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="recipient_state" name="recipient_state" title="State" value="">
+                                <select title="State" class="form-control" name="recipient_state" id="recipient_state">
+                                        <option value="">Select an option</option>
+                                        <?php load_ddl_option("all_state_list"); ?>
+                                </select>
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Country</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="recipient_country" name="recipient_country" title="Country" value="">
+                                <select title="Country" class="form-control" name="recipient_country"
+                                        id="recipient_country">
+                                    <option value="">Select an option</option>
+                                    <?php load_ddl_option("get_countries"); ?>
+                                </select>
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Zip Code</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="recipient_zip_code" name="recipient_zip_code" title="Zip Code" zipval value="">
+                                <input placeholder="Zip" class="form-control" type="text" id="recipient_zip_code" name="recipient_zip_code" title="Zip Code" zipval value="">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">TIN (Tax Identification Number)</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="recipient_tin" name="recipient_tin" title="TIN" value="">
+                                <input placeholder="TIN" class="form-control" type="text" id="recipient_tin" name="recipient_tin" title="TIN" value="">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
@@ -341,7 +363,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Non-Employee Compensation :</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="recipient_first_name" name="recipient_first_name" title="First Name" value="">
+                                <input placeholder="" class="form-control" type="text" id="compensation" name="compensation" title="Non-Employee Compensation" value="">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
@@ -363,6 +385,7 @@
                             </div>
                         </div>
                         <?= service_note_func('Note', 'n', 'service', "", $service_id); ?>
+
                         <div class="hr-line-dashed"></div>
                         <h3>Confirmation</h3>
                         <div class="form-group">
@@ -382,8 +405,8 @@
                                 <input type="hidden" name="service_id" id="service_id" value="<?= $service_id; ?>">
                                 <input type="hidden" name="base_url" id="base_url" value="<?= base_url(); ?>">
                                 <input type="hidden" name="editval" id="editval" value="">
-                                <button class="btn btn-success" type="button" onclick="">Save changes</button> &nbsp;&nbsp;&nbsp;
-                                <button class="btn btn-default" type="button" onclick="">Cancel</button>
+                                <button class="btn btn-success" type="button" onclick="request_create_1099_write_up();">Save changes</button> &nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-default" type="button" onclick="go('services/home');">Cancel</button>
                             </div>
                         </div>
                     </form>
@@ -397,4 +420,42 @@
 <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script>
     clientTypeChange(1, <?= $reference_id; ?>, '<?= $reference; ?>', 1);
+    $(function () {
+    $("#copy-contact").click(function () {
+            $("#payer_first_name").val('');
+            $("#payer_last_name").val('');
+            $("#payer_phone_number").val('');
+            $("#payer_address").val('');
+            $("#payer_city").val('');
+            $("#payer_state").val('');
+            $("#payer_country").val('');
+            $("#payer_zip_code").val('');
+            var ref_id = $('#reference_id').val();
+            $.ajax({
+                type: "POST",
+                                url: '<?= base_url(); ?>services/accounting_services/copy_contact_for_1099_write_up',
+                                data: {ref_id: ref_id}, 
+                                cache: false,
+                                success: function (data) {
+                    //alert(data);
+                    if (data != 0) {
+                        var res = JSON.parse(data);
+                        //alert(res);
+                        $("#payer_information_quantity").val(1);
+                        $("#payer_first_name").val(res.first_name);
+                        $("#payer_last_name").val(res.last_name);
+                        $("#payer_phone_number").val(res.phone1);
+                        $("#payer_address").val(res.address1);
+                        $("#payer_city").val(res.city);
+                        $("#payer_state").val(res.state);
+                        $("#payer_country").val(res.country);
+                        $("#payer_zip_code").val(res.zip);
+                        $("#payer_information_div").show();
+                    } else {
+                        swal("Error", "No Main Contact Added", "error");
+                    }
+                }
+            });
+        });
+    });   //document.ready end
 </script>

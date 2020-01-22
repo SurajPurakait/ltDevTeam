@@ -501,6 +501,72 @@ if ($usertype != '3') {
                     </td>
                 </tr>
 
+                <?php if (!empty($payer_recipient_info)){ ?>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                        <b>Payer's Information:</b>
+                    </td>
+                        <td style="<?= $td_style; ?>">
+                            <?php
+                                $state_name = state_info($payer_recipient_info['payer_state'])['state_name'];
+                                $country = country_info($payer_recipient_info['payer_country'])['country_name'];
+                                ?>
+                            <div class='media-body'>
+                                <h4 class='media-heading'>Payer's Name : <?= $payer_recipient_info['payer_last_name'] . ', ' . $payer_recipient_info['payer_first_name']; ?></h4>
+                                <p>
+                                    <b>Phone Number : </b><?= $payer_recipient_info['payer_phone_number']; ?><br>
+                                    <b>Address : </b><?= $payer_recipient_info['payer_address']; ?><br>
+                                    <b>City : </b><?= $payer_recipient_info['payer_city']; ?><br>
+                                    <b>State : </b><?= $state_name; ?><br>
+                                    <b>Country : </b><?= $country; ?><br>
+                                    <b>Zip : </b><?= $payer_recipient_info['payer_zip']; ?><br>
+                                    <b>TIN (Tax Identification Number) : </b><?= ($payer_recipient_info['payer_tin'] != '') ? $payer_recipient_info['payer_tin'] : 'N/A'; ?><br>
+                                    
+                                </p>
+                            </div>
+                        </td>
+                </tr>
+
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                        <b>Recipient's Information:</b>
+                    </td>
+                        <td style="<?= $td_style; ?>">
+                            <?php
+                                $state_name = state_info($payer_recipient_info['recipient_state'])['state_name'];
+                                $country = country_info($payer_recipient_info['recipient_country'])['country_name'];
+                                ?>
+                            <div class='media-body'>
+                                <h4 class='media-heading'>Recipient's Name : <?= $payer_recipient_info['recipient_last_name'] . ', ' . $payer_recipient_info['recipient_first_name']; ?></h4>
+                                <p>
+                                    <b>Phone Number : </b><?= $payer_recipient_info['recipient_phone_number']; ?><br>
+                                    <b>Address : </b><?= ($payer_recipient_info['recipient_address'] != '') ? $payer_recipient_info['recipient_address'] : 'N/A'; ?><br>
+                                    <b>City : </b><?= ($payer_recipient_info['recipient_city'] != '') ? $payer_recipient_info['recipient_city'] : 'N/A'; ?><br>
+                                    <b>State : </b><?= ($state_name != '') ? $state_name : 'N/A'; ?><br>
+                                    <b>Country : </b><?= ($country != '') ? $country : 'N/A'; ?><br>
+                                    <b>Zip : </b><?= ($payer_recipient_info['recipient_zip'] != '') ? $payer_recipient_info['recipient_zip'] : 'N/A'; ?><br>
+                                    <b>TIN (Tax Identification Number) : </b><?= ($payer_recipient_info['recipient_tin'] != '') ? $payer_recipient_info['recipient_tin'] : 'N/A'; ?><br>
+                                    
+                                </p>
+                            </div>
+                        </td>
+                </tr>
+
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                        <b>Compensation:</b>
+                    </td>
+                        <td style="<?= $td_style; ?>">
+                            <div class='media-body'>
+                                <p>
+                                    <b>Non-Employee compensation : </b><?= ($order_extra_data_for_compensation['compensation'] != '') ? $order_extra_data_for_compensation['compensation'] : 'N/A'; ?><br>
+                                    
+                                </p>
+                            </div>
+                        </td>
+                </tr>
+                <?php } ?>
+
                 <?php if (!empty($buyers_info)): ?>
                     <?php foreach ($buyers_info as $bi): ?>
                         <tr>
