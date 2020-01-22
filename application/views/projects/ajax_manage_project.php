@@ -1,3 +1,4 @@
+<?= $modal_type ?>
 <?php if ($modal_type == 'edit') { ?>
     <div class="modal-dialog">
         <div class="modal-content">
@@ -88,7 +89,7 @@
                         <div class="col-md-12">
                             <div class="form-group client_type_div0">
                                 <label class="col-lg-6 control-label">Client Type<span class="text-danger">*</span></label>
-                                <select class="form-control client_type_field0" onchange="projectContainerAjax(this.value, '', '','');" name="project[client_type]" id="client_type" title="Client Type" required="">
+                                <select class="form-control client_type_field0" onchange="projectContainerAjax(this.value, '', '');" name="project[client_type]" id="client_type" title="Client Type" required="">
                                     <option value="">Select Client Type</option>
                                     <option value="1">Business Client</option>
                                     <option value="2">Individual</option>
@@ -101,9 +102,9 @@
                             <!-- Add multiple service categories inside this div using ajax -->
                         </div>
                         <div class="col-md-12">
-                            <label class="col-lg-12 control-label">Creation Date:</label>
+                            <label class="col-lg-12 control-label">Due Date:<span class="text-danger">*</span></label>
                             <div class="form-group">
-                                <input placeholder="mm/dd/yyyy" id="creation_date" class="form-control datepicker_creation_date" type="text" title="Creation Date" name="project[created_at]">
+                                <input placeholder="mm/dd/yyyy" id="due_date" class="form-control datepicker_creation_date" type="text" title="Due Date" name="project[due_date]" required="">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>

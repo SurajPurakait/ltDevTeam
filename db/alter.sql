@@ -1128,3 +1128,7 @@ ALTER TABLE `report_dashboard_service` CHANGE `department` `department` VARCHAR(
 
 /* 21.01.2020 */
 ALTER TABLE `report_dashboard_action` ADD `creation_date` DATE NOT NULL AFTER `sos`;
+
+/* 22.01.2010 */
+
+ALTER TABLE `projects` CHANGE `created_at` `created_at` TIMESTAMP NOT NULL; 
