@@ -3580,7 +3580,6 @@ class Project_Template_model extends CI_Model {
         return date('m/d/Y' ,strtotime($project_date));
     }
 
-
 }
 
 ?>
