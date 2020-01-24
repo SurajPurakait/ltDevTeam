@@ -2,7 +2,7 @@
     $servername = "localhost";
     $username = "leafnet_db_user";
     $password = "leafnet@123";
-    $db = 'leafnet_stagings';
+    $db = 'leafnet_live';
     
     // $servername = "localhost";
     // $username = "root";
@@ -64,7 +64,7 @@
 
             if (!empty($sql_q_d_c_result)) {
                 $date_completed_b_c = $sql_q_d_c_result['created_time'];
-                $date_completed = '"'.date('Y-m-d', strtotime($date_completed_b_c. '+' .$end_days)).'"';
+                $date_completed = date('Y-m-d', strtotime($date_completed_b_c. '+' .$end_days));
             } else {
                 $date_completed = "0001-01-01";
                 $date_completed = addslashes($date_completed);
