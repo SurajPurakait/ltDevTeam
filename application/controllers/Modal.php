@@ -794,4 +794,18 @@ class Modal extends CI_Controller {
             $this->load->view('modal/task_financial_accounts', $render_data);
         }
     }
+
+
+     public function show_recipient() {
+
+        $render_data['modal_type'] = post('modal_type');
+        $render_data['reference'] = post('reference');
+        $render_data['reference_id'] = post('reference_id');
+        $render_data['retail_price'] = post('retail_price');
+        // if ($render_data['modal_type'] == "edit") {
+        //     $render_data["data"] = $this->service_model->get_single_contact_info($this->input->post("id"));
+        // }
+//        print_r($render_data["data"]);exit;
+        $this->load->view('modal/recipient_modal', $render_data);
+    }
 }
