@@ -623,6 +623,23 @@ class Contacts extends CI_Model {
         return $data;
     }
 
+    public function copy_main_contact_for_1099_write_up($reference, $reference_id) {
+        $sql = "select ci.id, ct.type, ci.reference, ci.first_name, ci.middle_name, ci.last_name,ci.phone1_country,ci.phone2_country,ci.type as type_id,
+                c1.country_name as phone1_country_name, 
+                c2.country_name as phone2_country_name, 
+                ci.phone1, ci.phone2, ci.email1, ci.email2, ci.skype, ci.whatsapp, ci.website, ci.status,
+                ci.address1, ci.address2, ci.city, ci.state, ci.country, c.country_name, ci.zip
+                from contact_info ci
+                left join contact_info_type ct on ct.id = ci.type
+                left join countries c on c.id = ci.country
+                left join countries c1 on c1.id = ci.phone1_country
+                left join countries c2 on c2.id = ci.phone2_country
+                where ci.status=1 and ci.reference='$reference' and ci.reference_id=$reference_id and ci.type='1'";
+
+        $data = $this->db->query($sql)->result_array();
+        return $data;
+    }
+
 }
 
 ?>

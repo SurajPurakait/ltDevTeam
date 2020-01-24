@@ -17,7 +17,7 @@ class Home extends CI_Controller {
         $this->load->model('billing_model');
         $this->filter_element = [
             1 => "ID",
-            2 => "Order ID",
+//            2 => "Order ID",
             3 => "Tracking",
             4 => "Office",
             5 => "Client Type",
@@ -31,7 +31,7 @@ class Home extends CI_Controller {
         ];
         $this->sorting_element = [
             "invoice_id" => "ID",
-            "order_id" => "Order ID",
+//            "order_id" => "Order ID",
             "status" => "Tracking",
             "officeid" => "Office ID",
             "invoice_type" => "Invoice Type",

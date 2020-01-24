@@ -1118,16 +1118,18 @@ class Project_Template_model extends CI_Model {
                     $post['project']['office_id']=$client_office->office;
                 }
                 $post['project']['client_id'] = $pcid;
-                if(isset($post['project']['created_at']) && $post['project']['created_at']!=''){
-                    $creation_date=$post['project']['created_at'];
-                    if(date('Y-m-d')!=date('Y-m-d',strtotime($creation_date))){
-                        $post['project']['created_at']=date('Y-m-d',strtotime($creation_date));
-                    }else{
-                        $post['project']['created_at']=date('Y-m-d',strtotime($creation_date));
-                    }
-                }else{
-                    $post['project']['created_at']=date('Y-m-d');
-                }
+//                if(isset($post['project']['created_at']) && $post['project']['created_at']!=''){
+//                    $creation_date=$post['project']['created_at'];
+//                    if(date('Y-m-d')!=date('Y-m-d',strtotime($creation_date))){
+//                        $post['project']['created_at']=date('Y-m-d',strtotime($creation_date));
+//                    }else{
+//                        $post['project']['created_at']=date('Y-m-d',strtotime($creation_date));
+//                    }
+//                }else{
+//                    $post['project']['created_at']=date('Y-m-d');
+//                }
+                $user_due_date=date('Y-m-d',strtotime($post['project']['due_date']));
+                unset($post['project']['due_date']);
                 $this->db->insert('projects', $post['project']);
                 $insert_id = $this->db->insert_id();
                 $notedata = $this->input->post('project_note');
@@ -1382,6 +1384,13 @@ class Project_Template_model extends CI_Model {
                             }
                         }
                     }
+//                    checking user date vs calculated pattern due date
+                    if($due_date==$user_due_date){
+                        $due_date=$due_date;
+                    }else{
+                        $due_date=$user_due_date;
+                    }
+                    
                     if ($project_recurrence_main_data['generation_month'] == '') {
                         $project_recurrence_main_data['generation_month'] = '0';
                     }
@@ -3359,7 +3368,7 @@ class Project_Template_model extends CI_Model {
 
         $all_projects_data = [];
         $all_tasks_data = [];
-        if ($category == 'projects_by_office') {
+        if ($data['category'] == 'projects_by_office') {
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
@@ -3377,7 +3386,7 @@ class Project_Template_model extends CI_Model {
             }
             return $all_projects_data;
 
-        } else if($category == 'tasks_by_office') {
+        } else if($data['category'] == 'tasks_by_office') {
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
@@ -3395,7 +3404,7 @@ class Project_Template_model extends CI_Model {
             }
             return $all_tasks_data;
 
-        } else if ($category == 'projects_to_department') {
+        } else if ($data['category'] == 'projects_to_department') {
             foreach ($data_department as $dd) {    
                 $data = [
                     'id' => $dd['id'],
@@ -3413,7 +3422,7 @@ class Project_Template_model extends CI_Model {
             }
             return $all_projects_data;
 
-        } else if ($category == 'tasks_to_department') {
+        } else if ($data['category'] == 'tasks_to_department') {
             foreach ($data_department as $dd) {    
                 $data = [
                     'id' => $dd['id'],
@@ -3570,7 +3579,6 @@ class Project_Template_model extends CI_Model {
         $project_date = $this->db->get('report_dashboard_project')->row_array()['project_creation_date'];
         return date('m/d/Y' ,strtotime($project_date));
     }
-
 
 }
 
