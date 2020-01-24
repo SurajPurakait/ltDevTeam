@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-10">
-        <table class="table table-bordered billing-report-table table-striped text-center m-b-0">
+        <table class="table table-bordered billing-report-table table-striped text-center m-b-0" id="report-billing-invoice">
             <thead>
                 <tr>
                     <th class="text-uppercase" style="white-space: nowrap;">Office</th>
@@ -110,3 +110,31 @@
     ?>
 </div>
 </div>
+<script type="text/javascript">
+    $('#report-billing-invoice').DataTable().destroy();
+    $('#report-billing-invoice').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'InvoicePaymentReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Invoice Payment Report</h2>';
+                }
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+</script>

@@ -3,7 +3,7 @@
 ?>
 	<div class="row">
 	    <div class="col-md-10">
-	        <table class="table table-bordered report-table table-striped text-center m-b-0">
+	        <table class="table table-bordered report-table table-striped text-center m-b-0" id="action-report-byoffice">
 	            <thead>
 	                <tr>
 	                    <th class="text-uppercase">Offices</th>
@@ -113,7 +113,7 @@
 ?>
 		<div class="row">
 	    <div class="col-md-10">
-	        <table class="table table-bordered report-table table-striped text-center m-b-0">
+	        <table class="table table-bordered report-table table-striped text-center m-b-0" id="action-report-tooffice">
 	            <thead>
 	                <tr>
 	                    <th class="text-uppercase">Offices</th>
@@ -223,7 +223,7 @@
 ?>
 		<div class="row">
 	    <div class="col-md-10">
-	        <table class="table table-bordered report-table table-striped text-center m-b-0">
+	        <table class="table table-bordered report-table table-striped text-center m-b-0" id="action-report-bydepartment">
 	            <thead>
 	                <tr>
 	                    <th class="text-uppercase">Departments</th>
@@ -323,7 +323,7 @@
 ?>
 		<div class="row">
 	    <div class="col-md-10">
-	        <table class="table table-bordered report-table table-striped text-center m-b-0">
+	        <table class="table table-bordered report-table table-striped text-center m-b-0" id="action-report-todepartment">
 	            <thead>
 	                <tr>
 	                    <th class="text-uppercase">Departments</th>
@@ -421,3 +421,114 @@
 <?php
     }
 ?>
+
+<script type="text/javascript">
+	$('#action-report-byoffice').DataTable().destroy();
+    $('#action-report-byoffice').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'ActionByOfficeReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Action By Office Report</h2>';
+                }
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+
+
+    $('#action-report-tooffice').DataTable().destroy();
+    $('#action-report-tooffice').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'ActionToOfficeReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Action To Office Report</h2>';
+                },
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+
+    $('#action-report-bydepartment').DataTable().destroy();
+    $('#action-report-bydepartment').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'ActionByDepartmentReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Action By Department Report</h2>';
+                }
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+
+    $('#action-report-todepartment').DataTable().destroy();
+    $('#action-report-todepartment').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'ActionToDepartmentReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Action To Department Report</h2>';
+                }
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+</script>

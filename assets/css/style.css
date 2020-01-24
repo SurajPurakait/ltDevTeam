@@ -9200,14 +9200,21 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
 #nav-tabs-div .nav-tabs li a { background:#afe35e !important; color: #000; }
 #nav-tabs-div .nav-tabs > li.active > a { background: #fff !important; color: #000; }
 .tab-content {padding:30px 5px 20px 5px;}
+.alert-primar-wrap{
+    display: flex;
+    flex-wrap: wrap;
+}
 .alert-primar {
     color: #004085;
     background-color: #cce5ff;
     border-color: #b8daff;
-    padding:5px 0 ;
-    float: left;
-    min-height:76px;
-
+    padding: 10px;
+    width: 25%;
+    margin-right: 15px;
+}
+.alert-primar-grid-container{
+    display: flex;
+    justify-content: space-between;
 }
 .clear-project-btn {margin-top:-20px; margin-bottom:13px; }
 .clear-project-btn-one {margin-top:-38px; margin-bottom:13px; }

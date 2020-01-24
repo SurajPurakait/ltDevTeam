@@ -98,12 +98,10 @@ class Home extends CI_Controller {
     }
 
     public function edit($order_id = '') {
-
         $this->load->layout = 'dashboard';
         $order_id = base64_decode($order_id);
         $edit_data = $this->service_model->get_order_info_by_id($order_id);
 // echo "<pre>";
-// print_r($edit_data);exit;
         $title = 'Edit ' . (($edit_data['service_shortname'] == 'inc_n_c_f' || $edit_data['service_shortname'] == 'inc_n_c_d' || $edit_data['service_shortname'] == 'inc_n_c_b_v_i' || $edit_data['service_shortname'] == 'inc_n_c_o') ? 'New Company' : $edit_data['service_name']);
         $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['main_menu'] = 'services';
@@ -209,8 +207,15 @@ class Home extends CI_Controller {
                 break;
 
             case 'inc_f_a_r':
+            case 'inc_a_a_r':
+            case 'inc_w_a_r':
+            case 'inc_m_a_r_c':
+            case 'inc_t_a_r':
+            case 'inc_n_j_a_r': 
+            case 'inc_n_y_a_r':    
             case 'inc_d_a_r': {     //     Annual Report 
                     $render_data['extra_services'] = $this->service_model->get_extra_services($order_id, $render_data['service_id']);
+//                    print_r($render_data['extra_services']); exit;
                     $selected_services = array();
                     if (!empty($render_data['extra_services'])) {
                         foreach ($render_data['extra_services'] as $data) {
@@ -223,9 +228,15 @@ class Home extends CI_Controller {
                     $render_data['all_related_services'] = $this->service_model->get_related_service_list_by_service_id($render_data['service_id']);
                     $render_data['florida'] = $this->service_model->get_service_by_shortname('inc_f_a_r');
                     $render_data['delaware'] = $this->service_model->get_service_by_shortname('inc_d_a_r');
+                    $render_data['arizona'] = $this->service_model->get_service_by_shortname('inc_a_a_r');
+                    $render_data['wyoming'] = $this->service_model->get_service_by_shortname('inc_w_a_r');
+                    $render_data['michigan'] = $this->service_model->get_service_by_shortname('inc_m_a_r_c');
+                    $render_data['texas'] = $this->service_model->get_service_by_shortname('inc_t_a_r');
+                    $render_data['new_jersey'] = $this->service_model->get_service_by_shortname('inc_n_j_a_r');
+                    $render_data['new_york'] = $this->service_model->get_service_by_shortname('inc_n_y_a_r');
                     $this->load->template('services/edit_annual_report', $render_data);
                 }
-
+                break;
                 case 'bus_l_t':{
                     $render_data['order_extra_data'] = $this->service_model->get_extra_data($order_id);
                     // echo "<pre>";
@@ -369,6 +380,12 @@ class Home extends CI_Controller {
                     $render_data['salestax_employee_notes'] = $this->payroll->get_payroll_employee_notes_by_reference_id($render_data['reference_id']);
                 }
                 break;
+
+            case 'acc_1_w_u': {   // 1099 Write Up
+                
+                   $render_data['order_extra_data_for_compensation'] = $this->service_model->get_extra_data($order_id); 
+                   $render_data['payer_recipient_info'] = $this->service_model->get_payer_recipient_info($order_id); 
+            }
         endswitch;
 //        echo '<pre>';print_r($render_data);exit;
 //        if ($service_id == '14') {

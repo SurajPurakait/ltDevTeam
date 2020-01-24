@@ -23,21 +23,13 @@ class Reports extends CI_Controller {
         $render_data['main_menu'] = 'reports';
         $render_data['menu'] = 'report_' . $type;
         $render_data['header_title'] = $title;
+        $render_data['current_date'] = date('m/d/Y');
         $render_data['order_start_date'] = $this->service_model->get_start_date_sales_report();
-    
-        if (!empty(post('range_btn_billing'))) {
-            if ($this->session->userdata('date_range_billing')) {
-                $this->session->unset_userdata('date_range_billing');
-            }
-            $this->session->set_userdata('date_range_billing',post('date_range_billing'));
-        }
-
-        if (!empty(post('range_btn_partner'))) {
-            if ($this->session->userdata('date_range_partner')) {
-                $this->session->unset_userdata('date_range_partner');
-            }
-            $this->session->set_userdata('date_range_partner',post('date_range_partner'));
-        }
+        $render_data['project_start_date'] = $this->Project_Template_model->get_project_start_date();
+        $render_data['action_start_date'] = $this->action_model->get_action_start_date();
+        $render_data['lead_start_date'] = $this->lead_management->get_lead_start_date();
+        $render_data['partner_start_date'] = $this->lead_management->get_partner_start_date();
+        // $render_data['client_start_date'] = '';
         $this->load->template('reports/reports', $render_data);
     }
     /* royalty_reports */
@@ -167,6 +159,9 @@ class Reports extends CI_Controller {
         );
         $this->load->view('reports/billing_invoice_payments_data',$render_data);   
     }
+    public function get_range_billing_report() {
+        echo post('date_range_billing');
+    }
     // report action data
     public function get_action_data() {       
         $category = post('category');
@@ -176,14 +171,22 @@ class Reports extends CI_Controller {
         $render_data['date_range_service_report'] = post('date_range'); 
         $this->load->view('reports/report_action_data',$render_data);
     }
+
+    public function get_range_action_report() {
+        echo post('date_range_action');
+    }
     // report project data
     public function get_project_data() {        
         $category = post('category');
-        $render_data['projects_list'] = $this->Project_Template_model->get_projects_data(post());
+        $date_range = post('date_range');
+        $render_data['projects_list'] = $this->Project_Template_model->get_projects_data($category,$date_range);
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
         $render_data['date_range_service_report'] = post('date_range'); 
         $this->load->view('reports/report_projects_data',$render_data);    
+    }
+    public function get_range_project_report() {
+        echo post('date_range_project');
     }
     // report client data
     public function get_clients_data() {
@@ -201,15 +204,20 @@ class Reports extends CI_Controller {
         $render_data['date_range_service_report'] = post('date_range');
         $this->load->view('reports/report_partner_data',$render_data);    
     }
-
+    public function get_range_partners_report() {
+        echo post('date_range_partner');
+    }
     // report lead data
     public function get_leads_data() {
-//        print_r(post());die;
         $category = post('category');
         $render_data['lead_list'] = $this->lead_management->get_lead_data(post());
         $render_data['reports'] = array('report'=>'leafnet_report');
         $render_data['category'] = $category;
         $render_data['date_range_service_report'] = post('date_range');         
         $this->load->view('reports/report_lead_data',$render_data);    
+    }
+
+    public function get_range_lead_report() {
+        echo post('date_range_lead');
     }
 }

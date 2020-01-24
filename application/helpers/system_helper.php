@@ -1057,6 +1057,16 @@ if (!function_exists('state_info')) {
 
 }
 
+if (!function_exists('country_info')) {
+
+    function country_info($country_id) {
+        $ci = &get_instance();
+        $ci->load->model('system');
+        return $ci->system->get_country_by_id($country_id);
+    }
+
+}
+
 if (!function_exists('county_info')) {
 
     function county_info($county_id) {
@@ -2330,7 +2340,13 @@ if (!function_exists('edit_by_shortname_array')) {
             'inc_n_c_n_p_f',
             'inc_n_f_p',
             'tax_f',
-            'bus_l_t'
+            'bus_l_t',
+            'inc_a_a_r',
+            'inc_w_a_r',
+            'inc_m_a_r_c',
+            'inc_t_a_r',
+            'inc_n_j_a_r',
+            'inc_n_y_a_r'
         ];
     }
 
