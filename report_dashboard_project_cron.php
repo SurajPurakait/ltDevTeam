@@ -78,7 +78,7 @@
                 'sos' => $sos
             );
 
-            // fetching data from report_dashboard_billing table
+            // fetching data from report_dashboard_project table
             $project_sql = "SELECT * FROM `report_dashboard_project` WHERE task_id = '".$task_id."'";
             $project_query_run = mysqli_query($conn,$project_sql);
             $pqr = mysqli_fetch_assoc($project_query_run);
