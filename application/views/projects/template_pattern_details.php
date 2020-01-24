@@ -275,7 +275,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         </div>
     </div>
     <div class="col-md-12">
-        <h3 class="m-0 p-b-10 col-lg-12">Frequency:<?= date("m/d/Y", $dueDate) ?></h3>
+        <h3 class="m-0 p-b-10 col-lg-12">Frequency:</h3>
         <label class="col-lg-12 control-label">Next Recurrence: <?= date('m/d/Y', strtotime($generation_date)) ?></label>
     </div>
 <?php } ?>
