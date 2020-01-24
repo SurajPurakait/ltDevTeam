@@ -3579,6 +3579,13 @@ class Project_Template_model extends CI_Model {
         $project_date = $this->db->get('report_dashboard_project')->row_array()['project_creation_date'];
         return date('m/d/Y' ,strtotime($project_date));
     }
+    public function getTemplatePatternDetails($template_id){
+        $data = $this->db->get_where('project_template_recurrence_main', ['template_id' => $template_id])->row_array();
+        return $data;
+    }
+    public function project_template_task_details($template_id){
+        return $this->db->get_where('project_template_task',['template_main_id'=>$template_id])->row();
+    }
 
 }
 

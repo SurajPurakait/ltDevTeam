@@ -91,7 +91,7 @@
                                 <label class="col-lg-6 control-label">Client Type<span class="text-danger">*</span></label>
                                 <select class="form-control client_type_field0" onchange="projectContainerAjax(this.value, '', '');" name="project[client_type]" id="client_type" title="Client Type" required="">
                                     <option value="">Select Client Type</option>
-                                    <option value="1">Business Client</option>
+                                    <option value="1" selected>Business Client</option>
                                     <option value="2">Individual</option>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
@@ -101,16 +101,10 @@
                         <div id="project_container">
                             <!-- Add multiple service categories inside this div using ajax -->
                         </div>
-                        <div class="col-md-12">
-                            <label class="col-lg-12 control-label">Due Date:<span class="text-danger">*</span></label>
-                            <div class="form-group">
-                                <input placeholder="mm/dd/yyyy" id="due_date" class="form-control datepicker_creation_date" type="text" title="Due Date" name="project[due_date]" required="">
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
                         <div class="hr-line-dashed"></div>
                         
                         <div id="template_recurrence"></div>
+                        
                         <div class="hr-line-dashed"></div>
                         <div class="col-md-12">
                             <label class="col-lg-12 control-label">Notes:</label>
@@ -136,9 +130,11 @@
 <?php if ($modal_type == 'edit') { ?>
     projectContainerAjax(<?= $project_dtls->client_type ?>,'<?= $project_dtls->client_id ?>',<?= $project_dtls->id ?>);
 //        project_client_list(<? $project_dtls->office_id ?>,<? $project_dtls->client_id ?>, 'edit');
+<?php } if($modal_type=='add'){ ?>
+    projectContainerAjax(1,'','');
 <?php } ?>
     $(document).ready(function () {
-        $(".datepicker_creation_date").datepicker({format: 'mm/dd/yyyy', autoHide: true});
+        $(".datepicker_creation_date").datepicker({format: 'mm/dd/yyyy', autoHide: true,startDate: new Date()});
 //        alert('hi');
         $('.add-task-note').click(function () {
 //            alert("hlw");

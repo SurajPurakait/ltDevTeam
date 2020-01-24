@@ -352,7 +352,8 @@ class Project extends CI_Controller {
     }
     public function get_template_pattern_details(){
         $template_id=post('id');
-        $render_data['pattern_details']=$this->Project_Template_model->getTemplatePatternValue($template_id);
+        $render_data['project_recurrence_main_data']=$this->Project_Template_model->getTemplatePatternDetails($template_id);
+        $render_data['task_list']=$this->Project_Template_model->project_template_task_details($template_id);
         $this->load->view('projects/template_pattern_details',$render_data);
     }
 }
