@@ -171,8 +171,9 @@ if (!empty($result)):
         }
 //        $services_list = service_list_by_order_id($row->id);
         ?>
+      <?php if($invoice_info !=''){?>
         <div id="order<?= $row->id; ?>" class="panel panel-default service-panel category<?= $row->category_id; ?> filter-<?= $row->department_id . '-' . $status . ' ' . $late_class; ?>">
-           <?php if($invoice_info !=''){?>
+           
             <div class="panel-heading">
                 <?php if (!empty($invoice_info) && ($invoice_info['is_order'] == 'y')) { ?>
                 <a href="<?= base_url("billing/invoice/place/" . base64_encode($invoice_info['id']) . "/" . base64_encode('view')); ?>" target="_blank" class="btn btn-primary btn-xs btn-service-view"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
@@ -334,10 +335,10 @@ if (!empty($result)):
                     </div>
                 </a>
             </div>
-         
+        
             <div id="collapse<?= $row->id; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;"></div>
         </div>
-           <?php } ?>
+   <?php } ?>
         <?php
         $row_number = $row_count + 1;
     endforeach;
