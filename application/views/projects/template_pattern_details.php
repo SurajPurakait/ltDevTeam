@@ -1,185 +1,278 @@
-<div class="col-md-12">
-    <h4 class="m-0 p-b-20">Frequency:</h4>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label class="control-label">Pattern:</label>
-                <select class="form-control" id="pattern" name="recurrence[pattern]" onchange="change_due_pattern(this.value);" style="pointer-events:none" readonly>
-                    <option value="monthly" <?php echo ($pattern_details->pattern == 'monthly') ? 'selected' : ''; ?>>Monthly</option>     
-                    <option value="weekly" <?php echo ($pattern_details->pattern == 'weekly') ? 'selected' : ''; ?>>Weekly</option>
-                    <option value="quarterly" <?php echo ($pattern_details->pattern == 'quarterly') ? 'selected' : ''; ?>>Quarterly</option>
-                    <option value="annually" <?php echo ($pattern_details->pattern == 'annually') ? 'selected' : ''; ?>>Annually</option>
-                    <option value="periodic" <?php echo ($pattern_details->pattern == 'periodic') ? 'selected' : ''; ?>>Periodic</option>
-                    <option value="none" <?php echo ($pattern_details->pattern == 'none') ? 'selected' : ''; ?>>None</option>
-                </select>
-            </div>
-            <?php if ($pattern_details->pattern != 'periodic') { ?>
-                <div class="form-group">
-                    <label class="control-label"><input type="checkbox" name="recurrence[occur_weekdays]" readonly="" id="occur_weekdays" <?php echo ($pattern_details->occur_weekdays == '0') ? '' : 'checked'; ?>> Must occur on weekdays</label>
-                </div>
-            <?php } ?>
-            <div class="annual-check-div" <?php echo ($pattern_details->pattern == 'annually') ? 'style="display: block;"' : 'style="display: none;"'; ?>>
-                <div class="form-group">
-                    <label class="control-label"><input type="checkbox" <?php echo ($pattern_details->client_fiscal_year_end == '0') ? '' : 'checked'; ?> name="recurrence[client_fiscal_year_end]" id="client_fiscal_year_end" readonly> Based on Client fiscal year ends</label>
-                </div>
-            </div>
-        </div><!-- ./col-md-12 -->
-        <div class="col-md-12">
-            <div class="form-group">
-                <div class="form-inline due-div">
-                    <?php
-                    if ($pattern_details->pattern == 'annually') {
-                        if ($pattern_details->client_fiscal_year_end == '0') {
-                            ?>
-                            <label class="control-label">
-                                <input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day" readonly=""> Due on every</label>&nbsp;<select class="form-control" id="r_month" name="recurrence[due_month]" disabled="">
-                                <option value="1" <?php echo ($pattern_details->due_month == '1') ? 'selected' : ''; ?>>January</option>
-                                <option value="2" <?php echo ($pattern_details->due_month == '2') ? 'selected' : ''; ?>>February</option>
-                                <option value="3" <?php echo ($pattern_details->due_month == '3') ? 'selected' : ''; ?>>March</option>
-                                <option value="4" <?php echo ($pattern_details->due_month == '4') ? 'selected' : ''; ?>>April</option>
-                                <option value="5" <?php echo ($pattern_details->due_month == '5') ? 'selected' : ''; ?>>May</option>
-                                <option value="6" <?php echo ($pattern_details->due_month == '6') ? 'selected' : ''; ?>>June</option>
-                                <option value="7" <?php echo ($pattern_details->due_month == '7') ? 'selected' : ''; ?>>July</option>
-                                <option value="8" <?php echo ($pattern_details->due_month == '8') ? 'selected' : ''; ?>>August</option>
-                                <option value="9" <?php echo ($pattern_details->due_month == '9') ? 'selected' : ''; ?>>September</option>
-                                <option value="10" <?php echo ($pattern_details->due_month == '10') ? 'selected' : ''; ?>>October</option>
-                                <option value="11" <?php echo ($pattern_details->due_month == '11') ? 'selected' : ''; ?>>November</option>
-                                <option value="12" <?php echo ($pattern_details->due_month == '12') ? 'selected' : ''; ?>>December</option>
-                            </select>&nbsp;
-                            <input class="form-control" type="number" name="recurrence[due_day]" min="1" value="<?php echo $pattern_details->due_day; ?>" max="31" style="width: 100px" id="r_day">
+<?php
+$project_date = date('Y-m-d');
+if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data)) {
+    if ($project_recurrence_main_data['client_fiscal_year_end'] == 1) {
+        $get_client_fye = get_client_fye($client_reference_id);
+        $current_year = date('Y', strtotime($project_date));
+        if ($project_recurrence_main_data['fye_type'] == 1) {
 
+            $get_project_creation_date = $this->db->get_where('projects', ['id' => $insert_id])->row_array();
+            $creation_date = date('Y-m-d', strtotime($project_date));
 
-                        <?php } else { ?>
-                            <label class="control-label m-r-5">
-                                <input type="radio" name="recurrence[due_fiscal]" <?php echo ($pattern_details->fye_type == '1') ? 'checked' : ''; ?> value="1"> Due on every</label>&nbsp;
-                            <select class="form-control" name="recurrence[due_fiscal_month]">
-                                <option <?php echo ($pattern_details->fye_month == '1') ? 'selected' : ''; ?> value="1">First</option>
-                                <option <?php echo ($pattern_details->fye_month == '2') ? 'selected' : ''; ?> value="2">Second</option>
-                                <option <?php echo ($pattern_details->fye_month == '3') ? 'selected' : ''; ?> value="3">Third</option>
-                                <option <?php echo ($pattern_details->fye_month == '4') ? 'selected' : ''; ?> value="4">Fourth</option>
-                            </select>&nbsp;
-                            <label class="control-label m-r-5">month after FYE on day</label>&nbsp;
-                            <input class="form-control m-r-5" value="1" type="number" name="recurrence[due_fiscal_day]" min="1" max="30" style="width: 100px">&nbsp;
+            $fye_day = $project_recurrence_main_data['fye_day'];
+            $fye_is_weekday = $project_recurrence_main_data['fye_is_weekday'];
+            $fye_month = $project_recurrence_main_data['fye_month'];
 
-                            <?php
-                        }
-                    } elseif ($pattern_details->pattern == 'none') {
-                        ?>
-                        <label class="control-label">
-                            <input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> Due on every</label>&nbsp;<select class="form-control" id="r_month" name="recurrence[due_month]">
-                            <option value="1" <?php echo ($pattern_details->due_month == '1') ? 'selected' : ''; ?>>January</option>
-                            <option value="2" <?php echo ($pattern_details->due_month == '2') ? 'selected' : ''; ?>>February</option>
-                            <option value="3" <?php echo ($pattern_details->due_month == '3') ? 'selected' : ''; ?>>March</option>
-                            <option value="4" <?php echo ($pattern_details->due_month == '4') ? 'selected' : ''; ?>>April</option>
-                            <option value="5" <?php echo ($pattern_details->due_month == '5') ? 'selected' : ''; ?>>May</option>
-                            <option value="6" <?php echo ($pattern_details->due_month == '6') ? 'selected' : ''; ?>>June</option>
-                            <option value="7" <?php echo ($pattern_details->due_month == '7') ? 'selected' : ''; ?>>July</option>
-                            <option value="8" <?php echo ($pattern_details->due_month == '8') ? 'selected' : ''; ?>>August</option>
-                            <option value="9" <?php echo ($pattern_details->due_month == '9') ? 'selected' : ''; ?>>September</option>
-                            <option value="10" <?php echo ($pattern_details->due_month == '10') ? 'selected' : ''; ?>>October</option>
-                            <option value="11" <?php echo ($pattern_details->due_month == '11') ? 'selected' : ''; ?>>November</option>
-                            <option value="12" <?php echo ($pattern_details->due_month == '12') ? 'selected' : ''; ?>>December</option>
-                        </select>&nbsp;
-                        <input class="form-control" type="number" name="recurrence[due_day]" min="1" value="<?php echo $pattern_details->due_day; ?>" max="31" style="width: 100px" id="r_day">
-                        }
-                    <?php } elseif ($pattern_details->pattern == 'weekly') { ?>
-                        <label class="control-label"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day"> Due every</label>&nbsp;
-                        <input class="form-control" value="<?php echo $pattern_details->due_day; ?>" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day">&nbsp;week(s) on the following days:&nbsp;
-                        <div class="m-t-10">
-                            <div class="m-b-10">
-                                <span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="1" <?php echo ($pattern_details->due_month == '1') ? 'checked' : ''; ?> class="m-r-5">&nbsp;Sunday&nbsp;</span>
-                                <span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="2" <?php echo ($pattern_details->due_month == '2') ? 'checked' : ''; ?> class="m-r-5">&nbsp;Monday&nbsp;</span>
-                                <span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="3" <?php echo ($pattern_details->due_month == '3') ? 'checked' : ''; ?> class="m-r-5">&nbsp;Tuesday&nbsp;</span>
-                                <span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="4" <?php echo ($pattern_details->due_month == '4') ? 'checked' : ''; ?> class="m-r-5">&nbsp;Wednesday&nbsp;</span>
-                            </div>
-                            <span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="5" class="m-r-5">&nbsp;Thursday&nbsp;</span>
-                            <span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="6" class="m-r-5">&nbsp;Friday&nbsp;</span>
-                            <span class="m-r-20"><input type="radio" name="recurrence[due_month]" value="7" class="m-r-5">&nbsp;Saturday</span>
-                        </div>
-                    <?php } elseif ($pattern_details->pattern == 'quarterly') { ?>
-                        <label class="control-label">
-                            <input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day" class="m-r-5"> Due on day</label>&nbsp;
-                        <input class="form-control" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day" value="<?php echo $pattern_details->due_day; ?>"><label class="control-label">of</label>&nbsp;
-                        <select class="form-control" id="r_month" name="recurrence[due_month]">
-                            <option value="1" <?php echo ($pattern_details->due_month == '1') ? 'selected' : ''; ?>>First</option>
-                            <option value="2" <?php echo ($pattern_details->due_month == '2') ? 'selected' : ''; ?>>Second</option>
-                            <option value="3" <?php echo ($pattern_details->due_month == '3') ? 'selected' : ''; ?>>Third</option>
-                        </select>&nbsp;
-                        <label class="control-label" id="control-label">month in quarter</label>
-                    <?php } elseif ($pattern_details->pattern == 'periodic') { ?>
-                        <label class="control-label">Due on day</label>&nbsp;
-                        <input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day" readonly="" value="<?php echo $pattern_details->due_day; ?>">
-                        <label class="control-label m-r-5">of month</label>&nbsp;
-                        <!--<input class="form-control" type="number" name="recurrence[due_month]" min="1" max="12" style="width: 100px" id="r_month" value="<?php echo $pattern_details->due_month; ?>">&nbsp;-->
-                        <select class="form-control" id="r_month" name="recurrence[due_month]" disabled>
-                            <option value="1" <?php echo ($pattern_details->due_month == '1') ? 'selected' : ''; ?>>January</option>
-                            <option value="2" <?php echo ($pattern_details->due_month == '2') ? 'selected' : ''; ?>>February</option>
-                            <option value="3" <?php echo ($pattern_details->due_month == '3') ? 'selected' : ''; ?>>March</option>
-                            <option value="4" <?php echo ($pattern_details->due_month == '4') ? 'selected' : ''; ?>>April</option>
-                            <option value="5" <?php echo ($pattern_details->due_month == '5') ? 'selected' : ''; ?>>May</option>
-                            <option value="6" <?php echo ($pattern_details->due_month == '6') ? 'selected' : ''; ?>>June</option>
-                            <option value="7" <?php echo ($pattern_details->due_month == '7') ? 'selected' : ''; ?>>July</option>
-                            <option value="8" <?php echo ($pattern_details->due_month == '8') ? 'selected' : ''; ?>>August</option>
-                            <option value="9" <?php echo ($pattern_details->due_month == '9') ? 'selected' : ''; ?>>September</option>
-                            <option value="10" <?php echo ($pattern_details->due_month == '10') ? 'selected' : ''; ?>>October</option>
-                            <option value="11" <?php echo ($pattern_details->due_month == '11') ? 'selected' : ''; ?>>November</option>
-                            <option value="12" <?php echo ($pattern_details->due_month == '12') ? 'selected' : ''; ?>>December</option>
-                        </select>&nbsp;<a href="javascript:void(0);" onclick="addPeriodicDate()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Periodic Date" style="pointer-events:none" disabled> <i class="fa fa-plus" aria-hidden="true"></i> </a>
-                        <?php
-                        if (!empty($periodic_pattern)) {
-                            foreach ($periodic_pattern as $val) {
-                                ?><div class="row" id="clone-<?= $val['id'] ?>">
-                                    <div class="col-md-12 m-b-5"><label class="control-label m-b-5"> Due on day</label>&nbsp;<input class="form-control m-r-5 test" type="number" name="due_days[]" min="1" max="31" readonly="" value="<?= $val['due_day'] ?>" style="width: 100px" id="r_day1"><label class="control-label m-r-5">of month</label>
-                                        <select class="form-control m-r-2 periodic_mnth" id="r_month1" name="due_months[]" value="1" disabled>
-                                            <option value="1" <?= $val['due_month'] == 1 ? 'selected' : '' ?> >January</option>
-                                            <option value="2" <?= $val['due_month'] == 2 ? 'selected' : '' ?> >February</option>
-                                            <option value="3" <?= $val['due_month'] == 3 ? 'selected' : '' ?> >March</option>
-                                            <option value="4" <?= $val['due_month'] == 4 ? 'selected' : '' ?>>April</option>
-                                            <option value="5" <?= $val['due_month'] == 5 ? 'selected' : '' ?>>May</option>
-                                            <option value="6" <?= $val['due_month'] == 6 ? 'selected' : '' ?>>June</option>
-                                            <option value="7" <?= $val['due_month'] == 7 ? 'selected' : '' ?>>July</option>
-                                            <option value="8" <?= $val['due_month'] == 8 ? 'selected' : '' ?>>August</option>
-                                            <option value="9" <?= $val['due_month'] == 9 ? 'selected' : '' ?>>September</option>
-                                            <option value="10" <?= $val['due_month'] == 10 ? 'selected' : '' ?>>October</option>
-                                            <option value="11" <?= $val['due_month'] == 11 ? 'selected' : '' ?>>November</option>
-                                            <option value="12" <?= $val['due_month'] == 12 ? 'selected' : '' ?>>December</option>
-                                        </select>&nbsp;
-                                        <a href="javascript:void(0);" onclick="removePeriodicDate('<?= $val['id'] ?>')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>
-                                <?php
-                            }
-                        }
-                    } else {
-                        ?>
-                        <label class="control-label"><input type="radio" name="recurrence[due_type]" checked="" value="1" id="due_on_day" readonly=""> Due on day</label>&nbsp;
-                        <input class="form-control m-r-5" type="number" name="recurrence[due_day]" min="1" max="31" style="width: 100px" id="r_day" readonly="" value="<?php echo $pattern_details->due_day; ?>">
-                        <label class="control-label m-r-5">of every</label>&nbsp;
-                        <input class="form-control" type="number" name="recurrence[due_month]" min="1" max="12" style="width: 100px" id="r_month" readonly="" value="<?php echo $pattern_details->due_month; ?>">&nbsp;
-                        <label class="control-label" id="control-label">month(s)</label>
-                    <?php } ?>
-                </div>
-            </div> 
+            $after_days = (int) $fye_month * 30;
+            $current_due = $project_recurrence_main_data['actual_due_year'] . '-' . $get_client_fye;
+
+            $newDate = strtotime($current_due . ' + ' . $after_days . ' days');
+
+            $project_recurrence_main_data['actual_due_day'] = $fye_day;
+            $project_recurrence_main_data['actual_due_month'] = date('m', $newDate);
+            $project_recurrence_main_data['actual_due_year'] = date('Y', $newDate);
+
+            if ($project_recurrence_main_data['actual_due_month'] <= 12) {
+                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+            } else {
+                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . ($project_recurrence_main_data['actual_due_month'] % 12) . '-' . $project_recurrence_main_data['actual_due_day'];
+            }
+
+            if ($due_date <= $creation_date) {
+                $project_recurrence_main_data['actual_due_year'] = $project_recurrence_main_data['actual_due_year'] + 1;
+            } else {
+                $project_recurrence_main_data['actual_due_year'] = $project_recurrence_main_data['actual_due_year'];
+            }
+        }
+    }
+//                    day month and year creation
+    unset($project_recurrence_main_data['actual_due_day']);
+    unset($project_recurrence_main_data['actual_due_month']);
+    unset($project_recurrence_main_data['actual_due_year']);
+    if ($project_recurrence_main_data['pattern'] == 'annually' || $project_recurrence_main_data['pattern'] == 'none') {
+        $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
+        $project_recurrence_main_data['actual_due_month'] = $project_recurrence_main_data['due_month'];
+        $current_month = date('m', strtotime($project_date));
+        $current_day = date('d', strtotime($project_date));
+        $current_year = date('Y', strtotime($project_date));
+        if ($project_recurrence_main_data['due_month'] >= $current_month && $project_recurrence_main_data['due_day'] >= $current_day) {
+            $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year);
+        } else {
+            $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year);
+        }
+    } elseif ($project_recurrence_main_data['pattern'] == 'monthly') {
+
+        $current_month = date('m', strtotime($project_date));
+        $current_day = date('d', strtotime($project_date));
+        $current_year = date('Y', strtotime($project_date));
+        $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
+        $project_recurrence_main_data['actual_due_month'] = (int) $current_month + (int) $project_recurrence_main_data['due_month'];
+        if ($project_recurrence_main_data['due_day'] >= $current_day) {
+
+            if ($project_recurrence_main_data['actual_due_month'] <= 12) {
+                $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year);
+            } else {
+                $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year) + 1;
+            }
+        } else {
+
+            if ($project_recurrence_main_data['actual_due_month'] <= 12) {
+                $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year);
+            } else {
+                $year = intdiv($project_recurrence_main_data['actual_due_month'], 12);
+                $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year) + $year;
+            }
+        }
+    } elseif ($project_recurrence_main_data['pattern'] == 'weekly') {
+        $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
+        $current_day = $day_array[$project_recurrence_main_data['due_month']];
+        $current_months = date('m', strtotime($project_date));
+        $current_days = date('d', strtotime($project_date));
+        $current_year = date('Y', strtotime($project_date));
+        $givenDate = date('Y-m-d', mktime(0, 0, 0, $current_months, $current_days + $project_recurrence_main_data['due_day'], ($current_year == date('Y') ? date('Y') : $current_year)));
+        $project_recurrence_main_data['actual_due_day'] = date('d', strtotime('next ' . $current_day, strtotime($givenDate)));
+        $project_recurrence_main_data['actual_due_month'] = date('m', strtotime('next ' . $current_day, strtotime($givenDate)));
+        $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year);
+    } elseif ($project_recurrence_main_data['pattern'] == 'quarterly') {
+//                                $current_month = date('m');
+        $current_month = date('m', strtotime($project_date));
+        $current_day = date('d', strtotime($project_date));
+        $current_year = date('Y', strtotime($project_date));
+        if ($current_month == '1' || $current_month == '2' || $current_month == '3') {
+            $next_quarter[1] = '4';
+            $next_quarter[2] = '5';
+            $next_quarter[3] = '6';
+            $due_year = ($current_year == date('Y') ? date('Y') : $current_year);
+        } elseif ($current_month == '4' || $current_month == '5' || $current_month == '6') {
+            $next_quarter[1] = '7';
+            $next_quarter[2] = '8';
+            $next_quarter[3] = '9';
+            $due_year = ($current_year == date('Y') ? date('Y') : $current_year);
+        } elseif ($current_month == '7' || $current_month == '8' || $current_month == '9') {
+            $next_quarter[1] = '10';
+            $next_quarter[2] = '11';
+            $next_quarter[3] = '12';
+            $due_year = ($current_year == date('Y') ? date('Y') : $current_year);
+        } else {
+            $next_quarter[1] = '1';
+            $next_quarter[2] = '2';
+            $next_quarter[3] = '3';
+            $due_year = date(($current_year == date('Y') ? date('Y') : $current_year)) + 1;
+        }
+        $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
+        if ($project_recurrence_main_data['due_month'] > $current_month) {
+            $project_recurrence_main_data['actual_due_month'] = $project_recurrence_main_data['due_month'];
+        } else {
+            $project_recurrence_main_data['actual_due_month'] = $next_quarter[$project_recurrence_main_data['due_month']];
+        }
+        $project_recurrence_main_data['actual_due_year'] = $due_year;
+    } elseif ($project_recurrence_main_data['pattern'] == 'periodic') {
+//                                $current_month = date('m');
+        $current_month = date('m', strtotime($project_date));
+        $current_day = date('d', strtotime($project_date));
+        $current_year = date('Y', strtotime($project_date));
+        $project_recurrence_main_data['actual_due_day'] = $project_recurrence_main_data['due_day'];
+        $project_recurrence_main_data['actual_due_month'] = (int) $project_recurrence_main_data['due_month'];
+        if ($project_recurrence_main_data['actual_due_day'] >= $current_day) {
+            if ($project_recurrence_main_data['actual_due_month'] < $current_month) {
+                $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year) + 1;
+            } else {
+                $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year);
+            }
+        } else {
+            if ($project_recurrence_main_data['actual_due_month'] <= $current_month) {
+                $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year) + 1;
+            } else {
+                $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year);
+            }
+        }
+//                                $periodic_day= json_decode($project_recurrence_main_data['periodic_due_day']);
+//                                $periodic_month=json_decode($project_recurrence_main_data['periodic_due_month']);
+//                                unset($project_recurrence_main_data['periodic_due_day']);
+//                                unset($project_recurrence_main_data['periodic_due_month']);
+    } else {
+        $project_recurrence_main_data['actual_due_day'] = '0';
+        $project_recurrence_main_data['actual_due_month'] = '0';
+        $project_recurrence_main_data['actual_due_year'] = '0';
+    }
+//                            end of new date 
+//                            echo $project_recurrence_main_data['actual_due_month'];die;
+    if ($project_recurrence_main_data['pattern'] == 'monthly') {
+//                        $cur_day = date('d');
+        $cur_month = date('m', strtotime($project_date));
+        $cur_day = date('d', strtotime($project_date));
+        $current_year = date('Y', strtotime($project_date));
+        if ($cur_day <= $project_recurrence_main_data['actual_due_day']) {
+            if ($cur_month <= $project_recurrence_main_data['actual_due_month']) {
+                $project_recurrence_main_data['actual_due_month'] = $cur_month;
+            } else {
+                $project_recurrence_main_data['actual_due_month'] = $project_recurrence_main_data['actual_due_month'];
+            }
+        } else {
+            if ($cur_month <= $project_recurrence_main_data['actual_due_month']) {
+                $project_recurrence_main_data['actual_due_month'] = $project_recurrence_main_data['actual_due_month'];
+            } else {
+                $project_recurrence_main_data['actual_due_month'] = $cur_month;
+            }
+        }
+    }
+    unset($project_recurrence_main_data['id']);
+    if ($project_recurrence_main_data['pattern'] != 'annually') {
+        if ($project_recurrence_main_data['actual_due_month'] <= 12) {
+            $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+        } else {
+            $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . ($project_recurrence_main_data['actual_due_month'] % 12) . '-' . $project_recurrence_main_data['actual_due_day'];
+        }
+    } else {
+        $current_month = date('m', strtotime($project_date));
+        $current_day = date('d', strtotime($project_date));
+        $current_year = date('Y', strtotime($project_date));
+        if ($project_recurrence_main_data['actual_due_day'] > $current_day) {
+            if ($project_recurrence_main_data['actual_due_month'] >= $current_month) {
+                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+            } else {
+                $due_date = $project_recurrence_main_data['actual_due_year'] + 1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+            }
+        } else {
+            if ($project_recurrence_main_data['actual_due_month'] > $current_month) {
+                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+            } else {
+                $due_date = $project_recurrence_main_data['actual_due_year'] + 1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+            }
+        }
+    }
+//                    checking user date vs calculated pattern due date
+//    if ($due_date == $user_due_date) {
+//        $due_date = $due_date;
+//    } else {
+//        $due_date = $user_due_date;
+//    }
+
+    if ($project_recurrence_main_data['generation_month'] == '') {
+        $project_recurrence_main_data['generation_month'] = '0';
+    }
+
+    if ($project_recurrence_main_data['generation_day'] == '') {
+        $project_recurrence_main_data['generation_day'] = '0';
+    }
+    $generation_days = ((int) $project_recurrence_main_data['generation_month'] * 30) + (int) $project_recurrence_main_data['generation_day'];
+
+    $project_recurrence_main_data['due_date'] = $due_date;
+//                    echo $due_date;die;
+    if ($project_recurrence_main_data['pattern'] == 'monthly') {
+        $next_due_date = date("Y-m-d", strtotime("+1 month", strtotime($due_date)));
+        $project_recurrence_main_data['next_due_date'] = $next_due_date;
+    } elseif ($project_recurrence_main_data['pattern'] == 'annually') {
+        $next_due_date = date("Y-m-d", strtotime("+1 year", strtotime($due_date)));
+        $project_recurrence_main_data['next_due_date'] = $next_due_date;
+    } elseif ($project_recurrence_main_data['pattern'] == 'weekly') {
+        $next_due_date = date("Y-m-d", strtotime("+7 days", strtotime($due_date)));
+        $project_recurrence_main_data['next_due_date'] = $next_due_date;
+    } elseif ($project_recurrence_main_data['pattern'] == 'quarterly') {
+        $next_due_date = date("Y-m-d", strtotime("+3 months", strtotime($due_date)));
+        $project_recurrence_main_data['next_due_date'] = $next_due_date;
+    } elseif ($project_recurrence_main_data['pattern'] == 'periodic') {
+        $next_due_date = '0000-00-00';
+        $project_recurrence_main_data['next_due_date'] = $next_due_date;
+    } else {
+        $project_recurrence_main_data['next_due_date'] = '0000-00-00';
+    }
+    if ($project_recurrence_main_data['generation_type'] == 2 || $project_recurrence_main_data['pattern'] == 'periodic') {
+        $generation_date = NULL;
+    } else {
+        $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
+    }
+    $project_recurrence_main_data['generation_date'] = $generation_date;
+//    $project_recurrence_main_data['project_id'] = $insert_id;
+//    $this->db->set($project_recurrence_main_data);
+//    $this->db->insert('project_recurrence_main', $project_recurrence_main_data);
+    ?>
+
+    <?php
+    if (!empty($task_list)) {
+            $dueDate = strtotime($due_date);
+            $project_date=strtotime($project_date);
+            $start_date = $task_list->target_start_date . 'days';
+            $complete_date = $task_list->target_complete_date . 'days';
+            if ($task_list->target_start_day == 1) {
+                $targetStartDate = date("Y-m-d", strtotime(("+$start_date"), $project_date));
+            } else {
+                $targetStartDate = date("Y-m-d", strtotime(("-$start_date"), $dueDate));
+            }
+            if ($task_list->target_complete_day == 1) {
+                $targetCompleteDate = date("Y-m-d", strtotime(("+$complete_date"), $project_date));
+            } else {
+                $targetCompleteDate = date("Y-m-d", strtotime(("-$complete_date"), $dueDate));
+            }
+    }
+    ?>
+    <div class="col-md-6">
+        <label class="col-lg-12 control-label">Start Date:<span class="text-danger">*</span></label>
+        <div class="form-group">
+            <input placeholder="mm/dd/yyyy" id="start_date" class="form-control datepicker_creation_date" type="text" title="Start Date" value="<?= date('m/d/Y',strtotime($targetStartDate)) ?>">
+            <div class="errorMessage text-danger"></div>
         </div>
     </div>
-    <hr class="hr-line-dashed"/>
-    <h3 class="m-0 p-b-20">Generation:</h3>
-    <div class="row">
-        <div class="col-md-12">
-            <label class="control-label"><input type="radio" name="recurrence[generation_type]" disabled value="0" <?php echo ($pattern_details->generation_type == '0') ? 'checked' : ''; ?> onclick="//check_generation_type(this.value)">&nbsp; When previous project is Complete</label>
+    <div class="col-md-6">
+        <label class="col-lg-12 control-label">Due Date:<span class="text-danger">*</span></label>
+        <div class="form-group">
+            <input placeholder="mm/dd/yyyy" id="due_date" name="project[due_date]" class="form-control datepicker_creation_date" type="text" title="Due Date" value="<?= date('m/d/Y', strtotime($due_date)) ?>">
+            <div class="errorMessage text-danger"></div>
         </div>
-        <div class="col-md-12">
-            <div class="form-inline">
-                <label class="control-label"><input type="radio" name="recurrence[generation_type]" <?php echo ($pattern_details->generation_type == '1') ? 'checked' : ''; ?> value="1" readonly="" onclick="//check_generation_type(this.value)"></label>&nbsp;
-                <input class="form-control" type="number" id="generation_month" name="recurrence[generation_month]" value="<?php echo $pattern_details->generation_month; ?>" readonly="" min="0" max="12" style="width: 100px">&nbsp;
-                <label class="control-label">month(s)</label>&nbsp;
-                <input class="form-control" value="<?php echo $pattern_details->generation_day; ?>" type="number" id="generation_day" name="recurrence[generation_day]" min="1" max="31" readonly="" style="width: 100px">&nbsp;
-                <label class="control-label">Day(s) before next occurrence due date</label>
-            </div>
-        </div>
-        <div class="col-md-12">
-            <label class="control-label"><input type="radio" name="recurrence[generation_type]" value="2" <?php echo ($pattern_details->generation_type == '2') ? 'checked' : ''; ?> disabled="" onclick="//check_generation_type(this.value)">&nbsp; None</label>
-        </div>
-
-    </div> <!-- ./row -->
-
-</div><!-- ./modal-body -->
-</div>
+    </div>
+<?php } ?>
+<script>
+    $(document).ready(function () {
+        $(".datepicker_creation_date").datepicker({format: 'mm/dd/yyyy', autoHide: true});
+    });
+</script>
