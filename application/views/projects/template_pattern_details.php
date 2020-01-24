@@ -240,43 +240,62 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
 
     <?php
     if (!empty($task_list)) {
-            $dueDate = strtotime($due_date);
-            $project_date=strtotime($project_date);
-            $start_date = $task_list->target_start_date . 'days';
-            $complete_date = $task_list->target_complete_date . 'days';
-            if ($task_list->target_start_day == 1) {
-                $targetStartDate = date("Y-m-d", strtotime(("+$start_date"), $project_date));
-            } else {
-                $targetStartDate = date("Y-m-d", strtotime(("-$start_date"), $dueDate));
-            }
-            if ($task_list->target_complete_day == 1) {
-                $targetCompleteDate = date("Y-m-d", strtotime(("+$complete_date"), $project_date));
-            } else {
-                $targetCompleteDate = date("Y-m-d", strtotime(("-$complete_date"), $dueDate));
-            }
+        $dueDate = strtotime($due_date);
+        $project_date = strtotime($project_date);
+        $start_date = $task_list->target_start_date . 'days';
+        $complete_date = $task_list->target_complete_date . 'days';
+        if ($task_list->target_start_day == 1) {
+            $targetStartDate = date("Y-m-d", strtotime(("+$start_date"), $project_date));
+        } else {
+            $targetStartDate = date("Y-m-d", strtotime(("-$start_date"), $dueDate));
+        }
+        if ($task_list->target_complete_day == 1) {
+            $targetCompleteDate = date("Y-m-d", strtotime(("+$complete_date"), $project_date));
+        } else {
+            $targetCompleteDate = date("Y-m-d", strtotime(("-$complete_date"), $dueDate));
+        }
     }
     ?>
+    <input type="hidden" id="target_start_date" value="<?= $task_list->target_start_date; ?>">
+    <input type="hidden" id="target_start_day" value="<?= $task_list->target_start_day; ?>">
+    <input type="hidden" id="actual_target_start_date" value="<?= date('m/d/Y', strtotime($targetStartDate)) ?>">
+    <input type="hidden" id="actual_due_date" value="<?= $dueDate ?>">
     <div class="col-md-6">
         <label class="col-lg-12 control-label">Start Date:<span class="text-danger">*</span></label>
         <div class="form-group">
-            <input placeholder="mm/dd/yyyy" id="start_date" class="form-control datepicker_creation_date" type="text" title="Start Date" value="<?= date('m/d/Y',strtotime($targetStartDate)) ?>">
+            <input placeholder="mm/dd/yyyy" id="task_start_date" class="form-control datepicker_creation_date" type="text" title="Start Date" value="<?= date('m/d/Y', strtotime($targetStartDate)) ?>">
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
     <div class="col-md-6">
         <label class="col-lg-12 control-label">Due Date:<span class="text-danger">*</span></label>
         <div class="form-group">
-            <input placeholder="mm/dd/yyyy" id="due_date" name="project[due_date]" class="form-control datepicker_creation_date" type="text" title="Due Date" value="<?= date('m/d/Y', strtotime($due_date)) ?>">
+            <input placeholder="mm/dd/yyyy" id="due_date" name="project[due_date]" class="form-control datepicker_creation_date" type="text" title="Due Date" value="<?= date('m/d/Y', strtotime($due_date)) ?>" onchange="change_task_start_date(this.value)">
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
-<div class="col-md-12">
-    <h3 class="m-0 p-b-10 col-lg-12">Frequency:</h3>
-    <label class="col-lg-12 control-label">Next Recurrence: <?= date('m/d/Y', strtotime($generation_date)) ?></label>
-</div>
+    <div class="col-md-12">
+        <h3 class="m-0 p-b-10 col-lg-12">Frequency:</h3>
+        <label class="col-lg-12 control-label">Next Recurrence: <?= date('m/d/Y', strtotime($generation_date)) ?></label>
+    </div>
 <?php } ?>
 <script>
     $(document).ready(function () {
         $(".datepicker_creation_date").datepicker({format: 'mm/dd/yyyy', autoHide: true});
     });
+    function change_task_start_date(due_date) {
+        var target_start_date = $("#target_start_date").val();
+        var target_start_day = $('#target_start_day').val();
+        var actual_target_start_date = $("#actual_target_start_date").val();
+        var actual_due_date = $("#actual_due_date").val();
+        var due_date = $('#due_date').val();
+        if (target_start_day == 2) {
+            var a = new Date(due_date);
+            a.setDate(a.getDate() + parseInt(target_start_date));
+            var dateEnd = (a.getMonth() + 1) + '/' + a.getDate() + '/' + a.getFullYear()
+            $('#task_start_date').val(dateEnd);
+        } else {
+            $('#task_start_date').val(actual_target_start_date);
+        }
+    }
 </script>
