@@ -35,8 +35,7 @@
     $table = ' `project_task` as prt INNER JOIN projects as pro ON prt.project_id = pro.id INNER JOIN project_main as prm ON pro.id = prm.project_id LEFT JOIN sos_notification AS snf ON pro.id = snf.reference_id and `snf`.reference="projects"';
 
     $project_get_query = 'SELECT ' . implode(', ', $select) . ' FROM ' . $table . ' GROUP BY prt.id ORDER BY prt.id ASC';
-    // echo $project_get_query;exit;
-    mysqli_query($conn,'TRUNCATE `report_dashboard_project`');
+    
     mysqli_query($conn, 'SET SQL_BIG_SELECTS=1');
     $project_query_response = mysqli_query($conn,$project_get_query);
     $project_data_count = mysqli_num_rows($project_query_response);
@@ -65,12 +64,75 @@
             }    
             $sos = $prod['sos'];
             
-            $insert_sql = "INSERT INTO `report_dashboard_project`(`task_id`, `project_id`, `task_status`, `project_status`, `task_office`, `project_office`, `task_department`, `project_department`, `project_creation_date`,`project_due_date`,`sos`) VALUES ('$task_id', '$project_id', '$task_status', '$project_status', '$task_office', '$project_office', '$task_department', '$project_department', '$project_creation_date','$project_due_date','$sos')";
+            $comparison_array = array(
+                'task_id' => $task_id, 
+                'project_id' => $project_id, 
+                'task_status' => $task_status, 
+                'project_status' => $project_status, 
+                'task_office' => $task_office, 
+                'project_office' => $project_office, 
+                'task_department' => $task_department, 
+                'project_department' => $project_department, 
+                'project_creation_date' => $project_creation_date,
+                'project_due_date' => $project_due_date,
+                'sos' => $sos
+            );
 
-            echo $insert_sql;
-            echo "<hr>";
-            mysqli_query($conn,$insert_sql)or die('Insert Error!!!');
+            // fetching data from report_dashboard_billing table
+            $project_sql = "SELECT * FROM `report_dashboard_project` WHERE task_id = '".$task_id."'";
+            $project_query_run = mysqli_query($conn,$project_sql);
+            $pqr = mysqli_fetch_assoc($project_query_run);
 
+            if($task_id == $pqr['task_id']) {
+                unset($pqr['id']);
+                if (empty(array_diff($comparison_array,$pqr))) {
+                    echo "No difference with previuos values";
+                    echo "<hr>";
+                } else {
+                    $update_sql = "UPDATE `report_dashboard_project` SET ";
+                    if ($task_status != $pqr['task_status']) {
+                        $update_sql .= "`task_status`='$task_status',";
+                    }
+                    if ($project_status != $pqr['project_status']) {
+                        $update_sql .= "`project_status`='$project_status',";
+                    }
+                    if ($task_office != $pqr['task_office']) {
+                        $update_sql .= "`task_office`='$task_office',";
+                    }
+                    if ($project_office != $pqr['project_office']) {
+                        $update_sql .= "`project_office`='$project_office',";
+                    }
+                    if ($task_department != $pqr['task_department']) {
+                        $update_sql .= "`task_department`='$task_department',";
+                    }
+                    if ($project_department != $pqr['project_department']) {
+                        $update_sql .= "`project_department`='$project_department',";
+                    }
+                    if ($project_creation_date != $pqr['project_creation_date']) {
+                        $update_sql .= "`project_creation_date`='$project_creation_date',";
+                    }
+                    if ($project_due_date != $pqr['project_due_date']) {
+                        $update_sql .= "`project_due_date`='$project_due_date',";
+                    }
+                    if ($sos != $pqr['sos']) {
+                        $update_sql .= "`sos`='$sos',";
+                    }
+                    if (substr($update_sql, -1) == ',') {
+                        $update_sql = substr($update_sql,0,-1);
+                    }
+
+                    $update_sql .= " WHERE task_id = '".$task_id."'";
+                    mysqli_query($conn,$update_sql);
+                    echo $update_sql;
+                    echo "<hr>";
+                }
+            } else {
+                $insert_sql = "INSERT INTO `report_dashboard_project`(`task_id`, `project_id`, `task_status`, `project_status`, `task_office`, `project_office`, `task_department`, `project_department`, `project_creation_date`,`project_due_date`,`sos`) VALUES ('$task_id', '$project_id', '$task_status', '$project_status', '$task_office', '$project_office', '$task_department', '$project_department', '$project_creation_date','$project_due_date','$sos')";
+
+                echo $insert_sql;
+                echo "<hr>";
+                mysqli_query($conn,$insert_sql)or die('Insert Error!!!');    
+            }
         }
         echo "success";    
     }    
