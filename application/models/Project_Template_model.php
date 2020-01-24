@@ -3368,7 +3368,7 @@ class Project_Template_model extends CI_Model {
 
         $all_projects_data = [];
         $all_tasks_data = [];
-        if ($category == 'projects_by_office') {
+        if ($data['category'] == 'projects_by_office') {
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
@@ -3386,7 +3386,7 @@ class Project_Template_model extends CI_Model {
             }
             return $all_projects_data;
 
-        } else if($category == 'tasks_by_office') {
+        } else if($data['category'] == 'tasks_by_office') {
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
@@ -3404,7 +3404,7 @@ class Project_Template_model extends CI_Model {
             }
             return $all_tasks_data;
 
-        } else if ($category == 'projects_to_department') {
+        } else if ($data['category'] == 'projects_to_department') {
             foreach ($data_department as $dd) {    
                 $data = [
                     'id' => $dd['id'],
@@ -3422,7 +3422,7 @@ class Project_Template_model extends CI_Model {
             }
             return $all_projects_data;
 
-        } else if ($category == 'tasks_to_department') {
+        } else if ($data['category'] == 'tasks_to_department') {
             foreach ($data_department as $dd) {    
                 $data = [
                     'id' => $dd['id'],
