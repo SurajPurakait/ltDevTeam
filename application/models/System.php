@@ -113,6 +113,10 @@ Class System extends CI_Model {
         return $this->db->get_where("states", ["id" => $states_id])->row_array();
     }
 
+    public function get_country_by_id($country_id) {
+        return $this->db->get_where("countries", ["id" => $country_id])->row_array();
+    }
+
     public function get_county_by_id($county_id) {
         return $this->db->get_where("sales_tax_rate", ["id" => $county_id])->row_array();
     }
