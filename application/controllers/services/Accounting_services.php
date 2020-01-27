@@ -1121,4 +1121,41 @@ class Accounting_services extends CI_Controller {
         $this->load->template('services/edit_rt6_unemployment_app', $render_data);
     }
 
+    public function create_1099_write_up() {
+        $this->load->layout = 'dashboard';
+        $title = "Create 1099 Write Up";
+        $render_data['title'] = $title . ' | Tax Leaf';
+        $render_data['main_menu'] = 'services';
+        $render_data['menu'] = 'accounting_services';
+        $render_data['header_title'] = $title;
+        $render_data['service_info'] = $this->service_model->get_service_by_shortname('acc_1_w_u');
+        $render_data['service_id'] = $render_data['service_info']['id'];
+        $render_data['reference_id'] = $this->system->create_reference_id();
+        $render_data['reference'] = 'company';
+        $this->load->template('services/create_1099_write_up', $render_data);
+    }
+
+    public function copy_contact_for_1099_write_up() {
+        $reference_id = request('ref_id');
+        $this->load->model('Contacts');
+        $this->load->model('Payroll');
+        $contactdata = $this->Contacts->copy_main_contact_for_1099_write_up("company", $reference_id);
+        if (!empty($contactdata)) {
+            echo json_encode($contactdata[0]);
+        } else {
+            echo '0';
+        }
+    }
+
+    function request_create_1099_write_up() {
+        // print_r(post());exit;
+        $order_id = $this->company_model->request_create_1099_write_up(post());
+        if ($order_id) {
+            mod_services_count($status_from = '', $status_to = 2, $section_name = 'incorporation');
+            echo $order_id;
+        } else {
+            echo 0;
+        }
+    }
+
 }

@@ -28,7 +28,9 @@ $user_info = staff_info();
 $usertype = $user_info['type'];
 $row_number = 0;
 if (!empty($result)):
-    foreach ($result as $row_count => $row):        
+    
+    foreach ($result as $row_count => $row): 
+    
         if(isset($page_number)){
             if($page_number != 1){
                 if($row_count < (($page_number - 1) * 20)){
@@ -68,8 +70,10 @@ if (!empty($result)):
         if ($usertype != '3') {
             if ($row->category_id == 1) {
                 if ($row->service_id == '3' || $row->service_id == '39' || $row->service_id == '48') {
-                    $url = 'services/accounting_services/edit_annual_report/' . base64_encode($row->id);
-                } elseif ($row->service_id == '2' || $row->service_id == '4' || $row->service_id == '6' || $row->service_id == '53') {
+//                    $url = 'services/accounting_services/edit_annual_report/' . base64_encode($row->id);
+                      $url = 'services/home/edit/' . base64_encode($row->id);
+                }
+                elseif ($row->service_id == '2' || $row->service_id == '4' || $row->service_id == '6' || $row->service_id == '53') {
                     $url = 'services/home/edit/' . base64_encode($row->id);
                 } elseif ($row->service_id == '5' || $row->service_id == '54' || $row->service_id == '55') {
                     $url = 'services/home/edit/' . base64_encode($row->id);
@@ -82,8 +86,9 @@ if (!empty($result)):
                         $url = 'services/home/edit/' . base64_encode($row->id);
                     }
                 }
-            } else {
-                if ($row->service_id == 10 || $row->service_id == '41') {
+            } 
+            else {
+                if ($row->service_id == '10' || $row->service_id == '41') {
                     $res = get_bookkeeping_by_order_id($row->id);
                     if (!empty($res)) {
                         if ($res['sub_category'] == 2) {
@@ -108,7 +113,8 @@ if (!empty($result)):
                     $url = 'services/accounting_services/edit_annual_report/' . base64_encode($row->id);
                 } elseif ($row->service_id == '48' || $row->service_id == '39') {
                     $url = 'services/accounting_services/edit_annual_report/' . base64_encode($row->id);
-                } else {
+                }
+                else {
                     $url = 'services/home/edit/' . base64_encode($row->id);
                 }
             }
@@ -119,7 +125,8 @@ if (!empty($result)):
             if ($usertype == '3' && $status == 2) {
                 if ($row->category_id == 1) {
                     if ($row->service_id == '3' || $row->service_id == '39' || $row->service_id == '48') {
-                        $url = 'services/accounting_services/edit_annual_report/' . base64_encode($row->id);
+//                        $url = 'services/accounting_services/edit_annual_report/' . base64_encode($row->id);
+                        $url = 'services/home/edit/' . base64_encode($row->id);
                     } else {
                         if ($row->service_shortname == 'inc_n_c_d' || $row->service_shortname == 'inc_n_c_f') {
                             $url = 'services/incorporation/edit_company/' . base64_encode($row->id);
@@ -164,7 +171,9 @@ if (!empty($result)):
         }
 //        $services_list = service_list_by_order_id($row->id);
         ?>
+      <?php if($invoice_info !=''){?>
         <div id="order<?= $row->id; ?>" class="panel panel-default service-panel category<?= $row->category_id; ?> filter-<?= $row->department_id . '-' . $status . ' ' . $late_class; ?>">
+           
             <div class="panel-heading">
                 <?php if (!empty($invoice_info) && ($invoice_info['is_order'] == 'y')) { ?>
                 <a href="<?= base_url("billing/invoice/place/" . base64_encode($invoice_info['id']) . "/" . base64_encode('view')); ?>" target="_blank" class="btn btn-primary btn-xs btn-service-view"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
@@ -326,8 +335,10 @@ if (!empty($result)):
                     </div>
                 </a>
             </div>
+        
             <div id="collapse<?= $row->id; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;"></div>
         </div>
+   <?php } ?>
         <?php
         $row_number = $row_count + 1;
     endforeach;

@@ -3,7 +3,7 @@
 ?>
 <div class="row">
     <div class="col-md-10">
-        <table class="table table-bordered billing-report-table table-striped text-center m-b-0">
+        <table class="table table-bordered billing-report-table table-striped text-center m-b-0" id="lead-report-bystatus">
             <thead>
                 <tr>
                     <th class="text-uppercase" style="white-space: nowrap;">Office</th>
@@ -104,7 +104,7 @@
 ?>
 <div class="row">
     <div class="col-md-10">
-        <table class="table table-bordered billing-report-table table-striped text-center m-b-0">
+        <table class="table table-bordered billing-report-table table-striped text-center m-b-0" id="lead-report-bytype">
             <thead>
                 <tr>
                     <th class="text-uppercase" style="white-space: nowrap;">Office</th>
@@ -197,7 +197,7 @@
 ?>
 <div class="row">
     <div class="col-md-10">
-        <table class="table table-bordered billing-report-table table-striped text-center m-b-0">
+        <table class="table table-bordered billing-report-table table-striped text-center m-b-0" id="lead-report-bycampaign">
             <thead>
                 <tr>
                     <th class="text-uppercase" style="white-space: nowrap;">Office</th>
@@ -293,3 +293,86 @@
 <?php
     }
 ?>
+<script type="text/javascript">
+    $('#lead-report-bystatus').DataTable().destroy();
+    $('#lead-report-bystatus').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'LeadByStatusReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Lead By Status Report</h2>';
+                }
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+
+    $('#lead-report-bytype').DataTable().destroy();
+    $('#lead-report-bytype').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'LeadByTypeReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Lead By Type Report</h2>';
+                }
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+
+    $('#lead-report-bycampaign').DataTable().destroy();
+    $('#lead-report-bycampaign').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'LeadByCampaignReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Lead By Campaign Report</h2>';
+                },
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+
+</script>

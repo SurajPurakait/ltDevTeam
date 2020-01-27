@@ -46,23 +46,23 @@
                         <div class="form-group" id="state_div">
                             <label class="col-lg-2 control-label">State of Incorporation<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control value_field required_field disabled_field" name="state" id="state" title="State of Incorporation" required="" onchange="select_other_state(this.value);">
+                                <select class="form-control value_field required_field" name="istate" id="state" title="State of Incorporation" required=""  onchange="change_due_date(this.value, document.getElementById('type').value);select_other_state(this.value);">
                                     <option value="">Select an option</option>
                                     <?php load_ddl_option("state_list_annual_report"); ?>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
-                        <div class="form-group" id="state_other" <?php echo ($other_state == "")? "style='display:none'":"" ;?>>
+                        <div class="form-group" id="state_other" style="display:none;">
                             <div class="col-lg-10 col-lg-offset-2">
-                                <input type="text" name="state_other" class="form-control" value="<?= $other_state; ?>">
+                                <input type="text" name="state_other" class="form-control" >
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
                         <div class="form-group" id="type_div">
                             <label class="col-lg-2 control-label">Type of Company<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control value_field required_field disabled_field" name="type" id="type" title="Type of Company" required="">
+                                <select class="form-control value_field required_field disabled_field" name="type" id="type" title="Type of Company" required="" onchange="change_due_date(document.getElementById('state').value, this.value)">
                                     <option value="">Select an option</option>
                                     <?php load_ddl_option("company_type_list"); ?>
                                 </select>
@@ -107,14 +107,15 @@
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
-                        <div id="contact_info_div">
+<!--                        <div id="contact_info_div" class="display_div">
                             <div class="hr-line-dashed"></div>
-                            <h3>Contact Info<span class="text-danger">*</span><span class="display_div">&nbsp; (<a href="javascript:void(0);" class="contactadd" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>'); return false;">Add Contact</a>)</span></h3>
+                            <h3>Contact Info<span class="display_div">&nbsp; (<a href="javascript:void(0);" class="contactadd" onclick="contact_modal('add', '<= $reference; ?>', '<= $reference_id; ?>'); return false;">Add Contact</a>)</span></h3>
                             <div id="contact-list">
-                                <input type="hidden" title="Contact Info" id="contact-list-count" required="required" value="">
+                                <input type="hidden" title="Contact Info" id="contact-list-count" value="">
                                 <div class="errorMessage text-danger"></div>
                             </div>
-                        </div>
+                        </div>-->
+
                         <div id="owners_div" class="display_div">
                             <div class="hr-line-dashed"></div>
                             <h3>Owners<span class="text-danger">*</span> &nbsp; (<a href="javascript:void(0);" class="owneradd" onclick="open_owner_popup(1, '<?= $reference_id; ?>', 0); return false;">Add owner</a>)</h3>
@@ -207,35 +208,35 @@
                             <label class="col-lg-2 control-label">Select Service</label>
                             <div class="col-lg-10 related-service-div">
                                 <label class="radio-inline">
-                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $florida['id'] ? 'checked' : ''; ?> name="service_id" id="service_florida" onchange="changeServiceRadio(this.value, '<?= $florida['retail_price']; ?>');" retail_price="<?= $florida['retail_price']; ?>" value="<?= $florida['id']; ?>">
+                                    <input disabled="" type="radio" class="service_radio"  title="Service" <?= $service_id == $florida['id'] ? 'checked' : ''; ?> name="service_id" id="service_florida" onchange="changeServiceRadio(this.value, '<?= $florida['retail_price']; ?>');" retail_price="<?= $florida['retail_price']; ?>" value="<?= $florida['id']; ?>">
                                     <label for="service_florida"><?= $florida['description']; ?></label>
                                 </label><br>
                                 <label class="radio-inline">
-                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $delaware['id'] ? 'checked' : ''; ?> name="service_id" id="service_delaware" onchange="changeServiceRadio(this.value, '<?= $delaware['retail_price']; ?>');" retail_price="<?= $delaware['retail_price']; ?>" value="<?= $delaware['id']; ?>">
+                                    <input disabled="" type="radio" class="service_radio"  title="Service" <?= $service_id == $delaware['id'] ? 'checked' : ''; ?> name="service_id" id="service_delaware" onchange="changeServiceRadio(this.value, '<?= $delaware['retail_price']; ?>');" retail_price="<?= $delaware['retail_price']; ?>" value="<?= $delaware['id']; ?>">
                                     <label for="service_delaware"><?= $delaware['description']; ?></label>
                                 </label><br>
                                 <label class="radio-inline">
-                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $arizona['id'] ? 'checked' : ''; ?> name="service_id" id="service_arizona" onchange="changeServiceRadio(this.value, '<?= $arizona['retail_price']; ?>');" retail_price="<?= $arizona['retail_price']; ?>" value="<?= $arizona['id']; ?>">
+                                    <input disabled="" type="radio" class="service_radio"  title="Service" <?= $service_id == $arizona['id'] ? 'checked' : ''; ?> name="service_id" id="service_arizona" onchange="changeServiceRadio(this.value, '<?= $arizona['retail_price']; ?>');" retail_price="<?= $arizona['retail_price']; ?>" value="<?= $arizona['id']; ?>">
                                     <label for="service_arizona"><?= $arizona['description']; ?></label>
                                 </label><br>
                                 <label class="radio-inline">
-                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $wyoming['id'] ? 'checked' : ''; ?> name="service_id" id="service_wyoming" onchange="changeServiceRadio(this.value, '<?= $wyoming['retail_price']; ?>');" retail_price="<?= $wyoming['retail_price']; ?>" value="<?= $wyoming['id']; ?>">
+                                    <input disabled="" type="radio" class="service_radio"  title="Service" <?= $service_id == $wyoming['id'] ? 'checked' : ''; ?> name="service_id" id="service_wyoming" onchange="changeServiceRadio(this.value, '<?= $wyoming['retail_price']; ?>');" retail_price="<?= $wyoming['retail_price']; ?>" value="<?= $wyoming['id']; ?>">
                                     <label for="service_wyoming"><?= $wyoming['description']; ?></label>
                                 </label><br>
                                 <label class="radio-inline">
-                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $michigan['id'] ? 'checked' : ''; ?> name="service_id" id="service_michigan" onchange="changeServiceRadio(this.value, '<?= $michigan['retail_price']; ?>');" retail_price="<?= $michigan['retail_price']; ?>" value="<?= $michigan['id']; ?>">
+                                    <input disabled="" type="radio" class="service_radio"  title="Service" <?= $service_id == $michigan['id'] ? 'checked' : ''; ?> name="service_id" id="service_michigan" onchange="changeServiceRadio(this.value, '<?= $michigan['retail_price']; ?>');" retail_price="<?= $michigan['retail_price']; ?>" value="<?= $michigan['id']; ?>">
                                     <label for="service_michigan"><?= $michigan['description']; ?></label>
                                 </label><br>
                                 <label class="radio-inline">
-                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $texas['id'] ? 'checked' : ''; ?> name="service_id" id="service_texas" onchange="changeServiceRadio(this.value, '<?= $texas['retail_price']; ?>');" retail_price="<?= $texas['retail_price']; ?>" value="<?= $texas['id']; ?>">
+                                    <input disabled="" type="radio" class="service_radio"  title="Service" <?= $service_id == $texas['id'] ? 'checked' : ''; ?> name="service_id" id="service_texas" onchange="changeServiceRadio(this.value, '<?= $texas['retail_price']; ?>');" retail_price="<?= $texas['retail_price']; ?>" value="<?= $texas['id']; ?>">
                                     <label for="service_texas"><?= $texas['description']; ?></label>
                                 </label><br>
                                 <label class="radio-inline">
-                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id  == $new_jersey['id'] ? 'checked' : ''; ?> name="service_id" id="service_new_jersey" onchange="changeServiceRadio(this.value, '<?= $new_jersey['retail_price']; ?>');" retail_price="<?= $new_jersey['retail_price']; ?>" value="<?= $new_jersey['id']; ?>">
+                                    <input disabled="" type="radio" class="service_radio"  title="Service" <?= $service_id  == $new_jersey['id'] ? 'checked' : ''; ?> name="service_id" id="service_new_jersey" onchange="changeServiceRadio(this.value, '<?= $new_jersey['retail_price']; ?>');" retail_price="<?= $new_jersey['retail_price']; ?>" value="<?= $new_jersey['id']; ?>">
                                     <label for="service_new_jersey"><?= $new_jersey['description']; ?></label>
                                 </label><br>
                                 <label class="radio-inline">
-                                    <input type="radio" class="service_radio" required="" title="Service" <?= $service_id == $new_york['id'] ? 'checked' : ''; ?> name="service_id" id="service_new_york" onchange="changeServiceRadio(this.value, '<?= $new_york['retail_price']; ?>');" retail_price="<?= $new_york['retail_price']; ?>" value="<?= $new_york['id']; ?>">
+                                    <input disabled="" type="radio" class="service_radio"  title="Service" <?= $service_id == $new_york['id'] ? 'checked' : ''; ?> name="service_id" id="service_new_york" onchange="changeServiceRadio(this.value, '<?= $new_york['retail_price']; ?>');" retail_price="<?= $new_york['retail_price']; ?>" value="<?= $new_york['id']; ?>">
                                     <label for="service_new_york"><?= $new_york['description']; ?></label>
                                 </label><br>
                                 <div class="errorMessage text-danger" id="service_id_error"></div>
@@ -245,7 +246,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Due Date</label>
                             <div class="col-lg-10">
-                                <input placeholder="dd/mm/yyyy" readonly="" class="form-control" type="text" title="Due Date" name="due_date" id="due_date" value="" required>
+                                <input placeholder="mm/dd/yyyy" class="form-control" type="text" title="Due Date" name="due_date" id="due_date" value="" required>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -336,8 +337,8 @@
                                 <button class="btn btn-default" type="button" onclick="go('services/home');">Cancel</button>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

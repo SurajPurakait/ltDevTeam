@@ -128,48 +128,51 @@
                     } else {
                         $update_sql = "UPDATE `weekly_sales_report` SET ";
                         if ($date != $wsr['date']) {
-                            $update_sql .= "`date`='$date', ";
+                            $update_sql .= "`date`='$date',";
                         } 
                         if ($client_id != $wsr['client_id']) {
-                            $update_sql .= "`client_id`='$client_id', ";
+                            $update_sql .= "`client_id`='$client_id',";
                         }
                         if ($service_name != $wsr['service_name']) {
-                            $update_sql .= "`service_name`='$service_name', ";
+                            $update_sql .= "`service_name`='$service_name',";
                         }
                         if ($status != $wsr['status']) {
-                            $update_sql .= "`status`= '$status', ";
+                            $update_sql .= "`status`= '$status',";
                         }
                         if ($retail_price != $wsr['retail_price']) {
-                            $update_sql .= "`retail_price`='$retail_price', ";
+                            $update_sql .= "`retail_price`='$retail_price',";
                         }
                         if ($override_price != $wsr['override_price']) {
-                            $update_sql .= "`override_price` = '$override_price', ";
+                            $update_sql .= "`override_price` = '$override_price',";
                         }
                         if ($cost != $wsr['cost']) {
-                            $update_sql .= "`cost`='$cost', "; 
+                            $update_sql .= "`cost`='$cost',"; 
                         }
                         if ($collected != $wsr['collected']) {
-                            $update_sql .= "`collected`='$collected', "; 
+                            $update_sql .= "`collected`='$collected',"; 
                         }
                         if ($total_net != $wsr['total_net']) {
                             $total_net_modified = (int)$override_price - (int)$wsr['cost']; 
                             // this logic is done because service cost would not be change for already purchased service  
-                            $update_sql .= "`total_net`='$total_net_modified', ";
+                            $update_sql .= "`total_net`='$total_net_modified',";
                         }
 
                         if ($franchisee_fee != $wsr['franchisee_fee']) {
-                            $update_sql .= "`franchisee_fee`='$franchisee_fee', ";
+                            $update_sql .= "`franchisee_fee`='$franchisee_fee',";
                         }
                         if ($gross_profit != $wsr['gross_profit']) {
-                            $update_sql .= "`gross_profit`='$gross_profit', ";
+                            $update_sql .= "`gross_profit`='$gross_profit',";
                         }
                         if ($notes != $wsr['notes']) {
-                            $update_sql .= "`notes`='$notes', ";
+                            $update_sql .= "`notes`='$notes',";
                         }
                         if($office_id != $wsr['office_id']) {
-                            $update_sql .= "`office_id`='$office_id'";
+                            $update_sql .= "`office_id`='$office_id',";
+                        }
+                        if (substr($update_sql, -1) == ',') {
+                            $update_sql = substr($update_sql,0,-1);
                         } 
-                        $update_sql .= "WHERE service_id = '".$service_id."'";
+                        $update_sql .= " WHERE service_id = '".$service_id."'";
                         mysqli_query($conn,$update_sql);
                         echo $update_sql;
                         echo "<hr>";

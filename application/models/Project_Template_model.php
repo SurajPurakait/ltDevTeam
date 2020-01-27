@@ -1118,16 +1118,18 @@ class Project_Template_model extends CI_Model {
                     $post['project']['office_id']=$client_office->office;
                 }
                 $post['project']['client_id'] = $pcid;
-                if(isset($post['project']['created_at']) && $post['project']['created_at']!=''){
-                    $creation_date=$post['project']['created_at'];
-                    if(date('Y-m-d')!=date('Y-m-d',strtotime($creation_date))){
-                        $post['project']['created_at']=date('Y-m-d',strtotime($creation_date));
-                    }else{
-                        $post['project']['created_at']=date('Y-m-d',strtotime($creation_date));
-                    }
-                }else{
-                    $post['project']['created_at']=date('Y-m-d');
-                }
+//                if(isset($post['project']['created_at']) && $post['project']['created_at']!=''){
+//                    $creation_date=$post['project']['created_at'];
+//                    if(date('Y-m-d')!=date('Y-m-d',strtotime($creation_date))){
+//                        $post['project']['created_at']=date('Y-m-d',strtotime($creation_date));
+//                    }else{
+//                        $post['project']['created_at']=date('Y-m-d',strtotime($creation_date));
+//                    }
+//                }else{
+//                    $post['project']['created_at']=date('Y-m-d');
+//                }
+                $user_due_date=date('Y-m-d',strtotime($post['project']['due_date']));
+                unset($post['project']['due_date']);
                 $this->db->insert('projects', $post['project']);
                 $insert_id = $this->db->insert_id();
                 $notedata = $this->input->post('project_note');
@@ -1382,6 +1384,13 @@ class Project_Template_model extends CI_Model {
                             }
                         }
                     }
+//                    checking user date vs calculated pattern due date
+                    if($due_date==$user_due_date){
+                        $due_date=$due_date;
+                    }else{
+                        $due_date=$user_due_date;
+                    }
+                    
                     if ($project_recurrence_main_data['generation_month'] == '') {
                         $project_recurrence_main_data['generation_month'] = '0';
                     }
@@ -3353,8 +3362,8 @@ class Project_Template_model extends CI_Model {
         return $this->db->get_where('projects',['id'=>$project_id])->row()->created_at;
     }
 
-    public function get_projects_data($category) {
-        $data_office = $this->db->get('office')->result_array();
+    public function get_projects_data($category,$date_range="") {
+        $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
         $data_department = $this->db->get('department')->result_array();
 
         $all_projects_data = [];
@@ -3364,14 +3373,14 @@ class Project_Template_model extends CI_Model {
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_projects' => $this->report_data_calculation('projects_by_office','total_projects',$do['id']),           
-                    'new' => $this->report_data_calculation('projects_by_office','new',$do['id']),           
-                    'started' => $this->report_data_calculation('projects_by_office','started',$do['id']),                     
-                    'completed' => $this->report_data_calculation('projects_by_office','completed',$do['id']),
-                    'less_then_30' => $this->report_data_calculation('projects_by_office','less_then_30',$do['id']),
-                    'less_then_60' => $this->report_data_calculation('projects_by_office','less_then_60',$do['id']),
-                    'more_then_60' => $this->report_data_calculation('projects_by_office','more_then_60',$do['id']),
-                    'sos' => $this->report_data_calculation('projects_by_office','sos',$do['id']),           
+                    'total_projects' => $this->report_data_calculation($date_range,'projects_by_office','total_projects',$do['id']),           
+                    'new' => $this->report_data_calculation($date_range,'projects_by_office','new',$do['id']),           
+                    'started' => $this->report_data_calculation($date_range,'projects_by_office','started',$do['id']),                     
+                    'completed' => $this->report_data_calculation($date_range,'projects_by_office','completed',$do['id']),
+                    'less_then_30' => $this->report_data_calculation($date_range,'projects_by_office','less_then_30',$do['id']),
+                    'less_then_60' => $this->report_data_calculation($date_range,'projects_by_office','less_then_60',$do['id']),
+                    'more_then_60' => $this->report_data_calculation($date_range,'projects_by_office','more_then_60',$do['id']),
+                    'sos' => $this->report_data_calculation($date_range,'projects_by_office','sos',$do['id']),           
                 ];
                 array_push($all_projects_data,$data);
             }
@@ -3382,14 +3391,14 @@ class Project_Template_model extends CI_Model {
                 $data = [
                     'id' => $do['id'],
                     'office_name' => $do['name'],
-                    'total_tasks' => $this->report_data_calculation('tasks_by_office','total_tasks',$do['id']),           
-                    'new' => $this->report_data_calculation('tasks_by_office','new',$do['id']),           
-                    'started' => $this->report_data_calculation('tasks_by_office','started',$do['id']),                     
-                    'completed' => $this->report_data_calculation('tasks_by_office','completed',$do['id']),
-                    'less_then_30' => $this->report_data_calculation('tasks_by_office','less_then_30',$do['id']),
-                    'less_then_60' => $this->report_data_calculation('tasks_by_office','less_then_60',$do['id']),
-                    'more_then_60' => $this->report_data_calculation('tasks_by_office','more_then_60',$do['id']),
-                    'sos' => $this->report_data_calculation('tasks_by_office','sos',$do['id']),           
+                    'total_tasks' => $this->report_data_calculation($date_range,'tasks_by_office','total_tasks',$do['id']),           
+                    'new' => $this->report_data_calculation($date_range,'tasks_by_office','new',$do['id']),           
+                    'started' => $this->report_data_calculation($date_range,'tasks_by_office','started',$do['id']),                     
+                    'completed' => $this->report_data_calculation($date_range,'tasks_by_office','completed',$do['id']),
+                    'less_then_30' => $this->report_data_calculation($date_range,'tasks_by_office','less_then_30',$do['id']),
+                    'less_then_60' => $this->report_data_calculation($date_range,'tasks_by_office','less_then_60',$do['id']),
+                    'more_then_60' => $this->report_data_calculation($date_range,'tasks_by_office','more_then_60',$do['id']),
+                    'sos' => $this->report_data_calculation($date_range,'tasks_by_office','sos',$do['id']),           
                 ];
                 array_push($all_tasks_data,$data);
             }
@@ -3400,14 +3409,14 @@ class Project_Template_model extends CI_Model {
                 $data = [
                     'id' => $dd['id'],
                     'department_name' => $dd['name'],
-                    'total_projects' => $this->report_data_calculation('projects_to_department','total_projects','',$dd['id']),           
-                    'new' => $this->report_data_calculation('projects_to_department','new','',$dd['id']),           
-                    'started' => $this->report_data_calculation('projects_to_department','started','',$dd['id']),                     
-                    'completed' => $this->report_data_calculation('projects_to_department','completed','',$dd['id']),
-                    'less_then_30' => $this->report_data_calculation('projects_to_department','less_then_30','',$dd['id']),
-                    'less_then_60' => $this->report_data_calculation('projects_to_department','less_then_60','',$dd['id']),
-                    'more_then_60' => $this->report_data_calculation('projects_to_department','more_then_60','',$dd['id']),
-                    'sos' => $this->report_data_calculation('projects_to_department','sos','',$dd['id']),           
+                    'total_projects' => $this->report_data_calculation($date_range,'projects_to_department','total_projects','',$dd['id']),           
+                    'new' => $this->report_data_calculation($date_range,'projects_to_department','new','',$dd['id']),           
+                    'started' => $this->report_data_calculation($date_range,'projects_to_department','started','',$dd['id']),                     
+                    'completed' => $this->report_data_calculation($date_range,'projects_to_department','completed','',$dd['id']),
+                    'less_then_30' => $this->report_data_calculation($date_range,'projects_to_department','less_then_30','',$dd['id']),
+                    'less_then_60' => $this->report_data_calculation($date_range,'projects_to_department','less_then_60','',$dd['id']),
+                    'more_then_60' => $this->report_data_calculation($date_range,'projects_to_department','more_then_60','',$dd['id']),
+                    'sos' => $this->report_data_calculation($date_range,'projects_to_department','sos','',$dd['id']),           
                 ];
                 array_push($all_projects_data,$data);
             }
@@ -3418,14 +3427,14 @@ class Project_Template_model extends CI_Model {
                 $data = [
                     'id' => $dd['id'],
                     'department_name' => $dd['name'],
-                    'total_tasks' => $this->report_data_calculation('tasks_to_department','total_tasks','',$dd['id']),           
-                    'new' => $this->report_data_calculation('tasks_to_department','new','',$dd['id']),           
-                    'started' => $this->report_data_calculation('tasks_to_department','started','',$dd['id']),                     
-                    'completed' => $this->report_data_calculation('tasks_to_department','completed','',$dd['id']),
-                    'less_then_30' => $this->report_data_calculation('tasks_to_department','less_then_30','',$dd['id']),
-                    'less_then_60' => $this->report_data_calculation('tasks_to_department','less_then_60','',$dd['id']),
-                    'more_then_60' => $this->report_data_calculation('tasks_to_department','more_then_60','',$dd['id']),
-                    'sos' => $this->report_data_calculation('tasks_to_department','sos','',$dd['id']),           
+                    'total_tasks' => $this->report_data_calculation($date_range,'tasks_to_department','total_tasks','',$dd['id']),           
+                    'new' => $this->report_data_calculation($date_range,'tasks_to_department','new','',$dd['id']),           
+                    'started' => $this->report_data_calculation($date_range,'tasks_to_department','started','',$dd['id']),                     
+                    'completed' => $this->report_data_calculation($date_range,'tasks_to_department','completed','',$dd['id']),
+                    'less_then_30' => $this->report_data_calculation($date_range,'tasks_to_department','less_then_30','',$dd['id']),
+                    'less_then_60' => $this->report_data_calculation($date_range,'tasks_to_department','less_then_60','',$dd['id']),
+                    'more_then_60' => $this->report_data_calculation($date_range,'tasks_to_department','more_then_60','',$dd['id']),
+                    'sos' => $this->report_data_calculation($date_range,'tasks_to_department','sos','',$dd['id']),           
                 ];
                 array_push($all_tasks_data,$data);
             }
@@ -3433,7 +3442,7 @@ class Project_Template_model extends CI_Model {
         }
     }
 
-    public function report_data_calculation($category="",$sub_category="",$office="",$department="") {
+    public function report_data_calculation($date_range="",$category="",$sub_category="",$office="",$department="") {
         if ($category == 'projects_by_office') {
             $this->db->distinct();
             $this->db->select('project_id');
@@ -3457,6 +3466,14 @@ class Project_Template_model extends CI_Model {
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
             }
+            if ($date_range != "") {
+                $date_value = explode("-", $date_range);
+                $start_date = date("Y-m-d", strtotime($date_value[0]));
+                $end_date = date("Y-m-d", strtotime($date_value[1]));
+                
+                $this->db->where('project_creation_date >=',$start_date);
+                $this->db->where('project_creation_date <=',$end_date);
+            }
             return $this->db->get('report_dashboard_project')->num_rows();
         } elseif ($category == 'tasks_by_office') {
             $this->db->select('task_id');
@@ -3479,6 +3496,14 @@ class Project_Template_model extends CI_Model {
                 $this->db->where('DATEDIFF(CURDATE(),STR_TO_DATE(project_due_date, \'%Y-%m-%d\')) >','60');
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
+            }
+            if ($date_range != "") {
+                $date_value = explode("-", $date_range);
+                $start_date = date("Y-m-d", strtotime($date_value[0]));
+                $end_date = date("Y-m-d", strtotime($date_value[1]));
+                
+                $this->db->where('project_creation_date >=',$start_date);
+                $this->db->where('project_creation_date <=',$end_date);
             }
             return $this->db->get('report_dashboard_project')->num_rows();
         } elseif ($category == 'projects_to_department') {
@@ -3504,6 +3529,14 @@ class Project_Template_model extends CI_Model {
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
             }
+            if ($date_range != "") {
+                $date_value = explode("-", $date_range);
+                $start_date = date("Y-m-d", strtotime($date_value[0]));
+                $end_date = date("Y-m-d", strtotime($date_value[1]));
+                
+                $this->db->where('project_creation_date >=',$start_date);
+                $this->db->where('project_creation_date <=',$end_date);
+            }
             return $this->db->get('report_dashboard_project')->num_rows();
         } elseif ($category == 'tasks_to_department') {
             $this->db->select('task_id');
@@ -3527,11 +3560,32 @@ class Project_Template_model extends CI_Model {
             } elseif ($sub_category == 'sos') {
                 $this->db->where('sos !=','');
             }
+            if ($date_range != "") {
+                $date_value = explode("-", $date_range);
+                $start_date = date("Y-m-d", strtotime($date_value[0]));
+                $end_date = date("Y-m-d", strtotime($date_value[1]));
+                
+                $this->db->where('project_creation_date >=',$start_date);
+                $this->db->where('project_creation_date <=',$end_date);
+            }
             return $this->db->get('report_dashboard_project')->num_rows();
         }
 
     }
 
+    public function get_project_start_date() {
+        $this->db->select_min('project_creation_date');
+        $this->db->order_by('project_creation_date', 'ASC');
+        $project_date = $this->db->get('report_dashboard_project')->row_array()['project_creation_date'];
+        return date('m/d/Y' ,strtotime($project_date));
+    }
+    public function getTemplatePatternDetails($template_id){
+        $data = $this->db->get_where('project_template_recurrence_main', ['template_id' => $template_id])->row_array();
+        return $data;
+    }
+    public function project_template_task_details($template_id){
+        return $this->db->get_where('project_template_task',['template_main_id'=>$template_id])->row();
+    }
 
 }
 

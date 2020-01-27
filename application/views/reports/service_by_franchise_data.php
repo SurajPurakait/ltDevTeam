@@ -3,7 +3,7 @@
 ?>
 <div class="row">
     <div class="col-md-10">
-<table class="table table-bordered report-table table-striped text-center m-b-0">
+<table class="table table-bordered report-table table-striped text-center m-b-0" id="report-service-franchise">
     <thead>
         <tr>
             <th class="text-uppercase">Offices</th>
@@ -111,7 +111,7 @@
 
 <div class="row">
     <div class="col-md-10">
-<table class="table table-bordered report-table table-striped text-center m-b-0">
+<table class="table table-bordered report-table table-striped text-center m-b-0" id="report-service-department">
     <thead>
         <tr>
             <th class="text-uppercase">Departments</th>
@@ -207,7 +207,7 @@
 ?>
 <div class="row">
     <div class="col-md-10">
-<table class="table table-bordered report-table table-striped text-center m-b-0">
+<table class="table table-bordered report-table table-striped text-center m-b-0" id="report-service-category">
     <thead>
         <tr>
             <th class="text-uppercase">Category</th>
@@ -292,3 +292,124 @@
 <?php
     }
 ?>
+<script type="text/javascript">
+    // $(document).ready(function(){
+    //     if ($('#report-service-franchise').length) {
+    //         var id_text = 'report-service-franchise';
+    //     }
+    //     if($('#report-service-department').length) {
+    //         var id_text = 'report-service-department';
+    //     }
+    //     if ($('#report-service-category').length) {
+    //         var id_text = 'report-service-category';
+    //     }
+
+    //     $('#'+id_text).DataTable().destroy();
+    //     $('#'+id_text).DataTable({
+
+    //         'dom': '<"html5buttons"B>lTfgitp',
+    //         'buttons': [ 
+    //             {extend: 'excel', title: 'RoyaltyReport'},
+    //             {extend: 'print',
+    //                 customize: function (win){
+    //                     $(win.document.body).addClass('white-bg');
+    //                     $(win.document.body).css('font-size', '10px');
+
+    //                     $(win.document.body).find('table')
+    //                             .addClass('compact')
+    //                             .css('font-size', 'inherit');
+    //             }
+    //             }
+    //         ],
+    //         "bFilter": false,
+    //         "paging":   false,
+    //         "ordering": false,
+    //         "info":     false
+
+    //     });        
+         
+    // });
+
+    $('#report-service-franchise').DataTable().destroy();
+    $('#report-service-franchise').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'ServiceByFranchiseReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Service By Franchise Report</h2>';
+                }
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+
+
+    $('#report-service-department').DataTable().destroy();
+    $('#report-service-department').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'ServiceByDepartmentReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Service By Department Report</h2>';
+                },
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+
+    $('#report-service-category').DataTable().destroy();
+    $('#report-service-category').DataTable({
+        'dom': '<"html5buttons"B>lTfgitp',
+        'buttons': [ 
+            {extend: 'excel', title: 'ServiceByCategoryReport'},
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+
+                    $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                },
+                title: '',
+                messageTop: function () {
+                    return '<h2 style="color:#8ab645;text-align:center;font-weight:bold;margin-bottom:10px">Service By Category Report</h2>';
+                }
+            }
+        ],
+        "bFilter": false,
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+
+    });
+    
+</script>
