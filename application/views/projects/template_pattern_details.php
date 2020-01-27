@@ -239,7 +239,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     ?>
 
     <?php
-    if (!empty($task_list)) {
+    if (!empty($task_list)) {      
         $dueDate = strtotime($due_date);
         $project_date = strtotime($project_date);
         $start_date = $task_list->target_start_date . 'days';
@@ -255,15 +255,26 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             $targetCompleteDate = date("Y-m-d", strtotime(("-$complete_date"), $dueDate));
         }
     }
+    if(!empty($project_recurrence_main_data)){
+        $start_target_date = $project_recurrence_main_data['target_start_date'];               
+    }
+    if(!empty($task_list))
+    {
     ?>
     <input type="hidden" id="target_start_date" value="<?= $task_list->target_start_date; ?>">
     <input type="hidden" id="target_start_day" value="<?= $task_list->target_start_day; ?>">
     <input type="hidden" id="actual_target_start_date" value="<?= date('m/d/Y', strtotime($targetStartDate)) ?>">
     <input type="hidden" id="actual_due_date" value="<?= $dueDate ?>">
+    <?php } else {?>
+    <input type="hidden" id="target_start_date" value="">
+    <input type="hidden" id="target_start_day" value="">
+    <input type="hidden" id="actual_target_start_date" value="">
+    <input type="hidden" id="actual_due_date" value="">
+    <?php }?>
     <div class="col-md-6">
         <label class="col-lg-12 control-label">Start Date:<span class="text-danger">*</span></label>
         <div class="form-group">
-            <input placeholder="mm/dd/yyyy" id="task_start_date" class="form-control datepicker_creation_date" type="text" title="Start Date" value="<?= date('m/d/Y', strtotime($targetStartDate)) ?>">
+            <input placeholder="mm/dd/yyyy" id="task_start_date" class="form-control datepicker_creation_date" type="text" title="Start Date" value="<?php echo $start_target_date; ?>">
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
