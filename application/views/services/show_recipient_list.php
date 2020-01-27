@@ -1,11 +1,9 @@
-<?php foreach ($list as $recipient) :
-    // $state_name = state_info($recipient['recipient_state'])['state_name'];
- ?>
+<?php foreach ($list as $key => $recipient) : ?>
     <div class="row">
         <label class="col-lg-2 control-label"></label>
         <div class="col-lg-10" style="padding-top:8px">
             <p>
-                <b>Recipient Name: <?= $recipient["first_name"]; ?> <?= $recipient["last_name"]; ?> </b><br>
+                <b>Recipient <?= $key+1 ?> : <?= $recipient["first_name"]; ?> <?= $recipient["last_name"]; ?> </b><br>
                 <b>Phone Number: </b><?= ($recipient["recipient_phone_number"] !='') ? $recipient["recipient_phone_number"] : 'NA'; ?><br>
                 <b>Address: </b><?= ($recipient["recipient_address"] !='') ? $recipient["recipient_address"] : 'NA'; ?><br>
                 <b>City: </b><?= ($recipient["recipient_city"] !='') ? $recipient["recipient_city"] : 'NA'; ?><br>

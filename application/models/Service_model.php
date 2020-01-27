@@ -3014,8 +3014,12 @@ class Service_model extends CI_Model {
             return $this->db->update('recipient_information');
     }
 
-    public function get_payer_recipient_info($order_id) {
-        return $this->db->get_where('payer_recipient_information', ['order_id' => $order_id])->row_array();
+    public function get_payer_info($order_id) {
+        return $this->db->get_where('payer_information', ['order_id' => $order_id])->row_array();
+    }
+
+    public function get_recipient_info($order_id) {
+        return $this->db->get_where('recipient_information', ['order_id' => $order_id])->result_array();
     }
 
 
@@ -3048,6 +3052,33 @@ class Service_model extends CI_Model {
         $this->db->where(['ri.reference_id' => $reference_id, 'ri.reference' => $reference]);
         // $this->db->group_by('ri.reference_id');
         return $this->db->get()->result_array();
+    }
+
+    public function get_recipient_info_by_id($order_id) {
+        $select = 'ri.id,ri.reference_id, ri.reference,TRIM(ri.recipient_first_name) as first_name,TRIM(ri.recipient_last_name) as last_name,ri.recipient_phone_number, ri.recipient_address, ri.recipient_city, ri.recipient_zip, ri.recipient_tin, ri.compensation,c.country_name,st.state_name AS state_name';
+        $this->db->select($select);
+        $this->db->from('recipient_information AS ri');
+        $this->db->join('countries AS c', 'c.id = ri.recipient_country', 'left');
+        $this->db->join('states AS st', 'st.id = ri.recipient_state', 'left');
+        $this->db->where('ri.order_id', $order_id);
+        return $this->db->get()->result_array();
+    }
+
+    public function update_payer_data_fields($data,$order_id){
+        $details = [
+                'payer_first_name' => $data['payer_first_name'],
+                'payer_last_name' => $data['payer_last_name'],
+                'payer_phone_number' => $data['payer_phone_number'],
+                'payer_address' => $data['payer_address'],
+                'payer_city' => $data['payer_city'],
+                'payer_state' => $data['payer_state'],
+                'payer_country' => $data['payer_country'],
+                'payer_zip' => $data['payer_zip_code'],
+                'payer_tin' => $data['payer_tin']
+            ];
+            $this->db->set($details);
+            $this->db->where('order_id',$order_id);
+            return $this->db->update('payer_information');
     }
 
 }

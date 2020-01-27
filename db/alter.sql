@@ -1141,3 +1141,7 @@ ALTER TABLE `order_extra_data` ADD `compensation` VARCHAR(100) NOT NULL AFTER `c
 -- import payer_information 
 -- import recipient_information 
 DROP TABLE `payer_recipient_information`;
+
+/*  27.01.2020 */
+ALTER TABLE `order_extra_data` DROP `compensation`;
+ALTER TABLE `project_template_recurrence_main` ADD `target_start_date` VARCHAR(30) NULL DEFAULT NULL AFTER `created_at`, ADD `target_end_date` VARCHAR(30) NULL DEFAULT NULL AFTER `target_start_date`; 
