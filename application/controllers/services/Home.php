@@ -1676,6 +1676,21 @@ class Home extends CI_Controller {
         $this->load->view('services/show_payroll_account_list', $data);
     }
 
+    public function save_recipient() {
+        echo $this->service_model->save_recipient(post());
+    }
+
+    public function get_recipient_list() {
+        // $data['disable'] = post('disable');
+        $data['list'] = $this->service_model->get_recipient_list_by_reference(post('reference_id'), post('reference'));
+        $this->load->view('services/show_recipient_list', $data);
+    }
+    public function get_recipient_list_count() {
+        // $data['disable'] = post('disable');
+        $data['list'] = $this->service_model->get_recipient_list_by_reference(post('reference_id'), post('reference'));
+        echo count($data['list']);
+    }
+
 }
 
 // End controller class

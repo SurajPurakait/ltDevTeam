@@ -3387,3 +3387,60 @@ function request_create_1099_write_up() {
         }
     });
 }
+
+
+function recipient_modal(modal_type, reference, reference_id, id, retail_price = '') {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'modal/show_recipient',
+        data: {
+            modal_type: modal_type,
+            reference: reference,
+            reference_id: reference_id,
+            id: id,
+            retail_price: retail_price
+        },
+        success: function (result) {
+            $('#recipient-form').html(result).modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        }
+    });
+}
+
+
+function save_recipient() {
+    // if (!requiredValidation('form_recipient')) {
+    //     return false;
+    // }
+    var form_data = new FormData(document.getElementById('form_recipient'));
+    var reference = $("form#form_recipient #reference").val();
+    var reference_id = $("form#form_recipient #reference_id").val();
+    var retail_price = $("form#form_recipient #retail_price").val();
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'services/home/save_recipient',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            //console.log(result); return false;
+            if (result != 1) {
+                swal("ERROR!", "Error Processing Data", "error");
+            }else {
+                $('#recipient-form').modal('hide');
+                 get_recipient_list(reference_id, reference,retail_price);
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
