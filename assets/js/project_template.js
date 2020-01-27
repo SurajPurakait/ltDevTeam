@@ -374,7 +374,7 @@ function hide_task_ofc_staff_div_in_editcase(assign_myself) {
 //end task department staff
 
 function request_create_template() {
-    if (!requiredValidation('save_template_main')) {
+if (!requiredValidation('save_template_main')) {
         return false;
     }
     var form_data = new FormData(document.getElementById("save_template_main"));
@@ -447,7 +447,9 @@ function request_create_template() {
     var expiration_type = $('input[name="recurrence[expiration_type]"]:checked').val();
     var end_occurrence = $("#end_occurrence").val();
     var target_start_days = $("#t_start_day").val();
+    var target_start_months = $("#t_start_month").val();
     var target_end_days = $("#t_end_day").val();
+    var target_end_months = $("#t_end_month").val();
     var target_start_day = $('input[name="recurrence[target_start_day]"]:checked').val();
     var target_end_day = $('input[name="recurrence[target_end_day]"]:checked').val();
     var generation_type = $('input[name="recurrence[generation_type]"]:checked').val();
@@ -464,8 +466,10 @@ function request_create_template() {
     form_data.append('recurrence[expiration_type]', expiration_type);
     form_data.append('recurrence[end_occurrence]', end_occurrence);
     form_data.append('recurrence[target_start_days]', target_start_days);
+    form_data.append('recurrence[target_start_months]', target_start_months);
     form_data.append('recurrence[target_start_day]', target_start_day);
     form_data.append('recurrence[target_end_days]', target_end_days);
+    form_data.append('recurrence[target_end_months]', target_end_months);
     form_data.append('recurrence[target_end_day]', target_end_day);
     form_data.append('recurrence[generation_type]', generation_type);
     form_data.append('recurrence[generation_day]', generation_day);
@@ -509,7 +513,6 @@ function request_create_template() {
             closeLoading();
         }
     });
-
 }
 
 function get_template_task_modal(template_id) {
