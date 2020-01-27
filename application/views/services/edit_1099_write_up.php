@@ -7,45 +7,29 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Your Office<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="staff_office" id="staff_office" title="Office" required="">
-                                    <option value="">Select Office</option>
-                                        <?php if (strpos($staff_info['office'], ',') !== false) {
-                                                load_ddl_option("users_office_list", "", "staff_office");
-                                            }else{
-                                                load_ddl_option("users_office_list", $staff_info['office'], "staff_office");
-                                            } 
-                                        ?>      
+                                <select class="form-control" disabled="" name="staff_office" id="staff_office" title="Office" required="">
+                                    <?php load_ddl_option("staff_office_list", $edit_data['staff_office'], "staff_office"); ?>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
-                        </div>
+                        </div>       
                         <h3>Business Information</h3><span class="company-data"></span>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Existing Client<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control type_of_client" name="type_of_client" id="type_of_client_ddl" onchange="clientTypeChange(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1);" title="Type Of Client" required>
-                                    <option value="0">Yes</option>
-                                    <option selected="selected" value="1">No</option>
+                                <select disabled="" class="form-control type_of_client" name="type_of_client" id="type_of_client_ddl" onchange="clientTypeChange(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1);" title="Type Of Client" required>
+                                    <option value="0" <?= ($edit_data['new_existing'] == 0) ? 'selected' : ''; ?>>Yes</option>
+                                    <option value="1" <?= ($edit_data['new_existing'] == 1) ? 'selected' : ''; ?>>No</option>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
-
-                        <div class="form-group client_type_div0">
-                            <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <select class="form-control chosen-select client_type_field0" name="client_office" id="client_office" onchange="refresh_existing_client_list(this.value, '');" title="Office" required="">
-                                    <option value="">Select Office</option>
-                                    <?php load_ddl_option("staff_office_list",'', (staff_info()['type'] != 1) ? "client_office" : ""); ?>
-                                </select>
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
-
                         <div class="form-group client_type_div0" id="client_list">
                             <label class="col-lg-2 control-label">Existing Client List<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control client_list client_type_field0" name="client_list" id="client_list_ddl" title="Client List" onchange="fetchExistingClientData(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1);">
+                                <select disabled="" class="form-control client_list client_type_field0" name="client_list" id="client_list_ddl" title="Client List" onchange="fetchExistingClientData(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1);">
+                                    <option value="">Select an option</option>
+                                    <?php load_ddl_option("existing_client_list", $reference_id); ?>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
@@ -67,16 +51,16 @@
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
-                        <div class="form-group" id="state_other" style="display:none;">
+                        <div class="form-group" id="state_other" <?php echo ($other_state == "")? "style='display:none'":"" ;?>>
                             <div class="col-lg-10 col-lg-offset-2">
-                                <input type="text" name="state_other" class="form-control" >
+                                <input type="text" name="state_other" class="form-control" value="<?= $other_state; ?>">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
                         <div class="form-group display_div" id="type_div">
                             <label class="col-lg-2 control-label">Type of Company<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control value_field required_field disabled_field" name="type" id="type" title="Type of Company" required="">
+                                <select class="form-control value_field required_field" name="type" id="type" title="Type of Company" required="">
                                     <option value="">Select an option</option>
                                     <?php load_ddl_option("company_type_list"); ?>
                                 </select>
@@ -86,7 +70,7 @@
                         <div class="form-group display_div">
                             <label class="col-lg-2 control-label">Month & Year to Start</label>
                             <div class="col-lg-10">
-                                <input placeholder="mm/yyyy" id="month" class="form-control datepicker_my value_field" type="text" title="Month & Year to Start" name="start_year" value="">
+                                <input placeholder="mm/yyyy" class="form-control datepicker_my value_field" type="text" title="Month & Year to Start" id="start_month_year" name="start_year" value="">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -117,7 +101,7 @@
                         <div class="form-group display_div" id="business_description_div">
                             <label class="col-lg-2 control-label">Business Description</label>
                             <div class="col-lg-10">
-                                <textarea class="form-control value_field" name="business_description"  title="Business Description"></textarea>
+                                <textarea class="form-control value_field" name="business_description" id="business_description" title="Business Description"></textarea>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -202,17 +186,10 @@
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
-                            <div class="form-group" style="display: none;">
+                            <div class="form-group">
                                 <label class="col-lg-2 control-label">Existing Practice ID</label>
                                 <div class="col-lg-10">
-                                    <input placeholder="" class="form-control value_field" type="text" name="existing_practice_id" id="existing_practice_id" title="Existing Practice ID" value="">
-                                    <div class="errorMessage text-danger"></div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-lg-2 control-label">Practice ID</label>
-                                <div class="col-lg-10">
-                                    <input placeholder="" class="form-control value_field" type="text" name="practice_id" id="practice_id" title="Practice ID" value="">
+                                    <input placeholder="" class="form-control value_field" type="text" name="existing_practice_id" id="existing_practice_id" title="Existing Practice ID" value="" readonly>
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
@@ -225,45 +202,39 @@
                         <div class="hr-line-dashed"></div>
 
                         <h3>Payer's Information : <span class="text-danger">*</span></h3>
-
-                        <div class="link-content m-b-10">
-                                <input type="hidden" id="payer_information_quantity" value="0">
-                                <button class="btn btn-success btn-xs" id="copy-contact" ref_id="<?= $reference_id; ?>">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Main Contact</button>&nbsp;
-                        </div>
-
                         <div id="payer_information_div">
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <input placeholder="First Name" class="form-control" type="text" id="payer_first_name" name="payer_first_name" title="First Name" value="" required="">
+                                    <input placeholder="First Name" class="form-control" type="text" id="payer_first_name" name="payer_first_name" title="First Name" value="<?= $payer_data['payer_first_name'] ?>" required="">
                                     <div class="errorMessage text-danger"></div>        
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <input placeholder="Last Name" class="form-control" type="text" id="payer_last_name" name="payer_last_name" title="Last Name" value="" required="">
+                                    <input placeholder="Last Name" class="form-control" type="text" id="payer_last_name" name="payer_last_name" title="Last Name" value="<?= $payer_data['payer_last_name'] ?>" required="">
                                     <div class="errorMessage text-danger"></div>        
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Phone Number<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <input placeholder="Phone Number" phoneval class="form-control" type="text" id="payer_phone_number" name="payer_phone_number" title="Phone Number" value="" required="">
+                                    <input placeholder="Phone Number" phoneval class="form-control" type="text" id="payer_phone_number" name="payer_phone_number" title="Phone Number" value="<?= $payer_data['payer_phone_number'] ?>" required="">
                                     <div class="errorMessage text-danger"></div>        
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Address<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <input placeholder="Address" class="form-control" type="text" id="payer_address" name="payer_address" title="Address" value="" required="">
+                                    <input placeholder="Address" class="form-control" type="text" id="payer_address" name="payer_address" title="Address" value="<?= $payer_data['payer_address'] ?>" required="">
                                     <div class="errorMessage text-danger"></div>        
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">City<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <input placeholder="City" class="form-control" type="text" id="payer_city" name="payer_city" title="City" value="" required="">
+                                    <input placeholder="City" class="form-control" type="text" id="payer_city" name="payer_city" title="City" value="<?= $payer_data['payer_city'] ?>" required="">
                                     <div class="errorMessage text-danger"></div>        
                                 </div>
                             </div>
@@ -272,7 +243,7 @@
                                 <div class="col-lg-10">
                                     <select title="State" class="form-control" name="payer_state" id="payer_state" required="">
                                             <option value="">Select an option</option>
-                                            <?php load_ddl_option("all_state_list"); ?>
+                                            <?php load_ddl_option("all_state_list",$payer_data['payer_state']); ?>
                                     </select>
                                     <div class="errorMessage text-danger"></div>   
                                 </div>
@@ -282,7 +253,7 @@
                                 <div class="col-lg-10">
                                     <select title="Country" class="form-control" name="payer_country" id="payer_country" required="">
                                         <option value="">Select an option</option>
-                                        <?php load_ddl_option("get_countries"); ?>
+                                        <?php load_ddl_option("get_countries",$payer_data['payer_country']); ?>
                                     </select>
                                     <div class="errorMessage text-danger"></div>        
                                 </div>
@@ -290,7 +261,7 @@
                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Zip<span class="text-danger">*</span></label>
                                 <div class="col-lg-10">
-                                    <input placeholder="Zip Code" class="form-control" type="text" id="payer_zip_code" name="payer_zip_code" title="Zip Code" zipval value="" required="">
+                                    <input placeholder="Zip Code" class="form-control" type="text" id="payer_zip_code" name="payer_zip_code" title="Zip Code" zipval value="<?= $payer_data['payer_zip'] ?>" required="">
                                     <div class="errorMessage text-danger"></div>        
                                 </div>
                             </div>
@@ -299,19 +270,36 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">TIN (Tax Identification Number)<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="TIN" class="form-control" type="text" id="payer_tin" name="payer_tin" title="TIN" value="" required="">
+                                <input placeholder="TIN" class="form-control" type="text" id="payer_tin" name="payer_tin" title="TIN" value="<?= $payer_data['payer_tin'] ?>" required="">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
-                        <div class="hr-line-dashed"></div> 
+                        <div class="hr-line-dashed"></div>
 
                         <input type="hidden" title="Recipient List" id="recipient_id_list" name="recipient_id_list" value="">
 
                         <div id="recipient_info_div">
-                            <h3>Recipient(s)&nbsp; (<a href="javascript:void(0);" class="recipientadd" onclick="recipient_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>','','<?= $service_info['retail_price']; ?>'); return false;">Add Recipient</a>)</span></h3>
+                            <h3>Recipient(s)&nbsp; (<a href="javascript:void(0);" class="recipientadd" onclick="recipient_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>','','<?= $edit_data['retail_price']; ?>'); return false;">Add Recipient</a>)</span></h3>
                             <div id="recipient-list">
                                 <!-- <input type="hidden" title="Contact Info" id="contact-list-count" value="">
                                 <div class="errorMessage text-danger"></div> -->
+                            </div>
+                            <div class="row" id="recipient-list-details">
+                                <label class="col-lg-2 control-label"></label>
+                                <div class="col-lg-10" style="padding-top:8px">
+                                <?php foreach ($recipient_data as $key => $rd){ ?>
+                                    <p>
+                                        <b>Recipient <?= $key+1 ?> : <?= $rd["first_name"]; ?> <?= $rd["last_name"]; ?> </b><br>
+                                        <b>Phone Number: </b><?= ($rd["recipient_phone_number"] !='') ? $rd["recipient_phone_number"] : 'NA'; ?><br>
+                                        <b>Address: </b><?= ($rd["recipient_address"] !='') ? $rd["recipient_address"] : 'NA'; ?><br>
+                                        <b>City: </b><?= ($rd["recipient_city"] !='') ? $rd["recipient_city"] : 'NA'; ?><br>
+                                        <b>State: </b><?= ($rd["state_name"] !='')? $rd["state_name"] : 'NA'; ?><br>
+                                        <b>Country: </b><?= ($rd["country_name"] !='') ? $rd["country_name"] : 'NA'; ?><br>
+                                        <b>Zip: </b><?= ($rd["recipient_zip"] !='') ? $rd["recipient_zip"] : 'NA'; ?><br> 
+                                        <b>TIN: </b><?= ($rd["recipient_tin"] !='') ? $rd["recipient_tin"] : 'NA'; ?> 
+                                    </p>
+                                    <?php } ?>
+                                </div>
                             </div>
                         </div>
                         
@@ -321,19 +309,18 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Retail Price</label>
                             <div class="col-lg-10">
-                                <input name="retail_price" id="retail_price" readonly="" placeholder="" class="form-control" type="text" title="Retail Price" value="<?= $service_info['retail_price']; ?>">
-                                <!-- <input name="retail_price" type="hidden" value="<?//= $service_info['retail_price']; ?>"> -->
+                                <input readonly="" placeholder="" id="retail_price" class="form-control" type="text" title="Retail Price" value="<?= $edit_data['retail_price']; ?>">
+                                <input name="related_service[<?= $edit_data['id']; ?>][<?= $service_id; ?>][retail_price]" type="hidden" value="<?= $edit_data['retail_price']; ?>">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Override Price</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="retail_price_override" name="retail_price_override" numeric_valid="" title="Retail Price" value="">
+                                <input placeholder="" class="form-control" type="text" id="retail_price_override" name="related_service[<?= $edit_data['id']; ?>][<?= $service_id; ?>][override_price]" numeric_valid="" title="Override Price" value="<?= $edit_data['total_of_order']; ?>">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
-                        <?= service_note_func('Note', 'n', 'service', "", $service_id); ?>
-
+                        <?= service_note_func('Note', 'n', 'service', $edit_data['id'], $service_id); ?>
                         <div class="hr-line-dashed"></div>
                         <h3>Confirmation</h3>
                         <div class="form-group">
@@ -352,7 +339,7 @@
                                 <input type="hidden" name="reference" id="reference" value="<?= $reference; ?>">
                                 <input type="hidden" name="service_id" id="service_id" value="<?= $service_id; ?>">
                                 <input type="hidden" name="base_url" id="base_url" value="<?= base_url(); ?>">
-                                <input type="hidden" name="editval" id="editval" value="">
+                                <input type="hidden" name="editval" id="editval" value="<?= $edit_data['id']; ?>">
                                 <button class="btn btn-success" type="button" onclick="request_create_1099_write_up();">Save changes</button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button" onclick="go('services/home');">Cancel</button>
                             </div>
@@ -368,43 +355,25 @@
 <div id="document-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script>
-    clientTypeChange(1, <?= $reference_id; ?>, '<?= $reference; ?>', 1);
+    clientTypeChange('<?= $edit_data['new_existing']; ?>', '<?= $reference_id; ?>', '<?= $reference; ?>', 1);
     $(function () {
-    $("#copy-contact").click(function () {
-            $("#payer_first_name").val('');
-            $("#payer_last_name").val('');
-            $("#payer_phone_number").val('');
-            $("#payer_address").val('');
-            $("#payer_city").val('');
-            $("#payer_state").val('');
-            $("#payer_country").val('');
-            $("#payer_zip_code").val('');
-            var ref_id = $('#reference_id').val();
-            $.ajax({
-                type: "POST",
-                                url: '<?= base_url(); ?>services/accounting_services/copy_contact_for_1099_write_up',
-                                data: {ref_id: ref_id}, 
-                                cache: false,
-                                success: function (data) {
-                    //alert(data);
-                    if (data != 0) {
-                        var res = JSON.parse(data);
-                        //alert(res);
-                        $("#payer_information_quantity").val(1);
-                        $("#payer_first_name").val(res.first_name);
-                        $("#payer_last_name").val(res.last_name);
-                        $("#payer_phone_number").val(res.phone1);
-                        $("#payer_address").val(res.address1);
-                        $("#payer_city").val(res.city);
-                        $("#payer_state").val(res.state);
-                        $("#payer_country").val(res.country);
-                        $("#payer_zip_code").val(res.zip);
-                        $("#payer_information_div").show();
-                    } else {
-                        swal("Error", "No Main Contact Added", "error");
-                    }
-                }
-            });
-        });
-    });   //document.ready end
+        var client_type = $('#type_of_client_ddl').val();
+        if (client_type == '0') {
+            fetchExistingClientData('<?= $reference_id; ?>', <?= $reference_id; ?>, '<?= $reference; ?>', 1);
+            $('.display_div').hide();
+        } else {
+            get_contact_list('<?= $company_id; ?>', 'company');
+            reload_owner_list('<?= $company_id; ?>', 'main');
+            get_document_list('<?= $company_id; ?>', 'company');
+            getInternalData('<?= $reference_id; ?>', 'company');
+            setIdVal('state', '<?= $edit_data['state_opened']; ?>');
+            setIdVal('type', '<?= $edit_data['company_type']; ?>');
+            setIdVal('business_description', '<?= urlencode($edit_data['business_description']); ?>');
+            setIdVal('fye', '<?= $edit_data['fiscal_year_end']; ?>');
+            setIdVal('business_name', '<?= $edit_data['company_name']; ?>');
+            setIdVal('dba', '<?= $edit_data['dba']; ?>');
+            setIdVal('fein', '<?= $edit_data['fein']; ?>');
+            setIdVal('start_month_year', "<?= $edit_data['start_month_year']; ?>");
+        }
+    });
 </script>
