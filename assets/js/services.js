@@ -3434,6 +3434,7 @@ function save_recipient() {
             }else {
                 $('#recipient-form').modal('hide');
                  get_recipient_list(reference_id, reference,retail_price);
+                $('#recipient-list-details').hide(); 
             }
         },
         beforeSend: function () {

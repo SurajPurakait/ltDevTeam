@@ -2083,6 +2083,11 @@ class Company_model extends CI_Model {
             }
             $this->company->update_title_status($data["reference_id"]);
             $this->system->log("insert", "order", $order_id);
+
+
+            $this->service_model->update_payer_data_fields($data,$order_id);
+            $this->service_model->recipient_data_fields($data["reference_id"],$order_id,$data['recipient_id_list']);
+
             $this->billing_model->update_invoice_data($data);
             $this->system->save_general_notification('order', $order_id, 'edit');
         }
