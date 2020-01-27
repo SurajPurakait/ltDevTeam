@@ -233,26 +233,51 @@
                                                                     </div> 
                                                                 </div>
                                                             </div><!-- ./row -->
-                                                            <hr class="hr-line-dashed"/>                                                   
-                                                            <h3 class="m-0 p-b-20">Target Dates:</h3>
-                                                            <div class="row">
+                                                            <hr class="hr-line-dashed"/>         <div class="row">
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
-                                                                        <label class="">For Start</label>
-                                                                        <input class="form-control" type="number" name="recurrence[target_start_days]" value="0" min="0" style="width: 100px" id="t_start_day">
-                                                                        <label class="control-label"><input type="radio" name="recurrence[target_start_day]" value="1" checked="">&nbsp; Days before due date</label>
-                                                                        <label class="control-label"><input type="radio" name="recurrence[target_start_day]" value="2">&nbsp; Days after creation date</label>
+                                                                        <div class="row">
+                                                                            <div class="col-md-6 p-r-0">
+                                                                                <label class="">For Start</label>
+                                                                                <input class="form-control" type="number" id="t_start_month" name="recurrence[target_start_months]" min="0" max="12" value="1" style="width: 120px">
+                                                                                <label class="control-label">month(s)</label>
+                                                                            </div>
+                                                                            <div class="col-md-6 p-l-0">
+                                                                                <label class="">&nbsp;</label>
+                                                                                <input class="form-control" type="number" name="recurrence[target_start_days]" value="0" min="0" style="width: 120px" id="t_start_day">
+                                                                            </div>
+                                                                            <div class="col-md-12 m-t-10">
+                                                                                <label class="control-label"><input style="vertical-align: text-bottom;" type="radio" name="recurrence[target_start_day]" value="1" checked="">&nbsp; Days before due date</label>
+                                                                                <label class="control-label"><input style="vertical-align: text-bottom;" type="radio" name="recurrence[target_start_day]" value="2">&nbsp; Days after creation date</label>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
-                                                                        <label class="">For Complete</label>
-                                                                        <input class="form-control" type="number" name="recurrence[target_end_days]" value="0" min="0" style="width: 100px" id="t_end_day">
-                                                                        <label class="control-label"><input type="radio" name="recurrence[target_end_day]" value="1" checked="">&nbsp; Days before due date</label>
-                                                                        <label class="control-label"><input type="radio" name="recurrence[target_end_day]" value="2">&nbsp; Days after creation date</label>
+                                                                        <div class="row">
+                                                                            <div class="col-md-6 p-r-0">
+                                                                                <label class="">For Complete</label>
+                                                                                <input class="form-control" type="number" id="t_end_month" name="recurrence[target_end_months]" min="0" max="12" value="1" style="width: 120px">
+                                                                                <label class="control-label">month(s)</label>
+                                                                            </div>
+                                                                            <div class="col-md-6 p-l-0">
+                                                                                <label class="">&nbsp;</label>   
+                                                                                <input class="form-control" type="number" name="recurrence[target_end_days]" value="0" min="0" style="width: 120px" id="t_end_day">
+                                                                            </div>
+                                                                            <div class="col-md-12 m-t-10">
+                                                                                <label class="control-label"><input style="vertical-align: text-bottom;" type="radio" name="recurrence[target_end_day]" value="1" checked="">&nbsp; Days before due date</label>
+                                                                                <label class="control-label"><input style="vertical-align: text-bottom;" type="radio" name="recurrence[target_end_day]" value="2">&nbsp; Days after creation date</label>
+                                                                            </div>
+                                                                        </div>
+
+
+
+
                                                                     </div>
                                                                 </div>
-                                                            </div><!-- ./row -->
+                                                            </div>                                          
+                                                            <!-- ./row -->
                                                             <div class="none-div">
                                                                 <hr class="hr-line-dashed"/>
                                                                 <h3 class="m-0 p-b-20">Expiration:</h3>
