@@ -1141,3 +1141,6 @@ ALTER TABLE `order_extra_data` ADD `compensation` VARCHAR(100) NOT NULL AFTER `c
 -- import payer_information 
 -- import recipient_information 
 DROP TABLE `payer_recipient_information`;
+
+/*  27.01.2020 */
+ALTER TABLE `order_extra_data` DROP `compensation`;
