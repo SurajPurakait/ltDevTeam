@@ -101,7 +101,8 @@ class Home extends CI_Controller {
         $this->load->layout = 'dashboard';
         $order_id = base64_decode($order_id);
         $edit_data = $this->service_model->get_order_info_by_id($order_id);
-// echo "<pre>";
+        // echo "<pre>";
+        // print_r($edit_data);exit;
         $title = 'Edit ' . (($edit_data['service_shortname'] == 'inc_n_c_f' || $edit_data['service_shortname'] == 'inc_n_c_d' || $edit_data['service_shortname'] == 'inc_n_c_b_v_i' || $edit_data['service_shortname'] == 'inc_n_c_o') ? 'New Company' : $edit_data['service_name']);
         $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['main_menu'] = 'services';
@@ -237,11 +238,15 @@ class Home extends CI_Controller {
                     $this->load->template('services/edit_annual_report', $render_data);
                 }
                 break;
-                case 'bus_l_t':{
+                case 'bus_l_t':{        // Legal Translations
                     $render_data['order_extra_data'] = $this->service_model->get_extra_data($order_id);
-                    // echo "<pre>";
-                    // print_r($render_data['order_extra_data']);exit;
                     $this->load->template('services/edit_legal_translations', $render_data);
+                }
+                break;
+                case 'acc_1_w_u': {     // 1099 Write Up
+                    $render_data['payer_data'] = $this->service_model->get_payer_info($order_id);
+                    $render_data['recipient_data'] = $this->service_model->get_recipient_info_by_id($order_id);
+                    $this->load->template('services/edit_1099_write_up', $render_data);
                 }
                 break;
             default :
@@ -382,12 +387,12 @@ class Home extends CI_Controller {
                 break;
 
             case 'acc_1_w_u': {   // 1099 Write Up
-                
-                   $render_data['order_extra_data_for_compensation'] = $this->service_model->get_extra_data($order_id); 
-                   $render_data['payer_recipient_info'] = $this->service_model->get_payer_recipient_info($order_id); 
+                   
+                   $render_data['recipient_info'] = $this->service_model->get_recipient_info($order_id); 
+                   $render_data['payer_info'] = $this->service_model->get_payer_info($order_id); 
             }
         endswitch;
-//        echo '<pre>';print_r($render_data);exit;
+
 //        if ($service_id == '14') {
 //            $result['sales_tax_data'] = $this->rt6_model->get_rt6_data($rowid)[0];
 //            if (!empty($result['sales_tax_data']) && $result['sales_tax_data']['resident_type'] == "Resident") {
@@ -397,9 +402,7 @@ class Home extends CI_Controller {
 //            }
 //            $result['salestax_employee_notes'] = $this->payroll->get_payroll_employee_notes_by_reference_id($edit_data[0]['reference_id']);
 //        }
-//        echo "<pre>";
-//        print_r($render_data);
-//        echo "</pre>";die;
+
         $this->load->template('services/view_service1', $render_data);
     }
 
@@ -1674,6 +1677,21 @@ class Home extends CI_Controller {
         $reference_id = post('reference_id');
         $data['account_details'] = $this->company_model->get_account_details($reference_id);
         $this->load->view('services/show_payroll_account_list', $data);
+    }
+
+    public function save_recipient() {
+        echo $this->service_model->save_recipient(post());
+    }
+
+    public function get_recipient_list() {
+        // $data['disable'] = post('disable');
+        $data['list'] = $this->service_model->get_recipient_list_by_reference(post('reference_id'), post('reference'));
+        $this->load->view('services/show_recipient_list', $data);
+    }
+    public function get_recipient_list_count() {
+        // $data['disable'] = post('disable');
+        $data['list'] = $this->service_model->get_recipient_list_by_reference(post('reference_id'), post('reference'));
+        echo count($data['list']);
     }
 
 }

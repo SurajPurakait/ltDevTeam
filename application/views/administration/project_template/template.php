@@ -130,7 +130,25 @@
 
                                             <div id="responsible_staff_div"></div>
                                         </div>
-                                       
+                                        <!--                                <div class="row">
+                                                                            <div class="form-group dept_div" style="display: inline-block;width: 100%;">
+                                                                                <label class="col-sm-3 col-md-2 control-label text-right">Office<span class="spanclass text-danger">*</span></label>
+                                                                                <div class="col-sm-9 col-md-10">
+                                                                                    <select required class="form-control" title="Office" name="template_main[office]" id="office" onchange="get_template_office_staff();" required>
+                                                                                        <option value="">Select an option</option>
+                                        <?php
+//                                                foreach ($office_list as $key => $value):
+                                        ?>
+                                                                                            <option value="<? $value["id"]; ?>"><? $value["name"]; ?></option>
+                                        <?php
+//                                                endforeach;
+                                        ?>
+                                                                                    </select>
+                                                                                    <div class="errorMessage text-danger"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div id="ofic_staff_div"></div>
+                                                                        </div>-->
                                         <hr class="hr-line-dashed"/>
                                         <h3>Assigned :</h3>
                                         <?php
@@ -176,7 +194,7 @@
 
                                         </div>
                                         <hr class="hr-line-dashed"/>
-                                        <h3>Generation:</h3>
+                                        <h3>Generation :</h3>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <h4><button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#RecurranceModal" title="Add Recurrence"><i class="fa fa-refresh"></i></button> &nbsp;<b id="pattern_show"></b>
@@ -195,7 +213,7 @@
                                                             <h2 class="modal-title">Recurrence</h2>
                                                         </div><!-- modal-header -->
                                                         <div class="modal-body">
-                                                            <h3 class="m-0 p-b-20">Frequency:</h3>
+                                                            <h3 class="m-0 p-b-20">Frequency :</h3>
                                                             <div class="row">
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
@@ -206,13 +224,12 @@
                                                                             <option value="weekly">Weekly</option>
                                                                             <option value="quarterly">Quarterly</option>
                                                                             <option value="annually">Annually</option>
-                                                                            <option value="periodic">Periodic</option>
                                                                             <option value="none">None</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6">    
-                                                                    <div class="form-group m-t-25" id="weekend_val">
+                                                                    <div class="form-group m-t-25">
                                                                         <label class="control-label"><input type="checkbox" name="recurrence[occur_weekdays]" id="occur_weekdays"> Must occur on weekdays</label>
                                                                     </div>
                                                                     <div class="annual-check-div" style="display: none;">
@@ -234,7 +251,7 @@
                                                                 </div>
                                                             </div><!-- ./row -->
                                                             <hr class="hr-line-dashed"/>                                                   
-                                                            <h3 class="m-0 p-b-20">Target Dates:</h3>
+                                                            <h3 class="m-0 p-b-20">Target Dates :</h3>
                                                             <div class="row">
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
@@ -255,7 +272,7 @@
                                                             </div><!-- ./row -->
                                                             <div class="none-div">
                                                                 <hr class="hr-line-dashed"/>
-                                                                <h3 class="m-0 p-b-20">Expiration:</h3>
+                                                                <h3 class="m-0 p-b-20">Expiration :</h3>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="form-group">
@@ -276,10 +293,10 @@
 
                                                                 </div><!--./row -->
                                                                 <hr class="hr-line-dashed"/>
-                                                                <h3 class="m-0 p-b-20">Generation:</h3>
+                                                                <h3 class="m-0 p-b-20">Generation :</h3>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
-                                                                        <label class="control-label"><input type="radio" disabled name="recurrence[generation_type]" value="0" onclick="//check_generation_type(this.value)">&nbsp; When previous project is Complete</label>
+                                                                        <label class="control-label"><input type="radio" disabled name="recurrence[generation_type]" value="0" onclick="//check_generation_type(this.value)">&nbsp; When the current Schedule Item is Complete</label>
                                                                     </div>
                                                                     <div class="col-md-12">
                                                                         <div class="form-inline">
@@ -287,19 +304,18 @@
                                                                             <input class="form-control" type="number" id="generation_month" name="recurrence[generation_month]" min="0" max="12" value="1" style="width: 100px">&nbsp;
                                                                             <label class="control-label">month(s)</label>&nbsp;
                                                                             <input class="form-control" type="number" id="generation_day" name="recurrence[generation_day]" min="1" max="31" value="1" style="width: 100px">&nbsp;
-                                                                            <label class="control-label">Day(s) before next occurrence due date</label>
+                                                                            <label class="control-label">Day(s) before next occurrence</label>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-md-12">
-                                                                        <label class="control-label"><input type="radio" name="recurrence[generation_type]" value="2" checked="" onclick="//check_generation_type(this.value)">&nbsp; None</label>
+                                                                        <label class="control-label"><input type="radio" name="recurrence[generation_type]" value="2" checked="" onclick="//check_generation_type(this.value)">&nbsp; When I manually create it</label>
                                                                     </div>
 
                                                                 </div> <!-- ./row -->
                                                             </div>
                                                         </div><!-- ./modal-body -->
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" onclick="closeRecurrenceModal();">Save</button>
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                                            <button type="button" class="btn btn-primary" onclick="closeRecurrenceModal();">Ok</button>
                                                         </div><!-- modal-footer -->
                                                     </div><!-- Modal content-->
 
@@ -328,7 +344,7 @@
 
                                         <?php
                                         if (!empty($task_list)) {
-                                            foreach ($task_list as $key=> $value) {
+                                            foreach ($task_list as $value) {
                                                 if (strlen($value['description']) > 20) {
                                                     $description = substr($value['description'], 0, 20) . '...';
                                                 } else {
@@ -344,14 +360,16 @@
                                                                 <table class="table table-borderless text-center" style="margin-bottom: 0px;">
                                                                     <tbody>
                                                                         <tr>
-                                                                            <th style="width:8%; text-align: center">Task Id</th>
-                                                                            <th style="width:8%; text-align: center">Title</th>
+                                                                            <th style="width:8%; text-align: center">Task Order</th>
+                                                                            <th style="width:8%; text-align: center">Description</th>
                                                                             <th style="width:8%; text-align: center">Assigned To</th>
                                                                             <th style="width:8%; text-align: center">Notes</th>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td title="ID"><?= $value['task_order'] ?></td>
-                                                                            <td title="Title"><?= $value['task_title'] ?></td>
+                                                                            <td title="Task Order"><?= $value['task_order'] ?></td>
+                                                                            <td title="Description">
+                                                                                <a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $description ?>" data-trigger="hover" title="" data-original-title=""><?= $description ?></a>
+                                                                            </td>
                                                                             <!--<td title="Assign To"><span></span></td>-->
                                                                             <td title="Assign To"><span class="text-success"><?php echo get_assigned_task_staff($value['id']); ?></span><br><?php echo get_assigned_task_department($value['id']); ?></td>                                                    
 
@@ -445,7 +463,6 @@
             buttonup_class: 'btn btn-white'
         });
     });
-
 
 </script>
 

@@ -2987,7 +2987,7 @@ class Service_model extends CI_Model {
     }
 
 
-    public function payer_recipient_data_fields($data,$order_id){
+    public function payer_data_fields($data,$order_id){
         $extra_data = [
                 'reference_id' => $data["reference_id"],
                 'order_id' => $order_id,
@@ -2999,32 +2999,86 @@ class Service_model extends CI_Model {
                 'payer_state' => $data['payer_state'],
                 'payer_country' => $data['payer_country'],
                 'payer_zip' => $data['payer_zip_code'],
-                'payer_tin' => $data['payer_tin'],
-                'recipient_first_name' => $data['recipient_first_name'],
-                'recipient_last_name' => $data['recipient_last_name'],
-                'recipient_phone_number' => $data['recipient_phone_number'],
-                'recipient_address' => $data['recipient_address'],
-                'recipient_city' => $data['recipient_city'],
-                'recipient_state' => $data['recipient_state'],
-                'recipient_country' => $data['recipient_country'],
-                'recipient_zip' => $data['recipient_zip_code'],
-                'recipient_tin' => $data['recipient_tin']
+                'payer_tin' => $data['payer_tin']
             ];
             
-            return $this->db->insert('payer_recipient_information', $extra_data);
+            return $this->db->insert('payer_information', $extra_data);
     }
 
-    public function order_extra_data_compensation_fields($data,$order_id){
-        $order_extra_data = [
-                'compensation' => $data['compensation'],
-                'order_id' => $order_id
+    public function recipient_data_fields($reference_id,$order_id,$recipient_id_list=""){
+            $recipient_id_list = explode(",",$recipient_id_list);
+
+            $this->db->set('order_id',$order_id);
+            $this->db->set('reference_id', $reference_id);
+            $this->db->where_in('id',$recipient_id_list);
+            return $this->db->update('recipient_information');
+    }
+
+    public function get_payer_info($order_id) {
+        return $this->db->get_where('payer_information', ['order_id' => $order_id])->row_array();
+    }
+
+    public function get_recipient_info($order_id) {
+        return $this->db->get_where('recipient_information', ['order_id' => $order_id])->result_array();
+    }
+
+
+    public function save_recipient($data) {
+       $arr = array(
+           'reference' => $data['reference'],
+           'reference_id' => $data['reference_id'],
+           'recipient_first_name' => $data['recipient_first_name'],
+           'recipient_last_name' => $data['recipient_last_name'],
+           'recipient_phone_number' => $data['recipient_phone_number'],
+           'recipient_address' => $data['recipient_address'],
+           'recipient_city' => $data['recipient_city'],
+           'recipient_state' => $data['recipient_state'],
+           'recipient_country' => $data['recipient_country'],
+           'recipient_zip' => $data['recipient_zip_code'],
+           'recipient_tin' => $data['recipient_tin'],
+           'compensation' => $data['compensation']
+       );
+
+        return $this->db->insert('recipient_information', $arr);
+    }
+
+
+    public function get_recipient_list_by_reference($reference_id, $reference) {
+        $select = 'ri.id,ri.reference_id, ri.reference,TRIM(ri.recipient_first_name) as first_name,TRIM(ri.recipient_last_name) as last_name,ri.recipient_phone_number, ri.recipient_address, ri.recipient_city, ri.recipient_zip, ri.recipient_tin, ri.compensation,c.country_name,st.state_name AS state_name';
+        $this->db->select($select);
+        $this->db->from('recipient_information AS ri');
+        $this->db->join('countries AS c', 'c.id = ri.recipient_country', 'left');
+        $this->db->join('states AS st', 'st.id = ri.recipient_state', 'left');
+        $this->db->where(['ri.reference_id' => $reference_id, 'ri.reference' => $reference]);
+        // $this->db->group_by('ri.reference_id');
+        return $this->db->get()->result_array();
+    }
+
+    public function get_recipient_info_by_id($order_id) {
+        $select = 'ri.id,ri.reference_id, ri.reference,TRIM(ri.recipient_first_name) as first_name,TRIM(ri.recipient_last_name) as last_name,ri.recipient_phone_number, ri.recipient_address, ri.recipient_city, ri.recipient_zip, ri.recipient_tin, ri.compensation,c.country_name,st.state_name AS state_name';
+        $this->db->select($select);
+        $this->db->from('recipient_information AS ri');
+        $this->db->join('countries AS c', 'c.id = ri.recipient_country', 'left');
+        $this->db->join('states AS st', 'st.id = ri.recipient_state', 'left');
+        $this->db->where('ri.order_id', $order_id);
+        return $this->db->get()->result_array();
+    }
+
+    public function update_payer_data_fields($data,$order_id){
+        $details = [
+                'payer_first_name' => $data['payer_first_name'],
+                'payer_last_name' => $data['payer_last_name'],
+                'payer_phone_number' => $data['payer_phone_number'],
+                'payer_address' => $data['payer_address'],
+                'payer_city' => $data['payer_city'],
+                'payer_state' => $data['payer_state'],
+                'payer_country' => $data['payer_country'],
+                'payer_zip' => $data['payer_zip_code'],
+                'payer_tin' => $data['payer_tin']
             ];
-            
-            return $this->db->insert('order_extra_data', $order_extra_data);
-    }
-
-    public function get_payer_recipient_info($order_id) {
-        return $this->db->get_where('payer_recipient_information', ['order_id' => $order_id])->row_array();
+            $this->db->set($details);
+            $this->db->where('order_id',$order_id);
+            return $this->db->update('payer_information');
     }
 
 }

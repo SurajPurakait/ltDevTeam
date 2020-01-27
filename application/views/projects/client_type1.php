@@ -11,7 +11,7 @@
 </div>
 <?php // print_r($completed_orders); ?>
 <div class="col-md-12">
-    <div class="form-group client_type_div0" id="client_list">
+    <div class="form-group client_type_div0" id="client_list" style="display: none">
         <label class="col-lg-6 control-label">Client List<span class="text-danger">*</span></label>
 
         <select class="form-control client_type_field0" name="project[client_id][]" id="client_list_ddl" title="Client List" <?php echo (isset($client_id) && $client_id !='') ? 'disabled' : ''; ?> multiple required>

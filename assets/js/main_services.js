@@ -558,3 +558,36 @@ function clean_form_fields(formId) {
         form.elements[i].value = '';
     }
 }
+
+
+function get_recipient_list(reference_id, reference, retail_price) {
+    $.ajax({
+        type: "POST",
+        data: {
+            reference: reference,
+            reference_id: reference_id,
+            // disable: disable,
+            retail_price: retail_price
+        },
+        url: base_url + 'services/home/get_recipient_list',
+        dataType: "html",
+        success: function (result) {
+            $.ajax({
+                type:"POST",
+                data :  {
+                    reference: reference,
+                    reference_id: reference_id,
+                    retail_price: retail_price
+                },
+                url : base_url + 'services/home/get_recipient_list_count',
+                dataType: "html",
+                success: function (result) {    
+                    var price = result * retail_price; 
+                    $("#retail_price").val(price);        
+                }
+            });
+            
+            $("#recipient-list").html(result);
+        }
+    });
+}

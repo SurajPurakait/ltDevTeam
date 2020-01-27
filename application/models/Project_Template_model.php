@@ -49,12 +49,12 @@ class Project_Template_model extends CI_Model {
     }
 
     public function request_create_template($post) {
-//        echo "<pre>";
+        //        echo "<pre>";
 //        print_r($post);
 //        echo "</pre>";die;
         $last_id = '';
         $this->db->trans_begin();
-        if (isset($post['template_main']) && !empty($post['template_main'])) {
+        if (isset($post['template_main']) && !empty($post['template_main'])) {            
             $temp_main_ins['added_by_user'] = sess('user_id');
             $temp_main_ins['template_id'] = $post['template_main']['Id'];
             $temp_main_ins['title'] = $post['template_main']['title'];
@@ -138,13 +138,13 @@ class Project_Template_model extends CI_Model {
             }
         }
         if (isset($post['recurrence']) && !empty($post['recurrence']) && $last_id != '') {
-
+            
             $ins_recurrence = [];
             $ins_recurrence['template_id'] = $last_id;
             foreach ($post['recurrence'] as $key => $val) {
                 $ins_recurrence[$key] = $val;
-            }
-
+            }   
+            
             if ($ins_recurrence['pattern'] == 'annually' || $ins_recurrence['pattern'] == 'none') {
                 $ins_recurrence['actual_due_day'] = $ins_recurrence['due_day'];
                 $ins_recurrence['actual_due_month'] = $ins_recurrence['due_month'];
@@ -233,8 +233,10 @@ class Project_Template_model extends CI_Model {
             unset($ins_recurrence['periodic_due_day']);
             unset($ins_recurrence['periodic_due_month']);
 //            if(isset($ins_recurrence['pattern']))
-//            print_r($ins_recurrence);die;
-            $this->db->insert('project_template_recurrence_main', $ins_recurrence);
+           $ins_recurrence['target_start_date'] =  $ins_recurrence['target_start_months']."/".$ins_recurrence['target_start_days']."/".date("Y");                       
+           unset($ins_recurrence['target_start_months']);
+           unset($ins_recurrence['target_end_months']);
+           $this->db->insert('project_template_recurrence_main', $ins_recurrence);
 //            print_r($periodic_day);echo '<br>';
 //            print_r($periodic_month);echo "<br>";
             if(isset($periodic_day) && !empty($periodic_day)){
@@ -3578,6 +3580,13 @@ class Project_Template_model extends CI_Model {
         $this->db->order_by('project_creation_date', 'ASC');
         $project_date = $this->db->get('report_dashboard_project')->row_array()['project_creation_date'];
         return date('m/d/Y' ,strtotime($project_date));
+    }
+    public function getTemplatePatternDetails($template_id){
+        $data = $this->db->get_where('project_template_recurrence_main', ['template_id' => $template_id])->row_array();
+        return $data;
+    }
+    public function project_template_task_details($template_id){
+        return $this->db->get_where('project_template_task',['template_main_id'=>$template_id])->row();
     }
 
 }
