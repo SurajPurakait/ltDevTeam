@@ -36,7 +36,7 @@
     $table = '`actions` AS act LEFT JOIN sos_notification AS snf ON act.id = snf.reference_id and `snf`.reference="action"';
 
     $action_get_query = 'SELECT ' . implode(', ', $select) . ' FROM ' . $table . ' GROUP BY act.id ORDER BY act.id ASC';
-    mysqli_query($conn,'TRUNCATE `report_dashboard_action`');
+    // mysqli_query($conn,'TRUNCATE `report_dashboard_action`');
     mysqli_query($conn, 'SET SQL_BIG_SELECTS=1');
     $action_query_response = mysqli_query($conn,$action_get_query);
     $action_data_count = mysqli_num_rows($action_query_response);
@@ -62,16 +62,90 @@
             if ($creation_date == '0000-00-00' || $creation_date == '' || $creation_date == '1970-01-01') {
                 $creation_date = '0001-01-01';
             }
-
             $sos = addslashes($actd['sos']);
 
-            $action_insert_sql = "INSERT INTO `report_dashboard_action`(`action_id`, `by_office`, `by_office_name`, `to_office`, `to_office_name`, `by_department`, `by_department_name`, `to_department`, `to_department_name`, `status`, `due_date`, `sos`,`creation_date`) VALUES ('$action_id',' $by_office', '$by_office_name', '$to_office', '$to_office_name', '$by_department', '$by_department_name', '$to_department', '$to_department_name', '$status', '$due_date', '$sos','$creation_date')";
+            $comparison_array = array(
+                'action_id' => $action_id, 
+                'by_office' => $by_office, 
+                'by_office_name' => $by_office_name, 
+                'to_office' => $to_office, 
+                'to_office_name' => $to_office_name, 
+                'by_department' => $by_department, 
+                'by_department_name' => $by_department_name, 
+                'to_department' => $to_department, 
+                'to_department_name' => $to_department_name, 
+                'status' => $status, 
+                'due_date' => $due_date, 
+                'sos' => $sos,
+                'creation_date' => $creation_date
+            );
+
+            // fetching data from report_dashboard_action table
+            $action_sql = "SELECT * FROM `report_dashboard_action` WHERE action_id = '".$action_id."'";
+            $action_query_run = mysqli_query($conn,$action_sql);
+            $aqr = mysqli_fetch_assoc($action_query_run);
+
+            if($action_id == $aqr['action_id']) {
+                unset($aqr['id']);
+                if (empty(array_diff($comparison_array,$aqr))) {
+                    echo "No difference with previuos values";
+                    echo "<hr>";
+                } else {
+                    $update_sql = "UPDATE `report_dashboard_action` SET ";
+                    if ($by_office != $aqr['by_office']) {
+                        $update_sql .= "`by_office`='$by_office',";
+                    }
+                    if ($by_office_name != $aqr['by_office_name']) {
+                        $update_sql .= "`by_office_name`='$by_office_name',";
+                    }
+                    if ($to_office != $aqr['to_office']) {
+                        $update_sql .= "`to_office`='$to_office',";
+                    }
+                    if ($to_office_name != $aqr['to_office_name']) {
+                        $update_sql .= "`to_office_name`='$to_office_name',";
+                    }
+                    if ($by_department != $aqr['by_department']) {
+                        $update_sql .= "`by_department`='$by_department',";
+                    }
+                    if ($by_department_name != $aqr['by_department_name']) {
+                        $update_sql .= "`by_department_name`='$by_department_name',";
+                    }
+                    if ($to_department != $aqr['to_department']) {
+                        $update_sql .= "`to_department`='$to_department',";
+                    }
+                    if ($to_department_name != $aqr['to_department_name']) {
+                        $update_sql .= "`to_department_name`='$to_department_name',";
+                    }
+                    if ($status != $aqr['status']) {
+                        $update_sql .= "`status`='$status',";
+                    }
+                    if ($due_date != $aqr['due_date']) {
+                        $update_sql .= "`due_date`='$due_date',";
+                    }
+                    if ($sos != $aqr['sos']) {
+                        $update_sql .= "`sos`='$sos',";
+                    }
+                    if ($creation_date != $aqr['creation_date']) {
+                        $update_sql .= "`creation_date`='$creation_date',";
+                    }
+
+                    if (substr($update_sql, -1) == ',') {
+                        $update_sql = substr($update_sql,0,-1);
+                    }
+
+                    $update_sql .= " WHERE action_id = '".$action_id."'";
+                    mysqli_query($conn,$update_sql);
+                    echo $update_sql;
+                    echo "<hr>";
+                }
+            } else {
+                $action_insert_sql = "INSERT INTO `report_dashboard_action`(`action_id`, `by_office`, `by_office_name`, `to_office`, `to_office_name`, `by_department`, `by_department_name`, `to_department`, `to_department_name`, `status`, `due_date`, `sos`,`creation_date`) VALUES ('$action_id',' $by_office', '$by_office_name', '$to_office', '$to_office_name', '$by_department', '$by_department_name', '$to_department', '$to_department_name', '$status', '$due_date', '$sos','$creation_date')";
       
-            echo $action_insert_sql;
-            echo "<hr>";    
-            mysqli_query($conn,$action_insert_sql)or die('Insert Error!');
+                echo $action_insert_sql;
+                echo "<hr>";    
+                mysqli_query($conn,$action_insert_sql)or die('Insert Error!');
+            }
         }
         echo "Success";
-        exit;
     }       
 ?>

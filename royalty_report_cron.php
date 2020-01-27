@@ -1,13 +1,13 @@
 <?php
-    // $servername = "localhost";
-    // $username = "leafnet_db_user";
-    // $password = "leafnet@123";
-    // $db = 'leafnet_stagings';
-
     $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $db = 'leafnet';
+    $username = "leafnet_db_user";
+    $password = "leafnet@123";
+    $db = 'leafnet_stagings';
+
+    // $servername = "localhost";
+    // $username = "root";
+    // $password = "";
+    // $db = 'leafnet';
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
 
@@ -153,51 +153,54 @@
                         } else {
                             $update_sql = "UPDATE `royalty_report` SET ";
                             if ($date_val != $rqr['date']) {
-                                $update_sql .= "`date`='$date_val', ";
+                                $update_sql .= "`date`='$date_val',";
                             } 
                             if ($practice_id != $rqr['client_id']) {
-                                $update_sql .= "`client_id`='$practice_id', ";
+                                $update_sql .= "`client_id`='$practice_id',";
                             }
                             if ($service_details != $rqr['service_name']) {
-                                $update_sql .= "`service_name`='$service_details', ";
+                                $update_sql .= "`service_name`='$service_details',";
                             }
                             if ($retail_price != $rqr['retail_price']) {
-                                $update_sql .= "`retail_price`='$retail_price', ";
+                                $update_sql .= "`retail_price`='$retail_price',";
                             }
                             if ($override_price != $rqr['override_price']) {
-                                $update_sql .= "`override_price` = '$override_price', ";
+                                $update_sql .= "`override_price` = '$override_price',";
                             }
                             if ($payment_status != $rqr['payment_status']) {
-                                $update_sql .= "`payment_status`= '$payment_status', ";
+                                $update_sql .= "`payment_status`= '$payment_status',";
                             }
                             if ($collected != $rqr['collected']) {
-                                $update_sql .= "`collected`='$collected', "; 
+                                $update_sql .= "`collected`='$collected',"; 
                             }
                             if ($payment_type != $rqr['payment_type']) {
-                                $update_sql .= "`payment_type`='$payment_type', ";
+                                $update_sql .= "`payment_type`='$payment_type',";
                             }
                             if ($authorization_id_without_slash != $rqr['authorization_id']) {
-                                $update_sql .= "`authorization_id`='$authorization_id', ";
+                                $update_sql .= "`authorization_id`='$authorization_id',";
                             }
                             if ($reference != $rqr['reference']) {
-                                $update_sql .= "`reference`='$reference', ";
+                                $update_sql .= "`reference`='$reference',";
                             }
                             if ($total_net != $rqr['total_net']) {
                                 $total_net_modified = (int)$override_price - (int)$rqr['cost'];
-                                $update_sql .= "`total_net`='$total_net_modified', ";
+                                $update_sql .= "`total_net`='$total_net_modified',";
                             }
                             if ($fee_with_cost != $rqr['fee_with_cost']) {
                                 $fee_with_cost_modified = ((int)$override_price - (int)$rqr['cost'] ) * ((int)$rqr['office_fee'] / 100);
-                                $update_sql .= "`fee_with_cost`='$fee_with_cost_modified'"; 
+                                $update_sql .= "`fee_with_cost`='$fee_with_cost_modified',"; 
                             }
                             if ($fee_without_cost != $rqr['fee_without_cost']) {
                                 $fee_without_cost_modified = (int)$override_price * ((int)$rqr['office_fee'] / 100);
-                                $update_sql .= "`fee_without_cost`= '$fee_without_cost_modified'";
+                                $update_sql .= "`fee_without_cost`= '$fee_without_cost_modified',";
                             }
                             if($office_id_name != $rqr['office_id_name']) {
-                                $update_sql .= "`office_id_name`='$office_id_name'";
+                                $update_sql .= "`office_id_name`='$office_id_name',";
+                            }
+                            if (substr($update_sql, -1) == ',') {
+                                $update_sql = substr($update_sql,0,-1);
                             } 
-                            $update_sql .= "WHERE invoice_id = '".$invoice_id."'";
+                            $update_sql .= " WHERE invoice_id = '".$invoice_id."'";
                             mysqli_query($conn,$update_sql);
                             echo $update_sql;
                         }    

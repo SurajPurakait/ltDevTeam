@@ -1135,3 +1135,9 @@ ALTER TABLE `projects` CHANGE `created_at` `created_at` TIMESTAMP NOT NULL;
 
 -- import payer_recipient_information
 ALTER TABLE `order_extra_data` ADD `compensation` VARCHAR(100) NOT NULL AFTER `closing_date`; 
+
+/*  24.01.2020 */
+-- import report_dashboard_billing
+-- import payer_information 
+-- import recipient_information 
+DROP TABLE `payer_recipient_information`;

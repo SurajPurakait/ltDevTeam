@@ -30,6 +30,18 @@
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
+
+                        <div class="form-group client_type_div0">
+                            <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <select class="form-control chosen-select client_type_field0" name="client_office" id="client_office" onchange="refresh_existing_client_list(this.value, '');" title="Office" required="">
+                                    <option value="">Select Office</option>
+                                    <?php load_ddl_option("staff_office_list",'', (staff_info()['type'] != 1) ? "client_office" : ""); ?>
+                                </select>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
+
                         <div class="form-group client_type_div0" id="client_list">
                             <label class="col-lg-2 control-label">Existing Client List<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
@@ -278,103 +290,32 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">TIN (Tax Identification Number)</label>
+                            <label class="col-lg-2 control-label">TIN (Tax Identification Number)<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="TIN" class="form-control" type="text" id="payer_tin" name="payer_tin" title="TIN" value="">
+                                <input placeholder="TIN" class="form-control" type="text" id="payer_tin" name="payer_tin" title="TIN" value="" required="">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div> 
 
-                        <h3>Recipient's Information :</h3>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <input placeholder="First Name" class="form-control" type="text" id="recipient_first_name" name="recipient_first_name" title="First Name" value="" required="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <input placeholder="Last Name" class="form-control" type="text" id="recipient_last_name" name="recipient_last_name" title="Last Name" value="" required="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Phone Number<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <input placeholder="Phone Number" phoneval class="form-control" type="text" id="recipient_phone_number" name="recipient_phone_number" title="Phone Number" value="" required="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Address</label>
-                            <div class="col-lg-10">
-                                <input placeholder="Address" class="form-control" type="text" id="recipient_address" name="recipient_address" title="Address" value="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">City</label>
-                            <div class="col-lg-10">
-                                <input placeholder="City" class="form-control" type="text" id="recipient_city" name="recipient_city" title="City" value="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">State</label>
-                            <div class="col-lg-10">
-                                <select title="State" class="form-control" name="recipient_state" id="recipient_state">
-                                        <option value="">Select an option</option>
-                                        <?php load_ddl_option("all_state_list"); ?>
-                                </select>
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Country</label>
-                            <div class="col-lg-10">
-                                <select title="Country" class="form-control" name="recipient_country"
-                                        id="recipient_country">
-                                    <option value="">Select an option</option>
-                                    <?php load_ddl_option("get_countries"); ?>
-                                </select>
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Zip Code</label>
-                            <div class="col-lg-10">
-                                <input placeholder="Zip" class="form-control" type="text" id="recipient_zip_code" name="recipient_zip_code" title="Zip Code" zipval value="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">TIN (Tax Identification Number)</label>
-                            <div class="col-lg-10">
-                                <input placeholder="TIN" class="form-control" type="text" id="recipient_tin" name="recipient_tin" title="TIN" value="">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
+                        <input type="hidden" title="Recipient List" id="recipient_id_list" name="recipient_id_list" value="">
 
-                        <h3>Compensation :</h3>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Non-Employee Compensation :</label>
-                            <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" id="compensation" name="compensation" title="Non-Employee Compensation" value="">
-                                <div class="errorMessage text-danger"></div>        
+                        <div id="recipient_info_div">
+                            <h3>Recipient(s)&nbsp; (<a href="javascript:void(0);" class="recipientadd" onclick="recipient_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>','','<?= $service_info['retail_price']; ?>'); return false;">Add Recipient</a>)</span></h3>
+                            <div id="recipient-list">
+                                <!-- <input type="hidden" title="Contact Info" id="contact-list-count" value="">
+                                <div class="errorMessage text-danger"></div> -->
                             </div>
                         </div>
+                        
                         <div class="hr-line-dashed"></div>
 
                         <h3>Price</h3>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Retail Price</label>
                             <div class="col-lg-10">
-                                <input id="retail_price" readonly="" placeholder="" class="form-control" type="text" title="Retail Price" value="<?= $service_info['retail_price']; ?>">
-                                <input name="retail_price" type="hidden" value="<?= $service_info['retail_price']; ?>">
+                                <input name="retail_price" id="retail_price" readonly="" placeholder="" class="form-control" type="text" title="Retail Price" value="<?= $service_info['retail_price']; ?>">
+                                <!-- <input name="retail_price" type="hidden" value="<?//= $service_info['retail_price']; ?>"> -->
                             </div>
                         </div>
                         <div class="form-group">
@@ -416,6 +357,7 @@
     </div>
 </div>
 <div id="contact-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
+<div id="recipient-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="document-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script>

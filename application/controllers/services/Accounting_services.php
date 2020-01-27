@@ -1148,6 +1148,7 @@ class Accounting_services extends CI_Controller {
     }
 
     function request_create_1099_write_up() {
+        // print_r(post());exit;
         $order_id = $this->company_model->request_create_1099_write_up(post());
         if ($order_id) {
             mod_services_count($status_from = '', $status_to = 2, $section_name = 'incorporation');

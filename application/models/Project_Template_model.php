@@ -3368,7 +3368,7 @@ class Project_Template_model extends CI_Model {
 
         $all_projects_data = [];
         $all_tasks_data = [];
-        if ($data['category'] == 'projects_by_office') {
+        if ($category == 'projects_by_office') {
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
@@ -3386,7 +3386,7 @@ class Project_Template_model extends CI_Model {
             }
             return $all_projects_data;
 
-        } else if($data['category'] == 'tasks_by_office') {
+        } else if($category == 'tasks_by_office') {
             foreach ($data_office as $do) {    
                 $data = [
                     'id' => $do['id'],
@@ -3404,7 +3404,7 @@ class Project_Template_model extends CI_Model {
             }
             return $all_tasks_data;
 
-        } else if ($data['category'] == 'projects_to_department') {
+        } else if ($category == 'projects_to_department') {
             foreach ($data_department as $dd) {    
                 $data = [
                     'id' => $dd['id'],
@@ -3422,7 +3422,7 @@ class Project_Template_model extends CI_Model {
             }
             return $all_projects_data;
 
-        } else if ($data['category'] == 'tasks_to_department') {
+        } else if ($category == 'tasks_to_department') {
             foreach ($data_department as $dd) {    
                 $data = [
                     'id' => $dd['id'],
@@ -3578,6 +3578,13 @@ class Project_Template_model extends CI_Model {
         $this->db->order_by('project_creation_date', 'ASC');
         $project_date = $this->db->get('report_dashboard_project')->row_array()['project_creation_date'];
         return date('m/d/Y' ,strtotime($project_date));
+    }
+    public function getTemplatePatternDetails($template_id){
+        $data = $this->db->get_where('project_template_recurrence_main', ['template_id' => $template_id])->row_array();
+        return $data;
+    }
+    public function project_template_task_details($template_id){
+        return $this->db->get_where('project_template_task',['template_main_id'=>$template_id])->row();
     }
 
 }

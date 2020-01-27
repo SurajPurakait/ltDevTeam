@@ -1305,9 +1305,11 @@ function refresh_existing_client_list(office_id = '', client_id = '') {
         dataType: "html",
         success: function (result) {
 //            alert(result);
+            $("#client_list").show();
             $("#client_list_ddl").chosen("destroy");
             $("#client_list_ddl").html(result);
             $("#client_list_ddl").chosen();
+            
         },
         beforeSend: function () {
             openLoading();

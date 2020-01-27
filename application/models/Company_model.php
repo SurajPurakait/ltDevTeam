@@ -2020,8 +2020,8 @@ class Company_model extends CI_Model {
             $this->system->update_order_serial_id_by_order_id($order_id);
             $this->system->log("insert", "order", $order_id);
 
-            $this->service_model->payer_recipient_data_fields($data,$order_id);
-            $this->service_model->order_extra_data_compensation_fields($data,$order_id);
+            $this->service_model->payer_data_fields($data,$order_id);
+            $this->service_model->recipient_data_fields($data["reference_id"],$order_id,$data['recipient_id_list']);
 
             $this->billing_model->insert_invoice_data($data);
             $this->system->save_general_notification('order', $order_id, 'insert');
