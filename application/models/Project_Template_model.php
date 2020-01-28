@@ -1,5 +1,3 @@
-
-application/x-httpd-php Project_Template_model.php ( C++ source, ASCII text, with very long lines )
 <?php
 
 class Project_Template_model extends CI_Model {
