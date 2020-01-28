@@ -220,4 +220,13 @@ class Reports extends CI_Controller {
     public function get_range_lead_report() {
         echo post('date_range_lead');
     }
+
+    // refresh range
+    public function refresh_service_report() {
+        echo $this->service_model->refresh_report_dashboard_service();
+    }
+
+    public function refresh_billing_report() {
+        echo $this->billing_model->refresh_report_dashboard_billing();    
+    }
 }
