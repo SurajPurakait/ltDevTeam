@@ -259,8 +259,18 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         </div>
     </div>
     <div class="col-md-12">
-        <h3 class="m-0 p-b-10 col-lg-12">Frequency:</h3>
-        <p class="col-lg-12 control-label"><b>Next Recurrence:</b> <?= date('m/d/Y', strtotime($generation_date)) ?></p>
+        <h3 class="m-0 p-b-10 col-lg-12">Next Recurrence:</h3>
+        <div class="col-md-7">
+            <div class="form-inline">
+                <label class="control-label"><input type="radio" name="recurrence[generation_type]" <?php echo ($project_recurrence_main_data['generation_type'] == '1') ? 'checked' : ''; ?> value="1" readonly onclick="//check_generation_type(this.value)"></label>&nbsp;
+                <input class="form-control" type="number" id="generation_month" name="recurrence[generation_month]" value="<?php echo $project_recurrence_main_data['generation_month']; ?>" min="0" max="12" readonly style="width: 100px">&nbsp;
+                <label class="control-label">month(s)</label>&nbsp;
+                <input class="form-control" value="<?php echo $project_recurrence_main_data['generation_day']; ?>" type="number" id="generation_day" name="recurrence[generation_day]" min="1" readonly max="31" style="width: 100px">&nbsp;
+            </div>
+        </div>
+        <div class="col-md-5">
+            <label class="control-label">Day(s) before next occurrence due date</label>
+        </div>
     </div>
 <?php } ?>
 <script>
