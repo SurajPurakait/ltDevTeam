@@ -244,8 +244,8 @@ class Project_Template_model extends CI_Model {
             unset($ins_recurrence['periodic_due_month']);
 //            if(isset($ins_recurrence['pattern']))
 //           $ins_recurrence['target_start_date'] =  $ins_recurrence['target_start_months']."/".$ins_recurrence['target_start_days']."/".date("Y");                       
-           unset($ins_recurrence['target_start_months']);
-           unset($ins_recurrence['target_end_months']);
+//           unset($ins_recurrence['target_start_months']);
+//           unset($ins_recurrence['target_end_months']);
            $this->db->insert('project_template_recurrence_main', $ins_recurrence);
 //            print_r($periodic_day);echo '<br>';
 //            print_r($periodic_month);echo "<br>";
@@ -1141,7 +1141,9 @@ class Project_Template_model extends CI_Model {
 //                    $post['project']['created_at']=date('Y-m-d');
 //                }
                 $user_due_date=date('Y-m-d',strtotime($post['project']['due_date']));
+                $user_start_date=date('Y-m-d',strtotime($post['project']['start_date']));
                 unset($post['project']['due_date']);
+                unset($post['project']['start_date']);
                 $this->db->insert('projects', $post['project']);
                 $insert_id = $this->db->insert_id();
                 $notedata = $this->input->post('project_note');
@@ -1439,6 +1441,7 @@ class Project_Template_model extends CI_Model {
                         $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
                     }
                     $project_recurrence_main_data['generation_date'] = $generation_date;
+                    $project_recurrence_main_data['start_date']=$user_start_date;
                     $project_recurrence_main_data['project_id'] = $insert_id;
                     $this->db->set($project_recurrence_main_data);
                     $this->db->insert('project_recurrence_main', $project_recurrence_main_data);

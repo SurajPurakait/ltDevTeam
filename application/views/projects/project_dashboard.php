@@ -120,7 +120,7 @@ if (!empty($project_list)) {
                                     <th style="width:8%; text-align: center">Requested By</th>
                                     <th style="width:8%; text-align: center">Assigned To</th>
                                     <th style="width:8%; text-align: center">Tracking</th>
-                                    <th style="width:8%; text-align: center">Creation Date</th>
+                                    <th style="width:8%; text-align: center">Start Date</th>
                                     <th style="width:8%; text-align: center">Due Date</th>
                                     <th style="width:8%; text-align: center">Next Recurrence</th>
                                     <th style="width:8%; text-align: center">Note</th>
@@ -165,7 +165,7 @@ if (!empty($project_list)) {
                                         ?>
                                     </td>                                                  
                                     <td title="Tracking" class="text-center"><span id="trackouter-<?php echo $list['id']; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></td>
-                                    <td title="Creation Date"><?= date('m/d/Y', strtotime($list['created_at'])) ?></td>
+                                    <td title="Start Date"><?= date('m/d/Y', strtotime($pattern_details->start_date)) ?></td>
                                     <?php if($pattern_details->pattern=='periodic'){ ?>
                                     <td title="Due Date"><?= date('m/d/Y',strtotime($pattern_details->due_date)) ?></td>
                                     <?php } else {?>
