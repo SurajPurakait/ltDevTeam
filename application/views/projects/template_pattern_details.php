@@ -233,21 +233,22 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
     }
     $project_recurrence_main_data['generation_date'] = $generation_date;
-    
+
     //project start date section
     $project_start_day = ((int) $project_recurrence_main_data['target_start_months'] * 30) + (int) $project_recurrence_main_data['target_start_days'];
     $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
-    $dueDate=strtotime($due_date);
+    $dueDate = strtotime($due_date);
     ?>
     <input type="hidden" id="target_start_month" value="<?= $project_recurrence_main_data['target_start_months'] ?>">
     <input type="hidden" id="target_start_day" value="<?= $project_recurrence_main_data['target_start_days'] ?>">
     <input type="hidden" id="actual_target_start_date" value="<?= date('m/d/Y', strtotime($project_start_date)) ?>">
     <input type="hidden" id="actual_due_date" value="<?= $due_date ?>">
-    
+    <input type="hidden" id="project_pattern" value="<?= $project_recurrence_main_data['pattern'] ?>">
+
     <div class="col-md-6">
         <label class="col-lg-12 control-label">Start Date:<span class="text-danger">*</span></label>
         <div class="form-group">
-            <input placeholder="mm/dd/yyyy" id="task_start_date" class="form-control datepicker_creation_date" name="project[start_date]" type="text" title="Start Date" value="<?= date('m/d/Y',strtotime($project_start_date)); ?>" onchange="change_project_due_date(this.value)">
+            <input placeholder="mm/dd/yyyy" id="task_start_date" class="form-control datepicker_creation_date" name="project[start_date]" type="text" title="Start Date" value="<?= date('m/d/Y', strtotime($project_start_date)); ?>" onchange="change_project_due_date(this.value)">
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
@@ -284,34 +285,37 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         var actual_due_date = $("#actual_due_date").val();
         var due_date = $('#due_date').val();
         var a = new Date(due_date);
-        var target_start_days=(parseInt(target_start_month)*parseInt(30)+parseInt(target_start_day));
+        var target_start_days = (parseInt(target_start_month) * parseInt(30) + parseInt(target_start_day));
         a.setDate(a.getDate() - parseInt(target_start_days));
         var dateEnd = (a.getMonth() + 1) + '/' + a.getDate() + '/' + a.getFullYear();
         $('#task_start_date').val(dateEnd);
     }
-    function change_project_due_date(start_date){
-        var actual_start_date=$('#task_start_date').val();
+    function change_project_due_date(start_date) {
+        var actual_start_date = $('#task_start_date').val();
         var actual_due_date = $("#actual_due_date").val();
-        var p=new Date(actual_due_date);
-        var actual_day=p.getDate();
-        var actual_month=p.getMonth();
-        var parse_due_date=Date.parse(actual_due_date);
-        var parse_start_date=Date.parse(actual_start_date);
-        var old_date=new Date(parse_due_date);
-        var new_date=new Date(parse_start_date);
-        if(parse_start_date>parse_due_date){
-            var future_new_date=new_date.getDate();
-            var future_new_month=new_date.getMonth();
-            if(future_new_date>actual_day){
-                new_date.setDate(new_date.getDate() + parseInt(30));
-                var new_due_date = (new_date.getMonth()+1) + '/' + actual_day + '/' + new_date.getFullYear();
-            }else{
-                var new_due_date = (new_date.getMonth()+1) + '/' + actual_day + '/' + new_date.getFullYear();
+        var project_pattern =$("#project_pattern").val();
+        var p = new Date(actual_due_date);
+        var actual_day = p.getDate();
+        var actual_month = p.getMonth();
+        var parse_due_date = Date.parse(actual_due_date);
+        var parse_start_date = Date.parse(actual_start_date);
+        var old_date = new Date(parse_due_date);
+        var new_date = new Date(parse_start_date);
+        if(project_pattern=='monthly'){
+            if (parse_start_date > parse_due_date) {
+                var future_new_date = new_date.getDate();
+                var future_new_month = new_date.getMonth();
+                if (future_new_date > actual_day) {
+                    new_date.setDate(new_date.getDate() + parseInt(30));
+                    var new_due_date = (new_date.getMonth() + 1) + '/' + actual_day + '/' + new_date.getFullYear();
+                } else {
+                    var new_due_date = (new_date.getMonth() + 1) + '/' + actual_day + '/' + new_date.getFullYear();
+                }
+                $("#due_date").val(new_due_date);
+            } else {
+                var dueDate = (old_date.getMonth() + 1) + '/' + old_date.getDate() + '/' + old_date.getFullYear();
+                $("#due_date").val(dueDate);
             }
-            $("#due_date").val(new_due_date);
-        }else{
-           var dueDate = (old_date.getMonth() + 1) + '/' + old_date.getDate() + '/' + old_date.getFullYear();
-           $("#due_date").val(dueDate);
         }
     }
 </script>
