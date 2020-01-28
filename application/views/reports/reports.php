@@ -132,7 +132,7 @@
                                                     <button type="button" class="btn btn-success" id="report-actions-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
                                                 <div class="col-md-5 m-t-6 text-right">
-                                                    <button type="button" class="btn btn-warning" id="report-action-refresh-btn" style="border-radius: 0;"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
+                                                    <button type="button" class="btn btn-warning" id="report-action-refresh-btn" style="border-radius: 0;" onclick="refresh_action_report()"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
                                                 </div>
                                             </div>
                                             <?php 

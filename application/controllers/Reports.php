@@ -229,4 +229,12 @@ class Reports extends CI_Controller {
     public function refresh_billing_report() {
         echo $this->billing_model->refresh_report_dashboard_billing();    
     }
+
+    public function refresh_royalty_report_data() {
+        echo $this->billing_model->refresh_royalty_report_data();
+    }
+
+    public function refresh_sales_report_data() {
+        echo $this->service_model->refresh_sales_report_data();
+    }
 }
