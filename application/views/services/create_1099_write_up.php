@@ -228,7 +228,7 @@
 
                         <div class="link-content m-b-10">
                                 <input type="hidden" id="payer_information_quantity" value="0">
-                                <button class="btn btn-success btn-xs" id="copy-contact" ref_id="<?= $reference_id; ?>">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Main Contact</button>&nbsp;
+                                <button class="btn btn-success btn-xs" id="copy-contact" ref_id="<?= $reference_id; ?>">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Contact</button>&nbsp;
                         </div>
 
                         <div id="payer_information_div">
