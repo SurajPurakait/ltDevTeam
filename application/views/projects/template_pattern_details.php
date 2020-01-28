@@ -246,19 +246,21 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     <input type="hidden" id="project_pattern" value="<?= $project_recurrence_main_data['pattern'] ?>">
 
     <div class="col-md-6">
-        <label class="col-lg-12 control-label">Start Date:<span class="text-danger">*</span></label>
-        <div class="form-group">
-            <input placeholder="mm/dd/yyyy" id="task_start_date" class="form-control datepicker_creation_date" name="project[start_date]" type="text" title="Start Date" value="<?= date('m/d/Y', strtotime($project_start_date)); ?>" onchange="change_project_due_date(this.value)">
-            <div class="errorMessage text-danger"></div>
-        </div>
-    </div>
-    <div class="col-md-6">
         <label class="col-lg-12 control-label">Due Date:<span class="text-danger">*</span></label>
         <div class="form-group">
             <input placeholder="mm/dd/yyyy" id="due_date" name="project[due_date]" class="form-control datepicker_creation_date" type="text" title="Due Date" value="<?= date('m/d/Y', strtotime($due_date)) ?>" onchange="change_project_start_date(this.value)">
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
+
+    <div class="col-md-6">
+        <label class="col-lg-12 control-label">Start Date:<span class="text-danger">*</span></label>
+        <div class="form-group">
+            <input placeholder="mm/dd/yyyy" id="task_start_date" class="form-control datepicker_creation_date" name="project[start_date]" type="text" title="Start Date" value="<?= date('m/d/Y', strtotime($project_start_date)); ?>" onchange="change_project_due_date(this.value)">
+            <div class="errorMessage text-danger"></div>
+        </div>
+    </div>
+    
     <div class="col-md-12">
         <h3 class="m-0 p-b-10 col-lg-12">Next Recurrence:</h3>
         <div class="col-md-7">
