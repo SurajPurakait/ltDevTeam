@@ -2496,6 +2496,9 @@ class Service_model extends CI_Model {
                 if (in_array('service_id', $table_columns)) {
                     $save_data['service_id'] = $data['service_id'];
                 }
+                if (in_array('order_id', $table_columns)) {
+                    $save_data['order_id'] = $data['order_id'];
+                }
                 if ($table_name == 'new_company') {
                     $save_data['company_id'] = $data['reference_id'];
                 } else if ($table_name == 'company_principal' || $table_name == 'signer_data') {

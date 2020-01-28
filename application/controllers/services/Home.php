@@ -1629,6 +1629,10 @@ class Home extends CI_Controller {
                     }
                 }
                 break;
+            case 'acc_1_w_u': {      //  1099 Write Up
+                    $render_data['payer_information'] = $this->service_model->get_payer_info($order_id);
+                    $render_data['recipient_information'] = $this->service_model->get_recipient_info($order_id);
+                }
         endswitch;
         $this->load->template('services/related_services', $render_data);
     }
