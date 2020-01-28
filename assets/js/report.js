@@ -555,6 +555,99 @@ function show_clients_data(category) {
     });
 }
 
+// reload data 
+function refresh_service_report(){
+   $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/refresh_service_report',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });     
+}
+
+function refresh_billing_report(){
+   $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/refresh_billing_report',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });     
+}
+
+function refresh_action_report() {
+    alert("Action");
+}
+
+function reload_royalty_report_data() {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/refresh_royalty_report_data',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function reload_sales_report_data() {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/refresh_sales_report_data',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
 function pieChart(className) {
     $('.' + className).each(function () {
         var element = '#' + $(this).attr('id');

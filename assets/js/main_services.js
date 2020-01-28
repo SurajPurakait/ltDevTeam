@@ -583,7 +583,8 @@ function get_recipient_list(reference_id, reference, retail_price) {
                 dataType: "html",
                 success: function (result) {    
                     var price = result * retail_price; 
-                    $("#retail_price").val(price);        
+                    // $("#retail_price").val(price);        
+                    $("#retail_price_override").val(price);        
                 }
             });
             

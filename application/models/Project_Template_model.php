@@ -49,7 +49,7 @@ class Project_Template_model extends CI_Model {
     }
 
     public function request_create_template($post) {
-        //        echo "<pre>";
+//        echo "<pre>";
 //        print_r($post);
 //        echo "</pre>";die;
         $last_id = '';
@@ -172,6 +172,16 @@ class Project_Template_model extends CI_Model {
                         $ins_recurrence['actual_due_year']=date('Y')+($ins_recurrence['actual_due_month']/12);
                     } 
                 }
+                $due_date = $ins_recurrence['actual_due_day']."/".$ins_recurrence['actual_due_month']."/".$ins_recurrence['actual_due_year'];                                                 
+                if($ins_recurrence['target_start_months'] == 0)
+                {
+                    $target_date = $ins_recurrence['target_start_days'];
+                }else{
+                    $target_date = $ins_recurrence['target_start_days']+($ins_recurrence['target_start_months']*30);
+                }                 
+                $ins_recurrence['target_start_date'] = date('d/m/Y', strtotime('+'.$target_date.' day', strtotime($due_date)));                               
+                
+                
             } elseif ($ins_recurrence['pattern'] == 'weekly') {
                 $day_array = array('1' => 'Sunday', '2' => 'Monday', '3' => 'Tuesday', '4' => 'Wednesday', '5' => 'Thursday', '6' => 'Friday', '7' => 'Saturday');
                 $current_day = $day_array[$ins_recurrence['due_month']];
@@ -233,9 +243,9 @@ class Project_Template_model extends CI_Model {
             unset($ins_recurrence['periodic_due_day']);
             unset($ins_recurrence['periodic_due_month']);
 //            if(isset($ins_recurrence['pattern']))
-           $ins_recurrence['target_start_date'] =  $ins_recurrence['target_start_months']."/".$ins_recurrence['target_start_days']."/".date("Y");                       
-           unset($ins_recurrence['target_start_months']);
-           unset($ins_recurrence['target_end_months']);
+//           $ins_recurrence['target_start_date'] =  $ins_recurrence['target_start_months']."/".$ins_recurrence['target_start_days']."/".date("Y");                       
+//           unset($ins_recurrence['target_start_months']);
+//           unset($ins_recurrence['target_end_months']);
            $this->db->insert('project_template_recurrence_main', $ins_recurrence);
 //            print_r($periodic_day);echo '<br>';
 //            print_r($periodic_month);echo "<br>";
@@ -276,7 +286,7 @@ class Project_Template_model extends CI_Model {
                         'actual_due_day'=>$actual_due_day,
                         'actual_due_month'=>$actual_due_month,
                         'actual_due_year'=>$actual_due_year
-                    );
+                    );                    
                     $this->db->insert('template_periodic_pattern',$periodic_data);
                 }
                 
@@ -1131,7 +1141,9 @@ class Project_Template_model extends CI_Model {
 //                    $post['project']['created_at']=date('Y-m-d');
 //                }
                 $user_due_date=date('Y-m-d',strtotime($post['project']['due_date']));
+                $user_start_date=date('Y-m-d',strtotime($post['project']['start_date']));
                 unset($post['project']['due_date']);
+                unset($post['project']['start_date']);
                 $this->db->insert('projects', $post['project']);
                 $insert_id = $this->db->insert_id();
                 $notedata = $this->input->post('project_note');
@@ -1429,6 +1441,7 @@ class Project_Template_model extends CI_Model {
                         $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
                     }
                     $project_recurrence_main_data['generation_date'] = $generation_date;
+                    $project_recurrence_main_data['start_date']=$user_start_date;
                     $project_recurrence_main_data['project_id'] = $insert_id;
                     $this->db->set($project_recurrence_main_data);
                     $this->db->insert('project_recurrence_main', $project_recurrence_main_data);
