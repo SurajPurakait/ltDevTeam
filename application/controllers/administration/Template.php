@@ -181,7 +181,7 @@ class Template extends CI_Controller {
         $this->load->layout = 'dashboard';
         $title = "Project Template";
         $render_data['title'] = $title . ' | Tax Leaf';
-        $render_data['main_menu'] = 'administration';
+        $render_data['main_menu'] = 'project_dashboard';
         $render_data['menu'] = 'template';
         $render_data['header_title'] = $title;
         $render_data['template_id'] = $template_id;
