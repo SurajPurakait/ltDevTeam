@@ -1478,8 +1478,10 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
             if (status != '' || status == '0') {
 //                $("#clear_filter").html(filter_data + ' &nbsp; ');
 //                $("#clear_filter").show();
+                $("#project_apply_filter").show();
                 $('#bookkeeping_btn_clear_filter').show();
-                
+                $("#project_hide_filter").show();
+                $("#project_add_filter").hide();
             }
             else {
 //                $("#clear_filter").html('');
@@ -1488,6 +1490,9 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
                 $('#tax_btn_clear_filter').hide();
                 $('#sales_btn_clear_filter').hide();
                 $('#annual_btn_clear_filter').hide();
+                $("#project_apply_filter").hide();
+                $("#project_hide_filter").hide();
+                $("#project_add_filter").show();
             }
         },
         beforeSend: function () {

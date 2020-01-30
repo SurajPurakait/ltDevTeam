@@ -1101,7 +1101,7 @@ ALTER TABLE `payroll_account_numbers` ADD `client_id` INT(5) NULL DEFAULT NULL A
 -- import report_dashboard_project
 ALTER TABLE `report_dashboard_project` ADD `sos` LONGTEXT NULL DEFAULT NULL AFTER `project_creation_date`;
 ALTER TABLE `report_dashboard_project` ADD `project_due_date` DATE NOT NULL AFTER `project_creation_date`;
-/*live end*/
+
 /* 15.01.2020 */
 UPDATE `services` SET `retail_price` = '450.00', `responsible_assign` = '' WHERE `services`.`id` = 48;
 
@@ -1156,3 +1156,5 @@ ALTER TABLE `project_recurrence_main` ADD `target_end_months` INT(2) NULL DEFAUL
 
 ALTER TABLE `project_recurrence_main` ADD `target_start_date` DATE NULL DEFAULT NULL AFTER `generated_by_cron`, ADD `target_end_date` DATE NULL DEFAULT NULL AFTER `target_start_date`; 
 ALTER TABLE `project_recurrence_main` ADD `start_date` DATE NULL DEFAULT NULL COMMENT 'when project started' AFTER `generation_date`; 
+
+/*live end*/
