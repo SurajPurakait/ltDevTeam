@@ -310,12 +310,15 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         var parse_start_date = Date.parse(actual_start_date);
         var old_date = new Date(parse_due_date);
         var new_date = new Date(parse_start_date);
+        var actual_month=$("#actual_month").val();
+        var actual_year=$("#actual_year").val();
+        var total_days=new Date(actual_year, actual_month, 0).getDate();
         if(project_pattern=='monthly'){
             if (parse_start_date > parse_due_date) {
                 var future_new_date = new_date.getDate();
                 var future_new_month = new_date.getMonth();
                 if (future_new_date > actual_day) {
-                    new_date.setDate(new_date.getDate() + parseInt(30));
+                    new_date.setDate(new_date.getDate() + parseInt(total_days));
                     var new_due_date = (new_date.getMonth() + 1) + '/' + actual_day + '/' + new_date.getFullYear();
                 } else {
                     var new_due_date = (new_date.getMonth() + 1) + '/' + actual_day + '/' + new_date.getFullYear();
