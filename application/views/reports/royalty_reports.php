@@ -68,7 +68,7 @@
             startDate: start,
             endDate: end,
             ranges: {
-                'Select': [moment("<?= $start_date; ?>", "MM-DD-YYYY"), moment()],
+                'All Data': [moment("<?= $start_date; ?>", "MM-DD-YYYY"), moment()],
                 'Today': [moment(), moment()],
                 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                 'Last 7 Days': [moment().subtract(6, 'days'), moment()],
