@@ -75,8 +75,8 @@
         if($invoice_id == $bqr['invoice_id']) {
             unset($bqr['id']);
             if (empty(array_diff($comparison_array,$bqr))) {
-                echo "No difference with previuos values";
-                echo "<hr>";
+                // echo "No difference with previuos values";
+                // echo "<hr>";
             } else {
                 $update_sql = "UPDATE `report_dashboard_billing` SET ";
                 if ($payment_status != $bqr['payment_status']) {
@@ -103,8 +103,8 @@
 
                 $update_sql .= " WHERE invoice_id = '".$invoice_id."'";
                 mysqli_query($conn,$update_sql);
-                echo $update_sql;
-                echo "<hr>";
+                // echo $update_sql;
+                // echo "<hr>";
             }
         } else {
             $insert_sql = "INSERT INTO `report_dashboard_billing`(`invoice_id`, `payment_status`, `amount_collected`, `total_amount`, `office_id`, `office_name`, `created_date`) VALUES ('$invoice_id', '$payment_status', '$amount_collected', '$total_amount', '$office_id', '$office_name','$created_date')";
@@ -112,5 +112,5 @@
             mysqli_query($conn,$insert_sql)or die('insert error');
         }
     }
-    echo "Successfully Inserted";
+    echo "1";
 ?>

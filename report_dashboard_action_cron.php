@@ -88,8 +88,8 @@
             if($action_id == $aqr['action_id']) {
                 unset($aqr['id']);
                 if (empty(array_diff($comparison_array,$aqr))) {
-                    echo "No difference with previuos values";
-                    echo "<hr>";
+                    // echo "No difference with previuos values";
+                    // echo "<hr>";
                 } else {
                     $update_sql = "UPDATE `report_dashboard_action` SET ";
                     if ($by_office != $aqr['by_office']) {
@@ -135,17 +135,17 @@
 
                     $update_sql .= " WHERE action_id = '".$action_id."'";
                     mysqli_query($conn,$update_sql);
-                    echo $update_sql;
-                    echo "<hr>";
+                    // echo $update_sql;
+                    // echo "<hr>";
                 }
             } else {
                 $action_insert_sql = "INSERT INTO `report_dashboard_action`(`action_id`, `by_office`, `by_office_name`, `to_office`, `to_office_name`, `by_department`, `by_department_name`, `to_department`, `to_department_name`, `status`, `due_date`, `sos`,`creation_date`) VALUES ('$action_id',' $by_office', '$by_office_name', '$to_office', '$to_office_name', '$by_department', '$by_department_name', '$to_department', '$to_department_name', '$status', '$due_date', '$sos','$creation_date')";
       
-                echo $action_insert_sql;
-                echo "<hr>";    
+                // echo $action_insert_sql;
+                // echo "<hr>";    
                 mysqli_query($conn,$action_insert_sql)or die('Insert Error!');
             }
         }
-        echo "Success";
+        echo "1";
     }       
 ?>

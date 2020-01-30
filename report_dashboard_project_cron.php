@@ -86,8 +86,8 @@
             if($task_id == $pqr['task_id']) {
                 unset($pqr['id']);
                 if (empty(array_diff($comparison_array,$pqr))) {
-                    echo "No difference with previuos values";
-                    echo "<hr>";
+                    // echo "No difference with previuos values";
+                    // echo "<hr>";
                 } else {
                     $update_sql = "UPDATE `report_dashboard_project` SET ";
                     if ($task_status != $pqr['task_status']) {
@@ -123,18 +123,18 @@
 
                     $update_sql .= " WHERE task_id = '".$task_id."'";
                     mysqli_query($conn,$update_sql);
-                    echo $update_sql;
-                    echo "<hr>";
+                    // echo $update_sql;
+                    // echo "<hr>";
                 }
             } else {
                 $insert_sql = "INSERT INTO `report_dashboard_project`(`task_id`, `project_id`, `task_status`, `project_status`, `task_office`, `project_office`, `task_department`, `project_department`, `project_creation_date`,`project_due_date`,`sos`) VALUES ('$task_id', '$project_id', '$task_status', '$project_status', '$task_office', '$project_office', '$task_department', '$project_department', '$project_creation_date','$project_due_date','$sos')";
 
-                echo $insert_sql;
-                echo "<hr>";
+                // echo $insert_sql;
+                // echo "<hr>";
                 mysqli_query($conn,$insert_sql)or die('Insert Error!!!');    
             }
         }
-        echo "success";    
+        echo "1";    
     }    
 
 
