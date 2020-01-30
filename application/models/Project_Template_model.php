@@ -1412,7 +1412,8 @@ class Project_Template_model extends CI_Model {
                     if ($project_recurrence_main_data['generation_day'] == '') {
                         $project_recurrence_main_data['generation_day'] = '0';
                     }
-                    $generation_days = ((int) $project_recurrence_main_data['generation_month'] * 30) + (int) $project_recurrence_main_data['generation_day'];
+                    $total_days=cal_days_in_month(CAL_GREGORIAN, $project_recurrence_main_data['actual_due_month'], $project_recurrence_main_data['actual_due_year']);
+                    $generation_days = ((int) $project_recurrence_main_data['generation_month'] *(int) $total_days) + (int) $project_recurrence_main_data['generation_day'];
 
                     $project_recurrence_main_data['due_date'] = $due_date;
 //                    echo $due_date;die;
