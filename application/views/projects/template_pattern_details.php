@@ -295,7 +295,6 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         var a = new Date(due_date);
         var actual_month=a.getMonth();
         var actual_year=a.getYear();
-        alert(actual_month);
         var total_days=new Date(actual_year, actual_month, 0).getDate();
         var target_start_days = (parseInt(target_start_month) * parseInt(total_days) + parseInt(target_start_day));
         a.setDate(a.getDate() - parseInt(target_start_days));
