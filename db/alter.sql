@@ -1101,7 +1101,7 @@ ALTER TABLE `payroll_account_numbers` ADD `client_id` INT(5) NULL DEFAULT NULL A
 -- import report_dashboard_project
 ALTER TABLE `report_dashboard_project` ADD `sos` LONGTEXT NULL DEFAULT NULL AFTER `project_creation_date`;
 ALTER TABLE `report_dashboard_project` ADD `project_due_date` DATE NOT NULL AFTER `project_creation_date`;
-/*live end*/
+
 /* 15.01.2020 */
 UPDATE `services` SET `retail_price` = '450.00', `responsible_assign` = '' WHERE `services`.`id` = 48;
 
@@ -1144,4 +1144,17 @@ DROP TABLE `payer_recipient_information`;
 
 /*  27.01.2020 */
 ALTER TABLE `order_extra_data` DROP `compensation`;
-ALTER TABLE `project_template_recurrence_main` ADD `target_start_date` VARCHAR(30) NULL DEFAULT NULL AFTER `created_at`, ADD `target_end_date` VARCHAR(30) NULL DEFAULT NULL AFTER `target_start_date`; 
+ALTER TABLE `project_template_recurrence_main` ADD `target_start_date` VARCHAR(30) NULL DEFAULT NULL AFTER `created_at`, ADD `target_end_date` VARCHAR(30) NULL DEFAULT NULL AFTER `target_start_date`;
+
+/*28.01.2020*/
+
+ALTER TABLE `project_template_recurrence_main` ADD `target_start_months` INT(2) NOT NULL AFTER `target_start_days`; 
+ALTER TABLE `project_template_recurrence_main` ADD `target_end_months` INT(2) NULL DEFAULT NULL AFTER `target_end_days`; 
+
+ALTER TABLE `project_recurrence_main` ADD `target_start_months` INT(2) NULL DEFAULT NULL AFTER `target_start_days`; 
+ALTER TABLE `project_recurrence_main` ADD `target_end_months` INT(2) NULL DEFAULT NULL AFTER `target_end_days`; 
+
+ALTER TABLE `project_recurrence_main` ADD `target_start_date` DATE NULL DEFAULT NULL AFTER `generated_by_cron`, ADD `target_end_date` DATE NULL DEFAULT NULL AFTER `target_start_date`; 
+ALTER TABLE `project_recurrence_main` ADD `start_date` DATE NULL DEFAULT NULL COMMENT 'when project started' AFTER `generation_date`; 
+
+/*live end*/

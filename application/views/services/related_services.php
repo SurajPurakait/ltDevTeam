@@ -704,6 +704,177 @@
                                 ?>
                             </ul>
                         <?php endif; ?>
+
+
+                        <?php if ($service_shortname == 'acc_1_w_u'){  // 1099 Write Up
+                        ?>
+                        <h3>Payer's Information : <span class="text-danger">*</span></h3>
+
+                        <div class="link-content m-b-10">
+                                <input type="hidden" id="payer_information_quantity" value="0">
+                                <button class="btn btn-success btn-xs" id="copy-contact" ref_id="<?= $reference_id; ?>">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Contact</button>&nbsp;
+                        </div>
+
+                        <div id="payer_information_div">
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="First Name" class="form-control" type="text" id="payer_first_name" name="table[payer_information][payer_first_name]" title="First Name" value="<?= isset($payer_information['payer_first_name']) ? $payer_information['payer_first_name'] : '' ?>" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="Last Name" class="form-control" type="text" id="payer_last_name" name="table[payer_information][payer_last_name]" title="Last Name" value="<?= isset($payer_information['payer_last_name']) ? $payer_information['payer_last_name'] : '' ?>" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Phone Number<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="Phone Number" phoneval class="form-control" type="text" id="payer_phone_number" name="table[payer_information][payer_phone_number]" title="Phone Number" value="<?= isset($payer_information['payer_phone_number']) ? $payer_information['payer_phone_number'] : '' ?>" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Address<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="Address" class="form-control" type="text" id="payer_address" name="table[payer_information][payer_address]" title="Address" value="<?= isset($payer_information['payer_address']) ? $payer_information['payer_address'] : '' ?>" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">City<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="City" class="form-control" type="text" id="payer_city" name="table[payer_information][payer_city]" title="City" value="<?= isset($payer_information['payer_city']) ? $payer_information['payer_city'] : '' ?>" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">State<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <select title="State" class="form-control" name="table[payer_information][payer_state]" id="payer_state" required="">
+                                            <option value="">Select an option</option>
+                                        <?php load_ddl_option("all_state_list",isset($payer_information['payer_state']) ? $payer_information['payer_state'] : ''); ?>
+                                    </select>
+                                    <div class="errorMessage text-danger"></div>   
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Country<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <select title="Country" class="form-control" name="table[payer_information][payer_country]" id="payer_country" required="">
+                                        <option value="">Select an option</option>
+                                        <?php load_ddl_option("get_countries",isset($payer_information['payer_country']) ? $payer_information['payer_country'] : ''); ?>
+                                    </select>
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Zip<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="Zip Code" class="form-control" type="text" id="payer_zip_code" name="table[payer_information][payer_zip]" title="Zip Code" zipval value="<?= isset($payer_information['payer_zip']) ? $payer_information['payer_zip'] : '' ?>" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">TIN (Tax Identification Number)</label>
+                            <div class="col-lg-10">
+                                <input placeholder="TIN" class="form-control" type="text" id="payer_tin" name="table[payer_information][payer_tin]" title="TIN" value="<?= isset($payer_information['payer_tin']) ? $payer_information['payer_tin'] : '' ?>">
+                                <div class="errorMessage text-danger"></div>        
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+
+                        <h3>Recipient's Information : </h3>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">First Name</label>
+                            <div class="col-lg-10">
+                                <input placeholder="First Name" class="form-control" nameval="" type="text" id="recipient_first_name" name="table[recipient_information][recipient_first_name]" title="First Name" value="<?= isset($recipient_information[0]['recipient_first_name']) ? $recipient_information[0]['recipient_first_name'] : '' ?>">
+                                <div class="errorMessage text-danger"></div>        
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Last Name</label>
+                            <div class="col-lg-10">
+                                <input placeholder="Last Name" class="form-control" nameval="" type="text" id="recipient_last_name" name="table[recipient_information][recipient_last_name]" title="Last Name" value="<?= isset($recipient_information[0]['recipient_last_name']) ? $recipient_information[0]['recipient_last_name'] : '' ?>">
+                                <div class="errorMessage text-danger"></div>        
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Phone Number</label>
+                            <div class="col-lg-10">
+                                <input placeholder="Phone Number" class="form-control" phoneval="" type="text" id="recipient_phone_number" name="table[recipient_information][recipient_phone_number]" title="Phone Number" value="<?= isset($recipient_information[0]['recipient_phone_number']) ? $recipient_information[0]['recipient_phone_number'] : '' ?>">
+                                <div class="errorMessage text-danger"></div>        
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Address</label>
+                            <div class="col-lg-10">
+                                <input placeholder="Address" class="form-control" type="text" id="recipient_address" name="table[recipient_information][recipient_address]" title="Address" value="<?= isset($recipient_information[0]['recipient_address']) ? $recipient_information[0]['recipient_address'] : '' ?>">
+                                <div class="errorMessage text-danger"></div>        
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">City</label>
+                            <div class="col-lg-10">
+                                <input placeholder="City" class="form-control" type="text" id="recipient_city" name="table[recipient_information][recipient_city]" title="City" value="<?= isset($recipient_information[0]['recipient_city']) ? $recipient_information[0]['recipient_city'] : '' ?>">
+                                <div class="errorMessage text-danger"></div>        
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">State</label>
+                            <div class="col-lg-10">
+                                <select title="State" class="form-control" name="table[recipient_information][recipient_state]" id="recipient_state">
+                                    <option value="">Select an option</option>
+                                    <?php load_ddl_option("all_state_list",isset($recipient_information[0]['recipient_state']) ? $recipient_information[0]['recipient_state'] : ''); ?>
+                                </select>
+                                <div class="errorMessage text-danger"></div>        
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Country</label>
+                            <div class="col-lg-10">
+                                <select title="Country" class="form-control" name="table[recipient_information][recipient_country]" id="recipient_country">
+                                    <option value="">Select an option</option>
+                                    <?php load_ddl_option("get_countries",isset($recipient_information[0]['recipient_country']) ? $recipient_information[0]['recipient_country'] : ''); ?>
+                                </select>
+                                <div class="errorMessage text-danger"></div>        
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Zip Code</label>
+                            <div class="col-lg-10">
+                                <input placeholder="Zip Code" class="form-control" type="text" id="recipient_zip_code" name="table[recipient_information][recipient_zip]" title="Zip Code" value="<?= isset($recipient_information[0]['recipient_zip']) ? $recipient_information[0]['recipient_zip'] : '' ?>">
+                                <div class="errorMessage text-danger"></div>        
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">TIN (Tax Identification Number)</label>
+                            <div class="col-lg-10">
+                                <input placeholder="TIN" class="form-control" type="text" id="recipient_tin" name="table[recipient_information][recipient_tin]" title="TIN" value="<?= isset($recipient_information[0]['recipient_tin']) ? $recipient_information[0]['recipient_tin'] : '' ?>">
+                                <div class="errorMessage text-danger"></div>        
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <h3>Compensation : </h3>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Non-Employee Compensation</label>
+                            <div class="col-lg-10">
+                                <input placeholder="Non-Employee Compensation" class="form-control" type="text" id="compensation" name="table[recipient_information][compensation]" title="Non-Employee Compensation" value="<?= isset($recipient_information[0]['compensation']) ? $recipient_information[0]['compensation'] : '' ?>">
+                                <div class="errorMessage text-danger"></div>        
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <?php } ?>
+                        
+
                         <div class="form-group">
                             <label class="col-sm-3 col-md-2 control-label">Attachment</label>
                             <div class="col-sm-9 col-md-10">
@@ -859,6 +1030,46 @@
         }
         if (serviceShortName == 'acc_s_t_r') {
             county_ajax('<?= isset($sales_tax_recurring_details['state']) ? $sales_tax_recurring_details['state'] : ''; ?>', '<?= isset($sales_tax_recurring_details['county']) ? $sales_tax_recurring_details['county'] : ''; ?>');
+        }
+        if (serviceShortName == 'acc_1_w_u') {
+
+            $("#copy-contact").click(function () {
+            $("#payer_first_name").val('');
+            $("#payer_last_name").val('');
+            $("#payer_phone_number").val('');
+            $("#payer_address").val('');
+            $("#payer_city").val('');
+            $("#payer_state").val('');
+            $("#payer_country").val('');
+            $("#payer_zip_code").val('');
+            var ref_id = $('#reference_id').val();
+            $.ajax({
+                type: "POST",
+                                url: '<?= base_url(); ?>services/accounting_services/copy_contact_for_1099_write_up',
+                                data: {ref_id: ref_id}, 
+                                cache: false,
+                                success: function (data) {
+                    //alert(data);
+                    if (data != 0) {
+                        var res = JSON.parse(data);
+                        //alert(res);
+                        $("#payer_information_quantity").val(1);
+                        $("#payer_first_name").val(res.first_name);
+                        $("#payer_last_name").val(res.last_name);
+                        $("#payer_phone_number").val(res.phone1);
+                        $("#payer_address").val(res.address1);
+                        $("#payer_city").val(res.city);
+                        $("#payer_state").val(res.state);
+                        $("#payer_country").val(res.country);
+                        $("#payer_zip_code").val(res.zip);
+                        $("#payer_information_div").show();
+                    } else {
+                        swal("Error", "No Main Contact Added", "error");
+                    }
+                }
+            });
+        });
+
         }
         interval_total_amounts();
         $('.add-upload-file').on("click", function () {
