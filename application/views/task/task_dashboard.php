@@ -85,7 +85,7 @@ if (!empty($task_list)) {
 //                                                             start date and complete date calculation
 
         $created_at =strtotime(get_project_created_date($task['project_id']));
-        $due_date = strtotime($dueDate);
+        $due_date = strtotime($pattern_details->due_date);
         $start_date = $task['target_start_date'] . 'days';
         $complete_date = $task['target_complete_date'] . 'days';
         if ($task['target_start_day'] == 1) {
