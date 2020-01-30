@@ -205,7 +205,8 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     if ($project_recurrence_main_data['generation_day'] == '') {
         $project_recurrence_main_data['generation_day'] = '0';
     }
-    $generation_days = ((int) $project_recurrence_main_data['generation_month'] * 30) + (int) $project_recurrence_main_data['generation_day'];
+    $total_days=cal_days_in_month(CAL_GREGORIAN, $project_recurrence_main_data['actual_due_month'], $project_recurrence_main_data['actual_due_year']);
+    $generation_days = ((int) $project_recurrence_main_data['generation_month'] * $total_days) + (int) $project_recurrence_main_data['generation_day'];
 
     $project_recurrence_main_data['due_date'] = $due_date;
 //                    echo $due_date;die;
@@ -235,7 +236,8 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     $project_recurrence_main_data['generation_date'] = $generation_date;
 
     //project start date section
-    $project_start_day = ((int) $project_recurrence_main_data['target_start_months'] * 30) + (int) $project_recurrence_main_data['target_start_days'];
+    $total_days=cal_days_in_month(CAL_GREGORIAN, $project_recurrence_main_data['actual_due_month'], $project_recurrence_main_data['actual_due_year']);
+    $project_start_day = ((int) $project_recurrence_main_data['target_start_months'] * $total_days) + (int) $project_recurrence_main_data['target_start_days'];
     $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
     $dueDate = strtotime($due_date);
     ?>
