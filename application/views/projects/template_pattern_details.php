@@ -236,7 +236,9 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     $project_recurrence_main_data['generation_date'] = $generation_date;
 
     //project start date section
-    $total_days=cal_days_in_month(CAL_GREGORIAN, $project_recurrence_main_data['actual_due_month'], $project_recurrence_main_data['actual_due_year']);
+    $actual_month=date('m',strtotime($due_date));
+    $actual_year=date('Y',strtotime($due_date));
+    $total_days=cal_days_in_month(CAL_GREGORIAN, $actual_month, $actual_year);
     $project_start_day = ((int) $project_recurrence_main_data['target_start_months'] * $total_days) + (int) $project_recurrence_main_data['target_start_days'];
     $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
     $dueDate = strtotime($due_date);
@@ -290,9 +292,10 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         var actual_target_start_date = $("#actual_target_start_date").val();
         var actual_due_date = $("#actual_due_date").val();
         var due_date = $('#due_date').val();
-        var actual_month=$("#actual_month").val();
-        var actual_year=$("#actual_year").val();
         var a = new Date(due_date);
+        var actual_month=a.getMonth();
+        var actual_year=a.getYear();
+        alert(actual_month);
         var total_days=new Date(actual_year, actual_month, 0).getDate();
         var target_start_days = (parseInt(target_start_month) * parseInt(total_days) + parseInt(target_start_day));
         a.setDate(a.getDate() - parseInt(target_start_days));
@@ -310,8 +313,8 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         var parse_start_date = Date.parse(actual_start_date);
         var old_date = new Date(parse_due_date);
         var new_date = new Date(parse_start_date);
-        var actual_month=$("#actual_month").val();
-        var actual_year=$("#actual_year").val();
+        var actual_month=new_date.getMonth();
+        var actual_year=new_date.getYear();
         var total_days=new Date(actual_year, actual_month, 0).getDate();
         if(project_pattern=='monthly'){
             if (parse_start_date > parse_due_date) {
@@ -328,6 +331,13 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
                 var dueDate = (old_date.getMonth() + 1) + '/' + old_date.getDate() + '/' + old_date.getFullYear();
                 $("#due_date").val(dueDate);
             }
+        }
+        if(project_pattern=='weekly'){
+                var future_new_date = new_date.getDate();
+                var future_new_month = new_date.getMonth();
+                new_date.setDate(new_date.getDate() + parseInt(7));
+                var new_due_date = (new_date.getMonth() + 1) + '/' + actual_day + '/' + new_date.getFullYear();
+                $("#due_date").val(new_due_date);
         }
     }
 </script>
