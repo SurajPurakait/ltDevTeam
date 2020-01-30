@@ -559,7 +559,7 @@ function show_clients_data(category) {
 function refresh_service_report(){
    $.ajax({
         type: 'POST',
-        url: base_url + 'reports/refresh_service_report',
+        url: base_url + 'report_dashboard_service_cron.php',
         success: function (result) {
             if (result == 1) {
                 swal({
@@ -581,7 +581,7 @@ function refresh_service_report(){
 function refresh_billing_report(){
    $.ajax({
         type: 'POST',
-        url: base_url + 'reports/refresh_billing_report',
+        url: base_url + 'report_dashboard_billing_cron.php',
         success: function (result) {
             if (result == 1) {
                 swal({
@@ -601,13 +601,31 @@ function refresh_billing_report(){
 }
 
 function refresh_action_report() {
-    alert("Action");
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'report_dashboard_action_cron.php',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
 }
 
 function reload_royalty_report_data() {
     $.ajax({
         type: 'POST',
-        url: base_url + 'reports/refresh_royalty_report_data',
+        url: base_url + 'royalty_report_cron.php',
         success: function (result) {
             if (result == 1) {
                 swal({
@@ -629,7 +647,7 @@ function reload_royalty_report_data() {
 function reload_sales_report_data() {
     $.ajax({
         type: 'POST',
-        url: base_url + 'reports/refresh_sales_report_data',
+        url: base_url + 'sales_report_cron.php',
         success: function (result) {
             if (result == 1) {
                 swal({
@@ -646,6 +664,50 @@ function reload_sales_report_data() {
             closeLoading();
         }
     });
+}
+
+function refresh_project_report() {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'report_dashboard_project_cron.php',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });    
+}
+
+function refresh_client_report() {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'report_dashboard_client_cron.php',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });    
 }
 
 function pieChart(className) {
