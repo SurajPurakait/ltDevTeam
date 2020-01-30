@@ -246,6 +246,8 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     <input type="hidden" id="actual_target_start_date" value="<?= date('m/d/Y', strtotime($project_start_date)) ?>">
     <input type="hidden" id="actual_due_date" value="<?= $due_date ?>">
     <input type="hidden" id="project_pattern" value="<?= $project_recurrence_main_data['pattern'] ?>">
+    <input type="hidden" id="actual_month" value="<?= $project_recurrence_main_data['actual_due_month'] ?>">
+    <input type="hidden" id="actual_year" value="<?= $project_recurrence_main_data['actual_due_year'] ?>">
 
     <div class="col-md-6">
         <label class="col-lg-12 control-label">Due Date:<span class="text-danger">*</span></label>
@@ -288,8 +290,11 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         var actual_target_start_date = $("#actual_target_start_date").val();
         var actual_due_date = $("#actual_due_date").val();
         var due_date = $('#due_date').val();
+        var actual_month=$("#actual_month").val();
+        var actual_year=$("#actual_year").val();
         var a = new Date(due_date);
-        var target_start_days = (parseInt(target_start_month) * parseInt(30) + parseInt(target_start_day));
+        var total_days=new Date(actual_year, actual_month, 0).getDate();
+        var target_start_days = (parseInt(target_start_month) * parseInt(total_days) + parseInt(target_start_day));
         a.setDate(a.getDate() - parseInt(target_start_days));
         var dateEnd = (a.getMonth() + 1) + '/' + a.getDate() + '/' + a.getFullYear();
         $('#task_start_date').val(dateEnd);
