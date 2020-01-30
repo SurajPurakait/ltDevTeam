@@ -385,7 +385,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
             }
             if (tab_value == 'project') {
                 if (projectval != 0) {
-                    loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '<?php echo $company_name_option_data["id"] ?>', 'clients', '-1');
+                    loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '<?php echo $company_name_option_data["id"] ?>', '', '1');
                 } else {
                     $('#project_list_business').show();
                 }
