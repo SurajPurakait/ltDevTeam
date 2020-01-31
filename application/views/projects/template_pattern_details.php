@@ -292,7 +292,6 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     function change_project_start_date(due_date) {
          due_date=new Date(due_date)
         var month=due_date.getMonth();
-        alert(month);
     }
     function change_project_due_date(select_month='') {
         var project_pattern =$("#project_pattern").val();
