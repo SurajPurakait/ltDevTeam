@@ -58,7 +58,7 @@ if (!empty($project_list)) {
             $tracking = 'Started';
             $trk_class = 'label-yellow';
         } elseif ($status == 0) {
-            $tracking = 'Not Started';
+            $tracking = 'New';
             $trk_class = 'label-success';
         }elseif($status==4){
             $tracking = 'Canceled';
