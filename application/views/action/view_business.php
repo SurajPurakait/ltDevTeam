@@ -7,6 +7,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
 ?>
 <div class="wrapper wrapper-content">
     <div class="text-right">
+        <b class="pull-left">Client ID: <?= $company_internal_data[0]['reference_id'] ?></b>
         <button class="btn btn-primary" type="button" onclick="go('action/home/business_dashboard');">Go Back To List</button>
         <?php if ($usertype == 1 || $usertype == 2) { ?>
             <a class="btn btn-primary" href="<?php echo base_url(); ?>billing/invoice/index/<?php echo base64_encode($company_name_option_data["id"]); ?>/<?= base64_encode(1); ?>" style="width: 170px">+ Create Invoice</a>
@@ -312,21 +313,30 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                             <?php if (!empty($account_details)) { ?>
                                 <td <?= $style; ?>><strong>Account Info</strong></td>
                                 <td <?= $style; ?> >
-                                    <?php foreach ($account_details as $ad) { ?>
+                                    <?php foreach ($account_details as $ad) {
+                                    $security_details= get_secuirity_details($ad['id']); ?>
                                         <b>Type of Account: </b>
                                         <?php echo (isset($ad['type_of_account']) && $ad['type_of_account']!=''?$ad['type_of_account']:'') ?><br>
                                         <b>Bank Name:</b>
                                         <?php echo $ad['bank_name'] ?><br>
-                                        <b>Bank Account Number:</b>
+                                        <b>Account Number:</b>
                                         <?php echo $ad['ban_account_number'] ?><br>
-                                        <b>Bank Routing Number:</b>
+                                        <b>Routing Number:</b>
                                         <?php echo $ad['bank_routing_number'] ?><br>
                                         <b>Website: </b>
                                         <?php echo (isset($ad['bank_website']) && $ad['bank_website']!=''?$ad['bank_website']:'') ?><br>
                                         <b>User: </b>
                                         <?php echo (isset($ad['user']) && $ad['user']!=''?$ad['user']:'') ?><br>
+                                        <b>Password: </b><?php echo (isset($ad['password']) && $ad['password']!=''?$ad['password']:'') ?><br>
+
+                                        <?php if(!empty($security_details)){
+                                        foreach($security_details as $sec_ans){
+                                        echo "<b>Question : </b>".$sec_ans['security_question']."<br>";
+                                        echo "<b>Answer : </b>".$sec_ans['security_answer']."<br>";
+                                        } } ?>
                                         <p>
-                                            <i class="fa fa-edit" style="cursor:pointer" onclick="account_modal('edit', '<?= $ad['id'] ?>', 'month_diff');" title="Edit this account"></i>
+                                            <!-- <i class="fa fa-edit" style="cursor:pointer" onclick="account_modal('edit', '<?//= $ad['id'] ?>', 'month_diff');" title="Edit this account"></i> -->
+                                            <i class="fa fa-edit" style="cursor:pointer" onclick="account_modal('edit', '<?= $ad['id'] ?>', '');" title="Edit this account"></i>
                                             &nbsp;&nbsp;<i class="fa fa-trash" style="cursor:pointer" onclick="delete_account(<?= $ad['id'] ?>)" title="Remove this account"></i>
                                         </p>
                                         <hr />
@@ -343,7 +353,9 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                         </tr>
                     </tbody>
                 </table>
-
+            <!-- <a title="Account Info" class="btn btn-primary" href="javascript:void(0);" onclick="inactive_business('<?php //echo $company_name_option_data["id"]; ?>', '<?php //echo $company_name_option_data["company_id"]; ?>');">+ Add account info</a> -->
+            <a title="Account Info" class="btn btn-primary" href="javascript:void(0);" onclick="task_account_modal('add', '', '');">+ Add account info</a>
+            <input type="hidden" value="<?= $reference_id; ?>" id="reference_id">
             </div>
             <div role="tabpanel" class="tab-pane" id="invoice">
 
@@ -385,7 +397,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
             }
             if (tab_value == 'project') {
                 if (projectval != 0) {
-                    loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '<?php echo $company_name_option_data["id"] ?>', 'clients', '-1');
+                    loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '<?php echo $company_name_option_data["id"] ?>', '', '1');
                 } else {
                     $('#project_list_business').show();
                 }
