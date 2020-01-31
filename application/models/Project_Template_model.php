@@ -1451,7 +1451,7 @@ class Project_Template_model extends CI_Model {
                     }else{
                         $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
                     }
-                    if($user_generation_date=$generation_date){
+                    if($user_generation_date==$generation_date){
                         $generation_date=$generation_date;
                     }else{
                         $generation_date=$user_generation_date;

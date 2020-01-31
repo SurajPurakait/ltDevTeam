@@ -250,6 +250,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     <input type="hidden" id="due_day" value="<?= $project_recurrence_main_data['due_day'] ?>">
     <input type="hidden" id="target_start_month" value="<?= $project_recurrence_main_data['target_start_months'] ?>">
     <input type="hidden" id="generation_day" value="<?= $project_recurrence_main_data['generation_day'] ?>">
+    <input type="hidden" id="generation_month" value="<?= $project_recurrence_main_data['generation_month'] ?>">
     <input type="hidden" id="template_cat_id" value="<?= $template_cat_id ?>">
     <div class="col-md-6">
         <label class="col-lg-12 control-label">Start Date:<span class="text-danger">*</span></label>
@@ -303,6 +304,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             var due_day=$('#due_day').val();
             var target_start_month=$("#target_start_month").val();
             var generation_day=$('#generation_day').val();
+            var generation_month=$("#generation_month").val();
             var template_cat_id=$('#template_cat_id').val();
             var create_date=new Date(select_month+' '+due_day+' '+select_year);
             var next_month=parseInt(select_month)+parseInt(target_start_month);
@@ -329,7 +331,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             var actual_year=next_recurrence.getYear();
             var sales_month=new Date(actual_year, new_month, 0).getDate();
             if(target_start_month==1){
-                var total_recurrence_days=parseInt(sales_month)+parseInt(generation_day);
+                var total_recurrence_days=(parseInt(generation_month)*parseInt(sales_month))+parseInt(generation_day);
             }else{
                 var total_recurrence_days=parseInt(60)+parseInt(generation_day);
             }
