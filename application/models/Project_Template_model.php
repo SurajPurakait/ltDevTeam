@@ -1142,9 +1142,13 @@ class Project_Template_model extends CI_Model {
 //                }
                 $user_due_date=date('Y-m-d',strtotime($post['project']['due_date']));
                 $user_start_month=$post['project']['start_month'];
+                $user_next_due_date=date('Y-m-d',strtotime($post['project']['next_due_date']));
+                $user_generation_date=date('Y-m-d',strtotime($post['project']['next_due_date']));
                 unset($post['project']['due_date']);
                 unset($post['project']['start_month']);
                 unset($post['project']['start_year']);
+                unset($post['project']['next_due_date']);
+                unset($post['project']['generation_date']);
                 $this->db->insert('projects', $post['project']);
                 $insert_id = $this->db->insert_id();
                 $notedata = $this->input->post('project_note');
@@ -1420,6 +1424,11 @@ class Project_Template_model extends CI_Model {
 //                    echo $due_date;die;
                     if ($project_recurrence_main_data['pattern'] == 'monthly') {
                         $next_due_date = date("Y-m-d", strtotime("+1 month", strtotime($due_date)));
+                        if($user_next_due_date==$next_due_date){
+                            $next_due_date=$next_due_date;
+                        }else{
+                            $next_due_date=$user_next_due_date;
+                        }
                         $project_recurrence_main_data['next_due_date'] = $next_due_date;
                     } elseif ($project_recurrence_main_data['pattern'] == 'annually') {
                         $next_due_date = date("Y-m-d", strtotime("+1 year", strtotime($due_date)));
@@ -1441,6 +1450,11 @@ class Project_Template_model extends CI_Model {
                         $generation_date =NULL;
                     }else{
                         $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
+                    }
+                    if($user_generation_date=$generation_date){
+                        $generation_date=$generation_date;
+                    }else{
+                        $generation_date=$user_generation_date;
                     }
                     $project_recurrence_main_data['generation_date'] = $generation_date;
                     $project_recurrence_main_data['start_month']=$user_start_month;
@@ -2826,7 +2840,7 @@ class Project_Template_model extends CI_Model {
 
     public function get_project_filter_element_value($element_key, $office) {
         $tracking_array = [
-                ["id" => 0, "name" => "Not Started"],
+                ["id" => 0, "name" => "New"],
                 ["id" => 1, "name" => "Started"],
                 ["id" => 2, "name" => "Completed"],
                 ["id" => 4, "name" => "Canceled"]
@@ -3602,6 +3616,9 @@ class Project_Template_model extends CI_Model {
     }
     public function project_template_task_details($template_id){
         return $this->db->get_where('project_template_task',['template_main_id'=>$template_id])->row();
+    }
+    public function getTemplateCategoryId($template_id){
+        return $this->db->get_where('project_template_main',['id'=>$template_id])->row()->template_cat_id;
     }
 
 }
