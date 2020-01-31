@@ -1143,7 +1143,7 @@ class Project_Template_model extends CI_Model {
                 $user_due_date=date('Y-m-d',strtotime($post['project']['due_date']));
                 $user_start_month=$post['project']['start_month'];
                 $user_next_due_date=date('Y-m-d',strtotime($post['project']['next_due_date']));
-                $user_generation_date=date('Y-m-d',strtotime($post['project']['next_due_date']));
+                $user_generation_date=date('Y-m-d',strtotime($post['project']['generation_date']));
                 unset($post['project']['due_date']);
                 unset($post['project']['start_month']);
                 unset($post['project']['start_year']);
