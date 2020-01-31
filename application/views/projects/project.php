@@ -690,7 +690,7 @@ $role = $user_info['role'];
                 }
 
                 if (res.project_status == 0) {
-                    var tracking_main = 'Not Started';
+                    var tracking_main = 'New';
                     var trk_class_main = 'label label-success';
                 } else if (res.project_status == 1) {
                     var tracking_main = 'Started';
