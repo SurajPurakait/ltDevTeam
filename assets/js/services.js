@@ -964,7 +964,7 @@ function delete_account(id) {
     });
 }
 
-function save_account(section) {
+function save_account(section='') {
 
 //update_financial_account_by_date
     if (!requiredValidation('form_accounts')) {
@@ -974,6 +974,11 @@ function save_account(section) {
     var company_id = $("#company_id").val();
     var order_id = $("#editval").val();
     var modal_type=$("#modal_type").val();
+    
+    // if (section == 'edit') {
+    //     var order_id_edit=$("#edit_order_id").val();        
+    // }
+    
     form_data.append('section', section);
     $.ajax({
         type: "POST",
