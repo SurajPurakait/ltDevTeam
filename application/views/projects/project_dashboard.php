@@ -120,7 +120,7 @@ if (!empty($project_list)) {
                                     <th style="width:8%; text-align: center">Requested By</th>
                                     <th style="width:8%; text-align: center">Assigned To</th>
                                     <th style="width:8%; text-align: center">Tracking</th>
-                                    <th style="width:8%; text-align: center">Start Date</th>
+                                    <!--<th style="width:8%; text-align: center">Start Date</th>-->
                                     <th style="width:8%; text-align: center">Due Date</th>
                                     <th style="width:8%; text-align: center">Next Recurrence</th>
                                     <th style="width:8%; text-align: center">Note</th>
@@ -129,7 +129,7 @@ if (!empty($project_list)) {
                                     <td title="ID"><?= $list['id'] ?></td>
                                     <!--<td title="Category"><= get_template_category_name($list['template_cat_id']) ?></td>-->
                                     <td title="Project Name">
-                                        <span class=""><?= $templatedetails->title ?></span>
+                                        <span class=""><?= $templatedetails->title.($pattern_details->start_month!=''?' #'.$due_m[$pattern_details->start_month]:'') ?></span>
                                     </td>
                                     <td title="Pattern"><?= ucfirst($pattern_details->pattern) ?></td>
                                     <!--<td title="Client Type"><? ($list['client_type'] == '1') ? 'Business Client' : 'Individual Client' ?></td>-->
@@ -165,7 +165,7 @@ if (!empty($project_list)) {
                                         ?>
                                     </td>                                                  
                                     <td title="Tracking" class="text-center"><span id="trackouter-<?php echo $list['id']; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></td>
-                                    <td title="Start Date"><?= date('m/d/Y', strtotime($pattern_details->start_date)) ?></td>
+                                    <!--<td title="Start Date"><? date('m/d/Y', strtotime($pattern_details->start_date)) ?></td>-->
                                     <?php if($pattern_details->pattern=='periodic'){ ?>
                                     <td title="Due Date"><?= date('m/d/Y',strtotime($pattern_details->due_date)) ?></td>
                                     <?php } else {?>
