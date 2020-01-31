@@ -39,7 +39,7 @@
     $where['ord.reference'] = '`ord`.`reference` != \'invoice\' ';
     $where['ord.status'] = 'AND `ord`.`status` NOT IN ("7","10") ';
 
-    $table = '`order` AS ord INNER JOIN company ON ord.reference_id = company.id INNER JOIN internal_data indt ON indt.reference_id = `ord`.`reference_id` AND indt.reference = `ord`.`reference` INNER JOIN services ON services.id = ord.service_id LEFT OUTER JOIN service_request AS srv_rq ON srv_rq.order_id = ord.id INNER JOIN staff st ON st.id = ord.staff_requested_service'; 
+    $table = '`order` AS `ord` INNER JOIN `service_request` AS `srv` ON `srv`.order_id = `ord`.id WHERE `ord`.reference = "invoice"'; 
     $query = 'SELECT ' . implode(', ', $select) . ' FROM ' . $table . ' WHERE ' . implode('', $where)  . 'GROUP BY ord.id ORDER BY ord.id DESC';
     // echo $query;exit;
     mysqli_query($conn,'TRUNCATE report_dashboard_service');

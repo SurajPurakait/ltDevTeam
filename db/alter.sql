@@ -1158,3 +1158,5 @@ ALTER TABLE `project_recurrence_main` ADD `target_start_date` DATE NULL DEFAULT 
 ALTER TABLE `project_recurrence_main` ADD `start_date` DATE NULL DEFAULT NULL COMMENT 'when project started' AFTER `generation_date`; 
 
 /*live end*/
+/* 31.01.2020 */
+ALTER TABLE `report_dashboard_service` ADD `service_request_id` INT(11) NOT NULL AFTER `id`; 
