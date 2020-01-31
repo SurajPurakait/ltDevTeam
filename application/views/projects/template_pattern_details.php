@@ -252,7 +252,6 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     <input type="hidden" id="generation_day" value="<?= $project_recurrence_main_data['generation_day'] ?>">
     <input type="hidden" id="template_cat_id" value="<?= $template_cat_id ?>">
     <div class="col-md-6">
-        <?= $generation_date ?>
         <label class="col-lg-12 control-label">Start Date:<span class="text-danger">*</span></label>
         <div class="form-group">
             <select id="project_start_month" name="project[start_month]" onchange="change_project_due_date(this.value)">
