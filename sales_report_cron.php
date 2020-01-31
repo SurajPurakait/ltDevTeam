@@ -123,8 +123,8 @@
                 if ($service_id == $wsr['service_id']) {
                     unset($wsr['id']);
                     if (empty(array_diff($comparison_array,$wsr))) {
-                        echo "No Difference with previous values";
-                        echo "<hr>";
+                        // echo "No Difference with previous values";
+                        // echo "<hr>";
                     } else {
                         $update_sql = "UPDATE `weekly_sales_report` SET ";
                         if ($date != $wsr['date']) {
@@ -174,18 +174,18 @@
                         } 
                         $update_sql .= " WHERE service_id = '".$service_id."'";
                         mysqli_query($conn,$update_sql);
-                        echo $update_sql;
-                        echo "<hr>";
+                        // echo $update_sql;
+                        // echo "<hr>";
                     }
                 } else {    
                     $sql_query = "INSERT INTO `weekly_sales_report`(`date`, `client_id`, `service_id`, `service_name`, `status`, `retail_price`, `override_price`, `cost`, `collected`, `total_net`, `franchisee_fee`, `gross_profit`, `notes`,`office_id`,`created_by`) VALUES (
                         '" . $date . "','" . $client_id . "','".$service_id."','".$service_name."','".$status."','".$retail_price."','".$override_price."','".$cost."','".$collected."','".$total_net."','".$franchisee_fee."','".$gross_profit."','".$notes."','".$office_id."','".$created_by."')";
-                    echo $sql_query;
+                    // echo $sql_query;
                     mysqli_query($conn,$sql_query)or die('insert error');
-                    echo "<hr>";
+                    // echo "<hr>";
                 }
             }
         }
     }
-    echo "Success";
+    echo "1";
 ?>

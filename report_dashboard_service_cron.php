@@ -2,8 +2,8 @@
     $servername = "localhost";
     $username = "leafnet_db_user";
     $password = "leafnet@123";
-    $db = 'leafnet_live';
-    
+    $db = 'leafnet_stagings';
+
     // $servername = "localhost";
     // $username = "root";
     // $password = "";
@@ -105,10 +105,10 @@
 
             $insert_sql = "INSERT INTO `report_dashboard_service`(`service_name`, `status`,`order_date` ,`date_completed`, `date_complete_actual`, `late_status`, `sos`, `category`, `department`, `office`)
             VALUES ('$service_name','$status','$order_date','$date_completed', '$date_complete_actual', '$late_status', '$sos', '$category', '$department', '$office')";
-            echo $insert_sql;
-            echo "<hr>";
+            // echo $insert_sql;
+            // echo "<hr>";
             mysqli_query($conn,$insert_sql)or die('Insert Error');
         }
     }
-    echo "successfully inserted";
+    echo "1";
 ?>

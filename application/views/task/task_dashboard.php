@@ -69,23 +69,8 @@ if (!empty($task_list)) {
             $trk_class = 'label-danger';
         }
         $pattern_details = get_project_pattern($task['project_id']);
-
-        $due_date = '';
-//                                if ($pattern_details->pattern != '' && $pattern_details->pattern == 'annually') {
-        $actual_day = $pattern_details->actual_due_day;
-        $actual_mnth = $pattern_details->actual_due_month;
-        $actual_yr = $pattern_details->actual_due_year;
-        if (strlen($actual_mnth) == 1) {
-            $actual_mnth = '0' . $actual_mnth;
-        }
-        if (strlen($actual_day) == 1) {
-            $actual_day = '0' . $actual_day;
-        }
-        $dueDate = $actual_yr . '-' . $actual_mnth . '-' . $actual_day;
-//                                                             start date and complete date calculation
-
         $created_at =strtotime(get_project_created_date($task['project_id']));
-        $due_date = strtotime($dueDate);
+        $due_date = strtotime($pattern_details->due_date);
         $start_date = $task['target_start_date'] . 'days';
         $complete_date = $task['target_complete_date'] . 'days';
         if ($task['target_start_day'] == 1) {
