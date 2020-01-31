@@ -1141,9 +1141,10 @@ class Project_Template_model extends CI_Model {
 //                    $post['project']['created_at']=date('Y-m-d');
 //                }
                 $user_due_date=date('Y-m-d',strtotime($post['project']['due_date']));
-                $user_start_date=date('Y-m-d',strtotime($post['project']['start_date']));
+                $user_start_month=$post['project']['start_month'];
                 unset($post['project']['due_date']);
-                unset($post['project']['start_date']);
+                unset($post['project']['start_month']);
+                unset($post['project']['start_year']);
                 $this->db->insert('projects', $post['project']);
                 $insert_id = $this->db->insert_id();
                 $notedata = $this->input->post('project_note');
@@ -1442,7 +1443,7 @@ class Project_Template_model extends CI_Model {
                         $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
                     }
                     $project_recurrence_main_data['generation_date'] = $generation_date;
-                    $project_recurrence_main_data['start_date']=$user_start_date;
+                    $project_recurrence_main_data['start_month']=$user_start_month;
                     $project_recurrence_main_data['project_id'] = $insert_id;
                     $this->db->set($project_recurrence_main_data);
                     $this->db->insert('project_recurrence_main', $project_recurrence_main_data);
