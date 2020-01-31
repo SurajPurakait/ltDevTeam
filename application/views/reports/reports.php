@@ -198,7 +198,7 @@
                                                     <button type="button" class="btn btn-success" id="report-projects-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
                                                 <div class="col-md-5 m-t-6 text-right">
-                                                    <button type="button" class="btn btn-warning" id="report-project-refresh-btn" style="border-radius: 0;"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
+                                                    <button type="button" class="btn btn-warning" id="report-project-refresh-btn" style="border-radius: 0;" onclick="refresh_project_report()"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
                                                 </div>
                                             </div>
                                             <?php 
@@ -254,7 +254,7 @@
                                     <div role="tabpanel" id="tab-clients" class="tab-pane">
                                         <div class="panel-body">
                                             <div class="col-md-5 col-md-offset-7 m-t-6 text-right">
-                                                <button type="button" class="btn btn-warning" id="report-client-refresh-btn" style="border-radius: 0;"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
+                                                <button type="button" class="btn btn-warning" id="report-client-refresh-btn" style="border-radius: 0;" onclick="refresh_client_report()"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
                                             </div>
                                             <div class="ibox m-t-25" id="total_clients_by_office_section" onclick="show_clients_data('clients_by_office')">
                                                 <div class="ibox-title p-t-15 p-b-40">
@@ -303,9 +303,9 @@
                                                 <div class="col-md-2 p-l-0">
                                                     <button type="button" class="btn btn-success" id="report-partners-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
-                                                <div class="col-md-5 m-t-6 text-right">
+                                                <!-- <div class="col-md-5 m-t-6 text-right">
                                                     <button type="button" class="btn btn-warning" id="report-partner-refresh-btn" style="border-radius: 0;"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
-                                                </div>
+                                                </div> -->
                                             </div>
                                             <?php 
                                                 $dateRangePartner = $partner_start_date.' - '.$current_date;
@@ -336,9 +336,9 @@
                                                 <div class="col-md-2 p-l-0">
                                                     <button type="button" class="btn btn-success" id="report-leads-range-btn" style="border-radius: 0;">Apply</button>    
                                                 </div>
-                                                <div class="col-md-5 m-t-6 text-right">
+<!--                                                 <div class="col-md-5 m-t-6 text-right">
                                                     <button type="button" class="btn btn-warning" id="report-lead-refresh-btn" style="border-radius: 0;"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
-                                                </div>
+                                                </div> -->
                                             </div> 
                                             <?php 
                                                 $dateRangeLead = $lead_start_date.' - '.$current_date;

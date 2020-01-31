@@ -71,11 +71,11 @@
 
        
             $ind_insert_sql = "INSERT INTO `report_client`(`type`, `client_id`, `status`, `country_residence`,`country_residence_name`,`office`, `office_id`) VALUES ('$type','$client_id','$status','$country_residence','$country_residence_name','$office','$office_id')";
-            echo $ind_insert_sql;
-            echo "<hr>";
+            // echo $ind_insert_sql;
+            // echo "<hr>";
             mysqli_query($conn,$ind_insert_sql)or die('Error : Insert Error');    
-            }
         }
+    }
     
 
     /* inserting data for business client */
@@ -113,11 +113,11 @@
             $office_b = $rcrb['office'];
 
             $bus_insert_sql_b = "INSERT INTO `report_client`(`type`, `client_id`, `status`, `type_of_company` ,`office` ,`office_id`) VALUES ('$type_b','$client_id_b','$status_b','$type_of_company_b','$office_b','$office_id_b')";
-            echo $bus_insert_sql_b;
-            echo "<hr>";
+            // echo $bus_insert_sql_b;
+            // echo "<hr>";
             mysqli_query($conn,$bus_insert_sql_b)or die('Error : Insert Error');                
         }
     }
 
-    echo "Success"    
+    echo "1";    
 ?>

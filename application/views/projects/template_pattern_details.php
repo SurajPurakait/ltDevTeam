@@ -80,6 +80,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         $current_days = date('d', strtotime($project_date));
         $current_year = date('Y', strtotime($project_date));
         $givenDate = date('Y-m-d', mktime(0, 0, 0, $current_months, $current_days + $project_recurrence_main_data['due_day'], ($current_year == date('Y') ? date('Y') : $current_year)));
+//        echo $givenDate;
         $project_recurrence_main_data['actual_due_day'] = date('d', strtotime('next ' . $current_day, strtotime($givenDate)));
         $project_recurrence_main_data['actual_due_month'] = date('m', strtotime('next ' . $current_day, strtotime($givenDate)));
         $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year);
@@ -205,8 +206,9 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     if ($project_recurrence_main_data['generation_day'] == '') {
         $project_recurrence_main_data['generation_day'] = '0';
     }
-    $generation_days = ((int) $project_recurrence_main_data['generation_month'] * 30) + (int) $project_recurrence_main_data['generation_day'];
-
+    $total_days=cal_days_in_month(CAL_GREGORIAN, $project_recurrence_main_data['actual_due_month'], $project_recurrence_main_data['actual_due_year']);
+    $generation_days = ((int) $project_recurrence_main_data['generation_month'] *(int) $total_days) + (int) $project_recurrence_main_data['generation_day'];
+//    echo $generation_days;
     $project_recurrence_main_data['due_date'] = $due_date;
 //                    echo $due_date;die;
     if ($project_recurrence_main_data['pattern'] == 'monthly') {
@@ -235,7 +237,10 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     $project_recurrence_main_data['generation_date'] = $generation_date;
 
     //project start date section
-    $project_start_day = ((int) $project_recurrence_main_data['target_start_months'] * 30) + (int) $project_recurrence_main_data['target_start_days'];
+    $actual_month=date('m',strtotime('-1 month',strtotime($due_date)));
+    $actual_year=date('Y',strtotime($due_date));
+    $total_days=cal_days_in_month(CAL_GREGORIAN, $actual_month, $actual_year);
+    $project_start_day = ((int) $project_recurrence_main_data['target_start_months'] * $total_days) + (int) $project_recurrence_main_data['target_start_days'];
     $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
     $dueDate = strtotime($due_date);
     ?>
@@ -244,7 +249,9 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     <input type="hidden" id="actual_target_start_date" value="<?= date('m/d/Y', strtotime($project_start_date)) ?>">
     <input type="hidden" id="actual_due_date" value="<?= $due_date ?>">
     <input type="hidden" id="project_pattern" value="<?= $project_recurrence_main_data['pattern'] ?>">
-
+    <input type="hidden" id="actual_month" value="<?= $project_recurrence_main_data['actual_due_month'] ?>">
+    <input type="hidden" id="actual_year" value="<?= $project_recurrence_main_data['actual_due_year'] ?>">
+    <input type="hidden" id="due_day" value="<?= $project_recurrence_main_data['due_day'] ?>">
     <div class="col-md-6">
         <label class="col-lg-12 control-label">Due Date:<span class="text-danger">*</span></label>
         <div class="form-group">
@@ -262,18 +269,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     </div>
     
     <div class="col-md-12">
-        <h3 class="m-0 p-b-10 col-lg-12">Next Recurrence:</h3>
-        <div class="col-md-7">
-            <div class="form-inline">
-                <label class="control-label"><input type="radio" name="recurrence[generation_type]" <?php echo ($project_recurrence_main_data['generation_type'] == '1') ? 'checked' : ''; ?> value="1" readonly onclick="//check_generation_type(this.value)"></label>&nbsp;
-                <input class="form-control" type="number" id="generation_month" name="recurrence[generation_month]" value="<?php echo $project_recurrence_main_data['generation_month']; ?>" min="0" max="12" readonly style="width: 100px">&nbsp;
-                <label class="control-label">month(s)</label>&nbsp;
-                <input class="form-control" value="<?php echo $project_recurrence_main_data['generation_day']; ?>" type="number" id="generation_day" name="recurrence[generation_day]" min="1" readonly max="31" style="width: 100px">&nbsp;
-            </div>
-        </div>
-        <div class="col-md-5">
-            <label class="control-label">Day(s) before next occurrence due date</label>
-        </div>
+        <h3 class="m-0 p-b-10 col-lg-12">Next Recurrence: <?= date('m/d/Y',strtotime($generation_date)); ?></h3>
     </div>
 <?php } ?>
 <script>
@@ -287,7 +283,10 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         var actual_due_date = $("#actual_due_date").val();
         var due_date = $('#due_date').val();
         var a = new Date(due_date);
-        var target_start_days = (parseInt(target_start_month) * parseInt(30) + parseInt(target_start_day));
+        var actual_month=a.getMonth();
+        var actual_year=a.getYear();
+        var total_days=new Date(actual_year, actual_month, 0).getDate();
+        var target_start_days = (parseInt(target_start_month) * parseInt(total_days) + parseInt(target_start_day));
         a.setDate(a.getDate() - parseInt(target_start_days));
         var dateEnd = (a.getMonth() + 1) + '/' + a.getDate() + '/' + a.getFullYear();
         $('#task_start_date').val(dateEnd);
@@ -303,12 +302,16 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         var parse_start_date = Date.parse(actual_start_date);
         var old_date = new Date(parse_due_date);
         var new_date = new Date(parse_start_date);
+        var actual_month=new_date.getMonth();
+        var actual_year=new_date.getYear();
+        var actual_days=new_date.getDate();
+        var total_days=new Date(actual_year, actual_month, 0).getDate();
         if(project_pattern=='monthly'){
             if (parse_start_date > parse_due_date) {
                 var future_new_date = new_date.getDate();
                 var future_new_month = new_date.getMonth();
                 if (future_new_date > actual_day) {
-                    new_date.setDate(new_date.getDate() + parseInt(30));
+                    new_date.setDate(new_date.getDate() + parseInt(total_days));
                     var new_due_date = (new_date.getMonth() + 1) + '/' + actual_day + '/' + new_date.getFullYear();
                 } else {
                     var new_due_date = (new_date.getMonth() + 1) + '/' + actual_day + '/' + new_date.getFullYear();
@@ -319,5 +322,18 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
                 $("#due_date").val(dueDate);
             }
         }
+//        if(project_pattern=='weekly'){
+//                var future_new_date = new_date.getDate();
+//                var future_new_month = new_date.getMonth();
+//                var due_day=$("#due_day").val();
+//                var day_array=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+//                var current_day=day_array[due_day];
+//                var given_date= new Date(actual_year, actual_month - 1, actual_days + parseInt(due_day), 0,0, 0).getTime() / 1000;
+//                var new_month=new_date.setDate(new_date.getDate() + current_day);
+//                new_date.setDate(new_date.getDate() + parseInt(7));
+////                
+//                var new_due_date = (new_date.getMonth() + 1) + '/' + new_date.getDate() + '/' + new_date.getFullYear();
+//                $("#due_date").val(new_due_date);
+//        }
     }
 </script>

@@ -40,8 +40,7 @@ $role = $user_info['role'];
                             <div class="tab-content">
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <a href="#" class="btn btn-primary m-t-15" id="project_add_filter">Add Filter</a>
-                                        <a href="#" class="btn btn-primary m-t-15" id="project_hide_filter" style="display:none">Hide Filter</a>
+                                        <a href="#" class="btn btn-primary m-t-15" id="project_add_filter">Show Filter</a>
                                     </div>
                                     <div class="col-md-2">
                                         <div>
@@ -180,25 +179,25 @@ $role = $user_info['role'];
                                                             <table>
                                                                 <tr>
                                                                     <td style="text-align: right; padding-right: 5px;">New</td>
-                                                                    <td><span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('2-tax_returns', '0-Not Started');loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 1);"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span></td>
+                                                                    <td><span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '0-Not Started');loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td style="text-align: right; padding-right: 5px;">Started</td>
-                                                                    <td><span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('2-tax_returns', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 1);"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span></td>
+                                                                    <td><span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span></td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td style="text-align: right; padding-right: 5px;">Completed</td>
-                                                                    <td><span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('2-tax_returns', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 1);"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span>   </td>
+                                                                    <td><span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span>   </td>
                                                                 </tr>
                                                             </table>
                                                             
                                                         </div>
                                                         <div class="alert-primar-grid">
-                                                            <div class="project-tax-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_tax_donut_<?= $key ?>" data-json="project_tax_data_<?= $key ?>"></div>
-                                                            <script>
-                                                                var project_tax_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': '#309f77'}];
-                                                            </script>
-                                                        </div>
+                                                                <div class="project-bookkeeping-campaigns-donut-<?= $key ?> text-center" data-size="65" id="project_bookkeeping_donut_<?= $key ?>" data-json="project_bookkeeping_data_<?= $key ?>"></div>
+                                                                <script>
+                                                                    var project_bookkeeping_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': '#309f77'}];
+                                                                </script>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 
@@ -584,16 +583,14 @@ $role = $user_info['role'];
 </div>
 <script>
     $("#project_add_filter").click(function(){
-        $("#project_apply_filter").show();
-        addProjectFilterRow();
-        $("#project_hide_filter").show();
-        $("#project_add_filter").hide();
-    });
-    $("#project_hide_filter").click(function(){
-        $("#project_apply_filter").hide();
+        $("#project_apply_filter").toggle();
         clearProjectFilter();
-        $("#project_hide_filter").hide();
-        $("#project_add_filter").show();
+        addProjectFilterRow();
+        if($("#project_add_filter").text()=='Show Filter'){
+            $("#project_add_filter").text('Hide Filter');
+        }else{
+            $("#project_add_filter").text('Show Filter');
+        }
     });
     loadProjectDashboard('<?= $status; ?>', '<?= $request_type; ?>', '<?= $template_id; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '', '', '', '', '', '', '', '', 1,<?= $template_cat_id ?>);
     reflactProjectFilterWithCategory('<?= $category ?>', '');
