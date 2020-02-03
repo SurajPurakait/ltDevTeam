@@ -81,9 +81,9 @@ if ($modal_type != "edit"):
                         <input placeholder="" class="form-control" type="text" id="website" name="bank_website" title="Website URL" required="">
                         <div class="errorMessage text-danger"></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="display:none;">
                         <label>Number Of Transactions<span class="text-danger">*</span></label>
-                        <select class="form-control" name="number_of_transactions" id="number_of_transactions" title="Number Of Transactions" required="">
+                        <select class="form-control" name="number_of_transactions" id="number_of_transactions" title="Number Of Transactions">
                             <option value="">Select</option>
                             <option value="0-100">0-100</option>
                             <option value="101-200">101-200</option>
@@ -97,7 +97,7 @@ if ($modal_type != "edit"):
                         <input class="m-t-5" type="file" name="acc_file" id="acc_file">
                         <div class="errorMessage text-danger"></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="display:none; ">
                         <label>Total Amount (in $)</label> 
                         <input class="form-control" type="text" readonly id="total_amount" name="total_amount" value="">
                         <div class="errorMessage text-danger"></div>
