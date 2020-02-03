@@ -18,26 +18,28 @@
     }
 
     $select = [
-        'ord.complete_date AS complete_date',
-        'ord.late_status AS late_status',
-        'ord.order_date AS order_date',
+        'ord.id AS id',  
+        'ord.status AS status',  
+        'services.id AS services_id',  
+        'services.dept AS department_id',  
+        'ord.order_date AS order_date', 
+        'ord.late_status AS late_status', 
+        'ord.start_date AS start_date', 
+        'ord.complete_date AS complete_date', 
+        'ord.target_start_date AS target_start_date', 
+        'ord.target_complete_date AS target_complete_date',  
+        'services.category_id AS category_id', 
+        'services.id AS service_id', 
         'indt.office AS office_id',
         'srv_rq.id AS service_request_id',
-        // 'ord.status AS status',
-        'srv_rq.status AS status',
-        'srv.id AS services_id',
-        'srv.dept AS department_id',
-        'srv.category_id AS category_id', 
-        'srv.description AS service_name',
-        // '(SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as office',
+        '(SELECT ofc.office_id FROM office as ofc WHERE ofc.id = indt.office) as office, services.description AS service_name',
         '(SELECT CONCAT(",",GROUP_CONCAT(`msg`), ",") FROM `sos_notification` WHERE reference_id = ord.id and reference = "order") as sos'
     ];
     
-    $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
-    // $where['ord.status'] = 'AND `ord`.`status` NOT IN ("7","10") ';
+    $where['ord.reference'] = '`ord`.`reference` != \'invoice\' ';
+    $where['ord.status'] = 'AND `ord`.`status` NOT IN ("7","10") ';
 
-    $table = '`order` AS ord INNER JOIN service_request AS srv_rq ON srv_rq.order_id = ord.id LEFT JOIN internal_data indt ON indt.reference_id = `ord`.`reference_id` INNER JOIN services AS srv ON srv.id = ord.service_id';
-
+    $table = '`order` AS `ord` INNER JOIN `service_request` AS `srv` ON `srv`.order_id = `ord`.id WHERE `ord`.reference = "invoice"'; 
     $query = 'SELECT ' . implode(', ', $select) . ' FROM ' . $table . ' WHERE ' . implode('', $where)  . 'GROUP BY ord.id ORDER BY ord.id DESC';
     // echo $query;exit;
     mysqli_query($conn,'TRUNCATE report_dashboard_service');
@@ -87,6 +89,7 @@
             } else {
                 $department = 0;
             }
+            
             $office = $rsd['office_id'];
             
             if(!empty($rsd['order_date'])) {
@@ -99,8 +102,11 @@
                 $order_date = '0001-01-01';
             }
             
-            $insert_sql = "INSERT INTO `report_dashboard_service`(`service_name`,`service_request_id`, `status`,`order_date` ,`date_completed`, `date_complete_actual`, `late_status`, `sos`, `category`, `department`, `office`)
-            VALUES ('$service_name','$service_request_id','$status','$order_date','$date_completed', '$date_complete_actual', '$late_status', '$sos', '$category', '$department', '$office')";
+
+            $insert_sql = "INSERT INTO `report_dashboard_service`(`service_name`, `status`,`order_date` ,`date_completed`, `date_complete_actual`, `late_status`, `sos`, `category`, `department`, `office`)
+            VALUES ('$service_name','$status','$order_date','$date_completed', '$date_complete_actual', '$late_status', '$sos', '$category', '$department', '$office')";
+            // echo $insert_sql;
+            // echo "<hr>";
             mysqli_query($conn,$insert_sql)or die('Insert Error');
         }
     }

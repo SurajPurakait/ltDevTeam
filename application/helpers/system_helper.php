@@ -3607,3 +3607,10 @@ if(!function_exists('get_invoice_id')){
         return $ci->Service_model->get_invoice_id($order_id);
     }
 }
+if(!function_exists('get_template_cat_id')){
+    function get_template_cat_id($template_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getTemplateCategoryId($template_id);
+    }
+}
