@@ -233,6 +233,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         $generation_date = NULL;
     } else {
         $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
+        $generation_date=date('Y').'-'.date('m').'-'.$project_recurrence_main_data['due_day'];
     }
     $project_recurrence_main_data['generation_date'] = $generation_date;
     $month_array = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'Dececmber');
@@ -308,10 +309,13 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             var template_cat_id=$('#template_cat_id').val();
             var create_date=new Date(select_month+' '+due_day+' '+select_year);
             var next_month=parseInt(select_month)+parseInt(target_start_month);
+            var day_of_select_month=new Date(select_year, select_month, 0).getDate();
+            var next_month_of_selected_month= new Date(create_date.getFullYear(), create_date.getMonth(), create_date.getDate()+30);
+            var day_of_next_selected_month=new Date(next_month_of_selected_month.getYear(),next_month_of_selected_month.getMonth(),0).getDate();
             if(target_start_month==1){
                 var total_days=30;
             }else{
-                var total_days=60;
+                var total_days=parseInt(day_of_select_month)+parseInt(day_of_next_selected_month);
             }
             if(next_month==13){
                 next_month=01;
@@ -323,7 +327,10 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             $("#due_date").val(due_date);
             var next_due_month=parseInt(next_month)+parseInt(1);
             var next_due=new Date(due_date);
-            next_due.setDate(next_due.getDate() + parseInt(30));
+            next_due.setDate(next_due.getDate() + parseInt(31));
+            if(next_due_month==13){
+                next_due_month=01;
+            }
             var next_due_date=next_due_month + '/' + due_day + '/' + next_due.getFullYear();
             $('#next_due_date').val(next_due_date);
             var next_recurrence=new Date(next_due_date);
@@ -333,17 +340,19 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             if(target_start_month==1){
                 var total_recurrence_days=(parseInt(generation_month)*parseInt(sales_month))+parseInt(generation_day);
             }else{
-                var total_recurrence_days=parseInt(60)+parseInt(generation_day);
+                var total_recurrence_days=(parseInt(generation_month)*parseInt(sales_month))+parseInt(generation_day);
             }
             next_recurrence.setDate(next_recurrence.getDate() - parseInt(total_recurrence_days));
             var next_recurrence_month=parseInt(next_due_month)-parseInt(target_start_month);
             if(next_recurrence_month==0){
                 next_recurrence_month=12;
+            }if(next_recurrence_month==-1){
+                next_recurrence_month=11;
             }
             if(template_cat_id==1){
-                var next_recurrence_date=next_recurrence_month + '/' + due_day + '/' + next_due.getFullYear();
+                var next_recurrence_date=next_recurrence_month + '/' + due_day + '/' + next_recurrence.getFullYear();
             }else if(template_cat_id==3){
-                var next_recurrence_date=(next_recurrence.getMonth()+ 1) + '/' + next_recurrence.getDate() + '/' + next_due.getFullYear();
+                var next_recurrence_date=(next_recurrence.getMonth()+ 1) + '/' + next_recurrence.getDate() + '/' + next_recurrence.getFullYear();
             }
             $("#next_recurrence").text(next_recurrence_date);
             $('#generation_date').val(next_recurrence_date);
