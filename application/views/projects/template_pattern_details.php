@@ -315,7 +315,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             if(target_start_month==1){
                 var total_days=30;
             }else{
-                var total_days=parseInt(day_of_select_month)+parseInt(day_of_next_selected_month);
+                var total_days=parseInt(day_of_select_month)+parseInt(day_of_next_selected_month)+parseInt(1);
             }
             if(next_month==13){
                 next_month=01;
@@ -323,6 +323,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
                 next_month=02;
             }
             create_date.setDate(create_date.getDate() + parseInt(total_days));
+            alert(create_date);
             var due_date=next_month + '/' + due_day + '/' + create_date.getFullYear();
             $("#due_date").val(due_date);
             var next_due_month=parseInt(next_month)+parseInt(1);
