@@ -141,6 +141,7 @@ if ($result = mysqli_query($conn, $sql)) {
                                 $old_due_date = $row3['due_date'];
                                 $old_next_due_date= $row3['next_due_date'];
                                 $old_generation_date= $row3['generation_date'];
+                                $start_month=date('n',strtotime($old_generation_date));
                                 if (strlen($row3['actual_due_month']) == 1) {
                                     $row3['actual_due_month'] = '0' . $row3['actual_due_month'];
                                 }
@@ -237,7 +238,7 @@ if ($result = mysqli_query($conn, $sql)) {
                                 }
                                 
 //                              for lots of changing it will created
-                                $due_date=date('Y-m-d',strtotime('+ 1 month',strtotime($old_due_date)));
+                                $due_date=date('Y-m-d',strtotime('+ 2 month',strtotime($old_generation_date)));
                                 $insert_project_recurrence_main_data['due_date']="'".$due_date."'";
 //                                end of lots of chang
                                 $actual_month = date('m', strtotime('-1 month', strtotime($due_date)));
@@ -247,7 +248,7 @@ if ($result = mysqli_query($conn, $sql)) {
 
                                 if ($row3['pattern'] == 'monthly') {
                                     $next_due_date = date("Y-m-d", strtotime("+1 month", strtotime($due_date)));
-                                    $insert_project_recurrence_main_data['next_due_date'] = "'".date("Y-m-d", strtotime("+1 month", strtotime($old_next_due_date)))."'";
+                                    $insert_project_recurrence_main_data['next_due_date'] = "'".$next_due_date."'";
                                 } elseif ($row3['pattern'] == 'annually') {
                                     $next_due_date = date("Y-m-d", strtotime("+1 year", strtotime($due_date)));
                                     $insert_project_recurrence_main_data['next_due_date'] = $next_due_date;
@@ -262,7 +263,8 @@ if ($result = mysqli_query($conn, $sql)) {
                                 }
                                 $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($next_due_date)));
 
-                                $insert_project_recurrence_main_data['generation_date'] = "'".date("Y-m-d", strtotime("+1 month", strtotime($old_generation_date)))."'";
+                                $insert_project_recurrence_main_data['generation_date'] = "'".$generation_date."'";
+                                $insert_project_recurrence_main_data['start_month']="'".$start_month."'";
                                 $columns4 = implode(", ", array_keys($insert_project_recurrence_main_data));
                                 $escaped_values4 = array_values($insert_project_recurrence_main_data);
                                 $values4 = implode(", ", $escaped_values4);
