@@ -961,7 +961,7 @@ class Patch extends CI_Controller {
         foreach ($internal_data_details as $idd) {
 
     
-                $sql = 'SELECT CONCAT(GROUP_CONCAT(`id`), ",") AS ids,CONCAT(GROUP_CONCAT(`practice_id`), ",") AS practice_ids FROM internal_data WHERE reference = "company" AND practice_id != "" GROUP BY practice_id HAVING COUNT(practice_id) > 1';
+                $sql = 'SELECT CONCAT(GROUP_CONCAT(`id`), ",") AS ids,CONCAT(GROUP_CONCAT(`practice_id`), ",") AS practice_ids FROM internal_data WHERE reference = "company" AND practice_id != "" AND practice_id != "1" GROUP BY practice_id HAVING COUNT(practice_id) > 1';
                 $data = $this->db->query($sql)->result_array();
                 
                 foreach ($data as $dt) {
