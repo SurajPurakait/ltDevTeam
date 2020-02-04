@@ -198,25 +198,28 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                     <tbody>
                         <tr>
                             <?php if (!empty($get_individual_data)) { 
-                                $count = (count($get_individual_data)-1);
+                                // $count = (count($get_individual_data)-1);
+                                
                                 ?>
                                 <td <?= $style; ?>>
                                     Owners
                                 </td>
+
                                 <td <?= $style; ?>>
-                                    <div class="row">
-                                        <div class="col-lg-10" style="padding-top:8px">
+                                    <?php foreach($get_individual_data as $ind){ ?>
+                                    <!-- <div class="row"> -->
+                                        <!-- <div class="col-lg-10" style="padding-top:8px"> -->
                                             
-                                                <b><?= $get_individual_data[$count]['title'] ?></b><br>
+                                                <b><?= $ind['title'] ?></b><br>
                                                 <b>Name:</b>
-                                                <?= $get_individual_data[$count]['last_name'] . ', ' . '' . $get_individual_data[$count]['first_name'] . ' ' . $get_individual_data[$count]['middle_name']; ?><br>
+                                                <?= $ind['last_name'] . ', ' . '' . $ind['first_name'] . ' ' . $ind['middle_name']; ?><br>
                                                 <b>Percentage</b>
-                                                <?= $get_individual_data[$count]['percentage'] . '%' ?>  
-                                                <p>
+                                                <?= $ind['percentage'] . '%' ?>  
                                                 <hr>
                                            
-                                        </div>
-                                    </div>
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                <?php } ?>
                                 </td>
                             <?php } else { ?>
                                 <td <?= $style; ?>>
