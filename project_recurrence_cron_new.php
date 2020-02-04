@@ -238,7 +238,11 @@ if ($result = mysqli_query($conn, $sql)) {
                                 }
                                 
 //                              for lots of changing it will created
-                                $due_date=date('Y-m-d',strtotime('+ 2 month',strtotime($old_generation_date)));
+                                if($template_cat_id==1){
+                                    $due_date=date('Y-m-d',strtotime('+ 2 month',strtotime($old_generation_date)));
+                                }elseif($template_cat_id==3){
+                                    $due_date=date('Y-m-d',strtotime('+ 1 month',strtotime($old_generation_date)));
+                                }
                                 $insert_project_recurrence_main_data['due_date']="'".$due_date."'";
 //                                end of lots of chang
                                 $actual_month = date('m', strtotime('-1 month', strtotime($due_date)));
@@ -248,6 +252,15 @@ if ($result = mysqli_query($conn, $sql)) {
 
                                 if ($row3['pattern'] == 'monthly') {
                                     $next_due_date = date("Y-m-d", strtotime("+1 month", strtotime($due_date)));
+                                    if($template_cat_id==1){
+                                        $next_due_month=date('m',strtotime($next_due_date));
+                                        $next_due_year=date('Y',strtotime($next_due_date));
+                                        $next_due_date=$next_due_year.'-'.$next_due_month.'-01';
+                                    }elseif($template_cat_id==3){
+                                        $next_due_month=date('m',strtotime($next_due_date));
+                                        $next_due_year=date('Y',strtotime($next_due_date));
+                                        $next_due_date=$next_due_year.'-'.$next_due_month.'-19';
+                                    }
                                     $insert_project_recurrence_main_data['next_due_date'] = "'".$next_due_date."'";
                                 } elseif ($row3['pattern'] == 'annually') {
                                     $next_due_date = date("Y-m-d", strtotime("+1 year", strtotime($due_date)));
