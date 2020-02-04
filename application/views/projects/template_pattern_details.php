@@ -323,7 +323,6 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
                 next_month=02;
             }
             create_date.setDate(create_date.getDate() + parseInt(total_days));
-            alert(create_date);
             var due_date=next_month + '/' + due_day + '/' + create_date.getFullYear();
             $("#due_date").val(due_date);
             var next_due_month=parseInt(next_month)+parseInt(1);
