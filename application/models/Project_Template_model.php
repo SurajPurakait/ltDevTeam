@@ -1118,6 +1118,15 @@ class Project_Template_model extends CI_Model {
         $this->db->trans_begin();
 //        print_r($post);die;
         $project_client_ids = $post['project']['client_id'];
+        $user_due_date=date('Y-m-d',strtotime($post['project']['due_date']));
+        $user_start_month=$post['project']['start_month'];
+        $user_next_due_date=date('Y-m-d',strtotime($post['project']['next_due_date']));
+        $user_generation_date=date('Y-m-d',strtotime($post['project']['generation_date']));
+        unset($post['project']['due_date']);
+        unset($post['project']['start_month']);
+        unset($post['project']['start_year']);
+        unset($post['project']['next_due_date']);
+        unset($post['project']['generation_date']);
         if (!empty($project_client_ids)) {
             foreach ($project_client_ids as $pcid) {
 
@@ -1140,15 +1149,7 @@ class Project_Template_model extends CI_Model {
 //                }else{
 //                    $post['project']['created_at']=date('Y-m-d');
 //                }
-                $user_due_date=date('Y-m-d',strtotime($post['project']['due_date']));
-                $user_start_month=$post['project']['start_month'];
-                $user_next_due_date=date('Y-m-d',strtotime($post['project']['next_due_date']));
-                $user_generation_date=date('Y-m-d',strtotime($post['project']['generation_date']));
-                unset($post['project']['due_date']);
-                unset($post['project']['start_month']);
-                unset($post['project']['start_year']);
-                unset($post['project']['next_due_date']);
-                unset($post['project']['generation_date']);
+                
                 $this->db->insert('projects', $post['project']);
                 $insert_id = $this->db->insert_id();
                 $notedata = $this->input->post('project_note');
