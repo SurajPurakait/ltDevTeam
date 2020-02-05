@@ -1,9 +1,13 @@
 <?php
-
 $servername = "localhost";
-$username = "root";
-$password = "root";
-$db = 'leafnet_new';
+$username = "leafnet_db_user";
+$password = "leafnet@123";
+$db = 'leafnet_stagings';
+
+//$servername = "localhost";
+//$username = "root";
+//$password = "root";
+//$db = 'leafnet_new';
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $db);
 // Check connection
@@ -348,6 +352,11 @@ if ($result = mysqli_query($conn, $sql)) {
                                 }else{
                                     $responsible_task_staff=$row5['responsible_task_staff'];
                                 }
+                                if($row5['is_all']==''){
+                                    $is_all_task_staff='NULL';
+                                }else{
+                                    $is_all_task_staff=$row5['is_all'];
+                                }
                                 $insert_project_task_data = array(
                                     'template_main_id' => "'" . $row5['template_main_id'] . "'",
                                     'project_id' => "'" . $project_id_new . "'",
@@ -360,7 +369,7 @@ if ($result = mysqli_query($conn, $sql)) {
                                     'target_complete_date' => "'" . $row5['target_complete_date'] . "'",
                                     'target_complete_day' => "'" . $row5['target_complete_day'] . "'",
                                     'tracking_description' => 0,
-                                    'is_all' => "'" . $row5['is_all'] . "'",
+                                    'is_all' => $is_all_task_staff,
                                     'department_id' => "'" . $row5['department_id'] . "'",
                                     'office_id' => $task_office_id,
                                     'responsible_task_staff' => $responsible_task_staff,
