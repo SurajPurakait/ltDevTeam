@@ -51,9 +51,9 @@
                     <td><?= $totals['total_no_of_invoice'] ; ?></td>
                     <td><?= round($totals['total_amounts']) ; ?></td>
                     <td><?= round($totals['total_amount_collected']) ; ?></td>
-                    <td><?= round($totals['total_unpaid']) ; ?></td>
-                    <td><?= round($totals['total_partial']) ; ?></td>
-                    <td><?= round($totals['total_paid']) ; ?></td>
+                    <td><?= round($totals['total_unpaid'])."%" ; ?></td>
+                    <td><?= round($totals['total_partial'])."%" ; ?></td>
+                    <td><?= round($totals['total_paid'])."%" ; ?></td>
                     <td><?= $totals['total_less_than_30'] ; ?></td>
                     <td><?= $totals['total_less_than_60'] ; ?></td>
                     <td><?= $totals['total_more_than_60'] ; ?></td>
