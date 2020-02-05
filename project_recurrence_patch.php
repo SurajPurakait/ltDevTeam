@@ -20,7 +20,7 @@ if ($result = mysqli_query($conn, $sql)) {
         while ($pattern_details = mysqli_fetch_array($result)) {
             $recurDate = $pattern_details['generation_date'];
             $curDate = date('Y-m-d');
-            if (strtotime($curDate) == strtotime($recurDate)) {   
+            if (strtotime($curDate) >= strtotime($recurDate)) {   //this condition is off for past recurrence date
                 $project_id = $pattern_details['project_id'];
                 //update old table
                 $updatesql = "update `project_recurrence_main` set generated_by_cron= 1 where id = " . $pattern_details['id'];
@@ -403,7 +403,7 @@ if ($result = mysqli_query($conn, $sql)) {
                         //end project_task table 
                     }
                 }
-            }
+            }// current day condition is off for past recurrence date
         }
     }
 }
