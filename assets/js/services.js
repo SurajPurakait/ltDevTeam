@@ -1675,7 +1675,7 @@ function request_create_sales_tax_application() {
         processData: false,
         success: function (result) {
 //            alert(result);
-            //console.log("Result: " + result); return false;
+            // console.log("Result: " + result); return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
 //                clearCacheFormFields('form_create_payroll');
