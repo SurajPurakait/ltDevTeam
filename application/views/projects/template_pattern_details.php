@@ -315,7 +315,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             if(target_start_month==1){
                 var total_days=30;
             }else{
-                var total_days=parseInt(day_of_select_month)+parseInt(day_of_next_selected_month);
+                var total_days=parseInt(day_of_select_month)+parseInt(day_of_next_selected_month)+parseInt(1);
             }
             if(next_month==13){
                 next_month=01;
