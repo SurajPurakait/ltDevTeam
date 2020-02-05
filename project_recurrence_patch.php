@@ -298,7 +298,15 @@ if ($result = mysqli_query($conn, $sql)) {
                                 }
                                 $actual_year = date('Y', strtotime($next_due_date));
                                 $total_days = cal_days_in_month(CAL_GREGORIAN, $actual_month, $actual_year);
-                                $generation_days = ((int) $row3['generation_month'] * $total_days) + (int) $row3['generation_day'];
+                                if($actual_year=='2019'){
+                                    $generation_days = ((int) $row3['generation_month'] * 30) + (int) $row3['generation_day']-1;
+                                }else{
+                                    if($template_cat_id==1){
+                                        $generation_days = ((int) $row3['generation_month'] * 30) + (int) $row3['generation_day'];    
+                                    }else{
+                                        $generation_days = ((int) $row3['generation_month'] * $total_days) + (int) $row3['generation_day']-2;    
+                                    }
+                                }
                                 
                                 $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($next_due_date)));
                                 if($template_cat_id==1|| $template_cat_id==3){
