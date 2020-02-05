@@ -383,7 +383,7 @@ if ($result = mysqli_query($conn, $sql)) {
                                     'responsible_task_staff' => $responsible_task_staff,
                                     'date_started' => 'NULL',
                                     'date_completed' => 'NULL',
-                                    'status' => 0,
+                                    'is_input_form'=>"'".$row5['is_input_form']."'",
                                     'input_form_type'=>"'".$row5['input_form_type']."'",
                                     'bookkeeping_input_type'=>"'".$row5['bookkeeping_input_type']."'"
                                 );
