@@ -1184,12 +1184,13 @@ class Project_Template_model extends CI_Model {
                 $this->db->where('project_id', $insert_id);
                 $manage_result = $this->db->get()->row();
                 $res = $this->db->get_where('internal_data', ['reference_id' => $manage_result->client_id])->row();
-
-                if ($manage_result->office_id == 3 && $manage_result->responsible_staff == 1) {
-                    $partner_id = $res->partner;
-                }
-                if ($manage_result->office_id == 3 && $manage_result->responsible_staff == 2) {
-                    $manager_id = $res->manager;
+                if(!empty($res)){
+                    if ($manage_result->office_id == 3 && $manage_result->responsible_staff == 1) {
+                        $partner_id = $res->partner;
+                    }
+                    if ($manage_result->office_id == 3 && $manage_result->responsible_staff == 2) {
+                        $manager_id = $res->manager;
+                    }
                 }
 
                 if (isset($partner_id) && $partner_id != '') {
@@ -1585,12 +1586,13 @@ class Project_Template_model extends CI_Model {
                     $new_key1 = (int) +0;
                     foreach ($manage_result1 as $key1 => $mng_result) {
                         $res = $this->db->get_where('internal_data', ['reference_id' => $mng_result['client_id']])->row();
-
-                        if ($mng_result['department_id'] == 2 && $mng_result['responsible_task_staff'] == 1) {
-                            $partner_id = $res->partner;
-                        }
-                        if ($mng_result['department_id'] == 2 && $mng_result['responsible_task_staff'] == 2) {
-                            $manager_id = $res->manager;
+                        if(!empty($res)){
+                            if ($mng_result['department_id'] == 2 && $mng_result['responsible_task_staff'] == 1) {
+                                $partner_id = $res->partner;
+                            }
+                            if ($mng_result['department_id'] == 2 && $mng_result['responsible_task_staff'] == 2) {
+                                $manager_id = $res->manager;
+                            }
                         }
 
                         if (isset($partner_id) && $partner_id != '') {
@@ -2890,7 +2892,14 @@ class Project_Template_model extends CI_Model {
 //                    return $this->db->get()->result_array();
 //                }
 //                break;
-            case 5:
+            case 5:{
+                $this->db->select("ind.reference_id as id,ind.practice_id as name");
+                $this->db->from('projects AS p');
+                $this->db->join('internal_data as ind','p.client_id=ind.reference_id','inner');
+                $this->db->group_by('p.client_id');
+                return $this->db->get()->result_array();
+                
+            }break;
             case 9:
             case 11:
             case 8: {

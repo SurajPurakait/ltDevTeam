@@ -23,7 +23,7 @@ class Project extends CI_Controller {
             2 => "Template",
             3 => "Pattern",
             4 => "Client Type",
-//            5 => "Client Id",
+            5 => "Client Id",
             6 => "Responsible",
             7 => "Assigned To",
             8 => "Tracking",
