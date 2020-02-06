@@ -1,9 +1,13 @@
 <?php
-
 $servername = "localhost";
-$username = "root";
-$password = "root";
-$db = 'leafnet_new';
+$username = "leafnet_db_user";
+$password = "leafnet@123";
+$db = 'leafnet_stagings';
+
+//$servername = "localhost";
+//$username = "root";
+//$password = "root";
+//$db = 'leafnet_new';
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $db);
 // Check connection
@@ -20,7 +24,7 @@ if ($result = mysqli_query($conn, $sql)) {
         while ($pattern_details = mysqli_fetch_array($result)) {
             $recurDate = $pattern_details['generation_date'];
             $curDate = date('Y-m-d');
-            if (strtotime($curDate) == strtotime($recurDate)) {   
+            if (strtotime($curDate) >= strtotime($recurDate)) {   //this condition is off for past recurrence date
                 $project_id = $pattern_details['project_id'];
                 //update old table
                 $updatesql = "update `project_recurrence_main` set generated_by_cron= 1 where id = " . $pattern_details['id'];
@@ -294,7 +298,15 @@ if ($result = mysqli_query($conn, $sql)) {
                                 }
                                 $actual_year = date('Y', strtotime($next_due_date));
                                 $total_days = cal_days_in_month(CAL_GREGORIAN, $actual_month, $actual_year);
-                                $generation_days = ((int) $row3['generation_month'] * $total_days) + (int) $row3['generation_day'];
+                                if($actual_year=='2019'){
+                                    $generation_days = ((int) $row3['generation_month'] * 30) + (int) $row3['generation_day']-1;
+                                }else{
+                                    if($template_cat_id==1){
+                                        $generation_days = ((int) $row3['generation_month'] * 30) + (int) $row3['generation_day'];    
+                                    }else{
+                                        $generation_days = ((int) $row3['generation_month'] * $total_days) + (int) $row3['generation_day']-2;    
+                                    }
+                                }
                                 
                                 $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($next_due_date)));
                                 if($template_cat_id==1|| $template_cat_id==3){
@@ -348,6 +360,11 @@ if ($result = mysqli_query($conn, $sql)) {
                                 }else{
                                     $responsible_task_staff=$row5['responsible_task_staff'];
                                 }
+                                if($row5['is_all']==''){
+                                    $is_all_task_staff='NULL';
+                                }else{
+                                    $is_all_task_staff=$row5['is_all'];
+                                }
                                 $insert_project_task_data = array(
                                     'template_main_id' => "'" . $row5['template_main_id'] . "'",
                                     'project_id' => "'" . $project_id_new . "'",
@@ -360,13 +377,13 @@ if ($result = mysqli_query($conn, $sql)) {
                                     'target_complete_date' => "'" . $row5['target_complete_date'] . "'",
                                     'target_complete_day' => "'" . $row5['target_complete_day'] . "'",
                                     'tracking_description' => 0,
-                                    'is_all' => "'" . $row5['is_all'] . "'",
+                                    'is_all' => $is_all_task_staff,
                                     'department_id' => "'" . $row5['department_id'] . "'",
                                     'office_id' => $task_office_id,
                                     'responsible_task_staff' => $responsible_task_staff,
                                     'date_started' => 'NULL',
                                     'date_completed' => 'NULL',
-                                    'status' => 0,
+                                    'is_input_form'=>"'".$row5['is_input_form']."'",
                                     'input_form_type'=>"'".$row5['input_form_type']."'",
                                     'bookkeeping_input_type'=>"'".$row5['bookkeeping_input_type']."'"
                                 );
@@ -403,7 +420,7 @@ if ($result = mysqli_query($conn, $sql)) {
                         //end project_task table 
                     }
                 }
-            }
+            }// current day condition is off for past recurrence date
         }
     }
 }

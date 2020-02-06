@@ -11,7 +11,7 @@
                             <div class="tabs-container">
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="active"><a class="nav-link" data-toggle="tab" href="#tab-1">Services</a></li>
-                                    <li><a class="nav-link" data-toggle="tab" href="#tab-billing" id="report_billing">Billings</a></li>
+                                    <li><a class="nav-link" data-toggle="tab" href="#tab-billing" id="report_billing">Billing</a></li>
                                     <li><a class="nav-link" data-toggle="tab" href="#tab-action">Actions</a></li>
                                     <li><a class="nav-link" data-toggle="tab" href="#tab-projects">Projects</a></li>
                                     <li><a class="nav-link" data-toggle="tab" href="#tab-clients">Clients</a></li>
@@ -88,8 +88,8 @@
                                     </div>
                                     <div role="tabpanel" id="tab-billing" class="tab-pane">
                                         <div class="panel-body">
-                                         <div class="row">
-                                                <div class="col-md-2 m-t-5" style="width: 120px;">
+                                            <div class="row">
+                                                <!-- <div class="col-md-2 m-t-5" style="width: 120px;">
                                                     <h4>Select Period</h4> 
                                                 </div>
                                                 <div class="col-md-3 p-r-0 p-l-0">
@@ -97,8 +97,8 @@
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
                                                     <button type="button" class="btn btn-success" id="report-billing-range-btn" style="border-radius: 0;">Apply</button>
-                                                </div>
-                                                <div class="col-md-5 m-t-6 text-right">
+                                                </div> -->    
+                                                <div class="col-md-5 col-md-offset-7 m-t-6 text-right">
                                                     <button type="button" class="btn btn-warning" id="report-billing-refresh-btn" style="border-radius: 0;" onclick="refresh_billing_report()"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
                                                 </div>
                                             </div>
@@ -106,7 +106,7 @@
                                                 $dateRangeBilling = $order_start_date.' - '.$current_date;
                                             ?>    
                                             <input type="hidden" name="billing_range_report_value" id="billing_range_report">
-                                            <div class="ibox m-t-25" id="billing_invoice_payments_section" onclick="show_billing_data()">
+                                            <div class="ibox m-t-5 m-b-15" id="billing_invoice_payments_section" onclick="show_billing_data()">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Invoice Payments</h5>
                                                     <div class="ibox-tools">

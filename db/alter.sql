@@ -1157,10 +1157,36 @@ ALTER TABLE `project_recurrence_main` ADD `target_end_months` INT(2) NULL DEFAUL
 ALTER TABLE `project_recurrence_main` ADD `target_start_date` DATE NULL DEFAULT NULL AFTER `generated_by_cron`, ADD `target_end_date` DATE NULL DEFAULT NULL AFTER `target_start_date`; 
 ALTER TABLE `project_recurrence_main` ADD `start_date` DATE NULL DEFAULT NULL COMMENT 'when project started' AFTER `generation_date`; 
 
-/*live end*/
+
 /*31.01.2020*/
 
 ALTER TABLE `project_recurrence_main` DROP `start_date`
 ALTER TABLE `project_recurrence_main` ADD `start_month` VARCHAR(50) NULL DEFAULT NULL AFTER `generation_date`; 
 ALTER TABLE `report_dashboard_service` ADD `service_request_id` INT(11) NOT NULL AFTER `id`; 
 
+/*live end*/
+
+/* 05.02.2020 */
+ALTER TABLE `sales_tax_application` CHANGE `order_id` `order_id` INT(11) NOT NULL; 
+ALTER TABLE `sales_tax_application` CHANGE `reference_id` `reference_id` INT(11) NOT NULL; 
+ALTER TABLE `sales_tax_application` CHANGE `state_recurring` `state_recurring` INT(4) NOT NULL; 
+ALTER TABLE `sales_tax_application` CHANGE `country_recurring` `country_recurring` INT(4) NOT NULL; 
+
+ALTER TABLE `sales_tax_recurring` 
+ADD `sales_tax_number` INT(11) NOT NULL AFTER `contact_phone_no`, 
+ADD `business_partner_number` INT(11) NOT NULL AFTER `sales_tax_number`, 
+ADD `sales_tax_business_description` LONGTEXT NOT NULL AFTER `business_partner_number`, 
+ADD `bank_account_number` INT(11) NOT NULL AFTER `sales_tax_business_description`, 
+ADD `bank_routing_number` INT(11) NOT NULL AFTER `bank_account_number`, 
+ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `bank_routing_number`; 
+
+ALTER TABLE `sales_tax_application` 
+ADD `sales_tax_number` INT(11) NOT NULL AFTER `contact_phone_no`, 
+ADD `business_partner_number` INT(11) NOT NULL AFTER `sales_tax_number`, 
+ADD `sales_tax_business_description` LONGTEXT NOT NULL AFTER `business_partner_number`, 
+ADD `sales_bank_account_number` INT(11) NOT NULL AFTER `sales_tax_business_description`, 
+ADD `sales_bank_routing_number` INT(11) NOT NULL AFTER `sales_bank_account_number`, 
+ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `sales_bank_routing_number`;
+
+ALTER TABLE `sales_tax_application` CHANGE `sales_bank_account_number` `sales_bank_account_number` VARCHAR(100) NOT NULL; 
+ALTER TABLE `sales_tax_application` CHANGE `sales_bank_routing_number` `sales_bank_routing_number` VARCHAR(100) NOT NULL; 

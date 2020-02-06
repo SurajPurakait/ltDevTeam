@@ -5,24 +5,24 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h3 class="modal-title">Add Account</h3>
             </div>
-            <?php
-            if (!empty($account_details)) {
-                foreach ($account_details as $val) {
+           <!--  <?php
+            //if (!empty($account_details)) {
+                //foreach ($account_details as $val) {
                     ?>
                     <div class="m-t-10">
                         <div class="col-md-6">
                             <div class="form-group" id="bookkeeping_account_list">
-                                <a class="btn btn-success"  href="javascript:void(0)" onclick="set_exist_bookkeeping_value('<?= $val['type_of_account'] ?>', '<?= $val['bank_name'] ?>', '<?= $val['account_number'] ?>', '<?= $val['routing_number'] ?>', '<?= $val['bank_website'] ?>', '<?= $val['user'] ?>', '<?= $val['password'] ?>')">
-                                    <b>Bank Name: <?= $val['bank_name'] ?></b><br>
-                                    <b>Account Number: </b><?= $val['account_number'] ?><br>
+                                <a class="btn btn-success"  href="javascript:void(0)" onclick="set_exist_bookkeeping_value('<= $val['type_of_account'] ?>', '<= $val['bank_name'] ?>', '<= $val['account_number'] ?>', '<= $val['routing_number'] ?>', '<= $val['bank_website'] ?>', '<= $val['user'] ?>', '<= $val['password'] ?>')">
+                                    <b>Bank Name: <= $val['bank_name'] ?></b><br>
+                                    <b>Account Number: </b><= $val['account_number'] ?><br>
                                 </a>
                             </div>
                         </div>
                     </div>
                     <?php
-                }
-            }
-            ?>
+                //}
+           // }
+            ?> -->
             <form role="form" id="form_accounts" name="form_accounts">
                 <div class="modal-body">
                     <div class="form-group">

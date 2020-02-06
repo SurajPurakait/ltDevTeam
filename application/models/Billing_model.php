@@ -2960,6 +2960,7 @@ class Billing_model extends CI_Model {
                 'id' => $do['id'],
                 'office' => $do['name'],
                 'total_invoice' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'], 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
+                'total_amount' => $this->total_amount_calculation($do['id'],$daterange),
                 'amount_collected' => $this->amount_collected($do['id'],$daterange),
                 'unpaid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Unpaid', 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
                 'paid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Paid', 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
@@ -2978,6 +2979,7 @@ class Billing_model extends CI_Model {
                 'id' => $do['id'],
                 'office' => $do['name'],
                 'total_invoice' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id']))->num_rows(),
+                'total_amount' => $this->total_amount_calculation($do['id']),
                 'amount_collected' => $this->amount_collected($do['id']),
                 'unpaid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Unpaid'))->num_rows(),
                 'paid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Paid'))->num_rows(),
@@ -3004,6 +3006,19 @@ class Billing_model extends CI_Model {
         $this->db->where('office_id',$ofc_id);
         $amount_data = $this->db->get('report_dashboard_billing')->result_array();
         return $amount_collected = array_sum(array_column($amount_data,'amount_collected'));
+    }
+    public function total_amount_calculation($ofc_id,$date_range = "") {
+        if (!empty($date_range)) {
+            $daterange = $date_range;
+            $date_value = explode("-", $daterange);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            $this->db->where('created_date >=',$start_date);
+            $this->db->where('created_date <=',$end_date);
+        }
+        $this->db->where('office_id',$ofc_id);
+        $amount_data = $this->db->get('report_dashboard_billing')->result_array();
+        return $total_amount = array_sum(array_column($amount_data,'total_amount'));
     }
 
     public function late_status_calculation_report_dashboard_billing($ofc_id,$late_span,$date_range = "") {
