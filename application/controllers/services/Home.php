@@ -402,7 +402,10 @@ class Home extends CI_Controller {
 //            }
 //            $result['salestax_employee_notes'] = $this->payroll->get_payroll_employee_notes_by_reference_id($edit_data[0]['reference_id']);
 //        }
-        $render_data['state_name'] = $this->salestax_model->getstatename();           
+        foreach ($render_data['order_extra_data'] as $value) {
+            $state = $value['state_recurring'];
+        }
+        $render_data['state_name1'] = $this->salestax_model->getstatename($state);        
         $this->load->template('services/view_service1', $render_data);
     }
 

@@ -1,4 +1,4 @@
-<?php
+<?php     
 $user_info = staff_info();
 $usertype = $user_info['type'];
 $td_style = "padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;";
@@ -1518,7 +1518,7 @@ if ($usertype != '3') {
                     <td style="<?= $td_style; ?>">
                             <b>State of Recurring:</b>  
                     </td>
-                    <td style="<?= $td_style; ?>"><?php echo $value['state_recurring']; ?></td>
+                    <td style="<?= $td_style; ?>"><?php echo $state_name1['0']['state_name']; ?></td>
                 </tr>
                 <tr>
                     <td style="<?= $td_style; ?>">
