@@ -123,7 +123,7 @@ if (!empty($project_list)) {
                                     <th style="width:8%; text-align: center">Tracking</th>
                                     <!--<th style="width:8%; text-align: center">Start Date</th>-->
                                     <th style="width:8%; text-align: center">Due Date</th>
-                                    <th style="width:15%; text-align: center">Next Recurrence</th>
+                                    <th style="width:15%; white-space: nowrap; text-align: center">Next Recurrence</th>
                                     <th style="width:8%; text-align: center">Note</th>
                                 </tr>
                                 <tr>
