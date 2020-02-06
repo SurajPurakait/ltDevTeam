@@ -1,23 +1,12 @@
 <div class="row">
     <div class="col-md-10">
-        <?php 
-            $dateRangeBilling = $order_start_date.' - '.$current_date;
-        ?>
-        <div class="col-md-2 m-t-5" style="width: 120px;">
-            <h4>Select Period</h4> 
-        </div>
-        <div class="col-md-3 p-r-0 p-l-0">
-            <input type="text" class="form-control" id="reportrangebilling" name="daterange" placeholder="Select Period">    
-        </div>
-        <div class="col-md-2 p-l-0">
-            <button type="button" class="btn btn-success" id="report-billing-range-btn" style="border-radius: 0;">Apply</button>
-        </div>
+        <div id="select_peroid_billing"></div>
         <table class="table table-bordered billing-report-table table-striped text-center m-b-0" id="report-billing-invoice">
             <thead>
                 <tr>
                     <th class="text-uppercase" style="white-space: nowrap;">Office</th>
                     <th class="text-uppercase" style="white-space: nowrap;">Total Invoice</th>
-                    <th class="text-uppercase" style="white-space: nowrap;">Amounts</th>
+                    <th class="text-uppercase" style="white-space: nowrap;">Amount</th>
                     <th class="text-uppercase" style="white-space: nowrap;">Collected</th>
                     <th class="text-uppercase" style="white-space: nowrap;">Unpaid</th>
                     <th class="text-uppercase" style="white-space: nowrap;">Partial</th>
@@ -151,44 +140,5 @@
         "ordering": false,
         "info":     false
 
-    });
-
-
-    $(function () {
-        if('<?= $dateRangeBilling; ?>' != '') {
-            var range = '<?= $dateRangeBilling ?>';
-            var start = range.split("-")[0];
-            var end = range.split("-")[1];
-        } else {
-            var start = moment();
-            var end = moment();    
-        }
-        function cb(start, end) {
-            if ('<?= $dateRangeBilling; ?>' != '') {
-                $('#reportrangebilling span').html(start + ' - ' + end);
-            } else {
-                $('#reportrangebilling span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-            }
-        }
-
-        $('#reportrangebilling').daterangepicker({
-            startDate: start,
-            endDate: end,
-            ranges: {
-                'All data': [moment("<?= $order_start_date; ?>", "MM-DD-YYYY"), moment()],
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            }
-        }, cb);
-        cb(start, end);
-
-        $("#report-billing-range-btn").click(function () {
-            var report_range_billing = document.getElementById('reportrangebilling').value;
-            get_billing_date_range(report_range_billing);    
-        });
     });
 </script>
