@@ -91,7 +91,7 @@
                                 <label class="col-lg-6 control-label">Client Type<span class="text-danger">*</span></label>
                                 <select class="form-control client_type_field0" onchange="projectContainerAjax(this.value, '', '');" name="project[client_type]" id="client_type" title="Client Type" required="">
                                     <option value="">Select Client Type</option>
-                                    <option value="1" selected>Business Client</option>
+                                    <option value="1">Business Client</option>
                                     <option value="2">Individual</option>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
