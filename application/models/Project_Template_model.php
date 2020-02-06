@@ -2893,7 +2893,7 @@ class Project_Template_model extends CI_Model {
 //                }
 //                break;
             case 5:{
-                $this->db->select("ind.practice_id as name");
+                $this->db->select("ind.reference_id as id,ind.practice_id as name");
                 $this->db->from('projects AS p');
                 $this->db->join('internal_data as ind','p.client_id=ind.reference_id','inner');
                 $this->db->group_by('p.client_id');
