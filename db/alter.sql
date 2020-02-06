@@ -1190,3 +1190,7 @@ ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `sales_bank_routing_numb
 
 ALTER TABLE `sales_tax_application` CHANGE `sales_bank_account_number` `sales_bank_account_number` VARCHAR(100) NOT NULL; 
 ALTER TABLE `sales_tax_application` CHANGE `sales_bank_routing_number` `sales_bank_routing_number` VARCHAR(100) NOT NULL; 
+
+/* 06.02.2020 */
+ALTER TABLE `sales_tax_recurring` DROP `frequency_of_sales_tax`;
+ALTER TABLE `sales_tax_recurring` CHANGE `freq_of_salestax` `freq_of_salestax` VARCHAR(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;

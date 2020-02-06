@@ -452,12 +452,18 @@ class Salestax_model extends CI_Model {
             $state = $data['state'];
             $start_month_year = $data['start_year'];
             $contact_phone_no = $data['contact_phone_no'];
+            $sales_tax_number = $data['sales_tax_number'];
+            $business_partner_number = $data['business_partner_number'];
+            $sales_tax_business_description = $data['sales_tax_business_description'];
+            $bank_account_number = $data['bank_account_number'];
+            $bank_routing_number = $data['bank_routing_number'];
+
             if ($data['county'] != '') {
                 $county = $data['county'];
             } else {
                 $county = '';
             }
-            $sql = "insert into sales_tax_recurring values('','$new_existing','$existing_ref_id','$existing_practice_id','$reference_id','$start_month_year','$order_id','$service_id','$sales_tax_id','$password','$website','$frequeny_of_salestax','$state','$county','$contact_phone_no')";
+            $sql = "insert into sales_tax_recurring values('','$new_existing','$existing_ref_id','$existing_practice_id','$reference_id','$start_month_year','$order_id','$service_id','$sales_tax_id','$password','$website','$frequeny_of_salestax','$state','$county','$contact_phone_no','$sales_tax_number','$business_partner_number','$sales_tax_business_description','$bank_account_number','$bank_routing_number')";
             $conn->query($sql);
             if (isset($data['service_notes'])) {
                 foreach ($data['service_notes'] as $services_id => $note_data) {
@@ -572,7 +578,7 @@ class Salestax_model extends CI_Model {
                     }
                 }
             }
-            $sql = "update sales_tax_recurring set sales_tax_id='$sales_tax_id',password='$password',website='$website',freq_of_salestax='$frequeny_of_salestax',state='$state',county='$county',start_month_year='$start_month_year',existing_practice_id='$existing_practice_id',contact_phone_no='$contact_phone_no' where service_id='$service_id' and order_id='$order_id'";
+            $sql = "update sales_tax_recurring set sales_tax_id='$sales_tax_id',password='$password',website='$website',freq_of_salestax='$frequeny_of_salestax',state='$state',county='$county',start_month_year='$start_month_year',existing_practice_id='$existing_practice_id',contact_phone_no='$contact_phone_no',sales_tax_number='$sales_tax_number',business_partner_number='$business_partner_number',sales_tax_business_description='$sales_tax_business_description',bank_account_number='$bank_account_number',bank_routing_number='$bank_routing_number' where service_id='$service_id' and order_id='$order_id'";
             $conn->query($sql);
             $data['order_id'] = $order_id;
             $this->billing_model->update_invoice_data($data);

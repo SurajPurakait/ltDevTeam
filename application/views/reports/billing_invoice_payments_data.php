@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-10">
-        <div id="select_peroid_billing"></div>
+        <div id="select_peroid_billing" class="pull-left"></div>
         <table class="table table-bordered billing-report-table table-striped text-center m-b-0" id="report-billing-invoice">
             <thead>
                 <tr>
