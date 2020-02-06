@@ -136,8 +136,6 @@ class Reports extends CI_Controller {
     public function get_show_billing_data() {       
         $render_data['section'] = "billing";
         $render_data['reports'] = array('report'=>'leafnet_report');
-        $render_data['current_date'] = date('m/d/Y');
-        $render_data['order_start_date'] = $this->service_model->get_start_date_sales_report();
         $render_data['billing_report_list'] = $this->billing_model->report_billing_list(post());
         $total_invoice = array_sum(array_column($render_data['billing_report_list'],'total_invoice'));
         if($total_invoice != '' || $total_invoice !=0) {

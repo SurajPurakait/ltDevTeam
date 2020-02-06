@@ -89,7 +89,10 @@
                                     <div role="tabpanel" id="tab-billing" class="tab-pane">
                                         <div class="panel-body">
                                             <div class="row">
-                                                <!-- <div class="col-md-2 m-t-5" style="width: 120px;">
+                                                <?php 
+                                                    $dateRangeBilling = $order_start_date.' - '.$current_date;
+                                                ?>
+                                                <div class="col-md-2 m-t-5" style="width: 120px;">
                                                     <h4>Select Period</h4> 
                                                 </div>
                                                 <div class="col-md-3 p-r-0 p-l-0">
@@ -97,8 +100,8 @@
                                                 </div>
                                                 <div class="col-md-2 p-l-0">
                                                     <button type="button" class="btn btn-success" id="report-billing-range-btn" style="border-radius: 0;">Apply</button>
-                                                </div> -->    
-                                                <div class="col-md-5 col-md-offset-7 m-t-6 text-right">
+                                                </div>    
+                                                <div class="col-md-5 m-t-6 text-right">
                                                     <button type="button" class="btn btn-warning" id="report-billing-refresh-btn" style="border-radius: 0;" onclick="refresh_billing_report()"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
                                                 </div>
                                             </div>
@@ -619,7 +622,8 @@
 
             $("#report-billing-range-btn").click(function () {
                 var report_range_billing = document.getElementById('reportrangebilling').value;
-                get_billing_date_range(report_range_billing);    
+                // get_billing_date_range(report_range_billing,rangeText);    
+                show_billing_data(report_range_billing,'<?= $order_start_date; ?>');    
             });
         });
 </script>
