@@ -234,21 +234,25 @@ function show_billing_data(date_range = '',start_date='') {
     if (date_range == moment(start_date).format("MM/DD/YYYY")+" - "+moment().format("MM/DD/YYYY")) {
         rangeText = "<h4 class='text-success'>Showing All Invoice Data</h4>";
     } else if(date_range == moment().format("MM/DD/YYYY")+" - "+moment().format("MM/DD/YYYY")) {
-        rangeText = "<h4 class='text-success'>Showing Results for Today's</h4>";
+        rangeText = "<h4 class='text-success'>Showing Results for Today</h4>";
     } else if(date_range == moment().subtract(1, 'days').format("MM/DD/YYYY")+" - "+moment().subtract(1, 'days').format("MM/DD/YYYY")) {
-        rangeText = "<h4 class='text-success'>Showing Results for Yesterday's</h4>";
+        rangeText = "<h4 class='text-success'>Showing Results for Yesterday</h4>";
     } else if(date_range == moment().subtract(6, 'days').format("MM/DD/YYYY")+" - "+moment().format("MM/DD/YYYY")) {
-        rangeText = "<h4 class='text-success'>Showing Results for Last 7 Day's</h4>";
+        rangeText = "<h4 class='text-success'>Showing Results for Last 7 Day</h4>";
     } else if(date_range == moment().subtract(29, 'days').format("MM/DD/YYYY")+" - "+moment().format("MM/DD/YYYY")) {
-        rangeText = "<h4 class='text-success'>Showing Results for Last 30 Day's</h4>";
+        rangeText = "<h4 class='text-success'>Showing Results for Last 30 Day</h4>";
     } else if(date_range == moment().startOf('month').format("MM/DD/YYYY")+" - "+moment().endOf('month').format("MM/DD/YYYY")) {
         rangeText = "<h4 class='text-success'>Showing Results for This Month</h4>";
     } else if (date_range == moment().startOf('month').format("MM/DD/YYYY")+" - "+moment().endOf('month').format("MM/DD/YYYY")) {
         rangeText = "<h4 class='text-success'>Showing Results for Last Month</h4>";
     } else {
-        var start = date_range.split("-")[0];
-        var end = date_range.split("-")[1];
-        rangeText = "<h4 class='text-success'>Showing results from "+start+" to "+end+"</h4>";
+        if (date_range != '') {
+            var start = date_range.split("-")[0];
+            var end = date_range.split("-")[1];
+            rangeText = "<h4 class='text-success'>Showing results from "+start+" to "+end+"</h4>";    
+        }else {
+            rangeText = "<h4 class='text-success'>Showing All Invoice Data</h4>";
+        }
     }    
     $.ajax({
         type: 'POST',
