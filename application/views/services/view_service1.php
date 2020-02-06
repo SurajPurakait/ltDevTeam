@@ -1,4 +1,4 @@
-<?php
+<?php     
 $user_info = staff_info();
 $usertype = $user_info['type'];
 $td_style = "padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;";
@@ -1471,7 +1471,62 @@ if ($usertype != '3') {
                         <h4>All Files</h4>
                     </td>
                 </tr>
-                <tr class="file_tr">
+
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="<?= $td_style; ?>">
+                        <h4>Sales Tax Input Form:</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Sales Tax Number:</b>
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
+                                    echo $value['sales_tax_number'];
+                                            ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Business Partner Number:</b>
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php echo $value['business_partner_number'];?></td>
+                </tr>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Bank Account Number:</b>
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php
+                            echo $value['sales_bank_account_number']; ?></td>
+                </tr>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Bank Routing Number:</b>  
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php echo $value['sales_bank_routing_number'];?></td>
+                </tr>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Frequency Of Salestax:</b>  
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php if($value['frequency_of_sales_tax'] == 'm') {echo "Monthly";} if($value['frequency_of_sales_tax'] == 'y') {echo "Yearly";} if($value['frequency_of_sales_tax'] == 'q') {echo "Quarterly";}?></td>
+                </tr>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>State of Recurring:</b>  
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php echo $state_name1['0']['state_name']; ?></td>
+                </tr>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>County of Recurring:</b>  
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php echo $value['country_recurring']; }?></td>
+                </tr>
+                                <tr class="file_tr">
                     <td colspan="2" style="<?= $td_style; ?>">
                         <?php if (!empty($document_list)): ?>
                             <b>Documents:</b>
@@ -1530,6 +1585,7 @@ if ($usertype != '3') {
                         <?php endif; ?>
                     </td>
                 </tr>
+                
             </table>
         </div>
         <div class="text-right">

@@ -865,6 +865,7 @@ class Accounting_services extends CI_Controller {
         $edit_data = $this->salestax_model->get_sales_by_id($id);
         $render_data['company_id'] = $edit_data['reference_id'];
         $render_data['edit_data'] = $edit_data;
+        // print_r($render_data['recurring_data']);exit;
         $render_data['staffInfo'] = staff_info();
 
         $reference_id = $this->salestax_model->get_sales_by_id($id)['reference_id'];

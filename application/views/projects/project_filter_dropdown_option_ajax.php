@@ -15,8 +15,9 @@ elseif($element_key == 11): ?>
             endforeach;
             array_multisort($new_sort, SORT_ASC, $element_value_list);
             ?>
-            <?php foreach ($element_value_list as $evl): ?>
-                <option value="<?= ($element_name == 'client_id') ? '' : $evl['id']; ?>"><?= $evl['name']; ?></option>
+            <?php foreach ($element_value_list as $evl): ?>   
+        <!--($element_name == 'client_id') ? $evl['id'] :--> 
+                <option value="<?= $evl['id'] ?>"><?= $evl['name']; ?></option>
             <?php endforeach; ?>
         <?php endif; ?>
     </select>
