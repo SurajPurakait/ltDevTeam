@@ -254,7 +254,7 @@ class Home extends CI_Controller {
         endswitch;
     }
 
-    public function view($order_id = '') {
+    public function view($order_id = '') {       
         $this->load->layout = 'dashboard';
         $order_id = base64_decode($order_id);
         $order_info = $this->service_model->get_order_info_by_id($order_id);
@@ -402,7 +402,7 @@ class Home extends CI_Controller {
 //            }
 //            $result['salestax_employee_notes'] = $this->payroll->get_payroll_employee_notes_by_reference_id($edit_data[0]['reference_id']);
 //        }
-
+        $render_data['state_name'] = $this->salestax_model->getstatename();           
         $this->load->template('services/view_service1', $render_data);
     }
 

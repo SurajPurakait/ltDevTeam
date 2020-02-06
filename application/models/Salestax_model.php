@@ -1273,8 +1273,12 @@ class Salestax_model extends CI_Model {
         return $this->db->query($sql)->result_array();
     }
 
-    public function get_salestax_data($order_id) {
+    public function get_salestax_data($order_id) {        
         return $this->db->get_where("sales_tax_application", ['order_id' => $order_id])->result_array();
+    }
+    
+    public function getstatename() {
+        return $this->db->get('states')->result_array();
     }
 
     public function get_sales_tax_application_by_order_id($order_id) {
