@@ -1416,7 +1416,7 @@ function request_create_salestax_processing() {
         processData: false,
         contentType: false,
         success: function (result) {
-            //console.log("Result: " + result); return false;
+            // console.log("Result: " + result); return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
                 goURL(base_url + 'services/home/view/' + result.trim());

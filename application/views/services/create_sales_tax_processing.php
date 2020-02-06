@@ -250,7 +250,7 @@
                         </div>
                         
                         <div class="ibox-content">
-                            <div id="sales_tax_input_form_div" class="display_div">
+                            <div id="sales_tax_input_form_div" class="">
                                 <h3>Sales Tax Input Form</h3><span class=""></span>
                                 <div class="form-group">
                                     <label id="referred-label" class="col-lg-2 control-label">Sales Tax Number #<span class="text-danger">*</span></label>
@@ -266,7 +266,7 @@
                                         <div class="errorMessage text-danger"></div>
                                     </div>
                                 </div>
-                                <div class="form-group display_div">
+                                <div class="form-group">
                                     <label class="col-lg-2 control-label">Sales Tax Business Description<span class="text-danger">*</span></label>
                                     <div class="col-lg-10">
                                         <textarea class="form-control value_field required_field" name="sales_tax_business_description" id="sales_tax_business_description" title="Sales Tax Business Description"></textarea>
