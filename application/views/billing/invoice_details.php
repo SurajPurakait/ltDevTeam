@@ -76,25 +76,25 @@ if ($export_type == 'email') {
                     </table>
                 </div>
                 <div class="table-responsive"> 
-                    <table class="table invoice-table m-b-5">
+                    <table class="table invoice-table m-b-5" border="1" style="border-collapse: collapse; width:100%;">
                         <thead>
                             <tr>
-                                <th style="text-align: left;">ORDER#</th>
+                                <th style="text-align: center;">ORDER#</th>
                                 <!-- <th style="text-align: right;">Retail Price</th> -->
-                                <th style="text-align: right;">Price</th>
-                                <th style="text-align: right;">Quantity</th>
-                                <th style="text-align: right;">Final Price</th>
+                                <th style="text-align: center;">Price</th>
+                                <th style="text-align: center;">Quantity</th>
+                                <th style="text-align: center;">Final Price</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             foreach ($order_summary["services"] as $services_info) {
                                 echo '<tr>';
-                                echo '<td>' . $services_info['service'] . '</td>';
+                                echo '<td style="text-align: center;">' . $services_info['service'] . '</td>';
                                 //echo '<td style="text-align: right;">' . $services_info['retail_price'] . '</td>';
-                                echo '<td style="text-align: right;">' . ($services_info['override_price'] != '' ? $services_info['override_price'] : $services_info['retail_price']) . '</td>';
-                                echo '<td style="text-align: right;">' . $services_info['quantity'] . '</td>';
-                                echo '<td style="text-align: right;">' . $services_info['sub_total'] . '</td>';
+                                echo '<td style="text-align: center;">' . ($services_info['override_price'] != '' ? $services_info['override_price'] : $services_info['retail_price']) . '</td>';
+                                echo '<td style="text-align: center;">' . $services_info['quantity'] . '</td>';
+                                echo '<td style="text-align: center;">' . $services_info['sub_total'] . '</td>';
                                 echo '</tr>';
                             }
                             ?> 

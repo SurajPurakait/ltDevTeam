@@ -272,13 +272,13 @@ $state_id=$state->id;
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
+<!--                        <div class="form-group">
                             <label class="col-lg-2 control-label">Existing Practice ID</label>
                             <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" name="existing_practice_id" title="Existing Practice ID" value="<?= $recurring_data->existing_practice_id; ?>">
+                                <input placeholder="" class="form-control" type="text" name="existing_practice_id" title="Existing Practice ID" value="<//?= $recurring_data->existing_practice_id; ?>">
                                 <div class="errorMessage text-danger"></div>
                             </div>
-                        </div>
+                        </div>-->
 
 
                         <div class="ibox-content">

@@ -350,7 +350,8 @@ class Invoice extends CI_Controller {
             $render_data['order_summary']['sub_total'] = number_format((float) array_sum(array_column($render_data['order_summary']['services'], 'sub_total')), 2, '.', '');
             $render_data['order_summary']['invoice_notes'] = invoice_notes($invoice_id, '');
             $render_data['export_type'] = 'email';
-            $subject = 'Billing Invoice #' . str_pad($order_summary['invoice_id'], 10, 0, STR_PAD_LEFT) . ' for ' . $order_summary['services'] . ' totaling $' . $render_data['order_summary']['sub_total'] . ' has been successfully placed';
+            // $subject = 'Billing Invoice #' . str_pad($order_summary['invoice_id'], 10,' ', STR_PAD_LEFT) . ' for ' . $order_summary['services'] . ' totaling $' . $render_data['order_summary']['sub_total'] . ' has been successfully placed';
+            $subject = 'Invoice #' . str_pad($order_summary['invoice_id'], 10,' ', STR_PAD_LEFT) . ' from ' . $order_summary['office'] . ' is Ready For Your Review ';
 //            $subject = 'New Invoice received from '. $render_data['order_summary']['office'];
             $staff_info = staff_info();
 
@@ -399,7 +400,20 @@ class Invoice extends CI_Controller {
             $message .= '<body style="background: #f3f3f4; padding:30px;">';
             $message .= '<table style="width:90%; margin: 20px auto;"><tr><td align="left">';
             $message .= $client_name . ',<br>' . $subject . ' on your LeafCloud Portal.';
-            $message .= '</td><td align="right"><img src="' . base_url() . 'assets/img/logo.png" height="100" /></td></tr>';
+
+            $user_logo = "";
+                if ($order_summary['office_id'] != 0) {
+                    $user_logo = get_user_logo($order_summary['office_id']);
+                }
+
+                if ($user_logo != "" && !file_exists('https://leafnet.us/uploads/' . $user_logo)) {
+                    $user_logo_fullpath = 'https://leafnet.us/uploads/' . $user_logo;
+                } else {
+                    $user_logo_fullpath = 'https://leafnet.us/assets/img/logo.png';
+                }
+
+            // $message .= '</td><td align="right"><img src="' . base_url() . 'assets/img/logo.png" height="100" /></td></tr>';
+            $message .= '</td><td align="right"><img src="' . $user_logo_fullpath .'" height="100" /></td></tr>';
             $message .= '<tr><td colspan="2">';
             $message .= '<table style="background: #ffffff; border-radius: 6px; width: 100%; margin-top: 10px;"><tr><td style="padding: 10px 20px 20px;">';
             $message .= $this->load->view('billing/invoice_details', $render_data, true);
@@ -407,7 +421,7 @@ class Invoice extends CI_Controller {
             $message .= '</td></tr></table>';
             $message .= '</body>';
             $message .= '</html>';
-
+            // print_r($message);die;
             if (post('invoice_id')) {
                 $email_list = post('email');
                 $status = 0;
