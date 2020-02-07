@@ -895,15 +895,25 @@ function request_create_project() {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//            alert(result);return false;
-            if (result.trim() == "1") {
+//            alert(result);
+            if (result.trim() != "-1") {
                 $('#projectModal').hide();
                 swal({
                     title: "Success!",
                     text: "Project Successfully Added!",
                     type: "success"
                 }, function () {
-                    goURL(base_url + 'project');
+                    var category='';
+                    if(result=='1'){
+                            category="1-bookkeeping";
+                        }else if(result=='2'){
+                            category= '2-tax_returns';
+                        }else if(result=='3'){
+                            category= '3-sales_tax';
+                        }else{
+                            category= '4-annual_report';
+                        }
+                    goURL(base_url + 'Project/index/'+category+'/'+result);
                 });
             } else if (result.trim() == "-1") {
                 swal("ERROR!", "Unable To Add Data", "error");
