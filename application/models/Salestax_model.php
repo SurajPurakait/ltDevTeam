@@ -306,7 +306,16 @@ class Salestax_model extends CI_Model {
                 $county = '';
             }
             $service_id = $data["service_id"];
-            $existing_practice_id = $data['existing_practice_id'];
+            if ($data['existing_practice_id'] != '') {
+                $existing_practice_id = $data['existing_practice_id'];
+            } else {
+                $existing_practice_id = '';
+            }
+            $sales_tax_number = $data['sales_tax_number'];
+            $business_partner_number = $data['business_partner_number'];
+            $sales_tax_business_description = $data['sales_tax_business_description'];
+            $bank_account_number = $data['sales_bank_account_number'];
+            $bank_routing_number = $data['sales_bank_routing_number'];
 
 
 
@@ -330,7 +339,7 @@ class Salestax_model extends CI_Model {
             }
 
             $sql = "update sales_tax_processing set start_year='$start_month_year',frequeny_of_salestax='$frequeny_of_salestax',"
-                    . "frequency_of_salestax_val='$freq_val',frequency_of_salestax_years='$year_val',state='$state',county='$county',existing_practice_id='$existing_practice_id',contact_phone_no='$contact_phone_no'"
+                    . "frequency_of_salestax_val='$freq_val',frequency_of_salestax_years='$year_val',state='$state',county='$county',existing_practice_id='$existing_practice_id',contact_phone_no='$contact_phone_no',sales_tax_number='$sales_tax_number',business_partner_number='$business_partner_number',sales_tax_business_description='$sales_tax_business_description',sales_bank_account_number='$bank_account_number',sales_bank_routing_number='$bank_routing_number'"
                     . "  where service_id='$service_id' and order_id='$order_id'";
 
             $conn->query($sql);
@@ -563,6 +572,11 @@ class Salestax_model extends CI_Model {
             $start_month_year = $data['start_year'];
             $existing_practice_id = $data['existing_practice_id'];
             $contact_phone_no = $data['contact_phone_no'];
+            $sales_tax_number = $data['sales_tax_number'];
+            $business_partner_number = $data['business_partner_number'];
+            $sales_tax_business_description = $data['sales_tax_business_description'];
+            $bank_account_number = $data['bank_account_number'];
+            $bank_routing_number = $data['bank_routing_number'];
             if ($data['county'] != '') {
                 $county = $data['county'];
             } else {

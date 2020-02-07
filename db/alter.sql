@@ -1204,3 +1204,6 @@ ADD `sales_bank_routing_number` INT(11) NOT NULL AFTER `sales_bank_account_numbe
 ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `sales_bank_routing_number`;
 
 ALTER TABLE `sales_tax_processing` DROP `frequency_of_sales_tax`;
+
+/* 07.02.2020 */
+ALTER TABLE `sales_tax_processing` CHANGE `existing_practice_id` `existing_practice_id` VARCHAR(50) NOT NULL; 
