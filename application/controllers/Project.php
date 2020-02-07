@@ -35,7 +35,7 @@ class Project extends CI_Controller {
         ];
     }
 
-    function index($status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '', $template_cat_id = '',$year='',$category='',$month='') {
+    function index($category='',$year='',$month='',$status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '', $template_cat_id = '') {
 //        echo $category;die;
         $this->load->layout = 'dashboard';
         $title = "Project Dashboard";
@@ -91,7 +91,12 @@ class Project extends CI_Controller {
     }
 
     function request_create_project() {
-        echo $this->Project_Template_model->requestCreateProject($this->input->post());
+        $insert_id=$this->Project_Template_model->requestCreateProject($this->input->post());
+        if($insert_id!=''){
+            echo $this->Project_Template_model->getProjectMainTemplateCatId($insert_id);
+        }else{
+            return '-1';
+        }
     }
 
     public function updateProjectNotes() {

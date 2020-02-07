@@ -918,12 +918,8 @@ $role = $user_info['role'];
         var month = $('#due_month').val();
         $('#due_month').val(month)
         reflactProjectFilterWithCategory(category, '');
-//        if(statusArray[0]==1){
-//            pieChart('project-bookkeeping-campaigns-donut-1');
-//        }
-//        go('Project/index/'+'t'+'uk');
-        go('Project/index/' + 'n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/' + statusArray[0] + '/' + year + '/' + category + '/' + month);
-//        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, statusArray[0],'',year)
+        go('Project/index/' + category + '/' + year + '/' + month);
+//        go('Project/index/' + 'n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/' + statusArray[0] + '/' + year + '/' + category + '/' + month);
     }
     function change_project_month(month) {
         var category = $('#cat').val();
@@ -932,6 +928,7 @@ $role = $user_info['role'];
         $("#due_year").val(year);
         $('#due_month').val(month)
         reflactProjectFilterWithCategory(category, '');
-        go('Project/index/' + 'n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/' + statusArray[0] + '/' + year + '/' + category + '/' + month);
+        go('Project/index/' + category + '/' + year + '/' + month);
+//        go('Project/index/' + 'n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/' + statusArray[0] + '/' + year + '/' + category + '/' + month);
     }
 </script> 

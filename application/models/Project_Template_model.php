@@ -1633,7 +1633,7 @@ class Project_Template_model extends CI_Model {
             return "-1";
         } else {
             $this->db->trans_commit();
-            return "1";
+            return $insert_id;
         }
     }
 
@@ -3630,7 +3630,9 @@ class Project_Template_model extends CI_Model {
     public function getTemplateCategoryId($template_id){
         return $this->db->get_where('project_template_main',['id'=>$template_id])->row()->template_cat_id;
     }
-
+    public function getProjectMainTemplateCatId($project_id){
+        return $this->db->get_where('project_main',['project_id'=>$project_id])->row()->template_cat_id;
+    }
 }
 
 ?>
