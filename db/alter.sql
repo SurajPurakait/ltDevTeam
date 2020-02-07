@@ -1194,3 +1194,13 @@ ALTER TABLE `sales_tax_application` CHANGE `sales_bank_routing_number` `sales_ba
 /* 06.02.2020 */
 ALTER TABLE `sales_tax_recurring` DROP `frequency_of_sales_tax`;
 ALTER TABLE `sales_tax_recurring` CHANGE `freq_of_salestax` `freq_of_salestax` VARCHAR(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+ALTER TABLE `sales_tax_processing` 
+ADD `sales_tax_number` INT(11) NOT NULL AFTER `contact_phone_no`, 
+ADD `business_partner_number` INT(11) NOT NULL AFTER `sales_tax_number`, 
+ADD `sales_tax_business_description` LONGTEXT NOT NULL AFTER `business_partner_number`, 
+ADD `sales_bank_account_number` INT(11) NOT NULL AFTER `sales_tax_business_description`, 
+ADD `sales_bank_routing_number` INT(11) NOT NULL AFTER `sales_bank_account_number`, 
+ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `sales_bank_routing_number`;
+
+ALTER TABLE `sales_tax_processing` DROP `frequency_of_sales_tax`;
