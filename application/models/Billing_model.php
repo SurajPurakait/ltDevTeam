@@ -2386,36 +2386,36 @@ class Billing_model extends CI_Model {
         }
         $this->db->insert_batch('service_request', $service_request_data);
 
-//         $check_if_all_services_not_started = $this->db->query('select * from service_request where  order_id="' .  $order_id . '"')->result_array();
-// //          
+        $check_if_all_services_not_started = $this->db->query('select * from service_request where  order_id="' .  $order_id . '"')->result_array();
+//          
             
-//         if (!empty($check_if_all_services_not_started)) {
-//             $k = 0;
-//             $status_array = '';
-//             $len = count($check_if_all_services_not_started);
-//             foreach ($check_if_all_services_not_started as $val) {
-//                 if ($k == $len - 1) {
-//                     $status_array .= $val['status'];
-//                 } else {
-//                     $status_array .= $val['status'] . ',';
-//                 }
-//                 $k++;
-//             }
-//         }
-// //            echo $status_array;die;
-//         if($status_array == 2){
-//             $this->db->where('id', $order_id);
-//             $this->db->update('order', array('status' => 2));
-//         }else if($status_array == '0,2' || $status_array == '2,0'){
-//             $this->db->where('id', $order_id);
-//             $this->db->update('order', array('status' => 1));
-//         }else{
-//             $status_array_values = explode(",", $status_array);
-//             if (count(array_unique($status_array_values)) == 1) {
-//                 $this->db->where('id', $order_id);
-//                 $this->db->update('order', array('status' => 0));
-//             }
-//         }
+        if (!empty($check_if_all_services_not_started)) {
+            $k = 0;
+            $status_array = '';
+            $len = count($check_if_all_services_not_started);
+            foreach ($check_if_all_services_not_started as $val) {
+                if ($k == $len - 1) {
+                    $status_array .= $val['status'];
+                } else {
+                    $status_array .= $val['status'] . ',';
+                }
+                $k++;
+            }
+        }
+//            echo $status_array;die;
+        if($status_array == 2){
+            $this->db->where('id', $order_id);
+            $this->db->update('order', array('status' => 2));
+        }else if($status_array == '0,2' || $status_array == '2,0' || $status_array == '0,0,2' || $status_array == '0,2,0' || $status_array == '2,0,0'){
+            $this->db->where('id', $order_id);
+            $this->db->update('order', array('status' => 1));
+        }else{
+            $status_array_values = explode(",", $status_array);
+            if (count(array_unique($status_array_values)) == 1) {
+                $this->db->where('id', $order_id);
+                $this->db->update('order', array('status' => 0));
+            }
+        }
         
 
         if ($save_type == 'create') {
