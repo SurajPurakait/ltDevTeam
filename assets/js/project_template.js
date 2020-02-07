@@ -913,7 +913,7 @@ function request_create_project() {
                         }else{
                             category= '4-annual_report';
                         }
-                    goURL(base_url + 'Project/index/'+category);
+                    goURL(base_url + 'Project/index/'+category+'/'+result);
                 });
             } else if (result.trim() == "-1") {
                 swal("ERROR!", "Unable To Add Data", "error");
