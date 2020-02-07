@@ -158,12 +158,12 @@ class Salestax_model extends CI_Model {
             $bank_account_number = $data['bank_account_number'];
             $bank_routing_number = $data['bank_routing_number'];
 
-            $sql = "insert into sales_tax_processing values('','$new_existing','$existing_ref_id','$start_month_year',"
-                    . "'$frequeny_of_salestax',"
-                    . "'$freq_val','$year_val','$state','$county',"
-                    . "'$order_id','$service_id','$existing_practice_id','$contact_phone_no','$sales_tax_number','$business_partner_number','$sales_tax_business_description','$bank_account_number','$bank_routing_number')";
+            // $sql = "insert into sales_tax_processing values('','$new_existing','$existing_ref_id','$start_month_year',"
+            //         . "'$frequeny_of_salestax',"
+            //         . "'$freq_val','$year_val','$state','$county',"
+            //         . "'$order_id','$service_id','$existing_practice_id','$contact_phone_no','$sales_tax_number','$business_partner_number','$sales_tax_business_description','$bank_account_number','$bank_routing_number')";
 
-            $sql = "INSERT INTO `sales_tax_processing`(`new_existing`, `start_year`, `frequeny_of_salestax`, `frequency_of_salestax_val`, `frequency_of_salestax_years`, `state`, `county`, `order_id`, `service_id`, `existing_practice_id`, `contact_phone_no`, `sales_tax_number`, `business_partner_number`, `sales_tax_business_description`, `sales_bank_account_number`, `sales_bank_routing_number`) VALUES ('$new_existing','$start_month_year','$frequeny_of_salestax','$freq_val','$year_val','$state','$county','$order_id','$service_id','$existing_practice_id','$contact_phone_no','$sales_tax_number','$business_partner_number','$sales_tax_business_description','$bank_account_number','$bank_routing_number')";                        
+            $sql = "INSERT INTO `sales_tax_processing`(`type_of_client`,`new_existing`, `start_year`, `frequeny_of_salestax`, `frequency_of_salestax_val`, `frequency_of_salestax_years`, `state`, `county`, `order_id`, `service_id`, `existing_practice_id`, `contact_phone_no`, `sales_tax_number`, `business_partner_number`, `sales_tax_business_description`, `sales_bank_account_number`, `sales_bank_routing_number`) VALUES ('$new_existing','$existing_ref_id','$start_month_year','$frequeny_of_salestax','$freq_val','$year_val','$state','$county','$order_id','$service_id','$existing_practice_id','$contact_phone_no','$sales_tax_number','$business_partner_number','$sales_tax_business_description','$bank_account_number','$bank_routing_number')";                        
             $conn->query($sql);
 
             $today = date('Y-m-d h:i:s');
