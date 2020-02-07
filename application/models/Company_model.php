@@ -2100,5 +2100,8 @@ class Company_model extends CI_Model {
         }
     }
 
+    public function get_company_id_client_id($client_id) {
+        return $this->db->get_where('company',array('id'=>$client_id))->row_array()['company_id'];
+    }
 
 }
