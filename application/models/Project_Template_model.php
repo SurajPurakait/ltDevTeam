@@ -1119,11 +1119,15 @@ class Project_Template_model extends CI_Model {
 //        print_r($post);die;
         $project_client_ids = $post['project']['client_id'];
         $user_due_date=date('Y-m-d',strtotime($post['project']['due_date']));
-        $user_start_month=$post['project']['start_month'];
         $user_next_due_date=date('Y-m-d',strtotime($post['project']['next_due_date']));
         $user_generation_date=date('Y-m-d',strtotime($post['project']['generation_date']));
         unset($post['project']['due_date']);
-        unset($post['project']['start_month']);
+        if(isset($post['project']['start_month']) && $post['project']['start_month']!=''){
+            $user_start_month=$post['project']['start_month'];
+            unset($post['project']['start_month']);
+        }else{
+            $user_start_month='';
+        }
         unset($post['project']['start_year']);
         unset($post['project']['next_due_date']);
         unset($post['project']['generation_date']);
