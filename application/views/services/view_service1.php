@@ -1475,115 +1475,168 @@ if ($usertype != '3') {
                 <tr>
                     <td></td>
                 </tr>
+                <?php if($title != "Sales Tax Application | Tax Leaf"){?>
                 <tr>
                     <td colspan="2" style="<?= $td_style; ?>">
                         <h4>Sales Tax Input Form:</h4>
                     </td>
                 </tr>
+            <?php }?>
+                <?php if($title != "Sales Tax Application | Tax Leaf"){?>
                 <tr>
                     <td style="<?= $td_style; ?>">
                             <b>Sales Tax Number:</b>
                     </td>                   
-                    <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
-                                if($title == "Sales Tax Application | Tax Leaf"){
-                                    echo $value['sales_tax_number'];
-                    }}
+                    <td style="<?= $td_style; ?>"><?php 
                                 if($title == "Sales Tax Recurring | Tax Leaf")
+                                {
+                                    echo $order_extra_data['sales_tax_number'];
+                                }
+                                if($title == "Sales Tax processing | Tax Leaf")
                                 {
                                     echo $order_extra_data['sales_tax_number'];
                                 }
                         ?>
                     </td>
                 </tr>
+            <?php } if($title != "Sales Tax Application | Tax Leaf"){?>
                 <tr>
                     <td style="<?= $td_style; ?>">
                             <b>Business Partner Number:</b>
                     </td>
-                    <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
-                        if($title == "Sales Tax Application | Tax Leaf"){
-                            echo $value['business_partner_number'];
-                        }
-                    }
+                    <td style="<?= $td_style; ?>"><?php 
                         if($title == "Sales Tax Recurring | Tax Leaf")
+                        {
+                            echo $order_extra_data['business_partner_number'];
+                        }
+                        if($title == "Sales Tax processing | Tax Leaf")
                         {
                             echo $order_extra_data['business_partner_number'];
                         }
                         ?></td>
                 </tr>
+            <?php } if($title != "Sales Tax Application | Tax Leaf"){?>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Business Description:</b>
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php 
+                            if($title == "Sales Tax Recurring | Tax Leaf")
+                            {
+                                echo $order_extra_data['sales_tax_business_description'];
+                            }
+                            if($title == "Sales Tax processing | Tax Leaf")
+                            {
+                                echo $order_extra_data['sales_tax_business_description'];
+                            }
+                            ?>
+                    </td>
+                </tr>
+            <?php } if($title != "Sales Tax Application | Tax Leaf"){?>
                 <tr>
                     <td style="<?= $td_style; ?>">
                             <b>Bank Account Number:</b>
                     </td>
-                    <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
-                            if($title == "Sales Tax Application | Tax Leaf"){
-                                echo $value['sales_bank_account_number'];
-                            }
-                    }
+                    <td style="<?= $td_style; ?>"><?php 
                             if($title == "Sales Tax Recurring | Tax Leaf")
                             {
                                 echo $order_extra_data['bank_account_number'];
                             }
+                            if($title == "Sales Tax processing | Tax Leaf")
+                            {
+                                echo $order_extra_data['sales_bank_account_number'];
+                            }
                             ?></td>
                 </tr>
+            <?php } if($title != "Sales Tax Application | Tax Leaf"){?>
                 <tr>
                     <td style="<?= $td_style; ?>">
                             <b>Bank Routing Number:</b>  
                     </td>
-                    <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
-                    if($title == "Sales Tax Application | Tax Leaf"){
-                        echo $value['sales_bank_routing_number'];
-                    }}
+                    <td style="<?= $td_style; ?>"><?php 
                     if($title == "Sales Tax Recurring | Tax Leaf")
                     {
                         echo $order_extra_data['bank_routing_number'];
                     }
+                    if($title == "Sales Tax processing | Tax Leaf")
+                    {
+                        echo $order_extra_data['sales_bank_routing_number'];
+                    }
                     ?></td>
                 </tr>
+            <?php } if($title != "Sales Tax Application | Tax Leaf"){?>
                 <tr>
                     <td style="<?= $td_style; ?>">
                             <b>Frequency Of Salestax:</b>  
                     </td>
-                    <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
-                    if($title == "Sales Tax Application | Tax Leaf"){
-                    if($value['frequency_of_sales_tax'] == 'm') {echo "Monthly";} if($value['frequency_of_sales_tax'] == 'y') {echo "Yearly";} if($value['frequency_of_sales_tax'] == 'q') {echo "Quarterly";}
-                    }}
+                    <td style="<?= $td_style; ?>"><?php 
                     if($title == "Sales Tax Recurring | Tax Leaf")
+                    {
+                        if($order_extra_data['frequency'] == 'm') {echo "Monthly";} if($order_extra_data['frequency'] == 'y') {echo "Yearly";} if($order_extra_data['frequency'] == 'q') {echo "Quarterly";}
+                        
+                    }
+                    if($title == "Sales Tax processing | Tax Leaf")
                     {
                         if($order_extra_data['frequency'] == 'm') {echo "Monthly";} if($order_extra_data['frequency'] == 'y') {echo "Yearly";} if($order_extra_data['frequency'] == 'q') {echo "Quarterly";}
                         
                     }
                     ?></td>
                 </tr>
+                 <?php } if($title == "Sales Tax processing | Tax Leaf")
+                    { ?>
+                <?php if($order_extra_data['frequency_of_salestax_val'] != ''){
+                        if($order_extra_data['frequeny_of_salestax'] == 'm') {?>
                 <tr>
                     <td style="<?= $td_style; ?>">
-                            <b>State of Recurring:</b>  
+                            <b>Month:</b>  
                     </td>
-                    <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
-                     if($title == "Sales Tax Application | Tax Leaf"){
-                    echo $state_name1['0']['state_name'];
-                     }
+                    <td><?php echo $order_extra_data['frequency_of_salestax_val'];?></td>
+                </tr>
+                <?php }} if($order_extra_data['frequeny_of_salestax'] == 'q') {?>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Quaterly:</b>  
+                    </td>
+                    <td><?php echo $order_extra_data['frequency_of_salestax_val'];?></td>
+                </tr>
+                <?php }?>             
+                 
+                
+                
+             <?php } if($title != "Sales Tax Application | Tax Leaf"){?>  
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>State:</b>  
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php 
+                    if($title == "Sales Tax Recurring | Tax Leaf")
+                    {
+                        echo $order_extra_data['state_name'];
                     }
-                     if($title == "Sales Tax Recurring | Tax Leaf")
+                    if($title == "Sales Tax processing | Tax Leaf")
                     {
                         echo $order_extra_data['state_name'];
                     }
                      ?></td>
                 </tr>
+            <?php } if($title != "Sales Tax Application | Tax Leaf"){?>
                 <tr>
                     <td style="<?= $td_style; ?>">
-                            <b>County of Recurring:</b>  
+                            <b>County:</b>  
                     </td>
-                    <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
-                    if($title == "Sales Tax Application | Tax Leaf"){
-                    echo $value['country_recurring'];
-                    }}
+                    <td style="<?= $td_style; ?>"><?php 
                     if($title == "Sales Tax Recurring | Tax Leaf")
                     {
                         echo $order_extra_data['county_name'];
                     }
+                    if($title == "Sales Tax processing | Tax Leaf")
+                    {
+                        echo $order_extra_data['county_name'];
+                    }
                     ?></td>
-                </tr>
-                                <tr class="file_tr">
+                </tr> 
+            <?php }?>
+                    <tr class="file_tr">
                     <td colspan="2" style="<?= $td_style; ?>">
                         <?php if (!empty($document_list)): ?>
                             <b>Documents:</b>

@@ -150,7 +150,31 @@
                         </div>
 
                         <div class="hr-line-dashed"></div>
-                        
+                        <div class="form-group state_div">
+                            <label class="col-lg-2 control-label">State of Recurring<span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <select class="form-control" onchange="county_ajax(this.value, '');" name="state_recurring" id="salesstate" title="State of Recurring" required="">
+                                    <option value="">Select an option</option>
+                                    <?php
+                                    foreach ($state_list as $st) {
+                                        ?>
+                                        <option value="<?= $st['id'] ?>" <?php echo ($state_id == $st['id']) ? 'selected' : ''; ?>><?= $st['state_name']; ?></option>
+                                        <?php }
+                                    ?>
+                                </select>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
+                        <div class="form-group county_div" id="county_div">
+                            <label class="col-lg-2 control-label">County of Recurring<span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <div id="county"><select class="form-control" name="county" id="county" title="County of Recurring" required="">
+                                        <option value="">Select</option>
+                                    </select>
+                                </div>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
 
                         <div class="hr-line-dashed"></div>
                         <h3>Account number where Sales Tax will be debited</h3>
@@ -406,86 +430,6 @@
                                         <?php load_ddl_option("language_list", $inter_data['language']); ?>
                                     </select>
                                     <div class="errorMessage text-danger"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ibox-content">
-                            <div id="sales_tax_input_form_div" class="display_div1">
-                                <h3>Sales Tax Input Form</h3><span class=""></span>
-                                <div class="form-group">
-                                    <label id="referred-label" class="col-lg-2 control-label">Sales Tax Number #<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <input placeholder="" class="form-control required_field" type="text" id="sales_tax_number" name="sales_tax_number" title="Sales Tax Number" value="<?= $sales_tax_data['sales_tax_number'] ?>">
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label id="referred-label" class="col-lg-2 control-label">Business Partner Number #<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <input placeholder="" class="form-control required_field" type="text" id="business_partner_number" name="business_partner_number" title="Business Partner Number" value="<?= $sales_tax_data['business_partner_number'] ?>">
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group display_div">
-                                    <label class="col-lg-2 control-label">Sales Tax Business Description<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <textarea class="form-control value_field required_field" name="sales_tax_business_description" id="sales_tax_business_description" title="Sales Tax Business Description"><?= $sales_tax_data['sales_tax_business_description']; ?></textarea>
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label id="referred-label" class="col-lg-2 control-label">Bank Account Number #<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <input placeholder="" class="form-control required_field" type="text" id="sales_bank_account_number" name="sales_bank_account_number" title="Bank Account Number" value="<?= $sales_tax_data['sales_bank_account_number']; ?>">
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label id="referred-label" class="col-lg-2 control-label">Bank Routing Number #<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <input placeholder="" class="form-control required_field" type="text" id="sales_bank_routing_number" name="sales_bank_routing_number" title="Bank Routing Number" value="<?= $sales_tax_data['sales_bank_routing_number']; ?>">
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <?php 
-                                    $frequency_sales_tax = trim($sales_tax_data['frequency_of_sales_tax']);
-                                ?>
-                                <div class="form-group">
-                                    <label class="col-lg-2 control-label">Frequency Of Salestax<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <select class="form-control frequeny_of_bookkeeping" name="frequency_of_sales_tax" id="frequency_of_sales_tax" title="Frequency Of salestex" required="">
-                                            <option value="">Select</option>
-                                            <option value="m" <?= ($frequency_sales_tax == 'm' ) ? 'selected':''; ?>>Monthly</option>
-                                            <option value="q" <?= ($frequency_sales_tax == 'q' ) ? 'selected':''; ?>>Quarterly</option>
-                                            <option value="y" <?= ($frequency_sales_tax == 'y' ) ? 'selected':''; ?>>Yearly</option>
-                                        </select>
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group state_div">
-                                    <label class="col-lg-2 control-label">State of Recurring<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <select class="form-control" onchange="county_ajax(this.value, '');" name="state_recurring" id="salesstate" title="State of Recurring" required="">
-                                            <option value="">Select an option</option>
-                                            <?php
-                                            foreach ($state_list as $st) {
-                                                ?>
-                                                <option value="<?= $st['id'] ?>" <?php echo ($state_id == $st['id']) ? 'selected' : ''; ?>><?= $st['state_name']; ?></option>
-                                                <?php }
-                                            ?>
-                                        </select>
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group county_div" id="county_div">
-                                    <label class="col-lg-2 control-label">County of Recurring<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <div id="county"><select class="form-control" name="county" id="county" title="County of Recurring" required="">
-                                                <option value="">Select</option>
-                                            </select>
-                                        </div>
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
                                 </div>
                             </div>
                         </div> 

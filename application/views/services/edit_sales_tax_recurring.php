@@ -301,7 +301,7 @@ $state_id=$state->id;
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label">Sales Tax Business Description<span class="text-danger">*</span></label>
                                     <div class="col-lg-10">
-                                        <textarea class="form-control value_field required_field" name="sales_tax_business_description" id="sales_tax_business_description" title="Sales Tax Business Description"><?= $recurring_data->sales_tax_business_description; ?></textarea>
+                                        <textarea class="form-control" name="sales_tax_business_description" id="sales_tax_business_description" title="Sales Tax Business Description"><?= $recurring_data->sales_tax_business_description; ?></textarea>
                                         <div class="errorMessage text-danger"></div>
                                     </div>
                                 </div>
