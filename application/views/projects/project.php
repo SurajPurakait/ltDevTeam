@@ -3,6 +3,7 @@ $user_info = staff_info();
 $user_department = $user_info['department'];
 $user_type = $user_info['type'];
 $role = $user_info['role'];
+echo $category;
 ?>
 <style>
     .project-clear-filter{
@@ -918,7 +919,7 @@ $role = $user_info['role'];
         var month = $('#due_month').val();
         $('#due_month').val(month)
         reflactProjectFilterWithCategory(category, '');
-        go('Project/index/' + category + '/' + year + '/' + month);
+        go('Project/index/' + category + '/' + statusArray[0] + '/' + year + '/' + month);
 //        go('Project/index/' + 'n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/' + statusArray[0] + '/' + year + '/' + category + '/' + month);
     }
     function change_project_month(month) {
@@ -928,7 +929,7 @@ $role = $user_info['role'];
         $("#due_year").val(year);
         $('#due_month').val(month)
         reflactProjectFilterWithCategory(category, '');
-        go('Project/index/' + category + '/' + year + '/' + month);
+        go('Project/index/' + category +'/' + statusArray[0]+ '/' + year + '/' + month);
 //        go('Project/index/' + 'n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/' + statusArray[0] + '/' + year + '/' + category + '/' + month);
     }
 </script> 
