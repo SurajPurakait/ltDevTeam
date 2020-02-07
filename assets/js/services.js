@@ -3415,9 +3415,9 @@ function recipient_modal(modal_type, reference, reference_id, id, retail_price =
 
 
 function save_recipient() {
-    // if (!requiredValidation('form_recipient')) {
-    //     return false;
-    // }
+    if (!requiredValidation('form_recipient')) {
+        return false;
+    }
     var form_data = new FormData(document.getElementById('form_recipient'));
     var reference = $("form#form_recipient #reference").val();
     var reference_id = $("form#form_recipient #reference_id").val();
@@ -3437,7 +3437,7 @@ function save_recipient() {
                 swal("ERROR!", "Error Processing Data", "error");
             }else {
                 $('#recipient-form').modal('hide');
-                 get_recipient_list(reference_id, reference,retail_price);
+                get_recipient_list(reference_id, reference,retail_price);
                 $('#recipient-list-details').hide(); 
             }
         },
@@ -3447,5 +3447,36 @@ function save_recipient() {
         complete: function (msg) {
             closeLoading();
         }
+    });
+}
+
+function recipient_delete(id, reference_id, reference) {         
+    swal({
+        title: "Are you sure?",
+        text: "Your will not be able to recover this recipient!!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+    }, function () {
+        $.ajax({
+            type: "POST",
+            data: {
+                id: id,
+                reference_id: reference_id,
+                reference: reference
+                   },
+            url: base_url + "services/home/recipient_delete",
+            dataType: "html",
+            success: function (result) {
+              if (result == '1') {                                                         
+                    swal("Deleted!", "Your recipient has been deleted.", "success");
+                    get_recipient_list(reference_id, reference);
+                } else {
+                    swal("Error!", "Error to Delete recipient.", "error");
+                }
+            }
+        });
     });
 }
