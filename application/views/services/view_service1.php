@@ -1512,6 +1512,22 @@ if ($usertype != '3') {
                 </tr>
                 <tr>
                     <td style="<?= $td_style; ?>">
+                            <b>Business Description:</b>
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
+                            if($title == "Sales Tax Application | Tax Leaf"){
+                                echo $value['sales_tax_business_description'];
+                            }
+                            }
+                            if($title == "Sales Tax Recurring | Tax Leaf")
+                            {
+                                echo $order_extra_data['sales_tax_business_description'];
+                            }
+                            ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="<?= $td_style; ?>">
                             <b>Bank Account Number:</b>
                     </td>
                     <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
@@ -1543,9 +1559,10 @@ if ($usertype != '3') {
                     <td style="<?= $td_style; ?>">
                             <b>Frequency Of Salestax:</b>  
                     </td>
-                    <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
+                    <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {                        
                     if($title == "Sales Tax Application | Tax Leaf"){
-                    if($value['frequency_of_sales_tax'] == 'm') {echo "Monthly";} if($value['frequency_of_sales_tax'] == 'y') {echo "Yearly";} if($value['frequency_of_sales_tax'] == 'q') {echo "Quarterly";}
+                        $value1 = trim($value['frequency_of_sales_tax']);                        
+                    if($value1 == 'm') {echo "Monthly";} if($value1 == 'y') {echo "Yearly";} if($value1 == 'q') {echo "Quarterly";}
                     }}
                     if($title == "Sales Tax Recurring | Tax Leaf")
                     {
@@ -1556,7 +1573,7 @@ if ($usertype != '3') {
                 </tr>
                 <tr>
                     <td style="<?= $td_style; ?>">
-                            <b>State of Recurring:</b>  
+                            <b>State:</b>  
                     </td>
                     <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
                      if($title == "Sales Tax Application | Tax Leaf"){
@@ -1571,7 +1588,7 @@ if ($usertype != '3') {
                 </tr>
                 <tr>
                     <td style="<?= $td_style; ?>">
-                            <b>County of Recurring:</b>  
+                            <b>County:</b>  
                     </td>
                     <td style="<?= $td_style; ?>"><?php foreach ($order_extra_data as $value) {
                     if($title == "Sales Tax Application | Tax Leaf"){
