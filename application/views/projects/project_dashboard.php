@@ -97,7 +97,31 @@ if (!empty($project_list)) {
             }
         }
         $recurrence_is_created=$pattern_details->generated_by_cron;
-        
+        $start_months='';
+        if($pattern_details->start_month!=''){
+            if($pattern_details->pattern=='quarterly'){
+                switch ($pattern_details->start_month){
+                    case 1:{
+                        $start_months='January';
+                        break;
+                    }
+                    case 2:{
+                       $start_months='April';
+                        break; 
+                    }
+                    case 3:{
+                       $start_months='July';
+                        break; 
+                    }
+                    case 4:{
+                       $start_months='October';
+                        break; 
+                    }
+                }
+            }else{
+                $start_months=$due_m[$pattern_details->start_month];
+            }
+        }
         ?>
         <div class="panel panel-default service-panel type2 filter-active" id="action<?= $list['id'] ?>">
             <div class="panel-heading" onclick="load_project_tasks('<?php echo $list['id']; ?>', '<?php echo $list['created_at']; ?>', '<?php echo $dueDate; ?>');"> 
@@ -130,7 +154,7 @@ if (!empty($project_list)) {
                                     <td title="ID"><?= $list['id'] ?></td>
                                     <!--<td title="Category"><= get_template_category_name($list['template_cat_id']) ?></td>-->
                                     <td title="Project Name">
-                                        <span class=""><?= $templatedetails->title.($pattern_details->start_month!=''?' #'.$due_m[$pattern_details->start_month]:'') ?></span>
+                                        <span class=""><?= $templatedetails->title.($pattern_details->start_month!=''?' #'.$start_months:'') ?></span>
                                     </td>
                                     <td title="Pattern"><?= ucfirst($pattern_details->pattern) ?></td>
                                     <!--<td title="Client Type"><? ($list['client_type'] == '1') ? 'Business Client' : 'Individual Client' ?></td>-->
