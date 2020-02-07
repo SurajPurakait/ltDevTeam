@@ -128,6 +128,34 @@
                             </div>
                         </div>
 
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group state_div">
+                            <label class="col-lg-2 control-label">State of Sales Tax<span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <select class="form-control" onchange="county_ajax(this.value, '');" name="state_recurring" id="salesstate" title="State of Recurring" required="">
+                                    <option value="">Select an option</option>
+                                    <?php
+                                    foreach ($state as $data) {
+                                        ?>
+                                        <option value="<?= $data['id']; ?>"><?= $data['state_name']; ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
+                        <div class="form-group county_div" id="county_div">
+                            <label class="col-lg-2 control-label">County of Sales Tax<span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                <div id="county"><select class="form-control" name="county" id="county" title="County of Recurring" required="">
+                                        <option value="">Select</option>
+                                    </select>
+                                </div>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
+
                         <div id="documents_div" class="display_div">
                             <div class="hr-line-dashed"></div>
                             <h3>Documents &nbsp; (<a data-toggle="modal"  id="add_document_btn" onclick="document_modal('add', '<?= $reference ?>', '<?= $reference_id ?>'); return false;" href="javascript:void(0);">Add document</a>)</h3> 
@@ -366,85 +394,7 @@
                                 </div>
                             </div> -->
 
-                        </div>
-                        <div class="ibox-content">
-                            <div id="sales_tax_input_form_div" class="display_div1">
-                                <h3>Sales Tax Input Form</h3><span class=""></span>
-                                <div class="form-group">
-                                    <label id="referred-label" class="col-lg-2 control-label">Sales Tax Number #<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <input placeholder="" class="form-control required_field" type="text" id="sales_tax_number" name="sales_tax_number" title="Sales Tax Number" value="">
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label id="referred-label" class="col-lg-2 control-label">Business Partner Number #<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <input placeholder="" class="form-control required_field" type="text" id="business_partner_number" name="business_partner_number" title="Business Partner Number" value="">
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 control-label">Sales Tax Business Description<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <textarea class="form-control" name="sales_tax_business_description" id="sales_tax_business_description" title="Sales Tax Business Description"></textarea>
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label id="referred-label" class="col-lg-2 control-label">Bank Account Number #<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <input placeholder="" class="form-control required_field" type="text" id="sales_bank_account_number" name="sales_bank_account_number" title="Bank Account Number" value="">
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label id="referred-label" class="col-lg-2 control-label">Bank Routing Number #<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <input placeholder="" class="form-control required_field" type="text" id="sales_bank_routing_number" name="sales_bank_routing_number" title="Bank Routing Number" value="">
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-lg-2 control-label">Frequency Of Salestax<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <select class="form-control frequeny_of_bookkeeping" name="frequency_of_sales_tax" id="frequency_of_sales_tax" title="Frequency Of salestex" required="">
-                                            <option value="">Select</option>
-                                            <option value="m">Monthly</option>
-                                            <option value="q">Quarterly</option>
-                                            <option value="y">Yearly</option>
-                                        </select>
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group state_div">
-                                    <label class="col-lg-2 control-label">State of Sales Tax<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <select class="form-control" onchange="county_ajax(this.value, '');" name="state_recurring" id="salesstate" title="State of Recurring" required="">
-                                            <option value="">Select an option</option>
-                                            <?php
-                                            foreach ($state as $data) {
-                                                ?>
-                                                <option value="<?= $data['id']; ?>"><?= $data['state_name']; ?></option>
-                                                <?php
-                                            }
-                                            ?>
-                                        </select>
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group county_div" id="county_div">
-                                    <label class="col-lg-2 control-label">County of Sales Tax<span class="text-danger">*</span></label>
-                                    <div class="col-lg-10">
-                                        <div id="county"><select class="form-control" name="county" id="county" title="County of Recurring" required="">
-                                                <option value="">Select</option>
-                                            </select>
-                                        </div>
-                                        <div class="errorMessage text-danger"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>        
+                        </div>    
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
