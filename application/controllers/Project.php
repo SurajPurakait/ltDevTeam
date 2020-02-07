@@ -35,7 +35,7 @@ class Project extends CI_Controller {
         ];
     }
 
-    function index($category='',$year='',$month='',$status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '', $template_cat_id = '') {
+    function index($category='',$template_cat_id = '',$year='',$month='',$status = '', $template_id = '', $request_type = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '') {
 //        echo $category;die;
         $this->load->layout = 'dashboard';
         $title = "Project Dashboard";
