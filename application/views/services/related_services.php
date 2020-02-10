@@ -9,7 +9,7 @@
                     <form class="form-horizontal" method="post" id="related_service_form" onsubmit="saveRelatedService(); return false;">
                         <h4>Service Id: <?= $service_id2; ?></h4>
                         <h4>Service Name: <?= $service_details['description']; ?></h4>
-                        <h4>Client Id: <?= $company_info['company_id']?></h4>
+                        <h4>Client Id: <?= $client_id; ?></h4>
                         <div class="hr-line-dashed"></div>
 
                         <?php if ($service_shortname == 'acc_p'): //Payroll ?>

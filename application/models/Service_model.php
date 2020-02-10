@@ -3118,4 +3118,9 @@ class Service_model extends CI_Model {
         return $this->db->get_where('invoice_info',['client_id'=>$reference_id,
                                                         'order_id'=>$order_id])->row()->id;
    }
+
+   public function get_practice_id($reference_id)
+   {
+     return $this->db->get_where('internal_data',['reference_id'=>$reference_id])->row()->practice_id;
+   }
 }
