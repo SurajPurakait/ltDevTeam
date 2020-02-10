@@ -1546,11 +1546,9 @@ class Home extends CI_Controller {
 
     public function related_services($service_request_id, $type = 'edit') {
         $this->load->layout = 'dashboard';
-        $title = "Related Services";
-        $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['main_menu'] = 'services';
         $render_data['menu'] = 'service_dashboard';
-        $render_data['header_title'] = $title;
+        
 
         $render_data['service_request_id'] = $service_request_id;
         $render_data['service_request_details'] = $service_request_details = $this->service_model->get_service_request_by_id($service_request_id);
@@ -1558,6 +1556,9 @@ class Home extends CI_Controller {
             redirect(base_url('services/home'));
         }
         $render_data['service_details'] = $service_details = $this->service_model->get_service_by_id($service_request_details['services_id']);
+        $title = $render_data['service_details']['description'];
+        $render_data['title'] = $title . ' | Tax Leaf';
+        $render_data['header_title'] = $title;
         $render_data['order_details'] = $order_details = $this->service_model->get_order_by_id($service_request_details['order_id']);
         $render_data['related_service_files'] = $this->service_model->get_related_service_files_by_id($service_request_id);
         $render_data['service_name'] = $service_name = $service_details['description'];
@@ -1573,7 +1574,6 @@ class Home extends CI_Controller {
                 $due_date = date('m/d/Y', strtotime($renewal_date_info['date']));
             }
         }
-
         $render_data['order_extra_data'] = [];
         switch ($service_shortname):
             case 'inc_n_c_f':
@@ -1638,9 +1638,10 @@ class Home extends CI_Controller {
                 break;
             case 'acc_1_w_u': {      //  1099 Write Up
                     $render_data['payer_information'] = $this->service_model->get_payer_info($order_id);
-                    $render_data['recipient_information'] = $this->service_model->get_recipient_info($order_id);
+                    $render_data['recipient_information'] = $this->service_model->get_recipient_info($order_id);                
                 }
         endswitch;
+        $render_data['service_id2'] = $this->service_model->get_service_id_for_1099_service($render_data['reference_id'], $render_data['order_id']);
         $this->load->template('services/related_services', $render_data);
     }
 
