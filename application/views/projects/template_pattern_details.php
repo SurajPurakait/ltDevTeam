@@ -241,9 +241,17 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     } else {
         $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
         if($template_cat_id==1){
-            $generation_date=date('Y',strtotime($generation_date)).'-'.date('m',strtotime($generation_date)).'-'.$project_recurrence_main_data['due_day'];
+            if($project_recurrence_main_data['pattern']!='annually'){
+                $generation_date=date('Y',strtotime($generation_date)).'-'.date('m',strtotime($generation_date)).'-'.$project_recurrence_main_data['due_day'];
+            }else{
+                $generation_date=date('Y',strtotime($generation_date)).'-'.'01'.'-'.$project_recurrence_main_data['due_day'];
+            }
         }else{
-            $generation_date=date('Y',strtotime($generation_date)).'-'.date('m',strtotime($generation_date)).'-'.'01';
+            if($project_recurrence_main_data['pattern']!='annually'){
+                $generation_date=date('Y',strtotime($generation_date)).'-'.date('m',strtotime($generation_date)).'-'.'01';
+            }else{
+                $generation_date=date('Y',strtotime($generation_date)).'-'.'01'.'-'.'01';
+            }
         }
     }
     $project_recurrence_main_data['generation_date'] = $generation_date;
@@ -320,6 +328,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     }
     function change_project_due_date(select_month='') {
         var project_pattern =$("#project_pattern").val();
+        var template_cat_id=$('#template_cat_id').val();
         if(project_pattern=='monthly'){
             if(select_month==''){
                 select_month=$("#project_start_month").val();
@@ -329,7 +338,6 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             var target_start_month=$("#target_start_month").val();
             var generation_day=$('#generation_day').val();
             var generation_month=$("#generation_month").val();
-            var template_cat_id=$('#template_cat_id').val();
             var create_date=new Date(select_month+' '+due_day+' '+select_year);
             var next_month=parseInt(select_month)+parseInt(target_start_month);
             var day_of_select_month=new Date(select_year, select_month, 0).getDate();
@@ -382,10 +390,6 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             }
             var select_year=$("#project_start_year").val();
             var due_day=$('#due_day').val();
-            var target_start_month=$("#target_start_month").val();
-            var generation_day=$('#generation_day').val();
-            var generation_month=$("#generation_month").val();
-            var template_cat_id=$('#template_cat_id').val();
             if(select_month==1){
                 var due_date= 04+'/'+due_day + "/"+ select_year;
                 var next_due_date= 07+'/'+due_day + "/"+ select_year;
@@ -402,6 +406,24 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
                 due_date= 01+'/'+due_day + "/"+ (parseInt(select_year) +parseInt(1));
                 next_due_date= 04+'/'+due_day + "/"+ (parseInt(select_year) +parseInt(1));
                 next_recurrence_date=01+'/'+01 + "/"+ (parseInt(select_year) +parseInt(1));
+            }
+            $("#due_date").val(due_date);
+            $('#next_due_date').val(next_due_date);
+            $("#next_recurrence").text(next_recurrence_date);
+            $('#generation_date').val(next_recurrence_date);
+        }
+        else if(project_pattern=='annually'){
+            var select_year=$("#project_start_year").val();
+            var due_day=$('#due_day').val();
+            var next_year=(parseInt(select_year) +parseInt(1));
+            if(template_cat_id==1){
+                var due_date= 01+'/'+due_day + "/"+ next_year;
+                var next_due_date= 01+'/'+due_day + "/"+ (parseInt(next_year) +parseInt(1));
+                var next_recurrence_date= 01+'/'+01 + "/"+ next_year;
+            }else{
+                var due_date= 01+'/'+due_day + "/"+ next_year;
+                var next_due_date= 01+'/'+due_day + "/"+ (parseInt(next_year) +parseInt(1));
+                var next_recurrence_date= 01+'/'+01 + "/"+ next_year;
             }
             $("#due_date").val(due_date);
             $('#next_due_date').val(next_due_date);

@@ -1,4 +1,5 @@
-<?php foreach ($list as $key => $recipient) : ?>
+<?php foreach ($list as $key => $recipient) :       
+ ?>
     <div class="row">
         <label class="col-lg-2 control-label"></label>
         <div class="col-lg-10" style="padding-top:8px">
@@ -11,6 +12,10 @@
                 <b>Country: </b><?= ($recipient["country_name"] !='') ? $recipient["country_name"] : 'NA'; ?><br>
                 <b>Zip: </b><?= ($recipient["recipient_zip"] !='') ? $recipient["recipient_zip"] : 'NA'; ?><br> 
                 <b>TIN: </b><?= ($recipient["recipient_tin"] !='') ? $recipient["recipient_tin"] : 'NA'; ?> 
+            </p>
+            <p>
+                    <i class="fa fa-edit recipientedit text-success" style="cursor:pointer" onclick="recipient_modal(<?= $recipient["id"]?>)"title="Edit this recipient info"></i>
+                    &nbsp;&nbsp;<i class="fa fa-trash recipientdelete text-danger" style="cursor:pointer" onclick="recipient_delete('<?= $recipient["id"]; ?>', '<?= $recipient["reference_id"]; ?>', '<?= $recipient["reference"]; ?>')" title="Remove this recipient info"></i>
             </p>
             <!-- <?php //if ($disable != "y"): ?>
                 <p>

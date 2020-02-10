@@ -1701,7 +1701,7 @@ var file_upload_task = () => {
         }
     });
 }
-function task_account_modal(modal_type, id, section) {
+function task_account_modal(modal_type, id='', section='') {
     var reference_id = $("#reference_id").val();
 //    var exist_client_id=$("#exist_client_id").val();
 //    if ($("#editval").val() == '') {

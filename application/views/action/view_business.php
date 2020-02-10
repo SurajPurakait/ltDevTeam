@@ -6,17 +6,24 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
 $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]);
 ?>
 <div class="wrapper wrapper-content">
-    <div class="text-right">
-        <b class="pull-left">Client ID: <?= $company_internal_data[0]['reference_id'] ?></b>
-        <button class="btn btn-primary" type="button" onclick="go('action/home/business_dashboard');">Go Back To List</button>
-        <?php if ($usertype == 1 || $usertype == 2) { ?>
-            <a class="btn btn-primary" href="<?php echo base_url(); ?>billing/invoice/index/<?php echo base64_encode($company_name_option_data["id"]); ?>/<?= base64_encode(1); ?>" style="width: 170px">+ Create Invoice</a>
-            <a class="btn btn-success" href="<?php echo base_url(); ?>action/home/edit_business/<?php echo $company_name_option_data['id'] ?>/<?php echo $company_name_option_data['company_id'] ?>">Edit Client Info</a>
-            <?php if ($usertype == 1 || $user_dept == 14) { ?>
-                <a title="DELETE" class="btn btn-warning" href="javascript:void(0);" onclick="delete_business('<?php echo $company_name_option_data["id"]; ?>', '<?php echo $company_name_option_data["company_id"]; ?>', 'view-page');">Delete</a>
-                <a title="INACTIVE" class="btn btn-danger" href="javascript:void(0);" onclick="inactive_business('<?php echo $company_name_option_data["id"]; ?>', '<?php echo $company_name_option_data["company_id"]; ?>');">Inactive</a>
-            <?php } ?>
-        <?php } ?>
+    <div class="row">
+        <div class="col-md-4">
+            <b class="pull-left">Client ID: <?= $company_internal_data[0]['practice_id']; ?></b><br>
+            <b class="pull-left">Office ID: <?= $office['office_id']; ?></b>
+        </div>
+        <div class="col-md-8">
+            <div class="text-right">
+                <button class="btn btn-primary" type="button" onclick="go('action/home/business_dashboard');">Go Back To List</button>
+                <?php if ($usertype == 1 || $usertype == 2) { ?>
+                    <a class="btn btn-primary" href="<?php echo base_url(); ?>billing/invoice/index/<?php echo base64_encode($company_name_option_data["id"]); ?>/<?= base64_encode(1); ?>" style="width: 170px">+ Create Invoice</a>
+                    <a class="btn btn-success" href="<?php echo base_url(); ?>action/home/edit_business/<?php echo $company_name_option_data['id'] ?>/<?php echo $company_name_option_data['company_id'] ?>">Edit Client Info</a>
+                    <?php if ($usertype == 1 || $user_dept == 14) { ?>
+                        <a title="DELETE" class="btn btn-warning" href="javascript:void(0);" onclick="delete_business('<?php echo $company_name_option_data["id"]; ?>', '<?php echo $company_name_option_data["company_id"]; ?>', 'view-page');">Delete</a>
+                        <a title="INACTIVE" class="btn btn-danger" href="javascript:void(0);" onclick="inactive_business('<?php echo $company_name_option_data["id"]; ?>', '<?php echo $company_name_option_data["company_id"]; ?>');">Inactive</a>
+                    <?php } ?>
+                <?php } ?>
+            </div>
+        </div>
     </div>
     <div class="tabs-container m-t-10">
         <!-- Nav tabs -->
@@ -53,7 +60,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                     <tbody>
                         <tr>
                             <td <?= $style; ?> width="20%">
-                                <b style="font-size: 15px;">Practice Id :</b>
+                                <b style="font-size: 15px;">Client Id:</b>
                             </td>
                             <td <?= $style; ?>>
                                 <?= $company_internal_data[0]['practice_id'] ?>
@@ -61,7 +68,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                         </tr>
                         <tr>
                             <td <?= $style; ?>>
-                                <b style="font-size: 15px;">Company Name :</b>
+                                <b style="font-size: 15px;">Company Name:</b>
                             </td>
                             <td <?= $style; ?>>
                                 <?= $company_name_option_data['name']; ?>
@@ -69,7 +76,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                         </tr>
                         <tr>
                             <td <?= $style; ?>>
-                                <b style="font-size: 15px;">Type of Company :</b>
+                                <b style="font-size: 15px;">Type of Company:</b>
                             </td>
                             <td <?= $style; ?>>
                                 <?= $company_type['type']; ?>                                
@@ -77,7 +84,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                         </tr>
                         <tr>
                             <td <?= $style; ?>>
-                                <b style="font-size: 15px;">Federal Id :</b>
+                                <b style="font-size: 15px;">Federal Id:</b>
                             </td>
                             <td>
                                 <?= $company_name_option_data['fein']; ?>
@@ -85,7 +92,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                         </tr>
                         <tr>
                             <td <?= $style; ?>>
-                                <b style="font-size: 15px;">State of Incorporation :</b>
+                                <b style="font-size: 15px;">State of Incorporation:</b>
                             </td>
                             <td>
                                 <?= $state_data['state_name']; ?>
@@ -101,7 +108,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                         </tr>
                         <tr>
                             <td <?= $style; ?>>
-                                <b style="font-size: 15px;">Business Description :</b>
+                                <b style="font-size: 15px;">Business Description:</b>
                             </td>
                             <td>
                                 <?= $company_name_option_data['business_description']; ?>                                
@@ -109,30 +116,30 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                         </tr>
                         <tr>
                             <td <?= $style; ?>>
-                                <b style="font-size: 15px;">Internal Data :</b>
+                                <b style="font-size: 15px;">Internal Data:</b>
                             </td>
                             <td class="p-0">
                                 <table class="table table-striped table-bordered m-b-0">
                                     <tr>
-                                        <th width="250" class="text-left no-top-border" style="font-size: 15px; padding-left: 60px;">Office :</th>
+                                        <th width="250" class="text-left no-top-border" style="font-size: 15px; padding-left: 60px;">Office:</th>
                                         <td class="no-top-border">
                                             <?= $office['name'] ?>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="text-left" style="font-size: 15px; padding-left: 60px;">Manager :</th>
-                                        <td><?= $manager_name['last_name'] . ', ' . $manager_name['first_name'] . ' ' . $manager_name['middle_name']; ?></td>
+                                        <th class="text-left" style="font-size: 15px; padding-left: 60px;">Manager:</th>
+                                        <td><?= $manager_name['first_name'].' '.$manager_name['middle_name'].' '.$manager_name['last_name']; ?></td>
                                     </tr>
                                     <tr>
-                                        <th class="text-left" style="font-size: 15px; padding-left: 60px;">Partner :</th>
-                                        <td><?= $partner_name['last_name'] . ', ' . $partner_name['first_name'] . ' ' . $partner_name['middle_name']; ?></td>
+                                        <th class="text-left" style="font-size: 15px; padding-left: 60px;">Partner:</th>
+                                        <td><?= $partner_name['first_name'].' '.$partner_name['middle_name'].' '.$partner_name['last_name']; ?></td>
                                     </tr>
                                     <tr>
-                                        <th class="text-left" style="font-size: 15px; padding-left: 60px;">Client Association :</th>
+                                        <th class="text-left" style="font-size: 15px; padding-left: 60px;">Client Association:</th>
                                         <td><?= $company_internal_data[0]['client_association'] ?></td>
                                     </tr>
                                     <tr>
-                                        <th class="text-left" style="font-size: 15px; padding-left: 60px;">Referred Source :</th>
+                                        <th class="text-left" style="font-size: 15px; padding-left: 60px;">Referred Source:</th>
                                         <td>
                                             <?php
                                             if (isset($ref_by_src['source']) && $ref_by_src['source'] != '') {
@@ -156,7 +163,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class="text-left" style="font-size: 15px; padding-left: 60px;">Language :</th>
+                                        <th class="text-left" style="font-size: 15px; padding-left: 60px;">Language:</th>
                                         <td><?= $language_list['language'] ?></td>
                                     </tr>
                                 </table>
@@ -357,7 +364,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                     </tbody>
                 </table>
             <!-- <a title="Account Info" class="btn btn-primary" href="javascript:void(0);" onclick="inactive_business('<?php //echo $company_name_option_data["id"]; ?>', '<?php //echo $company_name_option_data["company_id"]; ?>');">+ Add account info</a> -->
-            <a title="Account Info" class="btn btn-primary" href="javascript:void(0);" onclick="task_account_modal('add', '', '');">+ Add account info</a>
+            <a title="Account Info" class="btn btn-primary" href="javascript:void(0);" onclick="task_account_modal('add', '', 'client');">+ ADD ACCOUNT INFO</a>
             <input type="hidden" value="<?= $reference_id; ?>" id="reference_id">
             </div>
             <div role="tabpanel" class="tab-pane" id="invoice">

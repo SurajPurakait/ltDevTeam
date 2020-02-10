@@ -1693,7 +1693,7 @@ function deleteTaskNote(divID, noteID, relatedTableID) {
     });
     $("#" + divID).remove();
 }
-function save_task_account(section) {
+function save_task_account(section='') {
 
 //update_financial_account_by_date
     if (!requiredValidation('form_accounts')) {
@@ -1702,7 +1702,9 @@ function save_task_account(section) {
     var form_data = new FormData(document.getElementById('form_accounts'));
     var company_id = $("#company_id").val();
     var order_id = $("#editval").val();
-    var client_id=$("#client_id").val();
+    var client_id = $("#client_id").val();
+    var is_client = $("#section").val();
+
     form_data.append('section', section);
     $.ajax({
         type: "POST",
@@ -1714,11 +1716,14 @@ function save_task_account(section) {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//            alert(result); return false;
             if (result.trim() == "1") {
                 swal({title: "Success!", text: "Financial account successfully saved!", type: "success"}, function () {
                     $('#accounts-form').modal('hide');
-                    get_financial_account_list(company_id, section, order_id);
+                    if (is_client == 'client') {
+                        goURL(base_url+'action/home/view_business/'+client_id+'/'+company_id);    
+                    } else {
+                        get_financial_account_list(company_id, section, order_id);    
+                    }
                 });
             } else if (result.trim() == "-1") {
                 swal("ERROR!", "Unable to save financial account", "error");

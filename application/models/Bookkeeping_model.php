@@ -57,12 +57,12 @@ class Bookkeeping_model extends CI_Model {
         }
         unset($data['modal_type']);
         unset($data['section']);
-        if ($_FILES['acc_file']['name'] != "") {
-            $status = common_upload("acc_file");
-            if ($status["success"] == 1) {
-                $data["acc_doc"] = $status["status_msg"];
-            }
-        }
+        // if ($_FILES['acc_file']['name'] != "") {
+        //     $status = common_upload("acc_file");
+        //     if ($status["success"] == 1) {
+        //         $data["acc_doc"] = $status["status_msg"];
+        //     }
+        // }
         $edit_id = $data["edit_id"];
         unset($data["edit_id"]);
         $this->db->trans_begin();
