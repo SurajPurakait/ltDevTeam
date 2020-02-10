@@ -10,67 +10,67 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>First Name</label>
+                                <label>First Name <span class="text-danger">*</span></label>
                                 <input placeholder="" class="form-control" nameval="" type="text" id="recipient_first_name"
-                                       name="recipient_first_name" title="First Name">
+                                       name="recipient_first_name" title="First Name" required="">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">
-                                <label>Last Name</label>
+                                <label>Last Name <span class="text-danger">*</span></label>
                                 <input placeholder="" class="form-control" nameval="" type="text" id="recipient_last_name"
-                                       name="recipient_last_name" title="Last Name">
+                                       name="recipient_last_name" title="Last Name" required="">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">
-                                <label>Phone Number</label>
+                                <label>Phone Number <span class="text-danger">*</span></label>
                                 <input class="form-control" type="text" phoneval="" name="recipient_phone_number" id="recipient_phone_number"
-                                       title="Phone Number" value="">
+                                       title="Phone Number" value="" required="">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">
-                                <label>Address</label>
+                                <label>Address <span class="text-danger">*</span></label>
                                 <input class="form-control" type="text" name="recipient_address" id="recipient_address"
-                                       title="Address" value="">
+                                       title="Address" value="" required="">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">
-                                <label>City</label>
+                                <label>City <span class="text-danger">*</span></label>
                                 <input class="form-control" type="text" name="recipient_city" id="recipient_city"
-                                       title="City" value="">
+                                       title="City" value="" required="">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">
-                                <label>State</label>
-                                <select title="State" class="form-control" name="recipient_state" id="recipient_state">
+                                <label>State <span class="text-danger">*</span></label>
+                                <select title="State" class="form-control" name="recipient_state" required="" id="recipient_state">
                                         <option value="">Select an option</option>
                                         <?php load_ddl_option("all_state_list"); ?>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">
-                                <label>Country</label>
+                                <label>Country <span class="text-danger">*</span></label>
                                 <select title="Country" class="form-control" name="recipient_country"
-                                        id="recipient_country">
+                                        id="recipient_country" required="">
                                     <option value="">Select an option</option>
                                     <?php load_ddl_option("get_countries"); ?>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">
-                                <label>Zip Code</label>
-                                <input class="form-control" type="text" name="recipient_zip_code" id="recipient_zip_code"
+                                <label>Zip Code <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text" required="" name="recipient_zip_code" id="recipient_zip_code"
                                        title="Zip Code" value="">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">
-                                <label>TIN (Tax Identification Number)</label>
-                                <input class="form-control" type="text" name="recipient_tin" id="recipient_tin"
+                                <label>TIN (Tax Identification Number) <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text" name="recipient_tin" required="" id="recipient_tin"
                                        title="TIN" value="">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                             <div class="form-group">
-                                <label>Non-Employee Compensation</label>
-                                <input class="form-control" type="text" name="compensation" id="compensation"
+                                <label>Non-Employee Compensation <span class="text-danger">*</span></label>
+                                <input class="form-control" type="text" required="" name="compensation" id="compensation"
                                        title="Non-Employee Compensation" value="">
                                 <div class="errorMessage text-danger"></div>
                             </div>

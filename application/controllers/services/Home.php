@@ -1690,7 +1690,7 @@ class Home extends CI_Controller {
         $this->load->view('services/show_payroll_account_list', $data);
     }
 
-    public function save_recipient() {
+    public function save_recipient() {        
         echo $this->service_model->save_recipient(post());
     }
 
@@ -1705,6 +1705,11 @@ class Home extends CI_Controller {
         echo count($data['list']);
     }
 
+    public function recipient_delete()
+    {
+       $id = post()['id'];                 
+       echo $data['recipient'] = $this->service_model->recipent_delete($id);     
+    }
 }
 
 // End controller class

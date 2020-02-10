@@ -3083,4 +3083,8 @@ class Service_model extends CI_Model {
             $this->db->where('order_id',$order_id);
             return $this->db->update('payer_information');
     }
+
+    public function recipent_delete($id) {
+        return $this->db->delete('recipient_information', array('id' => $id)); 
+    }
 }
