@@ -134,6 +134,33 @@
                                         <div class="errorMessage text-danger"></div>
                                     </div>
                                 </div>
+                                <?php
+                                $bank_account_no='';
+                                $bank_routing_no='';
+                                if(isset($bank_account_details) && !empty($bank_account_details)){
+                                    $bank_account_no=$bank_account_details->account_number;
+                                    $bank_routing_no=$bank_account_details->routing_number;
+                                }else{
+                                    if(isset($sales_tax_process) && !empty($sales_tax_process)){
+                                        $bank_account_no= $sales_tax_process->bank_account_no;
+                                        $bank_routing_no=$sales_tax_process->bank_routing_no;
+                                    }
+                                }
+                                ?>
+                                <div class="form-group">
+                                    <label id="referred-label" class="col-lg-2 control-label">Bank Account Number<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="" class="form-control required_field" type="text" id="sales_bank_account_number" name="bank_account_number" title="Bank Account Number" value="<?= $bank_account_no ?>">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label id="referred-label" class="col-lg-2 control-label">Bank Routing Number<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="" class="form-control required_field" type="text" id="sales_bank_routing_number" name="bank_routing_number" title="Bank Routing Number" value="<?= $bank_routing_no ?>">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label">Frequency Of Salestax<span class="text-danger">*</span></label>
                                     <div class="col-lg-10">
@@ -569,5 +596,6 @@
     h3.textContent = "00:00:00";
     seconds = 0; minutes = 0; hours = 0;
     }
+
 
 </script>
