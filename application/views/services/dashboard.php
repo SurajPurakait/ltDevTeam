@@ -162,7 +162,7 @@ if ($status == '') {
                                             </tr>
                                             <?php
                                         }
-                                        if ($stafftype == 1 || ($stafftype == 3 && $staffrole == 2) || ($stafftype == 2 && $staffrole == 4)) {
+                                        if ($stafftype == 1) {
                                             ?>
                                             <tr>
                                                 <th>Others</th>
@@ -182,6 +182,47 @@ if ($status == '') {
                                                     </a>
                                                 </td>
                                             </tr>
+                                        <?php }elseif ($stafftype == 3 && $staffrole == 2) { ?>
+                                            <tr>
+                                                <th>My Offices</th>
+                                                <td class="text-center">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-2">
+                                                        <span class="label label-success">-</span>
+                                                    </a>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-1">
+                                                        <span class="label label-warning">-</span>
+                                                    </a>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-3">
+                                                        <span class="label label-danger">-</span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+
+                                        <?php }elseif ($stafftype == 2 && $staffrole == 4) { ?>
+                                            
+                                            <tr>
+                                                <th>My Departments</th>
+                                                <td class="text-center">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-2">
+                                                        <span class="label label-success">-</span>
+                                                    </a>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-1">
+                                                        <span class="label label-warning">-</span>
+                                                    </a>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="javascript:void(0)" class="filter-button" id="filter-byothers-3">
+                                                        <span class="label label-danger">-</span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+
                                         <?php } ?>
                                     <tbody>
                                 </table>
