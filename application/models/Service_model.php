@@ -939,6 +939,10 @@ class Service_model extends CI_Model {
         return $this->db->where("id", $id)->get("contact_info")->row_array();
     }
 
+    public function get_single_recipient_info($id) {
+        return $this->db->where("id", $id)->get("recipient_information")->row_array();
+    }
+
     public function update_contact($id, $data) {
         $old_types = explode(",", $data["old_types"]);
         if (($key = array_search($data["edit_type_id"], $old_types)) !== false) {
@@ -3086,5 +3090,26 @@ class Service_model extends CI_Model {
 
     public function recipent_delete($id) {
         return $this->db->delete('recipient_information', array('id' => $id)); 
+    }
+
+    public function update_recipient($data) {
+        $id = $data['id'];
+        $reference_id = $data['reference_id'];
+       $arr = array(
+           'reference' => $data['reference'],
+           'recipient_first_name' => $data['recipient_first_name'],
+           'recipient_last_name' => $data['recipient_last_name'],
+           'recipient_phone_number' => $data['recipient_phone_number'],
+           'recipient_address' => $data['recipient_address'],
+           'recipient_city' => $data['recipient_city'],
+           'recipient_state' => $data['recipient_state'],
+           'recipient_country' => $data['recipient_country'],
+           'recipient_zip' => $data['recipient_zip_code'],
+           'recipient_tin' => $data['recipient_tin'],
+           'compensation' => $data['compensation']
+       );
+               $this->db->where('id', $id);
+               $this->db->where('reference_id', $reference_id);
+            return $this->db->update('recipient_information', $arr);
     }
 }
