@@ -1642,6 +1642,7 @@ class Home extends CI_Controller {
                 }
         endswitch;
         $render_data['service_id2'] = $this->service_model->get_service_id_for_1099_service($render_data['reference_id'], $render_data['order_id']);
+        $render_data['client_id'] = $this->service_model->get_practice_id($render_data['reference_id']);
         $this->load->template('services/related_services', $render_data);
     }
 
