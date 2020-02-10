@@ -1,4 +1,6 @@
 <?php
+// echo "<pre>";
+// print_r($order_summary);exit;
 $office_info = get_office_info_by_id($order_summary['office_id']);
 if ($export_type == 'email') {
     ?>
@@ -19,8 +21,9 @@ if ($export_type == 'email') {
                         </tr>
                         <tr>
                             <td width="50%" class="p-r-5">
-                                <h5>From:</h5><br/>
+                                <span>From:</span><br/>
                                 <address>
+                                    <strong><?= $order_summary['manager']; ?></strong><br>
                                     <strong><?= $office_info['name']; ?></strong><br>
                                     <?= $office_info['address']; ?><br>
                                     <?= $office_info['state_name']; ?>, <?= $office_info['city']; ?> <?= $office_info['zip']; ?><br>
