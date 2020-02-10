@@ -179,18 +179,10 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         $current_month = date('m', strtotime($project_date));
         $current_day = date('d', strtotime($project_date));
         $current_year = date('Y', strtotime($project_date));
-        if ($project_recurrence_main_data['actual_due_day'] > $current_day) {
-            if ($project_recurrence_main_data['actual_due_month'] >= $current_month) {
-                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
-            } else {
-                $due_date = $project_recurrence_main_data['actual_due_year'] + 1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
-            }
-        } else {
-            if ($project_recurrence_main_data['actual_due_month'] > $current_month) {
-                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
-            } else {
-                $due_date = $project_recurrence_main_data['actual_due_year'] + 1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
-            }
+        if($template_cat_id==1){
+            $due_date = $project_recurrence_main_data['actual_due_year'] + 1 . '-' . 03 . '-' . $project_recurrence_main_data['actual_due_day'];
+        }else{
+            $due_date = $project_recurrence_main_data['actual_due_year'] + 1 . '-' . 01 . '-' . $project_recurrence_main_data['actual_due_day'];
         }
     }
 //                    checking user date vs calculated pattern due date
@@ -262,7 +254,15 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     $actual_year = date('Y', strtotime($due_date));
     $total_days = cal_days_in_month(CAL_GREGORIAN, $actual_month, $actual_year);
     $project_start_day = ((int) $project_recurrence_main_data['target_start_months'] * $total_days) + (int) $project_recurrence_main_data['target_start_days'];
-    $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
+    if($project_recurrence_main_data['pattern']!='annually'){
+        $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
+    }else{
+        if($template_cat_id==3){
+            $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
+        }else{
+            $project_start_date=date("Y-m-d",strtotime($project_date));
+        }
+    }
     $dueDate = strtotime($due_date);
     ?>
     
@@ -273,7 +273,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     <input type="hidden" id="generation_month" value="<?= $project_recurrence_main_data['generation_month'] ?>">
     <input type="hidden" id="template_cat_id" value="<?= $template_cat_id ?>">
     <div class="col-md-6">
-        <label class="col-lg-12 control-label">Start Period:<span class="text-danger">*</span></label>
+        <label class="col-lg-12 control-label">Starting Period:<span class="text-danger">*</span></label>
         <div class="form-group">
             <?php 
             if($project_recurrence_main_data['pattern']!='annually'){ 
@@ -417,8 +417,8 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             var due_day=$('#due_day').val();
             var next_year=(parseInt(select_year) +parseInt(1));
             if(template_cat_id==1){
-                var due_date= 01+'/'+due_day + "/"+ next_year;
-                var next_due_date= 01+'/'+due_day + "/"+ (parseInt(next_year) +parseInt(1));
+                var due_date= 03+'/'+due_day + "/"+ next_year;
+                var next_due_date= 03+'/'+due_day + "/"+ (parseInt(next_year) +parseInt(1));
                 var next_recurrence_date= 01+'/'+01 + "/"+ next_year;
             }else{
                 var due_date= 01+'/'+due_day + "/"+ next_year;
