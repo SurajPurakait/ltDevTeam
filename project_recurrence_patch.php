@@ -258,7 +258,7 @@ if ($result = mysqli_query($conn, $sql)) {
                                     }
                                     elseif($row3['pattern']=='annually'){
                                         $due_date=date('Y-m-d',strtotime('+ 1 year',strtotime($old_generation_date)));
-                                        $due_date=date('Y-m-d',strtotime('+ 3 month',strtotime($due_date)));
+                                        $due_date=date('Y-m-d',strtotime('+ 2 month',strtotime($due_date)));
                                     }
                                 }elseif($template_cat_id==3){
                                     if($row3['pattern']=='monthly'){
