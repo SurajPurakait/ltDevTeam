@@ -3188,6 +3188,10 @@ class Project_Template_model extends CI_Model {
                 'period_of_time' => $data['period_time'],
                 'period_of_time_val' => $data['period_time'],
                 'period_of_time_yearval' => $data['period_time_year'],
+                'sales_tax_number' => $data['sales_tax_number'],
+                'business_partner_number' => $data['business_partner_number'],
+                'sales_tax_business_description' => $data['sales_tax_business_description'],
+                'frequency_of_sales_tax' => $data['frequeny_of_salestax'],               
                 'confirmation_number' => $data['confirmation_number'],
                 'status' => 0
             );

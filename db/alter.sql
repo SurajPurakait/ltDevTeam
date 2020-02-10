@@ -1164,7 +1164,7 @@ ALTER TABLE `project_recurrence_main` DROP `start_date`
 ALTER TABLE `project_recurrence_main` ADD `start_month` VARCHAR(50) NULL DEFAULT NULL AFTER `generation_date`; 
 ALTER TABLE `report_dashboard_service` ADD `service_request_id` INT(11) NOT NULL AFTER `id`; 
 
-/*live end*/
+
 
 /* 05.02.2020 */
 ALTER TABLE `sales_tax_application` CHANGE `order_id` `order_id` INT(11) NOT NULL; 
@@ -1211,3 +1211,13 @@ ALTER TABLE `sales_tax_processing` CHANGE `existing_practice_id` `existing_pract
 ALTER TABLE `sales_tax_application` DROP `sales_tax_number`, DROP `business_partner_number`, 
 DROP `sales_tax_business_description`, DROP `sales_bank_account_number`, 
 DROP `sales_bank_routing_number`, DROP `frequency_of_sales_tax`;
+
+/*live end*/
+
+/* 10.02.2020 */
+ALTER TABLE `project_task_sales_tax_process` ADD `sales_tax_number` INT(100) NOT NULL AFTER `confirmation_number`;
+ALTER TABLE `project_task_sales_tax_process` ADD `business_partner_number` INT(100) NOT NULL AFTER `sales_tax_number`; 
+ALTER TABLE `project_task_sales_tax_process` ADD `sales_tax_business_description` LONGTEXT NOT NULL AFTER `business_partner_number`;
+ALTER TABLE `project_task_sales_tax_process` ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `sales_tax_business_description`;
+
+/*live end*/
