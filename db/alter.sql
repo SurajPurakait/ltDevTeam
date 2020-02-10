@@ -1220,4 +1220,4 @@ ALTER TABLE `project_task_sales_tax_process` ADD `business_partner_number` INT(1
 ALTER TABLE `project_task_sales_tax_process` ADD `sales_tax_business_description` LONGTEXT NOT NULL AFTER `business_partner_number`;
 ALTER TABLE `project_task_sales_tax_process` ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `sales_tax_business_description`;
 
-/*live end*/
+ALTER TABLE `project_task_sales_tax_process` ADD `bank_account_no` VARCHAR(100) NOT NULL AFTER `main_salse_tax_id`, ADD `bank_routing_no` VARCHAR(100) NOT NULL AFTER `bank_account_no`;
