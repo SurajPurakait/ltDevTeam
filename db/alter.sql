@@ -1213,3 +1213,11 @@ DROP `sales_tax_business_description`, DROP `sales_bank_account_number`,
 DROP `sales_bank_routing_number`, DROP `frequency_of_sales_tax`;
 
 /*live end*/
+
+/* 10.02.2020 */
+ALTER TABLE `project_task_sales_tax_process` ADD `sales_tax_number` INT(100) NOT NULL AFTER `confirmation_number`;
+ALTER TABLE `project_task_sales_tax_process` ADD `business_partner_number` INT(100) NOT NULL AFTER `sales_tax_number`; 
+ALTER TABLE `project_task_sales_tax_process` ADD `sales_tax_business_description` LONGTEXT NOT NULL AFTER `business_partner_number`;
+ALTER TABLE `project_task_sales_tax_process` ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `sales_tax_business_description`;
+
+/*live end*/

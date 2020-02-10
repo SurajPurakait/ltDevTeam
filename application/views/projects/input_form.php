@@ -113,10 +113,136 @@
                                                     </div>
                                                 </div>-->
                         <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label id="referred-label" class="col-lg-2 control-label">Sales Tax Number<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="" class="form-control required_field" type="text" id="sales_tax_number" name="sales_tax_number" title="Sales Tax Number" value="<?= (isset($sales_tax_process->sales_tax_number)?($sales_tax_process->sales_tax_number!=''?$sales_tax_process->sales_tax_number:''):'') ?>">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div> 
+                                <div class="form-group">
+                                    <label id="referred-label" class="col-lg-2 control-label">Business Partner Number<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="" class="form-control required_field" type="text" id="business_partner_number" name="business_partner_number" title="Business Partner Number" value="<?=(isset($sales_tax_process->business_partner_number)?($sales_tax_process->business_partner_number!=''?$sales_tax_process->business_partner_number:''):'') ?>">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-2 control-label">Sales Tax Business Description<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <textarea class="form-control value_field required_field" name="sales_tax_business_description" id="sales_tax_business_description" title="Sales Tax Business Description" ><?=(isset($sales_tax_process->sales_tax_business_description)?($sales_tax_process->sales_tax_business_description!=''?$sales_tax_process->sales_tax_business_description:''):'') ?></textarea>
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-2 control-label">Frequency Of Salestax<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <select class="form-control frequeny_of_bookkeeping" name="frequeny_of_salestax" id="frequeny_of_salesteax" title="Frequency Of salestex" required="">
+                                            <option value="">Select</option>
+                                               <option value="m"<?=((isset($sales_tax_process->frequency_of_sales_tax) && $sales_tax_process->frequency_of_sales_tax == 'm' )? 'selected':'') ?> >Monthly</option>
+                                               <option value="q"<?=((isset($sales_tax_process->frequency_of_sales_tax) && $sales_tax_process->frequency_of_sales_tax == 'q' )? 'selected':'') ?>>Quarterly</option>
+                                            <option value="y"<?=((isset($sales_tax_process->frequency_of_sales_tax) && $sales_tax_process->frequency_of_sales_tax == 'y' )? 'selected':'') ?>>Yearly</option>
+                                        </select>
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                                <div id="frequency_of_salestax_month" style="display:none">
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Months<span class="text-danger">*</span></label>
+                                        <div class="col-lg-10">
+                                            <select class="form-control frequeny_of_bookkeeping" id="months" name="frequency_of_salestax_month"  title="Frequency Of salestex" >
+                                                <?php 
+                                                    $i=0;
+                                                    $months=['Select','January','Febuary','March','April','May','June','July','August','September','October','November','December'];
+                                                    for($i=0;$i<=12;$i++) {
+                                                ?>   
+                                                <option value="<?php echo $months[$i];?>"><?php echo $months[$i];?></option>
+                                                <?php  
+                                                    } 
+                                                ?>
+                                            </select>
+                                            <div class="errorMessage text-danger"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Years<span class="text-danger">*</span></label>
+                                        <div class="col-lg-10">
+                                            <select class="form-control" id="year1" name="frequency_of_salestax_years1"  title="Year" >
+                                                <?php
+                                                    $i=0;
+                                                    $year=['Select',date('Y')-3,date('Y')-2,date('Y')-1,date('Y'),date('Y')+1];
+                                                    for($i=0;$i<=5;$i++) { 
+                                                ?>
+                                                <option value="<?php echo $year[$i];?>" <?php if($year[$i]==date('Y')){ echo "selected"; } ?>><?php echo $year[$i];?></option>
+                                                <?php  
+                                                    } 
+                                                ?>
+                                            </select>
+                                            <div class="errorMessage text-danger"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="frequency_of_salestax_querter" style="display:none">
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Quarter<span class="text-danger">*</span></label>
+                                        <div class="col-lg-10">
+                                            <select class="form-control frequeny_of_bookkeeping" id="quarter" name="frequency_of_salestax_quarter"  title="Frequency Of salestex" >
+                                                <?php 
+                                                    $i=0;
+                                                    $querter=['Select','Quarter 1','Quarter 2','Quarter 3','Quarter 4'];
+                                                    for($i=0;$i<=4;$i++) {
+                                                ?>
+                                                <option value="<?php echo $querter[$i];?>"><?php echo $querter[$i];?></option>
+                                                <?php  
+                                                    } 
+                                                ?>
+                                            </select>
+                                            <div class="errorMessage text-danger"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Years<span class="text-danger">*</span></label>
+                                        <div class="col-lg-10">
+                                            <select class="form-control" id="year2" name="frequency_of_salestax_years2"  title="Year" >
+                                            <?php
+                                                $i=0;
+                                                $year=['Select',date('Y')-3,date('Y')-2,date('Y')-1,date('Y'),date('Y')+1];
+                                                for($i=0;$i<=5;$i++) { 
+                                            ?>
+                                            <option value="<?php echo $year[$i];?>" <?php if($year[$i]==date('Y')){ echo "selected"; } ?>><?php echo $year[$i];?></option>
+                                            <?php  
+                                                } 
+                                            ?>
+                                            </select>
+                                            <div class="errorMessage text-danger"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="frequency_of_salestax_years" style="display:none">
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Years<span class="text-danger">*</span></label>
+                                        <div class="col-lg-10">
+                                            <select class="form-control frequeny_of_bookkeeping" id="year" name="frequency_of_salestax_years"  title="Year" >
+                                            <?php
+                                                $i=0;
+                                                $year=['Select',date('Y')-3,date('Y')-2,date('Y')-1,date('Y'),date('Y')+1];
+                                                for($i=0;$i<=5;$i++) { 
+                                            ?>
+                                            <option value="<?php echo $year[$i];?>" <?php if($year[$i]==date('Y')){ echo "selected"; } ?>><?php echo $year[$i];?></option>
+                                            <?php  
+                                                } 
+                                            ?>
+                                            </select>
+                                            <div class="errorMessage text-danger"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                        <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Confirmation Number</label>
                             <div class="col-lg-10">
-                                <input class="form-control" type="text" id="confirmation_number" name="confirmation_number" title="Confirmation Number">
+                                <input class="form-control" type="text" id="confirmation_number" name="confirmation_number" title="Confirmation Number" value="<?= (isset($sales_tax_process->confirmation_number)?($sales_tax_process->confirmation_number!=''?$sales_tax_process->confirmation_number:''):'') ?>">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
