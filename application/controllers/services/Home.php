@@ -1710,6 +1710,11 @@ class Home extends CI_Controller {
        $id = post()['id'];                 
        echo $data['recipient'] = $this->service_model->recipent_delete($id);     
     }
+
+    public function update_recipient()
+    {
+        echo $this->service_model->update_recipient(post());
+    }
 }
 
 // End controller class

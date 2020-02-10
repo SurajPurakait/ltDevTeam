@@ -3394,6 +3394,12 @@ function request_create_1099_write_up() {
 
 
 function recipient_modal(modal_type, reference, reference_id, id, retail_price = '') {
+
+    if (modal_type == "edit") {        
+        if ($(".recipientedit").hasClass("dcedit")) {            
+            return false;
+        }
+    }   
     $.ajax({
         type: 'POST',
         url: base_url + 'modal/show_recipient',
@@ -3478,5 +3484,42 @@ function recipient_delete(id, reference_id, reference) {
                 }
             }
         });
+    });
+}
+
+function update_recipient()
+{
+    if (!requiredValidation('form_recipient')) {
+        return false;
+    }
+    var form_data = new FormData(document.getElementById('form_recipient'));
+    var reference = $("form#form_recipient #reference").val();
+    var reference_id = $("form#form_recipient #reference_id").val();
+    var retail_price = $("form#form_recipient #retail_price").val();
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'services/home/update_recipient',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            //console.log(result); return false;
+            if (result != 1) {
+                swal("ERROR!", "Error Processing Data", "error");
+            }else {
+                $('#recipient-form').modal('hide');
+                get_recipient_list(reference_id, reference,retail_price);
+                // $('#recipient-list-details').hide(); 
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
     });
 }
