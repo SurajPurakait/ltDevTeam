@@ -139,6 +139,18 @@ class Home extends CI_Controller {
         mod_actions_count('', 0);
     }
 
+    public function get_company_practice_id(){
+        $client_id = $this->input->post('client_id');
+        $result = $this->action_model->get_company_practice_id($client_id);
+        echo $result;
+    }
+
+    public function get_individual_practice_id(){
+        $client_id = $this->input->post('client_id');
+        $result = $this->action_model->get_individual_practice_id($client_id);
+        echo $result;
+    }
+
     public function update_action_status() {
         $prev_status = $this->action_model->get_current_status('actions', $this->input->post("id"));
         $status = $this->input->post("status");
@@ -1009,6 +1021,21 @@ class Home extends CI_Controller {
     }
     public function sos_count(){
         echo sos_dashboard_count('action', 'byme');
+    }
+
+    public function get_action_container_ajax() {
+        $client_type = post('client_type');
+//        echo $client_type;die;
+        $reference_id = post('reference_id');
+        $render_data['reference_id'] = $reference_id;
+        $render_data['service_category_list'] = $this->billing_model->get_service_category();
+        if ($client_type == '1') {
+            $render_data['reference'] = 'company';
+//            $render_data['completed_orders'] = $this->service->completed_orders();
+        } else {
+            $render_data['reference'] = 'individual';
+        }
+        $this->load->view('action/action_client_type' . $client_type, $render_data);
     }
 
 }
