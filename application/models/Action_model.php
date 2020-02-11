@@ -1703,7 +1703,7 @@ class Action_model extends CI_Model {
                     $inactive = '<a title="INACTIVE" style="font-size: 20px; color:green;" href="javascript:void(0);" onclick="inactive_business(' . $row["id"] . ',' . $row["company_id"] . ');"><i class="fa fa-check"></i>&nbsp;<span style="font-size:13px;">Active</span></a>';
                     $active = '<a title="ACTIVE" style="font-size: 20px; color:red;" href="javascript:void(0);" onclick="active_business(' . $row["id"] . ',' . $row["company_id"] . ');"><i class="fa fa-ban"></i>&nbsp;<span style="font-size:13px;">Inactive</span></a>';
                 } else {
-                    $edit = '';
+                    $edit = '&nbsp;&nbsp;<a title="EDIT" target="_blank" href="' . base_url("/action/home/edit_business/" . $row["id"] . "/" . $row["company_id"]) . '"><i class="fa fa-edit"></i><span>Edit</span></a>&nbsp;&nbsp;';
                     $delete = '';
                     $inactive = '';
                     $active = '';
