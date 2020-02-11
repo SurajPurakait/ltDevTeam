@@ -2513,7 +2513,6 @@ class Service_model extends CI_Model {
                 $this->db->insert($table_name, $save_data);
             }
         }
-
 //        $this->db->select('SUM(price_charged) AS total_price');
 //        $this->db->where('order_id', $data['order_id']);
 //        $total_price = $this->db->get('service_request')->row_array();
@@ -2535,6 +2534,7 @@ class Service_model extends CI_Model {
                 }
             }
         }
+        
         if (isset($data['edit_service_notes'])) {
             foreach ($data['edit_service_notes'] as $services_id => $note_data) {
                 $reference_id = $this->notes->get_main_service_id($data['editval'], $services_id);
