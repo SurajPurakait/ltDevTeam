@@ -122,11 +122,17 @@ Class System extends CI_Model {
     }
 
     public function get_all_state($state_code = []) {
-        $this->db->select('states.*, states.state_name AS name');
-        if (count($state_code) > 0) {
-            $this->db->where_in('state_code', $state_code);
-        }
-        return $this->db->get("states")->result_array();
+//        $this->db->select('states.*, states.state_name AS name');
+//        if (count($state_code) > 0) {
+//            $this->db->where_in('state_code', $state_code);
+//        }
+//        return $this->db->get("states")->result_array();
+        $this->db->select('states.*');
+        $this->db->from('states');
+        $this->db->join('sales_tax_rate', 'sales_tax_rate.state = states.id ');
+        $this->db->group_by('states.state_name');
+        $query = $this->db->get()->result_array();
+        return $query;
     }
 
     public function get_all_company_type() {
