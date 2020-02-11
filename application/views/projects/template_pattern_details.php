@@ -251,7 +251,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
     }else{
         if($template_cat_id==3){
-            $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
+            $project_start_date = date("Y-m-d",strtotime($project_date));
         }else{
             $project_start_date=date("Y-m-d",strtotime($project_date));
         }
