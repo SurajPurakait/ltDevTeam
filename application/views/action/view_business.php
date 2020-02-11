@@ -333,17 +333,24 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                                         <?php echo $ad['ban_account_number'] ?><br>
                                         <b>Routing Number:</b>
                                         <?php echo $ad['bank_routing_number'] ?><br>
-                                        <b>Website: </b>
-                                        <?php echo (isset($ad['bank_website']) && $ad['bank_website']!=''?$ad['bank_website']:'') ?><br>
-                                        <b>User: </b>
-                                        <?php echo (isset($ad['user']) && $ad['user']!=''?$ad['user']:'') ?><br>
-                                        <b>Password: </b><?php echo (isset($ad['password']) && $ad['password']!=''?$ad['password']:'') ?><br>
+                                        <?php
+                                        if ($usertype != 3) {
+                                        ?>
+                                            <b>Website: </b>
+                                            <?php echo (isset($ad['bank_website']) && $ad['bank_website']!=''?$ad['bank_website']:'') ?><br>
+                                            <b>User: </b>
+                                            <?php echo (isset($ad['user']) && $ad['user']!=''?$ad['user']:'') ?><br>
+                                            <b>Password: </b><?php echo (isset($ad['password']) && $ad['password']!=''?$ad['password']:'') ?><br>
 
-                                        <?php if(!empty($security_details)){
-                                        foreach($security_details as $sec_ans){
-                                        echo "<b>Question : </b>".$sec_ans['security_question']."<br>";
-                                        echo "<b>Answer : </b>".$sec_ans['security_answer']."<br>";
-                                        } } ?>
+                                            <?php 
+                                                if(!empty($security_details)){
+                                                    foreach($security_details as $sec_ans){
+                                                        echo "<b>Question : </b>".$sec_ans['security_question']."<br>";
+                                                        echo "<b>Answer : </b>".$sec_ans['security_answer']."<br>";
+                                                    } 
+                                                } 
+                                            }
+                                        ?>
                                         <p>
                                             <!-- <i class="fa fa-edit" style="cursor:pointer" onclick="account_modal('edit', '<?//= $ad['id'] ?>', 'month_diff');" title="Edit this account"></i> -->
                                             <i class="fa fa-edit" style="cursor:pointer" onclick="account_modal('edit', '<?= $ad['id'] ?>', '');" title="Edit this account"></i>

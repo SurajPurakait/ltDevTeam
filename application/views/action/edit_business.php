@@ -1,3 +1,7 @@
+<?php
+    $staff_info = staff_info();
+    // print_r($staff_info);exit;
+?>
 <div class="wrapper wrapper-content">        
     <form class="form-horizontal" method="post" id="form_create_new_company">
         <div class="tabs-container">
@@ -27,7 +31,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Name of Company<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="Name of Company" class="form-control" id="name1" type="text" name="new_company[name1]" value="<?= $company_data[0]['name'] ?>" title="Name of Business" required="">
+                                <input placeholder="Name of Company" class="form-control" id="name1" type="text" name="new_company[name1]" value="<?= $company_data[0]['name'] ?>" title="Name of Business" required="" <?= ($staff_info['type'] == 3) ? 'style="pointer-events: none;"':''; ?>;>
                                 <div class="errorMessage text-danger"></div>
                                 <input style="display: none;" placeholder="Option 2" class="form-control" type="text" name="new_company[name2]" value="<?= isset($company_name_option_data[0]['name2']) ? $company_name_option_data[0]['name2'] : '' ?>"  title="Name of Business">
                                 <input style="display: none;" placeholder="Option 3" class="form-control" type="text" name="new_company[name3]" value="<?= isset($company_name_option_data[0]['name3']) ? $company_name_option_data[0]['name3'] : '' ?>" title="Name of Business">
@@ -174,8 +178,8 @@
                 </div>
                 <div class="tab-pane" role="tabpanel" id="contact_info">
                     <div class="panel-body">
-                        <h3>Contact Info<span class="text-danger">*</span>&nbsp; (<a href="javascript:void(0);" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>');
-                                return false;">Add Contact</a>)</h3>
+                        <h3>Contact Info<span class="text-danger">*</span>&nbsp; <a href="javascript:void(0);" class="btn btn-primary" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>');
+                                return false;"><span class="fa fa-plus"></span>&nbsp; Add Contact</a></h3>
                         <div id="contact-list">
                             <input type="hidden" title="Contact Info" id="contact-list-count" required="required" value="">
                             <div class="errorMessage text-danger"></div>
@@ -289,7 +293,7 @@
                                 <input type="hidden" name="quant_documents" id="quant_documents" value="">
                                 <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>"/>
                                 <input type="hidden" name="editval" id="editval" value="<?= isset($company_order_data[0]['id']) ? $company_order_data[0]['id'] : ''; ?>">
-                                <button class="btn btn-success" type="button" onclick="request_create_business()">Save</button> &nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-success" type="button" onclick="request_create_business('<?= $staff_info['type'] ?>','<?= $staff_info['role'] ?>')">Save</button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button" onclick="go('action/home/business_dashboard')">Cancel</button>
                             </div>
                         </div>
@@ -308,6 +312,26 @@
     reload_owner_list('<?= $reference_id; ?>', 'main');
     get_document_list('<?= $reference_id; ?>', 'company');
     $(function () {
+        if ('<?php echo $staff_info['type'] ?>' == 3) {
+            $("#state_opened").attr('disabled', true);   
+            // $("#name1").attr('disabled', true);   
+            $("#fein").attr('disabled', true);   
+            $("#type").attr('disabled', true);   
+            $("#fye").attr('disabled', true);   
+            $("#dba").attr('disabled', true);   
+            $("#business_description").attr('disabled', true);
+            if ('<?php echo $staff_info['role'] ?>' != 2) {
+                $("#office").attr('disabled', true);   
+                $("#partner").attr('disabled', true);   
+                $("#manager").attr('disabled', true);   
+                $("#client_association").attr('disabled', true);   
+                $("#practice_id").attr('disabled', true);   
+                $("#referred_by_source").attr('disabled', true);   
+                $("#referred_by_name").attr('disabled', true);
+                $("#language").attr('disabled', true);
+            }   
+        }
+
         load_partner_manager_ddl('<?= $company_internal_data[0]['office']; ?>', '<?= $company_internal_data[0]['partner']; ?>', '<?= $company_internal_data[0]['manager']; ?>');
         $("#referred_by_source").change(function () {
             var source = $("#referred_by_source option:selected").val();
