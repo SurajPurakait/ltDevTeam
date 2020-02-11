@@ -185,13 +185,6 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             $due_date = $project_recurrence_main_data['actual_due_year'] + 1 . '-' . 01 . '-' . $project_recurrence_main_data['actual_due_day'];
         }
     }
-//                    checking user date vs calculated pattern due date
-//    if ($due_date == $user_due_date) {
-//        $due_date = $due_date;
-//    } else {
-//        $due_date = $user_due_date;
-//    }
-
     if ($project_recurrence_main_data['generation_month'] == '') {
         $project_recurrence_main_data['generation_month'] = '0';
     }
