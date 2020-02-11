@@ -118,7 +118,10 @@ if (!empty($project_list)) {
                         break; 
                     }
                 }
-            }else{
+            }else if($pattern_details->pattern=='annually'){
+                $start_months=$pattern_details->start_month;
+            }
+            else{
                 $start_months=$due_m[$pattern_details->start_month];
             }
         }

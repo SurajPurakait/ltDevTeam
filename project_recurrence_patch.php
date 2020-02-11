@@ -1,13 +1,13 @@
 <?php
-$servername = "localhost";
-$username = "leafnet_db_user";
-$password = "leafnet@123";
-$db = 'leafnet_stagings';
-
 //$servername = "localhost";
-//$username = "root";
-//$password = "root";
-//$db = 'leafnet_new';
+//$username = "leafnet_db_user";
+//$password = "leafnet@123";
+//$db = 'leafnet_stagings';
+
+$servername = "localhost";
+$username = "root";
+$password = "root";
+$db = 'leafnet_new';
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $db);
 // Check connection
@@ -155,7 +155,30 @@ if ($result = mysqli_query($conn, $sql)) {
                                 $old_due_date = $row3['due_date'];
                                 $old_next_due_date= $row3['next_due_date'];
                                 $old_generation_date= $row3['generation_date'];
-                                $start_month=date('n',strtotime($old_generation_date));
+                                if($row3['pattern'] == 'annually'){
+                                    $start_month=date('Y',strtotime($old_generation_date));
+                                }elseif($row3['pattern'] == 'quarterly'){
+                                    $quarter_month=date('n',strtotime($old_generation_date));
+                                    switch ($quarter_month) {
+                                        case 1:
+                                            $start_month=1;
+                                            break;
+                                        case 4:
+                                            $start_month=2;
+                                            break;
+                                        case 7:
+                                            $start_month=3;
+                                            break;
+                                        case 10:
+                                            $start_month=4;
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }else{
+                                    $start_month=date('n',strtotime($old_generation_date));
+                                }
+                                
                                 if (strlen($row3['actual_due_month']) == 1) {
                                     $row3['actual_due_month'] = '0' . $row3['actual_due_month'];
                                 }
@@ -254,13 +277,13 @@ if ($result = mysqli_query($conn, $sql)) {
 //                              for lots of changing it will created
                                 if($template_cat_id==1){
                                     if($row3['pattern']=='monthly'){
-                                       $due_date=date('Y-m-d',strtotime('+ 1 month',strtotime($old_generation_date))); 
+                                       $due_date=date('Y-m-d',strtotime('+ 2 month',strtotime($old_generation_date)));
                                     }
-                                    elseif($row3['pattern']=='annually'){
+                                    else{   // this else for pattern annually
                                         $due_date=date('Y-m-d',strtotime('+ 1 year',strtotime($old_generation_date)));
                                         $due_date=date('Y-m-d',strtotime('+ 2 month',strtotime($due_date)));
                                     }
-                                }elseif($template_cat_id==3){
+                                }else{   // this else for template_cat_id 3(sales tax)
                                     if($row3['pattern']=='monthly'){
                                         $due_date=date('Y-m-d',strtotime('+ 1 month',strtotime($old_generation_date)));
                                     }elseif($row3['pattern']=='quarterly'){
