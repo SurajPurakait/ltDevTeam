@@ -7,7 +7,9 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <form class="form-horizontal" method="post" id="related_service_form" onsubmit="saveRelatedService(); return false;">
-                        <h2><?= $service_details['description']; ?></h2>
+                        <h4>Service Id: <?= $service_id2; ?></h4>
+                        <h4>Service Name: <?= $service_details['description']; ?></h4>
+                        <h4>Client Id: <?= $client_id; ?></h4>
                         <div class="hr-line-dashed"></div>
 
                         <?php if ($service_shortname == 'acc_p'): //Payroll ?>
@@ -793,44 +795,44 @@
                         <h3>Recipient's Information : </h3>
 
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">First Name</label>
+                            <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="First Name" class="form-control" nameval="" type="text" id="recipient_first_name" name="table[recipient_information][recipient_first_name]" title="First Name" value="<?= isset($recipient_information[0]['recipient_first_name']) ? $recipient_information[0]['recipient_first_name'] : '' ?>">
+                                <input placeholder="First Name" required="" class="form-control" nameval=""  type="text" id="recipient_first_name" name="table[recipient_information][recipient_first_name]" title="First Name" value="<?= isset($recipient_information[0]['recipient_first_name']) ? $recipient_information[0]['recipient_first_name'] : '' ?>">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Last Name</label>
+                            <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="Last Name" class="form-control" nameval="" type="text" id="recipient_last_name" name="table[recipient_information][recipient_last_name]" title="Last Name" value="<?= isset($recipient_information[0]['recipient_last_name']) ? $recipient_information[0]['recipient_last_name'] : '' ?>">
+                                <input placeholder="Last Name" required="" class="form-control" nameval="" type="text" id="recipient_last_name" name="table[recipient_information][recipient_last_name]" title="Last Name" value="<?= isset($recipient_information[0]['recipient_last_name']) ? $recipient_information[0]['recipient_last_name'] : '' ?>">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Phone Number</label>
+                            <label class="col-lg-2 control-label">Phone Number<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="Phone Number" class="form-control" phoneval="" type="text" id="recipient_phone_number" name="table[recipient_information][recipient_phone_number]" title="Phone Number" value="<?= isset($recipient_information[0]['recipient_phone_number']) ? $recipient_information[0]['recipient_phone_number'] : '' ?>">
+                                <input placeholder="Phone Number" required="" class="form-control" phoneval="" type="text" id="recipient_phone_number" name="table[recipient_information][recipient_phone_number]" title="Phone Number" value="<?= isset($recipient_information[0]['recipient_phone_number']) ? $recipient_information[0]['recipient_phone_number'] : '' ?>">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Address</label>
+                            <label class="col-lg-2 control-label">Address<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="Address" class="form-control" type="text" id="recipient_address" name="table[recipient_information][recipient_address]" title="Address" value="<?= isset($recipient_information[0]['recipient_address']) ? $recipient_information[0]['recipient_address'] : '' ?>">
+                                <input placeholder="Address" required="" class="form-control" type="text" id="recipient_address" name="table[recipient_information][recipient_address]" title="Address" value="<?= isset($recipient_information[0]['recipient_address']) ? $recipient_information[0]['recipient_address'] : '' ?>">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">City</label>
+                            <label class="col-lg-2 control-label">City<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="City" class="form-control" type="text" id="recipient_city" name="table[recipient_information][recipient_city]" title="City" value="<?= isset($recipient_information[0]['recipient_city']) ? $recipient_information[0]['recipient_city'] : '' ?>">
+                                <input placeholder="City" required="" class="form-control" type="text" id="recipient_city" name="table[recipient_information][recipient_city]" title="City" value="<?= isset($recipient_information[0]['recipient_city']) ? $recipient_information[0]['recipient_city'] : '' ?>">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">State</label>
+                            <label class="col-lg-2 control-label">State<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select title="State" class="form-control" name="table[recipient_information][recipient_state]" id="recipient_state">
+                                <select title="State" required="" class="form-control" name="table[recipient_information][recipient_state]" id="recipient_state">
                                     <option value="">Select an option</option>
                                     <?php load_ddl_option("all_state_list",isset($recipient_information[0]['recipient_state']) ? $recipient_information[0]['recipient_state'] : ''); ?>
                                 </select>
@@ -838,9 +840,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Country</label>
+                            <label class="col-lg-2 control-label">Country<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select title="Country" class="form-control" name="table[recipient_information][recipient_country]" id="recipient_country">
+                                <select title="Country" required="" class="form-control" name="table[recipient_information][recipient_country]" id="recipient_country">
                                     <option value="">Select an option</option>
                                     <?php load_ddl_option("get_countries",isset($recipient_information[0]['recipient_country']) ? $recipient_information[0]['recipient_country'] : ''); ?>
                                 </select>
@@ -848,16 +850,16 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Zip Code</label>
+                            <label class="col-lg-2 control-label">Zip Code<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="Zip Code" class="form-control" type="text" id="recipient_zip_code" name="table[recipient_information][recipient_zip]" title="Zip Code" value="<?= isset($recipient_information[0]['recipient_zip']) ? $recipient_information[0]['recipient_zip'] : '' ?>">
+                                <input placeholder="Zip Code" required="" class="form-control" type="text" id="recipient_zip_code" name="table[recipient_information][recipient_zip]" title="Zip Code" value="<?= isset($recipient_information[0]['recipient_zip']) ? $recipient_information[0]['recipient_zip'] : '' ?>">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">TIN (Tax Identification Number)</label>
+                            <label class="col-lg-2 control-label">TIN (Tax Identification Number)<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="TIN" class="form-control" type="text" id="recipient_tin" name="table[recipient_information][recipient_tin]" title="TIN" value="<?= isset($recipient_information[0]['recipient_tin']) ? $recipient_information[0]['recipient_tin'] : '' ?>">
+                                <input placeholder="TIN" required="" class="form-control" type="text" id="recipient_tin" name="table[recipient_information][recipient_tin]" title="TIN" value="<?= isset($recipient_information[0]['recipient_tin']) ? $recipient_information[0]['recipient_tin'] : '' ?>">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>
@@ -865,9 +867,9 @@
 
                         <h3>Compensation : </h3>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Non-Employee Compensation</label>
+                            <label class="col-lg-2 control-label">Non-Employee Compensation<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <input placeholder="Non-Employee Compensation" class="form-control" type="text" id="compensation" name="table[recipient_information][compensation]" title="Non-Employee Compensation" value="<?= isset($recipient_information[0]['compensation']) ? $recipient_information[0]['compensation'] : '' ?>">
+                                <input placeholder="Non-Employee Compensation" required="" class="form-control" type="text" id="compensation" name="table[recipient_information][compensation]" title="Non-Employee Compensation" value="<?= isset($recipient_information[0]['compensation']) ? $recipient_information[0]['compensation'] : '' ?>">
                                 <div class="errorMessage text-danger"></div>        
                             </div>
                         </div>

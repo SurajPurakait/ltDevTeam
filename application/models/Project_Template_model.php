@@ -398,6 +398,11 @@ class Project_Template_model extends CI_Model {
         $this->db->where('status !=','4'); // 4 = inactivated as on 26.12.19
         return $this->db->get('project_template_main')->result_array();
     }
+    
+    function getaccountdetails($client_id){
+      return $this->db->get_where('financial_accounts',['client_id'=>$client_id])->row(); 
+        
+    }
 
     public function get_assigned_dept_staff_project_template($id) {
 
@@ -3193,6 +3198,8 @@ class Project_Template_model extends CI_Model {
                 'sales_tax_business_description' => $data['sales_tax_business_description'],
                 'frequency_of_sales_tax' => $data['frequeny_of_salestax'],               
                 'confirmation_number' => $data['confirmation_number'],
+                'bank_account_no'=>$data['bank_account_number'],
+                'bank_routing_no'=>$data['bank_routing_number'],
                 'status' => 0
             );
             $this->db->trans_begin();
