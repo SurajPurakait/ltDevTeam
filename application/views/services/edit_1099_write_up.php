@@ -363,7 +363,6 @@
 <script>
     clientTypeChange('<?= $edit_data['new_existing']; ?>', '<?= $reference_id; ?>', '<?= $reference; ?>', 1);
     $(function () {     
-        get_recipient_list('<?= $reference_id; ?>', '<?= $reference; ?>');
         var client_type = $('#type_of_client_ddl').val();
         if (client_type == '0') {
             fetchExistingClientData('<?= $reference_id; ?>', <?= $reference_id; ?>, '<?= $reference; ?>', 1);
