@@ -287,7 +287,8 @@
                             <div class="row" id="recipient-list-details">
                                 <label class="col-lg-2 control-label"></label>
                                 <div class="col-lg-10" style="padding-top:8px">
-                                <?php foreach ($recipient_data as $key => $rd){ ?>
+                                <?php foreach ($recipient_data as $key => $rd){ 
+                                    ?>
                                     <p>
                                         <b>Recipient <?= $key+1 ?> : <?= $rd["first_name"]; ?> <?= $rd["last_name"]; ?> </b><br>
                                         <b>Phone Number: </b><?= ($rd["recipient_phone_number"] !='') ? $rd["recipient_phone_number"] : 'NA'; ?><br>
@@ -297,6 +298,10 @@
                                         <b>Country: </b><?= ($rd["country_name"] !='') ? $rd["country_name"] : 'NA'; ?><br>
                                         <b>Zip: </b><?= ($rd["recipient_zip"] !='') ? $rd["recipient_zip"] : 'NA'; ?><br> 
                                         <b>TIN: </b><?= ($rd["recipient_tin"] !='') ? $rd["recipient_tin"] : 'NA'; ?> 
+                                        <p>
+                                            <i class="fa fa-edit recipientedit text-success" style="cursor:pointer" onclick="recipient_modal('edit', '<?= $rd["reference"]; ?>', '<?= $rd["reference_id"]; ?>', '<?= $rd["id"]; ?>')"title="Edit this recipient info"></i>
+                                            &nbsp;&nbsp;<i class="fa fa-trash recipientdelete text-danger" style="cursor:pointer" onclick="recipient_delete('<?= $rd["id"]; ?>', '<?= $rd["reference_id"]; ?>', '<?= $rd["reference"]; ?>')" title="Remove this recipient info"></i>
+                                        </p>
                                     </p>
                                     <?php } ?>
                                 </div>

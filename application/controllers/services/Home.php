@@ -247,7 +247,7 @@ class Home extends CI_Controller {
                     $render_data['payer_data'] = $this->service_model->get_payer_info($order_id);
                     $render_data['recipient_data'] = $this->service_model->get_recipient_info_by_id($order_id);
                     $this->load->template('services/edit_1099_write_up', $render_data);
-                }
+                }              
                 break;
             default :
                 redirect(base_url('services/home'));
