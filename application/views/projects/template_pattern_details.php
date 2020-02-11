@@ -235,7 +235,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             if($project_recurrence_main_data['pattern']!='annually'){
                 $generation_date=date('Y',strtotime($generation_date)).'-'.date('m',strtotime($generation_date)).'-'.'01';
             }else{
-                $generation_date=date('Y',strtotime($generation_date)).'-'.'01'.'-'.'01';
+                $generation_date=(date('Y',strtotime($generation_date))+1).'-'.'01'.'-'.'01';
             }
         }
     }
