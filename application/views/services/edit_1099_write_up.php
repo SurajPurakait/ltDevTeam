@@ -304,6 +304,7 @@
                                         </p>
                                     </p>
                                     <?php } ?>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -355,13 +356,14 @@
         </div>
     </div>
 </div>
-<div id="contact-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="recipient-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
+<div id="contact-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="document-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script>
     clientTypeChange('<?= $edit_data['new_existing']; ?>', '<?= $reference_id; ?>', '<?= $reference; ?>', 1);
-    $(function () {
+    $(function () {     
+        get_recipient_list('<?= $reference_id; ?>', '<?= $reference; ?>');
         var client_type = $('#type_of_client_ddl').val();
         if (client_type == '0') {
             fetchExistingClientData('<?= $reference_id; ?>', <?= $reference_id; ?>, '<?= $reference; ?>', 1);
