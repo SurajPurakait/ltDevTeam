@@ -24,7 +24,7 @@ if ($result = mysqli_query($conn, $sql)) {
         while ($pattern_details = mysqli_fetch_array($result)) {
             $recurDate = $pattern_details['generation_date'];
             $curDate = date('Y-m-d');
-            if (strtotime($curDate) == strtotime($recurDate)) {   
+            if (strtotime($curDate) == strtotime($recurDate)) {   //this condition is off for past recurrence date
                 $project_id = $pattern_details['project_id'];
                 //update old table
                 $updatesql = "update `project_recurrence_main` set generated_by_cron= 1 where id = " . $pattern_details['id'];
@@ -155,7 +155,30 @@ if ($result = mysqli_query($conn, $sql)) {
                                 $old_due_date = $row3['due_date'];
                                 $old_next_due_date= $row3['next_due_date'];
                                 $old_generation_date= $row3['generation_date'];
-                                $start_month=date('n',strtotime($old_generation_date));
+                                if($row3['pattern'] == 'annually'){
+                                    $start_month=date('Y',strtotime($old_generation_date));
+                                }elseif($row3['pattern'] == 'quarterly'){
+                                    $quarter_month=date('n',strtotime($old_generation_date));
+                                    switch ($quarter_month) {
+                                        case 1:
+                                            $start_month=1;
+                                            break;
+                                        case 4:
+                                            $start_month=2;
+                                            break;
+                                        case 7:
+                                            $start_month=3;
+                                            break;
+                                        case 10:
+                                            $start_month=4;
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }else{
+                                    $start_month=date('n',strtotime($old_generation_date));
+                                }
+                                
                                 if (strlen($row3['actual_due_month']) == 1) {
                                     $row3['actual_due_month'] = '0' . $row3['actual_due_month'];
                                 }
@@ -253,12 +276,28 @@ if ($result = mysqli_query($conn, $sql)) {
                                 
 //                              for lots of changing it will created
                                 if($template_cat_id==1){
-                                    $due_date=date('Y-m-d',strtotime('+ 2 month',strtotime($old_generation_date)));
-                                }elseif($template_cat_id==3){
-                                    $due_date=date('Y-m-d',strtotime('+ 1 month',strtotime($old_generation_date)));
+                                    if($row3['pattern']=='monthly'){
+                                       $due_date=date('Y-m-d',strtotime('+ 2 month',strtotime($old_generation_date)));
+                                    }
+                                    else{   // this else for pattern annually
+                                        $due_date=date('Y-m-d',strtotime('+ 1 year',strtotime($old_generation_date)));
+                                        $due_date=date('Y-m-d',strtotime('+ 2 month',strtotime($due_date)));
+                                    }
+                                }else{   // this else for template_cat_id 3(sales tax)
+                                    if($row3['pattern']=='monthly'){
+                                        $due_date=date('Y-m-d',strtotime('+ 1 month',strtotime($old_generation_date)));
+                                    }elseif($row3['pattern']=='quarterly'){
+                                        $due_date=date('Y-m-d',strtotime('+ 3 month',strtotime($old_generation_date)));
+                                    }elseif($row3['pattern']=='annually'){
+                                        $due_date=date('Y-m-d',strtotime('+ 1 year',strtotime($old_generation_date)));
+                                    }
                                 }
                                 if($template_cat_id==1){
-                                    $due_date_ptrn=date('Y',strtotime($due_date)).'-'.date('m',strtotime($due_date)).'-01';
+                                    if ($row3['pattern'] == 'annually'){
+                                        $due_date_ptrn=date('Y',strtotime($due_date)).'-'.'03'.'-01';
+                                    }else{
+                                        $due_date_ptrn=date('Y',strtotime($due_date)).'-'.date('m',strtotime($due_date)).'-01';
+                                    }
                                     $insert_project_recurrence_main_data['due_date']="'".$due_date_ptrn."'";
                                 }else{
                                     $due_date_ptrn=date('Y',strtotime($due_date)).'-'.date('m',strtotime($due_date)).'-19';
@@ -280,14 +319,18 @@ if ($result = mysqli_query($conn, $sql)) {
                                     }
                                     $insert_project_recurrence_main_data['next_due_date'] = "'".$next_due_date."'";
                                 } elseif ($row3['pattern'] == 'annually') {
-                                    $next_due_date = date("Y-m-d", strtotime("+1 year", strtotime($due_date)));
-                                    $insert_project_recurrence_main_data['next_due_date'] = $next_due_date;
+                                    if($template_cat_id==3){
+                                        $next_due_date = date("Y-m-d", strtotime("+1 year", strtotime($due_date_ptrn)));
+                                    }else{
+                                        $next_due_date = date("Y-m-d", strtotime("+1 year", strtotime($due_date)));
+                                    }
+                                    $insert_project_recurrence_main_data['next_due_date'] = "'".$next_due_date."'";
                                 } elseif ($row3['pattern'] == 'weekly') {
                                     $next_due_date = date("Y-m-d", strtotime("+7 days", strtotime($due_date)));
                                     $insert_project_recurrence_main_data['next_due_date'] = $next_due_date;
                                 } elseif ($row3['pattern'] == 'quarterly') {
-                                    $next_due_date = date("Y-m-d", strtotime("+3 months", strtotime($due_date)));
-                                    $insert_project_recurrence_main_data['next_due_date'] = $next_due_date;
+                                    $next_due_date = date("Y-m-d", strtotime("+3 months", strtotime($due_date_ptrn)));
+                                    $insert_project_recurrence_main_data['next_due_date'] = "'".$next_due_date."'";
                                 } else {
                                     $insert_project_recurrence_main_data['next_due_date'] = '0000-00-00';
                                 }
@@ -296,16 +339,25 @@ if ($result = mysqli_query($conn, $sql)) {
                                 }else{
                                     $actual_month = date('m', strtotime($next_due_date));
                                 }
-                                $actual_year = date('Y', strtotime($next_due_date));
-                                $total_days = cal_days_in_month(CAL_GREGORIAN, $actual_month, $actual_year);
-                                if($actual_year=='2019'){
-                                    $generation_days = ((int) $row3['generation_month'] * 30) + (int) $row3['generation_day']-1;
-                                }else{
-                                    if($template_cat_id==1){
-                                        $generation_days = ((int) $row3['generation_month'] * 30) + (int) $row3['generation_day'];    
+                                
+                                
+                                if ($row3['pattern'] == 'monthly') {
+                                    $actual_year = date('Y', strtotime($next_due_date));
+                                    $total_days = cal_days_in_month(CAL_GREGORIAN, $actual_month, $actual_year);
+
+                                    if($actual_year=='2019'){
+                                        $generation_days = ((int) $row3['generation_month'] * 30) + (int) $row3['generation_day']-1;
                                     }else{
-                                        $generation_days = ((int) $row3['generation_month'] * $total_days) + (int) $row3['generation_day']-2;    
+                                        if($template_cat_id==1){
+                                            $generation_days = ((int) $row3['generation_month'] * 30) + (int) $row3['generation_day'];    
+                                        }else{
+                                            $generation_days = ((int) $row3['generation_month'] * $total_days) + (int) $row3['generation_day']-2;    
+                                        }
                                     }
+                                }elseif ($row3['pattern'] == 'quarterly') {
+                                    $generation_days = ((int) $row3['generation_month'] * 30) + (int) $row3['generation_day'];    
+                                }elseif ($row3['pattern'] == 'annually') {
+                                    $generation_days = ((int) $row3['generation_month'] * 30) + (int) $row3['generation_day'];    
                                 }
                                 
                                 $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($next_due_date)));
@@ -420,7 +472,7 @@ if ($result = mysqli_query($conn, $sql)) {
                         //end project_task table 
                     }
                 }
-            }
+            }// current day condition is off for past recurrence date
         }
     }
 }

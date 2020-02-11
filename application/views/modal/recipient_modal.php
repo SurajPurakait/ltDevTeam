@@ -52,7 +52,7 @@
                                 <select title="Country" class="form-control" name="recipient_country"
                                         id="recipient_country" required="">
                                     <option value="">Select an option</option>
-                                    <?php load_ddl_option("get_countries",  $data["recipient_country"]); ?>
+                                    <?php load_ddl_option("get_countries"); ?>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>

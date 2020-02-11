@@ -247,7 +247,7 @@ class Home extends CI_Controller {
                     $render_data['payer_data'] = $this->service_model->get_payer_info($order_id);
                     $render_data['recipient_data'] = $this->service_model->get_recipient_info_by_id($order_id);
                     $this->load->template('services/edit_1099_write_up', $render_data);
-                }
+                }              
                 break;
             default :
                 redirect(base_url('services/home'));
@@ -934,6 +934,7 @@ class Home extends CI_Controller {
 
     public function get_contact_list() {
         $data['disable'] = post('disable');
+        $data['section'] = post('section');
         $data['list'] = $this->service_model->get_contact_list_by_reference(post('reference_id'), post('reference'));
         if (empty($data['list'])) {
             $individual_data = $this->service_model->get_individual_id_by_ref_id(post('reference_id'));
