@@ -102,7 +102,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Practice Id</label>
                             <div class="col-lg-10">
-                                <input placeholder="Practice Id" class="form-control" type="text" name="internal_data[practice_id]" id="practice_id" value="<?= $result['practice_id']; ?>" title="Practice Id">
+                                <input placeholder="Practice Id" class="form-control" type="text" name="internal_data[practice_id]" id="practice_id" value="<?= $result['practice_id']; ?>" title="Practice Id" readonly>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
