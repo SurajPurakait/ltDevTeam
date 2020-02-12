@@ -1212,7 +1212,7 @@ ALTER TABLE `sales_tax_application` DROP `sales_tax_number`, DROP `business_part
 DROP `sales_tax_business_description`, DROP `sales_bank_account_number`, 
 DROP `sales_bank_routing_number`, DROP `frequency_of_sales_tax`;
 
-/*live end*/
+
 
 /* 10.02.2020 */
 ALTER TABLE `project_task_sales_tax_process` ADD `sales_tax_number` INT(100) NOT NULL AFTER `confirmation_number`;
@@ -1221,3 +1221,10 @@ ALTER TABLE `project_task_sales_tax_process` ADD `sales_tax_business_description
 ALTER TABLE `project_task_sales_tax_process` ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `sales_tax_business_description`;
 
 ALTER TABLE `project_task_sales_tax_process` ADD `bank_account_no` VARCHAR(100) NOT NULL AFTER `main_salse_tax_id`, ADD `bank_routing_no` VARCHAR(100) NOT NULL AFTER `bank_account_no`;
+
+/* 11.02.2020 */
+ALTER TABLE `actions` ADD `client_type` INT(11) NOT NULL COMMENT '1:Business Client,2:Individual Client' AFTER `id`;
+ALTER TABLE `actions` ADD `office_id` INT(100) NOT NULL AFTER `client_type`;
+ALTER TABLE `actions` ADD `client_list_id` INT(100) NOT NULL AFTER `office_id`;
+
+/*live end*/

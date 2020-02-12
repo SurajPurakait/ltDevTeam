@@ -287,18 +287,8 @@
                             <div class="row" id="recipient-list-details">
                                 <label class="col-lg-2 control-label"></label>
                                 <div class="col-lg-10" style="padding-top:8px">
-                                <?php foreach ($recipient_data as $key => $rd){ ?>
-                                    <p>
-                                        <b>Recipient <?= $key+1 ?> : <?= $rd["first_name"]; ?> <?= $rd["last_name"]; ?> </b><br>
-                                        <b>Phone Number: </b><?= ($rd["recipient_phone_number"] !='') ? $rd["recipient_phone_number"] : 'NA'; ?><br>
-                                        <b>Address: </b><?= ($rd["recipient_address"] !='') ? $rd["recipient_address"] : 'NA'; ?><br>
-                                        <b>City: </b><?= ($rd["recipient_city"] !='') ? $rd["recipient_city"] : 'NA'; ?><br>
-                                        <b>State: </b><?= ($rd["state_name"] !='')? $rd["state_name"] : 'NA'; ?><br>
-                                        <b>Country: </b><?= ($rd["country_name"] !='') ? $rd["country_name"] : 'NA'; ?><br>
-                                        <b>Zip: </b><?= ($rd["recipient_zip"] !='') ? $rd["recipient_zip"] : 'NA'; ?><br> 
-                                        <b>TIN: </b><?= ($rd["recipient_tin"] !='') ? $rd["recipient_tin"] : 'NA'; ?> 
-                                    </p>
-                                    <?php } ?>
+                             
+                                    
                                 </div>
                             </div>
                         </div>
@@ -350,13 +340,14 @@
         </div>
     </div>
 </div>
-<div id="contact-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="recipient-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
+<div id="contact-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="document-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script>
     clientTypeChange('<?= $edit_data['new_existing']; ?>', '<?= $reference_id; ?>', '<?= $reference; ?>', 1);
-    $(function () {
+    $(function () {     
+        get_recipient_list('<?= $reference_id; ?>', '<?= $reference; ?>');
         var client_type = $('#type_of_client_ddl').val();
         if (client_type == '0') {
             fetchExistingClientData('<?= $reference_id; ?>', <?= $reference_id; ?>, '<?= $reference; ?>', 1);

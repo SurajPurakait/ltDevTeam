@@ -1806,3 +1806,41 @@ var clear_sos_msg = (value) => {
     }
 
 }
+
+function actionContainerAjax(client_type, client_id, action_id)
+{
+    var url = '';
+    if (action_id != '') {
+        // url = 'project/get_edit_project_container_ajax';
+    } else {
+//        alert("hi");return false;
+        url = 'action/home/get_action_container_ajax';
+    }
+    $.ajax({
+        type: 'POST',
+        url: base_url + url,
+        data: {
+            action_id: action_id,
+            client_type: client_type,
+            client_id: client_id
+        },
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+//            alert(result);
+            if (result != '0') {
+                // $('#action_container').find('#individual_list_ddl').chosen('destroy');
+                $('#action_container').html(result);
+                // $('#action_container').find('#individual_list_ddl').chosen();
+            } else {
+                go('action/home');
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}

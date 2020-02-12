@@ -3765,4 +3765,22 @@ class Action_model extends CI_Model {
         return date('m/d/Y' ,strtotime($action_start_date));
     }
 
+    public function get_company_practice_id($client_id){
+        $this->db->select('practice_id');
+        $this->db->from('internal_data');
+        $this->db->where('reference','company');
+        $this->db->where('reference_id',$client_id);
+        return $this->db->get()->row_array()['practice_id'];
+    }
+
+     public function get_individual_practice_id($client_id){
+        $this->db->select('int.practice_id');
+        $this->db->from('internal_data int');
+        $this->db->join('title t','t.individual_id = int.reference_id','inner');
+        $this->db->where('int.reference','individual');
+        $this->db->where('t.id',$client_id);
+        return $this->db->get()->row_array()['practice_id'];
+    }
+
+
 }

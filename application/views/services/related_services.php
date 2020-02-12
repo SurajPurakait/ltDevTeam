@@ -97,7 +97,6 @@
                                 <div id="owner-list-payroll"></div>
                                 <input type="hidden" id="payroll_approver_quantity" value="0">
                                 <button class="btn btn-success btn-xs" id="copy-contact" ref_id="<?= $reference_id; ?>">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Main Contact</button>&nbsp;
-
                                 <div class="form-group" id="payroll_first_name_div">
                                     <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
                                     <div class="col-lg-10">
@@ -708,7 +707,8 @@
                         <?php endif; ?>
 
 
-                        <?php if ($service_shortname == 'acc_1_w_u'){  // 1099 Write Up
+                        <?php if ($service_shortname == 'acc_1_w_u'){
+                                  // 1099 Write Up
                         ?>
                         <h3>Payer's Information : <span class="text-danger">*</span></h3>
 
@@ -792,89 +792,16 @@
                         <div class="hr-line-dashed"></div>
 
 
-                        <h3>Recipient's Information : </h3>
-
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <input placeholder="First Name" required="" class="form-control" nameval=""  type="text" id="recipient_first_name" name="table[recipient_information][recipient_first_name]" title="First Name" value="<?= isset($recipient_information[0]['recipient_first_name']) ? $recipient_information[0]['recipient_first_name'] : '' ?>">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <input placeholder="Last Name" required="" class="form-control" nameval="" type="text" id="recipient_last_name" name="table[recipient_information][recipient_last_name]" title="Last Name" value="<?= isset($recipient_information[0]['recipient_last_name']) ? $recipient_information[0]['recipient_last_name'] : '' ?>">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Phone Number<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <input placeholder="Phone Number" required="" class="form-control" phoneval="" type="text" id="recipient_phone_number" name="table[recipient_information][recipient_phone_number]" title="Phone Number" value="<?= isset($recipient_information[0]['recipient_phone_number']) ? $recipient_information[0]['recipient_phone_number'] : '' ?>">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Address<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <input placeholder="Address" required="" class="form-control" type="text" id="recipient_address" name="table[recipient_information][recipient_address]" title="Address" value="<?= isset($recipient_information[0]['recipient_address']) ? $recipient_information[0]['recipient_address'] : '' ?>">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">City<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <input placeholder="City" required="" class="form-control" type="text" id="recipient_city" name="table[recipient_information][recipient_city]" title="City" value="<?= isset($recipient_information[0]['recipient_city']) ? $recipient_information[0]['recipient_city'] : '' ?>">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">State<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <select title="State" required="" class="form-control" name="table[recipient_information][recipient_state]" id="recipient_state">
-                                    <option value="">Select an option</option>
-                                    <?php load_ddl_option("all_state_list",isset($recipient_information[0]['recipient_state']) ? $recipient_information[0]['recipient_state'] : ''); ?>
-                                </select>
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Country<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <select title="Country" required="" class="form-control" name="table[recipient_information][recipient_country]" id="recipient_country">
-                                    <option value="">Select an option</option>
-                                    <?php load_ddl_option("get_countries",isset($recipient_information[0]['recipient_country']) ? $recipient_information[0]['recipient_country'] : ''); ?>
-                                </select>
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Zip Code<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <input placeholder="Zip Code" required="" class="form-control" type="text" id="recipient_zip_code" name="table[recipient_information][recipient_zip]" title="Zip Code" value="<?= isset($recipient_information[0]['recipient_zip']) ? $recipient_information[0]['recipient_zip'] : '' ?>">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">TIN (Tax Identification Number)<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <input placeholder="TIN" required="" class="form-control" type="text" id="recipient_tin" name="table[recipient_information][recipient_tin]" title="TIN" value="<?= isset($recipient_information[0]['recipient_tin']) ? $recipient_information[0]['recipient_tin'] : '' ?>">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
+                        <h3>Recipient's Information : &nbsp; (<a href="javascript:void(0);" class="recipientadd" onclick="recipient_modal('add', '<?= $reference; ?>', '<?= $order_details['reference_id']; ?>',''); return false;">Add Recipient</a>)</h3> 
+                           
+                                   
+                           <?php }?>
+                            <div id="recipient-list">
+                                <!-- <input type="hidden" title="Contact Info" id="contact-list-count" value="">
+                                <div class="errorMessage text-danger"></div> -->
+                            </div>  
                         <div class="hr-line-dashed"></div>
-
-                        <h3>Compensation : </h3>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Non-Employee Compensation<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <input placeholder="Non-Employee Compensation" required="" class="form-control" type="text" id="compensation" name="table[recipient_information][compensation]" title="Non-Employee Compensation" value="<?= isset($recipient_information[0]['compensation']) ? $recipient_information[0]['compensation'] : '' ?>">
-                                <div class="errorMessage text-danger"></div>        
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <?php } ?>
+                        
                         
 
                         <div class="form-group">
@@ -937,11 +864,14 @@
         </div>
     </div>
 </div>
-
+<div id="recipient-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="employee-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script>
     $(function () {
+        <?php if(isset($payer_information['payer_first_name'])){?>
+        get_recipient_list('<?= $order_details['reference_id']; ?>', '<?= $reference; ?>');
+        <?php } ?>
         var serviceShortName = $('#service_shortname').val();
         //        $('.retail-price').val('<?// $service_details['retail_price']; ?>');
         //        $('#retail_price_override').val('<?// $service_request_details['price_charged']; ?>');

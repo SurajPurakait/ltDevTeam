@@ -185,13 +185,6 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             $due_date = $project_recurrence_main_data['actual_due_year'] + 1 . '-' . 01 . '-' . $project_recurrence_main_data['actual_due_day'];
         }
     }
-//                    checking user date vs calculated pattern due date
-//    if ($due_date == $user_due_date) {
-//        $due_date = $due_date;
-//    } else {
-//        $due_date = $user_due_date;
-//    }
-
     if ($project_recurrence_main_data['generation_month'] == '') {
         $project_recurrence_main_data['generation_month'] = '0';
     }
@@ -242,7 +235,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             if($project_recurrence_main_data['pattern']!='annually'){
                 $generation_date=date('Y',strtotime($generation_date)).'-'.date('m',strtotime($generation_date)).'-'.'01';
             }else{
-                $generation_date=date('Y',strtotime($generation_date)).'-'.'01'.'-'.'01';
+                $generation_date=(date('Y',strtotime($generation_date))+1).'-'.'01'.'-'.'01';
             }
         }
     }
@@ -258,7 +251,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
     }else{
         if($template_cat_id==3){
-            $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
+            $project_start_date = date("Y-m-d",strtotime($project_date));
         }else{
             $project_start_date=date("Y-m-d",strtotime($project_date));
         }
