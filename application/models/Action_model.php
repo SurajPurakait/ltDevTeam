@@ -648,12 +648,25 @@ class Action_model extends CI_Model {
         } else {
             $data['is_all'] = $is_all;
         }
+
+        $client_type = $data['client_type'];
+        $client_list_id = $data['client_list_id'];
+        unset($data['client_type']);
+        unset($data['client_list_id']);
+        
         $actions = array_merge($data, ["added_by_user" => $user_id, "status" => 0, "due_date" => $date]);
 
-//        print_r($notes);die;
         $this->db->trans_begin();
         $this->db->insert('actions', $actions);
         $id = $this->db->insert_id();
+
+        if(isset($client_type) && !empty($client_type)){
+            $client_practice_id = explode(",",$data['client_id']);
+            $res = array_combine($client_list_id,$client_practice_id);
+            foreach ($res as $key => $val) {
+               $this->db->insert('action_client_list', ["action_id" => $id,"client_type" => $client_type,"client_list_id" => $key, "client_id" => $val]);
+            }
+        }
 
         $staff_user_add_ofc = $staff_info['office'];
         // $ex = explode(",", $staff_user_add_ofc);
@@ -3765,21 +3778,25 @@ class Action_model extends CI_Model {
         return date('m/d/Y' ,strtotime($action_start_date));
     }
 
-    public function get_company_practice_id($client_id){
-        $this->db->select('practice_id');
-        $this->db->from('internal_data');
-        $this->db->where('reference','company');
-        $this->db->where('reference_id',$client_id);
-        return $this->db->get()->row_array()['practice_id'];
+    public function get_company_practice_id($client_id = ''){
+        if(isset($client_id) && !empty($client_id)){
+            $this->db->select('practice_id');
+            $this->db->from('internal_data');
+            $this->db->where('reference','company');
+            $this->db->where_in('reference_id',$client_id);
+            return $this->db->get()->result_array();
+        }
     }
 
-     public function get_individual_practice_id($client_id){
-        $this->db->select('int.practice_id');
-        $this->db->from('internal_data int');
-        $this->db->join('title t','t.individual_id = int.reference_id','inner');
-        $this->db->where('int.reference','individual');
-        $this->db->where('t.id',$client_id);
-        return $this->db->get()->row_array()['practice_id'];
+    public function get_individual_practice_id($client_id = ''){
+        if(isset($client_id) && !empty($client_id)){
+            $this->db->select('int.practice_id');
+            $this->db->from('internal_data int');
+            $this->db->join('title t','t.individual_id = int.reference_id','inner');
+            $this->db->where('int.reference','individual');
+            $this->db->where_in('t.id',$client_id);
+            return $this->db->get()->result_array();
+        }
     }
 
 
