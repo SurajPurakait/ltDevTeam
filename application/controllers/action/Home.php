@@ -142,13 +142,27 @@ class Home extends CI_Controller {
     public function get_company_practice_id(){
         $client_id = $this->input->post('client_id');
         $result = $this->action_model->get_company_practice_id($client_id);
-        echo $result;
+        if($result != ''){
+        $res=[];
+        foreach($result as $val){
+            $res[] = $val['practice_id'];
+        }
+        $practice_id = implode(" , ",$res);
+        echo $practice_id; 
+      }
     }
 
     public function get_individual_practice_id(){
         $client_id = $this->input->post('client_id');
         $result = $this->action_model->get_individual_practice_id($client_id);
-        echo $result;
+        if($result != ''){
+        $res=[];
+        foreach($result as $val){
+            $res[] = $val['practice_id'];
+        }
+        $practice_id = implode(" , ",$res);
+        echo $practice_id; 
+      }
     }
 
     public function update_action_status() {

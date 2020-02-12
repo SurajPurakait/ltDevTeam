@@ -13,7 +13,7 @@
     <div class="form-group client_type_div0" id="client_list">
         <label class="col-lg-2 control-label">Client List<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-        <select class="form-control client_type_field0" name="client_list_id" id="client_list_ddl" title="Client List" <?php echo (isset($client_id) && $client_id !='') ? 'disabled' : ''; ?> onchange = "get_business_client_id(this.value);" required>
+        <select class="form-control client_type_field0" name="client_list_id[]" id="client_list_ddl" title="Client List" <?php echo (isset($client_id) && $client_id !='') ? 'disabled' : ''; ?> onchange = "get_business_client_id();" multiple required>
             <option value="">Select an option</option>
         </select>
         </div>
@@ -26,16 +26,22 @@
    <?php }?>
    $("#client_list_ddl").chosen();
 
-   function get_business_client_id(client_id = "") {
-        $.ajax({
+    function get_business_client_id() {
+        var dropDown = document.getElementById('client_list_ddl'), clientArray = [], i;
+        for (i = 0; i < dropDown.options.length ; i += 1) {
+            if (dropDown.options[i].selected) {
+                clientArray.push( dropDown.options[i].value);
+            }
+        }
+            // alert(clientArray);
+            $.ajax({
             type: "POST",
             data: {
-                client_id: client_id
+                client_id: clientArray
             },
             url: base_url + 'action/home/get_company_practice_id',
             dataType: "html",
             success: function (result) {
-                // alert(result);return false;
                 $("#client_id").val(result);
             },
             beforeSend: function () {
