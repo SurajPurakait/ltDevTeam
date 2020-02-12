@@ -1792,10 +1792,10 @@ function delete_project_template(project_id) {
         }
     });        
 }
-function get_pattern_detais(template_id){
+function get_pattern_detais(template_id,project_id='',section=''){
     $.ajax({
         type: "POST",
-        data: {id : template_id},
+        data: {id : template_id,project_id:project_id,section:section},
         url: base_url + 'project/get_template_pattern_details',
         cache:false,
         success: function (result) {

@@ -1228,3 +1228,10 @@ ALTER TABLE `actions` ADD `office_id` INT(100) NOT NULL AFTER `client_type`;
 ALTER TABLE `actions` ADD `client_list_id` INT(100) NOT NULL AFTER `office_id`;
 
 /*live end*/
+
+/* 12.02.2020 */
+ALTER TABLE `actions` DROP `client_type`;
+ALTER TABLE `actions` DROP `client_list_id`;
+--import action_client_list
+
+ALTER TABLE `project_recurrence_main` ADD `start_year` VARCHAR(20) NOT NULL AFTER `start_month`; 
