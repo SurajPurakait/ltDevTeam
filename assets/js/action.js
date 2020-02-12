@@ -1782,7 +1782,7 @@ var clear_sos_msg = (value) => {
 
 }
 
-function actionContainerAjax(client_type, client_id, action_id)
+function actionContainerAjax(client_type, client_id = '', action_id = '')
 {
     var url = '';
     if (action_id != '') {
