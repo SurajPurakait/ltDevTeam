@@ -1,7 +1,16 @@
+<?php
+if(isset($project_id) && $project_id!=''){
+    $disabled= "pointer-events:none";
+    $readonly= 'readonly';
+}else{
+    $disabled='';
+    $readonly='';
+}
+?>
 <div class="col-md-12">
     <div class="form-group client_type_div0">
         <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
-        <select class="form-control client_type_field0" name="project[office_id]" id="staff_office" onchange="refresh_existing_client_list(this.value,'');" title="Office" required="">
+        <select class="form-control client_type_field0" name="project[office_id]" id="staff_office" onchange="refresh_existing_client_list(this.value,'');" title="Office" required="" style="<?= $disabled ?>" <?= $readonly ?>>
             <option value="">Select Office</option>
             <?php load_ddl_option("staff_office_list",(isset($office_id)? $office_id:''), (staff_info()['type'] != 1) ? "staff_office" : ""); ?>
         </select>
