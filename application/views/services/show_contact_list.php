@@ -1,4 +1,6 @@
-<?php foreach ($list as $contact) :
+<?php 
+$staff_info = staff_info();
+foreach ($list as $contact) :
     $state_name = state_info($contact['state'])['state_name'];
  ?>
     <div class="row">
@@ -11,7 +13,7 @@
                 <?= $contact["address1"]; ?>, <?= $contact["city"]; ?>, <?= $state_name; ?>,
                 ZIP: <?= $contact["zip"]; ?>, <?= $contact["country_name"]; ?>
             </p>
-            <?php if ($disable != "y"): ?>
+            <?php if ($disable != "y" && ($staff_info['type'] == 1 || $staff_info['type'] == 2 || ($staff_info['type'] == 3 && $staff_info['role'] == 2))): ?>
                 <p>
                     <i class="fa fa-edit contactedit text-success" style="cursor:pointer" onclick="contact_modal('edit', '<?= $contact["reference"]; ?>', '<?= $contact["reference_id"]; ?>', '<?= $contact["id"]; ?>')"title="Edit this contact info"></i>
                     &nbsp;&nbsp;<i class="fa fa-trash contactdelete text-danger" style="cursor:pointer" onclick="contact_delete('<?= $contact["reference"]; ?>', '<?= $contact["reference_id"]; ?>', '<?= $contact["id"]; ?>')" title="Remove this contact info"></i>
