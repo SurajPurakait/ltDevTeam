@@ -20,7 +20,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">State of Incorporation<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="company[state_opened]" id="state_opened" title="State of Incorporation" required="">
+                                <select class="form-control" name="company[state_opened]" id="state_opened" title="State of Incorporation" required="" <?= ($staff_info['type'] == 3) ? 'style="pointer-events: none;"':''; ?>>
                                     <option value="">Select an option</option>
                                     <?php load_ddl_option("state_list", $company_data[0]['state_opened']); ?>
                                 </select>
@@ -41,7 +41,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Federal ID</label>
                             <div class="col-lg-10">
-                                <input placeholder="xx-xxxxxxx" data-mask="99-9999999" class="form-control" id="fein" type="text" name="company[fein]" value="<?= $company_data[0]['fein'] ?>" title="Federal ID">
+                                <input placeholder="xx-xxxxxxx" data-mask="99-9999999" class="form-control" id="fein" type="text" name="company[fein]" value="<?= $company_data[0]['fein'] ?>" title="Federal ID" <?= ($staff_info['type'] == 3) ? 'style="pointer-events: none;"':''; ?>>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Type of Company<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="company[type]" id="type" title="Type of Company" required="">
+                                <select class="form-control" name="company[type]" id="type" title="Type of Company" required="" <?= ($staff_info['type'] == 3) ? 'style="pointer-events: none;"':''; ?>>
                                     <option value="">Select an option</option>
                                     <?php load_ddl_option("company_type_list", $company_data[0]['type']); ?>
                                 </select>
@@ -60,7 +60,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Fiscal Year End<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="company[fye]" id="fye" title="Fiscal year end" required="">
+                                <select class="form-control" name="company[fye]" id="fye" title="Fiscal year end" required="" <?= ($staff_info['type'] == 3) ? 'style="pointer-events: none;"':''; ?>>
                                     <option class="form-control" value="">Select an option</option>
                                     <?php load_ddl_option("fiscal_year_end", $company_data[0]['fye']); ?>
                                 </select>
@@ -70,7 +70,7 @@
                         <div class="form-group" id="dba_div">
                             <label class="col-lg-2 control-label">DBA (if any)</label>
                             <div class="col-lg-10">
-                                <input placeholder="DBA" id="dba" class="form-control" type="text" name="company[dba]" title="DBA" value="<?php echo $company_data[0]['dba'] ?>">
+                                <input placeholder="DBA" id="dba" class="form-control" type="text" name="company[dba]" title="DBA" value="<?php echo $company_data[0]['dba'] ?>" <?= ($staff_info['type'] == 3) ? 'style="pointer-events: none;"':''; ?>>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Business Description</label>
                             <div class="col-lg-10">
-                                <textarea class="form-control" name="company[business_description]" id="business_description" title="Business Description"><?= urldecode($company_data[0]['business_description']) ?></textarea>
+                                <textarea class="form-control" name="company[business_description]" id="business_description" title="Business Description" <?= ($staff_info['type'] == 3) ? 'style="pointer-events: none;"':''; ?>><?= urldecode($company_data[0]['business_description']) ?></textarea>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="internal_data[office]" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required="">
+                                <select class="form-control" name="internal_data[office]" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required="" <?= ($staff_info['type'] == 3 && $staff_info['role'] != 2) ? 'style="pointer-events: none;"':''; ?>>
                                     <option value="">Select an option</option>
                                     <?php load_ddl_option("staff_office_list", $company_internal_data[0]['office']); ?>
                                 </select>
@@ -98,7 +98,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Partner<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="internal_data[partner]" id="partner" title="Partner" required>
+                                <select class="form-control" name="internal_data[partner]" id="partner" title="Partner" required <?= ($staff_info['type'] == 3 && $staff_info['role'] != 2) ? 'style="pointer-events: none;"':''; ?>>
                                     <option value="">Select an option</option>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
@@ -107,7 +107,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Manager<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="internal_data[manager]" id="manager" title="Manager" required>
+                                <select class="form-control" name="internal_data[manager]" id="manager" title="Manager" required <?= ($staff_info['type'] == 3 && $staff_info['role'] != 2) ? 'style="pointer-events: none;"':''; ?>>
                                     <option value="">Select an option</option>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
@@ -116,7 +116,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Client Association</label>
                             <div class="col-lg-10">
-                                <input placeholder="Client Association" class="form-control" type="text" name="internal_data[client_association]" value="<?= $company_internal_data[0]['client_association'] ?>" id="client_association" title="Client Association">
+                                <input placeholder="Client Association" class="form-control" type="text" name="internal_data[client_association]" value="<?= $company_internal_data[0]['client_association'] ?>" id="client_association" title="Client Association" <?= ($staff_info['type'] == 3 && $staff_info['role'] != 2) ? 'style="pointer-events: none;"':''; ?>>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
@@ -132,7 +132,7 @@
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Referred By Source<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" name="internal_data[referred_by_source]" id="referred_by_source" onchange="change_referred_name_status(this.value);" title="Referred By Source" required>
+                                <select class="form-control" name="internal_data[referred_by_source]" id="referred_by_source" onchange="change_referred_name_status(this.value);" title="Referred By Source" required <?= ($staff_info['type'] == 3 && $staff_info['role'] != 2) ? 'style="pointer-events: none;"':''; ?>>
                                     <option value="">Select an option</option>
                                     <?php load_ddl_option("referer_by_source", $company_internal_data[0]['referred_by_source']); ?>
                                 </select>
@@ -142,14 +142,14 @@
                         <div class="form-group">
                             <label id="referred-label" class="col-lg-2 control-label">Referred By Name</label>
                             <div class="col-lg-10">
-                                <input placeholder="Referred By Name" class="form-control" type="text" id="referred_by_name" name="internal_data[referred_by_name]" value="<?= $company_internal_data[0]['referred_by_name'] ?>" title="Referred By Name">
+                                <input placeholder="Referred By Name" class="form-control" type="text" id="referred_by_name" name="internal_data[referred_by_name]" value="<?= $company_internal_data[0]['referred_by_name'] ?>" title="Referred By Name" <?= ($staff_info['type'] == 3 && $staff_info['role'] != 2) ? 'style="pointer-events: none;"':''; ?>>
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Language<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
-                                <select class="form-control" id="language" name="internal_data[language]" title="Language" required="">
+                                <select class="form-control" id="language" name="internal_data[language]" title="Language" required="" <?= ($staff_info['type'] == 3 && $staff_info['role'] != 2) ? 'style="pointer-events: none;"':''; ?>>
                                     <option value="">Select an option</option>
                                     <?php load_ddl_option("language_list", $company_internal_data[0]['language']); ?>
                                 </select>
@@ -312,26 +312,6 @@
     reload_owner_list('<?= $reference_id; ?>', 'main');
     get_document_list('<?= $reference_id; ?>', 'company');
     $(function () {
-        if ('<?php echo $staff_info['type'] ?>' == 3) {
-            $("#state_opened").attr('disabled', true);   
-            // $("#name1").attr('disabled', true);   
-            $("#fein").attr('disabled', true);   
-            $("#type").attr('disabled', true);   
-            $("#fye").attr('disabled', true);   
-            $("#dba").attr('disabled', true);   
-            $("#business_description").attr('disabled', true);
-            if ('<?php echo $staff_info['role'] ?>' != 2) {
-                $("#office").attr('disabled', true);   
-                $("#partner").attr('disabled', true);   
-                $("#manager").attr('disabled', true);   
-                $("#client_association").attr('disabled', true);   
-                $("#practice_id").attr('disabled', true);   
-                $("#referred_by_source").attr('disabled', true);   
-                $("#referred_by_name").attr('disabled', true);
-                $("#language").attr('disabled', true);
-            }   
-        }
-
         load_partner_manager_ddl('<?= $company_internal_data[0]['office']; ?>', '<?= $company_internal_data[0]['partner']; ?>', '<?= $company_internal_data[0]['manager']; ?>');
         $("#referred_by_source").change(function () {
             var source = $("#referred_by_source option:selected").val();
