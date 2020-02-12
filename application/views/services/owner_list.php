@@ -1,4 +1,5 @@
 <?php
+$staff_info = staff_info();
 if (!empty($list)) :
     if ($section == "main") :
         foreach ($list as $title) :
@@ -11,7 +12,7 @@ if (!empty($list)) :
                         Percentage: <?= $title->percentage ?>%
                     </p>
                     <?php if ($title->existing_reference_id == $title->company_id): ?>
-                        <p>
+                        <p <?= (($staff_info['type'] == 1 || $staff_info['type'] == 2 || ($staff_info['type'] == 3 && $staff_info['role'] == 2))) ? '':'style="display:none"'; ?>>
                             <i class="fa fa-edit owneredit" style="cursor:pointer" onclick="open_owner_popup(0, '<?= $title->company_id; ?>', '<?= $title->id; ?>');" title="Edit This Owner"></i>
                             &nbsp;&nbsp;<i class="fa fa-trash ownerdelete" style="cursor:pointer" onclick="delete_owner('<?= $title->id; ?>');" title="Remove this owner"></i>
                         </p>

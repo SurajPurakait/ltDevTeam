@@ -9,9 +9,9 @@
                 <li class="nav-link active"><a href="#general_info" aria-controls="#general_info" role="tab" data-toggle="tab">GENERAL</a></li>
                 <li class="nav-link"><a href="#contact_info" aria-controls="#contact_info" role="tab" data-toggle="tab">CONTACT </a></li>
                 <li class="nav-link"><a href="#owner_info" aria-controls="#owner_info" role="tab" data-toggle="tab">OWNER</a></li>
-                <!-- <li class="nav-link"><a href="#other_info" aria-controls="#other_info" role="tab" data-toggle="tab">OTHER</a></li> -->                    
+                <li class="nav-link"><a href="#other_info" aria-controls="#other_info" role="tab" data-toggle="tab">OTHER</a></li>                    
                 <!--<li class="nav-link"><a href="#account_info" aria-controls="#account_info" role="tab" data-toggle="tab">ACCOUNT</a></li>-->
-  <!--               <li class="nav-link"><a href="#billing_info" aria-controls="#billing_info" role="tab" data-toggle="tab">INVOICE</a></li> -->                    
+                <li class="nav-link"><a href="#billing_info" aria-controls="#billing_info" role="tab" data-toggle="tab">INVOICE</a></li>                    
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" role="tabpanel" id="general_info">
@@ -204,8 +204,8 @@
                 </div>
                 <div class="tab-pane" role="tabpanel" id="owner_info">
                     <div class="panel-body">                         
-                        <h3>Owners<span class="text-danger">*</span> &nbsp; <a href="javascript:void(0);" class="btn btn-primary" onclick="open_owner_popup(<?= isset($company_order_data[0]['service_id']) ? $company_order_data[0]['service_id'] : 0; ?>, '<?= $reference_id; ?>', 0);
-                                return false;"><span class="fa fa-plus"></span>&nbsp; Add owner</a></h3>
+                        <h3>Owners<span class="text-danger">*</span> &nbsp; (<a href="javascript:void(0);" onclick="open_owner_popup(<?= isset($company_order_data[0]['service_id']) ? $company_order_data[0]['service_id'] : 0; ?>, '<?= $reference_id; ?>', 0);
+                                return false;">Add owner</a>)</h3>
                         <div id="owners-list">
                             <input type="hidden" title="Owners" id="owners-list-count" required="required" value="">
                             <div class="errorMessage text-danger"></div>
@@ -224,6 +224,76 @@
                                 <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>"/>
                                 <input type="hidden" name="editval" id="editval" value="<?= isset($company_order_data[0]['id']) ? $company_order_data[0]['id'] : ''; ?>">
                                 <button class="btn btn-success" type="button" onclick="request_create_business()">Save</button> &nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-default" type="button" onclick="go('action/home/business_dashboard')">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" role="tabpanel" id="other_info">
+                    <div class="panel-body"> 
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Attachments</label>
+                            <div class="col-lg-10">
+                                <input placeholder="Attachments" id="attachments" type="file" name="attachments" >
+                                <!--<div class="errorMessage text-danger"></div>-->
+                            </div>
+                        </div>
+                        <?php if ($company_data[0]['file_name'] != "") { ?>
+                            <ul class="uploaded-file-list">
+                                <li>
+                                    <div class="preview preview-image" style="background-image: url('<?= base_url(); ?>uploads/<?= $company_data[0]['file_name']; ?>');max-width: 100%;">
+                                        <a target="_blank" href="<?= base_url(); ?>uploads/<?= $company_data[0]['file_name']; ?>" title="<?= $company_data[0]['file_name']; ?>"><i class="fa fa-download"></i></a>
+                                    </div>
+                                    <p class="text-overflow-e" title="<?= $company_data[0]['file_name']; ?>"><?= $company_data[0]['file_name']; ?></p>
+                                </li>
+                            </ul>
+                        <?php }
+                        ?>
+
+                        <div class="hr-line-dashed"></div>
+
+
+                        <div>
+                            <?= note_func('Notes', 'n', 1, 'reference_id', $reference_id); ?>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <h3>Documents &nbsp; (<a onclick="document_modal('add', '<?= $reference ?>', '<?= $reference_id ?>');" href="javascript:void(0);">Add Document</a>)</h3>
+                        <div id="document-list"></div>                            
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-lg-10">
+                                <input type="hidden" name="reference_id" id="reference_id" value="<?= $reference_id; ?>">
+                                <input type="hidden" name="reference" id="reference" value="<?= $reference; ?>">
+                                <input type="hidden" name="service_id" id="service_id" value="<?= isset($company_order_data[0]['service_id']) ? $company_order_data[0]['service_id'] : 0; ?>">
+                                <input type="hidden" name="action" id="action" value="create_new_company">
+                                <input type="hidden" name="quant_title" id="quant_title" value="">
+                                <input type="hidden" name="quant_contact" id="quant_contact" value="">
+                                <input type="hidden" name="quant_documents" id="quant_documents" value="">
+                                <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>"/>
+                                <input type="hidden" name="editval" id="editval" value="<?= isset($company_order_data[0]['id']) ? $company_order_data[0]['id'] : ''; ?>">
+                                <button class="btn btn-success" type="button" onclick="request_create_business()">Save</button> &nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-default" type="button" onclick="go('action/home/business_dashboard')">Cancel</button>
+                            </div>
+                        </div>                                           
+                    </div>
+                </div>
+                
+                <div class="tab-pane" role="tabpanel" id="billing_info">
+                    <div class="panel-body">
+                        <div class="ajaxdiv" id="dashboard_result_div"></div>
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-lg-10">
+                                <input type="hidden" name="reference_id" id="reference_id" value="<?= $reference_id; ?>">
+                                <input type="hidden" name="reference" id="reference" value="<?= $reference; ?>">
+                                <input type="hidden" name="service_id" id="service_id" value="<?= isset($company_order_data[0]['service_id']) ? $company_order_data[0]['service_id'] : 0; ?>">
+                                <input type="hidden" name="action" id="action" value="create_new_company">
+                                <input type="hidden" name="quant_title" id="quant_title" value="">
+                                <input type="hidden" name="quant_contact" id="quant_contact" value="">
+                                <input type="hidden" name="quant_documents" id="quant_documents" value="">
+                                <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>"/>
+                                <input type="hidden" name="editval" id="editval" value="<?= isset($company_order_data[0]['id']) ? $company_order_data[0]['id'] : ''; ?>">
+                                <button class="btn btn-success" type="button" onclick="request_create_business('<?= $staff_info['type'] ?>','<?= $staff_info['role'] ?>')">Save</button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button" onclick="go('action/home/business_dashboard')">Cancel</button>
                             </div>
                         </div>
