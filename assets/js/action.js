@@ -420,31 +420,6 @@ function request_create_business(usertype='',userrole='') {
     }
 
     var company_type = $("#type option:selected").val();
-    if (usertype == 3) {
-        $("#state_opened").removeAttr('disabled');   
-        // $("#name1").removeAttr('disabled');   
-        $("#fein").removeAttr('disabled');   
-        $("#type").removeAttr('disabled');   
-        $("#fye").removeAttr('disabled');   
-        $("#dba").removeAttr('disabled');   
-        $("#business_description").removeAttr('disabled');        
-        $("#office").removeAttr('disabled');   
-        $("#partner").removeAttr('disabled');   
-        $("#manager").removeAttr('disabled');   
-        $("#client_association").removeAttr('disabled');   
-        $("#practice_id").removeAttr('disabled');   
-        $("#referred_by_source").removeAttr('disabled');   
-        $("#referred_by_name").removeAttr('disabled');
-        $("#language").removeAttr('disabled');
-    }  else if(userrole == 2) {
-        $("#state_opened").removeAttr('disabled');
-        // $("#name1").removeAttr('disabled');   
-        $("#fein").removeAttr('disabled');   
-        $("#type").removeAttr('disabled');   
-        $("#fye").removeAttr('disabled');   
-        $("#dba").removeAttr('disabled');   
-        $("#business_description").removeAttr('disabled');
-    }
 //    if (company_type == '1' || company_type == '2' || company_type == '3' || company_type == '4' || company_type == '5') {
 
     var total_percentage = $("#owner_percentage_total").val();
