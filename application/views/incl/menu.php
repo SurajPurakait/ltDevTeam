@@ -219,15 +219,21 @@ $office_id = get_office_id($staff_info['office']);
                             </div>
                             <a href="<?= base_url(); ?>services/partner_services">+ Partner</a>
                         </li>
-                        <?php if ($staff_info['type'] == '1' || $staff_info['department'] == '14') { ?>
+                        <?php 
+                        if ($staff_info['type'] == '1' || $staff_info['department'] == '14') { 
+                        ?>                        
                         <li <?= active_menu($menu, "service_setup"); ?>>
-                                <a class="admin-nav" href="<?= base_url('services/service_setup'); ?>">Service Setup</a>
+                            <a class="admin-nav" href="<?= base_url('services/service_setup'); ?>"><i class="fa fa-cog" aria-hidden="true"></i>Service Setup</a>
                         </li>
-
+                        <li <?= active_menu($menu, "partner_service_setup"); ?>>
+                            <a class="admin-nav" href="<?= base_url('services/partner_service_setup'); ?>"><i class="fa fa-wrench" aria-hidden="true"></i>Partner Service Setup</a>
+                        </li>
                         <li <?= active_menu($menu, "business_client"); ?>>
-                                <a class="admin-nav" href="<?= base_url('services/business_client'); ?>">Sales Tax Rate</a>
+                            <a class="admin-nav" href="<?= base_url('services/business_client'); ?>"><i class="fa fa-percent" aria-hidden="true"></i>Sales Tax Rate</a>
                         </li>
-                    <?php } ?>
+                        <?php 
+                        } 
+                        ?>
                     </ul>
                 </li>
 
