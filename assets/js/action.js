@@ -414,13 +414,12 @@ function cancel_edit_action(id) {
     goURL(base_url + '/action/home/view_action/' + id);
 }
 
-function request_create_business() {
+function request_create_business(usertype='',userrole='') {
     if (!requiredValidation('form_create_new_company')) {
         return false;
     }
 
     var company_type = $("#type option:selected").val();
-
 //    if (company_type == '1' || company_type == '2' || company_type == '3' || company_type == '4' || company_type == '5') {
 
     var total_percentage = $("#owner_percentage_total").val();
@@ -1781,4 +1780,42 @@ var clear_sos_msg = (value) => {
         $("#rad7").removeAttr('checked');
     }
 
+}
+
+function actionContainerAjax(client_type, client_id = '', action_id = '')
+{
+    var url = '';
+    if (action_id != '') {
+        // url = 'project/get_edit_project_container_ajax';
+    } else {
+//        alert("hi");return false;
+        url = 'action/home/get_action_container_ajax';
+    }
+    $.ajax({
+        type: 'POST',
+        url: base_url + url,
+        data: {
+            action_id: action_id,
+            client_type: client_type,
+            client_id: client_id
+        },
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+//            alert(result);
+            if (result != '0') {
+                // $('#action_container').find('#individual_list_ddl').chosen('destroy');
+                $('#action_container').html(result);
+                // $('#action_container').find('#individual_list_ddl').chosen();
+            } else {
+                go('action/home');
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
 }

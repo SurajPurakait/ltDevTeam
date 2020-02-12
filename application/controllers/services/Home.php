@@ -934,6 +934,7 @@ class Home extends CI_Controller {
 
     public function get_contact_list() {
         $data['disable'] = post('disable');
+        $data['section'] = post('section');
         $data['list'] = $this->service_model->get_contact_list_by_reference(post('reference_id'), post('reference'));
         if (empty($data['list'])) {
             $individual_data = $this->service_model->get_individual_id_by_ref_id(post('reference_id'));

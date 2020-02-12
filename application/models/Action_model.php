@@ -1703,7 +1703,7 @@ class Action_model extends CI_Model {
                     $inactive = '<a title="INACTIVE" style="font-size: 20px; color:green;" href="javascript:void(0);" onclick="inactive_business(' . $row["id"] . ',' . $row["company_id"] . ');"><i class="fa fa-check"></i>&nbsp;<span style="font-size:13px;">Active</span></a>';
                     $active = '<a title="ACTIVE" style="font-size: 20px; color:red;" href="javascript:void(0);" onclick="active_business(' . $row["id"] . ',' . $row["company_id"] . ');"><i class="fa fa-ban"></i>&nbsp;<span style="font-size:13px;">Inactive</span></a>';
                 } else {
-                    $edit = '';
+                    $edit = '&nbsp;&nbsp;<a title="EDIT" target="_blank" href="' . base_url("/action/home/edit_business/" . $row["id"] . "/" . $row["company_id"]) . '"><i class="fa fa-edit"></i><span>Edit</span></a>&nbsp;&nbsp;';
                     $delete = '';
                     $inactive = '';
                     $active = '';
@@ -3764,5 +3764,23 @@ class Action_model extends CI_Model {
         $action_start_date = $this->db->get('report_dashboard_action')->row_array()['creation_date'];
         return date('m/d/Y' ,strtotime($action_start_date));
     }
+
+    public function get_company_practice_id($client_id){
+        $this->db->select('practice_id');
+        $this->db->from('internal_data');
+        $this->db->where('reference','company');
+        $this->db->where('reference_id',$client_id);
+        return $this->db->get()->row_array()['practice_id'];
+    }
+
+     public function get_individual_practice_id($client_id){
+        $this->db->select('int.practice_id');
+        $this->db->from('internal_data int');
+        $this->db->join('title t','t.individual_id = int.reference_id','inner');
+        $this->db->where('int.reference','individual');
+        $this->db->where('t.id',$client_id);
+        return $this->db->get()->row_array()['practice_id'];
+    }
+
 
 }

@@ -61,7 +61,7 @@ if ($modal_type != "edit"):
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <label>Website URL</label> 
-                        <input placeholder="" class="form-control" type="text" id="website" name="bank_website" title="Website URL" required="">
+                        <input placeholder="" class="form-control" type="text" id="website" name="bank_website" title="Website URL">
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
@@ -93,12 +93,19 @@ if ($modal_type != "edit"):
                         </select>
                         <div class="errorMessage text-danger"></div>
                     </div>
-                    <!-- <div class="form-group">
+
+                    <?php
+                        if ($section != 'client') {                         
+                    ?>
+                    <div class="form-group">
                         <label>Upload</label><br>
                         <span id="uploadifle"></span>
                         <input class="m-t-5" type="file" name="acc_file" id="acc_file">
                         <div class="errorMessage text-danger"></div>
-                    </div> -->
+                    </div>
+                    <?php
+                        }
+                    ?>
                     <div class="form-group" style="display:none; ">
                         <label>Total Amount (in $)</label> 
                         <input class="form-control" type="text" readonly id="total_amount" name="total_amount" value="">
@@ -196,7 +203,7 @@ if ($modal_type != "edit"):
                     ?>
                     <div class="form-group">
                         <label>Website URL<span class="text-danger">*</span></label>
-                        <input class="form-control" type="text" name="bank_website" id="bank_website" title="Website URL" required value="<?= $data["bank_website"]; ?>">
+                        <input class="form-control" type="text" name="bank_website" id="bank_website" title="Website URL" value="<?= $data["bank_website"]; ?>">
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
