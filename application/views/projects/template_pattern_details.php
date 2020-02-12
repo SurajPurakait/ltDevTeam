@@ -257,6 +257,10 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         }
     }
     $dueDate = strtotime($due_date);
+    if($project_id!=''){
+        $project_start_date=$project_recurrence_main_data['start_month'];
+        $project_start_year=$project_recurrence_main_data['start_year'];
+    }
     ?>
     
     <input type="hidden" id="project_pattern" value="<?= $project_recurrence_main_data['pattern'] ?>">
@@ -265,6 +269,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     <input type="hidden" id="generation_day" value="<?= $project_recurrence_main_data['generation_day'] ?>">
     <input type="hidden" id="generation_month" value="<?= $project_recurrence_main_data['generation_month'] ?>">
     <input type="hidden" id="template_cat_id" value="<?= $template_cat_id ?>">
+    <?php // if($project_id==''){ ?>
     <div class="col-md-6">
         <label class="col-lg-12 control-label">Starting Period:<span class="text-danger">*</span></label>
         <div class="form-group">
@@ -272,7 +277,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             if($project_recurrence_main_data['pattern']!='annually'){ 
                 if($project_recurrence_main_data['pattern']=='quarterly'){ ?>
                     <select id="project_start_quarter" name="project[start_month]" onchange="change_project_due_date(this.value)">
-                        <?php $select_month = date('m', strtotime($project_start_date)); ?>
+                        <?php $select_month = ($project_id!=''?$project_start_date:date('m', strtotime($project_start_date))); ?>
                         <option value="">Select Quarter</option>
                         <?php foreach ($quarter_array as $key => $quarter) { ?>
                             <option value="<?= $key ?>" <?= $key == $select_month ? 'selected' : '' ?> ><?= $quarter ?></option>
@@ -280,7 +285,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
                     </select>
                 <?php }else{ ?>
                     <select id="project_start_month" name="project[start_month]" onchange="change_project_due_date(this.value)">
-                        <?php $select_month = date('m', strtotime($project_start_date)); ?>
+                        <?php $select_month = ($project_id!=''?$project_start_date:date('m', strtotime($project_start_date))); ?>
                         <option value="">Select Month</option>
                         <?php foreach ($month_array as $key => $month) { ?>
                             <option value="<?= $key ?>" <?= $key == $select_month ? 'selected' : '' ?> ><?= $month ?></option>
@@ -289,7 +294,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
             <?php } } ?>
             <?php $years = array_combine(range(date("Y"), 2019), range(date("Y"), 2019)); ?>
             <select id="project_start_year" name="project[start_year]" onchange="change_project_due_date()">
-                <?php $select_month = date('Y', strtotime($project_start_date)); ?>
+                <?php $select_month = ($project_id!=''?$project_start_year:date('Y', strtotime($project_start_date))); ?>
                 <option value="">Select Year</option>
                 <?php foreach ($years as $key => $year) { ?>
                     <option value="<?= $key ?>" <?= $key == $select_month ? 'selected' : '' ?> ><?= $year ?></option>
@@ -310,8 +315,13 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     </div>
     <input type="hidden" name="project[next_due_date]" id="next_due_date" value="<?= $next_due_date ?>">
     <input type="hidden" name="project[generation_date]" id="generation_date" value="<?= $generation_date ?>">
-<?php } ?>
+<?php }
+//}
+?>
 <script>
+    <?php if($project_id!=''){ ?>
+        change_project_due_date();
+    <?php } ?>
     $(document).ready(function () {
         $(".datepicker_due_date").datepicker({format: 'mm/dd/yyyy', autoHide: true});
     });

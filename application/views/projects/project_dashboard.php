@@ -129,9 +129,9 @@ if (!empty($project_list)) {
         <div class="panel panel-default service-panel type2 filter-active" id="action<?= $list['id'] ?>">
             <div class="panel-heading" onclick="load_project_tasks('<?php echo $list['id']; ?>', '<?php echo $list['created_at']; ?>', '<?php echo $dueDate; ?>');"> 
                 <!--<a href="javascript:void(0)" onclick="delete_project(<= $list['id']; ?>,<= $list['template_id']; ?>)" class="btn btn-danger btn-xs btn-service-edit"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a> &nbsp;-->
-                <!-- <a href="javascript:void(0)" onclick="CreateProjectModal('edit',<?//= $list['id'] ?>);" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>  &nbsp; --> 
+                 <a href="javascript:void(0)" onclick="CreateProjectModal('edit',<?= $list['id'] ?>);" class="btn btn-primary btn-xs btn-service-edit-project-main"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>  &nbsp;  
                 <?php if($user_type!=3){ ?>
-                <a target="_blank" href="<?= base_url() . 'project/edit_project_template/' . base64_encode($list['id']); ?>" class="btn btn-primary btn-xs btn-service-edit-project"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Project</a> 
+                <a target="_blank" href="<?= base_url() . 'project/edit_project_template/' . base64_encode($list['id']); ?>" class="btn btn-primary btn-xs btn-service-edit-project"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Pattern</a> 
                 <?php } ?>
                 <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $list['id']; ?>" aria-expanded="false" class="collapsed">
                     <div class="table-responsive">
