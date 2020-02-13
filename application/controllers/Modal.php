@@ -608,6 +608,7 @@ class Modal extends CI_Controller {
             $render_data['project_id'] = $this->input->post('project_id');
             $render_data['template_list'] = $this->Project_Template_model->get_project_template_list();
             $render_data['project_dtls'] = $this->Project_Template_model->getProjectDetails($this->input->post('project_id'));
+            $render_data['office_id'] = $this->Project_Template_model->get_project_office_id($this->input->post('project_id'));
 //            print_r($render_data['project_dtls']);die;
         }
         $this->load->view("projects/ajax_manage_project", $render_data);
