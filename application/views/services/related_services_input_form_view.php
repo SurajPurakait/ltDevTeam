@@ -78,9 +78,13 @@
                                     $file_name = $file['file_name'];
                                     $file_id = $file['id'];?>
                     <td>
-                        <div class="preview preview-image" style="background-image: url('<?= base_url(); ?>uploads/<?= $file_name; ?>');max-width: 100%;">
+                        <?php if($file_name != '') {?>
+                        <div class="preview preview-image" style="background-image: url('<?= base_url(); ?>uploads/<?= $file_name; ?>');max-width: 100%;">                           
                             <a href="<?php echo base_url(); ?>uploads/<?= $file_name; ?>" title="<?= $file_name; ?>"><i class="fa fa-download"></i></a>
-                        </div>                       
+                        </div>   
+                        <?php } else {
+                                echo 'No file selected';
+                        }?>
                     </td>
                 </tr>
                 <tr>
