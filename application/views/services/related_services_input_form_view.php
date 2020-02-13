@@ -102,9 +102,11 @@
                 <?php  endforeach;?>
             </tbody>
         </table>
-        <?php } else {
-                echo 'Input Form Not Found';
-        }?>
+        <?php } else { ?>
+        <div class="col-lg-12">
+            <label>Input Form Not Found</label>
+        </div>
+        <?php }?>
     </div>       
 </div>
 <script>
