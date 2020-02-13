@@ -83,7 +83,6 @@ class Service_setup extends CI_Controller
         $check = $this->administration->check_if_name_exists($servicename, $service_id);
         if ($check != 0) {
             echo "0";
-            // return;
         } else {
             $retailprice = $this->input->post("retailprice");
             $servicecat = $this->input->post("servicecat");

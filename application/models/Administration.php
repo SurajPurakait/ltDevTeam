@@ -418,6 +418,9 @@ class Administration extends CI_Model {
     public function get_all_categories() {
         return $this->db->get("category")->result_array();
     }
+    public function get_partners_type_list() {
+        return $this->db->get("type_of_contact_referral")->result_array();
+    }
 
     public function get_related_services($id) {
         return $this->db->get_where("services", ["category_id" => $id])->result_array();
@@ -439,7 +442,15 @@ class Administration extends CI_Model {
         $data = $this->db->query($sql)->num_rows();
         return $data;
     }
-
+    public function check_if_partner_service_name_exists($description) {
+        $this->db->where('description',$description);
+        return $this->db->get('partner_services')->num_rows();
+    }
+    public function check_if_partner_service_name_exists_at_update($description,$id) {
+        $this->db->where('id !=',$id);
+        $this->db->where('description',$description);
+        return $this->db->get('partner_services')->num_rows();    
+    }
     public function add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost,$responsible_assigned,$client_type) {
         $this->db->trans_begin();
 
@@ -531,6 +542,44 @@ class Administration extends CI_Model {
         } else {
             $this->db->trans_commit();
             return "1";
+        }
+    }
+    public function update_partner_service($data) {
+        $update_data = array(
+            'category_id' => $data['category_id'],
+            'description' => $data['description'],
+            'ideas' => $data['ideas'],
+            'responsible_assigned' => $data['responsible_assigned'],
+            'partner_type' => $data['partner_type'],
+            'input_form' => $data['input_form'],
+            'note' => $data['note'],
+        );
+
+        $this->db->where('id',$data['id']);
+        $this->db->update('partner_services',$update_data);
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return "-1";
+        } else {
+            $this->db->trans_commit();
+            return "1";
+        }   
+    }
+
+    public function change_partner_service_status($data) {
+        if ($data['is_active'] == 'y') {
+            $update_arr = array(
+                'is_active' => 'n'
+            );
+            $this->db->where('id',$data['service_id']);
+            return $this->db->update('partner_services',$update_arr);
+        } else {
+            $update_arr = array(
+                'is_active' => 'y'
+            );
+            $this->db->where('id',$data['service_id']);
+            return $this->db->update('partner_services',$update_arr);
         }
     }
 
@@ -1119,8 +1168,31 @@ ORDER BY `submit_time` DESC";
     }
 
 
-    public function deactive_service($id){  
+    public function deactive_service($id) {  
         return $this->db->query("UPDATE services SET is_active = (case when is_active = 'n' then 'y' else 'n' end) WHERE id='$id'");
     }
-    //}
+
+    public function add_partner_service($data) {
+        $this->db->insert('partner_services',$data);
+        
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            return "-1";
+        } else {
+            $this->db->trans_commit();
+            return "1";
+        }
+    }
+
+    public function get_partner_service_list() {
+        $this->db->select('tocr.name AS partner_type_name,c.name AS service_category_name,ps.*');
+        $this->db->from('partner_services AS ps');
+        $this->db->join('category AS c', 'c.id = ps.category_id');
+        $this->db->join('type_of_contact_referral AS tocr', 'tocr.id = ps.partner_type');
+        return $this->db->get()->result_array();
+    }
+
+    public function get_partner_service_by_id($id) {
+        return $this->db->get_where('partner_services',['id'=>$id])->row_array();
+    }
 }
