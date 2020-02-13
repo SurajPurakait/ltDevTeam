@@ -3123,4 +3123,8 @@ class Service_model extends CI_Model {
    {
      return $this->db->get_where('internal_data',['reference_id'=>$reference_id])->row()->practice_id;
    }
+
+   public function get_mortgages_list() {
+    return $this->db->get('type_of_mortgage')->result_array();
+   }
 }

@@ -1231,3 +1231,4 @@ ALTER TABLE `actions` ADD `client_list_id` INT(100) NOT NULL AFTER `office_id`;
 
 /* 13.02.2020 */
 -- import partner_services.sql
+-- import type_of_mortgage.sql
