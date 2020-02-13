@@ -13,7 +13,7 @@
                 <th style='width:11%; text-align: center;'>Complete</th>
                 <th style='width:5%; text-align: center;'>Notes</th>
                 <th style='width:5%; text-align: center;'>SOS</th>
-                <th style='width:11%; text-align: center; white-space: nowrap;'>Input Form</th>
+                <th style='width:120px; text-align: center; white-space: nowrap; display: flex;'>Input Form</th>
             </tr>
             <?php
             $user_id = sess('user_id');
@@ -226,14 +226,17 @@
                                         if ($row_inner->input_form_status == 'n') {
                                             $input_status = 'incomplete';
                                             ?>
-                                            <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><span class="label input-form-incomplete">Incomplete &nbsp;&nbsp;<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp; </a></span>
+                                <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: left;"><i class="fa fa-plus" aria-hidden="true"></i> Edit</a>
+                                <a href="<?= base_url() . 'services/home/related_services_view/' . $row_inner->service_request_id; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: right;"><i class="fa fa-eye" aria-hidden="true"></i> View </a>
                                         <?php } elseif ($inputform_attachments == '' || $inputform_notes == '') { ?>
                                             
-                                            <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><span class="label input-form-warning">Partial Complete &nbsp;&nbsp;<i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp; </a></span>
+                                            <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: left;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit </a>
+                                            <a href="<?= base_url() . 'services/home/related_services_view/' . $row_inner->service_request_id; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: right;"><i class="fa fa-eye" aria-hidden="true"></i> View </a>
                                         
                                         <?php } else { ?>
-                                             <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="text-white p-5" target="_blank"><span class="label input-form-complete">Completed &nbsp;&nbsp;<i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;&nbsp; </a></span>
-                                            <?php
+                                             <a href="<?= base_url() . 'services/home/related_services/' . $row_inner->service_request_id; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: left;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit </a>
+                                             <a href="<?= base_url() . 'services/home/related_services_view/' . $row_inner->service_request_id; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: right;"><i class="fa fa-eye" aria-hidden="true"></i> View </a>
+                                        <?php
                                         }
                                     }
                                 } else {

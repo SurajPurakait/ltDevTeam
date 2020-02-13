@@ -7612,6 +7612,14 @@ body.skin-3 {
 #action_dashboard_div .service-panel .btn-service-edit {
     right: 91px;
 }
+#action_dashboard_div .btn-service-edit-project-main {
+    margin-right: 80px;
+    color: #fff;
+    float: right;
+    margin-top: -10px;
+    margin-left: 3px;
+    border-radius: 3px;
+}
 #action_dashboard_div .project-btn-edit.btn-service-edit {
     right:0;
     border-bottom-right-radius: 0;

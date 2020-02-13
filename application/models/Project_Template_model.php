@@ -1134,6 +1134,9 @@ class Project_Template_model extends CI_Model {
             $user_start_year=$post['project']['start_year'];
             $user_start_month=$user_start_year;
         }
+        if(isset($post['project']['start_year']) && $post['project']['start_year']!=''){
+            $project_start_year=$post['project']['start_year'];
+        }
         unset($post['project']['start_year']);
         unset($post['project']['next_due_date']);
         unset($post['project']['generation_date']);
@@ -1470,6 +1473,7 @@ class Project_Template_model extends CI_Model {
                     }
                     $project_recurrence_main_data['generation_date'] = $generation_date;
                     $project_recurrence_main_data['start_month']=$user_start_month;
+                    $project_recurrence_main_data['start_year']=$project_start_year;
                     $project_recurrence_main_data['project_id'] = $insert_id;
                     $this->db->set($project_recurrence_main_data);
                     $this->db->insert('project_recurrence_main', $project_recurrence_main_data);
@@ -1687,78 +1691,37 @@ class Project_Template_model extends CI_Model {
 
     function requestUpdateProject($project_id, $post) {
         $this->db->trans_begin();
-        if (isset($post['project']['template_id']) && $post['project']['template_id'] != '') {
-            unset($post['project']['template_id']);
-        }
-        $project = $post['project'];
-        if (isset($project['office_id']) && $project['office_id'] != '') {
-            $post['project']['office_id'] = $project['office_id'];
-        }
-        $this->db->where('id', $project_id);
-        $this->db->update('projects', $post['project']);
-
-        $client_reference_id = $post['project']['client_id'];
-
-        $recurrence_data = $this->db->get_where('project_recurrence_main', ['project_id' => $project_id])->row_array();
-
-        $client_fiscal_year_end = $recurrence_data['client_fiscal_year_end'];
-
-//        if ($recurrence_data['pattern'] == 'annually') {
-//            if ($client_fiscal_year_end == 1) {
-//                $get_client_fye = get_client_fye($client_reference_id);
-//                if ($recurrence_data['fye_type'] == 1) {
-//                    $fye_day = $recurrence_data['fye_day'];
-//                    $fye_is_weekday = $recurrence_data['fye_is_weekday'];
-//                    $fye_month = $recurrence_data['fye_month'];
-//
-//                    $get_project_creation_date = $this->db->get_where('projects', ['id' => $project_id])->row_array();
-//                    $creation_date = strtotime($get_project_creation_date['created_at']);
-//
-//                    $after_days = (int) $fye_month * 30;
-//
-//                    // if(strlen($project_recurrence_main_data['actual_due_month'])==1){
-//                    //     $actual_mnth = '0'.$project_recurrence_main_data['actual_due_month'];
-//                    // }
-//                    // if(strlen($project_recurrence_main_data['actual_due_day'])==1){
-//                    //     $actual_day = '0'.$project_recurrence_main_data['actual_due_day'];
-//                    // }
-//
-//                    $current_due = $recurrence_data['actual_due_year'] . '-' . $get_client_fye;
-//
-//                    $newDate = strtotime($current_due . ' + ' . $after_days . ' days');
-//
-//                    $actual_due_day = $fye_day;
-//                    $actual_due_month = date('m', $newDate);
-//                    $actual_due_year = date('Y', $newDate);
-//
-//                    $due_date = $actual_due_year . '-' . $actual_due_month . '-' . $actual_due_day;
-//
-//                    if ($due_date <= $creation_date) {
-//                        $actual_due_year += 1;
-//                    }
-//                }
-//                //    else{
-//                //     $fye_day = $project_recurrence_main_data['fye_day'];
-//                //     $fye_is_weekday = $project_recurrence_main_data['fye_is_weekday'];
-//                //     $fye_month = $project_recurrence_main_data['fye_month'];
-//                //     $after_days = (int)$fye_month*2);
-//                //     if(strlen($project_recurrence_main_data['actual_due_month'])==1){
-//                //         $actual_mnth = '0'.$project_recurrence_main_data['actual_due_month'];
-//                //     }
-//                //     if(strlen($project_recurrence_main_data['actual_due_day'])==1){
-//                //         $actual_day = '0'.$project_recurrence_main_data['actual_due_day'];
-//                //     }
-//                //     $current_due = $project_recurrence_main_data['actual_due_year'].'-'.$actual_mnth.'-'.$actual_day;
-//                //     $newDate = strtotime('+'.$after_days.' days',$current_due);
-//                // }
-//                $this->db->where('project_id', $project_id);
-//                $this->db->update('project_recurrence_main', array('actual_due_day' => $actual_due_day, 'actual_due_month' => $actual_due_month, 'actual_due_year' => $actual_due_year));
-//            }
+//        if (isset($post['project']['template_id']) && $post['project']['template_id'] != '') {
+//            unset($post['project']['template_id']);
 //        }
-
-//        $insert_id=$this->db->insert_id();
-//        $notedata = $this->input->post('project_note');
-//        $this->insert_task_note(9, $notedata, "project_id", $project_id, 'project');
+//        $project = $post['project'];
+//        if (isset($project['office_id']) && $project['office_id'] != '') {
+//            $post['project']['office_id'] = $project['office_id'];
+//        }
+//        $this->db->where('id', $project_id);
+//        $this->db->update('projects', $post['project']);
+//
+//        $client_reference_id = $post['project']['client_id'];
+        $project_recurrence_main_data=[];
+        if(isset($post['project']['start_month']) && $post['project']['start_month']!=''){
+            $user_start_month=$post['project']['start_month'];
+            unset($post['project']['start_month']);
+        }else{
+            $user_start_year=$post['project']['start_year'];
+            $user_start_month=$user_start_year;
+        }
+        if(isset($post['project']['start_year']) && $post['project']['start_year']!=''){
+            $project_start_year=$post['project']['start_year'];
+        }
+        unset($post['project']['start_year']);
+        $project_recurrence_main_data['due_date']=date('Y-m-d',strtotime($post['project']['due_date']));
+        $project_recurrence_main_data['next_due_date']=date('Y-m-d',strtotime($post['project']['next_due_date']));
+        $project_recurrence_main_data['generation_date'] = date('Y-m-d',strtotime($post['project']['generation_date']));
+        $project_recurrence_main_data['start_month']=$user_start_month;
+        $project_recurrence_main_data['start_year']=$project_start_year;
+        
+        $this->db->where('project_id',$project_id);
+        $this->db->update('project_recurrence_main',$project_recurrence_main_data);
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return "-1";
@@ -2131,6 +2094,26 @@ class Project_Template_model extends CI_Model {
                     $this->db->insert('project_staff_main', ['project_id' => $project_id, 'staff_id' => $staffId, 'type' => 2]);
                 }
             }
+        }
+        if (isset($post['recurrence']) && !empty($post['recurrence']) && $project_id != '') {
+//            print_r($post['recurrence']);die;
+            $insert_recurrence=[];
+            $insert_recurrence['expiration_type']=$post['recurrence']['expiration_type'];
+            if($post['recurrence']['expiration_type']==1){
+                $insert_recurrence['end_occurrence']=$post['recurrence']['end_occurrence'];
+            }else{
+                $insert_recurrence['end_occurrence']=0;
+            }
+            $insert_recurrence['generation_type']=$post['recurrence']['generation_type'];
+            if($post['recurrence']['generation_type']==1){
+                $insert_recurrence['generation_day']=$post['recurrence']['generation_day'];
+                $insert_recurrence['generation_month']=$post['recurrence']['generation_month'];
+            }else{
+                $insert_recurrence['generation_day']=0;
+                $insert_recurrence['generation_month']=0;
+            }
+            $this->db->where('project_id',$project_id);
+            $this->db->update('project_recurrence_main',$insert_recurrence);
         }
         // Recurrence update section is removed...
 
@@ -3449,6 +3432,10 @@ class Project_Template_model extends CI_Model {
     }
     public function getProjectMainTemplateCatId($project_id){
         return $this->db->get_where('project_main',['project_id'=>$project_id])->row()->template_cat_id;
+    }
+    public function getProjectPatternDetails($project_id){
+        $data = $this->db->get_where('project_recurrence_main', ['project_id' => $project_id])->row_array();
+        return $data;
     }
 }
 
