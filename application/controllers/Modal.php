@@ -607,6 +607,7 @@ class Modal extends CI_Controller {
             $render_data['project_id'] = $this->input->post('project_id');
             $render_data['template_list'] = $this->Project_Template_model->get_project_template_list();
             $render_data['project_dtls'] = $this->Project_Template_model->getProjectDetails($this->input->post('project_id'));
+            $render_data['office_id'] = $this->Project_Template_model->get_project_office_id($this->input->post('project_id'));
 //            print_r($render_data['project_dtls']);die;
         }
         $this->load->view("projects/ajax_manage_project", $render_data);
@@ -638,15 +639,19 @@ class Modal extends CI_Controller {
         $render_data['task_details'] = $this->Project_Template_model->getProjectTaskDetails($task_id);
         $render_data['staff_type'] = $this->Project_Template_model->getStaffType();
         $render_data['template_category_id']=$this->Project_Template_model->getProjectTemplateCategoryd(post('project_id'));
+        $render_data['template_details'] = $this->Project_Template_model->editProjectMainDetail(post('project_id'));
+        $render_data['project_id'] = post('project_id');
         $this->load->view("projects/edit_project_task_modal", $render_data);
     }
 
-    public function get_project_task_modal() {
+    public function get_project_task_modal() {       
         $render_data = [];
         $render_data['template_id'] = $this->input->post('template_id');
         $render_data['project_id'] = $this->input->post('project_id');
         $render_data["departments"] = $this->action->get_departments();
         $render_data['template_category_id']=$this->Project_Template_model->getProjectTemplateCategoryd(post('project_id'));
+        $render_data['project_id'] = post('project_id');
+        $render_data['template_details'] = $this->Project_Template_model->editProjectMainDetail(post('project_id'));
         $this->load->view("projects/project_task_modal", $render_data);
     }
 

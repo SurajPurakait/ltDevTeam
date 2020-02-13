@@ -221,12 +221,12 @@ if ($modal_type != "edit"):
                     <?php
                     }
                         ?>
-                    <div class="form-group">
+<!--                    <div class="form-group">
                         <label>Upload</label><br>
                         <span id="uploadifle"></span>
                         <input class="m-t-5" type="file" name="acc_file" id="acc_file">
                         <div class="errorMessage text-danger"></div>
-                    </div>
+                    </div>-->
                     <?php  if($data['reference'] == "project")
                     { ?>
                     <div class="form-group" style="display:none;">

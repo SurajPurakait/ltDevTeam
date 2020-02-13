@@ -42,21 +42,6 @@
                             </div>
                         </div>
 
-                        <!--business or individual client-->
-                        <div class="form-group client_type_div0">
-                            <label class="col-lg-2 control-label">Client Type<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                            <select class="form-control client_type_field0" onchange="actionContainerAjax(this.value, '', '');" name="client_type" id="client_type" title="Client Type" required="">
-                                <option value="">Select Client Type</option>
-                                <option value="1">Business Client</option>
-                                <option value="2">Individual</option>
-                            </select>
-                            </div>
-                            <div class="errorMessage text-danger"></div>
-                        </div>
-                        <!-- <div class="hr-line-dashed"></div> -->
-                        <div id="action_container"></div>
-
                         <div class="form-group">
                             <label class="col-lg-2 control-label">My Department<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
@@ -85,6 +70,30 @@
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
+
+                        <!--business or individual client-->
+                        <div class="form-group client_type_div0">
+                            <label class="col-lg-2 control-label">Client Type<span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                            <select class="form-control client_type_field0" onchange="actionContainerAjax(this.value, '', '');" name="client_type" id="client_type" title="Client Type" required="">
+                                <option value="">Select Client Type</option>
+                                <option value="1">Business Client</option>
+                                <option value="2">Individual</option>
+                            </select>
+                            </div>
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                        <!-- <div class="hr-line-dashed"></div> -->
+                        <div id="action_container"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 col-md-2 control-label">Client ID</label>
+                            <div class="col-sm-9 col-md-10">
+                                <input placeholder="" class="form-control" type="text" name="client_id" id="client_id" title="Cient ID" value="" readonly>
+                                <!--<div class="errorMessage text-danger"></div>-->
+                            </div>
+                        </div>
+                       
                         <div class="form-group">
                             <label class="col-sm-3 col-md-2 control-label">Priority<span class="text-danger">*</span></label>
                             <div class="col-sm-9 col-md-10">
@@ -128,13 +137,6 @@
 
                         <div id="staff_div"></div>
 
-                        <div class="form-group">
-                            <label class="col-sm-3 col-md-2 control-label">Client ID</label>
-                            <div class="col-sm-9 col-md-10">
-                                <input placeholder="" class="form-control" type="text" name="client_id" id="client_id" title="Cient ID" value="" readonly>
-                                <!--<div class="errorMessage text-danger"></div>-->
-                            </div>
-                        </div>
                         <div class="form-group">
                             <label class="col-sm-3 col-md-2 control-label">Subject<span class="spanclass text-danger">*</span></label>
                             <div class="col-sm-9 col-md-10">

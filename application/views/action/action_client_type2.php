@@ -13,7 +13,7 @@
     <div class="form-group client_type_div0" id="client_list">
         <label class="col-lg-2 control-label">Individual List<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-        <select class="form-control individual_list client_type_field0" name="client_list_id" id="individual_list_ddl" title="Individual List" <?php echo (isset($client_id) && $client_id !='') ? 'disabled' : ''; ?> onchange = "get_individual_client_id(this.value);" required>
+        <select class="form-control individual_list client_type_field0" name="client_list_id[]" id="individual_list_ddl" title="Individual List" <?php echo (isset($client_id) && $client_id !='') ? 'disabled' : ''; ?> onchange = "get_individual_client_id();" multiple required>
             <option value="">Select an option</option>
             <?php load_ddl_option("existing_individual_list_new", (isset($client_id))? $client_id:''); ?>
         </select>
@@ -27,16 +27,22 @@
    <?php }?>
    $("#individual_list_ddl").chosen();
 
-    function get_individual_client_id(client_id = "") {
-        $.ajax({
+    function get_individual_client_id() {
+        var dropDown = document.getElementById('individual_list_ddl'), clientArray = [], i;
+        for (i = 0; i < dropDown.options.length ; i += 1) {
+            if (dropDown.options[i].selected) {
+                clientArray.push( dropDown.options[i].value);
+            }
+        }
+            // alert(clientArray);
+            $.ajax({
             type: "POST",
             data: {
-                client_id: client_id
+                client_id: clientArray
             },
             url: base_url + 'action/home/get_individual_practice_id',
             dataType: "html",
             success: function (result) {
-                // alert(result);return false;
                 $("#client_id").val(result);
             },
             beforeSend: function () {

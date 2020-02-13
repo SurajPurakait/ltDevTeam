@@ -3025,8 +3025,8 @@ class Service_model extends CI_Model {
         return $this->db->get_where('payer_information', ['order_id' => $order_id])->row_array();
     }
 
-    public function get_recipient_info($order_id) {
-        return $this->db->get_where('recipient_information', ['order_id' => $order_id])->result_array();
+    public function get_recipient_info($reference_id) {
+        return $this->db->get_where('recipient_information', ['reference_id' => $reference_id])->result_array();
     }
 
 
@@ -3122,5 +3122,15 @@ class Service_model extends CI_Model {
    public function get_practice_id($reference_id)
    {
      return $this->db->get_where('internal_data',['reference_id'=>$reference_id])->row()->practice_id;
+   }
+   
+   public function get_state_name($state_id)
+   {
+       return $this->db->get_where('states',['id'=>$state_id])->row()->state_name;
+   }
+   
+   public function get_country_name($country_id)
+   {
+       return $this->db->get_where('countries',['id'=>$country_id])->row()->country_name;
    }
 }
