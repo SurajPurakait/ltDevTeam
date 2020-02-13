@@ -69,11 +69,11 @@
                                         <tr>
                                             <th></th>
                                             <th class="text-center">Total Partner</th>
-                                            <th class="text-center">Leads Given</th>
+                                            <th class="text-center">Leads Sent</th>
                                             <th class="text-center">Leads Received</th>
                                         </tr>
                                         <tr id="byme">
-                                            <th>My Partners</th>
+                                            <th>By Me</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-byme-0">
                                                     <span class="label label-warning" id="requested_by_me_new" onclick="load_partners_dashboard('','',1); "><?= get_partner_count(1); ?></span>
@@ -96,7 +96,7 @@
                                         ?>
                                         <!-- <tr id="tome" class="bg-success"> -->
                                         <tr id="tome" class="action-row-border-top action-row-border-bottom" style="background: #596571;">
-                                            <th>Team Partners</th>
+                                            <th>My Team</th>
                                             <td class="text-center">
                                                 <a href="javascript:void(0)" class="filter-button" id="filter-tome-0">
                                                     <!-- 2 : used for byother -->

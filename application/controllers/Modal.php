@@ -106,6 +106,16 @@ class Modal extends CI_Controller {
         $this->load->view('modal/service_modal', $render_data);
     }
 
+    public function show_partner_service_modal() {
+        $render_data['modal_type'] = $this->input->post('modal_type');
+        $render_data["categories"] = $this->administration->get_all_categories();
+        $render_data['department_list'] = $this->administration->get_all_departments();
+        // if ($render_data['modal_type'] == "edit") {
+        //     $render_data['service_info'] = $this->administration->get_service_by_id_for_service_setup($this->input->post('service_id'));
+        // }
+        $this->load->view('modal/partner_service_modal', $render_data);
+    }
+
     public function show_company_modal() {
         $render_data['modal_type'] = $this->input->post('modal_type');
         if ($render_data['modal_type'] == "edit") {
