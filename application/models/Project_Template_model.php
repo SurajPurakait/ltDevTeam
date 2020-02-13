@@ -3437,6 +3437,13 @@ class Project_Template_model extends CI_Model {
         $data = $this->db->get_where('project_recurrence_main', ['project_id' => $project_id])->row_array();
         return $data;
     }
+    public function getIndividualClientName($client_id){
+        $this->db->select("CONCAT(ind.last_name,',',ind.first_name) as client_name");
+        $this->db->from('individual ind');
+        $this->db->join('title','title.individual_id=ind.id','inner');
+        $this->db->where('title.id',$client_id);
+        return $this->db->get()->row()->client_name;
+    }
 }
 
 ?>
