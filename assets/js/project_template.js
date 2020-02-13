@@ -1273,7 +1273,7 @@ function get_fiscal_year_options() {
     }
 }
 //find project client depending on client type
-function projectContainerAjax(client_type, client_id, project_id)
+function projectContainerAjax(client_type='', client_id='', project_id='',office_id='')
 {
 //    alert(client_type);return false;
     var url = '';
@@ -1289,7 +1289,8 @@ function projectContainerAjax(client_type, client_id, project_id)
         data: {
             project_id: project_id,
             client_type: client_type,
-            client_id: client_id
+            client_id: client_id,
+            office_id:office_id
         },
         enctype: 'multipart/form-data',
         cache: false,

@@ -132,7 +132,7 @@
 <script>
 <?php if ($modal_type == 'edit') { ?>
     get_pattern_detais(<?= $project_dtls->template_id ?>,<?= $project_id ?>,'edit');
-    projectContainerAjax(<?= $project_dtls->client_type ?>,'<?= $project_dtls->client_id ?>',<?= $project_dtls->id ?>);
+    projectContainerAjax(<?= $project_dtls->client_type ?>,'<?= $project_dtls->client_id ?>',<?= $project_dtls->id ?>,<?= $office_id ?>);
 //        project_client_list(<? $project_dtls->office_id ?>,<? $project_dtls->client_id ?>, 'edit');
 <?php } if($modal_type=='add'){ ?>
     projectContainerAjax(1,'','');
