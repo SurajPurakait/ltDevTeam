@@ -278,5 +278,9 @@ Class Notes extends CI_Model {
         $this->db->where('task_id', $id);
         $this->db->update('project_task_note', $data);
     }
-
+    
+    public function get_notes_by_service($service_request_id)
+    {
+        return $this->db->get_where('notes', array('reference' => 'service', 'reference_id' => $service_request_id))->result_array();
+    }
 }
