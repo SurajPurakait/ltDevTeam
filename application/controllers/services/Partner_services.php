@@ -9,6 +9,7 @@ class Partner_services extends CI_Controller {
         if (!$this->session->userdata('user_id') && $this->session->userdata('user_id') == '') {
             redirect(base_url());
         }
+        $this->load->model("service_model");
     }
 
     public function index() {
@@ -28,6 +29,8 @@ class Partner_services extends CI_Controller {
         $render_data['main_menu'] = 'services';
         $render_data['menu'] = 'partner_services';
         $render_data['header_title'] = $title;
+        $render_data['client_type'] = 1;
+        $render_data['mortgages_list'] = $this->service_model->get_mortgages_list();
         $this->load->template('services/create_mortgages_and_lending', $render_data);
     }
 }

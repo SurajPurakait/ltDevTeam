@@ -15,7 +15,7 @@
 
                                  <?php } else{ ?>
 
-                                    <select class="form-control" onchange="invoiceContainerAjax(this.value, <?= $reference_id; ?>, '','');" name="invoice_type" id="invoice_type" title="Invoice Type" required="">
+                                <select class="form-control" onchange="invoiceContainerAjax(this.value, <?= $reference_id; ?>, '','');" name="invoice_type" id="invoice_type" title="Invoice Type" required="">
                                     <option value="1" <?= (isset($client_type) && $client_type == '1') ? 'selected' : ''; ?>>Business Client</option>
                                     <option value="2" <?= (isset($client_type) && $client_type == '2') ? 'selected' : ''; ?>>Individual</option>
                                 </select>
