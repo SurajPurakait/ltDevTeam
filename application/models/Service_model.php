@@ -3025,8 +3025,8 @@ class Service_model extends CI_Model {
         return $this->db->get_where('payer_information', ['order_id' => $order_id])->row_array();
     }
 
-    public function get_recipient_info($order_id) {
-        return $this->db->get_where('recipient_information', ['order_id' => $order_id])->result_array();
+    public function get_recipient_info($reference_id) {
+        return $this->db->get_where('recipient_information', ['reference_id' => $reference_id])->result_array();
     }
 
 
@@ -3113,18 +3113,28 @@ class Service_model extends CI_Model {
             return $this->db->update('recipient_information', $arr);
     }
 
-   public function get_service_id_for_1099_service($reference_id, $order_id)
-   {
+    public function get_service_id_for_1099_service($reference_id, $order_id)
+    {
         return $this->db->get_where('invoice_info',['client_id'=>$reference_id,
                                                         'order_id'=>$order_id])->row()->id;
-   }
+    }
 
-   public function get_practice_id($reference_id)
-   {
-     return $this->db->get_where('internal_data',['reference_id'=>$reference_id])->row()->practice_id;
-   }
+    public function get_practice_id($reference_id)
+    {
+        return $this->db->get_where('internal_data',['reference_id'=>$reference_id])->row()->practice_id;
+    }
 
-   public function get_mortgages_list() {
-    return $this->db->get('type_of_mortgage')->result_array();
-   }
+    public function get_state_name($state_id)
+    {
+        return $this->db->get_where('states',['id'=>$state_id])->row()->state_name;
+    }
+   
+    public function get_country_name($country_id)
+    {
+        return $this->db->get_where('countries',['id'=>$country_id])->row()->country_name;
+    }
+
+    public function get_mortgages_list() {
+        return $this->db->get('type_of_mortgage')->result_array();
+    }
 }
