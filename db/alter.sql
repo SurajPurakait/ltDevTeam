@@ -1228,3 +1228,6 @@ ALTER TABLE `actions` ADD `office_id` INT(100) NOT NULL AFTER `client_type`;
 ALTER TABLE `actions` ADD `client_list_id` INT(100) NOT NULL AFTER `office_id`;
 
 /*live end*/
+
+/* 13.02.2020 */
+-- import partner_services.sql

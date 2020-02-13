@@ -21,6 +21,15 @@ class Partner_services extends CI_Controller {
         $this->load->template('services/partner_services', $render_data);
     }
 
+    public function create_mortgages_and_lending() {
+        $this->load->layout = 'dashboard';
+        $title = "Create Mortgages And Lending";
+        $render_data['title'] = $title . ' | Tax Leaf';
+        $render_data['main_menu'] = 'services';
+        $render_data['menu'] = 'partner_services';
+        $render_data['header_title'] = $title;
+        $this->load->template('services/create_mortgages_and_lending', $render_data);
+    }
 }
 
 ?>

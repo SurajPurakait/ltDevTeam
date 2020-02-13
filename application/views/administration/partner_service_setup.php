@@ -6,32 +6,34 @@
                    href="javascript:void(0);"><i class="fa fa-plus"></i> Add New Partner Service</a>
                 <div class="ibox-content m-t-10">
                     <div class="" id="service-tab-setup-wrap">
-                        <table id="partner-service-tab" class="table table-bordered table-striped">
+                        <table id="partner-service-tab" class="table table-bordered table-striped" width="100%">
                         <thead>
                         <tr>
-                            <th style="white-space: nowrap;">Service Category</th>
-                            <th style="white-space: nowrap;">Service Name</th>
-                            <th style="white-space: nowrap;">Responsible</th>
-                            <th style="white-space: nowrap;">Input Form</th>
-                            <th style="white-space: nowrap;">Days To Start</th>
-                            <th style="white-space: nowrap;">Days To Complete</th>
-                            <th style="white-space: nowrap;">Fixed Cost</th>
-                            <th style="white-space: nowrap;">Retail Price</th>
-                            <th style="white-space: nowrap;">Action</th>
+                            <th>Service Category</th>
+                            <th>Service Name</th>
+                            <th>Partner Type</th>
+                            <th>Input Form</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
+                        <?php
+                            foreach($partner_service_list as $val) {
+                        ?>    
                         <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td><?= $val['service_category_name']; ?></td>
+                            <td><?= $val['description']; ?></td>
+                            <td><?= $val['partner_type_name']; ?></td>
+                            <td><?= ($val['input_form'] == 'y') ? 'Yes':'No'; ?></td>
+                            <td>
+                                <a href="javascript:void(0);" class="editmodal edit_service" onclick="show_partner_service_modal('edit', '<?php echo $val['id']; ?>');" title="EDIT"><i class="fa fa-pencil-square-o text-blue f-s-16"></i></a>&nbsp;
+
+                                <a href="javascript:void(0);" title="<?= (isset($val['is_active']) ? $val['is_active'] == 'y' ?'Activate':'Deactivate':'') ?>" onclick="change_partner_service('<?= $val['id'] ?>','<?= isset($val['is_active'])?$val['is_active']:''?>');"><i class="<?= isset($val['is_active']) ? $val['is_active'] == 'y'?'fa fa-check-circle text-green f-s-16':'fa fa-minus-circle text-danger f-s-16':'' ?>" aria-hidden="true"></i></a>
+                            </td>
                         </tr>
+                        <?php
+                            }
+                        ?>
                         </tbody>
                     </table>
                     </div>
