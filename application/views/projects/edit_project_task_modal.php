@@ -7,6 +7,28 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h2 class="modal-title">Edit Task</h2>
             </div><!-- modal-header -->
+            <table class="table table-bordered">
+                <?php
+                $project_data = get_project_office_client($project_id);
+                ?>
+                <tr>
+                    <td style="width: 150px;"><b>Project ID: </b></td>
+                    <td><?= $project_id ?></td>
+                </tr>
+                <tr>
+                    <td style="width: 150px;"><b>Client ID: </b></td>
+                    <td><?= getProjectClientPracticeId($project_data->client_id, $project_data->client_type); ?></td>
+                </tr>
+                <tr>
+                    <td style="width: 150px;"><b>Office ID: </b></td>
+                    <td><?= get_project_office_name($project_data->office_id); ?></td>
+                </tr>
+                <tr>
+                    <td style="width: 150px;"><b>Project Name: </b></td>
+                    <td><?php echo $template_details->title; ?></td>
+                </tr>
+
+            </table> 
             <div class="modal-body">
                 <h3 class="text-success">Identification :</h3>
                 <div class="row">

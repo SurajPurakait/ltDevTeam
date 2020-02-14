@@ -1644,7 +1644,7 @@ class Home extends CI_Controller {
                 }
         endswitch;
         $render_data['service_id2'] = $this->service_model->get_service_id_for_1099_service($render_data['reference_id'], $render_data['order_id']);
-        $render_data['client_id'] = $this->service_model->get_practice_id($render_data['reference_id']);
+        $render_data['client_id'] = $this->service_model->get_practice_id($render_data['reference_id']);       
         $this->load->template('services/related_services', $render_data);
     }
 
@@ -1820,8 +1820,12 @@ class Home extends CI_Controller {
         endswitch;
         $render_data['service_id2'] = $this->service_model->get_service_id_for_1099_service($render_data['reference_id'], $render_data['order_id']);
         $render_data['client_id'] = $this->service_model->get_practice_id($render_data['reference_id']);
+        if($render_data['payer_information']['payer_state'] !='' && $render_data['payer_information']['payer_country'] != '')
+        {
         $render_data['state_name'] = $this->service_model->get_state_name($render_data['payer_information']['payer_state']);   
         $render_data['country_name'] = $this->service_model->get_country_name($render_data['payer_information']['payer_country']); 
+        }
+        $render_data['notes'] = $this->notes->get_notes_by_service($render_data['service_request_id']);             
         $this->load->template('services/related_services_input_form_view', $render_data);
     }
 }

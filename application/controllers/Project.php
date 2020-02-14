@@ -258,6 +258,7 @@ class Project extends CI_Controller {
         $client_type = post('client_type');
         $client_id = post('client_id');
         $project_id = post('project_id');
+        $office_id=post('office_id');
         if ($client_type == '1') {
             $render_data['project_id'] = $project_id;
             $render_data['client_id'] = $client_id;
@@ -267,6 +268,8 @@ class Project extends CI_Controller {
         } else {
             $render_data['project_id'] = $project_id;
             $render_data['client_id'] = $client_id;
+            $render_data['office_id'] = $office_id;
+            $render_data['client_name']=$this->Project_Template_model->getIndividualClientName($client_id);
             $render_data['reference'] = 'individual';
         }
         $this->load->view('projects/client_type' . $client_type, $render_data);
@@ -285,8 +288,8 @@ class Project extends CI_Controller {
         echo json_encode($return);
     }
 
-    public function project_filter($year) {
-        $render_data["project_list"] = $this->Project_Template_model->get_project_list('', '', '', '', '', '', post(),'','','','','','','',$year);
+    public function project_filter($year,$template_cat_id) {
+        $render_data["project_list"] = $this->Project_Template_model->get_project_list('', '', '', '', '', '', post(),'','','','','',$template_cat_id,'',$year);
         $this->load->view("projects/project_dashboard", $render_data);
     }
 
