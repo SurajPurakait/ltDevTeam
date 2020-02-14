@@ -3,17 +3,37 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
             	<form class="form-horizontal" method="post" id="create_mortgages_and_lending">
-            		<div class="ibox-content">
-            			<h3>Client Information</h3><span class="company-data"></span>
-            			<!-- <div class="form-group">
+            		<div class="ibox-content">            			
+            			<div class="form-group">
             				<label class="col-lg-2 control-label" style="font: 24px;">Client Type<span class="text-danger">*</span></label>
             				<div class="col-lg-10">
-            					<select class="form-control" onchange="invoiceContainerAjax(this.value, <?= $reference_id; ?>, '','');" name="client_type" id="client_type" title="Client Type" required="">
-                                    <option value="1" <?//= (isset($client_type) && $client_type == '1') ? 'selected' : ''; ?>>Business Client</option>
-                                    <option value="2" <?//= (isset($client_type) && $client_type == '2') ? 'selected' : ''; ?>>Individual</option>
+            					<select class="form-control" name="client_type" id="client_type" title="Client Type" required="" onchange="partnerServiceAjax(this.value,<?= $reference_id; ?>);">
+                                    <option value="1">Business Client</option>
+                                    <option value="2">Individual</option>
                                 </select>
             				</div>	
-            			</div> -->
+            			</div>
+            			<div class="hr-line-dashed"></div>
+            			<div id="partner_service_container">
+                            <!-- Add multiple service categories inside this div using ajax -->
+                        </div>
+                        
+                        <div class="form-group">
+            				<label class="col-lg-2 control-label" style="font: 24px;">Assigned To<span class="text-danger">*</span></label>
+            				<div class="col-lg-10">
+            					<select class="form-control" id="assigned_to" required="">
+            						<?php
+            							foreach ($all_partners_list as $apl) {
+            						?>
+            						<option value="<?= $apl['id']; ?>"><?= $apl['first_name'].' '.$apl['last_name']; ?></option>
+            						<?php
+            							}
+            						?>
+            					</select>            					
+            				</div>
+            			</div>
+            			<div class="hr-line-dashed"></div>
+                        <h3>Mortgages And Lending</h3>
             			<div class="form-group">
             				<label class="col-lg-2 control-label" style="font: 24px;">Status<span class="text-danger">*</span></label>
             				<div class="col-lg-10">
@@ -39,7 +59,7 @@
             				</div>
             			</div>
 
-            			<div class="form-group display_div">
+            			<div class="form-group">
                             <label class="col-lg-2 control-label">Purchase Price of Property<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
                                 <input placeholder="xx-xxxxxxx" class="form-control" id="purchase_price" type="text" name="purchase_price" value="" title="Purchase Price of Property">
@@ -61,15 +81,39 @@
 						<div class="form-group">
             				<label class="col-lg-2 control-label" style="font: 24px;">Realtor<span class="text-danger">*</span></label>
             				<div class="col-lg-10">
-            					<select class="form-control" id="realtor" required="">
+            					<select class="form-control" id="realtor" required="" onchange="changeRelator(this.value)">
             						<option value="1">Yes</option>
-            						<option value="2">No</option>		
+            						<option value="2" selected>No</option>		
             					</select>            					
             				</div>
             			</div>
+            			<div style="display: none;" id="realtor_div">
+							<div class="form-group">
+	                            <label class="col-lg-2 control-label">Name</label>
+	                            <div class="col-lg-10">
+	                                <input placeholder="Realtor Name" class="form-control" id="realtorname" type="text" name="realtorname" value="" title="Realtor Name">
+	                                <div class="errorMessage text-danger"></div>
+	                            </div>
+	                        </div>
+	                        <div class="form-group">
+	                            <label class="col-lg-2 control-label">Email</label>
+	                            <div class="col-lg-10">
+	                                <input placeholder="Realtor Email" class="form-control" id="realtoremail" type="text" name="realtoremail" value="" title="Realtor Email">
+	                                <div class="errorMessage text-danger"></div>
+	                            </div>
+	                        </div>
+	                        <div class="form-group">
+	                            <label class="col-lg-2 control-label">Phone Number</label>
+	                            <div class="col-lg-10">
+	                                <input placeholder="Realtor Phone Number" class="form-control" id="realtorphone" type="text" name="realtorphone" value="" title="Realtor Phone Number">
+	                                <div class="errorMessage text-danger"></div>
+	                            </div>
+	                        </div>            				
+            			</div><br>
             			<div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
-                            	<button class="btn btn-success" type="button">Save changes</button> &nbsp;&nbsp;&nbsp;
+                            	<input type="hidden" name="client_id" id="client_id" value="<?= (isset($client_id)) ? $client_id : ''; ?>">
+                            	<button class="btn btn-success" type="button" onclick="">Save changes</button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button">Cancel</button>
                             </div>
                         </div>                			
@@ -78,4 +122,15 @@
             </div>
         </div>
     </div>
-</div>            	
+</div>
+<div id="contact-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
+<script type="text/javascript">
+	partnerServiceAjax(1, <?= $reference_id; ?>);
+	function changeRelator(value) {
+		if (value == 1) {
+			$("#realtor_div").show();
+		} else {
+			$("#realtor_div").hide();
+		}
+	}
+</script>            	
