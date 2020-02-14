@@ -17,6 +17,22 @@
             			<div id="partner_service_container">
                             <!-- Add multiple service categories inside this div using ajax -->
                         </div>
+                        
+                        <div class="form-group">
+            				<label class="col-lg-2 control-label" style="font: 24px;">Assigned To<span class="text-danger">*</span></label>
+            				<div class="col-lg-10">
+            					<select class="form-control" id="assigned_to" required="">
+            						<?php
+            							foreach ($all_partners_list as $apl) {
+            						?>
+            						<option value="<?= $apl['id']; ?>"><?= $apl['first_name'].' '.$apl['last_name']; ?></option>
+            						<?php
+            							}
+            						?>
+            					</select>            					
+            				</div>
+            			</div>
+            			<div class="hr-line-dashed"></div>
                         <h3>Mortgages And Lending</h3>
             			<div class="form-group">
             				<label class="col-lg-2 control-label" style="font: 24px;">Status<span class="text-danger">*</span></label>
