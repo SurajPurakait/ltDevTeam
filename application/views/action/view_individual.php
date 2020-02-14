@@ -28,6 +28,9 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
             <li role="presentation">
                 <a href="#project" aria-controls="project" role="tab" data-toggle="tab">Project</a>
             </li>
+            <li role="presentation">
+                <a href="#action" aria-controls="action" role="tab" data-toggle="tab">Action</a>
+            </li>
         </ul>
 
         <!-- Tab panes -->
@@ -237,6 +240,7 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                     </tbody>
                 </table>
             </div>
+
             <div role="tabpanel" class="tab-pane" id="project">
 
                 <table class="table table-striped table-bordered" style="width:100%;">
@@ -245,6 +249,16 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
                     </tbody>
                 </table>
             </div>
+
+            <div role="tabpanel" class="tab-pane" id="action">
+
+                <table class="table table-striped table-bordered" style="width:100%;">
+                    <tbody>
+                    <div class="ajaxdiv" id="individual_action_dashboard_div"></div>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
 </div>
@@ -273,4 +287,5 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
 <script>
     loadBillingDashboard('', '', '', '', '<?= $reference_id . '-individual'; ?>');
     loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '2', '<?php echo $get_individual_data["id"] ?>', 'clients');
+    loadActionDashboard('', '', '', '', '', '', '','<?= $reference_id . '-individual'; ?>');
 </script>
