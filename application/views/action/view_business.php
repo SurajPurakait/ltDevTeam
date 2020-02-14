@@ -51,6 +51,9 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
             </li>
             <li role="presentation">
                 <a href="#project" aria-controls="project" role="tab" data-toggle="tab" onclick="loadbusinesstab('project', '<?= $check_project_exist ?>')">Project</a>
+            </li>
+            <li role="presentation">
+                <a href="#action" aria-controls="action" role="tab" data-toggle="tab" onclick="loadbusinesstab('action')">Action</a>
             </li>      
         </ul>
 
@@ -370,10 +373,11 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                         </tr>
                     </tbody>
                 </table>
-            <!-- <a title="Account Info" class="btn btn-primary" href="javascript:void(0);" onclick="inactive_business('<?php //echo $company_name_option_data["id"]; ?>', '<?php //echo $company_name_option_data["company_id"]; ?>');">+ Add account info</a> -->
+            
             <a title="Account Info" class="btn btn-primary" href="javascript:void(0);" onclick="task_account_modal('add', '', 'client');">+ ADD ACCOUNT INFO</a>
             <input type="hidden" value="<?= $reference_id; ?>" id="reference_id">
             </div>
+
             <div role="tabpanel" class="tab-pane" id="invoice">
 
                 <table class="table table-striped table-bordered" style="width:100%;">
@@ -382,6 +386,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                     </tbody>
                 </table>
             </div>
+
             <div role="tabpanel" class="tab-pane" id="project">
 
                 <table class="table table-striped table-bordered" style="width:100%;">
@@ -396,7 +401,17 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                     </tbody>
                 </table>
             </div>
-                <div role="tabpanel" class="tab-pane" id="recurring_invoice">
+
+            <div role="tabpanel" class="tab-pane" id="action">
+
+                <table class="table table-striped table-bordered" style="width:100%;">
+                    <tbody>
+                    <div class="ajaxdiv" id="business_action_dashboard_div"></div>
+                    </tbody>
+                </table>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="recurring_invoice">
 
                 <table class="table table-striped table-bordered" style="width:100%;">
                     <tbody>
@@ -419,8 +434,11 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                     $('#project_list_business').show();
                 }
             }
-             if (tab_value == 'recurring_invoice') {
+            if (tab_value == 'recurring_invoice') {
                 loadBillingDashboard('', '', '', '', '<?= $reference_id . '-company'; ?>','','y');
+            }
+            if (tab_value == 'action') {
+                loadActionDashboard('', '', '', '', '', '','<?= $reference_id . '-company'; ?>','');
             }
         }
 

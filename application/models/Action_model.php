@@ -71,7 +71,7 @@ class Action_model extends CI_Model {
         ];
     }
 
-    public function get_action_list($request = '', $status = '', $priority = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '') {
+    public function get_action_list($request = '', $status = '', $priority = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $business_client_id = '', $individual_client_id = '') {
 //        print_r($filter_data);die;
         $user_info = staff_info();
         $user_department = $user_info['department'];
@@ -103,6 +103,18 @@ class Action_model extends CI_Model {
 //        $this->db->join('action_assign_to_department_rel AS ass_dept', 'ass_dept.action_id = act.id');
         $this->db->join('department AS dprt', 'dprt.id = act.department');
         $this->db->join('staff AS st', 'st.id = act.added_by_user');
+
+        if($business_client_id !=''){
+        $this->db->join('action_client_list AS acl', 'act.id = acl.action_id'); 
+        $this->db->join('internal_data AS intr', 'intr.reference_id = acl.client_list_id'); 
+        }
+
+        if($individual_client_id !=''){
+        $this->db->join('action_client_list AS acl', 'act.id = acl.action_id'); 
+        $this->db->join('title AS t', 't.id = acl.client_list_id'); 
+        $this->db->join('internal_data AS intr', 't.individual_id = intr.reference_id');
+        }
+        
         if (isset($sos_value) && $sos_value != '') {
             $this->db->join('sos_notification AS sos', 'sos.reference_id = act.id');
             $this->db->join('sos_notification_staff AS sns', 'sns.sos_notification_id = sos.id');
@@ -386,6 +398,19 @@ class Action_model extends CI_Model {
         if (count($having) != 0) {
             $this->db->having(implode(' AND ', $having));
         }
+
+        if ($business_client_id != '') {
+            $business_client_id = explode("-", $business_client_id);
+            $this->db->where('intr.reference_id', $business_client_id[0]);
+            $this->db->where('intr.reference', $business_client_id[1]);
+        }
+
+        if ($individual_client_id != '') {
+            $individual_client_id = explode("-", $individual_client_id);
+            $this->db->where('intr.reference_id', $individual_client_id[0]);
+            $this->db->where('intr.reference', $individual_client_id[1]);
+        }
+
         $this->db->group_by('act.id');
         if ($sort_criteria != '') {
             $this->db->order_by($sort_criteria, $sort_type);
@@ -650,12 +675,16 @@ class Action_model extends CI_Model {
         }
 
         $client_type = $data['client_type'];
-        $client_list_id = $data['client_list_id'];
+
+        if(isset($data['client_list_id']) && !empty($data['client_list_id'])){
+           $client_list_id = $data['client_list_id']; 
+        }
+        
         unset($data['client_type']);
         unset($data['client_list_id']);
         
         $actions = array_merge($data, ["added_by_user" => $user_id, "status" => 0, "due_date" => $date]);
-
+        
         $this->db->trans_begin();
         $this->db->insert('actions', $actions);
         $id = $this->db->insert_id();

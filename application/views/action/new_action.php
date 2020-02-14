@@ -73,9 +73,9 @@
 
                         <!--business or individual client-->
                         <div class="form-group client_type_div0">
-                            <label class="col-lg-2 control-label">Client Type<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 control-label">Client Type</label>
                             <div class="col-lg-10">
-                            <select class="form-control client_type_field0" onchange="actionContainerAjax(this.value, '', '');" name="client_type" id="client_type" title="Client Type" required="">
+                            <select class="form-control client_type_field0" onchange="actionContainerAjax(this.value, '', '');" name="client_type" id="client_type" title="Client Type">
                                 <option value="">Select Client Type</option>
                                 <option value="1">Business Client</option>
                                 <option value="2">Individual</option>

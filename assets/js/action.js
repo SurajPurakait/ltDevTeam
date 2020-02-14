@@ -770,7 +770,7 @@ function assignAction(action_id, staff_id) {
         }
     });
 }
-function loadActionDashboard(status, request, priority, officeID, departmentID, filter_assign) {
+function loadActionDashboard(status, request, priority, officeID, departmentID, filter_assign, business_client_id = '', individual_client_id = '') {
 //    if (request != '') {
 //        activeShortColumn(request, short_column);
 //    } else {
@@ -784,7 +784,9 @@ function loadActionDashboard(status, request, priority, officeID, departmentID, 
             priority: priority,
             office_id: officeID,
             department_id: departmentID,
-            filter_assign: filter_assign
+            filter_assign: filter_assign,
+            business_client_id: business_client_id,
+            individual_client_id: individual_client_id
         },
         url: base_url + 'action/home/dashboard_ajax',
         success: function (action_result) {
@@ -798,6 +800,8 @@ function loadActionDashboard(status, request, priority, officeID, departmentID, 
             $(".status-dropdown").val(status);
             $(".request-dropdown").val(request);
             $("#action_dashboard_div").html(data.result);
+            $("#business_action_dashboard_div").html(data.result);
+            $("#individual_action_dashboard_div").html(data.result);
             $("[data-toggle=popover]").popover();
             var filter_result = '';
             if (request == 'byme') {
