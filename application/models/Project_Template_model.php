@@ -2430,7 +2430,7 @@ class Project_Template_model extends CI_Model {
     }
 
     public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='',$month='',$year='') {
-//        echo 'hi'.$status.'hlw'.$request.'<br/>';
+//        echo 'hi'.$template_cat_id.'<br/>';die;
 //        print_r($filter_data);die;
         $user_info = $this->session->userdata('staff_info');
         $user_department = $user_info['department'];
@@ -3436,6 +3436,13 @@ class Project_Template_model extends CI_Model {
     public function getProjectPatternDetails($project_id){
         $data = $this->db->get_where('project_recurrence_main', ['project_id' => $project_id])->row_array();
         return $data;
+    }
+    public function getIndividualClientName($client_id){
+        $this->db->select("CONCAT(ind.last_name,',',ind.first_name) as client_name");
+        $this->db->from('individual ind');
+        $this->db->join('title','title.individual_id=ind.id','inner');
+        $this->db->where('title.id',$client_id);
+        return $this->db->get()->row()->client_name;
     }
 }
 

@@ -1273,7 +1273,7 @@ function get_fiscal_year_options() {
     }
 }
 //find project client depending on client type
-function projectContainerAjax(client_type, client_id, project_id)
+function projectContainerAjax(client_type='', client_id='', project_id='',office_id='')
 {
 //    alert(client_type);return false;
     var url = '';
@@ -1289,7 +1289,8 @@ function projectContainerAjax(client_type, client_id, project_id)
         data: {
             project_id: project_id,
             client_type: client_type,
-            client_id: client_id
+            client_id: client_id,
+            office_id:office_id
         },
         enctype: 'multipart/form-data',
         cache: false,
@@ -1408,13 +1409,14 @@ function sort_project_dashboard(sort_criteria = '', sort_type = '') {
     });
 }
 function projectFilter(select_year) {
-//    alert(select_year);return false;
+    var category=$('#cat').val();
+    var statusArray = category.split('-');
     var form_data = new FormData(document.getElementById('filter-form'));
 //    form_data.append('year', select_year);
     $.ajax({
         type: "POST",
         data: form_data,
-        url: base_url + 'project/project_filter/'+select_year,
+        url: base_url + 'project/project_filter/'+select_year+'/'+statusArray[0],
         dataType: "html",
         processData: false,
         contentType: false,

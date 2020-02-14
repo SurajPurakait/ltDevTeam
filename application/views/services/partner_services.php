@@ -1,7 +1,7 @@
 <div class="wrapper wrapper-content">
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-4">
-            <a class="widget p-lg text-center ibox-content link-panel" href="javascript:void(0);">
+            <a class="widget p-lg text-center ibox-content link-panel" href="<?php echo base_url(); ?>services/partner_services/create_mortgages_and_lending">
                 <img src="<?php echo base_url() ?>assets/img/housetax_return.svg" alt="Mortgages And Lending" class="svg-icon m-b-md"/>
                 <h3 class="font-bold no-margins">
                     Mortgages And Lending

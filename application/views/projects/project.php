@@ -3,7 +3,6 @@ $user_info = staff_info();
 $user_department = $user_info['department'];
 $user_type = $user_info['type'];
 $role = $user_info['role'];
-echo $category;
 ?>
 <style>
     .project-clear-filter{
@@ -583,8 +582,19 @@ echo $category;
     </div>
 </div>
 <script>
+    var content = $(".filter-div").html();
+    var variableArray = [];
+    var elementArray = [];
     $("#project_add_filter").click(function(){
         $("#project_apply_filter").toggle();
+        
+        var random = Math.floor((Math.random() * 999) + 1);
+        var clone = '<div class="filter-div row m-b-20" id="clone-' + random + '">' + content + '<div class="col-sm-1 text-center p-l-0"><a href="javascript:void(0);" onclick="removeProjectFilterRow(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
+        $('.filter-inner').append(clone);
+
+        $.each(variableArray, function (key, value) {
+            $("#clone-" + random + " .variable-dropdown option[value='" + value + "']").remove();
+        });
         clearProjectFilter();
         addProjectFilterRow();
         if($("#project_add_filter").text()=='Show Filter'){
@@ -593,6 +603,7 @@ echo $category;
             $("#project_add_filter").text('Show Filter');
         }
     });
+    $("#project_add_filter").text('Show Filter');
     loadProjectDashboard('<?= $status; ?>', '<?= $request_type; ?>', '<?= $template_id; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '', '', '', '', '', '', '', '', 1,<?= $template_cat_id ?>);
     reflactProjectFilterWithCategory('<?= $category ?>', '');
     $(function () {
@@ -738,9 +749,7 @@ echo $category;
             }
         });
     }
-    var content = $(".filter-div").html();
-    var variableArray = [];
-    var elementArray = [];
+    
     function changeVariableProject(element) {
         var divID = $(element).parent().parent().attr('id');
         var variableValue = $(element).children("option:selected").val();
@@ -895,22 +904,27 @@ echo $category;
         if (statusArray[1] == 'bookkeeping') {
             $('#cat').val(statusArray[0] + '-' + statusArray[1]);
             $('#bookkeeping_btn_clear_filter').show();
+            $("#project_add_filter").text('Show Filter');
         } else if (statusArray[1] == 'tax_returns') {
             $('#cat').val(statusArray[0] + '-' + statusArray[1]);
             $('#tax_btn_clear_filter').show();
+            $("#project_add_filter").text('Show Filter');
         } else if (statusArray[1] == 'sales_tax') {
             $('#cat').val(statusArray[0] + '-' + statusArray[1]);
             $('#sales_btn_clear_filter').show();
+            $("#project_add_filter").text('Show Filter');
         } else if (statusArray[1] == 'annual_report') {
             $('#cat').val(statusArray[0] + '-' + statusArray[1]);
             $('#annual_btn_clear_filter').show();
+            $("#project_add_filter").text('Show Filter');
     }
 //        $("#due_year").val(new Date().getFullYear());
     }
     function clearProjectFilter() {
+        $('#btn_clear_filter').css('display', 'none');
         $(".criteria-dropdown").trigger("chosen:updated");
         $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
-        $('#btn_clear_filter').css('display', 'none');
+        $("#project_add_filter").text('Show Filter');
     }
     function change_project_year(year) {
         var category = $('#cat').val();
