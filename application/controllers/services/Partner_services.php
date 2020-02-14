@@ -10,6 +10,7 @@ class Partner_services extends CI_Controller {
             redirect(base_url());
         }
         $this->load->model("service_model");
+        $this->load->model('lead_management');
     }
 
     public function index() {
@@ -33,6 +34,7 @@ class Partner_services extends CI_Controller {
         $render_data['mortgages_list'] = $this->service_model->get_mortgages_list();
         $render_data['reference_id'] = $this->system->create_reference_id();
         $render_data['client_id'] = '';
+        $render_data['all_partners_list'] = $this->lead_management->get_all_partners_list();
         $this->load->template('services/create_mortgages_and_lending', $render_data);
     }
 
