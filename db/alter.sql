@@ -1238,8 +1238,4 @@ ALTER TABLE `project_recurrence_main` ADD `start_year` VARCHAR(20) NOT NULL AFTE
 
 /* 13.02.2020 */
 -- import partner_services.sql
-<<<<<<< HEAD
 -- import type_of_mortgage.sql
-=======
-
->>>>>>> 86a0c133e5545b35dfb889d239849334244bc617
