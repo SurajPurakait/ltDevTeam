@@ -104,3 +104,98 @@
     </div>
     <div class="hr-line-dashed"></div>
 </div>
+
+<div id="owners_div" class="display_div">
+    <h3>Owners<span class="text-danger">*</span> &nbsp; (<a href="javascript:void(0);" class="owneradd" onclick="open_owner_popup(1, '<?= $reference_id; ?>', 0); return false;">Add owner</a>)</h3>
+    <div id="owners-list">
+        <input type="hidden" class="required_field" title="Owners" id="owners-list-count" required="required" value="">
+        <div class="errorMessage text-danger"></div>
+    </div>
+</div>
+
+<div id="internal_data_div" class="display_div">
+    <div class="hr-line-dashed"></div>
+    <h3>Internal Data</h3><span class="internal-data"></span>
+    <div class="form-group office-internal">
+        <label class="col-lg-2 control-label">Office<span class="text-danger">*</span></label>
+        <div class="col-lg-10">
+            <select class="form-control chosen-select required_field value_field" name="office" onchange="load_partner_manager_ddl(this.value);" id="office" title="Office" required="">
+                <option value="">Select an option</option>
+                <?php load_ddl_option("staff_office_list"); ?>
+            </select>
+            <div class="errorMessage text-danger"></div>                                    
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-2 control-label">Partner<span class="text-danger">*</span></label>
+        <div class="col-lg-10">
+            <select name="partner" id="partner" class="form-control required_field value_field" title="Partner" required>
+                <option value="">Select an option</option>
+            </select>
+
+            <div class="errorMessage text-danger"></div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-2 control-label">Manager<span class="text-danger">*</span></label>
+        <div class="col-lg-10">
+            <select name="manager" class="form-control required_field value_field" id="manager" title="Manager" required>
+                <option value="">Select an option</option>
+            </select>
+            <div class="errorMessage text-danger"></div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-2 control-label">Client Association</label>
+        <div class="col-lg-10">
+            <input placeholder="" class="form-control value_field" type="text" id="client_association" name="client_association" title="Client Association" value="">
+            <div class="errorMessage text-danger"></div>
+        </div>
+    </div>
+    <div class="hidden">
+    <div class="form-group" style="display:none;">
+        <label class="col-lg-2 control-label">Practice Id</label>
+        <div class="col-lg-10">
+            <input placeholder="Practice Id" class="form-control" type="text" name="internal_data[practice_id]" id="practice_id" title="Practice Id">
+            <div class="errorMessage text-danger"></div>
+        </div>
+    </div>
+    </div>
+    
+    <div class="form-group">
+        <label class="col-lg-2 control-label">Referred By Source<span class="text-danger">*</span></label>
+        <div class="col-lg-10">
+            <select class="form-control chosen-select required_field value_field" name="referred_by_source" id="referred_by_source" onchange="change_referred_name_status(this.value);" title="Referred By Source" required>
+                <option value="">Select an option</option>
+                <?php load_ddl_option("referer_by_source"); ?>
+            </select>
+            <div class="errorMessage text-danger"></div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label id="referred-label" class="col-lg-2 control-label">Referred By Name</label>
+        <div class="col-lg-10">
+            <input placeholder="" class="form-control value_field" type="text" id="referred_by_name" name="referred_by_name" title="Referred By Name" value="">
+            <div class="errorMessage text-danger"></div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg-2 control-label">Language<span class="text-danger">*</span></label>
+        <div class="col-lg-10">
+            <select class="form-control chosen-select required_field value_field" id="language" name="language" title="Language" required="">
+                <option value="">Select an option</option>
+                <?php load_ddl_option("language_list"); ?>
+            </select>
+            <div class="errorMessage text-danger"></div>
+        </div>
+    </div>
+
+    <div class="form-group" style="display:none;">
+        <label class="col-lg-2 control-label">Existing Practice ID</label>
+        <div class="col-lg-10">
+            <input placeholder="" class="form-control value_field" type="text" name="existing_practice_id" title="Existing Practice ID" value="" readonly>
+            <!-- <div class="errorMessage text-danger"></div> -->
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+</div>

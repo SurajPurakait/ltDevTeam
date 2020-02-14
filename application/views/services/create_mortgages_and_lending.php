@@ -17,6 +17,7 @@
             			<div id="partner_service_container">
                             <!-- Add multiple service categories inside this div using ajax -->
                         </div>
+                        <h3>Mortgages And Lending</h3>
             			<div class="form-group">
             				<label class="col-lg-2 control-label" style="font: 24px;">Status<span class="text-danger">*</span></label>
             				<div class="col-lg-10">
@@ -92,11 +93,11 @@
 	                                <div class="errorMessage text-danger"></div>
 	                            </div>
 	                        </div>            				
-            			</div>
+            			</div><br>
             			<div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
                             	<input type="hidden" name="client_id" id="client_id" value="<?= (isset($client_id)) ? $client_id : ''; ?>">
-                            	<button class="btn btn-success" type="button">Save changes</button> &nbsp;&nbsp;&nbsp;
+                            	<button class="btn btn-success" type="button" onclick="">Save changes</button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button">Cancel</button>
                             </div>
                         </div>                			
@@ -107,7 +108,6 @@
     </div>
 </div>
 <div id="contact-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
-<div class="hr-line-dashed"></div>
 <script type="text/javascript">
 	partnerServiceAjax(1, <?= $reference_id; ?>);
 	function changeRelator(value) {
