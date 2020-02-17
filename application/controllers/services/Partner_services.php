@@ -51,7 +51,15 @@ class Partner_services extends CI_Controller {
         }
         $this->load->view('services/partner_services_type'.$client_type,$render_data);
     }
-
+    
+    public function request_create_mortgages() {
+        $result = $this->service_model->request_create_mortgages(post());
+        if($result){
+            echo $result;
+        } else {
+           echo 0; 
+        }
+    }
 }
 
 ?>

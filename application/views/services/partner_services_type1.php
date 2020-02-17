@@ -199,3 +199,8 @@
     </div>
     <div class="hr-line-dashed"></div>
 </div>
+<script>
+$(function () {
+        $("#start_month_year").datepicker({format: 'mm/yyyy', autoHide: true, startDate: new Date()});
+    });
+</script>

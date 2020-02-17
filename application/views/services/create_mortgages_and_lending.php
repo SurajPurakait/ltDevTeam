@@ -37,7 +37,7 @@
             			<div class="form-group">
             				<label class="col-lg-2 control-label" style="font: 24px;">Status<span class="text-danger">*</span></label>
             				<div class="col-lg-10">
-            					<select class="form-control" id="status" required="">
+                                            <select class="form-control" id="status" name="status" required="">
             						<option value="1">Foreign</option>
             						<option value="2">Domestic</option>	
             					</select>            					
@@ -47,7 +47,7 @@
             			<div class="form-group">
             				<label class="col-lg-2 control-label" style="font: 24px;">Type of Mortgage<span class="text-danger">*</span></label>
             				<div class="col-lg-10">
-            					<select class="form-control" id="typeofmortgage" required="">
+                                            <select class="form-control" id="typeofmortgage" name="typeofmortgage" required="">
             						<?php
             							foreach ($mortgages_list as $val) {				
             						?>
@@ -70,7 +70,7 @@
                         <div class="form-group">
             				<label class="col-lg-2 control-label" style="font: 24px;">What is Property Intended For ?<span class="text-danger">*</span></label>
             				<div class="col-lg-10">
-            					<select class="form-control" id="whatisproperty" required="">
+                                            <select class="form-control" id="whatisproperty" name="whatisproperty" required="">
             						<option value="1">Primary Residence</option>
             						<option value="2">Vacation or Secondary Home</option>	
             						<option value="3">Investment Property</option>	
@@ -81,7 +81,7 @@
 						<div class="form-group">
             				<label class="col-lg-2 control-label" style="font: 24px;">Realtor<span class="text-danger">*</span></label>
             				<div class="col-lg-10">
-            					<select class="form-control" id="realtor" required="" onchange="changeRelator(this.value)">
+                                            <select class="form-control" id="realtor" required="" name="realtor" onchange="changeRelator(this.value)">
             						<option value="1">Yes</option>
             						<option value="2" selected>No</option>		
             					</select>            					
@@ -112,8 +112,9 @@
             			</div><br>
             			<div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
+                                <input type="hidden" id="reference_id" name="reference_id" value="<?= (isset($reference_id)) ? $reference_id : ''; ?>"> 
                             	<input type="hidden" name="client_id" id="client_id" value="<?= (isset($client_id)) ? $client_id : ''; ?>">
-                            	<button class="btn btn-success" type="button" onclick="">Save changes</button> &nbsp;&nbsp;&nbsp;
+                            	<button class="btn btn-success" type="button" onclick="saveMortgages()">Save changes</button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button">Cancel</button>
                             </div>
                         </div>                			
