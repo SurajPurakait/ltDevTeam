@@ -3563,3 +3563,24 @@ function update_recipient()
         }
     });
 }
+
+function partnerServiceAjax(client_type,reference_id) {
+    $.ajax({
+        type: "POST",
+        data: { 
+            client_type : client_type,
+            reference_id : reference_id,
+            client_id: $('#client_id').val()
+        },
+        url: base_url + 'services/partner_services/get_related_section_by_type',
+        success: function (result) {
+            $("#partner_service_container").html(result);
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });    
+}
