@@ -369,13 +369,18 @@
                                                         $tracking = 'Incomplete';
                                                         $trk_class = 'label-danger';
                                                     }
+                                                    if($accounts['created_at']!=''){
+                                                        $created_at=date('m/d/Y h:i', strtotime($accounts['created_at']));
+                                                    }else{
+                                                       $created_at=''; 
+                                                    }
                                                     ?>
                                                     <tr>
                                                         <td title="Bank Name" class="text-center"><?= $accounts['bank_name']; ?></td>
                                                         <td title="Account Number" class="text-center"><?= $accounts['account_number']; ?></td>
                                                         <td title="Routing Number" class="text-center"><?= $accounts['routing_number']; ?></td>
                                                         <td title="Tracking" class="text-center"><a href='javascript:void(0)' onclick='change_bookkeeping_finance_input_status("<?= $accounts['id']; ?>", "<?= $status ?>")'> <span id="trackinner-<?= $accounts['id'] ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
-                                                        <td title="Time & Date" class="text-center"><?= date('m/d/Y h:i', strtotime($accounts['created_at'])); ?></td>
+                                                        <td title="Time & Date" class="text-center"><?= $created_at; ?></td>
                                                         <td></td>
                                                         <td></td>
                                                         <!--<= '<td title="Files" class="text-center" ><span id="taskfilespan' . $task->id . '">' . (($unread_files_count->unread_files_count > 0) ? '<a class="label label-danger" href="javascript:void(0)" count="' . $file_count->files . '" id="taskfile' . $task->id . '" onclick="show_task_files(\'' . $task->id . '\',\'' . $new_staffs . $task->added_by_user . '\')"><b>' . $file_count->files . '</b></a>' : '<a class="label label-success" href="javascript:void(0)" count="' . $file_count->files . '" id="actionfile' . $task->id . '" onclick="show_task_files(\'' . $task->id . '\',\'' . $new_staffs . $task->added_by_user . '\')"><b>' . $file_count->files . '</b></a>') . '</span></td>'; ?>-->
