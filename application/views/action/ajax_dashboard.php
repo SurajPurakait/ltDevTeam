@@ -176,7 +176,20 @@ if (!empty($action_list)):
                                     <?php } else { ?>
                                         <td title="Assign To"><label class="label label-default">Unassigned</label></td>
                                     <?php } ?>
-                                    <td title="Client ID"><?= $action["client_id"]; ?></td>
+
+                                  <?php if($action["client_id"] != ''){
+                                   $a = explode(",",$action["client_id"]); ?>
+                                    <td title="Client ID">
+                                        <?php foreach($a as $val){ ?>
+                                            <a  href="javascript:void(0)" onclick="show_action_client_view_page('<?= $action['id']?>','<?= $val ?>')" target="_blank" ><?= $val ?></a>
+                                        <?php } ?>
+
+
+                                    </td>
+                                <?php }else{ ?>
+                                    <td title="Client ID"></td>
+                                <?php } ?>
+
                                     <td align='left' title="Tracking Description" class="text-center">
                                         <a href='javascript:void(0);' id='actiontracking-<?php echo $action["id"]; ?>' onclick='show_action_tracking_modal("<?= $action["id"]; ?>", "ajax_dashboard")'>
                                             <span class='label <?php echo $trk_class; ?>'><?= $action["tracking_status"]; ?></span>
@@ -287,4 +300,25 @@ if (!empty($action_list)):
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
     });
+
+    function show_action_client_view_page(action_id,client_id) {
+        // alert(client_id);return false;
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'action/home/show_action_client_view_page',
+        data: {
+            action_id: action_id,
+            client_id: client_id
+        },
+        success: function (result) {
+            var obj = JSON.parse(result);
+            var client_id = obj.client_list_id;
+            var company_id = obj.company_id;
+            var client_type = obj.client_type;
+            if(client_type == 1){
+            goURL(base_url + 'action/home/view_business/' + client_id + '/' + company_id );
+          }
+        }
+    });
+}
 </script>
