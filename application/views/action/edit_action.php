@@ -64,6 +64,42 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
+
+                        <!--business or individual client-->
+                        <div class="form-group client_type_div0">
+                            <label class="col-lg-2 control-label">Client Type</label>
+                            <div class="col-lg-10">
+                                <select class="form-control client_type_field0" onchange="actionContainerAjax(this.value, '', '');" name="client_type" id="client_type" title="Client Type" disabled>
+                                <option value="">Select Client Type</option>
+                                <option value="1" <?= ($action_client_list[0]["client_type"] == 1) ? "selected" : ""; ?>>Business Client</option>
+                                <option value="2" <?= ($action_client_list[0]["client_type"] == 2) ? "selected" : ""; ?>>Individual</option>
+                                </select>
+                            </div>
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                        <!-- <div class="hr-line-dashed"></div> -->
+                        <div id="action_container"></div>
+
+                        <div class="form-group client_type_div0">
+                            <label class="col-lg-2 control-label">Office</label>
+                            <div class="col-lg-10">
+                                <select class="form-control client_type_field0" name="office_id" id="staff_office" onchange="refresh_existing_action_client_list(this.value,'');" title="Office" disabled>
+                                <option value="">Select Office</option>
+                                <!-- <?php //load_ddl_option("staff_office_list",(isset($office_id)? $office_id:''), (staff_info()['type'] != 1) ? "staff_office" : ""); ?> -->
+                                <?php load_ddl_option("staff_office_list",$data['office_id'], (staff_info()['type'] != 1) ? "staff_office" : ""); ?>
+                                </select>
+                            </div>
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Client ID</label>
+                            <div class="col-lg-10">
+                                <input placeholder="" class="form-control" type="text" name="client_id" title="Cient ID" value="<?= $data["client_id"]; ?>" readonly>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Priority<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
@@ -105,13 +141,7 @@ if ($data["added_by_user"] == sess("user_id") || ($staff_info['type'] == 1 || $s
 
                         <div id="staff_div"></div>
                         <input type="hidden" id="staff-hidden" name="staff-hidden" value="">
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Client ID</label>
-                            <div class="col-lg-10">
-                                <input placeholder="" class="form-control" type="text" name="client_id" title="Cient ID" value="<?= $data["client_id"]; ?>" readonly>
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
+                        
                         <div class="form-group">
                             <label class="col-sm-3 col-md-2 control-label">Subject<span class="spanclass text-danger">*</span></label>
                             <div class="col-sm-9 col-md-10">

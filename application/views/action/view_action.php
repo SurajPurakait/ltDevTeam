@@ -220,6 +220,18 @@ if ($data["status"] == 0) {
             ?>
             <div class="table-responsive">
                 <table class="table table-striped table-bordered"> 
+                    <?php if(isset($action_client_list[0]['client_type'])){ ?>
+                        <tr>
+                            <td <?= $style; ?> width="220"> 
+                                    <b>Client Type:</b>
+                            </td>
+                            <td><?php if($action_client_list[0]['client_type'] == 1){
+                                echo "Business Client";
+                            }else if($action_client_list[0]['client_type'] == 2){
+                                echo "Individual Client";
+                            } ?></td>
+                        </tr>
+                    <?php } ?>  
 
                     <?php
                     if ($data['client_id'] != '') {
