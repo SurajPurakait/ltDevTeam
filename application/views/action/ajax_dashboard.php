@@ -316,7 +316,7 @@ if (!empty($action_list)):
             var company_id = obj.company_id;
             var client_type = obj.client_type;
             if(client_type == 1){
-            goURL(base_url + 'action/home/view_business/' + client_id + '/' + company_id );
+            window.open(base_url + 'action/home/view_business/' + client_id + '/' + company_id );
           }
         }
     });
