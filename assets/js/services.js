@@ -3584,3 +3584,29 @@ function partnerServiceAjax(client_type,reference_id) {
         }
     });    
 }
+
+function saveMortgages() {  
+       if (!requiredValidation('create_mortgages_and_lending')) {
+        return false;
+    }
+    
+    var form_data = new FormData(document.getElementById('create_mortgages_and_lending'));
+     $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'services/partner_services/request_create_mortgages',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            if (result != 0) {
+                swal("Success!", "Successfully saved!", "success");
+            } else {
+                swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+            }
+        }
+    });
+}
+
