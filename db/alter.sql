@@ -1227,8 +1227,6 @@ ALTER TABLE `actions` ADD `client_type` INT(11) NOT NULL COMMENT '1:Business Cli
 ALTER TABLE `actions` ADD `office_id` INT(100) NOT NULL AFTER `client_type`;
 ALTER TABLE `actions` ADD `client_list_id` INT(100) NOT NULL AFTER `office_id`;
 
-/*live end*/
-
 
 /* 12.02.2020 */
 ALTER TABLE `actions` DROP `client_type`;
@@ -1239,3 +1237,5 @@ ALTER TABLE `project_recurrence_main` ADD `start_year` VARCHAR(20) NOT NULL AFTE
 /* 13.02.2020 */
 -- import partner_services.sql
 -- import type_of_mortgage.sql
+
+/*live end*/
