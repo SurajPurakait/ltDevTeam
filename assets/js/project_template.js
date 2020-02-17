@@ -374,7 +374,7 @@ function hide_task_ofc_staff_div_in_editcase(assign_myself) {
 //end task department staff
 
 function request_create_template() {
-    if (!requiredValidation('save_template_main')) {
+if (!requiredValidation('save_template_main')) {
         return false;
     }
     var form_data = new FormData(document.getElementById("save_template_main"));
@@ -447,7 +447,9 @@ function request_create_template() {
     var expiration_type = $('input[name="recurrence[expiration_type]"]:checked').val();
     var end_occurrence = $("#end_occurrence").val();
     var target_start_days = $("#t_start_day").val();
+    var target_start_months = $("#t_start_month").val();
     var target_end_days = $("#t_end_day").val();
+    var target_end_months = $("#t_end_month").val();
     var target_start_day = $('input[name="recurrence[target_start_day]"]:checked').val();
     var target_end_day = $('input[name="recurrence[target_end_day]"]:checked').val();
     var generation_type = $('input[name="recurrence[generation_type]"]:checked').val();
@@ -464,8 +466,10 @@ function request_create_template() {
     form_data.append('recurrence[expiration_type]', expiration_type);
     form_data.append('recurrence[end_occurrence]', end_occurrence);
     form_data.append('recurrence[target_start_days]', target_start_days);
+    form_data.append('recurrence[target_start_months]', target_start_months);
     form_data.append('recurrence[target_start_day]', target_start_day);
     form_data.append('recurrence[target_end_days]', target_end_days);
+    form_data.append('recurrence[target_end_months]', target_end_months);
     form_data.append('recurrence[target_end_day]', target_end_day);
     form_data.append('recurrence[generation_type]', generation_type);
     form_data.append('recurrence[generation_day]', generation_day);
@@ -509,7 +513,6 @@ function request_create_template() {
             closeLoading();
         }
     });
-
 }
 
 function get_template_task_modal(template_id) {
@@ -758,7 +761,9 @@ function request_edit_template() {
     var expiration_type = $('input[name="recurrence[expiration_type]"]:checked').val();
     var end_occurrence = $("#end_occurrence").val();
     var target_start_days = $("#t_start_day").val();
+    var target_start_months = $("#t_start_month").val();
     var target_end_days = $("#t_end_day").val();
+    var target_end_months = $("#t_end_month").val();
     var target_start_day = $('input[name="recurrence[target_start_day]"]:checked').val();
     var target_end_day = $('input[name="recurrence[target_end_day]"]:checked').val();
     var generation_type = $('input[name="recurrence[generation_type]"]:checked').val();
@@ -775,8 +780,10 @@ function request_edit_template() {
     form_data.append('recurrence[expiration_type]', expiration_type);
     form_data.append('recurrence[end_occurrence]', end_occurrence);
     form_data.append('recurrence[target_start_days]', target_start_days);
+    form_data.append('recurrence[target_start_months]', target_start_months);
     form_data.append('recurrence[target_start_day]', target_start_day);
     form_data.append('recurrence[target_end_days]', target_end_days);
+    form_data.append('recurrence[target_end_months]', target_end_months);
     form_data.append('recurrence[target_end_day]', target_end_day);
     form_data.append('recurrence[generation_type]', generation_type);
     form_data.append('recurrence[generation_day]', generation_day);
@@ -888,15 +895,25 @@ function request_create_project() {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//            alert(result);return false;
-            if (result.trim() == "1") {
+//            alert(result);
+            if (result.trim() != "-1") {
                 $('#projectModal').hide();
                 swal({
                     title: "Success!",
                     text: "Project Successfully Added!",
                     type: "success"
                 }, function () {
-                    goURL(base_url + 'project');
+                    var category='';
+                    if(result=='1'){
+                            category="1-bookkeeping";
+                        }else if(result=='2'){
+                            category= '2-tax_returns';
+                        }else if(result=='3'){
+                            category= '3-sales_tax';
+                        }else{
+                            category= '4-annual_report';
+                        }
+                    goURL(base_url + 'Project/index/'+category+'/'+result);
                 });
             } else if (result.trim() == "-1") {
                 swal("ERROR!", "Unable To Add Data", "error");
@@ -1256,7 +1273,7 @@ function get_fiscal_year_options() {
     }
 }
 //find project client depending on client type
-function projectContainerAjax(client_type, client_id, project_id)
+function projectContainerAjax(client_type='', client_id='', project_id='',office_id='')
 {
 //    alert(client_type);return false;
     var url = '';
@@ -1272,7 +1289,8 @@ function projectContainerAjax(client_type, client_id, project_id)
         data: {
             project_id: project_id,
             client_type: client_type,
-            client_id: client_id
+            client_id: client_id,
+            office_id:office_id
         },
         enctype: 'multipart/form-data',
         cache: false,
@@ -1391,13 +1409,14 @@ function sort_project_dashboard(sort_criteria = '', sort_type = '') {
     });
 }
 function projectFilter(select_year) {
-//    alert(select_year);return false;
+    var category=$('#cat').val();
+    var statusArray = category.split('-');
     var form_data = new FormData(document.getElementById('filter-form'));
 //    form_data.append('year', select_year);
     $.ajax({
         type: "POST",
         data: form_data,
-        url: base_url + 'project/project_filter/'+select_year,
+        url: base_url + 'project/project_filter/'+select_year+'/'+statusArray[0],
         dataType: "html",
         processData: false,
         contentType: false,
@@ -1471,8 +1490,10 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
             if (status != '' || status == '0') {
 //                $("#clear_filter").html(filter_data + ' &nbsp; ');
 //                $("#clear_filter").show();
+                $("#project_apply_filter").show();
                 $('#bookkeeping_btn_clear_filter').show();
-                
+                $("#project_hide_filter").show();
+                $("#project_add_filter").hide();
             }
             else {
 //                $("#clear_filter").html('');
@@ -1481,6 +1502,9 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
                 $('#tax_btn_clear_filter').hide();
                 $('#sales_btn_clear_filter').hide();
                 $('#annual_btn_clear_filter').hide();
+                $("#project_apply_filter").hide();
+                $("#project_hide_filter").hide();
+                $("#project_add_filter").show();
             }
         },
         beforeSend: function () {
@@ -1671,7 +1695,7 @@ function deleteTaskNote(divID, noteID, relatedTableID) {
     });
     $("#" + divID).remove();
 }
-function save_task_account(section) {
+function save_task_account(section='') {
 
 //update_financial_account_by_date
     if (!requiredValidation('form_accounts')) {
@@ -1680,7 +1704,9 @@ function save_task_account(section) {
     var form_data = new FormData(document.getElementById('form_accounts'));
     var company_id = $("#company_id").val();
     var order_id = $("#editval").val();
-    var client_id=$("#client_id").val();
+    var client_id = $("#client_id").val();
+    var is_client = $("#section").val();
+
     form_data.append('section', section);
     $.ajax({
         type: "POST",
@@ -1692,11 +1718,14 @@ function save_task_account(section) {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//            alert(result); return false;
             if (result.trim() == "1") {
                 swal({title: "Success!", text: "Financial account successfully saved!", type: "success"}, function () {
                     $('#accounts-form').modal('hide');
-                    get_financial_account_list(company_id, section, order_id);
+                    if (is_client == 'client') {
+                        goURL(base_url+'action/home/view_business/'+client_id+'/'+company_id);    
+                    } else {
+                        get_financial_account_list(company_id, section, order_id);    
+                    }
                 });
             } else if (result.trim() == "-1") {
                 swal("ERROR!", "Unable to save financial account", "error");
@@ -1765,10 +1794,10 @@ function delete_project_template(project_id) {
         }
     });        
 }
-function get_pattern_detais(template_id){
+function get_pattern_detais(template_id,project_id='',section=''){
     $.ajax({
         type: "POST",
-        data: {id : template_id},
+        data: {id : template_id,project_id:project_id,section:section},
         url: base_url + 'project/get_template_pattern_details',
         cache:false,
         success: function (result) {

@@ -128,30 +128,7 @@
                             </div>
                         </div>
 
-                        <div id="documents_div" class="display_div">
-                            <div class="hr-line-dashed"></div>
-                            <h3>Documents &nbsp; (<a data-toggle="modal"  id="add_document_btn" onclick="document_modal('add', '<?= $reference ?>', '<?= $reference_id ?>'); return false;" href="javascript:void(0);">Add document</a>)</h3> 
-                            <div id="document-list"></div>
-                        </div>
-
-                        <div id="contact_info_div">
-                            <div class="hr-line-dashed"></div>
-                            <h3>Contact Info<span class="text-danger">*</span><span class="display_div">&nbsp; (<a href="javascript:void(0);" class="contactadd" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>'); return false;">Add Contact</a>)</span></h3>
-                            <div id="contact-list">
-                                <input type="hidden" title="Contact Info" id="contact-list-count" required="required" value="">
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
-
-                        <div id="owners_div" class="display_div">
-                            <div class="hr-line-dashed"></div>
-                            <h3>Owners<span class="text-danger">*</span> &nbsp; (<a href="javascript:void(0);" class="owneradd" onclick="open_owner_popup(1, '<?= $reference_id; ?>', 0); return false;">Add owner</a>)</h3>
-                            <div id="owners-list">
-                                <input type="hidden" class="required_field" title="Owners" id="owners-list-count" required="required" value="">
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>                        
+                        <div class="hr-line-dashed"></div>
                         <div class="form-group state_div">
                             <label class="col-lg-2 control-label">State of Sales Tax<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
@@ -179,6 +156,29 @@
                             </div>
                         </div>
 
+                        <div id="documents_div" class="display_div">
+                            <div class="hr-line-dashed"></div>
+                            <h3>Documents &nbsp; (<a data-toggle="modal"  id="add_document_btn" onclick="document_modal('add', '<?= $reference ?>', '<?= $reference_id ?>'); return false;" href="javascript:void(0);">Add document</a>)</h3> 
+                            <div id="document-list"></div>
+                        </div>
+
+                        <div id="contact_info_div">
+                            <div class="hr-line-dashed"></div>
+                            <h3>Contact Info<span class="text-danger">*</span><span class="display_div">&nbsp; (<a href="javascript:void(0);" class="contactadd" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>'); return false;">Add Contact</a>)</span></h3>
+                            <div id="contact-list">
+                                <input type="hidden" title="Contact Info" id="contact-list-count" required="required" value="">
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
+
+                        <div id="owners_div" class="display_div">
+                            <div class="hr-line-dashed"></div>
+                            <h3>Owners<span class="text-danger">*</span> &nbsp; (<a href="javascript:void(0);" class="owneradd" onclick="open_owner_popup(1, '<?= $reference_id; ?>', 0); return false;">Add owner</a>)</h3>
+                            <div id="owners-list">
+                                <input type="hidden" class="required_field" title="Owners" id="owners-list-count" required="required" value="">
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
                         <div class="hr-line-dashed"></div>
                         <h3>Account number where Sales Tax will be debited</h3>
 
@@ -386,15 +386,15 @@
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
-                            <div class="form-group">
+<!--                             <div class="form-group">
                                 <label class="col-lg-2 control-label">Existing Practice ID</label>
                                 <div class="col-lg-10">
                                     <input placeholder="" class="form-control value_field" type="text" name="existing_practice_id" title="Existing Practice ID" value="">
                                     <div class="errorMessage text-danger"></div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                        </div>
+                        </div>    
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">

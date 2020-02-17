@@ -154,11 +154,14 @@ class Task extends CI_Controller {
             
             $render_data['state'] = $this->system->get_all_state();
             $render_data['staffInfo'] = staff_info();
+//            print_r($render_data['staffInfo']);die;
             $render_data['period_time']=Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
             $render_data['client_name']=$client_name=$this->Project_Template_model->getProjectClientName($client_dtls->client_id, $client_dtls->client_type);
+//            print_r($client_dtls); die;
     //        $render_data['completed_salestax_orders'] = $this->service->completed_orders_salestax(47); //id will be different for live
             $render_data['county_details'] = $this->action_model->get_county_name();
             $render_data['sales_tax_process']=$this->Project_Template_model->getProjectTaskSalesTaxProcess($task_id);
+            $render_data['bank_account_details'] =$this->Project_Template_model->getaccountdetails($client_dtls->client_id);
         }if($input_form_type==1){
             if($bookkeeping_input_type==1){
             $render_data['client_id']=$client_dtls->client_id;

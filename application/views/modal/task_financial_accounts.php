@@ -1,6 +1,5 @@
 <?php
 if ($modal_type != "edit"):
-//    print_r($account_details);
     ?>
     <div class="modal-dialog">
         <div class="modal-content">
@@ -9,29 +8,31 @@ if ($modal_type != "edit"):
                 <h3 class="modal-title">Add Account</h3>
             </div>
             <?php
-            if (!empty($account_details)) {
-                foreach ($account_details as $val) {
-                    ?>
-                    <div class="m-t-10">
-                        <div class="col-md-6">
-                            <div class="form-group" id="bookkeeping_account_list">
-                                <a class="btn btn-success"  href="javascript:void(0)" onclick="set_exist_bookkeeping_value('<?= $val['type_of_account'] ?>', '<?= $val['bank_name'] ?>', '<?= $val['account_number'] ?>', '<?= $val['routing_number'] ?>', '<?= $val['bank_website'] ?>', '<?= $val['user'] ?>', '<?= $val['password'] ?>')">
-                                    <b>Bank Name: <?= $val['bank_name'] ?></b><br>
-                                    <b>Account Number: </b><?= $val['account_number'] ?><br>
-                                </a>
+                if ($section != 'client') {
+                    if (!empty($account_details)) {
+                        foreach ($account_details as $val) {
+                            ?>
+                            <div class="m-t-10">
+                                <div class="col-md-6">
+                                    <div class="form-group" id="bookkeeping_account_list">
+                                        <a class="btn btn-success"  href="javascript:void(0)" onclick="set_exist_bookkeeping_value('<?= $val['type_of_account'] ?>', '<?= $val['bank_name'] ?>', '<?= $val['account_number'] ?>', '<?= $val['routing_number'] ?>', '<?= $val['bank_website'] ?>', '<?= $val['user'] ?>', '<?= $val['password'] ?>')">
+                                            <b>Bank Name: <?= $val['bank_name'] ?></b><br> 
+                                            <b>Account Number: </b><?= $val['account_number'] ?><br> 
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <?php
+                            <?php
+                        }
+                    }
                 }
-            }
             ?>
             <div class="clearfix"></div>
             <form role="form" id="form_accounts" name="form_accounts">
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label>Type Of Account</label>
+                        <label>Type Of Account<span class="text-danger">*</span></label>
                         <select class="form-control" name="type_of_account" id="acc_type" title="Type Of Account" required="">
                             <option value="">Select</option>
                             <option value="Bank Account">Bank Account</option>
@@ -49,22 +50,28 @@ if ($modal_type != "edit"):
                     </div>
                     <div class="form-group">
                         <label>Account Number<span class="text-danger">*</span></label> 
-                        <input placeholder="" class="form-control" zipval="" type="text" name="account_number" id="acc_no" title="Account Number" required="" >
+                        <input placeholder="" class="form-control" zipval="" type="text" name="account_number" id="acc_no" title="Account Number" required="">
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
-                        <label>Routing Number</label> 
-                        <input placeholder="" class="form-control" type="text" zipval="" name="routing_number" id="routing_no" title="Routing Number">
+                        <label>Routing Number<span class="text-danger">*</span></label> 
+                        <input placeholder="" class="form-control" type="text" zipval="" name="routing_number" id="routing_no" title="Routing Number" required="">
+                        <div class="errorMessage text-danger"></div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label>Website URL</label> 
+                        <input placeholder="" class="form-control" type="text" id="website" name="bank_website" title="Website URL">
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
-                        <label>User Id</label> 
-                        <input placeholder="" class="form-control" type="text" name="user" id="user_id" title="User Id">
+                        <label>User Id<span class="text-danger">*</span></label> 
+                        <input placeholder="" class="form-control" type="text" name="user" id="user_id" title="User Id" required="">
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
-                        <label>Password</label> 
-                        <input placeholder="" class="form-control" passval="" type="text" name="password" id="password" title="Password">
+                        <label>Password<span class="text-danger">*</span></label> 
+                        <input placeholder="" class="form-control" passval="" type="text" name="password" id="password" title="Password" required="">
                         <div class="errorMessage text-danger"></div>
                     </div>                   
                     <div class="form-group security_question bg-red">
@@ -76,14 +83,9 @@ if ($modal_type != "edit"):
                         </div>
                         <a href="javascript:void(0)" class="text-success add-secq"><i class="fa fa-plus"></i> Add Security Question</a>
                     </div>                    
-                    <div class="form-group">
-                        <label>Website URL<span class="text-danger">*</span></label> 
-                        <input placeholder="" class="form-control" type="text" id="website" name="bank_website" title="Website URL" required="">
-                        <div class="errorMessage text-danger"></div>
-                    </div>
-                    <div class="form-group">
+                    <div class="form-group" style="display:none;">
                         <label>Number Of Transactions<span class="text-danger">*</span></label>
-                        <select class="form-control" name="number_of_transactions" id="number_of_transactions" title="Number Of Transactions" required="">
+                        <select class="form-control" name="number_of_transactions" id="number_of_transactions" title="Number Of Transactions">
                             <option value="">Select</option>
                             <option value="0-100">0-100</option>
                             <option value="101-200">101-200</option>
@@ -91,13 +93,20 @@ if ($modal_type != "edit"):
                         </select>
                         <div class="errorMessage text-danger"></div>
                     </div>
+
+                    <?php
+                        if ($section != 'client') {                         
+                    ?>
                     <div class="form-group">
                         <label>Upload</label><br>
                         <span id="uploadifle"></span>
                         <input class="m-t-5" type="file" name="acc_file" id="acc_file">
                         <div class="errorMessage text-danger"></div>
                     </div>
-                    <div class="form-group">
+                    <?php
+                        }
+                    ?>
+                    <div class="form-group" style="display:none; ">
                         <label>Total Amount (in $)</label> 
                         <input class="form-control" type="text" readonly id="total_amount" name="total_amount" value="">
                         <div class="errorMessage text-danger"></div>
@@ -105,8 +114,9 @@ if ($modal_type != "edit"):
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="order_id" id="order_id" value="<?= $task_id; ?>">
-                    <input type="hidden" name="company_id" id="company_id" value="<?= $client_id; ?>">
+                    <input type="hidden" name="company_id" id="company_id" value="<?= $company_id; ?>">
                     <input type="hidden" name="client_id" id="client_id" value="<?= $client_id; ?>">
+                    <input type="hidden" name="section" id="section" value="<?= $section; ?>">
                     <input type="hidden" name="edit_id" value="">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="sub_btn" onclick="save_task_account('project');">Save changes</button>
@@ -193,7 +203,7 @@ if ($modal_type != "edit"):
                     ?>
                     <div class="form-group">
                         <label>Website URL<span class="text-danger">*</span></label>
-                        <input class="form-control" type="text" name="bank_website" id="bank_website" title="Website URL" required value="<?= $data["bank_website"]; ?>">
+                        <input class="form-control" type="text" name="bank_website" id="bank_website" title="Website URL" value="<?= $data["bank_website"]; ?>">
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">

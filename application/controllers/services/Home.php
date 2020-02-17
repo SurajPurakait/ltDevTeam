@@ -95,13 +95,15 @@ class Home extends CI_Controller {
         $render_data['category_id'] = $category_id;
         $render_data['office_id'] = $office_id;
         $this->load->template('services/dashboard', $render_data);
+        
     }
 
     public function edit($order_id = '') {
         $this->load->layout = 'dashboard';
         $order_id = base64_decode($order_id);
         $edit_data = $this->service_model->get_order_info_by_id($order_id);
-// echo "<pre>";
+        // echo "<pre>";
+        // print_r($edit_data);exit;
         $title = 'Edit ' . (($edit_data['service_shortname'] == 'inc_n_c_f' || $edit_data['service_shortname'] == 'inc_n_c_d' || $edit_data['service_shortname'] == 'inc_n_c_b_v_i' || $edit_data['service_shortname'] == 'inc_n_c_o') ? 'New Company' : $edit_data['service_name']);
         $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['main_menu'] = 'services';
@@ -237,19 +239,23 @@ class Home extends CI_Controller {
                     $this->load->template('services/edit_annual_report', $render_data);
                 }
                 break;
-                case 'bus_l_t':{
+                case 'bus_l_t':{        // Legal Translations
                     $render_data['order_extra_data'] = $this->service_model->get_extra_data($order_id);
-                    // echo "<pre>";
-                    // print_r($render_data['order_extra_data']);exit;
                     $this->load->template('services/edit_legal_translations', $render_data);
                 }
+                break;
+                case 'acc_1_w_u': {     // 1099 Write Up
+                    $render_data['payer_data'] = $this->service_model->get_payer_info($order_id);
+                    $render_data['recipient_data'] = $this->service_model->get_recipient_info_by_id($order_id);
+                    $this->load->template('services/edit_1099_write_up', $render_data);
+                }              
                 break;
             default :
                 redirect(base_url('services/home'));
         endswitch;
     }
 
-    public function view($order_id = '') {
+    public function view($order_id = '') {       
         $this->load->layout = 'dashboard';
         $order_id = base64_decode($order_id);
         $order_info = $this->service_model->get_order_info_by_id($order_id);
@@ -382,12 +388,12 @@ class Home extends CI_Controller {
                 break;
 
             case 'acc_1_w_u': {   // 1099 Write Up
-                
-                   $render_data['order_extra_data_for_compensation'] = $this->service_model->get_extra_data($order_id); 
-                   $render_data['payer_recipient_info'] = $this->service_model->get_payer_recipient_info($order_id); 
+                   
+                   $render_data['recipient_info'] = $this->service_model->get_recipient_info($order_id); 
+                   $render_data['payer_info'] = $this->service_model->get_payer_info($order_id); 
             }
         endswitch;
-//        echo '<pre>';print_r($render_data);exit;
+
 //        if ($service_id == '14') {
 //            $result['sales_tax_data'] = $this->rt6_model->get_rt6_data($rowid)[0];
 //            if (!empty($result['sales_tax_data']) && $result['sales_tax_data']['resident_type'] == "Resident") {
@@ -397,9 +403,14 @@ class Home extends CI_Controller {
 //            }
 //            $result['salestax_employee_notes'] = $this->payroll->get_payroll_employee_notes_by_reference_id($edit_data[0]['reference_id']);
 //        }
-//        echo "<pre>";
-//        print_r($render_data);
-//        echo "</pre>";die;
+        if($render_data['title'] == "Sales Tax Application | Tax Leaf")
+        {
+        $state = '';        
+        foreach ($render_data['order_extra_data'] as $value) {            
+            $state = $value['state_recurring'];
+        }
+        $render_data['state_name1'] = $this->salestax_model->getstatename($state);   
+        }
         $this->load->template('services/view_service1', $render_data);
     }
 
@@ -924,6 +935,7 @@ class Home extends CI_Controller {
 
     public function get_contact_list() {
         $data['disable'] = post('disable');
+        $data['section'] = post('section');
         $data['list'] = $this->service_model->get_contact_list_by_reference(post('reference_id'), post('reference'));
         if (empty($data['list'])) {
             $individual_data = $this->service_model->get_individual_id_by_ref_id(post('reference_id'));
@@ -1536,11 +1548,9 @@ class Home extends CI_Controller {
 
     public function related_services($service_request_id, $type = 'edit') {
         $this->load->layout = 'dashboard';
-        $title = "Related Services";
-        $render_data['title'] = $title . ' | Tax Leaf';
         $render_data['main_menu'] = 'services';
         $render_data['menu'] = 'service_dashboard';
-        $render_data['header_title'] = $title;
+        
 
         $render_data['service_request_id'] = $service_request_id;
         $render_data['service_request_details'] = $service_request_details = $this->service_model->get_service_request_by_id($service_request_id);
@@ -1548,6 +1558,9 @@ class Home extends CI_Controller {
             redirect(base_url('services/home'));
         }
         $render_data['service_details'] = $service_details = $this->service_model->get_service_by_id($service_request_details['services_id']);
+        $title = $render_data['service_details']['description'];
+        $render_data['title'] = $title . ' | Tax Leaf';
+        $render_data['header_title'] = $title;
         $render_data['order_details'] = $order_details = $this->service_model->get_order_by_id($service_request_details['order_id']);
         $render_data['related_service_files'] = $this->service_model->get_related_service_files_by_id($service_request_id);
         $render_data['service_name'] = $service_name = $service_details['description'];
@@ -1563,7 +1576,6 @@ class Home extends CI_Controller {
                 $due_date = date('m/d/Y', strtotime($renewal_date_info['date']));
             }
         }
-
         $render_data['order_extra_data'] = [];
         switch ($service_shortname):
             case 'inc_n_c_f':
@@ -1626,7 +1638,13 @@ class Home extends CI_Controller {
                     }
                 }
                 break;
+            case 'acc_1_w_u': {      //  1099 Write Up
+                    $render_data['payer_information'] = $this->service_model->get_payer_info($order_id);
+                    $render_data['recipient_information'] = $this->service_model->get_recipient_info($order_id);                
+                }
         endswitch;
+        $render_data['service_id2'] = $this->service_model->get_service_id_for_1099_service($render_data['reference_id'], $render_data['order_id']);
+        $render_data['client_id'] = $this->service_model->get_practice_id($render_data['reference_id']);       
         $this->load->template('services/related_services', $render_data);
     }
 
@@ -1676,7 +1694,7 @@ class Home extends CI_Controller {
         $this->load->view('services/show_payroll_account_list', $data);
     }
 
-    public function save_recipient() {
+    public function save_recipient() {        
         echo $this->service_model->save_recipient(post());
     }
 
@@ -1691,6 +1709,125 @@ class Home extends CI_Controller {
         echo count($data['list']);
     }
 
+    public function recipient_delete()
+    {
+       $id = post()['id'];                 
+       echo $data['recipient'] = $this->service_model->recipent_delete($id);     
+    }
+
+    public function update_recipient()
+    {
+        echo $this->service_model->update_recipient(post());
+    }
+    
+    public function related_services_view($service_request_id)
+    {
+        $this->load->layout = 'dashboard';
+        $render_data['main_menu'] = 'services';
+        $render_data['menu'] = 'service_dashboard';
+        
+
+        $render_data['service_request_id'] = $service_request_id;
+        $render_data['service_request_details'] = $service_request_details = $this->service_model->get_service_request_by_id($service_request_id);
+        if (empty($render_data['service_request_details'])) {
+            redirect(base_url('services/home'));
+        }
+        $render_data['service_details'] = $service_details = $this->service_model->get_service_by_id($service_request_details['services_id']);
+        $title = $render_data['service_details']['description'];
+        $render_data['title'] = $title . ' | Tax Leaf';
+        $render_data['header_title'] = $title;
+        $render_data['order_details'] = $order_details = $this->service_model->get_order_by_id($service_request_details['order_id']);
+        $render_data['related_service_files'] = $this->service_model->get_related_service_files_by_id($service_request_id);
+        $render_data['service_name'] = $service_name = $service_details['description'];
+        $render_data['service_shortname'] = $service_shortname = $service_details['ideas'];
+        $render_data['service_id'] = $service_id = $service_request_details['services_id'];
+        $render_data['order_id'] = $order_id = $service_request_details['order_id'];       
+        $render_data['reference_id'] = $reference_id = $order_details['reference_id'];
+        $render_data['reference'] = $reference = $order_details['reference'];
+        if ($reference == 'company') {
+            $render_data['company_info'] = $this->company_model->get_company_by_id($render_data['reference_id']);
+            if (!empty($render_data['company_info'])) {
+                $renewal_date_info = $this->service_model->get_renewal_dates($render_data['company_info']['state_opened'], $render_data['company_info']['type']);
+                $due_date = date('m/d/Y', strtotime($renewal_date_info['date']));
+            }
+        }
+        $render_data['order_extra_data'] = [];
+        switch ($service_shortname):
+            case 'inc_n_c_f':
+            case 'inc_n_c_d':
+            case 'inc_n_c_b_v_i':
+            case 'inc_n_c_o': {      // New Company
+                    if ($reference == 'company') {
+                        $render_data['company_name_option'] = $this->company_model->get_company_name_by_company_id($reference_id);
+                    }
+                }
+                break;
+            case 'acc_r_b':
+            case 'acc_b_b_d': {      // Bookkeeping--2019
+                    $render_data['bookkeeping_details'] = $this->bookkeeping_model->get_bookkeeping_by_order_id($order_id);
+                }
+                break;
+            case 'inc_o_a': {     // Operating Agreement--2019
+                    $render_data['order_extra_data'] = $this->service_model->get_extra_data($order_id);
+                }
+                break;
+            case 'acc_s_t_a': {      // Sales Tax Application--2019
+                    $render_data['rt6_data'] = $this->service_model->get_service_by_shortcode('acc_r');
+                    $render_data['all_driver_license'] = $this->salestax_model->get_salestax_driver_license_data_by_order_id($order_id);
+                    $render_data['sales_tax_application_details'] = $this->salestax_model->get_sales_tax_application_by_order_id($order_id);
+                }
+                break;
+            case 'acc_s_t_r': {      // Sales Tax Recurring--2019
+                    $render_data['sales_tax_recurring_details'] = $this->service_model->get_recurring_data_by_order_id($order_id);
+                }
+                break;
+            case 'acc_s_t_p': {      // Sales Tax Processing--2019
+                    $render_data['sales_tax_processing_details'] = $this->service_model->get_processing_data_by_order_id($order_id);
+                }
+                break;
+            case 'acc_p': {      // Payroll
+                    $render_data['payroll_account_details'] = $this->payroll_model->get_payroll_account_numbers_by_order_id($order_id);
+                    $render_data['payroll_wage_files'] = $this->payroll->payroll_wage_files($order_details['reference_id']);
+                    $render_data['payroll_data'] = $this->payroll->payroll_data($order_details['reference_id']);
+                    $render_data['payroll_approver'] = $this->payroll->get_payroll_approver_by_reference_id($order_details['reference_id']);
+                    $render_data['company_principal'] = $this->payroll->get_company_principal_by_reference_id($order_details['reference_id']);
+                    $render_data['signer_data'] = $this->payroll->get_signer_data($order_details['reference_id']);
+                }
+                break;
+            case 'inc_n_c_n_p_f':   // Create Company - Non Profit Florida
+            case 'inc_n_f_p': {         //  New Florida PA--2019
+                    if ($reference == 'company') {
+                        $render_data['company_name_option'] = $this->company_model->get_company_name_by_company_id($reference_id);
+                    }
+                    $render_data['order_extra_data'] = $this->service_model->get_extra_data($order_id);
+                }
+                break;
+            case 'acc_r_a_-_u': {      //  Rt6 Unemployment App--2019
+                    $render_data['rt6_details'] = $this->service_model->get_rt6_data_by_order_id($order_id);
+                }
+                break;
+            case 'inc_f_a_r':
+            case 'inc_d_a_r': {     //     Annual Report--2019
+                    if (isset($due_date)) {
+                        $render_data['due_date'] = $due_date;
+                    }
+                }
+                break;
+            case 'acc_1_w_u': {      //  1099 Write Up
+                    $render_data['payer_information'] = $this->service_model->get_payer_info($order_id);
+                    $render_data['recipient_information'] = $this->service_model->get_recipient_info($reference_id);                
+                }
+        endswitch;
+        $render_data['service_id2'] = $this->service_model->get_service_id_for_1099_service($render_data['reference_id'], $render_data['order_id']);
+        $render_data['client_id'] = $this->service_model->get_practice_id($render_data['reference_id']);
+        if($render_data['payer_information']['payer_state'] !='' && $render_data['payer_information']['payer_country'] != '')
+        {
+        $render_data['state_name'] = $this->service_model->get_state_name($render_data['payer_information']['payer_state']);   
+        $render_data['country_name'] = $this->service_model->get_country_name($render_data['payer_information']['payer_country']); 
+        }
+        $render_data['notes'] = $this->notes->get_notes_by_service($render_data['service_request_id']);             
+        $this->load->template('services/related_services_input_form_view', $render_data);
+    }
 }
 
 // End controller class

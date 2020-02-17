@@ -195,9 +195,11 @@ if ($modal_type != "edit"):
                         <input class="form-control" type="text" name="bank_website" id="bank_website" title="Website URL" required value="<?= $data["bank_website"]; ?>">
                         <div class="errorMessage text-danger"></div>
                     </div>
-                    <div class="form-group">
+                    <?php  if($data['reference'] == "project")
+                    { ?>
+                    <div class="form-group" style="display:none;">
                         <label>Number Of Transactions<span class="text-danger">*</span></label>
-                        <select class="form-control" name="number_of_transactions" id="no_of_transactions" title="Number Of Transactions" required>
+                        <select class="form-control" name="number_of_transactions" id="no_of_transactions" title="Number Of Transactions">
                             <option value="">Select</option>
                             <option value="0-100" <?= ($data["number_of_transactions"] == "0-100") ? "selected" : ""; ?>>0-100</option>
                             <option value="101-200" <?= ($data["number_of_transactions"] == "101-200") ? "selected" : ""; ?>>101-200</option>
@@ -205,17 +207,42 @@ if ($modal_type != "edit"):
                         </select>
                         <div class="errorMessage text-danger"></div>
                     </div>
-                    <div class="form-group">
+                    <?php } else { ?>
+                       <div class="form-group" style="display:block;">
+                        <label>Number Of Transactions<span class="text-danger">*</span></label>
+                        <select class="form-control" name="number_of_transactions" id="no_of_transactions" title="Number Of Transactions" required="">
+                            <option value="">Select</option>
+                            <option value="0-100" <?= ($data["number_of_transactions"] == "0-100") ? "selected" : ""; ?>>0-100</option>
+                            <option value="101-200" <?= ($data["number_of_transactions"] == "101-200") ? "selected" : ""; ?>>101-200</option>
+                            <option value="201-300" <?= ($data["number_of_transactions"] == "201-300") ? "selected" : ""; ?>>201-300</option>
+                        </select>
+                        <div class="errorMessage text-danger"></div>
+                    </div> 
+                    <?php
+                    }
+                        ?>
+<!--                    <div class="form-group">
                         <label>Upload</label><br>
                         <span id="uploadifle"></span>
                         <input class="m-t-5" type="file" name="acc_file" id="acc_file">
                         <div class="errorMessage text-danger"></div>
-                    </div>
-                    <div class="form-group">
+                    </div>-->
+                    <?php  if($data['reference'] == "project")
+                    { ?>
+                    <div class="form-group" style="display:none;">
                         <label>Total Amount (in $) Per Month</label>
                         <input class="form-control" type="text" readonly id="total_amount" name="total_amount" value="<?= $data["total_amount"]; ?>">
                         <div class="errorMessage text-danger"></div>
-                    </div>                       
+                    </div>  
+                    <?php } else {
+                        ?>
+                    <div class="form-group" style="display:block;">
+                        <label>Total Amount (in $) Per Month</label>
+                        <input class="form-control" type="text" readonly id="total_amount" name="total_amount" value="<?= $data["total_amount"]; ?>">
+                        <div class="errorMessage text-danger"></div>
+                    </div> 
+                    
+                   <?php }?>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" id="company_id" value="<?= $reference_id; ?>">

@@ -102,7 +102,7 @@
                     <input type="hidden" name="contact[reference_id]" id="reference_id" value="<?= $reference_id ?>">
                     <input name="contact[id]" value="" type="hidden">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="save_contact();">Save changes
+                    <button type="button" class="btn btn-primary" onclick="save_contact('client');">Save changes
                     </button>
                 </div>
             </form>
@@ -215,7 +215,7 @@
                         <input type="hidden" name="edit_type_id" value="<?= $data["type"]; ?>">
                         <input name="contact[id]" value="<?= $data["id"]; ?>" type="hidden">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="save_contact();">Save changes
+                        <button type="button" class="btn btn-primary" onclick="save_contact('client');">Save changes
                         </button>
                     </div>
             </form>

@@ -964,7 +964,7 @@ function delete_account(id) {
     });
 }
 
-function save_account(section) {
+function save_account(section='') {
 
 //update_financial_account_by_date
     if (!requiredValidation('form_accounts')) {
@@ -974,6 +974,11 @@ function save_account(section) {
     var company_id = $("#company_id").val();
     var order_id = $("#editval").val();
     var modal_type=$("#modal_type").val();
+    
+    // if (section == 'edit') {
+    //     var order_id_edit=$("#edit_order_id").val();        
+    // }
+    
     form_data.append('section', section);
     $.ajax({
         type: "POST",
@@ -1411,7 +1416,6 @@ function request_create_salestax_processing() {
         processData: false,
         contentType: false,
         success: function (result) {
-            //console.log("Result: " + result); return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
                 goURL(base_url + 'services/home/view/' + result.trim());
@@ -1670,7 +1674,7 @@ function request_create_sales_tax_application() {
         processData: false,
         success: function (result) {
 //            alert(result);
-            //console.log("Result: " + result); return false;
+            // console.log("Result: " + result); return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
 //                clearCacheFormFields('form_create_payroll');
@@ -3305,6 +3309,46 @@ function change_price(price,val) {
     }
 }
 
+function change_partner_service(service_id, is_active = '') {
+    if (is_active == 'n') {
+        var title = 'Do you want to activate?';
+        var msg = "Service has been activated successfully!";
+    } else {
+        title = 'Do you want to deactivate?';
+        msg = "Service has been deactivated successfully!";
+    }
+    swal({
+        title: title,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Yes, change it!",
+        closeOnConfirm: false
+    },function () {
+        $.ajax({
+            type: 'POST',
+            url: base_url + '/administration/partner_service_setup/change_partner_service_status',
+            data: {
+                service_id: service_id,
+                is_active : is_active
+            },
+            success: function (results) {
+                if (results == 1) {
+                    swal({
+                        title: "Success!",
+                        "text": msg,
+                        "type": "success"
+                    }, function () {
+                        goURL(base_url + 'administration/partner_service_setup');
+                    });
+                } else {
+                    swal("ERROR!", "Unable to change this service status", "error");
+                }
+            }
+        });
+    });
+
+}
 
 function deactive_service(service_id, is_active = '') {
 //     alert(status);return false;
@@ -3390,6 +3434,12 @@ function request_create_1099_write_up() {
 
 
 function recipient_modal(modal_type, reference, reference_id, id, retail_price = '') {
+
+    if (modal_type == "edit") {        
+        if ($(".recipientedit").hasClass("dcedit")) {            
+            return false;
+        }
+    }   
     $.ajax({
         type: 'POST',
         url: base_url + 'modal/show_recipient',
@@ -3411,9 +3461,9 @@ function recipient_modal(modal_type, reference, reference_id, id, retail_price =
 
 
 function save_recipient() {
-    // if (!requiredValidation('form_recipient')) {
-    //     return false;
-    // }
+    if (!requiredValidation('form_recipient')) {
+        return false;
+    }
     var form_data = new FormData(document.getElementById('form_recipient'));
     var reference = $("form#form_recipient #reference").val();
     var reference_id = $("form#form_recipient #reference_id").val();
@@ -3433,7 +3483,8 @@ function save_recipient() {
                 swal("ERROR!", "Error Processing Data", "error");
             }else {
                 $('#recipient-form').modal('hide');
-                 get_recipient_list(reference_id, reference,retail_price);
+                get_recipient_list(reference_id, reference,retail_price);
+                $('#recipient-list-details').hide(); 
             }
         },
         beforeSend: function () {
@@ -3443,4 +3494,93 @@ function save_recipient() {
             closeLoading();
         }
     });
+}
+
+function recipient_delete(id, reference_id, reference) {         
+    swal({
+        title: "Are you sure?",
+        text: "Your will not be able to recover this recipient!!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-danger",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+    }, function () {
+        $.ajax({
+            type: "POST",
+            data: {
+                id: id,
+                reference_id: reference_id,
+                reference: reference
+                   },
+            url: base_url + "services/home/recipient_delete",
+            dataType: "html",
+            success: function (result) {
+              if (result == '1') {                                                         
+                    swal("Deleted!", "Your recipient has been deleted.", "success");
+                    get_recipient_list(reference_id, reference);
+                } else {
+                    swal("Error!", "Error to Delete recipient.", "error");
+                }
+            }
+        });
+    });
+}
+
+function update_recipient()
+{
+    if (!requiredValidation('form_recipient')) {
+        return false;
+    }
+    var form_data = new FormData(document.getElementById('form_recipient'));
+    var reference = $("form#form_recipient #reference").val();
+    var reference_id = $("form#form_recipient #reference_id").val();
+    var retail_price = $("form#form_recipient #retail_price").val();
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'services/home/update_recipient',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            //console.log(result); return false;
+            if (result != 1) {
+                swal("ERROR!", "Error Processing Data", "error");
+            }else {
+                $('#recipient-form').modal('hide');
+                get_recipient_list(reference_id, reference,retail_price);
+                // $('#recipient-list-details').hide(); 
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function partnerServiceAjax(client_type,reference_id) {
+    $.ajax({
+        type: "POST",
+        data: { 
+            client_type : client_type,
+            reference_id : reference_id,
+            client_id: $('#client_id').val()
+        },
+        url: base_url + 'services/partner_services/get_related_section_by_type',
+        success: function (result) {
+            $("#partner_service_container").html(result);
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });    
 }

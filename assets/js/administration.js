@@ -256,6 +256,48 @@ function get_related_services(previous_services, current_service) {
     });
 }
 
+function addPartnerService() {
+    if (!requiredValidation('add-partner-services-form')) {
+        return false;
+    }
+    var servicecat = $('#add-partner-services-form #servicecat option:selected').val();
+    var servicename = $('#add-partner-services-form #servicename').val();
+    var input_form = $('#add-partner-services-form input[name="input_form"]:checked').val();
+    var shortcode = $('#add-partner-services-form #shorthidden').val();
+    var note = $('#add-partner-services-form #note').val();
+    var responsible_assigned = $('#add-partner-services-form input[name="responsible_assigned"]:checked').val();
+    var partnertype = $('#add-partner-services-form #partnertype option:selected').val();
+    
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'administration/partner_service_setup/add_partner_service',
+        data: {
+            category_id:servicecat,
+            description : servicename,
+            ideas : shortcode,
+            responsible_assigned : responsible_assigned,
+            partner_type : partnertype,
+            input_form : input_form,
+            note : note   
+        },
+        success: function (result) {
+            if (result.trim() == "1") {
+                swal({
+                    title: "Success!",
+                    "text": "Successfully added!",
+                    "type": "success"
+                }, function () {
+                    goURL(base_url + 'administration/partner_service_setup');
+                });
+            } else if (result.trim() == "-1") {
+                swal("ERROR!", "Unable To Add Partner Service", "error");
+            } else if (result.trim() == "0") {
+                swal("ERROR!", "Service Name Exists", "error");
+            }
+        }
+    });       
+}
+
 function addRelatedservice() {
     if (!requiredValidation('add-services-form')) {
         return false;
@@ -551,6 +593,48 @@ function delete_staff(id) {
                     });
         }
     });
+}
+
+function updatePartnerService() {
+    if (!requiredValidation('edit-partner-services-form')) {
+        return false;
+    }
+    var id = $('#edit-partner-services-form #service_id').val();
+    var servicecat = $('#edit-partner-services-form #servicecat option:selected').val();
+    var servicename = $('#edit-partner-services-form #servicename').val();
+    var input_form = $('#edit-partner-services-form input[name="input_form"]:checked').val();
+    var shortcode = $('#edit-partner-services-form #shorthidden').val();
+    var note = $('#edit-partner-services-form #note').val();
+    var responsible_assigned = $('#edit-partner-services-form input[name="responsible_assigned"]:checked').val();
+    var partnertype = $('#edit-partner-services-form #partnertype option:selected').val();
+
+    $.ajax({
+        type: "POST",
+        data: {
+            id : id,
+            category_id:servicecat,
+            description : servicename,
+            ideas : shortcode,
+            responsible_assigned : responsible_assigned,
+            partner_type : partnertype,
+            input_form : input_form,
+            note : note
+        },
+        url: base_url + '/administration/partner_service_setup/update_partner_service',
+        dataType: "html",
+        success: function (result) {
+            if (result.trim() == "1") {
+                swal({title: "Success!", text: "Successfully Updated!", type: "success"}, function () {
+                    goURL(base_url + 'administration/partner_service_setup');
+                });
+            } else if (result.trim() == "-1") {
+                swal("ERROR!", "Unable To Update Partner Service", "error");
+            } else {
+                swal("ERROR!", "Partner Service Name Already Exists", "error");
+            }
+        }
+    });
+
 }
 
 function updateRelatedservice() {

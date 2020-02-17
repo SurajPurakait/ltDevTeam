@@ -1,4 +1,4 @@
-<?php
+<?php  
 $user_info = staff_info();
 $usertype = $user_info['type'];
 $td_style = "padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;";
@@ -59,7 +59,11 @@ if ($usertype != '3') {
             $url = 'services/accounting_services/edit_sales_tax_application/' . base64_encode($order_info['id']);
         } elseif ($order_info['service_id'] == '14') {
             $url = 'services/accounting_services/edit_rt6_unemployment_app/' . base64_encode($order_info['id']);
-        } elseif ($order_info['service_id'] == $service_id) {
+        }elseif($order_info['service_shortname'] == 'acc_1_w_u'){
+
+             $url = 'services/home/edit/' . base64_encode($order_info['id']);
+             
+        }elseif ($order_info['service_id'] == $service_id) {
             $url = 'services/accounting_services/edit_sales_tax_recurring/' . base64_encode($order_info['id']);
         } elseif ($order_info['service_id'] == '13') { //change in live
             $url = 'services/accounting_services/edit_sales_tax_processing/' . base64_encode($order_info['id']);
@@ -501,71 +505,63 @@ if ($usertype != '3') {
                     </td>
                 </tr>
 
-                <?php if (!empty($payer_recipient_info)){ ?>
+                <?php if (!empty($payer_info)){ ?>
                 <tr>
                     <td style="<?= $td_style; ?>">
                         <b>Payer's Information:</b>
                     </td>
                         <td style="<?= $td_style; ?>">
                             <?php
-                                $state_name = state_info($payer_recipient_info['payer_state'])['state_name'];
-                                $country = country_info($payer_recipient_info['payer_country'])['country_name'];
+                                $state_name = state_info($payer_info['payer_state'])['state_name'];
+                                $country = country_info($payer_info['payer_country'])['country_name'];
                                 ?>
                             <div class='media-body'>
-                                <h4 class='media-heading'>Payer's Name : <?= $payer_recipient_info['payer_last_name'] . ', ' . $payer_recipient_info['payer_first_name']; ?></h4>
+                                <h4 class='media-heading'>Payer's Name : <?= $payer_info['payer_last_name'] . ', ' . $payer_info['payer_first_name']; ?></h4>
                                 <p>
-                                    <b>Phone Number : </b><?= $payer_recipient_info['payer_phone_number']; ?><br>
-                                    <b>Address : </b><?= $payer_recipient_info['payer_address']; ?><br>
-                                    <b>City : </b><?= $payer_recipient_info['payer_city']; ?><br>
+                                    <b>Phone Number : </b><?= $payer_info['payer_phone_number']; ?><br>
+                                    <b>Address : </b><?= $payer_info['payer_address']; ?><br>
+                                    <b>City : </b><?= $payer_info['payer_city']; ?><br>
                                     <b>State : </b><?= $state_name; ?><br>
                                     <b>Country : </b><?= $country; ?><br>
-                                    <b>Zip : </b><?= $payer_recipient_info['payer_zip']; ?><br>
-                                    <b>TIN (Tax Identification Number) : </b><?= ($payer_recipient_info['payer_tin'] != '') ? $payer_recipient_info['payer_tin'] : 'N/A'; ?><br>
-                                    
-                                </p>
-                            </div>
-                        </td>
-                </tr>
-
-                <tr>
-                    <td style="<?= $td_style; ?>">
-                        <b>Recipient's Information:</b>
-                    </td>
-                        <td style="<?= $td_style; ?>">
-                            <?php
-                                $state_name = state_info($payer_recipient_info['recipient_state'])['state_name'];
-                                $country = country_info($payer_recipient_info['recipient_country'])['country_name'];
-                                ?>
-                            <div class='media-body'>
-                                <h4 class='media-heading'>Recipient's Name : <?= $payer_recipient_info['recipient_last_name'] . ', ' . $payer_recipient_info['recipient_first_name']; ?></h4>
-                                <p>
-                                    <b>Phone Number : </b><?= $payer_recipient_info['recipient_phone_number']; ?><br>
-                                    <b>Address : </b><?= ($payer_recipient_info['recipient_address'] != '') ? $payer_recipient_info['recipient_address'] : 'N/A'; ?><br>
-                                    <b>City : </b><?= ($payer_recipient_info['recipient_city'] != '') ? $payer_recipient_info['recipient_city'] : 'N/A'; ?><br>
-                                    <b>State : </b><?= ($state_name != '') ? $state_name : 'N/A'; ?><br>
-                                    <b>Country : </b><?= ($country != '') ? $country : 'N/A'; ?><br>
-                                    <b>Zip : </b><?= ($payer_recipient_info['recipient_zip'] != '') ? $payer_recipient_info['recipient_zip'] : 'N/A'; ?><br>
-                                    <b>TIN (Tax Identification Number) : </b><?= ($payer_recipient_info['recipient_tin'] != '') ? $payer_recipient_info['recipient_tin'] : 'N/A'; ?><br>
-                                    
-                                </p>
-                            </div>
-                        </td>
-                </tr>
-
-                <tr>
-                    <td style="<?= $td_style; ?>">
-                        <b>Compensation:</b>
-                    </td>
-                        <td style="<?= $td_style; ?>">
-                            <div class='media-body'>
-                                <p>
-                                    <b>Non-Employee compensation : </b><?= ($order_extra_data_for_compensation['compensation'] != '') ? $order_extra_data_for_compensation['compensation'] : 'N/A'; ?><br>
+                                    <b>Zip : </b><?= $payer_info['payer_zip']; ?><br>
+                                    <b>TIN (Tax Identification Number) : </b><?= ($payer_info['payer_tin'] != '') ? $payer_info['payer_tin'] : 'N/A'; ?><br>
                                     
                                 </p>
                             </div>
                         </td>
                 </tr>
                 <?php } ?>
+
+                <?php if (!empty($recipient_info)): ?>
+                    <?php foreach ($recipient_info as $k => $reci): ?>
+                        <tr>
+                            <td style="<?= $td_style; ?>">
+                                <b>Recipient <?=$k+1?>:</b>
+                            </td>
+                            <td style="<?= $td_style; ?>">
+                                <?php
+                                    $state_name = state_info($reci['recipient_state'])['state_name'];
+                                    $country = country_info($reci['recipient_country'])['country_name'];
+                                    ?>
+                                <div class='media-body'>
+                                    <h4 class='media-heading'>Recipient's Name : <?= $reci['recipient_last_name'] . ', ' . $reci['recipient_first_name']; ?></h4>
+                                    <p>
+                                        <b>Phone Number : </b><?= ($reci['recipient_phone_number'] !='') ? $reci['recipient_phone_number'] : 'N/A'; ?><br>
+                                        <b>Address : </b><?= ($reci['recipient_address'] != '') ? $reci['recipient_address'] : 'N/A'; ?><br>
+                                        <b>City : </b><?= ($reci['recipient_city'] != '') ? $reci['recipient_city'] : 'N/A'; ?><br>
+                                        <b>State : </b><?= ($state_name != '') ? $state_name : 'N/A'; ?><br>
+                                        <b>Country : </b><?= ($country != '') ? $country : 'N/A'; ?><br>
+                                        <b>Zip : </b><?= ($reci['recipient_zip'] != '') ? $reci['recipient_zip'] : 'N/A'; ?><br>
+                                        <b>TIN (Tax Identification Number) : </b><?= ($reci['recipient_tin'] != '') ? $reci['recipient_tin'] : 'N/A'; ?><br>
+                                        <b>Compensation : </b><?= ($reci['compensation'] != '') ? $reci['compensation'] : 'N/A'; ?>
+                                        
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>                
+                <?php endif; ?>
+
 
                 <?php if (!empty($buyers_info)): ?>
                     <?php foreach ($buyers_info as $bi): ?>
@@ -1475,7 +1471,172 @@ if ($usertype != '3') {
                         <h4>All Files</h4>
                     </td>
                 </tr>
-                <tr class="file_tr">
+
+                <tr>
+                    <td></td>
+                </tr>
+                <?php if($title != "Sales Tax Application | Tax Leaf"){?>
+                <tr>
+                    <td colspan="2" style="<?= $td_style; ?>">
+                        <h4>Sales Tax Input Form:</h4>
+                    </td>
+                </tr>
+            <?php }?>
+                <?php if($title != "Sales Tax Application | Tax Leaf"){?>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Sales Tax Number:</b>
+                    </td>                   
+                    <td style="<?= $td_style; ?>"><?php 
+                                if($title == "Sales Tax Recurring | Tax Leaf")
+                                {
+                                    echo $order_extra_data['sales_tax_number'];
+                                }
+                                if($title == "Sales Tax processing | Tax Leaf")
+                                {
+                                    echo $order_extra_data['sales_tax_number'];
+                                }
+                        ?>
+                    </td>
+                </tr>
+            <?php } if($title != "Sales Tax Application | Tax Leaf"){?>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Business Partner Number:</b>
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php 
+                        if($title == "Sales Tax Recurring | Tax Leaf")
+                        {
+                            echo $order_extra_data['business_partner_number'];
+                        }
+                        if($title == "Sales Tax processing | Tax Leaf")
+                        {
+                            echo $order_extra_data['business_partner_number'];
+                        }
+                        ?></td>
+                </tr>
+            <?php } if($title != "Sales Tax Application | Tax Leaf"){?>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Business Description:</b>
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php 
+                            if($title == "Sales Tax Recurring | Tax Leaf")
+                            {
+                                echo $order_extra_data['sales_tax_business_description'];
+                            }
+                            if($title == "Sales Tax processing | Tax Leaf")
+                            {
+                                echo $order_extra_data['sales_tax_business_description'];
+                            }
+                            ?>
+                    </td>
+                </tr>
+            <?php } if($title != "Sales Tax Application | Tax Leaf"){?>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Bank Account Number:</b>
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php 
+                            if($title == "Sales Tax Recurring | Tax Leaf")
+                            {
+                                echo $order_extra_data['bank_account_number'];
+                            }
+                            if($title == "Sales Tax processing | Tax Leaf")
+                            {
+                                echo $order_extra_data['sales_bank_account_number'];
+                            }
+                            ?></td>
+                </tr>
+            <?php } if($title != "Sales Tax Application | Tax Leaf"){?>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Bank Routing Number:</b>  
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php 
+                    if($title == "Sales Tax Recurring | Tax Leaf")
+                    {
+                        echo $order_extra_data['bank_routing_number'];
+                    }
+                    if($title == "Sales Tax processing | Tax Leaf")
+                    {
+                        echo $order_extra_data['sales_bank_routing_number'];
+                    }
+                    ?></td>
+                </tr>
+            <?php } if($title != "Sales Tax Application | Tax Leaf"){?>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Frequency Of Salestax:</b>  
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php 
+                    if($title == "Sales Tax Recurring | Tax Leaf")
+                    {
+                        if($order_extra_data['frequency'] == 'm') {echo "Monthly";} if($order_extra_data['frequency'] == 'y') {echo "Yearly";} if($order_extra_data['frequency'] == 'q') {echo "Quarterly";}
+                        
+                    }
+                    if($title == "Sales Tax processing | Tax Leaf")
+                    {
+                        if($order_extra_data['frequency'] == 'm') {echo "Monthly";} if($order_extra_data['frequency'] == 'y') {echo "Yearly";} if($order_extra_data['frequency'] == 'q') {echo "Quarterly";}
+                        
+                    }
+                    ?></td>
+                </tr>
+                 <?php } if($title == "Sales Tax processing | Tax Leaf")
+                    { ?>
+                <?php if($order_extra_data['frequency_of_salestax_val'] != ''){
+                        if($order_extra_data['frequeny_of_salestax'] == 'm') {?>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Month:</b>  
+                    </td>
+                    <td><?php echo $order_extra_data['frequency_of_salestax_val'];?></td>
+                </tr>
+                <?php }} if($order_extra_data['frequeny_of_salestax'] == 'q') {?>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>Quaterly:</b>  
+                    </td>
+                    <td><?php echo $order_extra_data['frequency_of_salestax_val'];?></td>
+                </tr>
+                <?php }?>             
+                 
+                
+                
+             <?php } if($title != "Sales Tax Application | Tax Leaf"){?>  
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>State:</b>  
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php 
+                    if($title == "Sales Tax Recurring | Tax Leaf")
+                    {
+                        echo $order_extra_data['state_name'];
+                    }
+                    if($title == "Sales Tax processing | Tax Leaf")
+                    {
+                        echo $order_extra_data['state_name'];
+                    }
+                     ?></td>
+                </tr>
+            <?php } if($title != "Sales Tax Application | Tax Leaf"){?>
+                <tr>
+                    <td style="<?= $td_style; ?>">
+                            <b>County:</b>  
+                    </td>
+                    <td style="<?= $td_style; ?>"><?php 
+                    if($title == "Sales Tax Recurring | Tax Leaf")
+                    {
+                        echo $order_extra_data['county_name'];
+                    }
+                    if($title == "Sales Tax processing | Tax Leaf")
+                    {
+                        echo $order_extra_data['county_name'];
+                    }
+                    ?></td>
+                </tr> 
+            <?php }?>
+                    <tr class="file_tr">
                     <td colspan="2" style="<?= $td_style; ?>">
                         <?php if (!empty($document_list)): ?>
                             <b>Documents:</b>
@@ -1534,6 +1695,7 @@ if ($usertype != '3') {
                         <?php endif; ?>
                     </td>
                 </tr>
+                
             </table>
         </div>
         <div class="text-right">

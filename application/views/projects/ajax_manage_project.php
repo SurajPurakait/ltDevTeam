@@ -12,7 +12,7 @@
                         <div class="col-md-12">
                             <div class="form-group client_type_div0">
                                 <label class="col-lg-6 control-label">Project Template<span class="text-danger">*</span></label>
-                                <select class="form-control client_type_field0" disabled="" name="project[template_id]" id="project_template" title="Project Template" required="">
+                                <select class="form-control client_type_field0" disabled="" name="project[template_id]" id="project_template" title="Project Template" required="" onchange="get_pattern_detais(this.value)">
                                     <option value="">Select Template</option>
                                     <?php
                                     if (!empty($template_list)) {
@@ -32,7 +32,7 @@
                         <div class="col-md-12">
                             <div class="form-group client_type_div0">
                                 <label class="col-lg-6 control-label">Client Type<span class="text-danger">*</span></label>
-                                <select class="form-control client_type_field0" onchange="projectContainerAjax(this.value,<?= $project_dtls->client_id ?>,<?= $project_dtls->id ?>);" name="project[client_type]" id="client_type" title="Client Type" required="">
+                                <select class="form-control client_type_field0" onchange="projectContainerAjax(this.value,<?= $project_dtls->client_id ?>,<?= $project_dtls->id ?>);" name="project[client_type]" id="client_type" title="Client Type" required="" style="pointer-events:none" readonly
                                     <option value="">Select Client Type</option>
                                     <option value="1" <?= ($project_dtls->client_type==1)? 'selected':'' ?> >Business Client</option>
                                     <option value="2" <?= ($project_dtls->client_type==2)? 'selected':'' ?> >Individual</option>
@@ -44,6 +44,9 @@
                         <div id="project_container">
                             <!-- Add multiple service categories inside this div using ajax -->
                         </div>
+                        <div class="hr-line-dashed"></div>
+                        
+                        <div id="template_recurrence"></div>
                         <hr class="hr-line-dashed"/>
                         <div class="col-md-12 text-right">
                             <button class="btn btn-success" type="button" onclick="request_update_project(<?= $project_dtls->id ?>)">Save</button> &nbsp;&nbsp;&nbsp;
@@ -91,7 +94,7 @@
                                 <label class="col-lg-6 control-label">Client Type<span class="text-danger">*</span></label>
                                 <select class="form-control client_type_field0" onchange="projectContainerAjax(this.value, '', '');" name="project[client_type]" id="client_type" title="Client Type" required="">
                                     <option value="">Select Client Type</option>
-                                    <option value="1" selected>Business Client</option>
+                                    <option value="1">Business Client</option>
                                     <option value="2">Individual</option>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
@@ -128,7 +131,8 @@
 <?php } ?>
 <script>
 <?php if ($modal_type == 'edit') { ?>
-    projectContainerAjax(<?= $project_dtls->client_type ?>,'<?= $project_dtls->client_id ?>',<?= $project_dtls->id ?>);
+    get_pattern_detais(<?= $project_dtls->template_id ?>,<?= $project_id ?>,'edit');
+    projectContainerAjax(<?= $project_dtls->client_type ?>,'<?= $project_dtls->client_id ?>',<?= $project_dtls->id ?>,<?= $office_id ?>);
 //        project_client_list(<? $project_dtls->office_id ?>,<? $project_dtls->client_id ?>, 'edit');
 <?php } if($modal_type=='add'){ ?>
     projectContainerAjax(1,'','');

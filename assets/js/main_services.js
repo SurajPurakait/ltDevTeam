@@ -186,7 +186,7 @@ function document_modal(modal_type, reference, reference_id) {
     });
 }
 
-function save_contact() {
+function save_contact(section='') {
     if (!requiredValidation('form_contact')) {
         return false;
     }
@@ -212,7 +212,7 @@ function save_contact() {
                 swal("ERROR!", "Email/Phone Already Exists", "error");
             } else {
                 $('#contact-form').modal('hide');
-                get_contact_list(reference_id, reference);
+                get_contact_list(reference_id, reference,'',section);
             }
         },
         beforeSend: function () {
@@ -252,13 +252,14 @@ function save_document() {
     });
 }
 
-function get_contact_list(reference_id, reference, disable = "") {
+function get_contact_list(reference_id, reference, disable = "",section="") {
     $.ajax({
         type: "POST",
         data: {
             reference: reference,
             reference_id: reference_id,
-            disable: disable
+            disable: disable,
+            section: section
         },
         url: base_url + 'services/home/get_contact_list',
         dataType: "html",
@@ -583,7 +584,8 @@ function get_recipient_list(reference_id, reference, retail_price) {
                 dataType: "html",
                 success: function (result) {    
                     var price = result * retail_price; 
-                    $("#retail_price").val(price);        
+                    // $("#retail_price").val(price);        
+                    $("#retail_price_override").val(price);        
                 }
             });
             

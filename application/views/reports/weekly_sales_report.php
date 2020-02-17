@@ -11,9 +11,12 @@
                                 ?>
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <input type="text" class="form-control" id="reportrange" name="daterange" placeholder="Select Period">
                             <button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;">Apply</button>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <button type="button" class="btn btn-warning" id="royalty-btn" onclick="reload_sales_report_data()"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
                         </div>
                     </div>
                     <div id="total_sales_data" class="m-t-25"></div>
@@ -59,7 +62,7 @@
             startDate: start,
             endDate: end,
             ranges: {
-                'Select': [moment("<?= $start_date; ?>", "MM-DD-YYYY"), moment()],
+                'All Data': [moment("<?= $start_date; ?>", "MM-DD-YYYY"), moment()],
                 'Today': [moment(), moment()],
                 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                 'Last 7 Days': [moment().subtract(6, 'days'), moment()],

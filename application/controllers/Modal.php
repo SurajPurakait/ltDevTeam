@@ -106,6 +106,15 @@ class Modal extends CI_Controller {
         $this->load->view('modal/service_modal', $render_data);
     }
 
+    public function show_partner_service_modal() {
+        $render_data['modal_type'] = $this->input->post('modal_type');
+        $render_data["partners_type_list"] = $this->administration->get_partners_type_list();
+        if ($render_data['modal_type'] == "edit") {
+            $render_data['partner_service_info'] = $this->administration->get_partner_service_by_id(post('service_id'));
+        }
+        $this->load->view('modal/partner_service_modal', $render_data);
+    }
+
     public function show_company_modal() {
         $render_data['modal_type'] = $this->input->post('modal_type');
         if ($render_data['modal_type'] == "edit") {
@@ -598,6 +607,7 @@ class Modal extends CI_Controller {
             $render_data['project_id'] = $this->input->post('project_id');
             $render_data['template_list'] = $this->Project_Template_model->get_project_template_list();
             $render_data['project_dtls'] = $this->Project_Template_model->getProjectDetails($this->input->post('project_id'));
+            $render_data['office_id'] = $this->Project_Template_model->get_project_office_id($this->input->post('project_id'));
 //            print_r($render_data['project_dtls']);die;
         }
         $this->load->view("projects/ajax_manage_project", $render_data);
@@ -629,15 +639,19 @@ class Modal extends CI_Controller {
         $render_data['task_details'] = $this->Project_Template_model->getProjectTaskDetails($task_id);
         $render_data['staff_type'] = $this->Project_Template_model->getStaffType();
         $render_data['template_category_id']=$this->Project_Template_model->getProjectTemplateCategoryd(post('project_id'));
+        $render_data['template_details'] = $this->Project_Template_model->editProjectMainDetail(post('project_id'));
+        $render_data['project_id'] = post('project_id');
         $this->load->view("projects/edit_project_task_modal", $render_data);
     }
 
-    public function get_project_task_modal() {
+    public function get_project_task_modal() {       
         $render_data = [];
         $render_data['template_id'] = $this->input->post('template_id');
         $render_data['project_id'] = $this->input->post('project_id');
         $render_data["departments"] = $this->action->get_departments();
         $render_data['template_category_id']=$this->Project_Template_model->getProjectTemplateCategoryd(post('project_id'));
+        $render_data['project_id'] = post('project_id');
+        $render_data['template_details'] = $this->Project_Template_model->editProjectMainDetail(post('project_id'));
         $this->load->view("projects/project_task_modal", $render_data);
     }
 
@@ -783,6 +797,8 @@ class Modal extends CI_Controller {
         $render_data['task_id'] = post('task_id');
         $section = post('section');
         $render_data['account_details']=$this->company_model->get_account_details_bookkeeping(post('task_id'),'project',post('client_id'));
+        $render_data['company_id'] = $this->company_model->get_company_id_client_id(post('client_id'));
+        $render_data['section'] = post('section');
 //        $this->load->view('modal/financial_account',$data);
         if ($render_data['modal_type'] == "edit") {
             $render_data["id"] = post("id");
@@ -802,10 +818,10 @@ class Modal extends CI_Controller {
         $render_data['reference'] = post('reference');
         $render_data['reference_id'] = post('reference_id');
         $render_data['retail_price'] = post('retail_price');
-        // if ($render_data['modal_type'] == "edit") {
-        //     $render_data["data"] = $this->service_model->get_single_contact_info($this->input->post("id"));
-        // }
-//        print_r($render_data["data"]);exit;
+        if ($render_data['modal_type'] == "edit") {
+            $render_data["data"] = $this->service_model->get_single_recipient_info($this->input->post("id"));        
+        }
+       
         $this->load->view('modal/recipient_modal', $render_data);
     }
 }

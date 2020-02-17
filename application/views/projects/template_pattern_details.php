@@ -1,6 +1,7 @@
 <?php
 $project_date = date('Y-m-d');
 if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data)) {
+    $template_cat_id=get_template_cat_id($project_recurrence_main_data['template_id']);
     if ($project_recurrence_main_data['client_fiscal_year_end'] == 1) {
         $get_client_fye = get_client_fye($client_reference_id);
         $current_year = date('Y', strtotime($project_date));
@@ -80,6 +81,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         $current_days = date('d', strtotime($project_date));
         $current_year = date('Y', strtotime($project_date));
         $givenDate = date('Y-m-d', mktime(0, 0, 0, $current_months, $current_days + $project_recurrence_main_data['due_day'], ($current_year == date('Y') ? date('Y') : $current_year)));
+//        echo $givenDate;
         $project_recurrence_main_data['actual_due_day'] = date('d', strtotime('next ' . $current_day, strtotime($givenDate)));
         $project_recurrence_main_data['actual_due_month'] = date('m', strtotime('next ' . $current_day, strtotime($givenDate)));
         $project_recurrence_main_data['actual_due_year'] = ($current_year == date('Y') ? date('Y') : $current_year);
@@ -177,27 +179,12 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         $current_month = date('m', strtotime($project_date));
         $current_day = date('d', strtotime($project_date));
         $current_year = date('Y', strtotime($project_date));
-        if ($project_recurrence_main_data['actual_due_day'] > $current_day) {
-            if ($project_recurrence_main_data['actual_due_month'] >= $current_month) {
-                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
-            } else {
-                $due_date = $project_recurrence_main_data['actual_due_year'] + 1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
-            }
-        } else {
-            if ($project_recurrence_main_data['actual_due_month'] > $current_month) {
-                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
-            } else {
-                $due_date = $project_recurrence_main_data['actual_due_year'] + 1 . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
-            }
+        if($template_cat_id==1){
+            $due_date = $project_recurrence_main_data['actual_due_year'] + 1 . '-' . 03 . '-' . $project_recurrence_main_data['actual_due_day'];
+        }else{
+            $due_date = $project_recurrence_main_data['actual_due_year'] + 1 . '-' . 01 . '-' . $project_recurrence_main_data['actual_due_day'];
         }
     }
-//                    checking user date vs calculated pattern due date
-//    if ($due_date == $user_due_date) {
-//        $due_date = $due_date;
-//    } else {
-//        $due_date = $user_due_date;
-//    }
-
     if ($project_recurrence_main_data['generation_month'] == '') {
         $project_recurrence_main_data['generation_month'] = '0';
     }
@@ -205,8 +192,15 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     if ($project_recurrence_main_data['generation_day'] == '') {
         $project_recurrence_main_data['generation_day'] = '0';
     }
-    $generation_days = ((int) $project_recurrence_main_data['generation_month'] * 30) + (int) $project_recurrence_main_data['generation_day'];
-
+    if($template_cat_id==1){
+        $actual_month = date('m', strtotime('-1 month', strtotime($due_date)));
+    }else{
+        $actual_month = date('m', strtotime($due_date));
+    }
+    $actual_year = date('Y', strtotime($due_date));
+    $total_days = cal_days_in_month(CAL_GREGORIAN, $actual_month, $actual_year);
+    $generation_days = ((int) $project_recurrence_main_data['generation_month'] * (int) $total_days) + (int) $project_recurrence_main_data['generation_day'];
+//    echo $generation_days;
     $project_recurrence_main_data['due_date'] = $due_date;
 //                    echo $due_date;die;
     if ($project_recurrence_main_data['pattern'] == 'monthly') {
@@ -231,71 +225,213 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
         $generation_date = NULL;
     } else {
         $generation_date = date('Y-m-d', strtotime('-' . $generation_days . ' days', strtotime($project_recurrence_main_data['next_due_date'])));
+        if($template_cat_id==1){
+            if($project_recurrence_main_data['pattern']!='annually'){
+                $generation_date=date('Y',strtotime($generation_date)).'-'.date('m',strtotime($generation_date)).'-'.$project_recurrence_main_data['due_day'];
+            }else{
+                $generation_date=date('Y',strtotime($generation_date)).'-'.'01'.'-'.$project_recurrence_main_data['due_day'];
+            }
+        }else{
+            if($project_recurrence_main_data['pattern']!='annually'){
+                $generation_date=date('Y',strtotime($generation_date)).'-'.date('m',strtotime($generation_date)).'-'.'01';
+            }else{
+                $generation_date=(date('Y',strtotime($generation_date))+1).'-'.'01'.'-'.'01';
+            }
+        }
     }
     $project_recurrence_main_data['generation_date'] = $generation_date;
-//    $project_recurrence_main_data['project_id'] = $insert_id;
-//    $this->db->set($project_recurrence_main_data);
-//    $this->db->insert('project_recurrence_main', $project_recurrence_main_data);
-    ?>
-
-    <?php
-    if (!empty($task_list)) {
-        $dueDate = strtotime($due_date);
-        $project_date = strtotime($project_date);
-        $start_date = $task_list->target_start_date . 'days';
-        $complete_date = $task_list->target_complete_date . 'days';
-        if ($task_list->target_start_day == 1) {
-            $targetStartDate = date("Y-m-d", strtotime(("+$start_date"), $project_date));
-        } else {
-            $targetStartDate = date("Y-m-d", strtotime(("-$start_date"), $dueDate));
-        }
-        if ($task_list->target_complete_day == 1) {
-            $targetCompleteDate = date("Y-m-d", strtotime(("+$complete_date"), $project_date));
-        } else {
-            $targetCompleteDate = date("Y-m-d", strtotime(("-$complete_date"), $dueDate));
+    $month_array = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'Dececmber');
+    $quarter_array=array(1=>'Q1-Jan/Mar',2=>'Q2-Apr/Jun',3=>'Q3-Jul/Sep',4=>'Q4-Oct/Dec');
+    //project start date section
+    $actual_month = date('m', strtotime('-1 month', strtotime($due_date)));
+    $actual_year = date('Y', strtotime($due_date));
+    $total_days = cal_days_in_month(CAL_GREGORIAN, $actual_month, $actual_year);
+    $project_start_day = ((int) $project_recurrence_main_data['target_start_months'] * $total_days) + (int) $project_recurrence_main_data['target_start_days'];
+    if($project_recurrence_main_data['pattern']!='annually'){
+        $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
+    }else{
+        if($template_cat_id==3){
+            $project_start_date = date("Y-m-d",strtotime($project_date));
+        }else{
+            $project_start_date=date("Y-m-d",strtotime($project_date));
         }
     }
+    $dueDate = strtotime($due_date);
+    if($project_id!=''){
+        $project_start_date=$project_recurrence_main_data['start_month'];
+        $project_start_year=$project_recurrence_main_data['start_year'];
+    }
     ?>
-    <input type="hidden" id="target_start_date" value="<?= $task_list->target_start_date; ?>">
-    <input type="hidden" id="target_start_day" value="<?= $task_list->target_start_day; ?>">
-    <input type="hidden" id="actual_target_start_date" value="<?= date('m/d/Y', strtotime($targetStartDate)) ?>">
-    <input type="hidden" id="actual_due_date" value="<?= $dueDate ?>">
+    
+    <input type="hidden" id="project_pattern" value="<?= $project_recurrence_main_data['pattern'] ?>">
+    <input type="hidden" id="due_day" value="<?= $project_recurrence_main_data['due_day'] ?>">
+    <input type="hidden" id="target_start_month" value="<?= $project_recurrence_main_data['target_start_months'] ?>">
+    <input type="hidden" id="generation_day" value="<?= $project_recurrence_main_data['generation_day'] ?>">
+    <input type="hidden" id="generation_month" value="<?= $project_recurrence_main_data['generation_month'] ?>">
+    <input type="hidden" id="template_cat_id" value="<?= $template_cat_id ?>">
+    <?php // if($project_id==''){ ?>
     <div class="col-md-6">
-        <label class="col-lg-12 control-label">Start Date:<span class="text-danger">*</span></label>
+        <label class="col-lg-12 control-label">Starting Period:<span class="text-danger">*</span></label>
         <div class="form-group">
-            <input placeholder="mm/dd/yyyy" id="task_start_date" class="form-control datepicker_creation_date" type="text" title="Start Date" value="<?= date('m/d/Y', strtotime($targetStartDate)) ?>">
+            <?php 
+            if($project_recurrence_main_data['pattern']!='annually'){ 
+                if($project_recurrence_main_data['pattern']=='quarterly'){ ?>
+                    <select id="project_start_quarter" name="project[start_month]" onchange="change_project_due_date(this.value)">
+                        <?php $select_month = ($project_id!=''?$project_start_date:date('m', strtotime($project_start_date))); ?>
+                        <option value="">Select Quarter</option>
+                        <?php foreach ($quarter_array as $key => $quarter) { ?>
+                            <option value="<?= $key ?>" <?= $key == $select_month ? 'selected' : '' ?> ><?= $quarter ?></option>
+                        <?php } ?>
+                    </select>
+                <?php }else{ ?>
+                    <select id="project_start_month" name="project[start_month]" onchange="change_project_due_date(this.value)">
+                        <?php $select_month = ($project_id!=''?$project_start_date:date('m', strtotime($project_start_date))); ?>
+                        <option value="">Select Month</option>
+                        <?php foreach ($month_array as $key => $month) { ?>
+                            <option value="<?= $key ?>" <?= $key == $select_month ? 'selected' : '' ?> ><?= $month ?></option>
+                        <?php } ?>
+                    </select>
+            <?php } } ?>
+            <?php $years = array_combine(range(date("Y"), 2019), range(date("Y"), 2019)); ?>
+            <select id="project_start_year" name="project[start_year]" onchange="change_project_due_date()">
+                <?php $select_month = ($project_id!=''?$project_start_year:date('Y', strtotime($project_start_date))); ?>
+                <option value="">Select Year</option>
+                <?php foreach ($years as $key => $year) { ?>
+                    <option value="<?= $key ?>" <?= $key == $select_month ? 'selected' : '' ?> ><?= $year ?></option>
+                <?php } ?>
+            </select>
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
     <div class="col-md-6">
         <label class="col-lg-12 control-label">Due Date:<span class="text-danger">*</span></label>
         <div class="form-group">
-            <input placeholder="mm/dd/yyyy" id="due_date" name="project[due_date]" class="form-control datepicker_creation_date" type="text" title="Due Date" value="<?= date('m/d/Y', strtotime($due_date)) ?>" onchange="change_task_start_date(this.value)">
+            <input placeholder="mm/dd/yyyy" id="due_date" name="project[due_date]" class="form-control datepicker_due_date" type="text" title="Due Date" value="<?= date('m/d/Y', strtotime($due_date)) ?>" onchange="change_project_start_date(this.value)">
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
     <div class="col-md-12">
-        <h3 class="m-0 p-b-10 col-lg-12">Frequency:</h3>
-        <label class="col-lg-12 control-label">Next Recurrence: <?= date('m/d/Y', strtotime($generation_date)) ?></label>
+        <h3 class="m-0 p-b-10 col-lg-12">Next Recurrence: <span id='next_recurrence' ><?= date('m/d/Y', strtotime($generation_date)); ?></span></h3>
     </div>
-<?php } ?>
+    <input type="hidden" name="project[next_due_date]" id="next_due_date" value="<?= $next_due_date ?>">
+    <input type="hidden" name="project[generation_date]" id="generation_date" value="<?= $generation_date ?>">
+<?php }
+//}
+?>
 <script>
+    <?php if($project_id!=''){ ?>
+        change_project_due_date();
+    <?php } ?>
     $(document).ready(function () {
-        $(".datepicker_creation_date").datepicker({format: 'mm/dd/yyyy', autoHide: true});
+        $(".datepicker_due_date").datepicker({format: 'mm/dd/yyyy', autoHide: true});
     });
-    function change_task_start_date(due_date) {
-        var target_start_date = $("#target_start_date").val();
-        var target_start_day = $('#target_start_day').val();
-        var actual_target_start_date = $("#actual_target_start_date").val();
-        var actual_due_date = $("#actual_due_date").val();
-        var due_date = $('#due_date').val();
-        if (target_start_day == 2) {
-            var a = new Date(due_date);
-            a.setDate(a.getDate() + parseInt(target_start_date));
-            var dateEnd = (a.getMonth() + 1) + '/' + a.getDate() + '/' + a.getFullYear()
-            $('#task_start_date').val(dateEnd);
-        } else {
-            $('#task_start_date').val(actual_target_start_date);
+    function change_project_start_date(due_date) {
+         due_date=new Date(due_date)
+        var month=due_date.getMonth();
+    }
+    function change_project_due_date(select_month='') {
+        var project_pattern =$("#project_pattern").val();
+        var template_cat_id=$('#template_cat_id').val();
+        if(project_pattern=='monthly'){
+            if(select_month==''){
+                select_month=$("#project_start_month").val();
+            }
+            var select_year=$("#project_start_year").val();
+            var due_day=$('#due_day').val();
+            var target_start_month=$("#target_start_month").val();
+            var generation_day=$('#generation_day').val();
+            var generation_month=$("#generation_month").val();
+            var create_date=new Date(select_month+' '+due_day+' '+select_year);
+            var next_month=parseInt(select_month)+parseInt(target_start_month);
+            var day_of_select_month=new Date(select_year, select_month, 0).getDate();
+            var next_month_of_selected_month= new Date(create_date.getFullYear(), create_date.getMonth(), create_date.getDate()+30);
+            var day_of_next_selected_month=new Date(next_month_of_selected_month.getYear(),next_month_of_selected_month.getMonth(),0).getDate();
+            if(target_start_month==1){
+                var total_days=30;
+            }else{
+                var total_days=parseInt(day_of_select_month)+parseInt(day_of_next_selected_month)+parseInt(1);
+            }
+            if(next_month==13){
+                next_month=01;
+            }else if(next_month==14){
+                next_month=02;
+            }
+            create_date.setDate(create_date.getDate() + parseInt(total_days));
+            var due_date=next_month + '/' + due_day + '/' + create_date.getFullYear();
+            $("#due_date").val(due_date);
+            var next_due_month=parseInt(next_month)+parseInt(1);
+            var next_due=new Date(due_date);
+            next_due.setDate(next_due.getDate() + parseInt(31));
+            if(next_due_month==13){
+                next_due_month=01;
+            }
+            var next_due_date=next_due_month + '/' + due_day + '/' + next_due.getFullYear();
+            $('#next_due_date').val(next_due_date);
+            var next_recurrence=new Date(next_due_date);
+            var new_month=next_recurrence.getMonth();
+            var actual_year=next_recurrence.getYear();
+            var sales_month=new Date(actual_year, new_month, 0).getDate();
+            var total_recurrence_days=(parseInt(generation_month)*parseInt(sales_month))+parseInt(generation_day);
+            next_recurrence.setDate(next_recurrence.getDate() - parseInt(total_recurrence_days));
+            var next_recurrence_month=parseInt(next_due_month)-parseInt(target_start_month);
+            if(next_recurrence_month==0){
+                next_recurrence_month=12;
+            }if(next_recurrence_month==-1){
+                next_recurrence_month=11;
+            }
+            if(template_cat_id==1){
+                var next_recurrence_date=next_recurrence_month + '/' + due_day + '/' + next_recurrence.getFullYear();
+            }else {
+                var next_recurrence_date=(next_recurrence.getMonth()+ 1) + '/' + next_recurrence.getDate() + '/' + next_recurrence.getFullYear();
+            }
+            $("#next_recurrence").text(next_recurrence_date);
+            $('#generation_date').val(next_recurrence_date);
+        }
+        else if(project_pattern=='quarterly'){
+            if(select_month==''){
+                select_month=$("#project_start_quarter").val();
+            }
+            var select_year=$("#project_start_year").val();
+            var due_day=$('#due_day').val();
+            if(select_month==1){
+                var due_date= 04+'/'+due_day + "/"+ select_year;
+                var next_due_date= 07+'/'+due_day + "/"+ select_year;
+                var next_recurrence_date= 04+'/'+01 + "/"+ select_year;
+            }else if(select_month==2){
+                due_date= 07+'/'+due_day + "/"+ select_year;
+                next_due_date= 10+'/'+due_day + "/"+ select_year;
+                next_recurrence_date= 07+'/'+01 + "/"+ select_year;
+            }else if(select_month==3){
+                due_date= 10+'/'+due_day + "/"+ select_year;
+                next_due_date= 01+'/'+due_day + "/"+ (parseInt(select_year) +parseInt(1));
+                next_recurrence_date= 10+'/'+01 + "/"+ select_year;
+            }else{
+                due_date= 01+'/'+due_day + "/"+ (parseInt(select_year) +parseInt(1));
+                next_due_date= 04+'/'+due_day + "/"+ (parseInt(select_year) +parseInt(1));
+                next_recurrence_date=01+'/'+01 + "/"+ (parseInt(select_year) +parseInt(1));
+            }
+            $("#due_date").val(due_date);
+            $('#next_due_date').val(next_due_date);
+            $("#next_recurrence").text(next_recurrence_date);
+            $('#generation_date').val(next_recurrence_date);
+        }
+        else if(project_pattern=='annually'){
+            var select_year=$("#project_start_year").val();
+            var due_day=$('#due_day').val();
+            var next_year=(parseInt(select_year) +parseInt(1));
+            if(template_cat_id==1){
+                var due_date= 03+'/'+due_day + "/"+ next_year;
+                var next_due_date= 03+'/'+due_day + "/"+ (parseInt(next_year) +parseInt(1));
+                var next_recurrence_date= 01+'/'+01 + "/"+ next_year;
+            }else{
+                var due_date= 01+'/'+due_day + "/"+ next_year;
+                var next_due_date= 01+'/'+due_day + "/"+ (parseInt(next_year) +parseInt(1));
+                var next_recurrence_date= 01+'/'+01 + "/"+ next_year;
+            }
+            $("#due_date").val(due_date);
+            $('#next_due_date').val(next_due_date);
+            $("#next_recurrence").text(next_recurrence_date);
+            $('#generation_date').val(next_recurrence_date);
         }
     }
 </script>

@@ -71,7 +71,7 @@ class Action_model extends CI_Model {
         ];
     }
 
-    public function get_action_list($request = '', $status = '', $priority = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '') {
+    public function get_action_list($request = '', $status = '', $priority = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $business_client_id = '', $individual_client_id = '') {
 //        print_r($filter_data);die;
         $user_info = staff_info();
         $user_department = $user_info['department'];
@@ -103,6 +103,18 @@ class Action_model extends CI_Model {
 //        $this->db->join('action_assign_to_department_rel AS ass_dept', 'ass_dept.action_id = act.id');
         $this->db->join('department AS dprt', 'dprt.id = act.department');
         $this->db->join('staff AS st', 'st.id = act.added_by_user');
+
+        if($business_client_id !=''){
+        $this->db->join('action_client_list AS acl', 'act.id = acl.action_id'); 
+        $this->db->join('internal_data AS intr', 'intr.reference_id = acl.client_list_id'); 
+        }
+
+        if($individual_client_id !=''){
+        $this->db->join('action_client_list AS acl', 'act.id = acl.action_id'); 
+        $this->db->join('title AS t', 't.id = acl.client_list_id'); 
+        $this->db->join('internal_data AS intr', 't.individual_id = intr.reference_id');
+        }
+        
         if (isset($sos_value) && $sos_value != '') {
             $this->db->join('sos_notification AS sos', 'sos.reference_id = act.id');
             $this->db->join('sos_notification_staff AS sns', 'sns.sos_notification_id = sos.id');
@@ -386,6 +398,19 @@ class Action_model extends CI_Model {
         if (count($having) != 0) {
             $this->db->having(implode(' AND ', $having));
         }
+
+        if ($business_client_id != '') {
+            $business_client_id = explode("-", $business_client_id);
+            $this->db->where('intr.reference_id', $business_client_id[0]);
+            $this->db->where('intr.reference', $business_client_id[1]);
+        }
+
+        if ($individual_client_id != '') {
+            $individual_client_id = explode("-", $individual_client_id);
+            $this->db->where('intr.reference_id', $individual_client_id[0]);
+            $this->db->where('intr.reference', $individual_client_id[1]);
+        }
+
         $this->db->group_by('act.id');
         if ($sort_criteria != '') {
             $this->db->order_by($sort_criteria, $sort_type);
@@ -648,12 +673,29 @@ class Action_model extends CI_Model {
         } else {
             $data['is_all'] = $is_all;
         }
-        $actions = array_merge($data, ["added_by_user" => $user_id, "status" => 0, "due_date" => $date]);
 
-//        print_r($notes);die;
+        $client_type = $data['client_type'];
+
+        if(isset($data['client_list_id']) && !empty($data['client_list_id'])){
+           $client_list_id = $data['client_list_id']; 
+        }
+        
+        unset($data['client_type']);
+        unset($data['client_list_id']);
+        
+        $actions = array_merge($data, ["added_by_user" => $user_id, "status" => 0, "due_date" => $date]);
+        
         $this->db->trans_begin();
         $this->db->insert('actions', $actions);
         $id = $this->db->insert_id();
+
+        if(isset($client_type) && !empty($client_type)){
+            $client_practice_id = explode(",",$data['client_id']);
+            $res = array_combine($client_list_id,$client_practice_id);
+            foreach ($res as $key => $val) {
+               $this->db->insert('action_client_list', ["action_id" => $id,"client_type" => $client_type,"client_list_id" => $key, "client_id" => $val]);
+            }
+        }
 
         $staff_user_add_ofc = $staff_info['office'];
         // $ex = explode(",", $staff_user_add_ofc);
@@ -1703,7 +1745,7 @@ class Action_model extends CI_Model {
                     $inactive = '<a title="INACTIVE" style="font-size: 20px; color:green;" href="javascript:void(0);" onclick="inactive_business(' . $row["id"] . ',' . $row["company_id"] . ');"><i class="fa fa-check"></i>&nbsp;<span style="font-size:13px;">Active</span></a>';
                     $active = '<a title="ACTIVE" style="font-size: 20px; color:red;" href="javascript:void(0);" onclick="active_business(' . $row["id"] . ',' . $row["company_id"] . ');"><i class="fa fa-ban"></i>&nbsp;<span style="font-size:13px;">Inactive</span></a>';
                 } else {
-                    $edit = '';
+                    $edit = '&nbsp;&nbsp;<a title="EDIT" target="_blank" href="' . base_url("/action/home/edit_business/" . $row["id"] . "/" . $row["company_id"]) . '"><i class="fa fa-edit"></i><span>Edit</span></a>&nbsp;&nbsp;';
                     $delete = '';
                     $inactive = '';
                     $active = '';
@@ -3764,5 +3806,27 @@ class Action_model extends CI_Model {
         $action_start_date = $this->db->get('report_dashboard_action')->row_array()['creation_date'];
         return date('m/d/Y' ,strtotime($action_start_date));
     }
+
+    public function get_company_practice_id($client_id = ''){
+        if(isset($client_id) && !empty($client_id)){
+            $this->db->select('practice_id');
+            $this->db->from('internal_data');
+            $this->db->where('reference','company');
+            $this->db->where_in('reference_id',$client_id);
+            return $this->db->get()->result_array();
+        }
+    }
+
+    public function get_individual_practice_id($client_id = ''){
+        if(isset($client_id) && !empty($client_id)){
+            $this->db->select('int.practice_id');
+            $this->db->from('internal_data int');
+            $this->db->join('title t','t.individual_id = int.reference_id','inner');
+            $this->db->where('int.reference','individual');
+            $this->db->where_in('t.id',$client_id);
+            return $this->db->get()->result_array();
+        }
+    }
+
 
 }

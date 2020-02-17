@@ -1,14 +1,16 @@
 <div class="row">
     <div class="col-md-10">
+        <div id="select_peroid_billing" class="pull-left"></div>
         <table class="table table-bordered billing-report-table table-striped text-center m-b-0" id="report-billing-invoice">
             <thead>
                 <tr>
                     <th class="text-uppercase" style="white-space: nowrap;">Office</th>
                     <th class="text-uppercase" style="white-space: nowrap;">Total Invoice</th>
-                    <th class="text-uppercase" style="white-space: nowrap;">Amount Collected</th>
-                    <th class="text-uppercase" style="white-space: nowrap;">Unpaid (%)</th>
-                    <th class="text-uppercase" style="white-space: nowrap;">Partial (%)</th>
-                    <th class="text-uppercase" style="white-space: nowrap;">Paid (%)</th>
+                    <th class="text-uppercase" style="white-space: nowrap;">Amount</th>
+                    <th class="text-uppercase" style="white-space: nowrap;">Collected</th>
+                    <th class="text-uppercase" style="white-space: nowrap;">Unpaid</th>
+                    <th class="text-uppercase" style="white-space: nowrap;">Partial</th>
+                    <th class="text-uppercase" style="white-space: nowrap;">Paid</th>
                     <th class="text-uppercase" style="white-space: nowrap;">< 30</th>
                     <th class="text-uppercase" style="white-space: nowrap;">< 60</th>
                     <th class="text-uppercase" style="white-space: nowrap;">+ 60</th>
@@ -21,10 +23,11 @@
                 <tr>   
                     <td><?= $brl['office'] ?></td>
                     <td><?= $brl['total_invoice'] ?></td>
-                    <td><?= $brl['amount_collected'] ?></td>
-                    <td><?= ($brl['total_invoice']) ? round((((int)$brl['unpaid'] * 100) / (int)$brl['total_invoice']),2): '0.00'; ?></td>
-                    <td><?= ($brl['total_invoice'] != 0 ) ? round((((int)$brl['paid'] * 100) / (int)$brl['total_invoice']),2) : '0.00'; ?></td>
-                    <td><?= ($brl['total_invoice'] != 0) ? round((((int)$brl['partial'] * 100) / (int)$brl['total_invoice']),2) :'0.00'; ?></td>
+                    <td><?= round($brl['total_amount']) ?></td>
+                    <td><?= round($brl['amount_collected']) ?></td>
+                    <td><?= ($brl['total_invoice']) ? round((((int)$brl['unpaid'] * 100) / (int)$brl['total_invoice']))."%": '0%'; ?></td>
+                    <td><?= ($brl['total_invoice'] != 0 ) ? round((((int)$brl['paid'] * 100) / (int)$brl['total_invoice']))."%" : '0%'; ?></td>
+                    <td><?= ($brl['total_invoice'] != 0) ? round((((int)$brl['partial'] * 100) / (int)$brl['total_invoice']))."%" :'0%'; ?></td>
                     <td><?= $brl['less_than_30'] ?></td>
                     <td><?= $brl['less_than_60'] ?></td>
                     <td><?= $brl['more_than_60'] ?></td>
@@ -35,10 +38,11 @@
                 <tr>
                     <td>Total</td>
                     <td><?= $totals['total_no_of_invoice'] ; ?></td>
-                    <td><?= $totals['total_amount_collected'] ; ?></td>
-                    <td><?= $totals['total_unpaid'] ; ?></td>
-                    <td><?= $totals['total_partial'] ; ?></td>
-                    <td><?= $totals['total_paid'] ; ?></td>
+                    <td><?= round($totals['total_amounts']) ; ?></td>
+                    <td><?= round($totals['total_amount_collected']) ; ?></td>
+                    <td><?= round($totals['total_unpaid'])."%" ; ?></td>
+                    <td><?= round($totals['total_partial'])."%" ; ?></td>
+                    <td><?= round($totals['total_paid'])."%" ; ?></td>
                     <td><?= $totals['total_less_than_30'] ; ?></td>
                     <td><?= $totals['total_less_than_60'] ; ?></td>
                     <td><?= $totals['total_more_than_60'] ; ?></td>

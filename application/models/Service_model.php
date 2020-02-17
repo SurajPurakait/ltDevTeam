@@ -939,6 +939,10 @@ class Service_model extends CI_Model {
         return $this->db->where("id", $id)->get("contact_info")->row_array();
     }
 
+    public function get_single_recipient_info($id) {
+        return $this->db->where("id", $id)->get("recipient_information")->row_array();
+    }
+
     public function update_contact($id, $data) {
         $old_types = explode(",", $data["old_types"]);
         if (($key = array_search($data["edit_type_id"], $old_types)) !== false) {
@@ -2496,6 +2500,9 @@ class Service_model extends CI_Model {
                 if (in_array('service_id', $table_columns)) {
                     $save_data['service_id'] = $data['service_id'];
                 }
+                if (in_array('order_id', $table_columns)) {
+                    $save_data['order_id'] = $data['order_id'];
+                }
                 if ($table_name == 'new_company') {
                     $save_data['company_id'] = $data['reference_id'];
                 } else if ($table_name == 'company_principal' || $table_name == 'signer_data') {
@@ -2506,7 +2513,6 @@ class Service_model extends CI_Model {
                 $this->db->insert($table_name, $save_data);
             }
         }
-
 //        $this->db->select('SUM(price_charged) AS total_price');
 //        $this->db->where('order_id', $data['order_id']);
 //        $total_price = $this->db->get('service_request')->row_array();
@@ -2528,6 +2534,7 @@ class Service_model extends CI_Model {
                 }
             }
         }
+        
         if (isset($data['edit_service_notes'])) {
             foreach ($data['edit_service_notes'] as $services_id => $note_data) {
                 $reference_id = $this->notes->get_main_service_id($data['editval'], $services_id);
@@ -3014,8 +3021,12 @@ class Service_model extends CI_Model {
             return $this->db->update('recipient_information');
     }
 
-    public function get_payer_recipient_info($order_id) {
-        return $this->db->get_where('payer_recipient_information', ['order_id' => $order_id])->row_array();
+    public function get_payer_info($order_id) {
+        return $this->db->get_where('payer_information', ['order_id' => $order_id])->row_array();
+    }
+
+    public function get_recipient_info($reference_id) {
+        return $this->db->get_where('recipient_information', ['reference_id' => $reference_id])->result_array();
     }
 
 
@@ -3050,4 +3061,80 @@ class Service_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 
+    public function get_recipient_info_by_id($order_id) {
+        $select = 'ri.id,ri.reference_id, ri.reference,TRIM(ri.recipient_first_name) as first_name,TRIM(ri.recipient_last_name) as last_name,ri.recipient_phone_number, ri.recipient_address, ri.recipient_city, ri.recipient_zip, ri.recipient_tin, ri.compensation,c.country_name,st.state_name AS state_name';
+        $this->db->select($select);
+        $this->db->from('recipient_information AS ri');
+        $this->db->join('countries AS c', 'c.id = ri.recipient_country', 'left');
+        $this->db->join('states AS st', 'st.id = ri.recipient_state', 'left');
+        $this->db->where('ri.order_id', $order_id);
+        return $this->db->get()->result_array();
+    }
+
+    public function update_payer_data_fields($data,$order_id){
+        $details = [
+                'payer_first_name' => $data['payer_first_name'],
+                'payer_last_name' => $data['payer_last_name'],
+                'payer_phone_number' => $data['payer_phone_number'],
+                'payer_address' => $data['payer_address'],
+                'payer_city' => $data['payer_city'],
+                'payer_state' => $data['payer_state'],
+                'payer_country' => $data['payer_country'],
+                'payer_zip' => $data['payer_zip_code'],
+                'payer_tin' => $data['payer_tin']
+            ];
+            $this->db->set($details);
+            $this->db->where('order_id',$order_id);
+            return $this->db->update('payer_information');
+    }
+
+    public function recipent_delete($id) {
+        return $this->db->delete('recipient_information', array('id' => $id)); 
+    }
+
+    public function update_recipient($data) {
+        $id = $data['id'];
+        $reference_id = $data['reference_id'];
+       $arr = array(
+           'reference' => $data['reference'],
+           'recipient_first_name' => $data['recipient_first_name'],
+           'recipient_last_name' => $data['recipient_last_name'],
+           'recipient_phone_number' => $data['recipient_phone_number'],
+           'recipient_address' => $data['recipient_address'],
+           'recipient_city' => $data['recipient_city'],
+           'recipient_state' => $data['recipient_state'],
+           'recipient_country' => $data['recipient_country'],
+           'recipient_zip' => $data['recipient_zip_code'],
+           'recipient_tin' => $data['recipient_tin'],
+           'compensation' => $data['compensation']
+       );
+               $this->db->where('id', $id);
+               $this->db->where('reference_id', $reference_id);
+            return $this->db->update('recipient_information', $arr);
+    }
+
+    public function get_service_id_for_1099_service($reference_id, $order_id)
+    {
+        return $this->db->get_where('invoice_info',['client_id'=>$reference_id,
+                                                        'order_id'=>$order_id])->row()->id;
+    }
+
+    public function get_practice_id($reference_id)
+    {
+        return $this->db->get_where('internal_data',['reference_id'=>$reference_id])->row()->practice_id;
+    }
+
+    public function get_state_name($state_id)
+    {
+        return $this->db->get_where('states',['id'=>$state_id])->row()->state_name;
+    }
+   
+    public function get_country_name($country_id)
+    {
+        return $this->db->get_where('countries',['id'=>$country_id])->row()->country_name;
+    }
+
+    public function get_mortgages_list() {
+        return $this->db->get('type_of_mortgage')->result_array();
+    }
 }

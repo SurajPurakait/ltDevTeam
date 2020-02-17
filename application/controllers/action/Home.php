@@ -139,6 +139,32 @@ class Home extends CI_Controller {
         mod_actions_count('', 0);
     }
 
+    public function get_company_practice_id(){
+        $client_id = $this->input->post('client_id');
+        $result = $this->action_model->get_company_practice_id($client_id);
+        if($result != ''){
+        $res=[];
+        foreach($result as $val){
+            $res[] = $val['practice_id'];
+        }
+        $practice_id = implode(" , ",$res);
+        echo $practice_id; 
+      }
+    }
+
+    public function get_individual_practice_id(){
+        $client_id = $this->input->post('client_id');
+        $result = $this->action_model->get_individual_practice_id($client_id);
+        if($result != ''){
+        $res=[];
+        foreach($result as $val){
+            $res[] = $val['practice_id'];
+        }
+        $practice_id = implode(" , ",$res);
+        echo $practice_id; 
+      }
+    }
+
     public function update_action_status() {
         $prev_status = $this->action_model->get_current_status('actions', $this->input->post("id"));
         $status = $this->input->post("status");
@@ -840,7 +866,9 @@ class Home extends CI_Controller {
         $office_id = post("office_id");
         $department_id = post("department_id");
         $filter_assign = post("filter_assign");
-        $render_data["action_list"] = $this->action_model->get_action_list($request, $status, $priority, $office_id, $department_id, $filter_assign);
+        $business_client_id = post("business_client_id");
+        $individual_client_id = post("individual_client_id");
+        $render_data["action_list"] = $this->action_model->get_action_list($request, $status, $priority, $office_id, $department_id, $filter_assign,'','','','', $business_client_id, $individual_client_id);
         $return["result"] = $this->load->view("action/ajax_dashboard", $render_data, true);
         echo json_encode($return);
     }
@@ -1009,6 +1037,28 @@ class Home extends CI_Controller {
     }
     public function sos_count(){
         echo sos_dashboard_count('action', 'byme');
+    }
+
+    public function get_action_container_ajax() {
+        $client_type = post('client_type');
+//        echo $client_type;die;
+        $reference_id = post('reference_id');
+        $render_data['reference_id'] = $reference_id;
+        $render_data['service_category_list'] = $this->billing_model->get_service_category();
+        if ($client_type == '1') {
+            $render_data['reference'] = 'company';
+//            $render_data['completed_orders'] = $this->service->completed_orders();
+        } else {
+            $render_data['reference'] = 'individual';
+        }
+        $this->load->view('action/action_client_type' . $client_type, $render_data);
+    }
+
+    public function get_completed_orders_officewise() {
+        $office_id = post('office_id');
+        $render_data['client_id'] = post('client_id');
+        $render_data['completed_orders'] = $this->service->completed_orders('', $office_id);
+        $this->load->view('action/action_client_list', $render_data);
     }
 
 }

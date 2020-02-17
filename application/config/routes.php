@@ -62,6 +62,7 @@ $route['admin_panel/manage_log'] = 'administration/manage_log';
 
 // Services
 $route['services/service_setup'] = 'administration/service_setup';
+$route['services/partner_service_setup'] = 'administration/partner_service_setup';
 $route['services/business_client'] = 'administration/Business_client';
 
 // Projects

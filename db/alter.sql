@@ -1101,7 +1101,7 @@ ALTER TABLE `payroll_account_numbers` ADD `client_id` INT(5) NULL DEFAULT NULL A
 -- import report_dashboard_project
 ALTER TABLE `report_dashboard_project` ADD `sos` LONGTEXT NULL DEFAULT NULL AFTER `project_creation_date`;
 ALTER TABLE `report_dashboard_project` ADD `project_due_date` DATE NOT NULL AFTER `project_creation_date`;
-/*live end*/
+
 /* 15.01.2020 */
 UPDATE `services` SET `retail_price` = '450.00', `responsible_assign` = '' WHERE `services`.`id` = 48;
 
@@ -1141,3 +1141,101 @@ ALTER TABLE `order_extra_data` ADD `compensation` VARCHAR(100) NOT NULL AFTER `c
 -- import payer_information 
 -- import recipient_information 
 DROP TABLE `payer_recipient_information`;
+
+/*  27.01.2020 */
+ALTER TABLE `order_extra_data` DROP `compensation`;
+ALTER TABLE `project_template_recurrence_main` ADD `target_start_date` VARCHAR(30) NULL DEFAULT NULL AFTER `created_at`, ADD `target_end_date` VARCHAR(30) NULL DEFAULT NULL AFTER `target_start_date`;
+
+/*28.01.2020*/
+
+ALTER TABLE `project_template_recurrence_main` ADD `target_start_months` INT(2) NOT NULL AFTER `target_start_days`; 
+ALTER TABLE `project_template_recurrence_main` ADD `target_end_months` INT(2) NULL DEFAULT NULL AFTER `target_end_days`; 
+
+ALTER TABLE `project_recurrence_main` ADD `target_start_months` INT(2) NULL DEFAULT NULL AFTER `target_start_days`; 
+ALTER TABLE `project_recurrence_main` ADD `target_end_months` INT(2) NULL DEFAULT NULL AFTER `target_end_days`; 
+
+ALTER TABLE `project_recurrence_main` ADD `target_start_date` DATE NULL DEFAULT NULL AFTER `generated_by_cron`, ADD `target_end_date` DATE NULL DEFAULT NULL AFTER `target_start_date`; 
+ALTER TABLE `project_recurrence_main` ADD `start_date` DATE NULL DEFAULT NULL COMMENT 'when project started' AFTER `generation_date`; 
+
+
+/*31.01.2020*/
+
+ALTER TABLE `project_recurrence_main` DROP `start_date`
+ALTER TABLE `project_recurrence_main` ADD `start_month` VARCHAR(50) NULL DEFAULT NULL AFTER `generation_date`; 
+ALTER TABLE `report_dashboard_service` ADD `service_request_id` INT(11) NOT NULL AFTER `id`; 
+
+
+
+/* 05.02.2020 */
+ALTER TABLE `sales_tax_application` CHANGE `order_id` `order_id` INT(11) NOT NULL; 
+ALTER TABLE `sales_tax_application` CHANGE `reference_id` `reference_id` INT(11) NOT NULL; 
+ALTER TABLE `sales_tax_application` CHANGE `state_recurring` `state_recurring` INT(4) NOT NULL; 
+ALTER TABLE `sales_tax_application` CHANGE `country_recurring` `country_recurring` INT(4) NOT NULL; 
+
+ALTER TABLE `sales_tax_recurring` 
+ADD `sales_tax_number` INT(11) NOT NULL AFTER `contact_phone_no`, 
+ADD `business_partner_number` INT(11) NOT NULL AFTER `sales_tax_number`, 
+ADD `sales_tax_business_description` LONGTEXT NOT NULL AFTER `business_partner_number`, 
+ADD `bank_account_number` INT(11) NOT NULL AFTER `sales_tax_business_description`, 
+ADD `bank_routing_number` INT(11) NOT NULL AFTER `bank_account_number`, 
+ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `bank_routing_number`; 
+
+ALTER TABLE `sales_tax_application` 
+ADD `sales_tax_number` INT(11) NOT NULL AFTER `contact_phone_no`, 
+ADD `business_partner_number` INT(11) NOT NULL AFTER `sales_tax_number`, 
+ADD `sales_tax_business_description` LONGTEXT NOT NULL AFTER `business_partner_number`, 
+ADD `sales_bank_account_number` INT(11) NOT NULL AFTER `sales_tax_business_description`, 
+ADD `sales_bank_routing_number` INT(11) NOT NULL AFTER `sales_bank_account_number`, 
+ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `sales_bank_routing_number`;
+
+ALTER TABLE `sales_tax_application` CHANGE `sales_bank_account_number` `sales_bank_account_number` VARCHAR(100) NOT NULL; 
+ALTER TABLE `sales_tax_application` CHANGE `sales_bank_routing_number` `sales_bank_routing_number` VARCHAR(100) NOT NULL; 
+
+/* 06.02.2020 */
+ALTER TABLE `sales_tax_recurring` DROP `frequency_of_sales_tax`;
+ALTER TABLE `sales_tax_recurring` CHANGE `freq_of_salestax` `freq_of_salestax` VARCHAR(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+ALTER TABLE `sales_tax_processing` 
+ADD `sales_tax_number` INT(11) NOT NULL AFTER `contact_phone_no`, 
+ADD `business_partner_number` INT(11) NOT NULL AFTER `sales_tax_number`, 
+ADD `sales_tax_business_description` LONGTEXT NOT NULL AFTER `business_partner_number`, 
+ADD `sales_bank_account_number` INT(11) NOT NULL AFTER `sales_tax_business_description`, 
+ADD `sales_bank_routing_number` INT(11) NOT NULL AFTER `sales_bank_account_number`, 
+ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `sales_bank_routing_number`;
+
+ALTER TABLE `sales_tax_processing` DROP `frequency_of_sales_tax`;
+
+/* 07.02.2020 */
+ALTER TABLE `sales_tax_processing` CHANGE `existing_practice_id` `existing_practice_id` VARCHAR(50) NOT NULL; 
+
+ALTER TABLE `sales_tax_application` DROP `sales_tax_number`, DROP `business_partner_number`, 
+DROP `sales_tax_business_description`, DROP `sales_bank_account_number`, 
+DROP `sales_bank_routing_number`, DROP `frequency_of_sales_tax`;
+
+
+
+/* 10.02.2020 */
+ALTER TABLE `project_task_sales_tax_process` ADD `sales_tax_number` INT(100) NOT NULL AFTER `confirmation_number`;
+ALTER TABLE `project_task_sales_tax_process` ADD `business_partner_number` INT(100) NOT NULL AFTER `sales_tax_number`; 
+ALTER TABLE `project_task_sales_tax_process` ADD `sales_tax_business_description` LONGTEXT NOT NULL AFTER `business_partner_number`;
+ALTER TABLE `project_task_sales_tax_process` ADD `frequency_of_sales_tax` VARCHAR(20) NOT NULL AFTER `sales_tax_business_description`;
+
+ALTER TABLE `project_task_sales_tax_process` ADD `bank_account_no` VARCHAR(100) NOT NULL AFTER `main_salse_tax_id`, ADD `bank_routing_no` VARCHAR(100) NOT NULL AFTER `bank_account_no`;
+
+/* 11.02.2020 */
+ALTER TABLE `actions` ADD `client_type` INT(11) NOT NULL COMMENT '1:Business Client,2:Individual Client' AFTER `id`;
+ALTER TABLE `actions` ADD `office_id` INT(100) NOT NULL AFTER `client_type`;
+ALTER TABLE `actions` ADD `client_list_id` INT(100) NOT NULL AFTER `office_id`;
+
+
+/* 12.02.2020 */
+ALTER TABLE `actions` DROP `client_type`;
+ALTER TABLE `actions` DROP `client_list_id`;
+--import action_client_list
+ALTER TABLE `project_recurrence_main` ADD `start_year` VARCHAR(20) NOT NULL AFTER `start_month`; 
+
+/* 13.02.2020 */
+-- import partner_services.sql
+-- import type_of_mortgage.sql
+
+/*live end*/

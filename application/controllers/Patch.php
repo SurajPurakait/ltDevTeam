@@ -575,6 +575,7 @@ class Patch extends CI_Controller {
                 if ($cl['reference'] == 'individual') {
                     $details = $this->db->get_where('individual', ['id' => $reference_id])->row_array();
                     $name = trim($details['last_name']) . trim($details['first_name']);
+                    // echo $name;exit;
                     if (empty($name)) {
                         $details = $this->db->get_where('company', ['company_id' => $reference_id])->row_array();
                         $name = strtoupper(str_replace(' ', '', trim($details['name'])));
@@ -924,5 +925,64 @@ class Patch extends CI_Controller {
             }
         }
     }
+
+    public function update_practice_id_having_same_name_individual_client() {
+        $internal_data_details = $this->db->get('internal_data')->result_array();
+    
+        foreach ($internal_data_details as $idd) {
+
+    
+                $sql = 'SELECT CONCAT(GROUP_CONCAT(`id`), ",") AS ids,CONCAT(GROUP_CONCAT(`practice_id`), ",") AS practice_ids FROM internal_data WHERE reference = "individual" AND practice_id != "" GROUP BY practice_id HAVING COUNT(practice_id) > 1';
+                $data = $this->db->query($sql)->result_array();
+                
+                foreach ($data as $dt) {
+                    $ids = explode(',',$dt['ids']);
+                    $practice_ids = explode(',',$dt['practice_ids']);
+                    for($i=1;$i<count($ids)-1;$i++) {
+                        $id_length = strlen($practice_ids[$i]);
+                        
+                        $max_limit = $id_length - 1;
+                        //  echo $max_limit;exit;
+                        $updated_id = substr($dt['practice_ids'],0,$max_limit).$i;   
+                        $update_sql = "UPDATE `internal_data` SET `practice_id`='$updated_id' WHERE id = '$ids[$i]'";
+                        echo $update_sql."<br>";
+                        $this->db->query($update_sql);
+                    }
+                    echo "<hr>";
+                }
+            // }
+            exit;
+        }
+    }
+
+    public function update_practice_id_having_same_name_business_client() {
+        $internal_data_details = $this->db->get('internal_data')->result_array();
+    
+        foreach ($internal_data_details as $idd) {
+
+    
+                $sql = 'SELECT CONCAT(GROUP_CONCAT(`id`), ",") AS ids,CONCAT(GROUP_CONCAT(`practice_id`), ",") AS practice_ids FROM internal_data WHERE reference = "company" AND practice_id != "" AND practice_id != "1" GROUP BY practice_id HAVING COUNT(practice_id) > 1';
+                $data = $this->db->query($sql)->result_array();
+                
+                foreach ($data as $dt) {
+                    $ids = explode(',',$dt['ids']);
+                    $practice_ids = explode(',',$dt['practice_ids']);
+                    for($i=1;$i<count($ids)-1;$i++) {
+                        $id_length = strlen($practice_ids[$i]);
+                        
+                        $max_limit = $id_length - 1;
+                        //  echo $max_limit;exit;
+                        $updated_id = substr($dt['practice_ids'],0,$max_limit).$i;   
+                        $update_sql = "UPDATE `internal_data` SET `practice_id`='$updated_id' WHERE id = '$ids[$i]'";
+                        echo $update_sql."<br>";
+                        $this->db->query($update_sql);
+                    }
+                    echo "<hr>";
+                }
+            // }
+            exit;
+        }
+    }
+
 }
     

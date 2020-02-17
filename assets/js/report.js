@@ -220,36 +220,66 @@ function show_service_franchise_date(date_range = '',range_btn='',category='') {
         }
     })
 }
-// report billing section js
-function show_billing_data() {
-    $("#billing_invoice_payments").toggle();
-    
-    var date_range_billing = $("#billing_range_report").val();
 
-    $.ajax({
-        type: 'POST',
-        url: base_url + 'reports/get_show_billing_data',
-        data: {'date_range_billing':date_range_billing},
-        success: function (result) {
-            $("#billing_invoice_payments").html(result);
-        },
-        beforeSend: function () {
-            openLoading();
-        },
-        complete: function (msg) {
-            closeLoading();
+function show_billing_data(date_range = '',start_date='') {
+    $("#billing_invoice_payments").toggle();
+    var date_range_check = date_range;
+    if (date_range == '') {
+       var date_range = $("#billing_range_report").val();
+    }
+    if (start_date == '') {
+        start_date = moment("05-15-2018", "MM-DD-YYYY").format("MM/DD/YYYY");
+    }
+    var rangeText = '';
+    if (date_range == moment(start_date).format("MM/DD/YYYY")+" - "+moment().format("MM/DD/YYYY")) {
+        rangeText = "<h4 class='text-success'>Showing All Invoice Data</h4>";
+    } else if(date_range == moment().format("MM/DD/YYYY")+" - "+moment().format("MM/DD/YYYY")) {
+        rangeText = "<h4 class='text-success'>Showing Results for Today</h4>";
+    } else if(date_range == moment().subtract(1, 'days').format("MM/DD/YYYY")+" - "+moment().subtract(1, 'days').format("MM/DD/YYYY")) {
+        rangeText = "<h4 class='text-success'>Showing Results for Yesterday</h4>";
+    } else if(date_range == moment().subtract(6, 'days').format("MM/DD/YYYY")+" - "+moment().format("MM/DD/YYYY")) {
+        rangeText = "<h4 class='text-success'>Showing Results for Last 7 Day</h4>";
+    } else if(date_range == moment().subtract(29, 'days').format("MM/DD/YYYY")+" - "+moment().format("MM/DD/YYYY")) {
+        rangeText = "<h4 class='text-success'>Showing Results for Last 30 Day</h4>";
+    } else if(date_range == moment().startOf('month').format("MM/DD/YYYY")+" - "+moment().endOf('month').format("MM/DD/YYYY")) {
+        rangeText = "<h4 class='text-success'>Showing Results for This Month</h4>";
+    } else if (date_range == moment().startOf('month').format("MM/DD/YYYY")+" - "+moment().endOf('month').format("MM/DD/YYYY")) {
+        rangeText = "<h4 class='text-success'>Showing Results for Last Month</h4>";
+    } else {
+        if (date_range != '') {
+            var start = date_range.split("-")[0];
+            var end = date_range.split("-")[1];
+            rangeText = "<h4 class='text-success'>Showing results from "+start+" to "+end+"</h4>";    
+        }else {
+            rangeText = "<h4 class='text-success'>Showing All Invoice Data</h4>";
         }
-    });
-}
-function get_billing_date_range(date_range = '') {
+    }    
     $.ajax({
         type: 'POST',
         url : base_url + 'reports/get_range_billing_report',
         data : {'date_range_billing':date_range },
         success: function (result) {
             $("#billing_range_report").val(result);
-            show_billing_data();
-            $("#billing_invoice_payments").show();        
+            var date_range_billing = $("#billing_range_report").val();
+
+            $.ajax({
+                type: 'POST',
+                url: base_url + 'reports/get_show_billing_data',
+                data: {'date_range_billing':date_range_billing},
+                success: function (res) {
+                    $("#billing_invoice_payments").html(res);
+                    $("#select_peroid_billing").html(rangeText);
+                    if (date_range_check != '') {
+                        $("#billing_invoice_payments").show();
+                    }
+                },
+                beforeSend: function () {
+                    openLoading();
+                },
+                complete: function (msg) {
+                    closeLoading();
+                }
+            });     
         },
         beforeSend: function () {
             openLoading();
@@ -259,6 +289,7 @@ function get_billing_date_range(date_range = '') {
         }
     })
 }
+
 // report action section js
 function show_action_data(category='') {
     var date_range = $("#action_range_report").val();
@@ -553,6 +584,161 @@ function show_clients_data(category) {
             closeLoading();
         }
     });
+}
+
+// reload data 
+function refresh_service_report(){
+   $.ajax({
+        type: 'POST',
+        url: base_url + 'report_dashboard_service_cron.php',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });     
+}
+
+function refresh_billing_report(){
+   $.ajax({
+        type: 'POST',
+        url: base_url + 'report_dashboard_billing_cron.php',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });     
+}
+
+function refresh_action_report() {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'report_dashboard_action_cron.php',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function reload_royalty_report_data() {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'royalty_report_cron.php',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function reload_sales_report_data() {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'sales_report_cron.php',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
+function refresh_project_report() {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'report_dashboard_project_cron.php',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });    
+}
+
+function refresh_client_report() {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'report_dashboard_client_cron.php',
+        success: function (result) {
+            if (result == 1) {
+                swal({
+                    title: "Success!",
+                    text: "Updated Successfully!",
+                    type: "success"
+                });    
+            }
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });    
 }
 
 function pieChart(className) {

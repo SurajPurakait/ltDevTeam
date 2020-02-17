@@ -152,12 +152,18 @@ class Salestax_model extends CI_Model {
             }
             $service_id = $data["service_id"];
             $existing_practice_id = $data['existing_practice_id'];
+            $sales_tax_number = $data['sales_tax_number'];
+            $business_partner_number = $data['business_partner_number'];
+            $sales_tax_business_description = $data['sales_tax_business_description'];
+            $bank_account_number = $data['bank_account_number'];
+            $bank_routing_number = $data['bank_routing_number'];
 
-            $sql = "insert into sales_tax_processing values('','$new_existing','$existing_ref_id','$start_month_year',"
-                    . "'$frequeny_of_salestax',"
-                    . "'$freq_val','$year_val','$state','$county',"
-                    . "'$order_id','$service_id','$existing_practice_id','$contact_phone_no')";
+            // $sql = "insert into sales_tax_processing values('','$new_existing','$existing_ref_id','$start_month_year',"
+            //         . "'$frequeny_of_salestax',"
+            //         . "'$freq_val','$year_val','$state','$county',"
+            //         . "'$order_id','$service_id','$existing_practice_id','$contact_phone_no','$sales_tax_number','$business_partner_number','$sales_tax_business_description','$bank_account_number','$bank_routing_number')";
 
+            $sql = "INSERT INTO `sales_tax_processing`(`type_of_client`,`new_existing`, `start_year`, `frequeny_of_salestax`, `frequency_of_salestax_val`, `frequency_of_salestax_years`, `state`, `county`, `order_id`, `service_id`, `existing_practice_id`, `contact_phone_no`, `sales_tax_number`, `business_partner_number`, `sales_tax_business_description`, `sales_bank_account_number`, `sales_bank_routing_number`) VALUES ('$new_existing','$existing_ref_id','$start_month_year','$frequeny_of_salestax','$freq_val','$year_val','$state','$county','$order_id','$service_id','$existing_practice_id','$contact_phone_no','$sales_tax_number','$business_partner_number','$sales_tax_business_description','$bank_account_number','$bank_routing_number')";                        
             $conn->query($sql);
 
             $today = date('Y-m-d h:i:s');
@@ -300,7 +306,16 @@ class Salestax_model extends CI_Model {
                 $county = '';
             }
             $service_id = $data["service_id"];
-            $existing_practice_id = $data['existing_practice_id'];
+            if ($data['existing_practice_id'] != '') {
+                $existing_practice_id = $data['existing_practice_id'];
+            } else {
+                $existing_practice_id = '';
+            }
+            $sales_tax_number = $data['sales_tax_number'];
+            $business_partner_number = $data['business_partner_number'];
+            $sales_tax_business_description = $data['sales_tax_business_description'];
+            $bank_account_number = $data['sales_bank_account_number'];
+            $bank_routing_number = $data['sales_bank_routing_number'];
 
 
 
@@ -324,7 +339,7 @@ class Salestax_model extends CI_Model {
             }
 
             $sql = "update sales_tax_processing set start_year='$start_month_year',frequeny_of_salestax='$frequeny_of_salestax',"
-                    . "frequency_of_salestax_val='$freq_val',frequency_of_salestax_years='$year_val',state='$state',county='$county',existing_practice_id='$existing_practice_id',contact_phone_no='$contact_phone_no'"
+                    . "frequency_of_salestax_val='$freq_val',frequency_of_salestax_years='$year_val',state='$state',county='$county',existing_practice_id='$existing_practice_id',contact_phone_no='$contact_phone_no',sales_tax_number='$sales_tax_number',business_partner_number='$business_partner_number',sales_tax_business_description='$sales_tax_business_description',sales_bank_account_number='$bank_account_number',sales_bank_routing_number='$bank_routing_number'"
                     . "  where service_id='$service_id' and order_id='$order_id'";
 
             $conn->query($sql);
@@ -452,12 +467,20 @@ class Salestax_model extends CI_Model {
             $state = $data['state'];
             $start_month_year = $data['start_year'];
             $contact_phone_no = $data['contact_phone_no'];
+            $sales_tax_number = $data['sales_tax_number'];
+            $business_partner_number = $data['business_partner_number'];
+            $sales_tax_business_description = $data['sales_tax_business_description'];
+            $bank_account_number = $data['bank_account_number'];
+            $bank_routing_number = $data['bank_routing_number'];
+
             if ($data['county'] != '') {
                 $county = $data['county'];
             } else {
                 $county = '';
             }
-            $sql = "insert into sales_tax_recurring values('','$new_existing','$existing_ref_id','$existing_practice_id','$reference_id','$start_month_year','$order_id','$service_id','$sales_tax_id','$password','$website','$frequeny_of_salestax','$state','$county','$contact_phone_no')";
+            // $sql = "insert into sales_tax_recurring values('$new_existing','$existing_ref_id','$existing_practice_id','$reference_id','$start_month_year','$order_id','$service_id','$sales_tax_id','$password','$website','$frequeny_of_salestax','$state','$county','$contact_phone_no','$sales_tax_number','$business_partner_number','$sales_tax_business_description','$bank_account_number','$bank_routing_number')";
+
+            $sql = "INSERT INTO `sales_tax_recurring`(`new_existing`, `existing_ref_id`, `existing_practice_id`, `reference_id`, `start_month_year`, `order_id`, `service_id`, `sales_tax_id`, `password`, `website`, `freq_of_salestax`, `state`, `county`, `contact_phone_no`, `sales_tax_number`, `business_partner_number`, `sales_tax_business_description`, `bank_account_number`, `bank_routing_number`) VALUES ('$new_existing','$existing_ref_id','$existing_practice_id','$reference_id','$start_month_year','$order_id','$service_id','$sales_tax_id','$password','$website','$frequeny_of_salestax','$state','$county','$contact_phone_no','$sales_tax_number','$business_partner_number','$sales_tax_business_description','$bank_account_number','$bank_routing_number')";
             $conn->query($sql);
             if (isset($data['service_notes'])) {
                 foreach ($data['service_notes'] as $services_id => $note_data) {
@@ -549,6 +572,11 @@ class Salestax_model extends CI_Model {
             $start_month_year = $data['start_year'];
             $existing_practice_id = $data['existing_practice_id'];
             $contact_phone_no = $data['contact_phone_no'];
+            $sales_tax_number = $data['sales_tax_number'];
+            $business_partner_number = $data['business_partner_number'];
+            $sales_tax_business_description = $data['sales_tax_business_description'];
+            $bank_account_number = $data['bank_account_number'];
+            $bank_routing_number = $data['bank_routing_number'];
             if ($data['county'] != '') {
                 $county = $data['county'];
             } else {
@@ -572,7 +600,7 @@ class Salestax_model extends CI_Model {
                     }
                 }
             }
-            $sql = "update sales_tax_recurring set sales_tax_id='$sales_tax_id',password='$password',website='$website',freq_of_salestax='$frequeny_of_salestax',state='$state',county='$county',start_month_year='$start_month_year',existing_practice_id='$existing_practice_id',contact_phone_no='$contact_phone_no' where service_id='$service_id' and order_id='$order_id'";
+            $sql = "update sales_tax_recurring set sales_tax_id='$sales_tax_id',password='$password',website='$website',freq_of_salestax='$frequeny_of_salestax',state='$state',county='$county',start_month_year='$start_month_year',existing_practice_id='$existing_practice_id',contact_phone_no='$contact_phone_no',sales_tax_number='$sales_tax_number',business_partner_number='$business_partner_number',sales_tax_business_description='$sales_tax_business_description',bank_account_number='$bank_account_number',bank_routing_number='$bank_routing_number' where service_id='$service_id' and order_id='$order_id'";
             $conn->query($sql);
             $data['order_id'] = $order_id;
             $this->billing_model->update_invoice_data($data);
@@ -598,7 +626,7 @@ class Salestax_model extends CI_Model {
         $this->load->model('action_model');
         $this->db->trans_begin();
         $service_id = $data['service_id'];
-        //print_r($data); exit;
+        
         if ($data['type_of_client'] == 0) {
             $sql = $this->db->query("select name from company where id='" . $data['client_list'] . "'")->row_array();
             $data['name_of_business1'] = $sql['name'];
@@ -693,7 +721,7 @@ class Salestax_model extends CI_Model {
             }
 
 
-            $this->db->query("INSERT INTO `sales_tax_application` (`id`, `new_existing`, `existing_ref_id`, `existing_practice_id`, `reference_id`, `order_id`, `start_month_year`, `bank_name`, `bank_account_number`, `bank_routing_number`, `acc_type1`, `acc_type2`, `rt6_availability`, `rt6_number`, `state`, `void_cheque`, `need_rt6`, `resident_type`, `passport`, `lease`, `state_recurring`, `country_recurring`, `contact_phone_no`) VALUES ('', '{$data->type_of_client}', '{$data->client_list}', '{$data->existing_practice_id}', '{$data->reference_id}', '$order_id', '{$data->start_year}', '{$data->bank_name}', '{$data->bank_account}', '{$data->bank_routing}', '{$data->acctype1}', '{$data->acctype2}', '{$data->Rt6}', '{$data->rt6_number}', '{$data->state}', '$void_check_filename', '{$data->Rt6need}', '{$data->residenttype}', '$passport_filename', '$lease_filename', '{$data->state_recurring}', '{$data->county}', '{$data->contact_phone_no}')");
+            $this->db->query("INSERT INTO `sales_tax_application` (`id`, `new_existing`, `existing_ref_id`, `reference_id`, `order_id`, `start_month_year`, `bank_name`, `bank_account_number`, `bank_routing_number`, `acc_type1`, `acc_type2`, `rt6_availability`, `rt6_number`, `state`, `void_cheque`, `need_rt6`, `resident_type`, `passport`, `lease`, `state_recurring`, `country_recurring`, `contact_phone_no`) VALUES ('', '{$data->type_of_client}', '{$data->client_list}', '{$data->reference_id}', '$order_id', '{$data->start_year}', '{$data->bank_name}', '{$data->bank_account}', '{$data->bank_routing}', '{$data->acctype1}', '{$data->acctype2}', '{$data->Rt6}', '{$data->rt6_number}', '{$data->state}', '$void_check_filename', '{$data->Rt6need}', '{$data->residenttype}', '$passport_filename', '$lease_filename', '{$data->state_recurring}', '{$data->county}', '{$data->contact_phone_no}')");
 
             if (count($license_file) > 0) {
                 foreach ($license_file as $val) {
@@ -960,7 +988,9 @@ class Salestax_model extends CI_Model {
                 $data->Rt6need = '';
             }
 
-            $sales_sql = "update `sales_tax_application` set new_existing='{$data->type_of_client}', existing_ref_id='{$data->client_list}', existing_practice_id='{$data->existing_practice_id}', reference_id='{$data->reference_id}', start_month_year='{$data->start_year}', bank_name='{$data->bank_name}', bank_account_number='{$data->bank_account}', bank_routing_number='{$data->bank_routing}', acc_type1={$data->acctype1}, acc_type2={$data->acctype2}, rt6_availability='{$data->Rt6}', rt6_number='{$data->rt6_number}', state='{$data->state}', need_rt6='{$data->Rt6need}', resident_type='{$data->residenttype}', contact_phone_no='{$data->contact_phone_no}'";
+            // $sales_sql = "update `sales_tax_application` set new_existing='{$data->type_of_client}', existing_ref_id='{$data->client_list}', reference_id='{$data->reference_id}', start_month_year='{$data->start_year}', bank_name='{$data->bank_name}', bank_account_number='{$data->bank_account}', bank_routing_number='{$data->bank_routing}', acc_type1={$data->acctype1}, acc_type2={$data->acctype2}, rt6_availability='{$data->Rt6}', rt6_number='{$data->rt6_number}', state='{$data->state}', need_rt6='{$data->Rt6need}', resident_type='{$data->residenttype}', contact_phone_no='{$data->contact_phone_no}'";
+
+            $sales_sql = "update `sales_tax_application` set new_existing='{$data->type_of_client}', existing_ref_id='{$data->client_list}', reference_id='{$data->reference_id}', start_month_year='{$data->start_year}', bank_name='{$data->bank_name}', bank_account_number='{$data->bank_account}', bank_routing_number='{$data->bank_routing}', acc_type1={$data->acctype1}, acc_type2={$data->acctype2}, rt6_availability='{$data->Rt6}', rt6_number='{$data->rt6_number}', state='{$data->state}', need_rt6='{$data->Rt6need}', resident_type='{$data->residenttype}', contact_phone_no='{$data->contact_phone_no}'";
 
             if ($void_check_filename != '') {
                 $sales_sql .= ", void_cheque='{$void_check_filename}'";
@@ -1269,8 +1299,13 @@ class Salestax_model extends CI_Model {
         return $this->db->query($sql)->result_array();
     }
 
-    public function get_salestax_data($order_id) {
+    public function get_salestax_data($order_id) {        
         return $this->db->get_where("sales_tax_application", ['order_id' => $order_id])->result_array();
+    }
+    
+    public function getstatename($state) {
+        $this->db->select('states.state_name');
+        return $this->db->get_where('states',['id' => $state])->result_array();
     }
 
     public function get_sales_tax_application_by_order_id($order_id) {

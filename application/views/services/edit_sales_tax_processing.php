@@ -177,131 +177,6 @@ $state_id=$state->id;
                          <?= service_note_func('Sales Tax Note', 'n', 'service', "", 1); ?>  
 
                         <div class="hr-line-dashed"></div>
-                        
-                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Frequency Of Salestax<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <select class="form-control frequeny_of_bookkeeping" name="frequeny_of_salestax" id="frequency_of_salestax" title="Frequency Of Bookkeeping" required>
-                                    <option value="">Select</option>
-                                    <option value="m" <?= ($recurring_data->frequeny_of_salestax == 'm') ? 'Selected' : '' ?>>Monthly</option>
-                                    <option value="q" <?= ($recurring_data->frequeny_of_salestax == 'q') ? 'Selected' : '' ?>>Quarterly</option>
-                                    <option value="y" <?= ($recurring_data->frequeny_of_salestax == 'y') ? 'Selected' : '' ?>>Yearly</option>
-                                </select>
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
-
-
-                        <div id="frequency_of_salestax_month" <?= ($recurring_data->frequeny_of_salestax == 'm') ? 'style="display:block;"' : 'style="display:none;"' ?>>
-                          <div class="form-group">
-                            <label class="col-lg-2 control-label">Months<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <select class="form-control frequeny_of_bookkeeping" id="months" name="frequency_of_salestax_month"  title="Frequency Of salestex" <?= ($recurring_data->frequeny_of_salestax == 'm') ? 'required=""' : '' ?>>
-<!--                                    <option value="">Select</option>-->
-                                    <?php 
-                                $i=0;
-                                $months=['Select','January','Febuary','March','April','May','June','July','August','September','October','November','December'];
-                                for($i=0;$i<=12;$i++){?>
-                                   
-                                 <option value="<?php echo $months[$i];?>"<?php if($recurring_data->frequency_of_salestax_val==$months[$i]) { echo " selected" ; }?>><?php echo $months[$i];?></option>
-                                    <?php  } ?>
-                                </select>
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Years<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <select class="form-control" id="year1" name="frequency_of_salestax_years1"  title="Year" <?= ($recurring_data->frequeny_of_salestax == 'm') ? 'required=""' : '' ?>>
-                                    <?php
-                                    $i=0;
-                                    $year=['Select',date('Y')-3,date('Y')-2,date('Y')-1,date('Y'),date('Y')+1];
-                                    for($i=0;$i<=5;$i++){ ?>
-                                    <option value="<?php echo $year[$i];?>" <?php if($recurring_data->frequency_of_salestax_years==$year[$i]) { echo " selected" ; }?>><?php echo $year[$i];?></option>
-                                   <?php  } ?>
-                                </select>
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="frequency_of_salestax_querter" <?= ($recurring_data->frequeny_of_salestax == 'q') ? 'style="display:block;"' : 'style="display:none;"' ?>>
-                          <div class="form-group">
-                            <label class="col-lg-2 control-label">Quarter<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <select class="form-control frequeny_of_bookkeeping" id="quarter" name="frequency_of_salestax_quarter"  title="Frequency Of salestex" <?= ($recurring_data->frequeny_of_salestax == 'q') ? 'required=""' : '' ?>>
-                                    
-                                    <?php 
-                                $i=0;
-                                $querter=['Select','Querter 1','Querter 2','Querter 3','Querter 4'];
-                                for($i=0;$i<=4;$i++){?>
-                                 <option value="<?php echo $querter[$i];?>" <?php if($recurring_data->frequency_of_salestax_val==$querter[$i]) { echo " selected" ; }?>><?php echo $querter[$i];?></option>
-                                    <?php  } ?>
-                                </select>
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-lg-2 control-label">Years<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <select class="form-control" id="year2" name="frequency_of_salestax_years2"  title="Year" <?= ($recurring_data->frequeny_of_salestax == 'q') ? 'required=""' : '' ?>>
-                                    <?php
-                                    $i=0;
-                                    $year=['Select',date('Y')-3,date('Y')-2,date('Y')-1,date('Y'),date('Y')+1];
-                                    for($i=0;$i<=5;$i++){ ?>
-                                    <option value="<?php echo $year[$i];?>" <?php if($recurring_data->frequency_of_salestax_years==$year[$i]) { echo " selected" ; }?>><?php echo $year[$i];?></option>
-                                   <?php  } ?>
-                                </select>
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="frequency_of_salestax_years" <?= ($recurring_data->frequeny_of_salestax == 'y') ? 'style="display:block;"' : 'style="display:none;"' ?>>
-                          <div class="form-group">
-                            <label class="col-lg-2 control-label">Years<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <select class="form-control frequeny_of_bookkeeping" id="year" name="frequency_of_salestax_years"  title="Frequency Of salestex" <?= ($recurring_data->frequeny_of_salestax == 'y') ? 'required=""' : '' ?>>
-                                    <?php
-                                    $i=0;
-                                    $year=['Select',date('Y')-3,date('Y')-2,date('Y')-1,date('Y'),date('Y')+1];
-                                    for($i=0;$i<=5;$i++){ ?>
-                                    <option value="<?php echo $year[$i];?>" <?php if($year[$i]==date('Y')){ echo "selected"; } ?>><?php echo $year[$i];?></option>
-                                   <?php  } ?>
-                                </select>
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
-                        <input type="hidden" name="frequency_of_salestax_years" value="">
-                    </div>
-                        
-                        <div class="form-group state_div">
-                            <label class="col-lg-2 control-label">State of Recurring<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <select class="form-control" onchange="county_ajax(this.value, '');" name="state" id="salesstate" title="State of Recurring" required="">
-                                    <option value="">Select an option</option>
-                                     <?php
-                                    foreach ($state_list as $st) {
-                                        ?>
-                                        <option value="<?= $st['id']?>" <?php echo ($state_id == $st['id']) ? 'selected' : ''; ?>><?= $st['state_name']; ?></option>
-                                        <?php
-                                    }
-                                    ?>
-                                </select>
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
-                        <div class="form-group county_div" id="county_div">
-                            <label class="col-lg-2 control-label">County of Recurring<span class="text-danger">*</span></label>
-                            <div class="col-lg-10">
-                                <div id="county">
-                                    <select id="county_ddl" class="form-control" name="county"  title="County of Recurring" required="">
-
-                                        <option value="">Select</option>
-                                    </select>
-                                </div>
-                                <div class="errorMessage text-danger"></div>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
 
                         <div id="internal_data_div" class="display_div">
                             <div class="hr-line-dashed"></div>
@@ -368,17 +243,188 @@ $state_id=$state->id;
                                     <div class="errorMessage text-danger"></div>
                                 </div>
                             </div>
-                        </div>
-                        
-                            <div class="form-group">
+<!--                            <div class="form-group">
                                 <label class="col-lg-2 control-label">Existing Practice ID</label>
                                 <div class="col-lg-10">
-                                    <input placeholder="" class="form-control" type="text" name="existing_practice_id" title="Existing Practice ID" value="<?= $recurring_data->existing_practice_id; ?>">
+                                    <input placeholder="" class="form-control" type="text" name="existing_practice_id" title="Existing Practice ID" value="<//?= $recurring_data->existing_practice_id; ?>">
                                     <div class="errorMessage text-danger"></div>
                                 </div>
-                            </div>
+                            </div>-->
+                        </div>
                         
-                         <div class="form-group">
+                        <div class="ibox-content">
+                            <div id="sales_tax_input_form_div" class="display_div1">
+                                <h3>Sales Tax Input Form</h3><span class=""></span>
+                                <div class="form-group">
+                                    <label id="referred-label" class="col-lg-2 control-label">Sales Tax Number #<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="" class="form-control required_field" type="text" id="sales_tax_number" name="sales_tax_number" title="Sales Tax Number" value="<?= $recurring_data->sales_tax_number ?>">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label id="referred-label" class="col-lg-2 control-label">Business Partner Number #<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="" class="form-control required_field" type="text" id="business_partner_number" name="business_partner_number" title="Business Partner Number" value="<?= $recurring_data->business_partner_number ?>">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+<!--                            <div class="form-group">
+                                    <label class="col-lg-2 control-label">Sales Tax Business Description<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <textarea class="form-control value_field required_field" name="sales_tax_business_description" id="sales_tax_business_description" title="Sales Tax Business Description"><?= $recurring_data->sales_tax_business_description ?></textarea>
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div> -->
+                                <div class="form-group">
+                                    <label class="col-lg-2 control-label">Sales Tax Business Description<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <textarea class="form-control required_field" name="sales_tax_business_description" id="sales_tax_business_description" title="Sales Tax Business Description"><?= $recurring_data->sales_tax_business_description ?></textarea>
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label id="referred-label" class="col-lg-2 control-label">Bank Account Number #<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="" class="form-control required_field" type="text" id="sales_bank_account_number" name="sales_bank_account_number" title="Bank Account Number" value="<?= $recurring_data->sales_bank_account_number; ?>">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label id="referred-label" class="col-lg-2 control-label">Bank Routing Number #<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <input placeholder="" class="form-control required_field" type="text" id="sales_bank_routing_number" name="sales_bank_routing_number" title="Bank Routing Number" value="<?= $recurring_data->sales_bank_routing_number; ?>">
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-2 control-label">Frequency Of Salestax<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <select class="form-control frequeny_of_bookkeeping" name="frequeny_of_salestax" id="frequency_of_salestax" title="Frequency Of Bookkeeping" required>
+                                            <option value="">Select</option>
+                                            <option value="m" <?= ($recurring_data->frequeny_of_salestax == 'm') ? 'Selected' : '' ?>>Monthly</option>
+                                            <option value="q" <?= ($recurring_data->frequeny_of_salestax == 'q') ? 'Selected' : '' ?>>Quarterly</option>
+                                            <option value="y" <?= ($recurring_data->frequeny_of_salestax == 'y') ? 'Selected' : '' ?>>Yearly</option>
+                                        </select>
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+
+
+                                <div id="frequency_of_salestax_month" <?= ($recurring_data->frequeny_of_salestax == 'm') ? 'style="display:block;"' : 'style="display:none;"' ?>>
+                                  <div class="form-group">
+                                    <label class="col-lg-2 control-label">Months<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <select class="form-control frequeny_of_bookkeeping" id="months" name="frequency_of_salestax_month"  title="Frequency Of salestex" <?= ($recurring_data->frequeny_of_salestax == 'm') ? 'required=""' : '' ?>>
+        <!--                                    <option value="">Select</option>-->
+                                            <?php 
+                                        $i=0;
+                                        $months=['Select','January','Febuary','March','April','May','June','July','August','September','October','November','December'];
+                                        for($i=0;$i<=12;$i++){?>
+                                           
+                                         <option value="<?php echo $months[$i];?>"<?php if($recurring_data->frequency_of_salestax_val==$months[$i]) { echo " selected" ; }?>><?php echo $months[$i];?></option>
+                                            <?php  } ?>
+                                        </select>
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-2 control-label">Years<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <select class="form-control" id="year1" name="frequency_of_salestax_years1"  title="Year" <?= ($recurring_data->frequeny_of_salestax == 'm') ? 'required=""' : '' ?>>
+                                            <?php
+                                            $i=0;
+                                            $year=['Select',date('Y')-3,date('Y')-2,date('Y')-1,date('Y'),date('Y')+1];
+                                            for($i=0;$i<=5;$i++){ ?>
+                                            <option value="<?php echo $year[$i];?>" <?php if($recurring_data->frequency_of_salestax_years==$year[$i]) { echo " selected" ; }?>><?php echo $year[$i];?></option>
+                                           <?php  } ?>
+                                        </select>
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                                </div>
+                                <div id="frequency_of_salestax_querter" <?= ($recurring_data->frequeny_of_salestax == 'q') ? 'style="display:block;"' : 'style="display:none;"' ?>>
+                                <div class="form-group">
+                                    <label class="col-lg-2 control-label">Quarter<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <select class="form-control frequeny_of_bookkeeping" id="quarter" name="frequency_of_salestax_quarter"  title="Frequency Of salestex" <?= ($recurring_data->frequeny_of_salestax == 'q') ? 'required=""' : '' ?>>
+                                            
+                                            <?php 
+                                        $i=0;
+                                        $querter=['Select','Querter 1','Querter 2','Querter 3','Querter 4'];
+                                        for($i=0;$i<=4;$i++){?>
+                                         <option value="<?php echo $querter[$i];?>" <?php if($recurring_data->frequency_of_salestax_val==$querter[$i]) { echo " selected" ; }?>><?php echo $querter[$i];?></option>
+                                            <?php  } ?>
+                                        </select>
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-2 control-label">Years<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <select class="form-control" id="year2" name="frequency_of_salestax_years2"  title="Year" <?= ($recurring_data->frequeny_of_salestax == 'q') ? 'required=""' : '' ?>>
+                                            <?php
+                                            $i=0;
+                                            $year=['Select',date('Y')-3,date('Y')-2,date('Y')-1,date('Y'),date('Y')+1];
+                                            for($i=0;$i<=5;$i++){ ?>
+                                            <option value="<?php echo $year[$i];?>" <?php if($recurring_data->frequency_of_salestax_years==$year[$i]) { echo " selected" ; }?>><?php echo $year[$i];?></option>
+                                           <?php  } ?>
+                                        </select>
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                                </div>
+                                <div id="frequency_of_salestax_years" <?= ($recurring_data->frequeny_of_salestax == 'y') ? 'style="display:block;"' : 'style="display:none;"' ?>>
+                                      <div class="form-group">
+                                        <label class="col-lg-2 control-label">Years<span class="text-danger">*</span></label>
+                                        <div class="col-lg-10">
+                                            <select class="form-control frequeny_of_bookkeeping" id="year" name="frequency_of_salestax_years"  title="Frequency Of salestex" <?= ($recurring_data->frequeny_of_salestax == 'y') ? 'required=""' : '' ?>>
+                                                <?php
+                                                $i=0;
+                                                $year=['Select',date('Y')-3,date('Y')-2,date('Y')-1,date('Y'),date('Y')+1];
+                                                for($i=0;$i<=5;$i++){ ?>
+                                                <option value="<?php echo $year[$i];?>" <?php if($year[$i]==date('Y')){ echo "selected"; } ?>><?php echo $year[$i];?></option>
+                                               <?php  } ?>
+                                            </select>
+                                            <div class="errorMessage text-danger"></div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="frequency_of_salestax_years" value="">
+                                </div>
+                            
+                                <div class="form-group state_div">
+                                    <label class="col-lg-2 control-label">State of Recurring<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <select class="form-control" onchange="county_ajax(this.value, '');" name="state" id="salesstate" title="State of Recurring" required="">
+                                            <option value="">Select an option</option>
+                                             <?php
+                                            foreach ($state_list as $st) {
+                                                ?>
+                                                <option value="<?= $st['id']?>" <?php echo ($state_id == $st['id']) ? 'selected' : ''; ?>><?= $st['state_name']; ?></option>
+                                                <?php
+                                            }
+                                            ?>
+                                        </select>
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group county_div" id="county_div">
+                                    <label class="col-lg-2 control-label">County of Recurring<span class="text-danger">*</span></label>
+                                    <div class="col-lg-10">
+                                        <div id="county">
+                                            <select id="county_ddl" class="form-control" name="county"  title="County of Recurring" required="">
+
+                                                <option value="">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="errorMessage text-danger"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <div class="col-lg-offset-2 col-lg-10">
                                 <input type="hidden" name="reference_id" id="reference_id" value="<?= $reference_id; ?>">
                                 <input type="hidden" name="current_reference_id" id="current_reference_id" value="<?= $reference_id; ?>">
@@ -412,14 +458,15 @@ $state_id=$state->id;
 
 <script>
        
-     county_ajax(<?= $state_id;?>, <?= $recurring_data->county; ?>);        
+    county_ajax(<?= $state_id;?>, <?= $recurring_data->county; ?>);        
      
- clientTypeChange(<?= $recurring_data->type_of_client; ?>, <?= $reference_id; ?>, '<?= $reference; ?>', 1);
+    clientTypeChange(<?= $recurring_data->type_of_client; ?>, <?= $reference_id; ?>, '<?= $reference; ?>', 1);
 
     // reload_owner_list('<?= $reference_id; ?>', 'payroll');
     // reload_owner_list('<?= $reference_id; ?>', 'payroll2');
     // reload_owner_list('<?= $reference_id; ?>', 'payroll3');
     $(function () {
+        // $("textarea#sales_tax_business_description").val(<?= $recurring_data->sales_tax_business_description ?>);
 
         var client_type = $('#type_of_client').val();
         if (client_type == '0') {
@@ -435,7 +482,7 @@ $state_id=$state->id;
 
         $("#frequency_of_salestax").change(function(){
                 
-                 var frequency_of_salestax=$("#frequency_of_salestax").val();
+            var frequency_of_salestax=$("#frequency_of_salestax").val();
                   
             if(frequency_of_salestax=='m'){
                  $("#frequency_of_salestax_month").show();

@@ -39,7 +39,10 @@ $role = $user_info['role'];
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="row">
-                                    <div class="col-md-2 col-md-offset-8">
+                                    <div class="col-md-8">
+                                        <a href="#" class="btn btn-primary m-t-15" id="project_add_filter">Show Filter</a>
+                                    </div>
+                                    <div class="col-md-2">
                                         <div>
                                             <label class="text-left control-label">Month: </label>
                                             <?php
@@ -101,7 +104,7 @@ $role = $user_info['role'];
                                                                             </div>-->
                                     </div>
                                     <div class="col-lg-12">
-                                        <div class="filter-outer">
+                                        <div class="filter-outer" id="project_apply_filter" style="display:none">
                                             <form name="filter_form" id="filter-form"  method="post" onsubmit="projectFilter()">
                                                 <div class="form-group filter-inner">
 
@@ -160,38 +163,36 @@ $role = $user_info['role'];
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-12 p-t-15">
                                             <div class="alert-primar-wrap">
                                         <?php
-//                                    echo "<pre>";
-//                                    print_r($due_m);
-                                        foreach ($due_m as $key => $value) {
-                                            $projects_list = getTemplateCategoryProjectList('', 1, $key, $select_year);
+                                        foreach ($templateIds as $key => $value) {
+                                            $projects_list = getTemplateCategoryProjectList($value['template_id'], 1, '', $select_year);
                                             $status_array = array_count_values(array_column($projects_list, 'status'));
                                             if (!empty($projects_list)) {
                                                 ?>
                                                 
-                                                    
                                                     <div class="alert-primar m-b-15">
-                                                        <h3 class="p-l-15 p-r-15 f-s-14"> <?= $value ?> </h3>
+                                                        <h4 class="p-l-15 p-r-15 f-s-14"> <a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $value['title'] ?>" data-trigger="hover" title="" data-original-title=""><?= (strlen($value['title']) > 20 ? substr_replace($value['title'], '..', 20) : $value['title']) ?></a> </h4>
                                                         <div class="alert-primar-grid-container">
-                                                            <div class="alert-primar-grid m-t-5">
-                                                                <table>
-                                                                    <tr>
-                                                                        <td style="text-align: right; padding-right: 5px;">New</td>
-                                                                        <td><span class="label label-success label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '0-Not Started');loadProjectDashboard(0, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td style="text-align: right; padding-right: 5px;">Started</td>
-                                                                        <td><span class="label label-warning label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '1-Started');loadProjectDashboard(1, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td style="text-align: right; padding-right: 5px;">Completed</td>
-                                                                        <td><span class="label label-primary label-block" style="width: 45px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '2-Completed');loadProjectDashboard(2, '', '', '', '', '', '', '', '', '', '', '', '', 1, 1, '<?= $key ?>');"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </div>
-                                                            <div class="alert-primar-grid">
+                                                        <div class="alert-primar-grid m-t-5">
+                                                            <table>
+                                                                <tr>
+                                                                    <td style="text-align: right; padding-right: 5px;">New</td>
+                                                                    <td><span class="label label-success label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '0-Not Started');loadProjectDashboard(0, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 1);"> <?= isset($status_array[0]) ? $status_array[0] : 0; ?> </span></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="text-align: right; padding-right: 5px;">Started</td>
+                                                                    <td><span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 1);"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="text-align: right; padding-right: 5px;">Completed</td>
+                                                                    <td><span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 1);"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span>   </td>
+                                                                </tr>
+                                                            </table>
+                                                            
+                                                        </div>
+                                                        <div class="alert-primar-grid">
                                                                 <div class="project-bookkeeping-campaigns-donut-<?= $key ?> text-center" data-size="65" id="project_bookkeeping_donut_<?= $key ?>" data-json="project_bookkeeping_data_<?= $key ?>"></div>
                                                                 <script>
                                                                     var project_bookkeeping_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': '#309f77'}];
@@ -207,9 +208,9 @@ $role = $user_info['role'];
                                             }
                                         }
                                         ?>
-                                          </div><!-- ./alert-primar-wrap -->
-                                       </div><!-- ./col-md-12 -->
-                                    </div><!-- ./row -->
+                                             </div><!--./alert-primar-wrap --> 
+                                         </div><!--./col-md-12 --> 
+                                    </div><!--./row -->  
 
                                 </div>
                                 <div role="tabpanel" class="tab-pane <?= $category == '2-tax_returns' ? 'active' : '' ?>" id="tax_returns" >
@@ -228,7 +229,7 @@ $role = $user_info['role'];
                                                 ?>
                                                 
                                                     <div class="alert-primar m-b-15">
-                                                        <h4 class="p-l-15 p-r-15 f-s-14"> <a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $value['title'] ?>" data-trigger="hover" title="" data-original-title=""><?= (strlen($value['title']) > 10 ? substr_replace($value['title'], '..', 10) : $value['title']) ?></a> </h4>
+                                                        <h4 class="p-l-15 p-r-15 f-s-14"> <a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $value['title'] ?>" data-trigger="hover" title="" data-original-title=""><?= (strlen($value['title']) > 20 ? substr_replace($value['title'], '..', 20) : $value['title']) ?></a> </h4>
                                                         <div class="alert-primar-grid-container">
                                                         <div class="alert-primar-grid m-t-5">
                                                             <table>
@@ -283,7 +284,7 @@ $role = $user_info['role'];
                                                 ?>
                                                 
                                                     <div class="alert-primar m-b-15">
-                                                        <h4 class="p-l-15 p-r-15 f-s-14"><a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $value['title'] ?>" data-trigger="hover" title="" data-original-title=""><?= (strlen($value['title']) > 10 ? substr_replace($value['title'], '..', 10) : $value['title']) ?></a></h4>
+                                                        <h4 class="p-l-15 p-r-15 f-s-14"><a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $value['title'] ?>" data-trigger="hover" title="" data-original-title=""><?= (strlen($value['title']) > 20 ? substr_replace($value['title'], '..', 20) : $value['title']) ?></a></h4>
                                                         <div class="alert-primar-grid-container">
                                                             <div class="alert-primar-grid m-t-5"> 
                                                                 <table>
@@ -341,7 +342,7 @@ $role = $user_info['role'];
                                                 ?>
                                                 
                                                     <div class="alert-primar m-b-15">
-                                                        <h4 class="col-md-4 m-t-10 f-s-14"> <?= (strlen($value['title']) > 10 ? substr_replace($value['title'], '..', 10) : $value['title']) ?> </h4>
+                                                        <h4 class="col-md-4 m-t-10 f-s-14"> <?= (strlen($value['title']) > 20 ? substr_replace($value['title'], '..', 20) : $value['title']) ?> </h4>
                                                         <div class="alert-primar-grid-container">
                                                         <div class="alert-primar-grid m-t-5">
                                                             <table>
@@ -581,6 +582,28 @@ $role = $user_info['role'];
     </div>
 </div>
 <script>
+    var content = $(".filter-div").html();
+    var variableArray = [];
+    var elementArray = [];
+    $("#project_add_filter").click(function(){
+        $("#project_apply_filter").toggle();
+        
+        var random = Math.floor((Math.random() * 999) + 1);
+        var clone = '<div class="filter-div row m-b-20" id="clone-' + random + '">' + content + '<div class="col-sm-1 text-center p-l-0"><a href="javascript:void(0);" onclick="removeProjectFilterRow(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
+        $('.filter-inner').append(clone);
+
+        $.each(variableArray, function (key, value) {
+            $("#clone-" + random + " .variable-dropdown option[value='" + value + "']").remove();
+        });
+        clearProjectFilter();
+        addProjectFilterRow();
+        if($("#project_add_filter").text()=='Show Filter'){
+            $("#project_add_filter").text('Hide Filter');
+        }else{
+            $("#project_add_filter").text('Show Filter');
+        }
+    });
+    $("#project_add_filter").text('Show Filter');
     loadProjectDashboard('<?= $status; ?>', '<?= $request_type; ?>', '<?= $template_id; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '', '', '', '', '', '', '', '', 1,<?= $template_cat_id ?>);
     reflactProjectFilterWithCategory('<?= $category ?>', '');
     $(function () {
@@ -679,7 +702,7 @@ $role = $user_info['role'];
                 }
 
                 if (res.project_status == 0) {
-                    var tracking_main = 'Not Started';
+                    var tracking_main = 'New';
                     var trk_class_main = 'label label-success';
                 } else if (res.project_status == 1) {
                     var tracking_main = 'Started';
@@ -726,9 +749,7 @@ $role = $user_info['role'];
             }
         });
     }
-    var content = $(".filter-div").html();
-    var variableArray = [];
-    var elementArray = [];
+    
     function changeVariableProject(element) {
         var divID = $(element).parent().parent().attr('id');
         var variableValue = $(element).children("option:selected").val();
@@ -883,22 +904,27 @@ $role = $user_info['role'];
         if (statusArray[1] == 'bookkeeping') {
             $('#cat').val(statusArray[0] + '-' + statusArray[1]);
             $('#bookkeeping_btn_clear_filter').show();
+            $("#project_add_filter").text('Show Filter');
         } else if (statusArray[1] == 'tax_returns') {
             $('#cat').val(statusArray[0] + '-' + statusArray[1]);
             $('#tax_btn_clear_filter').show();
+            $("#project_add_filter").text('Show Filter');
         } else if (statusArray[1] == 'sales_tax') {
             $('#cat').val(statusArray[0] + '-' + statusArray[1]);
             $('#sales_btn_clear_filter').show();
+            $("#project_add_filter").text('Show Filter');
         } else if (statusArray[1] == 'annual_report') {
             $('#cat').val(statusArray[0] + '-' + statusArray[1]);
             $('#annual_btn_clear_filter').show();
+            $("#project_add_filter").text('Show Filter');
     }
 //        $("#due_year").val(new Date().getFullYear());
     }
     function clearProjectFilter() {
+        $('#btn_clear_filter').css('display', 'none');
         $(".criteria-dropdown").trigger("chosen:updated");
         $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
-        $('#btn_clear_filter').css('display', 'none');
+        $("#project_add_filter").text('Show Filter');
     }
     function change_project_year(year) {
         var category = $('#cat').val();
@@ -907,12 +933,8 @@ $role = $user_info['role'];
         var month = $('#due_month').val();
         $('#due_month').val(month)
         reflactProjectFilterWithCategory(category, '');
-//        if(statusArray[0]==1){
-//            pieChart('project-bookkeeping-campaigns-donut-1');
-//        }
-//        go('Project/index/'+'t'+'uk');
-        go('Project/index/' + 'n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/' + statusArray[0] + '/' + year + '/' + category + '/' + month);
-//        loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '', '', '', 1, statusArray[0],'',year)
+        go('Project/index/' + category + '/' + statusArray[0] + '/' + year + '/' + month);
+//        go('Project/index/' + 'n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/' + statusArray[0] + '/' + year + '/' + category + '/' + month);
     }
     function change_project_month(month) {
         var category = $('#cat').val();
@@ -921,6 +943,7 @@ $role = $user_info['role'];
         $("#due_year").val(year);
         $('#due_month').val(month)
         reflactProjectFilterWithCategory(category, '');
-        go('Project/index/' + 'n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/' + statusArray[0] + '/' + year + '/' + category + '/' + month);
+        go('Project/index/' + category +'/' + statusArray[0]+ '/' + year + '/' + month);
+//        go('Project/index/' + 'n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/n' + '/' + statusArray[0] + '/' + year + '/' + category + '/' + month);
     }
 </script> 

@@ -988,7 +988,7 @@ class Company_model extends CI_Model {
            $oid[]= $val['id'];
         }
         if(!empty($client_id)){
-            $this->db->select("id,client_id,bank_name, account_number as ban_account_number, routing_number as bank_routing_number,type_of_account,user,bank_website");
+            $this->db->select("id,client_id,bank_name, account_number as ban_account_number, routing_number as bank_routing_number,type_of_account,user,bank_website,password");
             $this->db->from('financial_accounts');
             $this->db->where('client_id',$client_id);
 //            $this->db->where_in('order_id',$oid);
@@ -2083,6 +2083,11 @@ class Company_model extends CI_Model {
             }
             $this->company->update_title_status($data["reference_id"]);
             $this->system->log("insert", "order", $order_id);
+
+
+            $this->service_model->update_payer_data_fields($data,$order_id);
+            $this->service_model->recipient_data_fields($data["reference_id"],$order_id,$data['recipient_id_list']);
+
             $this->billing_model->update_invoice_data($data);
             $this->system->save_general_notification('order', $order_id, 'edit');
         }
@@ -2095,5 +2100,8 @@ class Company_model extends CI_Model {
         }
     }
 
+    public function get_company_id_client_id($client_id) {
+        return $this->db->get_where('company',array('id'=>$client_id))->row_array()['company_id'];
+    }
 
 }

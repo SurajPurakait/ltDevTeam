@@ -159,6 +159,27 @@ function show_service_modal(modal_type, service_id) {
     });
 }
 
+function show_partner_service_modal(modal_type, service_id) {
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'modal/show_partner_service_modal',
+        data: {
+            modal_type: modal_type,
+            service_id: service_id
+        },
+        success: function (result) {
+            $('#partner-service-form-modal').html(result).modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            $('#partner-service-form-modal').on('shown.bs.modal', function () {
+                $(".chosen-select").chosen("destroy");
+                $(".chosen-select").chosen();
+            });
+        }
+    });
+}
+
 function show_company_modal(modal_type, company_id) {
     $.ajax({
         type: 'POST',
@@ -1701,7 +1722,7 @@ var file_upload_task = () => {
         }
     });
 }
-function task_account_modal(modal_type, id, section) {
+function task_account_modal(modal_type, id='', section='') {
     var reference_id = $("#reference_id").val();
 //    var exist_client_id=$("#exist_client_id").val();
 //    if ($("#editval").val() == '') {

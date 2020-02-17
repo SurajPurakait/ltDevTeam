@@ -7,7 +7,9 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <form class="form-horizontal" method="post" id="related_service_form" onsubmit="saveRelatedService(); return false;">
-                        <h2><?= $service_details['description']; ?></h2>
+                        <h4>Service Id: <?= $service_id2; ?></h4>
+                        <h4>Service Name: <?= $service_details['description']; ?></h4>
+                        <h4>Client Id: <?= $client_id; ?></h4>
                         <div class="hr-line-dashed"></div>
 
                         <?php if ($service_shortname == 'acc_p'): //Payroll ?>
@@ -95,7 +97,6 @@
                                 <div id="owner-list-payroll"></div>
                                 <input type="hidden" id="payroll_approver_quantity" value="0">
                                 <button class="btn btn-success btn-xs" id="copy-contact" ref_id="<?= $reference_id; ?>">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Main Contact</button>&nbsp;
-
                                 <div class="form-group" id="payroll_first_name_div">
                                     <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
                                     <div class="col-lg-10">
@@ -704,6 +705,105 @@
                                 ?>
                             </ul>
                         <?php endif; ?>
+
+
+                        <?php if ($service_shortname == 'acc_1_w_u'){
+                                  // 1099 Write Up
+                        ?>
+                        <h3>Payer's Information : <span class="text-danger">*</span></h3>
+
+                        <div class="link-content m-b-10">
+                                <input type="hidden" id="payer_information_quantity" value="0">
+                                <button class="btn btn-success btn-xs" id="copy-contact" ref_id="<?= $reference_id; ?>">&nbsp;<i class="fa fa-copy"></i>&nbsp;Copy Contact</button>&nbsp;
+                        </div>
+
+                        <div id="payer_information_div">
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="First Name" class="form-control" type="text" id="payer_first_name" name="table[payer_information][payer_first_name]" title="First Name" value="<?= isset($payer_information['payer_first_name']) ? $payer_information['payer_first_name'] : '' ?>" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Last Name<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="Last Name" class="form-control" type="text" id="payer_last_name" name="table[payer_information][payer_last_name]" title="Last Name" value="<?= isset($payer_information['payer_last_name']) ? $payer_information['payer_last_name'] : '' ?>" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Phone Number<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="Phone Number" phoneval class="form-control" type="text" id="payer_phone_number" name="table[payer_information][payer_phone_number]" title="Phone Number" value="<?= isset($payer_information['payer_phone_number']) ? $payer_information['payer_phone_number'] : '' ?>" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Address<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="Address" class="form-control" type="text" id="payer_address" name="table[payer_information][payer_address]" title="Address" value="<?= isset($payer_information['payer_address']) ? $payer_information['payer_address'] : '' ?>" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">City<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="City" class="form-control" type="text" id="payer_city" name="table[payer_information][payer_city]" title="City" value="<?= isset($payer_information['payer_city']) ? $payer_information['payer_city'] : '' ?>" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">State<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <select title="State" class="form-control" name="table[payer_information][payer_state]" id="payer_state" required="">
+                                            <option value="">Select an option</option>
+                                        <?php load_ddl_option("all_state_list",isset($payer_information['payer_state']) ? $payer_information['payer_state'] : ''); ?>
+                                    </select>
+                                    <div class="errorMessage text-danger"></div>   
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Country<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <select title="Country" class="form-control" name="table[payer_information][payer_country]" id="payer_country" required="">
+                                        <option value="">Select an option</option>
+                                        <?php load_ddl_option("get_countries",isset($payer_information['payer_country']) ? $payer_information['payer_country'] : ''); ?>
+                                    </select>
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Zip<span class="text-danger">*</span></label>
+                                <div class="col-lg-10">
+                                    <input placeholder="Zip Code" class="form-control" type="text" id="payer_zip_code" name="table[payer_information][payer_zip]" title="Zip Code" zipval value="<?= isset($payer_information['payer_zip']) ? $payer_information['payer_zip'] : '' ?>" required="">
+                                    <div class="errorMessage text-danger"></div>        
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">TIN (Tax Identification Number)</label>
+                            <div class="col-lg-10">
+                                <input placeholder="TIN" class="form-control" type="text" id="payer_tin" name="table[payer_information][payer_tin]" title="TIN" value="<?= isset($payer_information['payer_tin']) ? $payer_information['payer_tin'] : '' ?>">
+                                <div class="errorMessage text-danger"></div>        
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+
+                        <h3>Recipient's Information : &nbsp; (<a href="javascript:void(0);" class="recipientadd" onclick="recipient_modal('add', '<?= $reference; ?>', '<?= $order_details['reference_id']; ?>',''); return false;">Add Recipient</a>)</h3> 
+                           
+                                   
+                           <?php }?>
+                            <div id="recipient-list">
+                                <!-- <input type="hidden" title="Contact Info" id="contact-list-count" value="">
+                                <div class="errorMessage text-danger"></div> -->
+                            </div>  
+                        <div class="hr-line-dashed"></div>
+                        
+                        
+
                         <div class="form-group">
                             <label class="col-sm-3 col-md-2 control-label">Attachment</label>
                             <div class="col-sm-9 col-md-10">
@@ -764,11 +864,14 @@
         </div>
     </div>
 </div>
-
+<div id="recipient-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="employee-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <script>
     $(function () {
+        <?php if(isset($payer_information['payer_first_name'])){?>
+        get_recipient_list('<?= $order_details['reference_id']; ?>', '<?= $reference; ?>');
+        <?php } ?>
         var serviceShortName = $('#service_shortname').val();
         //        $('.retail-price').val('<?// $service_details['retail_price']; ?>');
         //        $('#retail_price_override').val('<?// $service_request_details['price_charged']; ?>');
@@ -859,6 +962,46 @@
         }
         if (serviceShortName == 'acc_s_t_r') {
             county_ajax('<?= isset($sales_tax_recurring_details['state']) ? $sales_tax_recurring_details['state'] : ''; ?>', '<?= isset($sales_tax_recurring_details['county']) ? $sales_tax_recurring_details['county'] : ''; ?>');
+        }
+        if (serviceShortName == 'acc_1_w_u') {
+
+            $("#copy-contact").click(function () {
+            $("#payer_first_name").val('');
+            $("#payer_last_name").val('');
+            $("#payer_phone_number").val('');
+            $("#payer_address").val('');
+            $("#payer_city").val('');
+            $("#payer_state").val('');
+            $("#payer_country").val('');
+            $("#payer_zip_code").val('');
+            var ref_id = $('#reference_id').val();
+            $.ajax({
+                type: "POST",
+                                url: '<?= base_url(); ?>services/accounting_services/copy_contact_for_1099_write_up',
+                                data: {ref_id: ref_id}, 
+                                cache: false,
+                                success: function (data) {
+                    //alert(data);
+                    if (data != 0) {
+                        var res = JSON.parse(data);
+                        //alert(res);
+                        $("#payer_information_quantity").val(1);
+                        $("#payer_first_name").val(res.first_name);
+                        $("#payer_last_name").val(res.last_name);
+                        $("#payer_phone_number").val(res.phone1);
+                        $("#payer_address").val(res.address1);
+                        $("#payer_city").val(res.city);
+                        $("#payer_state").val(res.state);
+                        $("#payer_country").val(res.country);
+                        $("#payer_zip_code").val(res.zip);
+                        $("#payer_information_div").show();
+                    } else {
+                        swal("Error", "No Main Contact Added", "error");
+                    }
+                }
+            });
+        });
+
         }
         interval_total_amounts();
         $('.add-upload-file').on("click", function () {

@@ -149,7 +149,7 @@
                     if ($invoice_id_inner == $rqr['service_id']) {
                         unset($rqr['id']);
                         if (empty(array_diff($comparison_array,$rqr))) {
-                            echo "No Difference with previous values";
+                            // echo "No Difference with previous values";
                         } else {
                             $update_sql = "UPDATE `royalty_report` SET ";
                             if ($date_val != $rqr['date']) {
@@ -202,7 +202,7 @@
                             } 
                             $update_sql .= " WHERE invoice_id = '".$invoice_id."'";
                             mysqli_query($conn,$update_sql);
-                            echo $update_sql;
+                            // echo $update_sql;
                         }    
                     } else {                          
                         $sql_query = "INSERT INTO `royalty_report`(`date`, `client_id`, `invoice_id`, `service_id`, `service_name`, `retail_price`, `override_price`, `cost`, `payment_status`, `collected`, `payment_type`, `authorization_id`, `reference`, `total_net`, `office_fee`, `fee_with_cost`, `fee_without_cost`, `office_id`,`office_id_name` ,`created_by`) VALUES (
@@ -214,12 +214,12 @@
                         '$fee_with_cost','$fee_without_cost','$office_id','$office_id_name',
                         '$created_by')";
                         mysqli_query($conn,$sql_query)or die('insert error');
-                        echo $sql_query;
+                        // echo $sql_query;
                     }   
-                    echo "<hr>";    
+                    // echo "<hr>";    
             }
         } 
-    echo "Success";
+    echo "1";
     } 
 
 ?>

@@ -195,9 +195,9 @@ class Billing_model extends CI_Model {
 
     public function get_service_list_by_category_id_for_billing($service_id,$category_id, $invoice_type) {
         if($invoice_type == 1){   
-            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '0' or client_type_assign = '2') and id !='$service_id'")->result_array();
+            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '0' or client_type_assign = '2') and id !='$service_id' and is_active!='n'")->result_array();
         }else{         
-            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '1' or client_type_assign = '2') and id !='$service_id'")->result_array();
+            return $this->db->query("select * from services where category_id = '$category_id' and (client_type_assign = '1' or client_type_assign = '2') and id !='$service_id' and is_active!='n'")->result_array();
         }
     }
 
@@ -2386,36 +2386,36 @@ class Billing_model extends CI_Model {
         }
         $this->db->insert_batch('service_request', $service_request_data);
 
-//         $check_if_all_services_not_started = $this->db->query('select * from service_request where  order_id="' .  $order_id . '"')->result_array();
-// //          
+        $check_if_all_services_not_started = $this->db->query('select * from service_request where  order_id="' .  $order_id . '"')->result_array();
+//          
             
-//         if (!empty($check_if_all_services_not_started)) {
-//             $k = 0;
-//             $status_array = '';
-//             $len = count($check_if_all_services_not_started);
-//             foreach ($check_if_all_services_not_started as $val) {
-//                 if ($k == $len - 1) {
-//                     $status_array .= $val['status'];
-//                 } else {
-//                     $status_array .= $val['status'] . ',';
-//                 }
-//                 $k++;
-//             }
-//         }
-// //            echo $status_array;die;
-//         if($status_array == 2){
-//             $this->db->where('id', $order_id);
-//             $this->db->update('order', array('status' => 2));
-//         }else if($status_array == '0,2' || $status_array == '2,0'){
-//             $this->db->where('id', $order_id);
-//             $this->db->update('order', array('status' => 1));
-//         }else{
-//             $status_array_values = explode(",", $status_array);
-//             if (count(array_unique($status_array_values)) == 1) {
-//                 $this->db->where('id', $order_id);
-//                 $this->db->update('order', array('status' => 0));
-//             }
-//         }
+        if (!empty($check_if_all_services_not_started)) {
+            $k = 0;
+            $status_array = '';
+            $len = count($check_if_all_services_not_started);
+            foreach ($check_if_all_services_not_started as $val) {
+                if ($k == $len - 1) {
+                    $status_array .= $val['status'];
+                } else {
+                    $status_array .= $val['status'] . ',';
+                }
+                $k++;
+            }
+        }
+//            echo $status_array;die;
+        if($status_array == 2){
+            $this->db->where('id', $order_id);
+            $this->db->update('order', array('status' => 2));
+        }else if($status_array == '0,2' || $status_array == '2,0' || $status_array == '0,0,2' || $status_array == '0,2,0' || $status_array == '2,0,0'){
+            $this->db->where('id', $order_id);
+            $this->db->update('order', array('status' => 1));
+        }else{
+            $status_array_values = explode(",", $status_array);
+            if (count(array_unique($status_array_values)) == 1) {
+                $this->db->where('id', $order_id);
+                $this->db->update('order', array('status' => 0));
+            }
+        }
         
 
         if ($save_type == 'create') {
@@ -2960,6 +2960,7 @@ class Billing_model extends CI_Model {
                 'id' => $do['id'],
                 'office' => $do['name'],
                 'total_invoice' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'], 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
+                'total_amount' => $this->total_amount_calculation($do['id'],$daterange),
                 'amount_collected' => $this->amount_collected($do['id'],$daterange),
                 'unpaid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Unpaid', 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
                 'paid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Paid', 'created_date >=' =>$start_date, 'created_date <=' =>$end_date))->num_rows(),
@@ -2978,6 +2979,7 @@ class Billing_model extends CI_Model {
                 'id' => $do['id'],
                 'office' => $do['name'],
                 'total_invoice' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id']))->num_rows(),
+                'total_amount' => $this->total_amount_calculation($do['id']),
                 'amount_collected' => $this->amount_collected($do['id']),
                 'unpaid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Unpaid'))->num_rows(),
                 'paid' => $this->db->get_where('report_dashboard_billing',array('office_id'=>$do['id'],'payment_status'=>'Paid'))->num_rows(),
@@ -3004,6 +3006,19 @@ class Billing_model extends CI_Model {
         $this->db->where('office_id',$ofc_id);
         $amount_data = $this->db->get('report_dashboard_billing')->result_array();
         return $amount_collected = array_sum(array_column($amount_data,'amount_collected'));
+    }
+    public function total_amount_calculation($ofc_id,$date_range = "") {
+        if (!empty($date_range)) {
+            $daterange = $date_range;
+            $date_value = explode("-", $daterange);
+            $start_date = date("Y-m-d", strtotime($date_value[0]));
+            $end_date = date("Y-m-d", strtotime($date_value[1]));
+            $this->db->where('created_date >=',$start_date);
+            $this->db->where('created_date <=',$end_date);
+        }
+        $this->db->where('office_id',$ofc_id);
+        $amount_data = $this->db->get('report_dashboard_billing')->result_array();
+        return $total_amount = array_sum(array_column($amount_data,'total_amount'));
     }
 
     public function late_status_calculation_report_dashboard_billing($ofc_id,$late_span,$date_range = "") {
@@ -3053,6 +3068,7 @@ class Billing_model extends CI_Model {
             return $z;
         }
     }
+
     public function recurring($invoice_id){
       return $this->db->query("select is_recurrence from invoice_info where id = $invoice_id")->result_array(); 
       

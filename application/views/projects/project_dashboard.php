@@ -58,7 +58,7 @@ if (!empty($project_list)) {
             $tracking = 'Started';
             $trk_class = 'label-yellow';
         } elseif ($status == 0) {
-            $tracking = 'Not Started';
+            $tracking = 'New';
             $trk_class = 'label-success';
         }elseif($status==4){
             $tracking = 'Canceled';
@@ -96,14 +96,42 @@ if (!empty($project_list)) {
                 $periodic_recurrence_date=date('m/d/Y', strtotime('+1 year',strtotime($new_recurrence_date)));
             }
         }
-        
+        $recurrence_is_created=$pattern_details->generated_by_cron;
+        $start_months='';
+        if($pattern_details->start_month!=''){
+            if($pattern_details->pattern=='quarterly'){
+                switch ($pattern_details->start_month){
+                    case 1:{
+                        $start_months='January';
+                        break;
+                    }
+                    case 2:{
+                       $start_months='April';
+                        break; 
+                    }
+                    case 3:{
+                       $start_months='July';
+                        break; 
+                    }
+                    case 4:{
+                       $start_months='October';
+                        break; 
+                    }
+                }
+            }else if($pattern_details->pattern=='annually'){
+                $start_months=$pattern_details->start_month;
+            }
+            else{
+                $start_months=$due_m[$pattern_details->start_month];
+            }
+        }
         ?>
         <div class="panel panel-default service-panel type2 filter-active" id="action<?= $list['id'] ?>">
             <div class="panel-heading" onclick="load_project_tasks('<?php echo $list['id']; ?>', '<?php echo $list['created_at']; ?>', '<?php echo $dueDate; ?>');"> 
                 <!--<a href="javascript:void(0)" onclick="delete_project(<= $list['id']; ?>,<= $list['template_id']; ?>)" class="btn btn-danger btn-xs btn-service-edit"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a> &nbsp;-->
-                <!-- <a href="javascript:void(0)" onclick="CreateProjectModal('edit',<?//= $list['id'] ?>);" class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>  &nbsp; --> 
+                 <a href="javascript:void(0)" onclick="CreateProjectModal('edit',<?= $list['id'] ?>);" class="btn btn-primary btn-xs btn-service-edit-project-main"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>  &nbsp;  
                 <?php if($user_type!=3){ ?>
-                <a target="_blank" href="<?= base_url() . 'project/edit_project_template/' . base64_encode($list['id']); ?>" class="btn btn-primary btn-xs btn-service-edit-project"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Project</a> 
+                <a target="_blank" href="<?= base_url() . 'project/edit_project_template/' . base64_encode($list['id']); ?>" class="btn btn-primary btn-xs btn-service-edit-project"><i class="fa fa-pencil" aria-hidden="true"></i> Template</a> 
                 <?php } ?>
                 <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $list['id']; ?>" aria-expanded="false" class="collapsed">
                     <div class="table-responsive">
@@ -120,16 +148,16 @@ if (!empty($project_list)) {
                                     <th style="width:8%; text-align: center">Requested By</th>
                                     <th style="width:8%; text-align: center">Assigned To</th>
                                     <th style="width:8%; text-align: center">Tracking</th>
-                                    <th style="width:8%; text-align: center">Creation Date</th>
+                                    <!--<th style="width:8%; text-align: center">Start Date</th>-->
                                     <th style="width:8%; text-align: center">Due Date</th>
-                                    <th style="width:8%; text-align: center">Next Recurrence</th>
+                                    <th style="width:8%; white-space: nowrap; text-align: center">Next Recurrence</th>
                                     <th style="width:8%; text-align: center">Note</th>
                                 </tr>
                                 <tr>
                                     <td title="ID"><?= $list['id'] ?></td>
                                     <!--<td title="Category"><= get_template_category_name($list['template_cat_id']) ?></td>-->
                                     <td title="Project Name">
-                                        <span class=""><?= $templatedetails->title ?></span>
+                                        <span class=""><?= $templatedetails->title.($pattern_details->start_month!=''?' #'.$start_months:'') ?></span>
                                     </td>
                                     <td title="Pattern"><?= ucfirst($pattern_details->pattern) ?></td>
                                     <!--<td title="Client Type"><? ($list['client_type'] == '1') ? 'Business Client' : 'Individual Client' ?></td>-->
@@ -165,7 +193,7 @@ if (!empty($project_list)) {
                                         ?>
                                     </td>                                                  
                                     <td title="Tracking" class="text-center"><span id="trackouter-<?php echo $list['id']; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></td>
-                                    <td title="Creation Date"><?= date('m/d/Y', strtotime($list['created_at'])) ?></td>
+                                    <!--<td title="Start Date"><? date('m/d/Y', strtotime($pattern_details->start_date)) ?></td>-->
                                     <?php if($pattern_details->pattern=='periodic'){ ?>
                                     <td title="Due Date"><?= date('m/d/Y',strtotime($pattern_details->due_date)) ?></td>
                                     <?php } else {?>
@@ -175,7 +203,7 @@ if (!empty($project_list)) {
                                         <!--<td title="Recurrence Date"><= $periodic_recurrence_date ?></td>-->
                                     <?php // }
 //                                    else { ?>
-                                    <td title="Recurrence Date"><?= ($pattern_details->generation_date!=''?(date('m/d/Y',strtotime($pattern_details->generation_date))):'Manual'); ?></td>
+                                    <td title="Recurrence Date"><?= ($pattern_details->generation_type==1 && $pattern_details->generation_date!=''?(date('m/d/Y',strtotime($pattern_details->generation_date))):'N/A'); ?><i style="color: #0fac3e;" class="<?= ($recurrence_is_created==1?'fa fa-check m-l-4':'') ?>"></i></td>
                                     <?php // } ?>
                                             <!-- <td title='Note'><a id="notecount-<?//= $list['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_notes(<?//= $list["id"]; ?>)"><b> <?//= get_project_note_count($list['id']) ?></b></a> -->
 
