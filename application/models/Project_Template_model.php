@@ -400,9 +400,8 @@ class Project_Template_model extends CI_Model {
     }
     
     function getaccountdetails($client_id){
-      return $this->db->get_where('financial_accounts',['client_id'=>$client_id])->row(); 
-        
-    }
+        return $this->db->get_where('financial_accounts',['client_id'=>$client_id])->row(); 
+     }
 
     public function get_assigned_dept_staff_project_template($id) {
 
@@ -3443,6 +3442,50 @@ class Project_Template_model extends CI_Model {
         $this->db->join('title','title.individual_id=ind.id','inner');
         $this->db->where('title.id',$client_id);
         return $this->db->get()->row()->client_name;
+    }
+    public function getTaskProjectId($task_id){
+        return $this->db->get_where('project_task',['id'=>$task_id])->row()->project_id;
+    }
+    public function getBookkeepingAccountDetails($client_id='',$task_id='',$project_id='',$section=''){
+        $account_exist=$this->db->get_where('project_task_bookkeeping_finance_account_report',['task_id'=>$task_id])->result_array();
+        if(empty($account_exist)){
+            $account_details=$this->db->get_where("financial_accounts",['client_id'=>$client_id])->result_array();
+            if(!empty($account_details)){
+                foreach ($account_details as $key=>$val){
+                    $insert_data=[];
+                    $insert_data['task_id']=$task_id;
+                    $insert_data['project_id']=$project_id;
+                    $insert_data['client_id']=$client_id;
+                    $insert_data['bank_name']=$val['bank_name'];
+                    $insert_data['account_number']=$val['account_number'];
+                    $insert_data['routing_number']=$val['routing_number'];
+                    $this->db->insert('project_task_bookkeeping_finance_account_report',$insert_data);
+                }
+                return $this->db->get_where('project_task_bookkeeping_finance_account_report',['task_id'=>$task_id])->result_array();
+            }else{
+                return array();
+            }
+        }else{
+            return $account_exist;
+        }
+    }
+    public function updateProjectBookkeepingInputFormStatus($status,$id){
+        $created_at=Date("Y-m-d h:i:sa");
+        if($status==0){
+            $this->db->where('id',$id);
+            $update=$this->db->update('project_task_bookkeeping_finance_account_report',['tracking'=>0,'created_at'=>$created_at]);
+        }elseif($status==1){
+            $this->db->where('id',$id);
+            $update=$this->db->update('project_task_bookkeeping_finance_account_report',['tracking'=>1,'created_at'=>$created_at]);
+        }else{
+            $this->db->where('id',$id);
+            $update=$this->db->update('project_task_bookkeeping_finance_account_report',['tracking'=>2,'created_at'=>$created_at]);
+        }
+        if($update){
+            return $this->db->get_where('project_task_bookkeeping_finance_account_report',['id'=>$id])->row()->tracking;
+        }else{
+            return false;
+        } 
     }
 }
 
