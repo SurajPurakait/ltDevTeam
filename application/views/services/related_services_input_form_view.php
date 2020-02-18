@@ -103,8 +103,13 @@
             </tbody>
         </table>
         <?php } else { ?>
-        <div class="col-lg-12">
-            <label>Input Form Not Found</label>
+        <div class="col-lg-12">            
+            <div class = "text-center m-t-30">
+                <div class = "alert alert-danger">
+                    <i class = "fa fa-times-circle-o fa-4x"></i>
+                    <h3><strong>Sorry!</strong> incomplete input form</h3>
+                </div>
+            </div>
         </div>
         <?php }?>
     </div>       
