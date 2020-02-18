@@ -3828,5 +3828,19 @@ class Action_model extends CI_Model {
         }
     }
 
+    public function get_action_client_list_data($action_id = ''){
+        return $this->db->where('action_id',$action_id)->get('action_client_list')->result_array();
+    }
 
+    public function show_action_client_view_page($action_id = '',$client_id = ''){
+        $client_type = $this->db->query("select client_type from action_client_list where action_id = '$action_id' ")->row_array()['client_type'];
+        if($client_type == 1){
+            $this->db->select('ac.client_type, ac.client_list_id , c.company_id');
+            $this->db->from('action_client_list ac');
+            $this->db->join('internal_data int','ac.client_list_id = int.reference_id');
+            $this->db->join('company c','c.id = ac.client_list_id');
+            $this->db->where(['ac.client_id'=>$client_id , 'ac.action_id'=>$action_id]);
+            return $this->db->get()->row_array();
+        }
+    }
 }

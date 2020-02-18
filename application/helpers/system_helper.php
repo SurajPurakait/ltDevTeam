@@ -3614,3 +3614,10 @@ if(!function_exists('get_template_cat_id')){
         return $ci->Project_Template_model->getTemplateCategoryId($template_id);
     }
 }
+if(!function_exists('get_project_task_details')){
+    function get_project_task_details($task_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getProjectTaskDetails($task_id);
+    }
+}

@@ -3137,4 +3137,27 @@ class Service_model extends CI_Model {
     public function get_mortgages_list() {
         return $this->db->get('type_of_mortgage')->result_array();
     }
+    
+    public function request_create_mortgages($data) {
+       
+        if($data['client_type'] == 1)
+        {
+            $arr = array('reference' => 'company',
+                         'reference_id' => $data['reference_id'],
+                         'office' => $data['office'],
+                         'partner' => $data['partner'],
+                         'manager' => $data['manager'],
+                         'client_association' => $data['client_association'],
+                         'practice_id' => strtoupper($data['name_of_business1']),
+                         'referred_by_source' => $data['referred_by_source'],
+                         'referred_by_name' => $data['referred_by_name'],
+                         'language' => $data['language'],
+                         'status' => $data['status']);
+        $data = $this->db->insert('internal_data', $arr);  
+        return $data;
+        }
+        
+        
+        
+    }
 }

@@ -251,6 +251,7 @@ class Home extends CI_Controller {
         $render_data["type_of_contact"] = $this->action_model->get_staff_by_department($render_data["data"]["department"]);
         $render_data["data"]["notes"] = explode(",", $render_data["data"]["notes"]);
         $render_data["data"]["files"] = $this->action_model->get_files_by_action_id($id);
+        $render_data["action_client_list"] = $this->action_model->get_action_client_list_data($id);
         $this->load->layout = 'dashboard';
         $title = "Edit Action";
         $render_data['title'] = $title . ' | Tax Leaf';
@@ -273,6 +274,7 @@ class Home extends CI_Controller {
             $render_data["type_of_contact"] = $this->action_model->get_staff_by_department($render_data["data"]["department"]);
             $render_data["data"]["notes"] = explode(",", $render_data["data"]["notes"]);
             $render_data["data"]["files"] = $this->action_model->get_files_by_action_id($id);
+            $render_data["action_client_list"] = $this->action_model->get_action_client_list_data($id);
             $this->load->layout = 'dashboard';
             $title = "Action Dashboard / View Action";
             $render_data['title'] = $title . ' | Tax Leaf';
@@ -1059,6 +1061,13 @@ class Home extends CI_Controller {
         $render_data['client_id'] = post('client_id');
         $render_data['completed_orders'] = $this->service->completed_orders('', $office_id);
         $this->load->view('action/action_client_list', $render_data);
+    }
+
+    public function show_action_client_view_page(){
+        $action_id = post('action_id');
+        $client_id = post('client_id');
+        $result = $this->action_model->show_action_client_view_page($action_id,$client_id);
+        echo json_encode($result);
     }
 
 }

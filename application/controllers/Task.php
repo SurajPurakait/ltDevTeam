@@ -146,7 +146,7 @@ class Task extends CI_Controller {
         $render_data['bookkeeping_input_type']=$bookkeeping_input_type;
         $render_data['client_id']='';
         $render_data['input_form_type']=$input_form_type=$this->Project_Template_model->getProjectTaskInputFormType($task_id);
-//      
+        $render_data['project_id']=$project_id=$this->Project_Template_model->getTaskProjectId($task_id);
         $client_dtls=$this->Project_Template_model->getClientDtlsByTaskId($task_id);
         if($input_form_type==3){
             $this->load->model('service');
@@ -165,8 +165,12 @@ class Task extends CI_Controller {
         }if($input_form_type==1){
             if($bookkeeping_input_type==1){
             $render_data['client_id']=$client_dtls->client_id;
-            $render_data['bookkeeping_details'] = $this->bookkeeping_model->get_bookkeeping_by_order_id($task_id,'project');
-            $render_data['list'] = $this->service_model->get_document_list_by_reference($task_id, 'project');
+            $render_data['client_account_details']= $this->Project_Template_model->getBookkeepingAccountDetails($client_dtls->client_id,$task_id,$project_id);
+            
+//            These 2 function are closed for new requirement of feb 14th 2020
+//            
+//            $render_data['bookkeeping_details'] = $this->bookkeeping_model->get_bookkeeping_by_order_id($task_id,'project');
+//            $render_data['list'] = $this->service_model->get_document_list_by_reference($task_id, 'project');
 //            $this->load->view('services/show_document_list', $data);
             }else if($bookkeeping_input_type==2|| $bookkeeping_input_type==3){
                 $render_data['bookkeeper_details']=$this->Project_Template_model->getProjetBookkeeperDetails($task_id);
@@ -209,5 +213,12 @@ class Task extends CI_Controller {
         $render_data['county_details'] = $this->action_model->get_county_name();
         $this->load->template('projects/project_task_sales_tax', $render_data);
     }
+    public function update_project_bookkeeping_input_form_status(){
+        $status = post('statusval');
+        $id = post('id');
+        $status_result= $this->Project_Template_model->updateProjectBookkeepingInputFormStatus($status,$id);
+        echo $status_result;
+    }
+
 }
 ?>
