@@ -278,7 +278,7 @@
 
                         <?php if ($service_shortname == 'acc_r_b' || $service_shortname == 'acc_b_b_d'): ?>
                             <div class="accounts-details">
-                                <h3>Financial Accounts<span class="text-danger">*</span>&nbsp; (<a href="javascript:void(0);" onclick="account_modal('add', '', '');">Add Financial Account</a>)</h3>
+                                <h3>Financial Accounts<span class="text-danger">*</span>&nbsp; (<a href="javascript:void(0);" onclick="account_modal('add', '', '', <?= $reference_id; ?>);">Add Financial Account</a>)</h3>
                                 <div id="accounts-list">
                                     <input type="hidden" title="Financial Accounts" id="accounts-list-count" required="required" value="">
                                     <div class="errorMessage text-danger"></div>
