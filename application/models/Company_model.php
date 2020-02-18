@@ -1016,7 +1016,7 @@ class Company_model extends CI_Model {
         }else{
             $this->db->where('client_id',$reference_id);
             $this->db->group_by("account_number");
-             $this->db->get('financial_accounts')->result_array();
+            return $this->db->get('financial_accounts')->result_array();
         }
     }
 
