@@ -22,7 +22,8 @@
             				<label class="col-lg-2 control-label" style="font: 24px;">Assigned To<span class="text-danger">*</span></label>
             				<div class="col-lg-10">
             					<select class="form-control" id="assigned_to" required="">
-            						<?php
+            						<option value="">Select Partner</option>
+                                    <?php
             							foreach ($all_partners_list as $apl) {
             						?>
             						<option value="<?= $apl['id']; ?>"><?= $apl['first_name'].' '.$apl['last_name']; ?></option>
@@ -70,7 +71,7 @@
                         <div class="form-group">
             				<label class="col-lg-2 control-label" style="font: 24px;">What is Property Intended For ?<span class="text-danger">*</span></label>
             				<div class="col-lg-10">
-                                            <select class="form-control" id="whatisproperty" name="whatisproperty" required="">
+                                            <select class="form-control" id="whatispropertyfor" name="whatispropertyfor" required="">
             						<option value="1">Primary Residence</option>
             						<option value="2">Vacation or Secondary Home</option>	
             						<option value="3">Investment Property</option>	
@@ -111,7 +112,7 @@
 	                        </div>            				
             			</div><br>
             			<div class="form-group">
-                            <div class="col-lg-offset-2 col-lg-10">
+                            <div class="col-lg-offset-2 col-lg-10">                                
                                 <input type="hidden" id="reference_id" name="reference_id" value="<?= (isset($reference_id)) ? $reference_id : ''; ?>"> 
                             	<input type="hidden" name="client_id" id="client_id" value="<?= (isset($client_id)) ? $client_id : ''; ?>">
                             	<button class="btn btn-success" type="button" onclick="saveMortgages()">Save changes</button> &nbsp;&nbsp;&nbsp;

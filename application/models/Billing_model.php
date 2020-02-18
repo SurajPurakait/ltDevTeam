@@ -206,8 +206,6 @@ class Billing_model extends CI_Model {
     }
 
     public function request_create_invoice($data,$is_recurrence = "") {
-//        echo "<pre>";
-//        print_r($data);exit;
         $staff_info = staff_info();
         $this->db->trans_begin();
         if ($data['editval'] == '') { // Insert section
@@ -222,7 +220,6 @@ class Billing_model extends CI_Model {
                     $this->service_model->updateCompany($data);
                 } else {
                     if ($this->service_model->insertCompany($data)) {
-
                         $data['practice_id'] = $data['internal_data']['practice_id'];
                         if (!$this->internal->saveInternalData($data)) {
                             return false;

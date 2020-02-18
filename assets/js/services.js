@@ -73,10 +73,10 @@ function load_service_container(service_id) {
     if (service_id != '') {
         var config = {
             '.chosen-select': {},
-            '.chosen-select-deselect': {allow_single_deselect: true},
-            '.chosen-select-no-single': {disable_search_threshold: 10},
-            '.chosen-select-no-results': {no_results_text: 'Oops, nothing found!'},
-            '.chosen-select-width': {width: "95%"}
+            '.chosen-select-deselect': { allow_single_deselect: true },
+            '.chosen-select-no-single': { disable_search_threshold: 10 },
+            '.chosen-select-no-results': { no_results_text: 'Oops, nothing found!' },
+            '.chosen-select-width': { width: "95%" }
         }
         for (var selector in config) {
             $(selector).chosen(config[selector]);
@@ -110,14 +110,14 @@ function request_create_company() {
     }
 
     var company_type = $("#type option:selected").val();
-//    if (company_type == '3') {
+    //    if (company_type == '3') {
 
     var total_percentage = $("#owner_percentage_total").val();
     if (total_percentage != '100.00') {
         swal("Error", "Percentage of all partners should equal to 100%", "error");
         return false;
     }
-//    }
+    //    }
 
     var override_price = $("#retail_price_override").val();
     if (isNaN(override_price)) {
@@ -483,13 +483,13 @@ function loadServiceDashboard(status, categoryID, requestType, officeID, pageNum
                 if (pageNumber != 0) {
                     $('.load-more-btn').not(':last').remove();
                 }
-                if(requestType=='on_load'){
+                if (requestType == 'on_load') {
                     $('#btn_service').hide();
-//                    clearFilter();
+                    //                    clearFilter();
                 }
             }
-            
-            
+
+
         },
         beforeSend: function () {
             openLoading();
@@ -593,17 +593,17 @@ function delete_contact(id) {
         confirmButtonText: "Yes, delete it!",
         closeOnConfirm: false
     },
-            function () {
-                $.get(base_url + "services/home/delete_contact/" + id, function (data) {
-                    if (data == 1) {
-                        $("#contact_id_" + id).remove();
-                        $("#contact-list-count").val(parseInt($("#contact-list-count").val()) - 1);
-                        swal("Deleted!", "Your contact has been deleted.", "success");
-                    } else {
-                        swal("Unable To Delete Contact");
-                    }
-                });
+        function () {
+            $.get(base_url + "services/home/delete_contact/" + id, function (data) {
+                if (data == 1) {
+                    $("#contact_id_" + id).remove();
+                    $("#contact-list-count").val(parseInt($("#contact-list-count").val()) - 1);
+                    swal("Deleted!", "Your contact has been deleted.", "success");
+                } else {
+                    swal("Unable To Delete Contact");
+                }
             });
+        });
 }
 
 function delete_document1(id, file_name) {
@@ -616,17 +616,17 @@ function delete_document1(id, file_name) {
         confirmButtonText: "Yes, delete it!",
         closeOnConfirm: false
     },
-            function () {
-                $.get(base_url + "services/home/delete_document/" + id + "/" + file_name, function (data) {
-                    if (data == 1) {
-                        $("#document_id_" + id).remove();
-                        $("#doc-list-count").val(parseInt($("#doc-list-count").val()) - 1);
-                        swal("Deleted!", "Your document has been deleted.", "success");
-                    } else {
-                        swal("Unable To Delete document");
-                    }
-                });
+        function () {
+            $.get(base_url + "services/home/delete_document/" + id + "/" + file_name, function (data) {
+                if (data == 1) {
+                    $("#document_id_" + id).remove();
+                    $("#doc-list-count").val(parseInt($("#doc-list-count").val()) - 1);
+                    swal("Deleted!", "Your document has been deleted.", "success");
+                } else {
+                    swal("Unable To Delete document");
+                }
             });
+        });
 }
 
 function update_contact_list_copy_contact(id) {
@@ -719,7 +719,7 @@ function select_existing_owner() {
     $.ajax({
         type: 'POST',
         url: base_url + 'services/home/select_existing_owner',
-        data: {company_id: company_id, individual_id: individual_id, company_type: company_type, percentage: percentage, old_individual_id: old_individual_id, title_id: title_id, ownertitle: ownertitle},
+        data: { company_id: company_id, individual_id: individual_id, company_type: company_type, percentage: percentage, old_individual_id: old_individual_id, title_id: title_id, ownertitle: ownertitle },
         datatype: "html",
         success: function (result) {
 
@@ -766,14 +766,14 @@ function save_owner() {
 
             console.log("Result: " + result);
             if (result == 1) {
-//                clearCacheFormFields('form_title');
+                //                clearCacheFormFields('form_title');
                 window.opener.reload_owner_list(company_id, "main");
                 if ($("#service_id").val() == 11) {
                     window.opener.reload_owner_list(company_id, "payroll");
                     window.opener.reload_owner_list(company_id, "payroll2");
                     window.opener.reload_owner_list(company_id, "payroll3");
                 }
-//                window.opener.swal("Success!", "Successfully saved!", "success");
+                //                window.opener.swal("Success!", "Successfully saved!", "success");
                 window.opener.disable_company_type1();
                 self.close();
             } else if (result == 2) {
@@ -840,20 +840,20 @@ function delete_owner(owner_id) {
                 url: base_url + 'services/home/delete_owner',
                 dataType: "html",
                 success: function (result) {
-//                    alert('hi');
-//                    swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+                    //                    alert('hi');
+                    //                    swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
 
-//                    if (result != 0) {                        
-//                        reload_owner_list(company_id, "main");
-//                        if ($("#service_id").val() == 11) {
-//                            reload_owner_list(company_id, "payroll");
-//                            reload_owner_list(company_id, "payroll2");
-//                            reload_owner_list(company_id, "payroll3");
-//                        }
-//                        enable_company_type(company_id);
-//                    } else {
-//                        swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
-//                    }
+                    //                    if (result != 0) {                        
+                    //                        reload_owner_list(company_id, "main");
+                    //                        if ($("#service_id").val() == 11) {
+                    //                            reload_owner_list(company_id, "payroll");
+                    //                            reload_owner_list(company_id, "payroll2");
+                    //                            reload_owner_list(company_id, "payroll3");
+                    //                        }
+                    //                        enable_company_type(company_id);
+                    //                    } else {
+                    //                        swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
+                    //                    }
 
                     if (result == '2') {
                         swal("Deleted!", "Owner has been deleted Successfully.", "success");
@@ -964,21 +964,21 @@ function delete_account(id) {
     });
 }
 
-function save_account(section='') {
+function save_account(section = '') {
 
-//update_financial_account_by_date
+    //update_financial_account_by_date
     if (!requiredValidation('form_accounts')) {
         return false;
     }
     var form_data = new FormData(document.getElementById('form_accounts'));
     var company_id = $("#company_id").val();
     var order_id = $("#editval").val();
-    var modal_type=$("#modal_type").val();
-    
+    var modal_type = $("#modal_type").val();
+
     // if (section == 'edit') {
     //     var order_id_edit=$("#edit_order_id").val();        
     // }
-    
+
     form_data.append('section', section);
     $.ajax({
         type: "POST",
@@ -990,9 +990,9 @@ function save_account(section='') {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//            alert(result); return false;
+            //            alert(result); return false;
             if (result.trim() == "1") {
-                swal({title: "Success!", text: "Financial account successfully saved!", type: "success"}, function () {
+                swal({ title: "Success!", text: "Financial account successfully saved!", type: "success" }, function () {
                     $('#accounts-form').modal('hide');
                     get_financial_account_list(company_id, section, order_id);
                 });
@@ -1016,14 +1016,14 @@ function request_create_bookkeeping() {
     }
     if ($('#type_of_client_ddl').val() == '1') {
         var company_type = $("#type option:selected").val();
-//        if (company_type == '3') {
+        //        if (company_type == '3') {
 
         var total_percentage = $("#owner_percentage_total").val();
         if (total_percentage != '100.00') {
             swal("Error", "Percentage of all partners should equal to 100%", "error");
             return false;
         }
-//        }
+        //        }
 
         var override_price = $("#retail_price_override").val();
         if (isNaN(override_price)) {
@@ -1123,14 +1123,14 @@ function request_create_bookkeeping_by_date() {
     }
     if ($("#type_of_client_ddl").val() == '1') {
         var company_type = $("#type option:selected").val();
-//        if (company_type == '3') {
+        //        if (company_type == '3') {
 
         var total_percentage = $("#owner_percentage_total").val();
         if (total_percentage != '100.00') {
             swal("Error", "Percentage of all partners should equal to 100%", "error");
             return false;
         }
-//        }
+        //        }
 
         var override_price = $("#retail_price_override").val();
         if (isNaN(override_price)) {
@@ -1162,7 +1162,7 @@ function request_create_bookkeeping_by_date() {
         cache: false,
         success: function (result) {
             // alert(result);
-//            return false;
+            //            return false;
             //console.log("Result: " + result); return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
@@ -1181,12 +1181,12 @@ function request_create_bookkeeping_by_date() {
 }
 function blank_contact_list() {
     return '<input type="hidden" title="Contact Info" id="contact-list-count" required="required" value="">' +
-            '<div class="errorMessage text-danger"></div>';
+        '<div class="errorMessage text-danger"></div>';
 }
 
 function blank_owner_list() {
     return '<input type="hidden" class="required_field" title="Owners" id="owners-list-count" value="">' +
-            '<div class="errorMessage text-danger"></div>';
+        '<div class="errorMessage text-danger"></div>';
 }
 
 function request_create_payroll() {
@@ -1210,8 +1210,8 @@ function request_create_payroll() {
         var residenttypeval = $('input[type=radio][name=residenttype]:checked').val();
         if (residenttypeval == 'Resident') {
             if (document.getElementById("license").files.length == 0) {
-//                swal("ERROR!", "Please Upload Driver License", "error");
-//                return false;
+                //                swal("ERROR!", "Please Upload Driver License", "error");
+                //                return false;
             }
         } else {
             if (document.getElementById("passport").files.length == 0) {
@@ -1287,7 +1287,7 @@ function request_create_payroll() {
             // console.log("Result: " + result); return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
-//                clearCacheFormFields('form_create_payroll');
+                //                clearCacheFormFields('form_create_payroll');
                 goURL(base_url + 'services/home/view/' + result.trim());
             } else {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
@@ -1379,7 +1379,7 @@ function load_company_data(clientid, new_reference_id) {
 }
 
 function request_create_salestax_processing() {
-//    alert("ok"); return false;
+    //    alert("ok"); return false;
 
     if (!requiredValidation('form_create_sales_tax_processing')) {
         return false;
@@ -1535,7 +1535,7 @@ function request_create_salestax_recurring() {
 
     company_type_enable();
     var formData = new FormData(document.getElementById('form_create_sales_tax_recurring'));
-//    alert(formData);
+    //    alert(formData);
 
     $.ajax({
         type: 'POST',
@@ -1544,10 +1544,10 @@ function request_create_salestax_recurring() {
         processData: false,
         contentType: false,
         success: function (result) {
-//            alert(result);return false;
+            //            alert(result);return false;
             //console.log("Result: " + result); return false;
             if (result != 0) {
-//                alert('Hi');
+                //                alert('Hi');
                 swal("Success!", "Successfully saved!", "success");
                 goURL(base_url + 'services/home/view/' + result.trim());
             } else {
@@ -1621,8 +1621,8 @@ function request_create_sales_tax_application() {
             var residenttypeval = $('input[type=radio][name=residenttype]:checked').val();
             if (residenttypeval == 'Resident') {
                 if (document.getElementById("license").files.length == 0) {
-//                swal("ERROR!", "Please Upload Driver License", "error");
-//                return false;
+                    //                swal("ERROR!", "Please Upload Driver License", "error");
+                    //                return false;
                 }
             } else {
                 if (document.getElementById("passport").files.length == 0) {
@@ -1673,11 +1673,11 @@ function request_create_sales_tax_application() {
         contentType: false,
         processData: false,
         success: function (result) {
-//            alert(result);
+            //            alert(result);
             // console.log("Result: " + result); return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
-//                clearCacheFormFields('form_create_payroll');
+                //                clearCacheFormFields('form_create_payroll');
                 goURL(base_url + 'services/home/view/' + result.trim());
             } else {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
@@ -1713,8 +1713,8 @@ function related_create_sales_tax_application(val) {
         var residenttypeval = $('input[type=radio][name=residenttype]:checked').val();
         if (residenttypeval == 'Resident') {
             if (document.getElementById("license").files.length == 0) {
-//                swal("ERROR!", "Please Upload Driver License", "error");
-//                return false;
+                //                swal("ERROR!", "Please Upload Driver License", "error");
+                //                return false;
             }
         } else {
             if (document.getElementById("passport").files.length == 0) {
@@ -1761,11 +1761,11 @@ function related_create_sales_tax_application(val) {
         contentType: false,
         processData: false,
         success: function (result) {
-//            alert(result);
+            //            alert(result);
             console.log("Result: " + result);
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
-//                clearCacheFormFields('form_create_payroll');
+                //                clearCacheFormFields('form_create_payroll');
                 goURL(base_url + 'services/home');
             } else {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
@@ -1801,8 +1801,8 @@ function request_create_rt6_unemployment_app() {
         var residenttypeval = $('input[type=radio][name=residenttype]:checked').val();
         if (residenttypeval == 'Resident') {
             if (document.getElementById("license").files.length == 0) {
-//                swal("ERROR!", "Please Upload Driver License", "error");
-//                return false;
+                //                swal("ERROR!", "Please Upload Driver License", "error");
+                //                return false;
             }
         } else {
             if (document.getElementById("passport").files.length == 0) {
@@ -1853,7 +1853,7 @@ function request_create_rt6_unemployment_app() {
         success: function (result) {
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
-//                clearCacheFormFields('form_create_payroll');
+                //                clearCacheFormFields('form_create_payroll');
                 goURL(base_url + 'services/home/view/' + result.trim());
             } else {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
@@ -1889,8 +1889,8 @@ function related_create_rt6_unemployment_app(val) {
         var residenttypeval = $('input[type=radio][name=residenttype]:checked').val();
         if (residenttypeval == 'Resident') {
             if (document.getElementById("license").files.length == 0) {
-//                swal("ERROR!", "Please Upload Driver License", "error");
-//                return false;
+                //                swal("ERROR!", "Please Upload Driver License", "error");
+                //                return false;
             }
         } else {
             if (document.getElementById("passport").files.length == 0) {
@@ -1936,7 +1936,7 @@ function related_create_rt6_unemployment_app(val) {
             console.log("Result: " + result);
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
-//                clearCacheFormFields('form_create_payroll');
+                //                clearCacheFormFields('form_create_payroll');
                 goURL(base_url + 'services/home');
             } else {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
@@ -2056,9 +2056,9 @@ function fetchExistingClientData(reference_id, new_reference_id, reference, serv
         getCompanyData(reference_id);
         get_state_of_incorporation_value(reference_id);
         get_company_type(reference_id);
-//        $('.disabled_field').prop('disabled', true);
-          $('.disabled_field').prop('disabled', false);
- //get_state_county_val(reference_id)
+        //        $('.disabled_field').prop('disabled', true);
+        $('.disabled_field').prop('disabled', false);
+        //get_state_county_val(reference_id)
         payroll_account_details(reference_id);
         $('#exist_client_id').val(reference_id);
     } else {
@@ -2142,20 +2142,20 @@ function annual_date(reference_id) {
 
 
 
-//                console.log(result);
-//                alert(result.state);
-//                if (result.state.trim() == 8) {
-//                    $('#annual_report_florida').removeAttr('checked');
-//                    $('#annual_report_delaware').prop('checked', true);
-//                    $("#retail-price").val(delaware + registered_agent);
-//                    $('#annual_div').show();
-//                } else {
-//                    $('#annual_report_delaware').removeAttr('checked');
-//                    $('#annual_report_florida').prop('checked', true);
-//                    $("#retail-price").val(florida);
-//                    $('#annual_div').hide();
-//                }
-//                $('#due_date').val(result.date);
+                //                console.log(result);
+                //                alert(result.state);
+                //                if (result.state.trim() == 8) {
+                //                    $('#annual_report_florida').removeAttr('checked');
+                //                    $('#annual_report_delaware').prop('checked', true);
+                //                    $("#retail-price").val(delaware + registered_agent);
+                //                    $('#annual_div').show();
+                //                } else {
+                //                    $('#annual_report_delaware').removeAttr('checked');
+                //                    $('#annual_report_florida').prop('checked', true);
+                //                    $("#retail-price").val(florida);
+                //                    $('#annual_div').hide();
+                //                }
+                //                $('#due_date').val(result.date);
             } else {
                 $("#service_florida, #service_delaware").prop("disabled", false);
                 $('#due_date').val('');
@@ -2238,18 +2238,18 @@ function setReferenceId(reference_id, new_reference_id, reference, service_id) {
         result_reference_id = reference_id;
     }
     $("#reference_id").val(result_reference_id);
-//    if ($("a").hasClass("contactadd")) {
-//        $("#contact-list").html(blank_contact_list());
-//        $(".contactadd").attr('onclick', 'contact_modal("add", "' + reference + '", ' + result_reference_id + '); return false;');
-//    }
-//    if ($("a").hasClass("owneradd")) {
-//        $("#owners-list").html(blank_owner_list());
-//        $(".owneradd").attr('onclick', 'open_owner_popup(' + service_id + ',' + result_reference_id + ', 0); return false;');
-//    }
-//    if ($("a").hasClass("documentadd")) {
-//        $("#document-list").html('');
-//        $(".documentadd").attr('onclick', 'document_modal("add", "' + reference + '", ' + result_reference_id + '); return false;');
-//    }
+    //    if ($("a").hasClass("contactadd")) {
+    //        $("#contact-list").html(blank_contact_list());
+    //        $(".contactadd").attr('onclick', 'contact_modal("add", "' + reference + '", ' + result_reference_id + '); return false;');
+    //    }
+    //    if ($("a").hasClass("owneradd")) {
+    //        $("#owners-list").html(blank_owner_list());
+    //        $(".owneradd").attr('onclick', 'open_owner_popup(' + service_id + ',' + result_reference_id + ', 0); return false;');
+    //    }
+    //    if ($("a").hasClass("documentadd")) {
+    //        $("#document-list").html('');
+    //        $(".documentadd").attr('onclick', 'document_modal("add", "' + reference + '", ' + result_reference_id + '); return false;');
+    //    }
 }
 
 function getCompanyData(reference_id) {
@@ -2265,14 +2265,14 @@ function getCompanyData(reference_id) {
                 var res = JSON.parse(result);
                 if (res.start_month_year != null && res.start_month_year != '') {
                     $("#start_month_year").val(res.start_month_year);
-//                    $("#start_month_year_div").hide();
+                    //                    $("#start_month_year_div").hide();
                 } else {
                     $("#start_month_year").val('');
                     //$("#start_month_year_div").show();
                 }
                 if (res.fein != null && res.fein != '') {
                     $("#fein").val(res.fein);
-//                    $("#fein_div").hide();
+                    //                    $("#fein_div").hide();
                     $("#fein_div").show();
                 } else {
                     $("#fein").val("");
@@ -2305,8 +2305,8 @@ function related_create_bookkeeping_by_date(val) {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//            alert(result);
-//            return false;
+            //            alert(result);
+            //            return false;
             console.log("Result: " + result);
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
@@ -2340,8 +2340,8 @@ function related_create_recurring_bookkeeping(val) {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//            alert(result);
-//            return false;
+            //            alert(result);
+            //            return false;
             console.log("Result: " + result);
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
@@ -2375,8 +2375,8 @@ function related_create_payroll(val) {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//            alert(result);
-//            return false;
+            //            alert(result);
+            //            return false;
             console.log("Result: " + result);
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
@@ -2599,11 +2599,11 @@ function assignOrder(order_id, staff_id) {
                 success: function (result) {
                     if (result != 0) {
                         swal("Success!", "Successfully " + (staff_id == 0 ? 'un' : '') + "assigned!", "success");
-//                        if (staff_id == '') {
-//                            goURL(base_url + 'services/home/view/' + order_id);
-//                        } else {
+                        //                        if (staff_id == '') {
+                        //                            goURL(base_url + 'services/home/view/' + order_id);
+                        //                        } else {
                         goURL(base_url + 'services/home');
-//                        }
+                        //                        }
                     } else {
                         swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
                     }
@@ -2641,11 +2641,11 @@ function assignService(service_id, staff_id) {
                 success: function (result) {
                     if (result != 0) {
                         swal("Success!", "Successfully " + (staff_id == 0 ? 'un' : '') + "assigned!", "success");
-//                        if (staff_id == '') {
-//                            goURL(base_url + 'services/home/view/' + order_id);
-//                        } else {
+                        //                        if (staff_id == '') {
+                        //                            goURL(base_url + 'services/home/view/' + order_id);
+                        //                        } else {
                         goURL(base_url + 'services/home');
-//                        }
+                        //                        }
                     } else {
                         swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
                     }
@@ -2704,7 +2704,7 @@ var add_service_notes = () => {
         processData: false,
         success: function (result) {
             // alert(result);return false;
-            swal({title: "Success!", text: "Successfully Saved!", type: "success"}, function () {
+            swal({ title: "Success!", text: "Successfully Saved!", type: "success" }, function () {
                 if (result != '0') {
                     if (ref_id == orderid) {
                         // if (serviceid == "") {
@@ -2754,7 +2754,7 @@ var update_service_note = () => {
         contentType: false,
         processData: false,
         success: function (result) {
-            swal({title: "Success!", text: "Successfully Updated!", type: "success"}, function () {
+            swal({ title: "Success!", text: "Successfully Updated!", type: "success" }, function () {
                 document.getElementById("modal_note_form_update").reset();
                 $('#show_notes').modal('hide');
             });
@@ -2785,7 +2785,7 @@ var add_sos = () => {
         contentType: false,
         processData: false,
         success: function (result) {
-            swal({title: "Success!", text: "Successfully Saved!", type: "success"}, function () {
+            swal({ title: "Success!", text: "Successfully Saved!", type: "success" }, function () {
                 $(".removenoteselector").trigger('click');
 
                 if (result == 0) {
@@ -2859,12 +2859,12 @@ function sort_service_dashboard(sort_criteria = '', sort_type = '') {
                 $("#" + activehyperlink).parent('li').addClass('active');
                 if (sort_type == 'ASC') {
                     $(".sort_type_div #sort-desc").hide();
-                    $(".sort_type_div #sort-asc").css({display: 'inline-block'});
+                    $(".sort_type_div #sort-asc").css({ display: 'inline-block' });
                 } else {
                     $(".sort_type_div #sort-asc").hide();
-                    $(".sort_type_div #sort-desc").css({display: 'inline-block'});
+                    $(".sort_type_div #sort-desc").css({ display: 'inline-block' });
                 }
-                $(".sort_type_div").css({display: 'inline-block'});
+                $(".sort_type_div").css({ display: 'inline-block' });
                 var text = $('.dropdown-menu li.active').find('a').text();
                 var textval = 'Sort By : ' + text + ' <span class="caret"></span>';
                 $("#sort-by-dropdown").html(textval);
@@ -3237,7 +3237,7 @@ function payroll_account_details(reference_id) {
         url: base_url + 'services/home/get_payroll_account_list',
         dataType: "html",
         success: function (result) {
-//            alert(result);return false;
+            //            alert(result);return false;
             if (result) {
                 $("#payroll-accounts-details").html(result);
                 $("#payroll-accounts-details").show();
@@ -3272,7 +3272,7 @@ function request_create_legal_translations() {
     }
     $('#type').removeAttr('disabled');
     var form_data = new FormData(document.getElementById('form_create_legal_translations'));
-//    alert(form_data);return false;
+    //    alert(form_data);return false;
     $.ajax({
         type: "POST",
         data: form_data,
@@ -3283,7 +3283,7 @@ function request_create_legal_translations() {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-           // alert(result);return false;
+            // alert(result);return false;
             //console.log("Result: " + result); return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
@@ -3302,9 +3302,9 @@ function request_create_legal_translations() {
 }
 
 
-function change_price(price,val) {
-    var changed_price = (price*val);
-    if(changed_price != 0){
+function change_price(price, val) {
+    var changed_price = (price * val);
+    if (changed_price != 0) {
         document.getElementById("employee-retail-price").value = changed_price;
     }
 }
@@ -3324,13 +3324,13 @@ function change_partner_service(service_id, is_active = '') {
         confirmButtonClass: "btn-danger",
         confirmButtonText: "Yes, change it!",
         closeOnConfirm: false
-    },function () {
+    }, function () {
         $.ajax({
             type: 'POST',
             url: base_url + '/administration/partner_service_setup/change_partner_service_status',
             data: {
                 service_id: service_id,
-                is_active : is_active
+                is_active: is_active
             },
             success: function (results) {
                 if (results == 1) {
@@ -3351,7 +3351,7 @@ function change_partner_service(service_id, is_active = '') {
 }
 
 function deactive_service(service_id, is_active = '') {
-//     alert(status);return false;
+    //     alert(status);return false;
     if (is_active == 'n') {
         var title = 'Do you want to activate?';
         var msg = "Service has been activated successfully!";
@@ -3369,28 +3369,28 @@ function deactive_service(service_id, is_active = '') {
                 confirmButtonText: "Yes, change it!",
                 closeOnConfirm: false
             },
-                    function () {
-                        $.ajax({
-                            type: 'POST',
-                            url: base_url + '/administration/service_setup/deactive_service',
-                            data: {
-                                service_id: service_id
-                            },
-                            success: function (results) {
-                                if (results == 1) {
-                                    swal({
-                                        title: "Success!",
-                                        "text": msg,
-                                        "type": "success"
-                                    }, function () {
-                                        goURL(base_url + 'administration/service_setup');
-                                    });
-                                } else {
-                                    swal("ERROR!", "Unable to change this service status", "error");
-                                }
+                function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: base_url + '/administration/service_setup/deactive_service',
+                        data: {
+                            service_id: service_id
+                        },
+                        success: function (results) {
+                            if (results == 1) {
+                                swal({
+                                    title: "Success!",
+                                    "text": msg,
+                                    "type": "success"
+                                }, function () {
+                                    goURL(base_url + 'administration/service_setup');
+                                });
+                            } else {
+                                swal("ERROR!", "Unable to change this service status", "error");
                             }
-                        });
+                        }
                     });
+                });
         }
     });
 }
@@ -3435,11 +3435,11 @@ function request_create_1099_write_up() {
 
 function recipient_modal(modal_type, reference, reference_id, id, retail_price = '') {
 
-    if (modal_type == "edit") {        
-        if ($(".recipientedit").hasClass("dcedit")) {            
+    if (modal_type == "edit") {
+        if ($(".recipientedit").hasClass("dcedit")) {
             return false;
         }
-    }   
+    }
     $.ajax({
         type: 'POST',
         url: base_url + 'modal/show_recipient',
@@ -3481,10 +3481,10 @@ function save_recipient() {
             //console.log(result); return false;
             if (result != 1) {
                 swal("ERROR!", "Error Processing Data", "error");
-            }else {
+            } else {
                 $('#recipient-form').modal('hide');
-                get_recipient_list(reference_id, reference,retail_price);
-                $('#recipient-list-details').hide(); 
+                get_recipient_list(reference_id, reference, retail_price);
+                $('#recipient-list-details').hide();
             }
         },
         beforeSend: function () {
@@ -3496,7 +3496,7 @@ function save_recipient() {
     });
 }
 
-function recipient_delete(id, reference_id, reference) {         
+function recipient_delete(id, reference_id, reference) {
     swal({
         title: "Are you sure?",
         text: "Your will not be able to recover this recipient!!",
@@ -3512,11 +3512,11 @@ function recipient_delete(id, reference_id, reference) {
                 id: id,
                 reference_id: reference_id,
                 reference: reference
-                   },
+            },
             url: base_url + "services/home/recipient_delete",
             dataType: "html",
             success: function (result) {
-              if (result == '1') {                                                         
+                if (result == '1') {
                     swal("Deleted!", "Your recipient has been deleted.", "success");
                     get_recipient_list(reference_id, reference);
                 } else {
@@ -3527,8 +3527,7 @@ function recipient_delete(id, reference_id, reference) {
     });
 }
 
-function update_recipient()
-{
+function update_recipient() {
     if (!requiredValidation('form_recipient')) {
         return false;
     }
@@ -3549,9 +3548,9 @@ function update_recipient()
             //console.log(result); return false;
             if (result != 1) {
                 swal("ERROR!", "Error Processing Data", "error");
-            }else {
+            } else {
                 $('#recipient-form').modal('hide');
-                get_recipient_list(reference_id, reference,retail_price);
+                get_recipient_list(reference_id, reference, retail_price);
                 // $('#recipient-list-details').hide(); 
             }
         },
@@ -3564,12 +3563,12 @@ function update_recipient()
     });
 }
 
-function partnerServiceAjax(client_type,reference_id) {
+function partnerServiceAjax(client_type, reference_id) {
     $.ajax({
         type: "POST",
-        data: { 
-            client_type : client_type,
-            reference_id : reference_id,
+        data: {
+            client_type: client_type,
+            reference_id: reference_id,
             client_id: $('#client_id').val()
         },
         url: base_url + 'services/partner_services/get_related_section_by_type',
@@ -3582,16 +3581,29 @@ function partnerServiceAjax(client_type,reference_id) {
         complete: function (msg) {
             closeLoading();
         }
-    });    
+    });
 }
 
-function saveMortgages() {  
-       if (!requiredValidation('create_mortgages_and_lending')) {
+function saveMortgages() {
+    if (!requiredValidation('create_mortgages_and_lending')) {
         return false;
     }
+
     
+    // var type = $("type").val();
+    // if(type == '') {
+    $("#type").removeAttr('disabled');
+    // }
     var form_data = new FormData(document.getElementById('create_mortgages_and_lending'));
-     $.ajax({
+    // var client_type = $("#client_type").val();
+    // if (client_type == '1') {
+    //     referecne = 'company';  
+    // } else {
+    //     referecne = 'individual';
+    // }
+    // form_data.append('reference', referecne);
+
+    $.ajax({
         type: "POST",
         data: form_data,
         url: base_url + 'services/partner_services/request_create_mortgages',

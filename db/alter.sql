@@ -1239,3 +1239,10 @@ ALTER TABLE `project_recurrence_main` ADD `start_year` VARCHAR(20) NOT NULL AFTE
 -- import type_of_mortgage.sql
 
 /*live end*/
+
+/*18.02.2020*/
+
+DROP TABLE project_task_bookkeeper_department
+
+/* import project_task_bookkeeping_finance_account_report.sql*/
+/* import project_task_bookkeeping_input_form2.sql*/
