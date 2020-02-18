@@ -1820,7 +1820,7 @@ class Home extends CI_Controller {
         endswitch;
         $render_data['service_id2'] = $this->service_model->get_service_id_for_1099_service($render_data['reference_id'], $render_data['order_id']);
         $render_data['client_id'] = $this->service_model->get_practice_id($render_data['reference_id']);
-        if($render_data['payer_information']['payer_state'] !='' && $render_data['payer_information']['payer_country'] != '')
+        if(isset($render_data['payer_information']['payer_state']) && $render_data['payer_information']['payer_state'] !='' && isset($render_data['payer_information']['payer_country']) && $render_data['payer_information']['payer_country'] != '')
         {
         $render_data['state_name'] = $this->service_model->get_state_name($render_data['payer_information']['payer_state']);   
         $render_data['country_name'] = $this->service_model->get_country_name($render_data['payer_information']['payer_country']); 
