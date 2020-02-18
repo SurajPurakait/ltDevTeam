@@ -3613,7 +3613,6 @@ function saveMortgages() {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-            // console.log(result);return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
             } else {

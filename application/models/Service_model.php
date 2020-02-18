@@ -3358,4 +3358,8 @@ class Service_model extends CI_Model
             return true;
         }        
     }
+
+    public function get_type_of_partner_services() {
+        return $this->db->get_where('partner_services',['ideas'=>'par_m_a_l'])->row_array()['partner_type'];
+    }
 }
