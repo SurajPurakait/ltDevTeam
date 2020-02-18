@@ -37,13 +37,15 @@
     <div class="form-group">
         <label class="col-lg-2 control-label">First Name<span class="text-danger">*</span></label>
         <div class="col-lg-10">
-            <input placeholder="" class="form-control value_field required_field" type="text" id="individual_first_name" nameval="" name="first_name" title="First Name" required><div class="errorMessage text-danger"></div>
+            <input placeholder="" class="form-control value_field required_field" type="text" id="individual_first_name" nameval="" name="first_name" title="First Name" required>
+            <div class="errorMessage text-danger"></div>
         </div>
     </div>
     <div class="form-group">
         <label class="col-lg-2 control-label">Middle Name</label>
         <div class="col-lg-10">
-            <input placeholder="" class="form-control value_field" type="text" id="individual_middle_name" nameval="" name="middle_name" title="Middle Name"><div class="errorMessage text-danger"></div>
+            <input placeholder="" class="form-control value_field" type="text" id="individual_middle_name" nameval="" name="middle_name" title="Middle Name">
+            <div class="errorMessage text-danger"></div>
         </div>
     </div>
     <div class="form-group">
@@ -67,11 +69,20 @@
             <div class="errorMessage text-danger"></div>
         </div>
     </div>
+    <div class="hidden">
+        <div class="form-group" style="display:none;">
+            <label class="col-lg-2 control-label">Practice Id</label>
+            <div class="col-lg-10">
+                <input placeholder="Practice Id" class="form-control" type="text" name="internal_data[practice_id]" id="practice_id" title="Practice Id">
+                <div class="errorMessage text-danger"></div>
+            </div>
+        </div>
+    </div>
     <div class="hr-line-dashed"></div>
 </div>
 
 
-<div id="contact_info_div">    
+<div id="contact_info_div">
     <h3>Contact Info<span class="text-danger">*</span><span class="display_div">&nbsp; (<a href="javascript:void(0);" class="contactadd" onclick="contact_modal('add', '<?= $reference; ?>', '<?= $reference_id; ?>'); return false;">Add Contact</a>)</span></h3>
     <div id="contact-list">
         <input type="hidden" title="Contact Info" id="contact-list-count" required="required" value="">
@@ -79,3 +90,12 @@
     </div>
     <div class="hr-line-dashed"></div>
 </div>
+<input type="hidden" value="<?= $reference; ?>" name="reference" id="reference">
+<script>
+    individualTypeChange(1, <?= $reference_id; ?>, '<?= $reference; ?>');
+    $(function() {
+        $("#individual_dob").datepicker({
+            autoHide: true,
+        });
+    });
+</script>
