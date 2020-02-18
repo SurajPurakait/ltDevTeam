@@ -2992,33 +2992,33 @@ class Project_Template_model extends CI_Model {
 //            echo $insert_id;die;
         }if($input_form_type==1){
             if($bookkeeping_input_type==1){
-                $exist=$this->db->get_where('bookkeeping',['order_id'=>$data['task_id'],'reference'=>'project'])->row();
-                if(!empty($exist)){
-                    $this->db->where(['order_id'=>$data['task_id'],'reference'=>'project']);
-                    $this->db->delete('bookkeeping');
-                }
-                $bookdata=array(
-                   'company_id'=>$data['reference_id'],
-                    'order_id'=>$data['task_id'],
-                    'frequency'=>$data['frequency'],
-                    'reference'=>'project'
-                );
-            $this->db->insert('bookkeeping',$bookdata);
+//                $exist=$this->db->get_where('bookkeeping',['order_id'=>$data['task_id'],'reference'=>'project'])->row();
+//                if(!empty($exist)){
+//                    $this->db->where(['order_id'=>$data['task_id'],'reference'=>'project']);
+//                    $this->db->delete('bookkeeping');
+//                }
+//                $bookdata=array(
+//                   'company_id'=>$data['reference_id'],
+//                    'order_id'=>$data['task_id'],
+//                    'frequency'=>$data['frequency'],
+//                    'reference'=>'project'
+//                );
+//            $this->db->insert('bookkeeping',$bookdata);
             }else if($bookkeeping_input_type==2){
-                $exist=$this->db->get_where('project_task_bookkeeper_department',['task_id'=>$data['task_id']])->row();
-                if(!empty($exist)){
-                    $this->db->where('task_id',$data['task_id']);
-                    $this->db->delete('project_task_bookkeeper_department');
-                }
-                $bookkeeper_data=array(
-                    'task_id'=>$data['task_id'],
-                    'bank_account_no'=>$data['bank_account_no'],
-                    'transaction'=>$data['transaction'],
-                    'item_uncategorize'=>$data['item_uncategorize'],
-                    'reconciled'=>$data['reconciled'],
-                    'total_time'=>$data['total_time']
-                );
-                $this->db->insert('project_task_bookkeeper_department',$bookkeeper_data);
+//                $exist=$this->db->get_where('project_task_bookkeeper_department',['task_id'=>$data['task_id']])->row();
+//                if(!empty($exist)){
+//                    $this->db->where('task_id',$data['task_id']);
+//                    $this->db->delete('project_task_bookkeeper_department');
+//                }
+//                $bookkeeper_data=array(
+//                    'task_id'=>$data['task_id'],
+//                    'bank_account_no'=>$data['bank_account_no'],
+//                    'transaction'=>$data['transaction'],
+//                    'item_uncategorize'=>$data['item_uncategorize'],
+//                    'reconciled'=>$data['reconciled'],
+//                    'total_time'=>$data['total_time']
+//                );
+//                $this->db->insert('project_task_bookkeeper_department',$bookkeeper_data);
             }else if($bookkeeping_input_type==3){
                 $exist=$this->db->get_where('project_task_bookkeeper_department',['task_id'=>$data['task_id']])->row();
                 if(!empty($exist)){
@@ -3032,29 +3032,31 @@ class Project_Template_model extends CI_Model {
                 $this->db->insert('project_task_bookkeeper_department',$client_data);
             }
         }
-        $uploadData = [];
-        $files = $_FILES["project_attachment"];
-        if (!empty($files["name"])) {
-            $filesCount = count($files['name']);
-            for ($i = 0; $i < $filesCount; $i++) {
-                $_FILES['attachment_file']['name'] = basename(time() . "_" . rand(111111, 99999) . "_" . str_replace(" ", "", $files['name'][$i]));
-                $_FILES['attachment_file']['type'] = $files['type'][$i];
-                $_FILES['attachment_file']['tmp_name'] = $files['tmp_name'][$i];
-                $_FILES['attachment_file']['error'] = $files['error'][$i];
-                $_FILES['attachment_file']['size'] = $files['size'][$i];
+        if($bookkeeping_input_type!=1 && $bookkeeping_input_type!=2){
+            $uploadData = [];
+            $files = $_FILES["project_attachment"];
+            if (!empty($files["name"])) {
+                $filesCount = count($files['name']);
+                for ($i = 0; $i < $filesCount; $i++) {
+                    $_FILES['attachment_file']['name'] = basename(time() . "_" . rand(111111, 99999) . "_" . str_replace(" ", "", $files['name'][$i]));
+                    $_FILES['attachment_file']['type'] = $files['type'][$i];
+                    $_FILES['attachment_file']['tmp_name'] = $files['tmp_name'][$i];
+                    $_FILES['attachment_file']['error'] = $files['error'][$i];
+                    $_FILES['attachment_file']['size'] = $files['size'][$i];
 
-                $uploadPath = FCPATH . 'uploads/';
-                $config['upload_path'] = $uploadPath;
-                $config['allowed_types'] = "*";
+                    $uploadPath = FCPATH . 'uploads/';
+                    $config['upload_path'] = $uploadPath;
+                    $config['allowed_types'] = "*";
 
-                $this->load->library('upload', $config);
-                $this->upload->initialize($config);
+                    $this->load->library('upload', $config);
+                    $this->upload->initialize($config);
 
-                if ($this->upload->do_upload('attachment_file')) {
-                    $fileData = $this->upload->data();
-                    $uploadData[$i]['file_name'] = $fileData['file_name'];
-                    $uploadData[$i]['added_by_user'] = sess('user_id');
-                    $uploadData[$i]['task_id'] = $data['task_id'];
+                    if ($this->upload->do_upload('attachment_file')) {
+                        $fileData = $this->upload->data();
+                        $uploadData[$i]['file_name'] = $fileData['file_name'];
+                        $uploadData[$i]['added_by_user'] = sess('user_id');
+                        $uploadData[$i]['task_id'] = $data['task_id'];
+                    }
                 }
             }
         }
@@ -3459,9 +3461,11 @@ class Project_Template_model extends CI_Model {
                     $insert_data['bank_name']=$val['bank_name'];
                     $insert_data['account_number']=$val['account_number'];
                     $insert_data['routing_number']=$val['routing_number'];
-                    $this->db->insert('project_task_bookkeeping_finance_account_report',$insert_data);
+                    $ins=$this->db->insert('project_task_bookkeeping_finance_account_report',$insert_data);
                 }
-                return $this->db->get_where('project_task_bookkeeping_finance_account_report',['task_id'=>$task_id])->result_array();
+                if($ins){
+                    return $this->db->get_where('project_task_bookkeeping_finance_account_report',['task_id'=>$task_id])->result_array();
+                }
             }else{
                 return array();
             }
@@ -3486,6 +3490,38 @@ class Project_Template_model extends CI_Model {
         }else{
             return false;
         } 
+    }
+    public function getBookkeepingInput2AccountDetails($client_id='',$task_id='',$project_id='',$section=''){
+        $account_exist=$this->db->get_where('project_task_bookkeeping_input_form2',['task_id'=>$task_id])->result_array();
+        if(empty($account_exist)){
+            $account_details=$this->db->get_where("financial_accounts",['client_id'=>$client_id])->result_array();
+            if(!empty($account_details)){
+                foreach ($account_details as $key=>$val){
+                    $insert_data=[];
+                    $insert_data['task_id']=$task_id;
+                    $insert_data['project_id']=$project_id;
+                    $insert_data['client_id']=$client_id;
+                    $insert_data['bank_name']=$val['bank_name'];
+                    $insert_data['account_number']=$val['account_number'];
+                    $ins=$this->db->insert('project_task_bookkeeping_input_form2',$insert_data);
+                }
+                if($ins){
+                    return $this->db->get_where('project_task_bookkeeping_input_form2',['task_id'=>$task_id])->result_array();
+                }
+            }else{
+                return array();
+            }
+        }else{
+            return $account_exist;
+        }
+    }
+    public function updateProjectBookkeepingTransactionVal($id,$transaction_val){
+        $this->db->where('id',$id);
+        return $this->db->update('project_task_bookkeeping_input_form2',['total_transaction'=>$transaction_val]);
+    }
+    public function updateProjectBookkeepingUncategorizedItem($id,$uncategorized_item){
+        $this->db->where('id',$id);
+        return $this->db->update('project_task_bookkeeping_input_form2',['uncategorized_item'=>$uncategorized_item]);
     }
 }
 
