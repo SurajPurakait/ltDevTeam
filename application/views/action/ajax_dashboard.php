@@ -179,9 +179,12 @@ if (!empty($action_list)):
 
                                   <?php if($action["client_id"] != ''){
                                    $a = explode(",",$action["client_id"]); ?>
-                                    <td title="Client ID">
-                                        <?php foreach($a as $val){ ?>
-                                            <a  href="javascript:void(0)" onclick="show_action_client_view_page('<?= $action['id']?>','<?= $val ?>')" target="_blank" ><?= $val ?></a>
+                                    <td>
+                                        <?php foreach($a as $val){ 
+                                            $v = $val;
+                                            $get_name = get_company_or_individual_name($action['id'],$v);
+                                        ?>
+                                            <a  href="javascript:void(0)" onclick="show_action_client_view_page('<?= $action['id']?>','<?= $v ?>')" title="<?= $get_name; ?>"><?= $val ?></a>
                                         <?php } ?>
 
 
