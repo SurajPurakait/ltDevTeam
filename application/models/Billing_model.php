@@ -2406,7 +2406,7 @@ class Billing_model extends CI_Model {
         if($status_array == 2){
             $this->db->where('id', $order_id);
             $this->db->update('order', array('status' => 2));
-        }else if($status_array == '0,2' || $status_array == '2,0' || $status_array == '0,0,2' || $status_array == '0,2,0' || $status_array == '2,0,0'){
+        }else if($status_array == '0,2' || $status_array == '2,0' || $status_array == '0,0,2' || $status_array == '0,2,0' || $status_array == '2,0,0' || $status_array == '0,2,2' || $status_array == '2,0,2' || $status_array == '2,2,0' || $status_array == '0,2,2,2' || $status_array == '2,0,2,2' || $status_array == '2,2,0,2' || $status_array == '2,2,2,0' || $status_array == '2,0,0,0' || $status_array == '0,2,0,0' || $status_array == '0,0,2,0' || $status_array == '0,0,0,2' || $status_array == '0,0,2,2' || $status_array == '2,2,0,0' || $status_array == '2,0,2,0' || $status_array == '0,2,0,2' || $status_array == '2,0,0,2' || $status_array == '0,2,2,0'){
             $this->db->where('id', $order_id);
             $this->db->update('order', array('status' => 1));
         }else{
