@@ -25,7 +25,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
             </div>
         </div>
     </div>
-    <div class="tabs-container m-t-10">
+    <div class="tabs-container m-t-10" id="client-view-business">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
