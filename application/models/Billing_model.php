@@ -206,8 +206,8 @@ class Billing_model extends CI_Model {
     }
 
     public function request_create_invoice($data,$is_recurrence = "") {
-//        echo "<pre>";
-//        print_r($data);exit;
+       echo "<pre>";
+       print_r($data);exit;
         $staff_info = staff_info();
         $this->db->trans_begin();
         if ($data['editval'] == '') { // Insert section
