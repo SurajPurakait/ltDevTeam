@@ -102,7 +102,24 @@
                 <?php  endforeach;?>
             </tbody>
         </table>
-        <?php } else { ?>
+        <?php } elseif(isset ($header_title) && $header_title == "Bookkeeping By Date") {
+            ?>
+        <table class="table table-striped table-bordered" style="width:100%;">
+            <tbody>
+                <tr>
+                    <td width="300" <?= $style; ?>>
+                        <b> Financial Accounts:</b>
+                    </td>
+                    <td <?= $style; ?>>
+                    <div id="accounts-list">
+                        <input type="hidden" title="Financial Accounts" id="accounts-list-count" required="required" value="">
+                        <div class="errorMessage text-danger"></div>
+                    </div>
+                    </td>
+                </tr>  
+            </tbody>
+        </table>
+       <?php } else { ?>
         <div class="col-lg-12">            
             <div class = "text-center m-t-30">
                 <div class = "alert alert-danger">
@@ -118,6 +135,18 @@
     $(function () {
           <?php if(isset($payer_information['payer_first_name'])){?>
             get_recipient_list('<?= $order_details['reference_id']; ?>', '<?= $reference; ?>');
-        <?php } ?>         
+        <?php } 
+        if(isset($service_shortname) && $service_shortname != '')
+        {
+          if ($service_shortname == 'acc_b_b_d') { ?>
+                get_financial_account_list('<?= $reference_id; ?>', 'month_diff', '<?= $order_id; ?>');
+        <?php
+        } else if ($service_shortname == 'acc_r_b') {
+        ?>
+                get_financial_account_list('<?= $reference_id; ?>', '', '<?= $order_id; ?>');
+        <?php
+        }
+        }
+        ?>         
     });
 </script>
