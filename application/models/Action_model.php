@@ -2365,7 +2365,7 @@ class Action_model extends CI_Model {
                 break;
             case 3:
             case 15: {
-                    return $this->administration->get_all_office();
+                    return $this->administration->get_all_office_except_inactive_offices();
                 }
                 break;
             case 14:

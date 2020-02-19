@@ -2133,7 +2133,7 @@ class Billing_model extends CI_Model {
                 }
                 break;
             case 4: {
-                    return $this->administration->get_all_office();
+                    return $this->administration->get_all_office_except_inactive_offices();
                 }
                 break;
             case 5: {
@@ -2174,7 +2174,7 @@ class Billing_model extends CI_Model {
             case 10: {
                     $this->db->select('id, description AS name');
                     $this->db->order_by('name');
-                    return $this->db->get_where("services", ['status' => 1])->result_array();
+                    return $this->db->get_where("services", ['status' => 1, 'is_active' => 'y'])->result_array();
                 }
                 break;
             case 11: {

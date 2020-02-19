@@ -504,13 +504,13 @@ class System extends CI_Model
         if ($val == 14) {
             $query = "select * from department";
         } elseif ($val == 2) {
-            $query = "select * from services";
+            $query = "select * from services where is_active = 'y' ";
         } elseif ($val == 3) {
             // these condition are stoped for client requirment
             if ($staff_info['type'] == 1 || $staff_info['department'] == 14 || $staff_info['type'] == 2) {
-                $query = "select * from office where status != 3";
+                $query = "select * from office where status != 3 and status != 2 ";
             } else {
-                $query = "select o.* from office o inner join office_staff os on os.office_id = o.id where os.staff_id = '" . $staff_info['id'] . "' and o.status != 3";
+                $query = "select o.* from office o inner join office_staff os on os.office_id = o.id where os.staff_id = '" . $staff_info['id'] . "' and o.status != 3 and status != 2 ";
             }
         } elseif ($val == 5) {
             if ($ofc_val == '') {
