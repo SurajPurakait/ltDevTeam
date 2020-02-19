@@ -53,7 +53,8 @@ class Billing_model extends CI_Model {
         ];
         $this->select_billing_2 = [
             'inv.id as invoice_id',
-            'inv.reference_id as reference_id',
+            // 'inv.reference_id as reference_id',
+            'inv.client_id as reference_id',
             'inv.order_id as order_id',
             'inv.new_existing as new_existing',
             'inv.created_time as created_time',
@@ -1516,7 +1517,8 @@ class Billing_model extends CI_Model {
         } else {
             $this->db->select(implode(', ', $this->select_billing_2));
             $this->db->from('invoice_info inv');
-            $this->db->join('title t', 't.company_id = inv.reference_id');
+            // $this->db->join('title t', 't.company_id = inv.reference_id');
+            $this->db->join('title t', 't.individual_id = inv.client_id');
             $this->db->join('individual ind', 'ind.id = t.individual_id');
             $this->db->join('internal_data indt', 'indt.reference_id = t.individual_id and indt.reference = "individual"');
             $where['t.status'] = 1;
@@ -1761,7 +1763,8 @@ class Billing_model extends CI_Model {
             $select[] = 'indt.manager as manager_id';
             $this->db->select(implode(', ', $select));
             $this->db->from('invoice_info inv');
-            $this->db->join('title t', 't.company_id = inv.reference_id');
+            // $this->db->join('title t', 't.company_id = inv.reference_id');
+            $this->db->join('title t', 't.individual_id = inv.client_id');
             $this->db->join('individual ind', 'ind.id = t.individual_id');
             $this->db->join('internal_data indt', 'indt.reference_id = t.individual_id and indt.reference = "individual"');
             $where['t.status'] = 1;
