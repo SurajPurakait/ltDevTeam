@@ -528,8 +528,8 @@ class Lead_management extends CI_Model
             $user_email = $userinfo['user'];
             $query = $this->db->query('select * from lead_management where email="' . $user_email . '"')->row_array();
             $sql = "insert into `referral_partner` (id,partner_id,assigned_by_usertype,assisned_by_userid,  assigned_clienttype,assigned_clientid,assigned_to_clienttype, assigned_to_clientid, status) 
-				values 
-				('','" . $id . "','" . $userinfo['type'] . "','" . $userinfo['id'] . "', '2', '" . $query['staff_requested_by'] . "', 0 ,0, '1')";
+                values 
+                ('','" . $id . "','" . $userinfo['type'] . "','" . $userinfo['id'] . "', '2', '" . $query['staff_requested_by'] . "', 0 ,0, '1')";
             $this->db->query($sql);
         }
 
@@ -1690,7 +1690,7 @@ class Lead_management extends CI_Model
 
     public function insert_new_event($id, $data)
     {
-        // echo $id;exit;		
+        // echo $id;exit;       
         // return $data['lead_id'];
 
         unset($data['lead_staff']);
@@ -1841,35 +1841,35 @@ class Lead_management extends CI_Model
     }
 
     // public function get_leads_referred_to_partners($agent_id_arr){
-    // 	$staff_type = staff_info()['type'];
-    // 	$lead_id_arr = [];
-    // 	foreach ($agent_id_arr as $aid) { 
-    // 		 if($aid['staff_requested_by']==sess('user_id')){
-    // 		$this->db->where('ref_partner_id',$aid['id']);
-    // 		$data = $this->db->get('referred_lead')->result_array();
-    // 		//return $data;
-    // 		if(!empty($data)){
-    // 			foreach ($data as $value) {
-    // 			 array_push($lead_id_arr, $value['lead_id']);			  
-    // 		   }
-    // 		}	
-    // 	  }		
-    // 	}
-    // 	$lead_id_arr = array_values(array_filter($lead_id_arr));
-    // 	$this->db->where('assisned_by_userid',sess('user_id'));
-    // 	$this->db->where('assigned_by_usertype',$staff_type);
-    // 	$lead_id_to_partner_arr = $this->db->get('referral_partner')->result_array();
-    // 	// return $lead_id_to_partner_arr;
-    // 	foreach ($lead_id_to_partner_arr as $val) {
-    // 		array_push($lead_id_arr, $val['partner_id']);
-    // 	}
-    // 	if(!empty($lead_id_arr)){
-    // 		$this->db->where_in('id', $lead_id_arr);
-    // 	        $newarray =  $this->db->get('lead_management')->result_array();
-    // 	}else{
-    // 		$newarray = array();
-    // 	}
-    // 		return $newarray;
+    //  $staff_type = staff_info()['type'];
+    //  $lead_id_arr = [];
+    //  foreach ($agent_id_arr as $aid) { 
+    //       if($aid['staff_requested_by']==sess('user_id')){
+    //      $this->db->where('ref_partner_id',$aid['id']);
+    //      $data = $this->db->get('referred_lead')->result_array();
+    //      //return $data;
+    //      if(!empty($data)){
+    //          foreach ($data as $value) {
+    //           array_push($lead_id_arr, $value['lead_id']);             
+    //         }
+    //      }   
+    //    }     
+    //  }
+    //  $lead_id_arr = array_values(array_filter($lead_id_arr));
+    //  $this->db->where('assisned_by_userid',sess('user_id'));
+    //  $this->db->where('assigned_by_usertype',$staff_type);
+    //  $lead_id_to_partner_arr = $this->db->get('referral_partner')->result_array();
+    //  // return $lead_id_to_partner_arr;
+    //  foreach ($lead_id_to_partner_arr as $val) {
+    //      array_push($lead_id_arr, $val['partner_id']);
+    //  }
+    //  if(!empty($lead_id_arr)){
+    //      $this->db->where_in('id', $lead_id_arr);
+    //          $newarray =  $this->db->get('lead_management')->result_array();
+    //  }else{
+    //      $newarray = array();
+    //  }
+    //      return $newarray;
     // }
 
     public function get_requested_to_partner($id)
