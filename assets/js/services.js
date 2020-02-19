@@ -3605,7 +3605,7 @@ function saveMortgages() {
         success: function (result) {
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
-                // goURL(base_url+'services/partner_services');
+                goURL(base_url+'referral_partner/referral_partners/partners');
             } else {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
             }
