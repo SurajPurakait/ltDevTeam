@@ -2415,9 +2415,9 @@ class Service_model extends CI_Model
                company.name AS client_name,ord.reference_id,ord.reference,ord.status,ord.late_status,ord.start_date,ord.complete_date,ord.category_id,ord.service_id,indt.office AS office_id,
                (SELECT ofc.name FROM office as ofc WHERE ofc.id = indt.office) as office,services.description AS service_name,services.ideas AS service_shortname,
                CONCAT((SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = services.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = ord.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),'')) AS all_staffs
-	       FROM `order` AS ord INNER JOIN company ON ord.reference_id=company.id 
+           FROM `order` AS ord INNER JOIN company ON ord.reference_id=company.id 
                INNER JOIN internal_data indt ON indt.reference_id = company.id
-	       INNER JOIN services ON services.id=ord.service_id
+           INNER JOIN services ON services.id=ord.service_id
                INNER JOIN staff AS st ON st.id=ord.staff_requested_service
                WHERE ord.id = '{$order_id}'";
         return $this->db->query($sql)->row_array();
@@ -3650,6 +3650,6 @@ class Service_model extends CI_Model
 
     public function get_type_of_partner_services()
     {
-        return $this->db->get_where('partner_services', ['ideas' => 'par_m_a_l'])->row_array()['partner_type'];
+        return $this->db->get_where('partner_services', ['ideas' => 'par_a_a'])->row_array()['partner_type'];
     }
 }
