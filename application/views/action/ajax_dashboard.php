@@ -179,9 +179,12 @@ if (!empty($action_list)):
 
                                   <?php if($action["client_id"] != ''){
                                    $a = explode(",",$action["client_id"]); ?>
-                                    <td title="Client ID">
-                                        <?php foreach($a as $val){ ?>
-                                            <a  href="javascript:void(0)" onclick="show_action_client_view_page('<?= $action['id']?>','<?= $val ?>')" target="_blank" ><?= $val ?></a>
+                                    <td>
+                                        <?php foreach($a as $val){ 
+                                            $v = $val;
+                                            $get_name = get_company_or_individual_name($action['id'],$v);
+                                        ?>
+                                            <a  href="javascript:void(0)" onclick="show_action_client_view_page('<?= $action['id']?>','<?= $v ?>')" title="<?= $get_name; ?>"><?= $val ?></a>
                                         <?php } ?>
 
 
@@ -302,7 +305,6 @@ if (!empty($action_list)):
     });
 
     function show_action_client_view_page(action_id,client_id) {
-        // alert(client_id);return false;
     $.ajax({
         type: 'POST',
         url: base_url + 'action/home/show_action_client_view_page',
@@ -311,12 +313,16 @@ if (!empty($action_list)):
             client_id: client_id
         },
         success: function (result) {
+            // alert(result);return false;
             var obj = JSON.parse(result);
             var client_id = obj.client_list_id;
             var company_id = obj.company_id;
             var client_type = obj.client_type;
+            var reference_id = obj.reference_id;
             if(client_type == 1){
             window.open(base_url + 'action/home/view_business/' + client_id + '/' + company_id );
+          }else if(client_type == 2){
+            window.open(base_url + 'action/home/view_individual/' + reference_id );
           }
         }
     });

@@ -1001,7 +1001,7 @@ class Company_model extends CI_Model {
 
     public function get_account_details_bookkeeping($reference_id,$reference='',$client_id='') {
         if($reference==''){
-            $this->db->where('client_id',$client_id);
+            $this->db->where('client_id',$reference_id);
             $this->db->group_by("account_number");
             return $this->db->get('financial_accounts')->result_array();
 //            return $this->db->get_where('financial_accounts',['client_id'=>$client_id])->result_array();
@@ -1014,7 +1014,7 @@ class Company_model extends CI_Model {
 //                return [];
 //            }
         }else{
-            $this->db->where('client_id',$client_id);
+            $this->db->where('client_id',$reference_id);
             $this->db->group_by("account_number");
             return $this->db->get('financial_accounts')->result_array();
         }

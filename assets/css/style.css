@@ -3848,6 +3848,9 @@ body.body-small .footer.fixed {
     font-weight: 600;
     padding: 10px 20px 10px 25px;
 }
+#client-view-business .nav-tabs > li > a {
+    padding: 10px 20px;
+}
 .nav-tabs > li > a:hover,
 .nav-tabs > li > a:focus {
     background-color: #e6e6e6;

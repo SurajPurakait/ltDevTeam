@@ -693,7 +693,8 @@ class Action_model extends CI_Model {
             $client_practice_id = explode(",",$data['client_id']);
             $res = array_combine($client_list_id,$client_practice_id);
             foreach ($res as $key => $val) {
-               $this->db->insert('action_client_list', ["action_id" => $id,"client_type" => $client_type,"client_list_id" => $key, "client_id" => $val]);
+               $v = trim($val); 
+               $this->db->insert('action_client_list', ["action_id" => $id,"client_type" => $client_type,"client_list_id" => $key, "client_id" => $v]);
             }
         }
 
@@ -3839,8 +3840,33 @@ class Action_model extends CI_Model {
             $this->db->from('action_client_list ac');
             $this->db->join('internal_data int','ac.client_list_id = int.reference_id');
             $this->db->join('company c','c.id = ac.client_list_id');
-            $this->db->where(['ac.client_id'=>$client_id , 'ac.action_id'=>$action_id]);
+            $this->db->where(['ac.client_id'=> trim($client_id) , 'ac.action_id'=>$action_id, 'int.reference' => 'company']);
+            return $this->db->get()->row_array();
+        }else if($client_type == 2){
+            $this->db->select('ac.client_type, int.reference_id');
+            $this->db->from('action_client_list ac');
+            $this->db->join('internal_data int','ac.client_id = int.practice_id');
+            $this->db->where(['ac.client_id' => trim($client_id) , 'ac.action_id'=>$action_id, 'int.reference' => 'individual']);
             return $this->db->get()->row_array();
         }
+    }
+
+    public function get_company_or_individual_name($action_id = '', $client_id = ''){
+        $client_type = $this->db->query("select client_type from action_client_list where action_id = '$action_id' ")->row_array()['client_type'];
+        if($client_type == 1){
+            $this->db->select('c.name');
+            $this->db->from('company c');
+            $this->db->join('action_client_list ac','ac.client_list_id = c.id');
+            $this->db->join('internal_data int','ac.client_list_id = int.reference_id');
+            $this->db->where(['ac.client_id'=> trim($client_id) , 'ac.action_id'=>$action_id, 'int.reference' => 'company']);
+            return $this->db->get()->row_array()['name'];
+        }else if($client_type == 2){
+            $this->db->select('CONCAT(ind.first_name," ",ind.last_name) as name');
+            $this->db->from('individual ind');
+            $this->db->join('internal_data int','ind.id = int.reference_id');
+            $this->db->join('action_client_list ac','ac.client_id = int.practice_id');
+            $this->db->where(['ac.client_id' => trim($client_id) , 'ac.action_id'=>$action_id, 'int.reference' => 'individual']);
+            return $this->db->get()->row_array()['name'];
+        } 
     }
 }
