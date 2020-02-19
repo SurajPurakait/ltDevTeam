@@ -1633,7 +1633,7 @@ class Lead_management extends CI_Model
                 }
                 break;
             case 3: {
-                    return $this->administration->get_all_office();
+                    return $this->administration->get_all_office_except_inactive_offices();
                 }
                 break;
             case 4: {
@@ -1665,7 +1665,7 @@ class Lead_management extends CI_Model
                 }
                 break;
             case 2: {
-                    return $this->administration->get_all_office();
+                    return $this->administration->get_all_office_except_inactive_offices();
                 }
                 break;
             case 4: {
