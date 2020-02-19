@@ -1250,4 +1250,3 @@ DROP TABLE project_task_bookkeeper_department
 /*19.02.2020*/
 ALTER TABLE `partner_services_data` CHANGE `what_is_property_for` `what_is_property_for` INT(2) NOT NULL COMMENT '1 : Primary Residence,2: Vacation or Secondary Home, 3: Investment Property';
 ALTER TABLE `partner_services_data` CHANGE `realtor` `realtor` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '1: Yes , 2: No';
-ALTER TABLE `lead_management` CHANGE `referred_status` `referred_status` ENUM('0','1','2') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '1' COMMENT '0:Partner to Staff, 1: Staff to Partner, 2:Others';
