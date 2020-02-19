@@ -1246,3 +1246,6 @@ DROP TABLE project_task_bookkeeper_department
 
 /* import project_task_bookkeeping_finance_account_report.sql*/
 /* import project_task_bookkeeping_input_form2.sql*/
+
+/* 19.02.2020 */
+ /*import project_bookkeeping_bank_record_time.sql */
