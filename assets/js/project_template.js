@@ -1815,3 +1815,19 @@ function get_pattern_detais(template_id,project_id='',section=''){
         }
     }); 
 }
+function delete_recoded_time(record_id,bank_id){
+//    alert(record_id);
+    $.ajax({
+        type: "POST",
+        data: {record_id : record_id,bank_id:bank_id},
+        url: base_url + 'task/delete_bookkeeping_timer_record',
+        cache:false,
+        success: function (result) {
+//            alert(result);return false;
+            if (result) {
+                $("#load_record_time-" + bank_id).hide();
+                $("#timer_result-" + bank_id).html(result);
+            }
+        },
+    });
+}

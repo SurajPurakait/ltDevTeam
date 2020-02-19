@@ -254,36 +254,40 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
 
                 <table class="table table-striped table-bordered" style="width:100%;">
                     <tbody>
-                    <div class="ajaxdiv" id="individual_action_dashboard_div"></div>
+                    <div class="ajaxdiv" id="action_ajax_dashboard_div"></div>
                     </tbody>
                 </table>
             </div>
 
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-sm-3">
-        <button class="btn btn-primary" type="button" onclick="go('action/home/individual_dashboard');" style="width: 250px">Go Back To List</button>        
-    </div>
-<?php if ($usertype == 1 || $usertype == 2) { ?>
-        <div class="col-sm-2 text-center">    
-            <a class="btn btn-success" href="<?php echo base_url(); ?>action/home/edit_individual/<?php echo $get_individual_data['id'] ?>" style="width: 170px">Edit Client Info</a>
-        </div>
-    <div class="col-sm-2 text-center">
-        <a class="btn btn-primary" href="<?php echo base_url(); ?>billing/invoice/index/<?php echo base64_encode($get_individual_data['title_id']); ?>/<?= base64_encode(2);?>" style="width: 170px">+ Create Invoice</a>        
-    </div>    
-    <?php if ($usertype == 1 || $user_dept == 14) { ?>
-            <div class="col-sm-2 text-center">
-                <a title="INACTIVE" class="btn btn-warning" href="javascript:void(0);" onclick="inactive_individual('<?php echo $get_individual_data["id"]; ?>');" style="width: 170px;">Inactive</a>
-            </div>
-            <div class="col-sm-3 text-right">    
-                <a title="DELETE" class="btn btn-danger" href="javascript:void(0);" onclick="delete_individual('<?php echo $get_individual_data['id']; ?>', 'view-page');" style="width: 250px">Delete</a>
-            </div>
+    <div class="m-b-20">
+        <div class="col-md-12">
+           
+            <button class="btn btn-primary" type="button" onclick="go('action/home/individual_dashboard');">Go Back To List</button>        
+       
+        <?php if ($usertype == 1 || $usertype == 2) { ?>
+           
+            <!-- <a class="btn btn-primary" href=""><i class="fa fa-plus"></i> Create Action</a> -->
+            
+            <a class="btn btn-success" href="<?php echo base_url(); ?>action/home/edit_individual/<?php echo $get_individual_data['id'] ?>">Edit Client Info</a>
+        
+        
+            <a class="btn btn-primary" href="<?php echo base_url(); ?>billing/invoice/index/<?php echo base64_encode($get_individual_data['title_id']); ?>/<?= base64_encode(2);?>">+ Create Invoice</a>        
+           
+        <?php if ($usertype == 1 || $user_dept == 14) { ?>
+                
+            <a title="INACTIVE" class="btn btn-warning" href="javascript:void(0);" onclick="inactive_individual('<?php echo $get_individual_data["id"]; ?>');">Inactive</a>
+        
+           
+            <a title="DELETE" class="btn btn-danger" href="javascript:void(0);" onclick="delete_individual('<?php echo $get_individual_data['id']; ?>', 'view-page');">Delete</a>
+                
         <?php } ?>        
-<?php } ?>
-
+        <?php } ?> 
+        </div>
+    </div>
 </div>
+
 <script>
     loadBillingDashboard('', '', '', '', '<?= $reference_id . '-individual'; ?>');
     loadProjectDashboard('', '', '', '', '', '', '', '', '', '', '2', '<?php echo $get_individual_data["id"] ?>', 'clients');

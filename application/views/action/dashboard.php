@@ -313,7 +313,7 @@ $role = $user_info['role'];
                     </div>
 
                     <hr class="hr-line-dashed  m-t-5 m-b-5">
-                    <div id="action_dashboard_div"></div>
+                    <div id="action_ajax_dashboard_div"></div>
                 </div>
             </div>
         </div>
