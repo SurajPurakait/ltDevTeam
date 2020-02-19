@@ -3614,3 +3614,18 @@ if(!function_exists('get_template_cat_id')){
         return $ci->Project_Template_model->getTemplateCategoryId($template_id);
     }
 }
+if(!function_exists('get_project_task_details')){
+    function get_project_task_details($task_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->getProjectTaskDetails($task_id);
+    }
+}
+
+if(!function_exists('get_company_or_individual_name')){
+    function get_company_or_individual_name($action_id,$client_id){
+        $ci = &get_instance();
+        $ci->load->model('action_model');
+        return $ci->action_model->get_company_or_individual_name($action_id,$client_id);
+    }
+}

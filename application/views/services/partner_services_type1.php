@@ -23,10 +23,10 @@
 
 <div class="form-group client_type_div0" id="client_list">
     <label class="col-lg-2 control-label">Existing Client List<span class="text-danger">*</span></label>
-    <div class="col-lg-10">  
+    <div class="col-lg-10">
         <select class="form-control client_type_field0" name="client_list" id="client_list_ddl" title="Client List" onchange="fetchExistingClientData(this.value, <?= $reference_id; ?>, '<?= $reference; ?>', 1);">
             <option value="">Select an option</option>
-        </select> 
+        </select>
     </div>
 </div>
 
@@ -34,7 +34,7 @@
 <div class="form-group client_type_div1" id="name_of_business">
     <label class="col-lg-2 control-label">Name of Company<span class="text-danger">*</span></label>
     <div class="col-lg-10">
-        <input placeholder="Name of Company" id="business_name" class="form-control client_type_field1" type="text" name="name_of_business1" title="Name of Business" >
+        <input placeholder="Name of Company" id="business_name" class="form-control client_type_field1" type="text" name="name_of_business1" title="Name of Business">
         <div class="errorMessage text-danger"></div>
     </div>
 </div>
@@ -90,7 +90,7 @@
 <div class="form-group display_div" id="business_description_div">
     <label class="col-lg-2 control-label">Business Description</label>
     <div class="col-lg-10">
-        <textarea class="form-control value_field" name="business_description"  title="Business Description"></textarea>
+        <textarea class="form-control value_field" name="business_description" title="Business Description"></textarea>
         <div class="errorMessage text-danger"></div>
     </div>
 </div>
@@ -123,7 +123,7 @@
                 <option value="">Select an option</option>
                 <?php load_ddl_option("staff_office_list"); ?>
             </select>
-            <div class="errorMessage text-danger"></div>                                    
+            <div class="errorMessage text-danger"></div>
         </div>
     </div>
     <div class="form-group">
@@ -153,15 +153,15 @@
         </div>
     </div>
     <div class="hidden">
-    <div class="form-group" style="display:none;">
-        <label class="col-lg-2 control-label">Practice Id</label>
-        <div class="col-lg-10">
-            <input placeholder="Practice Id" class="form-control" type="text" name="internal_data[practice_id]" id="practice_id" title="Practice Id">
-            <div class="errorMessage text-danger"></div>
+        <div class="form-group" style="display:none;">
+            <label class="col-lg-2 control-label">Practice Id</label>
+            <div class="col-lg-10">
+                <input placeholder="Practice Id" class="form-control" type="text" name="internal_data[practice_id]" id="practice_id" title="Practice Id">
+                <div class="errorMessage text-danger"></div>
+            </div>
         </div>
     </div>
-    </div>
-    
+
     <div class="form-group">
         <label class="col-lg-2 control-label">Referred By Source<span class="text-danger">*</span></label>
         <div class="col-lg-10">
@@ -197,5 +197,16 @@
             <!-- <div class="errorMessage text-danger"></div> -->
         </div>
     </div>
+    <input type="hidden" value="<?= $reference; ?>" name="reference" id="reference">
     <div class="hr-line-dashed"></div>
 </div>
+<script>
+    clientTypeChange(1, <?= $reference_id; ?>, '<?= $reference; ?>', 1)
+    $(function() {
+        $("#start_month_year").datepicker({
+            format: 'mm/yyyy',
+            autoHide: true,
+            startDate: new Date()
+        });
+    });
+</script>

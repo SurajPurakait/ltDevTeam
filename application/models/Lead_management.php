@@ -2365,7 +2365,7 @@ Class Lead_management extends CI_Model {
         return $partner_data;
     }
 
-    public function get_all_partners_list() {
-        return $this->db->get_where('lead_management',['type'=>'2'])->result_array();
+    public function get_all_partners_list($selected_service) {
+        return $this->db->get_where('lead_management',['type'=>'2','type_of_contact'=>$selected_service])->result_array();
     }
 }

@@ -34,7 +34,8 @@ class Partner_services extends CI_Controller {
         $render_data['mortgages_list'] = $this->service_model->get_mortgages_list();
         $render_data['reference_id'] = $this->system->create_reference_id();
         $render_data['client_id'] = '';
-        $render_data['all_partners_list'] = $this->lead_management->get_all_partners_list();
+        $render_data['partner_type'] = $this->service_model->get_type_of_partner_services();
+        $render_data['all_partners_list'] = $this->lead_management->get_all_partners_list($render_data['partner_type']);
         $this->load->template('services/create_mortgages_and_lending', $render_data);
     }
 
@@ -51,7 +52,15 @@ class Partner_services extends CI_Controller {
         }
         $this->load->view('services/partner_services_type'.$client_type,$render_data);
     }
-
+    
+    public function request_create_mortgages() {
+        $result = $this->service_model->request_create_mortgages(post());
+        if($result){
+            echo $result;
+        } else {
+           echo 0; 
+        }
+    }
 }
 
 ?>
