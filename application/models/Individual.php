@@ -1,10 +1,12 @@
 <?php
 
-class Individual extends CI_Model {
+class Individual extends CI_Model
+{
 
     public $id;
 
-    public function getIndividual($id) {
+    public function getIndividual($id)
+    {
         $sql = "select i.id, i.first_name, i.middle_name, i.last_name, i.birth_date, i.ssn_itin, i.type, 
                 i.language as language_id, l.language, 
                 c1.id as country_residence_id, c1.country_name as country_residence_name, 
@@ -23,7 +25,8 @@ class Individual extends CI_Model {
         }
     }
 
-    public function individual_list() {
+    public function individual_list()
+    {
         $this->db->select("tl.id, tl.title, tl.percentage, tl.company_id, concat(idv.last_name, ', ',idv.first_name, ' ',idv.middle_name) as name, tl.existing_reference_id");
         $this->db->from('title tl');
         $this->db->join('individual idv', 'idv.id = tl.individual_id');
@@ -32,7 +35,8 @@ class Individual extends CI_Model {
         return $this->db->get()->result_array();
     }
 
-    public function individual_list_new($office_id = '') {
+    public function individual_list_new($office_id = '')
+    {
         $staff_info = staff_info();
         $this->db->select("tl.id, tl.title, tl.percentage, tl.company_id, TRIM(CONCAT(idv.last_name, ', ',idv.first_name)) as name, idv.last_name, tl.existing_reference_id, idv.id as individual_id");
         $this->db->from('title tl');
@@ -58,7 +62,8 @@ class Individual extends CI_Model {
         return $this->db->get()->result_array();
     }
 
-    public function individual_info_by_title_id($title_id) {
+    public function individual_info_by_title_id($title_id)
+    {
         $this->db->select('tl.id, tl.individual_id, tl.title, tl.company_id as existing_reference_id, tl.percentage, tl.company_type,
                 idv.first_name, idv.middle_name, idv.last_name, idv.birth_date, idv.ssn_itin, idv.type, idv.language, idv.country_residence, idv.country_citizenship, CONCAT(idv.last_name, \', \',idv.first_name) as name, tl.existing_reference_id as existing_ref_id');
         $this->db->from('title tl');
@@ -67,7 +72,8 @@ class Individual extends CI_Model {
         return $this->db->get()->row_array();
     }
 
-    public function getIndividualContactInfo($id) {
+    public function getIndividualContactInfo($id)
+    {
         $sql = "select * from contact_info where reference='individual' and reference_id = $id";
         $conn = new Connection();
         $data = $conn->query($sql);
@@ -78,7 +84,8 @@ class Individual extends CI_Model {
         }
     }
 
-    public function getIndividualInternalData($id) {
+    public function getIndividualInternalData($id)
+    {
         $sql = "select * from internal_data where reference='individual' and reference_id = $id";
         $conn = new Connection();
         $data = $conn->query($sql);
@@ -89,7 +96,8 @@ class Individual extends CI_Model {
         }
     }
 
-    public function save_Owner($data) {
+    public function save_Owner($data)
+    {
 
         $data = (object) $data; // convert the post array into an object
         $conn = $this->db;
@@ -133,7 +141,8 @@ class Individual extends CI_Model {
         return true;
     }
 
-    public function owner_total_percentage($data) {
+    public function owner_total_percentage($data)
+    {
         $data = (object) $data;
         $company_id = $data->company_id;
         $sql = "select SUM(percentage) as total from title where company_id='$company_id' and status=1 and individual_id<>" . $data->individual_id;
@@ -141,7 +150,8 @@ class Individual extends CI_Model {
         return $query->result_array();
     }
 
-    public function saveOwner($data) {
+    public function saveOwner($data)
+    {
         $added_by_user = sess('user_id');
         $data = (object) $data; // convert the post array into an object
         $conn = $this->db;
@@ -181,7 +191,8 @@ class Individual extends CI_Model {
         return true;
     }
 
-    function saveIndividual() {
+    function saveIndividual()
+    {
         $data = post();
         $added_by_user = sess('user_id');
         $this->load->model('internal_model');
@@ -196,14 +207,14 @@ class Individual extends CI_Model {
         $data = (object) $data; // convert the post array into an object
         $conn = $this->db;
         $this->load->model('System');
-//        title='{$data->title}', percentage={$data->percentage},
+        //        title='{$data->title}', percentage={$data->percentage},
         $sql1 = "update title set company_type='{$data->type}', status=1 where id={$data->title_id}";
         if ($conn->query($sql1)) {
             $this->System->log("insert", "title", $data->title_id);
         } else {
             return false;
         }
-//        print_r($_FILES);die;
+        //        print_r($_FILES);die;
         if ($_FILES['attachments']['name'] != '') {
             if ($this->uploadpdffiles($_FILES['attachments'])) {
                 $attachment_filename = $this->file_uploaded;
@@ -216,8 +227,8 @@ class Individual extends CI_Model {
         $sql = "update title set file_name='$attachment_filename' where id={$data->title_id}";
         $this->db->query($sql);
 
-//            
-//        $data= (object) $data;
+        //            
+        //        $data= (object) $data;
         if (isset($data->notes)) {
             $this->notes->insert_note(1, $data->notes, 'reference_id', $data->reference_id, $data->reference);
         }
@@ -251,7 +262,8 @@ class Individual extends CI_Model {
         return true;
     }
 
-    public function get_individual_info_by_title_id($title_id) {
+    public function get_individual_info_by_title_id($title_id)
+    {
         $this->db->select('tl.id, tl.individual_id, tl.company_id as reference_id');
         $this->db->from('title tl');
         $this->db->join('individual idv', 'idv.id = tl.individual_id');
@@ -259,7 +271,8 @@ class Individual extends CI_Model {
         return $this->db->get()->row_array();
     }
 
-    public function get_individual_info_by_refernce_id($reference_id) {
+    public function get_individual_info_by_refernce_id($reference_id)
+    {
         $this->db->select('*');
         $this->db->from('title tl');
         $this->db->join('individual idv', 'idv.id = tl.individual_id');
@@ -267,14 +280,16 @@ class Individual extends CI_Model {
         return $this->db->get()->result_array();
     }
 
-    public function get_individual_by_id($individual_id) {
+    public function get_individual_by_id($individual_id)
+    {
         $this->db->select('ind.*, CONCAT(ind.last_name,", ",ind.first_name) as individual_name');
         $this->db->from('individual ind');
         $this->db->where(['ind.id' => $individual_id]);
         return $this->db->get()->row_array();
     }
 
-    private function uploadpdffiles($file) {
+    private function uploadpdffiles($file)
+    {
 
         $upload_dir = FCPATH . 'uploads/';
         $temp = explode('.', $file['name']);
@@ -307,18 +322,20 @@ class Individual extends CI_Model {
         }
     }
 
-    public function get_business_notes($id) {
-        return $this->db->query("select note from notes where reference_id='$id'")->result_array();
-        ;
+    public function get_business_notes($id)
+    {
+        return $this->db->query("select note from notes where reference_id='$id'")->result_array();;
     }
 
-    public function check_if_title_exists($title, $company_id) {
+    public function check_if_title_exists($title, $company_id)
+    {
         $sql = "select * from title where company_id='" . $company_id . "' and title='" . $title . "' and status=1";
         $query = $this->db->query($sql);
         return $query->num_rows();
     }
 
-    public function check_if_duplicate_exists($data) {
+    public function check_if_duplicate_exists($data)
+    {
         $data['first_name'] = trim($data['first_name']);
         $data['middle_name'] = trim($data['middle_name']);
         $data['last_name'] = trim($data['last_name']);
@@ -331,5 +348,4 @@ class Individual extends CI_Model {
             return $res;
         }
     }
-
 }

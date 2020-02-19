@@ -3629,3 +3629,10 @@ if(!function_exists('get_company_or_individual_name')){
         return $ci->action_model->get_company_or_individual_name($action_id,$client_id);
     }
 }
+if(!function_exists('get_bookkeeping_records_details')){
+    function get_bookkeeping_records_details($bank_id){
+        $ci = &get_instance();
+        $ci->load->model('Project_Template_model');
+        return $ci->Project_Template_model->insertBookkeepingBankRecordTime('',$bank_id);
+    }
+}

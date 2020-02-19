@@ -3589,19 +3589,9 @@ function saveMortgages() {
         return false;
     }
 
-    
-    // var type = $("type").val();
-    // if(type == '') {
     $("#type").removeAttr('disabled');
-    // }
+
     var form_data = new FormData(document.getElementById('create_mortgages_and_lending'));
-    // var client_type = $("#client_type").val();
-    // if (client_type == '1') {
-    //     referecne = 'company';  
-    // } else {
-    //     referecne = 'individual';
-    // }
-    // form_data.append('reference', referecne);
 
     $.ajax({
         type: "POST",
@@ -3615,6 +3605,7 @@ function saveMortgages() {
         success: function (result) {
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
+                goURL(base_url+'referral_partner/referral_partners/partners');
             } else {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
             }
