@@ -7,16 +7,21 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
 ?>
 <div class="wrapper wrapper-content">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <b class="pull-left">Client ID: <?= $company_internal_data[0]['practice_id']; ?></b><br>
             <b class="pull-left">Office ID: <?= $office['office_id']; ?></b>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="text-right">
                 <button class="btn btn-primary" type="button" onclick="go('action/home/business_dashboard');">Go Back To List</button>
                 <?php if ($usertype == 1 || $usertype == 2) { ?>
-                    <a class="btn btn-primary" href="<?php echo base_url(); ?>billing/invoice/index/<?php echo base64_encode($company_name_option_data["id"]); ?>/<?= base64_encode(1); ?>" style="width: 170px">+ Create Invoice</a>
+
+                    <!-- <a class="btn btn-primary" href=""><i class="fa fa-plus"></i> Create Action</a> -->
+
+                    <a class="btn btn-primary" href="<?php echo base_url(); ?>billing/invoice/index/<?php echo base64_encode($company_name_option_data["id"]); ?>/<?= base64_encode(1); ?>" style="">+ Create Invoice</a>
+
                     <a class="btn btn-success" href="<?php echo base_url(); ?>action/home/edit_business/<?php echo $company_name_option_data['id'] ?>/<?php echo $company_name_option_data['company_id'] ?>">Edit Client Info</a>
+                    
                     <?php if ($usertype == 1 || $user_dept == 14) { ?>
                         <a title="DELETE" class="btn btn-warning" href="javascript:void(0);" onclick="delete_business('<?php echo $company_name_option_data["id"]; ?>', '<?php echo $company_name_option_data["company_id"]; ?>', 'view-page');">Delete</a>
                         <a title="INACTIVE" class="btn btn-danger" href="javascript:void(0);" onclick="inactive_business('<?php echo $company_name_option_data["id"]; ?>', '<?php echo $company_name_option_data["company_id"]; ?>');">Inactive</a>
@@ -406,7 +411,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
 
                 <table class="table table-striped table-bordered" style="width:100%;">
                     <tbody>
-                    <div class="ajaxdiv" id="business_action_dashboard_div"></div>
+                    <div class="ajaxdiv" id="action_ajax_dashboard_div"></div>
                     </tbody>
                 </table>
             </div>
@@ -441,6 +446,5 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                 loadActionDashboard('', '', '', '', '', '','<?= $reference_id . '-company'; ?>','');
             }
         }
-
 
     </script>

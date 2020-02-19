@@ -233,5 +233,18 @@ class Task extends CI_Controller {
         $update=$this->Project_Template_model->updateProjectBookkeepingUncategorizedItem($id,$uncategorized_item);
         echo $update;
     }
+    public function update_project_bookkeeping_record_time(){
+        $record_time=post('record_time');
+        $bank_id=post('bank_id');
+        $ins['record_details']=$this->Project_Template_model->insertBookkeepingBankRecordTime($record_time,$bank_id);
+        $this->load->view('task/bookkeeping_record_details',$ins);
+    }
+    public function delete_bookkeeping_timer_record(){
+        $record_id=post('record_id');
+        $bank_id=post('bank_id');
+        $this->Project_Template_model->deleteBookkeepingTimerRecord($record_id);
+        $ins['record_details']=$this->Project_Template_model->insertBookkeepingBankRecordTime('',$bank_id);
+        $this->load->view('task/bookkeeping_record_details',$ins);
+    }
 }
 ?>

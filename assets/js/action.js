@@ -799,9 +799,7 @@ function loadActionDashboard(status, request, priority, officeID, departmentID, 
 //            }
             $(".status-dropdown").val(status);
             $(".request-dropdown").val(request);
-            $("#action_dashboard_div").html(data.result);
-            $("#business_action_dashboard_div").html(data.result);
-            $("#individual_action_dashboard_div").html(data.result);
+            $("#action_ajax_dashboard_div").html(data.result);
             $("[data-toggle=popover]").popover();
             var filter_result = '';
             if (request == 'byme') {
@@ -906,7 +904,7 @@ function actionFilter() {
         cache: false,
         success: function (result) {
             //console.log("Result: " + result); return false;
-            $("#action_dashboard_div").html(result);
+            $("#action_ajax_dashboard_div").html(result);
             $("[data-toggle=popover]").popover();
             $("#clear_filter").html('');
             $("#clear_filter").show();
@@ -1305,7 +1303,7 @@ function sort_dashboard(sort_criteria = '', sort_type = '') {
         success: function (action_result) {
             //alert(action_result);
             var data = JSON.parse(action_result);
-            $("#action_dashboard_div").html(data.result);
+            $("#action_ajax_dashboard_div").html(data.result);
             $(".dropdown-menu li").removeClass('active');
             $("#" + activehyperlink).parent('li').addClass('active');
             if (sort_type == 'ASC') {

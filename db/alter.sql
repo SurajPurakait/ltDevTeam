@@ -1247,6 +1247,8 @@ DROP TABLE project_task_bookkeeper_department
 /* import project_task_bookkeeping_finance_account_report.sql*/
 /* import project_task_bookkeeping_input_form2.sql*/
 
+
 /*19.02.2020*/
 ALTER TABLE `partner_services_data` CHANGE `what_is_property_for` `what_is_property_for` INT(2) NOT NULL COMMENT '1 : Primary Residence,2: Vacation or Secondary Home, 3: Investment Property';
 ALTER TABLE `partner_services_data` CHANGE `realtor` `realtor` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '1: Yes , 2: No';
+/*import project_bookkeeping_bank_record_time.sql */
