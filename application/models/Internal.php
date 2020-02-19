@@ -1,6 +1,8 @@
 <?php
-Class Internal extends CI_Model {
-    public function saveInternalData($data) {
+class Internal extends CI_Model
+{
+    public function saveInternalData($data)
+    {
         $this->load->model('system');
         $this->db->trans_begin();
         $internal_data_columns = $this->db->list_fields('internal_data');
@@ -29,29 +31,28 @@ Class Internal extends CI_Model {
             $this->system->log("update", "internal_data", $internal_data_id);
         } else {    // Insert section
 
-            $extract_string = substr($save_data['practice_id'],0,10);
-            $check_duplicate_practice_id = $this->db->select('*')->from('internal_data')->where("practice_id LIKE '%" .$extract_string. "%'")->get()->result_array();
-            
-            if(isset($check_duplicate_practice_id) && !empty($check_duplicate_practice_id)){
+            $extract_string = substr($save_data['practice_id'], 0, 10);
+            $check_duplicate_practice_id = $this->db->select('*')->from('internal_data')->where("practice_id LIKE '%" . $extract_string . "%'")->get()->result_array();
 
-            $arr   = end($check_duplicate_practice_id);
-            $lastchar = substr($arr['practice_id'], -1); 
-            $intval = (int)$lastchar + 1;
-            
-            $save_data['practice_id'] = substr_replace($save_data['practice_id'], $intval , -1);  
+            if (isset($check_duplicate_practice_id) && !empty($check_duplicate_practice_id)) {
 
-            $save_data['status'] = 1;
-            $this->db->insert('internal_data', $save_data);
-            $internal_data_id = $this->db->insert_id();
-            $this->system->log("insert", "internal_data", $internal_data_id);
-          }else{
-        
-            $save_data['status'] = 1;
-            $this->db->insert('internal_data', $save_data);
-            $internal_data_id = $this->db->insert_id();
-            $this->system->log("insert", "internal_data", $internal_data_id);
+                $arr   = end($check_duplicate_practice_id);
+                $lastchar = substr($arr['practice_id'], -1);
+                $intval = (int) $lastchar + 1;
 
-          }
+                $save_data['practice_id'] = substr_replace($save_data['practice_id'], $intval, -1);
+
+                $save_data['status'] = 1;
+                $this->db->insert('internal_data', $save_data);
+                $internal_data_id = $this->db->insert_id();
+                $this->system->log("insert", "internal_data", $internal_data_id);
+            } else {
+
+                $save_data['status'] = 1;
+                $this->db->insert('internal_data', $save_data);
+                $internal_data_id = $this->db->insert_id();
+                $this->system->log("insert", "internal_data", $internal_data_id);
+            }
         }
         if ($data['reference'] == 'company') { // Save company owner internal data
             $owner_list = $this->system->get_owner_list_by_company_id($data['reference_id']);
@@ -82,28 +83,28 @@ Class Internal extends CI_Model {
                     if ($save_data['practice_id'] == '') {
                         $save_data['practice_id'] = $this->system->generete_practice_id($save_data['reference_id'], $save_data['reference']);
 
-                        $extract_string = substr($save_data['practice_id'],0,10);
-                        $check_duplicate_practice_id = $this->db->select('*')->from('internal_data')->where("practice_id LIKE '%" .$extract_string. "%'")->get()->result_array();
+                        $extract_string = substr($save_data['practice_id'], 0, 10);
+                        $check_duplicate_practice_id = $this->db->select('*')->from('internal_data')->where("practice_id LIKE '%" . $extract_string . "%'")->get()->result_array();
 
-                        if(isset($check_duplicate_practice_id) && !empty($check_duplicate_practice_id)){
-                           
+                        if (isset($check_duplicate_practice_id) && !empty($check_duplicate_practice_id)) {
+
                             $arr   = end($check_duplicate_practice_id);
                             $lastchar = substr($arr['practice_id'], -1);
-                            $intval = (int)$lastchar + 1;
-                            
-                            $save_data['practice_id'] = substr_replace($save_data['practice_id'], $intval , -1); 
+                            $intval = (int) $lastchar + 1;
+
+                            $save_data['practice_id'] = substr_replace($save_data['practice_id'], $intval, -1);
 
                             $save_data['status'] = 1;
                             $this->db->insert('internal_data', $save_data);
                             $internal_data_id = $this->db->insert_id();
                             $this->system->log("insert", "internal_data", $internal_data_id);
-                        }else{
-                            
+                        } else {
+
                             $save_data['status'] = 1;
                             $this->db->insert('internal_data', $save_data);
                             $internal_data_id = $this->db->insert_id();
                             $this->system->log("insert", "internal_data", $internal_data_id);
-                        } 
+                        }
                     }
                 }
             }
@@ -116,7 +117,8 @@ Class Internal extends CI_Model {
             return true;
         }
     }
-    public function get_internal_data($reference, $reference_id) {
+    public function get_internal_data($reference, $reference_id)
+    {
         $sql = "select * from internal_data where reference_id=$reference_id and status=1";
         return $this->db->query($sql)->result_array();
     }

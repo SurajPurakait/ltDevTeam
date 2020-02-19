@@ -1,12 +1,14 @@
 <?php
 
-Class Lead_management extends CI_Model {
+class Lead_management extends CI_Model
+{
 
     private $lead_select;
     private $filter_element;
     private $filter_element_partner;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model("notes");
         $this->load->model("administration");
@@ -16,8 +18,8 @@ Class Lead_management extends CI_Model {
         $this->lead_select[] = 'lm.office AS office';
         $this->lead_select[] = 'lm.type AS type';
         $this->lead_select[] = 'lm.type_of_contact AS type_of_contact';
-//      $this->lead_select[] = 'lm.language AS language';
-        $this->lead_select[] ='(SELECT  language from  languages WHERE id = lm.language) AS language';
+        //      $this->lead_select[] = 'lm.language AS language';
+        $this->lead_select[] = '(SELECT  language from  languages WHERE id = lm.language) AS language';
         $this->lead_select[] = '(CASE WHEN lm.type = \'1\' THEN (SELECT name FROM type_of_contact_prospect WHERE id = lm.type_of_contact) ELSE (SELECT name FROM type_of_contact_referral WHERE id = lm.type_of_contact) END) AS contact_type_name';
         $this->lead_select[] = 'CONCAT(lm.first_name, \', \', lm.last_name) AS full_name';
         $this->lead_select[] = 'lm.first_name AS first_name';
@@ -68,27 +70,33 @@ Class Lead_management extends CI_Model {
         ];
     }
 
-    public function get_lead_types() {
+    public function get_lead_types()
+    {
         return $this->db->get("type_of_contact_prospect")->result_array();
     }
 
-    public function get_added_by_user_by_lead_id($lead_id) {
+    public function get_added_by_user_by_lead_id($lead_id)
+    {
         return $this->db->get_where("lead_management", ['id' => $lead_id])->row_array()['staff_requested_by'];
     }
 
-    public function get_lead_referral() {
+    public function get_lead_referral()
+    {
         return $this->db->get("type_of_contact_referral")->result_array();
     }
 
-    public function get_lead_sources() {
+    public function get_lead_sources()
+    {
         return $this->db->get("lead_prospect")->result_array();
     }
 
-    public function get_lead_type_name_by_id($id) {
+    public function get_lead_type_name_by_id($id)
+    {
         return $this->db->get_where("type_of_contact_prospect", ['id' => $id])->row_array();
     }
 
-    public function check_if_type_exists($lead_type_name, $id = null) {
+    public function check_if_type_exists($lead_type_name, $id = null)
+    {
         $sql = "select * from type_of_contact_prospect where name = '$lead_type_name'";
         if ($id != null) {
             $sql .= ' AND id!=' . $id;
@@ -97,45 +105,56 @@ Class Lead_management extends CI_Model {
         return $data;
     }
 
-    public function get_type_of_contact_by_id($id) {
+    public function get_type_of_contact_by_id($id)
+    {
         return $this->db->get_where("lead_type", ['id' => $id])->row_array();
     }
-    public function get_type_of_contact_prospect($id) {
+    public function get_type_of_contact_prospect($id)
+    {
         return $this->db->get_where("type_of_contact_prospect", ['id' => $id])->row_array();
     }
-    public function get_type_of_contact_referral_by_id($id) {
+    public function get_type_of_contact_referral_by_id($id)
+    {
         return $this->db->get_where("type_of_contact_referral", ['id' => $id])->row_array();
     }
 
-    public function view_leads_record($id) {
+    public function view_leads_record($id)
+    {
         return $this->db->get_where("lead_management", ['id' => $id])->row_array();
     }
 
-    public function get_state_by_id($id) {
+    public function get_state_by_id($id)
+    {
         return $this->db->get_where("states", ['id' => $id])->row_array();
     }
 
-    public function get_notes_by_lead_id($lead_id) {
+    public function get_notes_by_lead_id($lead_id)
+    {
         return $this->db->get_where("lead_notes", ['lead_id' => $lead_id])->result_array();
     }
 
-    public function add_lead_type($lead_type_name) {
+    public function add_lead_type($lead_type_name)
+    {
         return $this->db->insert('type_of_contact_prospect', ["name" => $lead_type_name]);
     }
 
-    public function update_lead_type($lead_type_name, $type_id) {
+    public function update_lead_type($lead_type_name, $type_id)
+    {
         return $this->db->set(["name" => $lead_type_name])->where("id", $type_id)->update("type_of_contact_prospect");
     }
 
-    public function delete_lead_type($type_id) {
+    public function delete_lead_type($type_id)
+    {
         return $this->db->where("id", $type_id)->delete("type_of_contact_prospect");
     }
 
-    public function get_lead_ref_name_by_id($id) {
+    public function get_lead_ref_name_by_id($id)
+    {
         return $this->db->get_where("type_of_contact_referral", ['id' => $id])->row_array();
     }
 
-    public function check_if_ref_exists($ref_name, $id = null) {
+    public function check_if_ref_exists($ref_name, $id = null)
+    {
         $sql = "select * from type_of_contact_referral where name = '$ref_name'";
         if ($id != null) {
             $sql .= ' AND id!=' . $id;
@@ -144,27 +163,33 @@ Class Lead_management extends CI_Model {
         return $data;
     }
 
-    public function add_ref_type($ref_name) {
+    public function add_ref_type($ref_name)
+    {
         return $this->db->insert('type_of_contact_referral', ["name" => $ref_name]);
     }
 
-    public function update_ref_type($ref_name, $id) {
+    public function update_ref_type($ref_name, $id)
+    {
         return $this->db->set(["name" => $ref_name])->where("id", $id)->update("type_of_contact_referral");
     }
 
-    public function delete_ref_type($id) {
+    public function delete_ref_type($id)
+    {
         return $this->db->where("id", $id)->delete("type_of_contact_referral");
     }
 
-    public function get_lead_source_by_id($id) {
+    public function get_lead_source_by_id($id)
+    {
         return $this->db->get_where("lead_prospect", ['id' => $id])->row_array();
     }
 
-    public function get_language_by_id($id) {
+    public function get_language_by_id($id)
+    {
         return $this->db->get_where("languages", ['id' => $id])->row_array();
     }
 
-    public function check_if_lead_source_exists($source_name, $id = null) {
+    public function check_if_lead_source_exists($source_name, $id = null)
+    {
         $sql = "select * from lead_prospect where name = '$source_name'";
         if ($id != null) {
             $sql .= ' AND id!=' . $id;
@@ -173,31 +198,37 @@ Class Lead_management extends CI_Model {
         return $data;
     }
 
-    public function add_lead_source($source_name) {
+    public function add_lead_source($source_name)
+    {
         return $this->db->insert('lead_prospect', ["name" => $source_name]);
     }
 
-    public function update_lead_source($source_name, $id) {
+    public function update_lead_source($source_name, $id)
+    {
         return $this->db->set(["name" => $source_name])->where("id", $id)->update("lead_prospect");
     }
 
-    public function delete_lead_source($id) {
+    public function delete_lead_source($id)
+    {
         return $this->db->where("id", $id)->delete("lead_prospect");
     }
 
-    public function get_lead_agents() {
+    public function get_lead_agents()
+    {
         return $this->db->where(["type" => "2", "status" => "1"])->get("lead_management")->result_array();
     }
 
-    public function get_client_name($id) {
+    public function get_client_name($id)
+    {
         return $this->db->where(["type" => "2", "id" => $id])->get("lead_management")->row();
     }
 
-    public function get_clients() {
+    public function get_clients()
+    {
         $staff_info = staff_info();
         $sql = "SELECT o.*,c.*,o.id AS id "
-                . "FROM `order` o "
-                . "INNER JOIN company c ON c.id = o.reference_id ";
+            . "FROM `order` o "
+            . "INNER JOIN company c ON c.id = o.reference_id ";
         if ($staff_info['type'] == 3) {
             $sql .= "INNER JOIN internal_data ind ON c.id = ind.reference_id WHERE ind.office IN (" . $staff_info['office'] . ")";
         }
@@ -207,12 +238,13 @@ Class Lead_management extends CI_Model {
         return $result;
     }
 
-    public function duplicate_email_check($email,$lead_type) {
-        
-        $this->db->where('email',$email);
+    public function duplicate_email_check($email, $lead_type)
+    {
+
+        $this->db->where('email', $email);
         $this->db->group_start();
-            $this->db->where('type',3);
-            $this->db->or_where('type',2);
+        $this->db->where('type', 3);
+        $this->db->or_where('type', 2);
         $this->db->group_end();
         $check = $this->db->get("lead_management")->num_rows();
 
@@ -226,13 +258,14 @@ Class Lead_management extends CI_Model {
                 } else {
                     return false;
                 }
-            }    
+            }
         } else {
             return false;
         }
     }
 
-    public function get_leads_referred_by_to_him($status = "", $request = "", $filter_data = []) {
+    public function get_leads_referred_by_to_him($status = "", $request = "", $filter_data = [])
+    {
         $staff_info = staff_info();
         $user_id = sess('user_id');
 
@@ -373,7 +406,8 @@ Class Lead_management extends CI_Model {
         return $this->db->get()->result_array();
     }
 
-    public function get_ref_partner_id($lead_id) {
+    public function get_ref_partner_id($lead_id)
+    {
         $email = $this->db->get_where("lead_management", ['id' => $lead_id])->row_array()['email'];
         $staff = $this->db->get_where("staff", ['user' => $email])->row_array();
         if (!empty($staff)) {
@@ -383,8 +417,9 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function insert_lead_prospect($data) {
-//         print_r($data);die;
+    public function insert_lead_prospect($data)
+    {
+        //         print_r($data);die;
         unset($data['event_id']);
         if (isset($data["lead_notes"])) {
             $lead_notes = $data["lead_notes"];
@@ -399,7 +434,7 @@ Class Lead_management extends CI_Model {
         }
 
         if (isset($data["refer_lead"]) && $data["refer_lead"] != '') {
-            $referred_lead=$data["refer_lead"];
+            $referred_lead = $data["refer_lead"];
             unset($data["refer_lead"]);
         } else {
             $referred_lead = '';
@@ -423,24 +458,24 @@ Class Lead_management extends CI_Model {
         if ($data['lead_source'] == 5) {
             $data['lead_agent'] = $data['lead_agent'];
         }
-//        elseif ($data['lead_source'] == 7) {
-//            $data['lead_agent'] = $data['lead_client'];
-//        } elseif ($data['lead_source'] == 6) {
-//            $data['lead_agent'] = $data['lead_client_other'];
-//        } else {
-//            $data['lead_agent'] = '';
-//        }
-//        unset($data['lead_client']);
-//        unset($data['lead_client_other']);
-//        if ($data['lead_source'] == 1) {
-//            if (isset($data['lead_networking']) && $data['lead_networking'] != '') {
-//                $data['lead_networking'] = $data['lead_networking'];
-//            } else {
-//                $data['lead_networking'] = '';
-//            }
-//        } else {
-//            $data['lead_networking'] = "";
-//        }
+        //        elseif ($data['lead_source'] == 7) {
+        //            $data['lead_agent'] = $data['lead_client'];
+        //        } elseif ($data['lead_source'] == 6) {
+        //            $data['lead_agent'] = $data['lead_client_other'];
+        //        } else {
+        //            $data['lead_agent'] = '';
+        //        }
+        //        unset($data['lead_client']);
+        //        unset($data['lead_client_other']);
+        //        if ($data['lead_source'] == 1) {
+        //            if (isset($data['lead_networking']) && $data['lead_networking'] != '') {
+        //                $data['lead_networking'] = $data['lead_networking'];
+        //            } else {
+        //                $data['lead_networking'] = '';
+        //            }
+        //        } else {
+        //            $data['lead_networking'] = "";
+        //        }
         $dofc_array = explode('/', $data['date_of_first_contact']);
         $data['date_of_first_contact'] = $dofc_array[2] . '-' . $dofc_array[0] . '-' . $dofc_array[1];
 
@@ -476,8 +511,8 @@ Class Lead_management extends CI_Model {
         unset($data["partner_creator"]);
         unset($data["fromval"]);
         $lead_management = $data;
-        $lead_management = array_merge($lead_management, ["staff_requested_by" => $this->session->userdata("user_id"), "status" => $status, "submission_date" => date('Y-m-d'),"mail_campaign_status"=>'0']);
-//        print_r($lead_management);die;
+        $lead_management = array_merge($lead_management, ["staff_requested_by" => $this->session->userdata("user_id"), "status" => $status, "submission_date" => date('Y-m-d'), "mail_campaign_status" => '0']);
+        //        print_r($lead_management);die;
         $this->db->trans_begin();
         $this->db->insert('lead_management', $lead_management);
         $id = $this->db->insert_id();
@@ -504,16 +539,17 @@ Class Lead_management extends CI_Model {
         $lead_type = $lead_management['type'];
         if ($lead_type == 1 || $lead_type == 3) {
             $reference = 'lead';
-        }if ($lead_type == 2) {
+        }
+        if ($lead_type == 2) {
             $reference = 'partner';
         }
         $staff[0] = sess('user_id');
-        if($referred_lead==''){
+        if ($referred_lead == '') {
             $this->system->save_general_notification($reference, $id, 'insert', $staff, '', $lead_type);
         }
         if ($referred_lead != '') {
             unset($staff);
-            $staff=array();
+            $staff = array();
             $this->system->save_general_notification($reference, $id, 'refer', $staff, '', $lead_type);
         }
 
@@ -526,7 +562,8 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_lead_list($lead_type, $status, $request_by = "", $lead_contact_type = "", $filter_data = [], $is_partner = "", $sort_criteria = '', $sort_type = '', $event_id = '') {
+    public function get_lead_list($lead_type, $status, $request_by = "", $lead_contact_type = "", $filter_data = [], $is_partner = "", $sort_criteria = '', $sort_type = '', $event_id = '')
+    {
         $staff_info = staff_info();
         $user_department = $staff_info['department'];
         $staff_id = sess('user_id');
@@ -630,14 +667,14 @@ Class Lead_management extends CI_Model {
                     } elseif ($filter_key == "type") {
                         foreach ($filter as $key => $filter_value) {
                             if ($filter_value != '') {
-                                $filter_value = explode(',',$filter_value);
-                                if($filter_value[0] == '1') {
+                                $filter_value = explode(',', $filter_value);
+                                if ($filter_value[0] == '1') {
                                     $filter_where_in[$this->filter_element[$filter_key]][] = $filter_value[1];
                                     $filter_where_in['type'] = 1;
                                 } else {
                                     $filter_where_in[$this->filter_element[$filter_key]][] = $filter_value[1];
                                     $filter_where_in['type'] = 3;
-                                }   
+                                }
                             }
                         }
                     } else {
@@ -656,7 +693,7 @@ Class Lead_management extends CI_Model {
                 if ($condition == 3 || $condition == 4) {
                     $this->db->where_not_in($column, $in);
                 } else {
-                    $this->db->where_in($column, $in);    
+                    $this->db->where_in($column, $in);
                 }
             }
         }
@@ -669,18 +706,19 @@ Class Lead_management extends CI_Model {
             $this->db->where(['lm.referred_status' => 1]);
         }
         if ($sort_criteria != '') {
-//            echo $sort_criteria.', '.$sort_type;die;
+            //            echo $sort_criteria.', '.$sort_type;die;
             $this->db->order_by($sort_criteria, $sort_type);
         } else {
             $this->db->order_by("lm.id", "DESC");
         }
 
         $result = $this->db->get()->result_array();
-//        echo $this->db->last_query();die;
+        //        echo $this->db->last_query();die;
         return $result;
     }
 
-    public function load_all_data($type, $status, $req_by = "", $lead_type = "") {
+    public function load_all_data($type, $status, $req_by = "", $lead_type = "")
+    {
         $user_details = staff_info();
         $usertype = $user_details['type'];
         $userid = $user_details['id'];
@@ -856,19 +894,23 @@ Class Lead_management extends CI_Model {
         return $this->db->query($sql)->result_array();
     }
 
-    public function get_lead_notes($id) {
+    public function get_lead_notes($id)
+    {
         return $this->db->where("lead_id", $id)->get("lead_notes")->result_array();
     }
 
-    public function get_current_status($table_name, $id) {
+    public function get_current_status($table_name, $id)
+    {
         return $this->db->query("select status from $table_name where id = '$id'")->row_array()["status"];
     }
 
-    public function get_tracking_log($id, $table_name) {
+    public function get_tracking_log($id, $table_name)
+    {
         return $this->db->query("SELECT concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id,s.id, s.department as department, case when tracking_logs.status_value = '0' then 'New' when tracking_logs.status_value = '1' then 'Completed' when tracking_logs.status_value = '2' then 'Inactive' when tracking_logs.status_value = '3' then 'Active' else 'Unknown' end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
     }
 
-    public function update_lead_status($id, $status) {
+    public function update_lead_status($id, $status)
+    {
         $this->db->trans_begin();
         $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => $status, "section_id" => $id, "related_table_name" => "lead_management"]);
         $data = ["status" => $status];
@@ -901,7 +943,8 @@ Class Lead_management extends CI_Model {
             return true;
         }
     }
-    public function change_mail_campaign_lead($data) {
+    public function change_mail_campaign_lead($data)
+    {
         $id = $data['lead_id'];
         $update_data = [];
         if ($data['lead_email'] == 'other') {
@@ -909,31 +952,30 @@ Class Lead_management extends CI_Model {
         }
         if ($data['mail_campaign_status_lead'] == '1') {
             $update_data['mail_campaign_status'] = '1';
-
         } else {
             $update_data['mail_campaign_status'] = '0';
             $update_data["day_0_mail_date"] = '0000-00-00';
         }
-        $this->db->where('id',$id);
-        $this->db->update('lead_management',$update_data);
+        $this->db->where('id', $id);
+        $this->db->update('lead_management', $update_data);
 
-        $lead_data = $this->db->get_where('lead_management',array('id'=>$id))->row_array();
-        
+        $lead_data = $this->db->get_where('lead_management', array('id' => $id))->row_array();
+
         if ($lead_data['mail_campaign_status'] == 1) {
             $check = $this->db->query("select * from lead_management where id=$id")->row_array();
             if (!empty($check)) {
                 //if ($check['day_0_mail_date'] == '0000-00-00') {
                 /* mail section */
                 $user_email = $check['email'];
-                $config = Array(
-                   'protocol' => 'smtp',
-                   'smtp_host' => 'ssl://smtp.gmail.com',
-                   'smtp_port' => 465,
-                   'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
-                   'smtp_pass' => 'codetestml0016@123', // change it to yours
-                   'mailtype' => 'html',
-                   'charset' => 'utf-8',
-                   'wordwrap' => TRUE
+                $config = array(
+                    'protocol' => 'smtp',
+                    'smtp_host' => 'ssl://smtp.gmail.com',
+                    'smtp_port' => 465,
+                    'smtp_user' => 'codetestml0016@gmail.com', // change it to yours
+                    'smtp_pass' => 'codetestml0016@123', // change it to yours
+                    'mailtype' => 'html',
+                    'charset' => 'utf-8',
+                    'wordwrap' => TRUE
                 );
 
                 // $config = Array(
@@ -947,18 +989,18 @@ Class Lead_management extends CI_Model {
                 //     'wordwrap' => TRUE
                 // );
                 $lead_result = $this->view_leads_record($id);
-                $mail_data = $this->get_campaign_mail_data(($check["type"] == '1') ? '1':'2', $check["language"], 1);
+                $mail_data = $this->get_campaign_mail_data(($check["type"] == '1') ? '1' : '2', $check["language"], 1);
                 $email_subject = $mail_data['subject'];
                 $mail_body = urldecode($mail_data['body']);
                 $user_details = staff_info();
                 $from = $user_details['user']; // email of staff
                 $from_name = $user_details['first_name'] . ', ' . $user_details['last_name'];
                 $user_name = $check["first_name"] . ', ' . $check["last_name"];
-                $contact_type = $this->get_type_of_contact_by_id(($check["type"] == '1') ? '1':'2');
+                $contact_type = $this->get_type_of_contact_by_id(($check["type"] == '1') ? '1' : '2');
                 $lead_source = $this->get_lead_source_by_id($check["lead_source"]);
                 $office_info = $this->administration->get_office_by_id($lead_result['office']);
                 $requested_by = $this->system->get_staff_info($lead_result['staff_requested_by']);
-                if($lead_result['type'] == '1') {
+                if ($lead_result['type'] == '1') {
                     $lead_type_name = $this->get_type_of_contact_prospect($lead_result['type_of_contact']);
                 } else {
                     $lead_type_name = $this->get_type_of_contact_referral_by_id($lead_result['type_of_contact']);
@@ -1075,7 +1117,7 @@ Class Lead_management extends CI_Model {
                                                 <a href="https://leafnet.us/" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Services</a>
                                             </td>
                                             <td style="text-align: center;">
-                                                <a href="'. $chat_link .'" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Chat</a>
+                                                <a href="' . $chat_link . '" style="text-transform: uppercase; text-decoration: none; color: #00aec8; background:#fff; padding: 6px 8px; display: inline-block;">Chat</a>
                                             </td>
                                         </tr>
                                       </table>
@@ -1104,7 +1146,8 @@ Class Lead_management extends CI_Model {
             echo "-1";
         }
     }
-    public function load_count_data() {
+    public function load_count_data()
+    {
         $user_details = staff_info();
         $usertype = $user_details['type'];
         $userid = $user_details['id'];
@@ -1124,7 +1167,7 @@ Class Lead_management extends CI_Model {
                     $i = 0;
                     $len = COUNT($ofc_staffs);
                     $staff_array = '';
-                    foreach ($ofc_staffs AS $os) {
+                    foreach ($ofc_staffs as $os) {
                         if ($i == $len - 1) {
                             $staff_array .= $os['staff_id'];
                         } else {
@@ -1137,7 +1180,7 @@ Class Lead_management extends CI_Model {
                     $j = 0;
                     $lenj = COUNT($staff_array_val);
                     if ($lenj > 1) {
-                        foreach ($staff_array_val AS $val) {
+                        foreach ($staff_array_val as $val) {
                             if ($j == 0) {
                                 $staffsql .= "(staff_requested_by='" . $val . "'";
                             } elseif ($j == $lenj - 1) {
@@ -1148,7 +1191,7 @@ Class Lead_management extends CI_Model {
                             $j++;
                         }
                     } else {
-                        foreach ($staff_array_val AS $val) {
+                        foreach ($staff_array_val as $val) {
                             $staffsql .= "staff_requested_by='" . $val . "'";
                             $j++;
                         }
@@ -1161,11 +1204,13 @@ Class Lead_management extends CI_Model {
         return $this->db->query($sql)->result_array()[0];
     }
 
-    public function fetch_data($id) {
+    public function fetch_data($id)
+    {
         return $this->db->query("select lm.*, group_concat(distinct(ln.note) separator ',') as notes from lead_management as lm inner join lead_notes as ln on ln.lead_id = lm.id where lm.id = '$id';")->row_array();
     }
 
-    public function edit_lead_prospect_now($lead_id, $data) {
+    public function edit_lead_prospect_now($lead_id, $data)
+    {
         if (isset($data["lead_notes"])) {
             $lead_notes = $data["lead_notes"];
             unset($data["lead_notes"]);
@@ -1225,7 +1270,8 @@ Class Lead_management extends CI_Model {
         $lead_type = $lead_management['type'];
         if ($lead_type == 1 || $lead_type == 3) {
             $reference = 'lead';
-        }if ($lead_type == 2) {
+        }
+        if ($lead_type == 2) {
             $reference = 'partner';
         }
         $staff = [];
@@ -1241,7 +1287,8 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_leads_count() {
+    public function get_leads_count()
+    {
         $user_details = staff_info();
         $usertype = $user_details['type'];
 
@@ -1254,7 +1301,8 @@ Class Lead_management extends CI_Model {
         return $this->db->query($sql)->num_rows();
     }
 
-    public function get_active_leads_count() {
+    public function get_active_leads_count()
+    {
         $user_details = staff_info();
         $usertype = $user_details['type'];
         $userid = $user_details['id'];
@@ -1266,9 +1314,11 @@ Class Lead_management extends CI_Model {
         return $this->db->query($sql)->num_rows();
     }
 
-    public function insert_mail_content($data) {
+    public function insert_mail_content($data)
+    {
 
-        $update_data = array('subject' => $data['subject'],
+        $update_data = array(
+            'subject' => $data['subject'],
             'schedule_date' => $this->System->invertDate($data['schedule_date']),
             'body' => urlencode($data['body']),
             'status' => 0
@@ -1287,9 +1337,11 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function update_mail_content($data) {
+    public function update_mail_content($data)
+    {
 
-        $update_data = array('subject' => $data['subject'],
+        $update_data = array(
+            'subject' => $data['subject'],
             'schedule_date' => $this->System->invertDate($data['schedule_date']),
             'body' => urlencode($data['body'])
         );
@@ -1308,15 +1360,18 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_lead_mail_content() {
+    public function get_lead_mail_content()
+    {
         return $this->db->query("SELECT * FROM `lead_mail`")->result_array();
     }
 
-    public function edit_lead_mail_content($id) {
+    public function edit_lead_mail_content($id)
+    {
         return $this->db->query("SELECT * FROM `lead_mail` where id='$id'")->row_array();
     }
 
-    public function lead_campaign_mails($leadtype, $language, $day, $status = '', $group_by = '') {
+    public function lead_campaign_mails($leadtype, $language, $day, $status = '', $group_by = '')
+    {
         $query = "SELECT lmc.*,(select type from lead_type where id=lmc.lead_type) as lead_name,(select language from languages where id=lmc.language) as language_name, CONCAT((select type from lead_type where id=lmc.lead_type) , '-', (select language from languages where id=lmc.language)) AS main_title FROM `lead_mail_chain` lmc";
         $sql = '';
         if ($leadtype != '') {
@@ -1355,16 +1410,19 @@ Class Lead_management extends CI_Model {
         // return $this->db->last_query();
     }
 
-    public function edit_lead_mail_chain_content($id) {
+    public function edit_lead_mail_chain_content($id)
+    {
         return $this->db->query("SELECT * FROM `lead_mail_chain` where id='$id'")->row_array();
     }
 
-    public function insert_mail_campaign_content($data) {
+    public function insert_mail_campaign_content($data)
+    {
 
         $check = $this->check_if_mail_exists($data['leadtype'], $data['language'], $data['day']);
 
         if (empty($check)) {
-            $update_data = array('lead_type' => $data['leadtype'],
+            $update_data = array(
+                'lead_type' => $data['leadtype'],
                 'language' => $data['language'],
                 'type' => $data['day'],
                 'subject' => $data['subject'],
@@ -1388,13 +1446,15 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function update_mail_campaign_content($data) {
+    public function update_mail_campaign_content($data)
+    {
 
         $check = $this->check_if_mail_exists($data['leadtype'], $data['language'], $data['day']);
 
         if (empty($check)) {
 
-            $update_data = array('lead_type' => $data['leadtype'],
+            $update_data = array(
+                'lead_type' => $data['leadtype'],
                 'language' => $data['language'],
                 'type' => $data['day'],
                 'subject' => $data['subject'],
@@ -1416,7 +1476,8 @@ Class Lead_management extends CI_Model {
             }
         } else {
             if ($check['id'] == $data['email_id']) {
-                $update_data = array('lead_type' => $data['leadtype'],
+                $update_data = array(
+                    'lead_type' => $data['leadtype'],
                     'language' => $data['language'],
                     'type' => $data['day'],
                     'subject' => $data['subject'],
@@ -1442,7 +1503,8 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function delete_lead_mail($id) {
+    public function delete_lead_mail($id)
+    {
         $this->db->trans_begin();
         $this->db->where("id", $id)->delete("lead_mail");
         if ($this->db->trans_status() === FALSE) {
@@ -1454,16 +1516,19 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function check_if_mail_exists($leadtype, $language, $day) {
+    public function check_if_mail_exists($leadtype, $language, $day)
+    {
         return $this->db->query("SELECT * FROM `lead_mail_chain` where lead_type='" . $leadtype . "' and language='" . $language . "' and type='" . $day . "'")->row_array();
     }
 
-    public function get_campaign_mail_data($lead_type, $language, $day) {
+    public function get_campaign_mail_data($lead_type, $language, $day)
+    {
         return $this->db->query("SELECT * FROM `lead_mail_chain` where lead_type='" . $lead_type . "' and language='" . $language . "' and type='" . $day . "'")->row_array();
         // return $this->db->last_query();
     }
 
-    public function delete_mail_campaign($id) {
+    public function delete_mail_campaign($id)
+    {
         $this->db->trans_begin();
         $this->db->where("id", $id)->delete("lead_mail_chain");
         if ($this->db->trans_status() === FALSE) {
@@ -1475,7 +1540,8 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function change_mail_campaign_status($leadtype, $language, $status) {
+    public function change_mail_campaign_status($leadtype, $language, $status)
+    {
         $this->db->trans_begin();
         $this->db->where(['lead_type' => $leadtype, 'language' => $language]);
         $this->db->update("lead_mail_chain", ['status' => $status]);
@@ -1488,17 +1554,19 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function update_mail_campaign($mail_id, $data) {
+    public function update_mail_campaign($mail_id, $data)
+    {
         $this->db->where(['id' => $mail_id]);
         return $this->db->update("lead_mail_chain", $data);
     }
 
-    public function get_partner_filter_element_value($element_key, $office) {
+    public function get_partner_filter_element_value($element_key, $office)
+    {
         $tracking_array = [
-                ["id" => 0, "name" => "New"],
-                ["id" => 1, "name" => "Complete"],
-                ["id" => 2, "name" => "Inactive"],
-                ["id" => 3, "name" => "Active"]
+            ["id" => 0, "name" => "New"],
+            ["id" => 1, "name" => "Complete"],
+            ["id" => 2, "name" => "Inactive"],
+            ["id" => 3, "name" => "Active"]
         ];
         switch ($element_key):
             case 1: {
@@ -1512,7 +1580,7 @@ Class Lead_management extends CI_Model {
             case 4: {
                     $this->db->select("st.id AS id, CONCAT(st.last_name, ', ',st.first_name,' ',st.middle_name) AS name");
                     $this->db->from('staff AS st');
-                    if ($office != ''):
+                    if ($office != '') :
                         $this->db->join('office_staff os', 'os.staff_id = st.id');
                         $this->db->where(['os.office_id' => $office]);
                     endif;
@@ -1522,7 +1590,7 @@ Class Lead_management extends CI_Model {
             case 7: {
                     $this->db->select("st.id AS id, CONCAT(st.last_name, ', ',st.first_name,' ',st.middle_name) AS name");
                     $this->db->from('staff AS st');
-                    if ($office != ''):
+                    if ($office != '') :
                         $this->db->join('office_staff os', 'os.staff_id = st.id');
                         $this->db->where(['os.office_id' => $office]);
                     endif;
@@ -1536,24 +1604,25 @@ Class Lead_management extends CI_Model {
         endswitch;
     }
 
-    public function get_lead_filter_element_value($element_key, $office) {
+    public function get_lead_filter_element_value($element_key, $office)
+    {
         $tracking_array = [
-                ["id" => 0, "name" => "New"],
-                ["id" => 1, "name" => "Complete"],
-                ["id" => 2, "name" => "Inactive"],
-                ["id" => 3, "name" => "Active"]
+            ["id" => 0, "name" => "New"],
+            ["id" => 1, "name" => "Complete"],
+            ["id" => 2, "name" => "Inactive"],
+            ["id" => 3, "name" => "Active"]
         ];
-        
+
         switch ($element_key):
             case 1: {
                     $data = [];
                     $lead_type_data = $this->db->get('type_of_contact_prospect')->result_array();
                     $partner_type_data = $this->db->get('type_of_contact_referral')->result_array();
                     foreach ($lead_type_data as $key => $value) {
-                        array_push($data,["id" => "1,".$value['id'],"name" => $value['name']]);
+                        array_push($data, ["id" => "1," . $value['id'], "name" => $value['name']]);
                     }
                     foreach ($partner_type_data as $key => $value) {
-                        array_push($data,["id" => "2,".$value['id'],"name" => $value['name']]);
+                        array_push($data, ["id" => "2," . $value['id'], "name" => $value['name']]);
                     }
                     // print_r($data);exit;
                     return $data;
@@ -1570,7 +1639,7 @@ Class Lead_management extends CI_Model {
             case 4: {
                     $this->db->select("st.id AS id, CONCAT(st.last_name, ', ',st.first_name,' ',st.middle_name) AS name");
                     $this->db->from('staff AS st');
-                    if ($office != ''):
+                    if ($office != '') :
                         $this->db->join('office_staff os', 'os.staff_id = st.id');
                         $this->db->where(['os.office_id' => $office]);
                     endif;
@@ -1586,7 +1655,8 @@ Class Lead_management extends CI_Model {
     }
 
 
-    public function get_event_filter_element_value($element_key) {
+    public function get_event_filter_element_value($element_key)
+    {
         // echo $element_key;exit;
         switch ($element_key):
             case 1: {
@@ -1613,11 +1683,13 @@ Class Lead_management extends CI_Model {
 
 
 
-    public function delete_lead_management($id) {
+    public function delete_lead_management($id)
+    {
         return $this->db->where("id", $id)->delete("lead_management");
     }
 
-    public function insert_new_event($id, $data) {
+    public function insert_new_event($id, $data)
+    {
         // echo $id;exit;		
         // return $data['lead_id'];
 
@@ -1648,18 +1720,21 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_event_details($office_id = '') {
+    public function get_event_details($office_id = '')
+    {
         if ($office_id != '') {
             $this->db->where("office_id", $office_id);
         }
         return $this->db->get('event')->result_array();
     }
 
-    public function get_prospects() {
+    public function get_prospects()
+    {
         return $this->db->get("lead_management")->result_array();
     }
 
-    public function insert_event_lead($array) {
+    public function insert_event_lead($array)
+    {
         $this->db->trans_begin();
         $this->db->insert("event_lead", $array);
 
@@ -1672,24 +1747,28 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_prospect_by_event_id($id) {
+    public function get_prospect_by_event_id($id)
+    {
         $this->db->select('*');
         $this->db->from('event_lead');
         $this->db->join('lead_management', 'lead_management.id = event_lead.lead_id');
         return $this->db->get();
     }
 
-    public function get_event_details_by_id($e_id) {
+    public function get_event_details_by_id($e_id)
+    {
         return $this->db->get_where("event", array("id" => $e_id))->row_array();
     }
 
-    public function get_office_name_by_id($id) {
+    public function get_office_name_by_id($id)
+    {
         $this->db->select('name');
         $office = $this->db->get_where("office", array("id" => $id))->row_array();
         return $office['name'];
     }
 
-    public function update_event($event_id, $data, $leadid) {
+    public function update_event($event_id, $data, $leadid)
+    {
         unset($data['lead_staff']);
         unset($data['lead_id']);
         unset($data['addlead_info']);
@@ -1727,7 +1806,8 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function change_tracking_status() {
+    public function change_tracking_status()
+    {
         $id = post('id');
         $status = post('value');
         if ($status == 1) {
@@ -1743,7 +1823,8 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_referred_leads() {
+    public function get_referred_leads()
+    {
         $user_id = sess('user_id');
         $this->db->where('staff_requested_by', $user_id);
         $this->db->where('referred_status', '1');
@@ -1791,7 +1872,8 @@ Class Lead_management extends CI_Model {
     // 		return $newarray;
     // }
 
-    public function get_requested_to_partner($id) {
+    public function get_requested_to_partner($id)
+    {
         $data = $this->db->get_where('referred_lead', array('lead_id' => $id))->row_array();
         $partner_id = $data['ref_partner_id'];
 
@@ -1799,13 +1881,15 @@ Class Lead_management extends CI_Model {
         return $value;
     }
 
-    public function get_requested_to_partner_id($id) {
+    public function get_requested_to_partner_id($id)
+    {
         $data = $this->db->get_where('referral_partner', array('partner_id' => $id))->row_array();
         $partner_id = $data['assisned_by_userid'];
         return $partner_id;
     }
 
-    public function update_lead_day($day, $lead_id) {
+    public function update_lead_day($day, $lead_id)
+    {
         $date_array = array();
         if ($day == 0) {
             $date_array['day_3_mail_date'] = '0000-00-00';
@@ -1818,7 +1902,8 @@ Class Lead_management extends CI_Model {
     }
 
     // Assign a lead as Partner
-    public function assign_lead_as_partner($id) {
+    public function assign_lead_as_partner($id)
+    {
         $this->db->trans_begin();
 
         $this->db->set('type', '2');
@@ -1836,7 +1921,8 @@ Class Lead_management extends CI_Model {
     }
 
     // Assign a lead as Client
-    public function assign_lead_as_client($id, $partner_id) {
+    public function assign_lead_as_client($id, $partner_id)
+    {
         $this->db->trans_begin();
 
         // Individual
@@ -1928,14 +2014,15 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function save_add_leads_modal($data) {
+    public function save_add_leads_modal($data)
+    {
 
         if (isset($data["lead_notes"])) {
             $lead_notes = $data["lead_notes"];
             unset($data["lead_notes"]);
         }
 
-       
+
         $values = array(
             'type_of_contact' => $data['type-of-contact'],
             'lead_source' => $data['lead-source'],
@@ -1948,16 +2035,16 @@ Class Lead_management extends CI_Model {
             'language' => $data['language']
         );
 
-         $this->db->trans_begin();
-         $this->db->insert("lead_management", $values);
-         $id = $this->db->insert_id();
-        
-          if (!empty($lead_notes)) {
+        $this->db->trans_begin();
+        $this->db->insert("lead_management", $values);
+        $id = $this->db->insert_id();
+
+        if (!empty($lead_notes)) {
             $this->notes->insert_note(3, $lead_notes, "lead_id", $id);
         }
 
 
-          if ($this->db->trans_status() === FALSE) {
+        if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return "-1";
         } else {
@@ -1966,7 +2053,8 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function update_addlead_modal($id, $data) {
+    public function update_addlead_modal($id, $data)
+    {
 
         if (isset($data["lead_notes"])) {
             $lead_notes = $data["lead_notes"];
@@ -2010,15 +2098,18 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_addleads_information($id) {
+    public function get_addleads_information($id)
+    {
         return $this->db->get_where("lead_management", array('id' => $id))->result_array();
     }
 
-    public function get_addlead_details($id) {
+    public function get_addlead_details($id)
+    {
         return $this->db->get_where("lead_management", array('id' => $id))->row_array();
     }
 
-    public function get_selected_languages($id) {
+    public function get_selected_languages($id)
+    {
 
         $this->db->select('lm.*,lg.*');
         $this->db->from('lead_management lm');
@@ -2028,7 +2119,8 @@ Class Lead_management extends CI_Model {
         return $result;
     }
 
-    public function get_addlead_details_by_id($id) {
+    public function get_addlead_details_by_id($id)
+    {
 
         $this->db->select('e.*,lmg.*');
         $this->db->from('event e');
@@ -2038,7 +2130,8 @@ Class Lead_management extends CI_Model {
         return $result;
     }
 
-    public function get_partner_count_by_staff($request_type) {
+    public function get_partner_count_by_staff($request_type)
+    {
         if ($request_type == 'byme') {
             $this->db->where('type', 2);
             $this->db->where('staff_requested_by', sess('user_id'));
@@ -2050,52 +2143,61 @@ Class Lead_management extends CI_Model {
         }
     }
 
-    public function get_types_of_lead($id) {
+    public function get_types_of_lead($id)
+    {
         $data = $this->db->get_where('lead_management', array('id' => $id))->row_array();
         return $data['type'];
     }
 
-    public function get_lead_type_for_mail() {
+    public function get_lead_type_for_mail()
+    {
         return $this->db->get("lead_type")->result_array();
     }
 
-    public function get_event_lead_by_id($id) {
+    public function get_event_lead_by_id($id)
+    {
         $data = $this->db->get_where('lead_management', array('event_id' => $id))->row_array();
         return $data['event_id'];
     }
 
-    public function get_event_lead_details($event_id) {
+    public function get_event_lead_details($event_id)
+    {
         $this->db->select('lead_management.*,languages.language as language_name');
         $this->db->from('lead_management');
-        $this->db->join('languages','lead_management.language=languages.id');
+        $this->db->join('languages', 'lead_management.language=languages.id');
         $this->db->where("lead_management.event_id", $event_id);
         return $this->db->get()->result_array();
     }
 
-    public function get_lead_note_count($id) {
+    public function get_lead_note_count($id)
+    {
         $this->db->select('lead_notes.*');
         $this->db->from('lead_notes');
-        $this->db->join('lead_management','lead_management.id=lead_notes.lead_id');
+        $this->db->join('lead_management', 'lead_management.id=lead_notes.lead_id');
         $this->db->where("lead_management.id", $id);
         return $this->db->get()->result_array();
     }
-    public function get_office_info_by_partner_id($partner_id) {
-        return $this->db->get_where('office_staff', array('staff_id' => $partner_id))->row_array()['office_id'];        
+    public function get_office_info_by_partner_id($partner_id)
+    {
+        return $this->db->get_where('office_staff', array('staff_id' => $partner_id))->row_array()['office_id'];
     }
-    public function update_lead_assigned_status($lead_id) {
+    public function update_lead_assigned_status($lead_id)
+    {
         $this->db->set('assigned_status', 'y');
         $this->db->where('id', $lead_id);
         return $this->db->update('lead_management');
     }
-    public function get_typeof_contact($type) {
+    public function get_typeof_contact($type)
+    {
         if ($type == '1') {
             return $this->db->get('type_of_contact_prospect')->result_array();
         } elseif ($type == '2') {
             return $this->db->get('type_of_contact_referral')->result_array();
         }
     }
-    public function get_updated_lead_status($id) {
-        $lead_status = $this->db->get_where('lead_management',array('id'=>$id))->row_array();
+    public function get_updated_lead_status($id)
+    {
+        $lead_status = $this->db->get_where('lead_management', array('id' => $id))->row_array();
         switch ($lead_status['status']) {
             case '1':
                 return 'Completed';
@@ -2105,19 +2207,19 @@ Class Lead_management extends CI_Model {
                 break;
             case '3':
                 return 'Active';
-                break;    
+                break;
             default:
                 return 'New';
                 break;
         }
-
     }
 
 
-      public function get_event_list($office_id = '',$filter_data = [],$sort = []) {
+    public function get_event_list($office_id = '', $filter_data = [], $sort = [])
+    {
         $this->db->select('ev.*,of.*');
         $this->db->from('event AS ev');
-        $this->db->join('office AS of','ev.office_id=of.id');
+        $this->db->join('office AS of', 'ev.office_id=of.id');
         $filter_where_in = [];
         $between = '';
         if (!empty($filter_data)) {
@@ -2130,34 +2232,32 @@ Class Lead_management extends CI_Model {
                     // echo $condition;exit;
                     if ($filter_key == "date") {
                         if (strlen($filter[0]) == 10) {
-                           
-                            $date_value = date("Y-m-d", strtotime($filter[0]));
-                           
-                            if($condition == 1){
-                             $filter_where_in[$this->filter_element_event[$filter_key]][] = $date_value;
-                            }elseif ($condition == 3) {
-                               
-                                $this->db->where('ev.event_date!=',$date_value);
-                            }
 
+                            $date_value = date("Y-m-d", strtotime($filter[0]));
+
+                            if ($condition == 1) {
+                                $filter_where_in[$this->filter_element_event[$filter_key]][] = $date_value;
+                            } elseif ($condition == 3) {
+
+                                $this->db->where('ev.event_date!=', $date_value);
+                            }
                         } elseif (strlen($filter[0]) == 23) {
                             $date_value = explode(" - ", $filter[0]);
-                           
+
                             foreach ($date_value as $date_key => $date) {
                                 $date_value[$date_key] = "'" . date("Y-m-d", strtotime($date)) . "'";
                             }
-                            $between = 'Date(' . $this->filter_element_event[$filter_key] . ')'.(($condition == 4) ? 'NOT ' : '') .' BETWEEN ' . implode(' AND ', $date_value);
-                            
+                            $between = 'Date(' . $this->filter_element_event[$filter_key] . ')' . (($condition == 4) ? 'NOT ' : '') . ' BETWEEN ' . implode(' AND ', $date_value);
                         }
                     } else {
                         foreach ($filter as $key => $filter_value) {
                             if ($filter_value != '') {
-                                if($condition == 1 || $condition == 2){
+                                if ($condition == 1 || $condition == 2) {
                                     $filter_where_in[$this->filter_element_event[$filter_key]][] = $filter_value;
-                                }elseif ($condition == 3 || $condition == 4) {
-                                    $this->db->where('ev.event_name!=',$filter_value);
-                                    $this->db->where('ev.location!=',$filter_value);
-                                    $this->db->where('of.name!=',$filter_value);
+                                } elseif ($condition == 3 || $condition == 4) {
+                                    $this->db->where('ev.event_name!=', $filter_value);
+                                    $this->db->where('ev.location!=', $filter_value);
+                                    $this->db->where('of.name!=', $filter_value);
                                 }
                             }
                         }
@@ -2174,9 +2274,9 @@ Class Lead_management extends CI_Model {
         }
 
         if (!empty($filter_where_in)) {
-            
+
             foreach ($filter_where_in as $column => $in) {
-                
+
                 $this->db->where_in($column, $in);
             }
         }
@@ -2189,183 +2289,196 @@ Class Lead_management extends CI_Model {
         return $result;
     }
 
-    public function get_lead_details_by_id($lead_id) {
-        $this->db->where('type !=','2');
-        $this->db->where('id',$lead_id);
+    public function get_lead_details_by_id($lead_id)
+    {
+        $this->db->where('type !=', '2');
+        $this->db->where('id', $lead_id);
         return $this->db->get('lead_management')->row_array();
     }
 
-    public function check_changes_in_mail_campaign($data) {
-        $this->db->where('mail_campaign_status',$data['mail_campaign_status_lead']);
-        $this->db->where('email',$data['lead_email']);
-        $this->db->where('id',$data['lead_id']);
+    public function check_changes_in_mail_campaign($data)
+    {
+        $this->db->where('mail_campaign_status', $data['mail_campaign_status_lead']);
+        $this->db->where('email', $data['lead_email']);
+        $this->db->where('id', $data['lead_id']);
         return $this->db->get('lead_management')->num_rows();
     }
-    public function get_lead_data($data) {       
+    public function get_lead_data($data)
+    {
         if ($data['date_range'] != '') {
             $daterange = $data['date_range'];
         } else {
             $daterange = '';
-        }                 
-        $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
+        }
+        $data_office = $this->db->get_where('office', ['status !=' => '2'])->result_array();
         $lead_details = [];
         if ($data['category'] == 'status') {
             foreach ($data_office as $do) {
                 $lead_data_status = [
                     'id' => $do['id'],
                     'office' => $do['name'],
-                    'total_lead' => $this->get_lead_data_report($do['id'],'total_lead',$daterange),
-                    'new' => $this->get_lead_data_report($do['id'],'new',$daterange),
-                    'active' => $this->get_lead_data_report($do['id'],'active',$daterange),
-                    'inactive' => $this->get_lead_data_report($do['id'],'inactive',$daterange),
-                    'completed' => $this->get_lead_data_report($do['id'],'completed',$daterange)
+                    'total_lead' => $this->get_lead_data_report($do['id'], 'total_lead', $daterange),
+                    'new' => $this->get_lead_data_report($do['id'], 'new', $daterange),
+                    'active' => $this->get_lead_data_report($do['id'], 'active', $daterange),
+                    'inactive' => $this->get_lead_data_report($do['id'], 'inactive', $daterange),
+                    'completed' => $this->get_lead_data_report($do['id'], 'completed', $daterange)
                 ];
-            array_push($lead_details,$lead_data_status);        
-            }    
-            return $lead_details;    
+                array_push($lead_details, $lead_data_status);
+            }
+            return $lead_details;
         }
         if ($data['category'] == 'type') {
             foreach ($data_office as $do) {
                 $lead_data_type = [
                     'id' => $do['id'],
                     'office' => $do['name'],
-                    'total_lead' => $this->get_lead_data_report($do['id'],'total_lead',$daterange),
-                    'client_lead' => $this->get_lead_data_report($do['id'],'client_lead',$daterange),
-                    'partner_lead' => $this->get_lead_data_report($do['id'],'partner_lead',$daterange)
+                    'total_lead' => $this->get_lead_data_report($do['id'], 'total_lead', $daterange),
+                    'client_lead' => $this->get_lead_data_report($do['id'], 'client_lead', $daterange),
+                    'partner_lead' => $this->get_lead_data_report($do['id'], 'partner_lead', $daterange)
                 ];
-            array_push($lead_details,$lead_data_type);        
-            }    
+                array_push($lead_details, $lead_data_type);
+            }
             return $lead_details;
         }
-        if ($data['category'] = 'mail_campaign') {            
+        if ($data['category'] = 'mail_campaign') {
             foreach ($data_office as $do) {
                 $lead_data_mail = [
                     'id' => $do['id'],
                     'office' => $do['name'],
-                    'total_lead' => $this->get_lead_data_report($do['id'],'total_lead',$daterange),
-                    'day_0' => $this->get_lead_data_report($do['id'],'day_0',$daterange),
-                    'day_3' => $this->get_lead_data_report($do['id'],'day_3',$daterange),
-                    'day_6' => $this->get_lead_data_report($do['id'],'day_6',$daterange),
-                    'campaign_on' => $this->get_lead_data_report($do['id'],'campaign_on',$daterange),
-                    'campaign_off' => $this->get_lead_data_report($do['id'],'campaign_off',$daterange)
+                    'total_lead' => $this->get_lead_data_report($do['id'], 'total_lead', $daterange),
+                    'day_0' => $this->get_lead_data_report($do['id'], 'day_0', $daterange),
+                    'day_3' => $this->get_lead_data_report($do['id'], 'day_3', $daterange),
+                    'day_6' => $this->get_lead_data_report($do['id'], 'day_6', $daterange),
+                    'campaign_on' => $this->get_lead_data_report($do['id'], 'campaign_on', $daterange),
+                    'campaign_off' => $this->get_lead_data_report($do['id'], 'campaign_off', $daterange)
                 ];
-            array_push($lead_details,$lead_data_mail);        
-            }    
+                array_push($lead_details, $lead_data_mail);
+            }
             return $lead_details;
         }
     }
-    public function get_lead_data_report($ofc_id,$key,$date_range) {        
-        $this->db->where('office',$ofc_id);
-        $this->db->where('type !=','2');
-        $this->db->where('referred_status !=','1');
-        
+    public function get_lead_data_report($ofc_id, $key, $date_range)
+    {
+        $this->db->where('office', $ofc_id);
+        $this->db->where('type !=', '2');
+        $this->db->where('referred_status !=', '1');
+
         if ($key == 'new') {
-            $this->db->where('status','0');    
+            $this->db->where('status', '0');
         }
         if ($key == 'active') {
-            $this->db->where('status','3');           
+            $this->db->where('status', '3');
         }
         if ($key == 'inactive') {
-            $this->db->where('status','2');       
+            $this->db->where('status', '2');
         }
         if ($key == 'completed') {
-            $this->db->where('status','1');       
+            $this->db->where('status', '1');
         }
         if ($key == 'client_lead') {
-            $this->db->where('type','1');       
+            $this->db->where('type', '1');
         }
         if ($key == 'partner_lead') {
-            $this->db->where('type','3');       
+            $this->db->where('type', '3');
         }
         if ($key == 'day_0') {
-            $this->db->where('day_0_mail_date !=','0000-00-00');       
+            $this->db->where('day_0_mail_date !=', '0000-00-00');
         }
         if ($key == 'day_3') {
-            $this->db->where('day_3_mail_date !=','0000-00-00');       
+            $this->db->where('day_3_mail_date !=', '0000-00-00');
         }
         if ($key == 'day_6') {
-            $this->db->where('day_6_mail_date !=','0000-00-00');       
-        }        
+            $this->db->where('day_6_mail_date !=', '0000-00-00');
+        }
         if ($key == 'campaign_on') {
-            $this->db->where('mail_campaign_status','1');       
-        }        
+            $this->db->where('mail_campaign_status', '1');
+        }
         if ($key == 'campaign_off') {
-            $this->db->where('mail_campaign_status','0');       
-        }                
+            $this->db->where('mail_campaign_status', '0');
+        }
         if ($date_range != "") {
             $date_value = explode("-", $date_range);
             $start_date = date("Y-m-d H:i:s", strtotime($date_value[0]));
             $end_date = date("Y-m-d H:i:s", strtotime($date_value[1]));
-            $this->db->where('referred_date >=',$start_date);
-            $this->db->where('referred_date <=',$end_date);   
-        }         
+            $this->db->where('referred_date >=', $start_date);
+            $this->db->where('referred_date <=', $end_date);
+        }
         return $this->db->get('lead_management')->num_rows();
-                                                        
     }
-    public function get_lead_start_date() {
+    public function get_lead_start_date()
+    {
         $this->db->select_min('referred_date');
-        $this->db->where('type !=','2');
+        $this->db->where('type !=', '2');
         $this->db->order_by('referred_date', 'ASC');
         $lead_date = $this->db->get('lead_management')->row_array()['referred_date'];
-        return date('m/d/Y' ,strtotime($lead_date));
+        return date('m/d/Y', strtotime($lead_date));
     }
-    public function get_partner_start_date() {
+    public function get_partner_start_date()
+    {
         $this->db->select_min('referred_date');
-        $this->db->where('type','2');
+        $this->db->where('type', '2');
         $this->db->order_by('referred_date', 'ASC');
-        $partner_date = $this->db->get('lead_management')->row_array()['referred_date'];    
-        return date('m/d/Y' ,strtotime($partner_date)); 
+        $partner_date = $this->db->get('lead_management')->row_array()['referred_date'];
+        return date('m/d/Y', strtotime($partner_date));
     }
-    public function get_partner_data($data) {              
-        $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
+    public function get_partner_data($data)
+    {
+        $data_office = $this->db->get_where('office', ['status !=' => '2'])->result_array();
         $partner_data = [];
-        if ($data['date_range'] != '') {            
+        if ($data['date_range'] != '') {
             $daterange = $data['date_range'];
             $date_value = explode("-", $daterange);
             $start_date = date("Y-m-d H:i:s", strtotime($date_value[0]));
-            $end_date = date("Y-m-d H:i:s", strtotime($date_value[1]));              
-            foreach ($data_office as $do) {               
+            $end_date = date("Y-m-d H:i:s", strtotime($date_value[1]));
+            foreach ($data_office as $do) {
                 $partner_data_list = [
                     'id' => $do['id'],
                     'office' => $do['name'],
-                    'total_partner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                    'banker' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'1','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                    'business_owner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'10','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                    'consultant' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'7','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                    'property_manager' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'5','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                    'insurance' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'2','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                    'lawyer' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'6','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                    'real_estate' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'3','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                    'vendor' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'9','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows(),
-                    'other' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'11','referred_date >=' =>$start_date, 'referred_date <=' =>$end_date))->num_rows()
+                    'total_partner' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'referred_date >=' => $start_date, 'referred_date <=' => $end_date))->num_rows(),
+                    'banker' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '1', 'referred_date >=' => $start_date, 'referred_date <=' => $end_date))->num_rows(),
+                    'business_owner' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '10', 'referred_date >=' => $start_date, 'referred_date <=' => $end_date))->num_rows(),
+                    'consultant' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '7', 'referred_date >=' => $start_date, 'referred_date <=' => $end_date))->num_rows(),
+                    'property_manager' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '5', 'referred_date >=' => $start_date, 'referred_date <=' => $end_date))->num_rows(),
+                    'insurance' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '2', 'referred_date >=' => $start_date, 'referred_date <=' => $end_date))->num_rows(),
+                    'lawyer' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '6', 'referred_date >=' => $start_date, 'referred_date <=' => $end_date))->num_rows(),
+                    'real_estate' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '3', 'referred_date >=' => $start_date, 'referred_date <=' => $end_date))->num_rows(),
+                    'vendor' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '9', 'referred_date >=' => $start_date, 'referred_date <=' => $end_date))->num_rows(),
+                    'other' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '11', 'referred_date >=' => $start_date, 'referred_date <=' => $end_date))->num_rows()
                 ];
-                array_push($partner_data,$partner_data_list);
+                array_push($partner_data, $partner_data_list);
             }
-        } else{
+        } else {
             $start_date = '';
             $end_date = '';
             foreach ($data_office as $do) {
-            $partner_data_list = [
-                'id' => $do['id'],
-                'office' => $do['name'],
-                'total_partner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id']))->num_rows(),
-                'banker' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'1'))->num_rows(),
-                'business_owner' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'10'))->num_rows(),
-                'consultant' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'7'))->num_rows(),
-                'property_manager' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'5'))->num_rows(),
-                'insurance' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'2'))->num_rows(),
-                'lawyer' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'6'))->num_rows(),
-                'real_estate' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'3'))->num_rows(),
-                'vendor' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'9'))->num_rows(),
-                'other' => $this->db->get_where('lead_management',array('type'=>'2','office'=>$do['id'],'type_of_contact'=>'11'))->num_rows()
-            ];
-            array_push($partner_data,$partner_data_list);
-          }
-        }                
+                $partner_data_list = [
+                    'id' => $do['id'],
+                    'office' => $do['name'],
+                    'total_partner' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id']))->num_rows(),
+                    'banker' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '1'))->num_rows(),
+                    'business_owner' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '10'))->num_rows(),
+                    'consultant' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '7'))->num_rows(),
+                    'property_manager' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '5'))->num_rows(),
+                    'insurance' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '2'))->num_rows(),
+                    'lawyer' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '6'))->num_rows(),
+                    'real_estate' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '3'))->num_rows(),
+                    'vendor' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '9'))->num_rows(),
+                    'other' => $this->db->get_where('lead_management', array('type' => '2', 'office' => $do['id'], 'type_of_contact' => '11'))->num_rows()
+                ];
+                array_push($partner_data, $partner_data_list);
+            }
+        }
         return $partner_data;
     }
 
-    public function get_all_partners_list($selected_service) {
-        return $this->db->get_where('lead_management',['type'=>'2','type_of_contact'=>$selected_service])->result_array();
+    public function get_all_partners_list($selected_service)
+    {   
+        $this->db->select('lm.id AS p_id,lm.*');
+        $this->db->where('lm.type', '2');
+        $this->db->where('lm.type_of_contact', $selected_service);
+        $this->db->from('lead_management AS lm');
+        $this->db->join('staff AS s', 's.user = lm.email', 'inner');
+        return $this->db->get()->result_array();
+        // return $this->db->get_where('lead_management',['type'=>'2','type_of_contact'=>$selected_service])->result_array();
     }
 }
