@@ -746,7 +746,7 @@
 <script>
     get_financial_account_list('<?= $client_id; ?>', 'project', '<?= $task_id; ?>');
 <?php if ($bookkeeping_input_type == 3) { ?>
-        check_adjustment('<?= $bookkeeper_details->adjustment ?>', 'edit');
+        check_adjustment('<?= (isset($bookkeeper_details->adjustment) && $bookkeeper_details->adjustment!=''?$bookkeeper_details->adjustment:'') ?>', 'edit');
 <?php } ?>
     $(function () {
         $('.add-upload-file').on("click", function () {
