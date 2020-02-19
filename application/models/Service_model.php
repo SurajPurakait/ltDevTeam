@@ -1,5 +1,3 @@
-
-application/x-httpd-php Service_model.php ( C++ source, ASCII text, with very long lines )
 <?php
 
 class Service_model extends CI_Model
