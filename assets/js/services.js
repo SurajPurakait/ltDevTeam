@@ -3613,3 +3613,6 @@ function saveMortgages() {
     });
 }
 
+function show_mortgage_information(reference='',reference_id='') {
+    window.location.href = base_url+'services/partner_services/show_mortgages_information/'+reference+'/'+reference_id; 
+}
