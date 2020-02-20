@@ -24,7 +24,6 @@
         }else{
             $type = get_type_of_contact_name($value['type_of_contact'],2)['name'];
         }
-        echo $type;exit;
         $notes = get_notes_ref_partner($value['lead_id']);  
 
      ?>
