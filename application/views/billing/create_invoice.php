@@ -16,8 +16,8 @@
                                  <?php } else{ ?>
 
                                 <select class="form-control" onchange="invoiceContainerAjax(this.value, <?= $reference_id; ?>, '','');" name="invoice_type" id="invoice_type" title="Invoice Type" required="">
-                                    <option value="1" <?= (isset($client_type) && $client_type == '1') ? 'selected' : ''; ?>>Business Client</option>
-                                    <option value="2" <?= (isset($client_type) && $client_type == '2') ? 'selected' : ''; ?>>Individual</option>
+                                    <option value="1" <?= (isset($client_id) && $client_id == '1') ? 'selected' : ''; ?>>Business Client</option>
+                                    <option value="2" <?= (isset($client_id) && $client_id == '2') ? 'selected' : ''; ?>>Individual</option>
                                 </select>
                             <?php } ?>
                                 <div class="errorMessage text-danger"></div>
@@ -178,8 +178,8 @@
     $(function () {
         $(".datepicker_mdy_due").datepicker({format: 'mm/dd/yyyy', autoHide: true, startDate: new Date()});
     });
-<?php if ($client_id != ''){ ?>
-        invoiceContainerAjax(<?= $client_type ?>, <?= $reference_id; ?>, '','');
+<?php if ($client_id != '' && $reference_id != ''){ ?>
+        invoiceContainerAjax(<?= $client_id ?>, <?= $reference_id; ?>, '','');
 <?php } else if($is_recurrence != ''){ ?>
         invoiceContainerAjax(1, <?= $reference_id; ?>, '','y');
 <?php }else{ ?>

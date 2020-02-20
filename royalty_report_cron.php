@@ -50,8 +50,8 @@
         '(SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = \'payment\' AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS pay_amount',
     ];
     $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
-    $where['status'] = 'AND `inv`.`status` != 0 ';
-
+    $where['status'] = 'AND `inv`.`status` NOT IN(0,7) ';
+    
     $table = '`invoice_info` AS `inv` ' .
         'INNER JOIN `order` AS `ord` ON `ord`.`invoice_id` = `inv`.`id` ' .
         'INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END)'.
@@ -91,8 +91,9 @@
                 $override_price = explode(',',$rpd['all_services_override'])[$i];
                 $total_net = ($override_price != '') ? (int)$override_price - (int)$service_detail['cost'] : (int)$service_detail['retail_price'] - (int)$service_detail['cost'];
                 $date_val = date('Y-m-d', strtotime($rpd['created_time']));
-                $fee_with_cost = (((int)$total_net * (int)$office_fees)/100); 
-                $fee_without_cost = (((int)$override_price * (int)$office_fees)/100);
+                $fee_with_cost = (((int)$total_net * (int)$office_fees)/100) + (int)$service_detail['cost']; 
+                $fee_without_cost = (((int)$total_net * (int)$office_fees)/100);
+                
                 if (($override_price - $collected) == 0) {
                     $payment_status = 'Paid';
                 } elseif (($override_price - $collected) == $override_price) {
@@ -202,7 +203,6 @@
                             } 
                             $update_sql .= " WHERE invoice_id = '".$invoice_id."'";
                             mysqli_query($conn,$update_sql);
-                            // echo $update_sql;
                         }    
                     } else {                          
                         $sql_query = "INSERT INTO `royalty_report`(`date`, `client_id`, `invoice_id`, `service_id`, `service_name`, `retail_price`, `override_price`, `cost`, `payment_status`, `collected`, `payment_type`, `authorization_id`, `reference`, `total_net`, `office_fee`, `fee_with_cost`, `fee_without_cost`, `office_id`,`office_id_name` ,`created_by`) VALUES (
@@ -214,7 +214,6 @@
                         '$fee_with_cost','$fee_without_cost','$office_id','$office_id_name',
                         '$created_by')";
                         mysqli_query($conn,$sql_query)or die('insert error');
-                        // echo $sql_query;
                     }   
                     // echo "<hr>";    
             }

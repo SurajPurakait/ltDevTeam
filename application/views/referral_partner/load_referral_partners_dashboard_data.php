@@ -1,7 +1,8 @@
 <?php 
 // echo '<pre>';
 // print_r($referral_partner_data);
-// echo '</pre>'; exit; ?>
+// echo '</pre>'; exit; 
+?>
 <?php if (!empty($referral_partner_data)): ?>
     <?php foreach ($referral_partner_data as $key => $value):
         $staff_data = staff_info_by_id($value["staff_requested_by"]);
