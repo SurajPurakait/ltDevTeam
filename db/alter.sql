@@ -1248,7 +1248,12 @@ ALTER TABLE `project_recurrence_main` ADD `start_year` VARCHAR(20) NOT NULL AFTE
 ALTER TABLE `partner_services_data` CHANGE `what_is_property_for` `what_is_property_for` INT(2) NOT NULL COMMENT '1 : Primary Residence,2: Vacation or Secondary Home, 3: Investment Property';
 ALTER TABLE `partner_services_data` CHANGE `realtor` `realtor` VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '1: Yes , 2: No';
 
+/*import project_bookkeeping_bank_record_time.sql */
 /* import project_bookkeeping_bank_record_time.sql */
 /* import partner_services_data.sql */
 
 /*live end*/
+
+/*20.02.2020*/
+ALTER TABLE `lead_management` ADD `client_reference` VARCHAR(50) NOT NULL AFTER `day_6_mail_date`, ADD `client_id` INT(11) NOT NULL AFTER `client_reference`;
+ALTER TABLE `lead_management` CHANGE `client_id` `client_id` INT(11) NOT NULL DEFAULT '0';
