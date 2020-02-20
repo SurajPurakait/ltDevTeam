@@ -3848,6 +3848,9 @@ body.body-small .footer.fixed {
     font-weight: 600;
     padding: 10px 20px 10px 25px;
 }
+#client-view-business .nav-tabs > li > a {
+    padding: 10px 20px;
+}
 .nav-tabs > li > a:hover,
 .nav-tabs > li > a:focus {
     background-color: #e6e6e6;
@@ -8833,12 +8836,26 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
     margin-left: 0.5em;
 }
 .watch {
-    background: #8ab6456e;
     width: 235px;
-    padding: 10px 25px;
-    border-radius: 5px;
+    padding: 0px;
+    /*border-radius: 5px;*/
 }
-
+.start i{
+  font-size: 21px;
+color:#f00;
+}
+.stop i{
+    font-size: 22px;
+color:#0f47f0;
+}
+.save i{
+    font-size: 21px;
+color:#3f9f2b;
+}
+.watch a{
+    display: inline-block;
+margin-left: 8px;
+}
 /* Responsive design */
 
 @media (min-width: 1200px) {
@@ -9319,5 +9336,5 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
     width: inherit;
 }
 #reports-tab_wrapper, #dt-reports-wrap{
-	padding-top: 160px;
+    padding-top: 160px;
 }
