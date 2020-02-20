@@ -613,7 +613,8 @@ class Service_model extends CI_Model
             } elseif (in_array('ord.status = 7', $where)) {
                 $where[] = 'ord.status not in ("0")';
             } else {
-                $where[] = 'ord.status not in ("0","7")';
+                // $where[] = 'ord.status not in ("0","7")';
+                $where[] = 'ord.status in ("2","1","0","7")';
             }
         }
 
@@ -645,11 +646,8 @@ class Service_model extends CI_Model
             $sql .= " ORDER BY ord.id DESC";
         }
         $this->db->query('SET SQL_BIG_SELECTS=1');
-        // echo $sql;exit;
         $result = $this->db->query($sql)->result();
-        //        echo count($result);
-        //        echo $this->db->last_query();
-        //        echo'<pre>';print_r($result);die;
+        //        echo $this->db->last_query();exit;
         return $result;
     }
 

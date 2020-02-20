@@ -3535,6 +3535,15 @@ class Project_Template_model extends CI_Model {
         $this->db->where('id',$record_id);
         return $this->db->delete('project_bookkeeping_bank_record_time');
     }
+    public function addActionForBookkeepingNeedClarification($data){
+        $this->load->model('action_model');
+        $task_id=$data['task_id'];
+        $client_type=$data['client_type'];
+        $client_id=$data['client_id'];
+        $action_message=$data['action_message'];
+        $staff_info=$_SESSION['staff_info'];
+    }
+    
 }
 
 ?>
