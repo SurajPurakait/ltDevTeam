@@ -119,7 +119,113 @@
                 </tr>  
             </tbody>
         </table>
-       <?php } else { ?>
+       <?php } elseif(isset ($header_title) && $header_title == "New Company - Florida"){
+               if(isset($company_name_option['name1']) && $company_name_option['name1'] != '') {
+           ?>
+           <table class="table table-striped table-bordered" style="width:100%;">
+               <tbody>
+                   <tr>
+                      <td width="300" <?= $style; ?>>
+                        <b>Name of Business</b>
+                      </td>  
+                      <td width="300" <?= $style; ?>>
+                        <?php echo $company_name_option['name1']."<br>"; ?>
+                        <?php if($company_name_option['name2'] != ''){
+                              echo "<hr>".$company_name_option['name2']."<br>"."<hr>"; }
+                              if($company_name_option['name3'] != '') {
+                              echo $company_name_option['name3']; }
+                        ?>
+                      </td>                      
+                   </tr>
+               </tbody>
+           </table>
+       <?php } else { ?> 
+                <div class="col-lg-12">            
+                    <div class = "text-center m-t-30">
+                        <div class = "alert alert-danger">
+                            <i class = "fa fa-times-circle-o fa-4x"></i>
+                            <h3><strong>Sorry!</strong> incomplete input form</h3>
+                        </div>
+                    </div>
+                </div>
+           <?php } } elseif(isset ($header_title) && $header_title == "Recurring Bookkeeping") { ?>
+            <table class="table table-striped table-bordered" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td width="300" <?= $style; ?>>
+                            <b> Financial Accounts:</b>
+                        </td>
+                        <td <?= $style; ?>>
+                        <div id="accounts-list">
+                            <input type="hidden" title="Financial Accounts" id="accounts-list-count" required="required" value="">
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                        </td>
+                    </tr>  
+                </tbody>
+            </table>
+           <?php } elseif (isset ($header_title) && $header_title == "Sales Tax Application") { ?>
+            <table class="table table-striped table-bordered" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td width="300" <?= $style; ?>>
+                            <b> State of Sales Tax:</b>
+                        </td> 
+                        <td width="300" <?= $style; ?>>
+                        
+                        </td>
+                    </tr>  
+                    <tr>
+                        <td width="300" <?= $style; ?>>
+                            <b> County of Sales Tax:</b>
+                        </td>  
+                        <td width="300" <?= $style; ?>>
+                        
+                        </td>
+                    </tr>  
+                    <tr>
+                        <td width="300" <?= $style; ?>>
+                            <b> Bank Name:</b>
+                        </td>  
+                        <td width="300" <?= $style; ?>>
+                        
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td width="300" <?= $style; ?>>
+                            <b> Bank Account #:</b>
+                        </td>  
+                        <td width="300" <?= $style; ?>>
+                        
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td width="300" <?= $style; ?>>
+                            <b> Bank Routing #:</b>
+                        </td>  
+                        <td width="300" <?= $style; ?>>
+                        
+                        </td>
+                    </tr>  
+                    <tr>
+                        <td width="300" <?= $style; ?>>
+                            <b> Personal Or Business Account:</b>
+                        </td>  
+                        <td width="300" <?= $style; ?>>
+                        
+                        </td>
+                    </tr>  
+                    <tr>
+                        <td width="300" <?= $style; ?>>
+                            <b> Checking Or Savings Account:</b>
+                        </td>  
+                        <td width="300" <?= $style; ?>>
+                        
+                        </td>
+                    </tr>  
+                </tbody>
+            </table>
+             <?php  } else { ?>
         <div class="col-lg-12">            
             <div class = "text-center m-t-30">
                 <div class = "alert alert-danger">
