@@ -1682,7 +1682,7 @@ class Service_model extends CI_Model
 
                 $contact_info = $this->db->get_where('contact_info',['reference'=>'company','type'=>'1','reference_id'=>$reference_id])->row_array();
                 $lead_data = array(
-                    'type' => 1,
+                    'type' => '3',
                     'type_of_contact' => $data->partner_type,
                     'first_name' => $contact_info['first_name'],
                     'last_name' => $contact_info['first_name'],
@@ -1696,7 +1696,8 @@ class Service_model extends CI_Model
                     'office' => $data->office,                
                     'date_of_first_contact' => date('Y-m-d'),
                     'staff_requested_by' => sess('user_id'),
-                    'status' => 0,
+                    'status' => '0',
+                    'submission_date' => date('Y-m-d'),
                     'referred_status' => '1',
                     
                 );
@@ -1785,7 +1786,7 @@ class Service_model extends CI_Model
 
                     $contact_info = $this->db->get_where('contact_info',['reference'=>'company','type'=>'1','reference_id'=>$company_id])->row_array();
                     $lead_data = array(
-                        'type' => 1,
+                        'type' => '3',
                         'type_of_contact' => $data->partner_type,
                         'first_name' => $contact_info['first_name'],
                         'last_name' => $contact_info['first_name'],
@@ -1795,12 +1796,12 @@ class Service_model extends CI_Model
                         'country' => $contact_info['country'],
                         'zip' => $contact_info['zip'],
                         'phone1' => $contact_info['phone1'],
-                        // 'phone2' => $contact_info['phone2'],
                         'email' => $contact_info['email1'],
                         'office' => $data->staff_office,                
                         'date_of_first_contact' => date('Y-m-d'),
                         'staff_requested_by' => sess('user_id'),
-                        'status' => 0,
+                        'status' => '0',
+                        'submission_date' => date('Y-m-d'),
                         'referred_status' => '1',
                     );
 
@@ -3511,7 +3512,7 @@ class Service_model extends CI_Model
                         
                         $contact_info = $this->db->get_where('contact_info',['reference'=>'individual','type'=>'1','reference_id'=>$reference_id])->row_array();
                         $lead_data = array(
-                            'type' => '1',
+                            'type' => '3',
                             'type_of_contact' => $data['partner_type'],
                             'first_name' => $data['first_name'],
                             'last_name' => $data['last_name'],                            
@@ -3525,6 +3526,7 @@ class Service_model extends CI_Model
                             'date_of_first_contact' => date('Y-m-d'),
                             'staff_requested_by' => sess('user_id'),
                             'status' => '0',
+                            'submission_date' => date('Y-m-d'),
                             'referred_status' => '1',
                         );
 
@@ -3607,7 +3609,7 @@ class Service_model extends CI_Model
 
                         $contact_info = $this->db->get_where('contact_info',['reference'=>'individual','type'=>'1','reference_id'=>$reference_id])->row_array();
                         $lead_data = array(
-                            'type' => '1',
+                            'type' => '3',
                             'type_of_contact' => $data['partner_type'],
                             'first_name' => $contact_info['first_name'],
                             'last_name' => $contact_info['last_name'],                            
@@ -3621,6 +3623,7 @@ class Service_model extends CI_Model
                             'date_of_first_contact' => date('Y-m-d'),
                             'staff_requested_by' => sess('user_id'),
                             'status' => '0',
+                            'submission_date' => date('Y-m-d'),
                             'referred_status' => '1'                            
                         );
                         $this->db->insert('lead_management',$lead_data);
