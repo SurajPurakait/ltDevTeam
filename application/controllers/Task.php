@@ -174,6 +174,7 @@ class Task extends CI_Controller {
 //            $this->load->view('services/show_document_list', $data);
             }else if($bookkeeping_input_type==2){
                 $render_data['client_id']=$client_dtls->client_id;
+                $render_data['client_type']=$client_dtls->client_type;
                 $render_data['client_account_details']= $this->Project_Template_model->getBookkeepingInput2AccountDetails($client_dtls->client_id,$task_id,$project_id);
 //                $render_data['bookkeeper_details']=$this->Project_Template_model->getProjetBookkeeperDetails($task_id);
             }else{
@@ -247,6 +248,11 @@ class Task extends CI_Controller {
         $this->Project_Template_model->deleteBookkeepingTimerRecord($record_id);
         $ins['record_details']=$this->Project_Template_model->insertBookkeepingBankRecordTime('',$bank_id);
         $this->load->view('task/bookkeeping_record_details',$ins);
+    }
+    public function add_action_for_bookkeeping_need_clarification(){
+        $data=post();
+//        $this->Project_Template_model->addActionForBookkeepingNeedClarification($data);
+        return true;
     }
 }
 ?>

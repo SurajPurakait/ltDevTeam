@@ -2519,6 +2519,8 @@ class Action_model extends CI_Model {
                     $criterias = implode(",", $criteria_value);
                 } elseif ($variable_value == 9) {
                     $criterias = implode(",", $criteria_value);
+                }elseif ($variable_value == 15){
+                    $criterias = implode(",", $criteria_value);
                 }
                 // if ($variable_value == 3) {
                 //     $query = 'office_id' . (($condition_value == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';

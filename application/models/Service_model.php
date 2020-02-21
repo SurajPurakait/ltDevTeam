@@ -613,7 +613,8 @@ class Service_model extends CI_Model
             } elseif (in_array('ord.status = 7', $where)) {
                 $where[] = 'ord.status not in ("0")';
             } else {
-                $where[] = 'ord.status not in ("0","7")';
+                // $where[] = 'ord.status not in ("0","7")';
+                $where[] = 'ord.status in ("2","1","0","7")';
             }
         }
 
@@ -645,11 +646,8 @@ class Service_model extends CI_Model
             $sql .= " ORDER BY ord.id DESC";
         }
         $this->db->query('SET SQL_BIG_SELECTS=1');
-        // echo $sql;exit;
         $result = $this->db->query($sql)->result();
-        //        echo count($result);
-        //        echo $this->db->last_query();
-        //        echo'<pre>';print_r($result);die;
+        //        echo $this->db->last_query();exit;
         return $result;
     }
 
@@ -1699,6 +1697,8 @@ class Service_model extends CI_Model
                     'status' => '0',
                     'submission_date' => date('Y-m-d'),
                     'referred_status' => '1',
+                    'client_reference' => 'company', 
+                    'client_id' => $reference_id
                     
                 );
 
@@ -1803,6 +1803,8 @@ class Service_model extends CI_Model
                         'status' => '0',
                         'submission_date' => date('Y-m-d'),
                         'referred_status' => '1',
+                        'client_reference' => 'company', 
+                        'client_id' => $company_id
                     );
 
                     $this->db->insert('lead_management',$lead_data);
@@ -3467,7 +3469,7 @@ class Service_model extends CI_Model
                     'birth_date' => $this->system->invertDate($data['birth_date']),
                     'ssn_itin' => $data['ssn_itin'],
                     'type' => '',
-                    'status' => 1,
+                    'status' => '1',
                     "added_by_user" => sess('user_id')
                 );
                 $this->db->insert('individual', $individual_insert_data);
@@ -3528,6 +3530,8 @@ class Service_model extends CI_Model
                             'status' => '0',
                             'submission_date' => date('Y-m-d'),
                             'referred_status' => '1',
+                            'client_reference' => 'individual', 
+                            'client_id' => $reference_id
                         );
 
                         $this->db->insert('lead_management',$lead_data);
@@ -3624,7 +3628,9 @@ class Service_model extends CI_Model
                             'staff_requested_by' => sess('user_id'),
                             'status' => '0',
                             'submission_date' => date('Y-m-d'),
-                            'referred_status' => '1'                            
+                            'referred_status' => '1',
+                            'client_reference' => 'individual', 
+                            'client_id' => $reference_id                           
                         );
                         $this->db->insert('lead_management',$lead_data);
 
@@ -3654,5 +3660,16 @@ class Service_model extends CI_Model
     public function get_type_of_partner_services()
     {
         return $this->db->get_where('partner_services', ['ideas' => 'par_a_a'])->row_array()['partner_type'];
+    }
+
+    public function get_mortgage_info($reference,$reference_id) {
+        $this->db->select('psd.*,tom.name AS type_of_mortgage_name');
+        $this->db->where('psd.reference',$reference);
+        $this->db->where('psd.reference_id',$reference_id);
+        $this->db->from('type_of_mortgage AS tom');
+        $this->db->join('partner_services_data AS psd','psd.type_of_mortgage = tom.id','inner');
+        return $this->db->get('partner_services_data')->row_array();
+
+        // return $this->db->get_where('partner_services_data', ['reference' => $reference,'reference_id' => $reference_id])->row_array();    
     }
 }
