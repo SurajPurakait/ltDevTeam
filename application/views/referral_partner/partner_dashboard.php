@@ -167,9 +167,10 @@
 
             <form name="setpwd-form" method="POST" action="<?php echo base_url(); ?>referral_partner/Referral_partners/set_password">
                 <div id="pwd-modal-body" class="modal-body">
+                    <h3 id="lead_email" class="text-center text-info"></h3>
                     <div class="form-group">
                         <label>Set Password</label>
-                        <input type="password" name="password" id="pwd" placeholder="Enter Password" value="******" class="form-control">
+                        <input type="password" name="password" id="pwd" placeholder="Enter Password" value="******" class="form-control"><span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password" style="float: right;margin-left: -25px;margin-top: -25px;position: relative;z-index: 2;padding-right: 25px;cursor: pointer;"></span>
                     </div>
                     <input type="hidden" name="hiddenid" id="hiddenid" value="">
                     <input type="hidden" name="staffrequestedby" id="staffrequestedby" value="">
@@ -274,6 +275,19 @@
                     '<a href="javascript:void(0)" onclick="removeNote(\'note_div' + div_count + '\')" class="text-danger"><i class="fa fa-times"></i> Remove Note</a>' +
                     '</div>';
             $(newHtml).insertAfter($(this).closest('.form-group'));
+        });
+
+        $(".toggle-password").click(function() {
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input_type = $('#pwd').prop("type");
+
+            if (input_type == "password") {
+                // $("#pwd").type = "text";
+                $("#pwd").prop("type", "text");
+            } else {
+                // $("#pwd").type = "password";
+                $("#pwd").prop("type", "password");
+            }
         });
     });
 

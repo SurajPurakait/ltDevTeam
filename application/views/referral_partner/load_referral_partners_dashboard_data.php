@@ -29,7 +29,7 @@
      ?>
         <div class="panel panel-default service-panel type2 filter-active">
             <div class="panel-heading">                           
-              <a href="<?= base_url("/lead_management/home/view/{$value["id"]}/1/"); ?>" class="btn btn-primary btn-xs btn-service-view"><i class="fa fa-eye" aria-hidden="true"></i>
+              <a href="<?= base_url("/lead_management/home/view/{$value["id"]}/1/"); ?>" class="btn btn-primary btn-xs btn-service-view" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i>
                     View</a> 
                 <a href="<?= base_url("/referral_partner/referral_partners/edit_lead_prospect/{$value["id"]}"); ?>"
                        class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i>
