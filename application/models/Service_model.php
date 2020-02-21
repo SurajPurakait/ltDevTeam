@@ -3663,6 +3663,13 @@ class Service_model extends CI_Model
     }
 
     public function get_mortgage_info($reference,$reference_id) {
-        return $this->db->get_where('partner_services_data', ['reference' => $reference,'reference_id' => $reference_id])->row_array();    
+        $this->db->select('psd.*,tom.name AS type_of_mortgage_name');
+        $this->db->where('psd.reference',$reference);
+        $this->db->where('psd.reference_id',$reference_id);
+        $this->db->from('type_of_mortgage AS tom');
+        $this->db->join('partner_services_data AS psd','psd.type_of_mortgage = tom.id','inner');
+        return $this->db->get('partner_services_data')->row_array();
+
+        // return $this->db->get_where('partner_services_data', ['reference' => $reference,'reference_id' => $reference_id])->row_array();    
     }
 }
