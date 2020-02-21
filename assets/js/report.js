@@ -8,10 +8,30 @@ function loadRoyaltyReportsData(office = '',date_range = '') {
         'processing': false,
         'serverSide': true,
         'scrollX':true,
+        "pageLength": 100,
         'dom': '<"html5buttons"B>lTfgitp',
         'buttons': [ 
-            {extend: 'excel', title: 'RoyaltyReport'},
-            {extend: 'print',
+            {
+                extend: 'excel', 
+                title: 'RoyaltyReport',
+                exportOptions : {
+                    modifier : {                   
+                        order : 'index',  // 'current', 'applied', 'index',  'original'
+                        page : 'all',      // 'all',     'current'
+                        search : 'none'     // 'none',    'applied', 'removed'
+                    }
+                }
+            },
+            {
+                extend: 'print',
+                title: 'RoyaltyReport',
+                exportOptions : {
+                    modifier : {                   
+                        order : 'index',  // 'current', 'applied', 'index',  'original'
+                        page : 'all',      // 'all',     'current'
+                        search : 'none'     // 'none',    'applied', 'removed'
+                    }
+                },
                 customize: function (win){
                     $(win.document.body).addClass('white-bg');
                     $(win.document.body).css('font-size', '10px');
@@ -19,7 +39,8 @@ function loadRoyaltyReportsData(office = '',date_range = '') {
                     $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
-            }
+                },
+
             }
         ],
         'columnDefs': [

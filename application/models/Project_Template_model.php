@@ -3477,6 +3477,17 @@ class Project_Template_model extends CI_Model {
     }
     public function updateProjectBookkeepingInputFormStatus($status,$id){
         $created_at=Date("Y-m-d h:i:sa");
+        $comment='';
+        $this->db->select('COUNT(id) as data_count');
+        $this->db->where('stuff_id', $this->session->userdata("user_id"));
+        $this->db->where('status_value', $status);
+        $this->db->where('section_id', $id);
+        $this->db->where('related_table_name', 'project_task_bookkeeping_finance_account_report');
+        $data_count = $this->db->get('tracking_logs')->row_array();
+//        $task_id=$this->db->get_where('project_task_bookkeeping_finance_account_report',['id'=>$id])->row()->task_id;
+        if ($data_count['data_count'] == 0) {
+            $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => $status, "section_id" => $id, "related_table_name" => "project_task_bookkeeping_finance_account_report", "comment" => $comment]);
+        }
         if($status==0){
             $this->db->where('id',$id);
             $update=$this->db->update('project_task_bookkeeping_finance_account_report',['tracking'=>0,'created_at'=>$created_at]);
@@ -3584,6 +3595,9 @@ class Project_Template_model extends CI_Model {
             $this->system->save_general_notification('action', $insert_id, 'insert', $staff_id);
             return $insert_id;
         }
+    }
+    public function getBookkeepingInputFormTrackingLog($id, $table_name) {
+        return $this->db->query("SELECT concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id, (SELECT name from department where id=(SELECT department_id from department_staff where staff_id=s.id )) as department, case when tracking_logs.status_value = '0' then 'Incomplete' when tracking_logs.status_value = '1' then 'Complete' when tracking_logs.status_value = '2' then 'Not Required' else tracking_logs.status_value end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
     }
     
 }
