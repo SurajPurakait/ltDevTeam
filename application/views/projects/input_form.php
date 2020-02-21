@@ -520,10 +520,13 @@
                                             <?php } ?>
                                         </table>
                                     </div>
+                                    <div>
+                                        <input type="button" name="clarification" id="clarification" value="Need Clarification" onclick="need_clarification('<?= $task_id ?>','<?= $client_type ?>','<?= $client_id ?>','<?= $project_id ?>')">
+                                    </div>
                                 </div>
 
                             <?php } else if ($bookkeeping_input_type == 3) { ?>
-                                <h3>REVIEW CLIENT MANAGER</h3>
+                                <!--<h3>REVIEW CLIENT MANAGER</h3>-->
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label">Adjustment Needed<span class="text-danger">*</span></label>
                                     <label class="checkbox-inline">
@@ -621,6 +624,9 @@
                                     </div>
                                 </div>
                             <?php } ?>
+                        </div>
+                            <div id="adjustment_no" class="p-l-35 text-success">
+                            <h4 id="adjustment_no_result"></h4>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
@@ -856,11 +862,18 @@
                 }, function () {
                     setTimeout(function () {
                         swal("Constant and Confirm Bookkeeping was done correctly..");
+                        $("#adjustment_no_result").html('Confirming Bookkeeping was done correctly');
+                        $("#adjustment_no_result").show();
                     }, 500);
                 });
+                
+            }else{
+                $("#adjustment_no_result").html('Confirming Bookkeeping was done correctly');
+                $("#adjustment_no_result").show();
             }
         } else {
             $("#bookkeeping_check3").show();
+            $("#adjustment_no_result").hide();
     }
     }
 </script>

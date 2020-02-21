@@ -368,9 +368,10 @@ function show_lead_notes(id) {
     });
 }
 
-function assign_ref_partner_password(id,requested_by_staff_id) {
+function assign_ref_partner_password(id,requested_by_staff_id,email) {
     $("#setpwd #hiddenid").val(id);
     $("#setpwd #staffrequestedby").val(requested_by_staff_id);
+    $("#setpwd #lead_email").html('User Email : '+email);
     openModal('setpwd');
 }
 

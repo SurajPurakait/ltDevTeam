@@ -824,4 +824,10 @@ class Modal extends CI_Controller {
        
         $this->load->view('modal/recipient_modal', $render_data);
     }
+
+    // public function get_lead_details_by_id() {
+    //     $render_data["lead_email"] = $this->lead_management->get_lead_details_by_id(post('id'))['email'];
+        
+    // }
+    
 }

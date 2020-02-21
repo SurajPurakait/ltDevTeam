@@ -22,7 +22,7 @@ if (count($referral_data) != 0): ?>
                         Refer New Lead</a>
                   
 
-                    <a href="javascript:void(0)" onclick="assign_ref_partner_password(<?= $value["id"]; ?>,<?= $value["requested_by_id"]; ?>)" class="btn btn-primary btn-xs btn-service-lead"><i class="fa fa-key" aria-hidden="true"></i>
+                    <a href="javascript:void(0)" onclick="assign_ref_partner_password(<?= $value["id"]; ?>,<?= $value["requested_by_id"]; ?>,'<?= $value["email"]; ?>')" class="btn btn-primary btn-xs btn-service-lead"><i class="fa fa-key" aria-hidden="true"></i>
                         Setup</a>
                   
                     
@@ -82,6 +82,7 @@ if (count($referral_data) != 0): ?>
                                     <th>Tracking</th>
                                     <th>Referred Date</th>
                                     <th>Note</th>
+                                    <th>Mortagage</th>
                                 </tr>
                                 <?php foreach ($lead_list_referred_to_me as $ad) { 
                                       $notes = get_notes_ref_partner($ad['id']);  
@@ -111,6 +112,7 @@ if (count($referral_data) != 0): ?>
                                         </td>
                                         <td><?= ($ad["referred_date"] != "0000-00-00") ? date("m/d/Y", strtotime($ad["referred_date"])) : "-"; ?></td>
                                         <?php echo '<td title="Notes"><span>' . (($notes > 0) ? '<a class="label label-warning" href="javascript:void(0)" onclick="show_ref_partner_notes(\'' . $ad["id"] . '\')"><b>' . $notes . '</b></a>' : '<a class="label label-warning" href="javascript:void(0)" onclick="show_ref_partner_notes(\'' . $ad["id"] . '\')"><b>' . $notes . '</b></a>') . '</span></td>'; ?>
+                                        <td>Mortages</td>
                                     </tr>
                                 <?php }
                                 ?>                        
@@ -138,6 +140,7 @@ if (count($referral_data) != 0): ?>
                                     <th>Tracking</th>
                                     <th>Referred Date</th>
                                     <th>Note</th>
+                                    <th></th>
                                 </tr>
                                 <?php foreach ($lead_list_referred_by_me as $ad) { 
                                       $notes = get_notes_ref_partner($ad['id']);  
@@ -167,6 +170,14 @@ if (count($referral_data) != 0): ?>
                                         </td>
                                         <td><?= ($ad["referred_date"] != "0000-00-00") ? date("m/d/Y", strtotime($ad["referred_date"])) : "-"; ?></td>
                                         <?php echo '<td title="Notes"><span>' . (($notes > 0) ? '<a class="label label-warning" href="javascript:void(0)" onclick="show_ref_partner_notes(\'' . $ad["id"] . '\')"><b>' . $notes . '</b></a>' : '<a class="label label-warning" href="javascript:void(0)" onclick="show_ref_partner_notes(\'' . $ad["id"] . '\')"><b>' . $notes . '</b></a>') . '</span></td>'; ?>
+                                        <?php
+                                            if (!empty($ad["client_reference"]) && !empty($ad["client_id"])) {
+                                        ?>
+                                        <td><a href="javascript:void(0)" class="label label-primary" onclick="show_mortgage_information('<?= $ad["client_reference"] ?>','<?= $ad["client_id"]; ?>')">Mortgage</a>
+                                        </td>
+                                        <?php
+                                            }
+                                        ?>
                                     </tr>
                                 <?php }
                                 ?>                        
