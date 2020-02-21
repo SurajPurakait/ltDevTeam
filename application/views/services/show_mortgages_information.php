@@ -1,3 +1,12 @@
+<?php 
+	if ($mortgages_info['what_is_property_for'] == '1') {
+		$what_is_property_for = 'Primary Residence'; 
+	} elseif ($mortgages_info['what_is_property_for'] == '2') {
+		$what_is_property_for = 'Vacation or Secondary Home';
+	} elseif ($mortgages_info['what_is_property_for'] == '3') {
+		$what_is_property_for = 'Investment Property';
+	}
+?>
 <div class="wrapper wrapper-content">
     <div class="ibox-content m-b-md">
 		<div class="table-responsive">           
@@ -8,7 +17,7 @@
             	</tr>
             	<tr>
             		<td>Type of Mortgage</td>
-            		<td><?= $mortgages_info['type_of_mortgage']; ?></td>
+            		<td><?= $mortgages_info['type_of_mortgage_name']; ?></td>
             	</tr>
             	<tr>
             		<td>Purchase Price</td>
@@ -16,7 +25,9 @@
             	</tr>
             	<tr>
             		<td>What is Property For</td>
-            		<td><?= $mortgages_info['what_is_property_for']; ?></td>
+            		<td>
+						<?= $what_is_property_for; ?>            				
+            		</td>
             	</tr>
             	<tr>
             		<td>Realtor</td>
