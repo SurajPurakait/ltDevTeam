@@ -85,7 +85,7 @@ class Referral_partners extends CI_Controller {
         $this->load->template('referral_partner/reffer_lead_to_partner', $render_data);
     }
 
-    function load_partner_dashboard() { // ajax_dashboard_referral
+    function load_partner_dashboard() { //all partner's ajax_dashboard
         $lead_type = post("lead_type");
         $request_by = post('req_by');
         $status = post("status");
@@ -94,7 +94,7 @@ class Referral_partners extends CI_Controller {
         $this->load->view('referral_partner/load_referral_partner_data', $render_data);
     }
 
-    function load_referral_partners_dashboard() {
+    function load_referral_partners_dashboard() { // referrel partner's login ajax_dashboard
         $type = post('type');
         $status = post('status');
         // $render_data['referral_partner_data'] = $this->referral_partner->load_referral_partners_dashboard_data($type, $status);

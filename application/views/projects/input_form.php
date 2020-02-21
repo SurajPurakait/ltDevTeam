@@ -521,7 +521,7 @@
                                         </table>
                                     </div>
                                     <div>
-                                        <input type="button" name="clarification" id="clarification" value="Need Clarification" onclick="need_clarification('<?= $task_id ?>','<?= $client_type ?>','<?= $client_id ?>','<?= $task_data->added_by_user ?>')">
+                                        <input type="button" name="clarification" id="clarification" value="Need Clarification" onclick="need_clarification('<?= $task_id ?>','<?= $client_type ?>','<?= $client_id ?>','<?= $project_id ?>')">
                                     </div>
                                 </div>
 

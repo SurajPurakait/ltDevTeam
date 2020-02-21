@@ -475,14 +475,16 @@ class Project_Template_model extends CI_Model {
                         . 'from project_template_staff_main '
                         . 'where template_id=' . $id . ' and type=2';
                 $data2 = $this->db->query($query)->row_array();
-
-                $query = 'select CONCAT(last_name, ", ",first_name,", ",middle_name) as full_name '
-                        . 'from staff '
-                        . 'where id=' . $data2['staff_id'] . '';
-                $data3 = $this->db->query($query)->row_array();
-
-
-                return $data3['full_name'];
+                if($data2['staff_id']!=''){
+                    $query = 'select CONCAT(last_name, ", ",first_name,", ",middle_name) as full_name '
+                            . 'from staff '
+                            . 'where id=' . $data2['staff_id'] . '';
+                    $data3 = $this->db->query($query)->row_array();
+                    return $data3['full_name'];
+                }
+                else{
+                    return '';
+                }
             }
         }
     }
@@ -3538,10 +3540,50 @@ class Project_Template_model extends CI_Model {
     public function addActionForBookkeepingNeedClarification($data){
         $this->load->model('action_model');
         $task_id=$data['task_id'];
+        $project_id=$data['project_id'];
         $client_type=$data['client_type'];
         $client_id=$data['client_id'];
         $action_message=$data['action_message'];
         $staff_info=$_SESSION['staff_info'];
+        $practice_id=$this->getProjectClientPracticeId($client_id, $client_type);
+        $subject="#".$project_id."ProjectId Need Clarification";
+        $staffids=$this->db->get_where('department_staff',['department_id'=>11])->result_array();
+//        print_r($staffids);die;
+        $insert_action=array(
+            'office_id'=>$staff_info['office'],
+            'created_office'=>$staff_info['office'],
+            'created_department'=>$staff_info['department'],
+            'department'=>11,
+            'office'=>$staff_info['office'],
+            'client_id'=>$practice_id,
+            'subject'=> $subject,
+            'message'=>$action_message,
+            'priority'=>1,
+            'status'=>0,
+            'added_by_user'=>$staff_info['id'],
+            'my_task'=>0,
+            'is_all'=>1,
+        );
+        $this->db->insert('actions',$insert_action);
+        $insert_id=$this->db->insert_id();
+        if(!empty($staffids)){
+            $staff_id=[];
+            foreach ($staffids as $key=> $value) {
+                $staff_id[$key]=$value['staff_id'];
+                $this->db->insert('action_staffs', ["action_id" => $insert_id, "staff_id" => $value['staff_id']]);
+            }
+        }
+        $insert_client_list=array(
+            'action_id'=>$insert_id,
+            'client_type'=>$client_type,
+            'client_list_id'=>$client_id,
+            'client_id'=>$practice_id
+        );
+        $this->db->insert('action_client_list',$insert_client_list);
+        if($insert_id!='' && !empty($staffids)){
+            $this->system->save_general_notification('action', $insert_id, 'insert', $staff_id);
+            return $insert_id;
+        }
     }
     
 }

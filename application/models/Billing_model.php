@@ -2563,7 +2563,7 @@ class Billing_model extends CI_Model {
         $staff_office = $staff_info['office'];
         $departments = explode(',', $staff_info['department']);
         $select = [
-            'inv1.id as invoice_id',
+            'inv.id as invoice_id',
             'inv.reference_id as reference_id',
             'inv.order_id as order_id',
             'inv.new_existing as new_existing',
