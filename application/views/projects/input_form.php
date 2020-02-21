@@ -692,6 +692,21 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="updateBookkeeping_input1Statusinner()">Save changes</button>
             </div>
+            <div class="modal-body" style="display: none;" id="log_modal">
+                <div style="height:200px; overflow-y: scroll">
+                    <table id="status_log" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                                <th>time</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
