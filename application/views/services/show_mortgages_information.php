@@ -9,7 +9,8 @@
 ?>
 <div class="wrapper wrapper-content">
     <div class="ibox-content m-b-md">
-		<div class="table-responsive">           
+		<div class="table-responsive">
+			<h3 class="m-b-25">Mortgages And Lending Information</h3>           
             <table class="table table-striped" style="width:100%;">
             	<tr>
             		<td>Mortagage Status</td>
