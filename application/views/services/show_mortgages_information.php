@@ -80,9 +80,9 @@ if ($mortgages_info['what_is_property_for'] == '1') {
 					<td class="p-0">
 						<table class="table table-bordered p-b-0 w-100 m-b-0">
 							<tr>
-								<td width="100px" class="text-center" style="vertical-align: middle;background: #e7eaec;">
-									<b><?= ($mortgages_info['realtor'] == '1') ? 'Yes' : 'No'; ?></b>
-								</td>
+								<!-- <td width="100px" class="text-center" style="vertical-align: middle;background: #e7eaec;">
+									<b><?//= ($mortgages_info['realtor'] == '1') ? 'Yes' : 'No'; ?></b>
+								</td> -->
 								<td>
 									<table class="table table-hover table-bordered w-100 m-b-0">
 										<tr>
