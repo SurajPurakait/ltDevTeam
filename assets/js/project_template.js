@@ -1848,6 +1848,17 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
             $("#changetrackinginner #rad1").prop('checked', false);
             $("#changetrackinginner #rad0").prop('checked', false).attr('disabled', true);
         }
+        $.get($('#baseurl').val() + "task/get_bookkeeping_input_form_tracking_log/" + id + "/project_task_bookkeeping_finance_account_report", function (data) {
+            $("#status_log > tbody > tr").remove();
+            var returnedData = JSON.parse(data);
+            for (var i = 0, l = returnedData.length; i < l; i++) {
+                $('#status_log > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
+            }
+            if (returnedData.length >= 1)
+                $("#log_modal").show();
+            else
+                $("#log_modal").hide();
+        });
         $("#changetrackinginner #input_id").val(id);
     }
     function updateBookkeeping_input1Statusinner() {
@@ -1915,7 +1926,7 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
                 url: base_url + 'task/add_action_for_bookkeeping_need_clarification',
                 dataType: "html",
                 success: function (result) {
-                    swal("Clarification done successfully.");
+                    swal("Query submited successfully!");
                 }
             });
         }
