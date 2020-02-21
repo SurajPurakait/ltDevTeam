@@ -277,17 +277,25 @@
             $(newHtml).insertAfter($(this).closest('.form-group'));
         });
 
-        $(".toggle-password").click(function() {
+        $(".toggle-password").mouseup(function() {
             $(this).toggleClass("fa-eye fa-eye-slash");
             var input_type = $('#pwd').prop("type");
 
-            if (input_type == "password") {
-                // $("#pwd").type = "text";
+            if (input_type == "password") {                
                 $("#pwd").prop("type", "text");
             } else {
-                // $("#pwd").type = "password";
                 $("#pwd").prop("type", "password");
             }
+        })
+        .mousedown(function(){
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input_type = $('#pwd').prop("type");
+
+            if (input_type == "password") {                
+                $("#pwd").prop("type", "text");
+            } else {
+                $("#pwd").prop("type", "password");
+            }    
         });
     });
 
