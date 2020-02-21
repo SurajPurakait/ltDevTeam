@@ -2481,4 +2481,8 @@ class Lead_management extends CI_Model
         return $this->db->get()->result_array();
         // return $this->db->get_where('lead_management',['type'=>'2','type_of_contact'=>$selected_service])->result_array();
     }
+
+    public function get_referred_staff_id($lead_id="") {
+        return $this->db->get_where('referred_lead',['lead_id'=>$lead_id])->row_array();
+    }
 }
