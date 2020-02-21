@@ -251,8 +251,8 @@ class Task extends CI_Controller {
     }
     public function add_action_for_bookkeeping_need_clarification(){
         $data=post();
-//        $this->Project_Template_model->addActionForBookkeepingNeedClarification($data);
-        return true;
+        $insert=$this->Project_Template_model->addActionForBookkeepingNeedClarification($data);
+        echo $insert;
     }
 }
 ?>
