@@ -1,4 +1,4 @@
-<?php // print_r($related_service_files);die;         ?>
+<?php // print_r($related_service_files);die;            ?>
 <div class="wrapper wrapper-content">
     <div class="row">
         <div class="col-lg-12">
@@ -286,13 +286,13 @@
                                             for ($i = 0; $i <= 5; $i++) {
                                                 ?>
                                                 <option value="<?php echo $year[$i]; ?>" <?php
-                                                        if ($year[$i] == date('Y')) {
-                                                            echo "selected";
-                                                        }
-                                                        ?>><?php echo $year[$i]; ?></option>
-        <?php
-    }
-    ?>
+                                                if ($year[$i] == date('Y')) {
+                                                    echo "selected";
+                                                }
+                                                ?>><?php echo $year[$i]; ?></option>
+                                                        <?php
+                                                    }
+                                                    ?>
                                         </select>
                                         <div class="errorMessage text-danger"></div>
                                     </div>
@@ -309,13 +309,13 @@
                                             for ($i = 0; $i <= 5; $i++) {
                                                 ?>
                                                 <option value="<?php echo $year[$i]; ?>" <?php
-                                                        if ($year[$i] == date('Y')) {
-                                                            echo "selected";
-                                                        }
-                                                        ?>><?php echo $year[$i]; ?></option>
-        <?php
-    }
-    ?>
+                                                if ($year[$i] == date('Y')) {
+                                                    echo "selected";
+                                                }
+                                                ?>><?php echo $year[$i]; ?></option>
+                                                        <?php
+                                                    }
+                                                    ?>
                                         </select>
                                         <div class="errorMessage text-danger"></div>
                                     </div>
@@ -343,16 +343,16 @@
                             <input type="hidden" name="user_id" id="user_id" value="<?= $staffInfo['id']; ?>">
                             <input type="hidden" name="user_type" id="user_type" value="<?= $staffInfo['type']; ?>">
                             <div class="hr-line-dashed"></div>
-<?php } ?>
-<?php
-if ($input_form_type == 1):
-    if ($bookkeeping_input_type == 1) {
-        ?>
+                        <?php } ?>
+                        <?php
+                        if ($input_form_type == 1):
+                            if ($bookkeeping_input_type == 1) {
+                                ?>
                                 <!--New bookkeeping input form section-->
                                 <div class="panel-body">
                                     <div class="table-responsive">
                                         <table class="table table-borderless">
-        <?php if (!empty($client_account_details)) { ?>
+                                            <?php if (!empty($client_account_details)) { ?>
                                                 <tr>
                                                     <th style='width:8%;  text-align: center;'>Bank Name</th>
                                                     <th style='width:8%;  text-align: center;'>Account Number</th>
@@ -391,12 +391,12 @@ if ($input_form_type == 1):
                                                         <td title="Tracking" class="text-center"><a href='javascript:void(0)' onclick='change_bookkeeping_finance_input_status("<?= $accounts['id']; ?>", "<?= $status ?>")'> <span id="trackinner-<?= $accounts['id'] ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                                                         <td title="Time & Date" class="text-center"><?= $created_at; ?></td>
                                                         <td title="Notes" class="text-center"><span> 
-                <?php
-                $read_status = project_task_notes_readstatus($task_id);
-                // print_r($read_status);
+                                                                <?php
+                                                                $read_status = project_task_notes_readstatus($task_id);
+                                                                // print_r($read_status);
 
-                if (get_project_task_note_count($task_id) > 0 && in_array(0, $read_status)) {
-                    ?> 
+                                                                if (get_project_task_note_count($task_id) > 0 && in_array(0, $read_status)) {
+                                                                    ?> 
 
                                                                     <a id="notecountinner-<?= $task_id ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task_id; ?>)"><b> <?= get_project_task_note_count($task_id) ?></b></a>
 
@@ -412,35 +412,36 @@ if ($input_form_type == 1):
 
                                                                     <a id="notecountinner-<?= $task_id ?>" class="label label-secondary" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task_id; ?>)"><b> <?= get_project_task_note_count($task_id) ?></b></a>
 
-                                                            <?php
-                                                        }
-                                                        ?>
+                                                                    <?php
+                                                                }
+                                                                ?>
                                                             </span></td>
-                                                    <?php
-                                                    $file_count = getTaskFilesCount($task_id);
-                                                    $unread_files_count = getUnreadTaskFileCount($task_id, 'task');
-                                                    ?>
-                <?= '<td title="Files" class="text-center" ><span id="taskfilespan' . $task_id . '">' . (($unread_files_count->unread_files_count > 0) ? '<a class="label label-danger" href="javascript:void(0)" count="' . $file_count->files . '" id="taskfile' . $task_id . '" onclick="show_task_files(\'' . $task_id . '\',\'' . $new_staffs . $task_data->added_by_user . '\')"><b>' . $file_count->files . '</b></a>' : '<a class="label label-success" href="javascript:void(0)" count="' . $file_count->files . '" id="actionfile' . $task_id . '" onclick="show_task_files(\'' . $task_id . '\',\'' . $new_staffs . $task_data->added_by_user . '\')"><b>' . $file_count->files . '</b></a>') . '</span></td>'; ?>
+                                                        <?php
+                                                        $file_count = getTaskFilesCount($task_id);
+                                                        $unread_files_count = getUnreadTaskFileCount($task_id, 'task');
+                                                        ?>
+                                                        <?= '<td title="Files" class="text-center" ><span id="taskfilespan' . $task_id . '">' . (($unread_files_count->unread_files_count > 0) ? '<a class="label label-danger" href="javascript:void(0)" count="' . $file_count->files . '" id="taskfile' . $task_id . '" onclick="show_task_files(\'' . $task_id . '\',\'' . $new_staffs . $task_data->added_by_user . '\')"><b>' . $file_count->files . '</b></a>' : '<a class="label label-success" href="javascript:void(0)" count="' . $file_count->files . '" id="actionfile' . $task_id . '" onclick="show_task_files(\'' . $task_id . '\',\'' . $new_staffs . $task_data->added_by_user . '\')"><b>' . $file_count->files . '</b></a>') . '</span></td>'; ?>
                                                     </tr>
-            <?php }
-        } else {
-            ?>
+                                                    <?php
+                                                }
+                                            } else {
+                                                ?>
                                                 <div class = "text-center m-t-30">
                                                     <div class = "alert alert-danger">
                                                         <i class = "fa fa-times-circle-o fa-4x"></i>
                                                         <h3><strong>Sorry!</strong> no data found</h3>
                                                     </div>
                                                 </div>
-        <?php } ?>
+                                            <?php } ?>
                                         </table>
                                     </div>
                                 </div>
 
-    <?php } else if ($bookkeeping_input_type == 2) { ?>
+                            <?php } else if ($bookkeeping_input_type == 2) { ?>
                                 <div class="panel-body">
                                     <div class="table-responsive">
                                         <table class="table table-borderless">
-        <?php if (!empty($client_account_details)) { ?>
+                                            <?php if (!empty($client_account_details)) { ?>
                                                 <tr>
                                                     <th style='width:8%;  text-align: center;'>Bank Name</th>
                                                     <th style='width:8%;  text-align: center;'>Account Number</th>
@@ -455,26 +456,37 @@ if ($input_form_type == 1):
                                                     <tr>
                                                         <td title="Bank Name" class="text-center"><?= $accounts['bank_name']; ?></td>
                                                         <td title="Account Number" class="text-center"><?= $accounts['account_number']; ?></td>
-                                                        <td title="Total Transactions" class="text-center"><input type="text" name="total_transaction" id="total_transaction" onblur="save_transaction(<?= $accounts['id'] ?>,this.value)" value="<?= $accounts['total_transaction']!=''?$accounts['total_transaction']:'' ?>" style="border-left: 0;border-right: 0;border-top: 0;border-bottom: 1px solid #676a6c70;text-align: center"></td>
-                                                        <td title="Uncategorized Items" class="text-center"><input type="text" name="uncategorized_item" id="uncategorized_item" onblur="save_uncategorized_item(<?= $accounts['id'] ?>,this.value)" value="<?= $accounts['uncategorized_item']!=''?$accounts['uncategorized_item']:'' ?>" style="border-left: 0;border-right: 0;border-top: 0;border-bottom: 1px solid #676a6c70;text-align: center" ></td>
+                                                        <td title="Total Transactions" class="text-center"><input type="text" name="total_transaction" id="total_transaction" onblur="save_transaction(<?= $accounts['id'] ?>, this.value)" value="<?= $accounts['total_transaction'] != '' ? $accounts['total_transaction'] : '' ?>" style="border-left: 0;border-right: 0;border-top: 0;border-bottom: 1px solid #676a6c70;text-align: center"></td>
+                                                        <td title="Uncategorized Items" class="text-center"><input type="text" name="uncategorized_item" id="uncategorized_item" onblur="save_uncategorized_item(<?= $accounts['id'] ?>, this.value)" value="<?= $accounts['uncategorized_item'] != '' ? $accounts['uncategorized_item'] : '' ?>" style="border-left: 0;border-right: 0;border-top: 0;border-bottom: 1px solid #676a6c70;text-align: center" ></td>
                                                         <td title="Time" class="text-center">
                                                             <div class="form-group">
-                                                            <div class="col-lg-10">
-                                                                <div class="watch">
-                                                                    <h3 id="total_time" name='total_time'><?= (isset($bookkeeper_details->total_time) ? ($bookkeeper_details->total_time != '' ? $bookkeeper_details->total_time : '') : '') ?></h3>
-                                                                    <input type='button' class="btn btn-success" id='start' name="start" onclick="add()" value="Start">
-                                                                    <input type="button" class="btn btn-warning" id='stop' name="stop" value="Stop">
-                                                                    <input type="button" class="btn btn-danger" id='clear' name="clear" value="Clear">
-                                                                </div>
-                                                            </div>
-                                                        </div></td>
-                                                        <td title="Notes" class="text-center"><span> 
-                                                            <?php
-                                                            $read_status = project_task_notes_readstatus($task_id);
-                                                            // print_r($read_status);
+                                                                <div class="col-lg-10">
+                                                                    <div class="watch">
+                                                                        <a href="javascript:void(0)" class="start" title="Record" id="start" name="start" onclick="add(<?= $accounts['id'] ?>)"><i class="fa fa-dot-circle-o" aria-hidden="true"></i></a>
+                                                                        <a href="javascript:void(0)" class="stop" title="Pause" id="stop" name="stop" onclick="stop_record()"><i class="fa fa-pause-circle" aria-hidden="true"></i></a>
+                                                                        <a href="javascript:void(0)" class="save" title="Save Entry" id="clear" name="clear" onclick="clear_record(<?= $accounts['id'] ?>)"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+                                                                        <h3 id="total_time"></h3>
+                                                                    </div>
 
-                                                            if (get_project_task_note_count($task_id) > 0 && in_array(0, $read_status)) {
-                                                                ?> 
+                                                                    <input type="hidden" id="bank_id" value="<?= $accounts['id'] ?>">
+                                                                    <div id="load_record_time-<?= $accounts['id'] ?>" >
+                                                                        <?php
+                                                                        $record_details = get_bookkeeping_records_details($accounts['id']);
+                                                                        foreach ($record_details as $key => $record) {
+                                                                            ?>
+                                                                            <h4 id="records_time" class="" name='records_time'>Entry <?= $key + 1 . ": " ?><?= $record['record_time'] ?><a href="javascript:void(0)" onclick="delete_recoded_time(<?= $record['id'] ?>,<?= $record['bank_id'] ?>)"><span class="fa fa-times text-danger m-l-4"></span></a></h4>
+                                                                        <?php } ?>
+                                                                    </div>
+                                                                    <div id="timer_result-<?= $accounts['id'] ?>"></div>
+                                                                </div>
+                                                            </div></td>
+                                                        <td title="Notes" class="text-center"><span> 
+                                                                <?php
+                                                                $read_status = project_task_notes_readstatus($task_id);
+                                                                // print_r($read_status);
+
+                                                                if (get_project_task_note_count($task_id) > 0 && in_array(0, $read_status)) {
+                                                                    ?> 
 
                                                                     <a id="notecountinner-<?= $task_id ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task_id; ?>)"><b> <?= get_project_task_note_count($task_id) ?></b></a>
 
@@ -490,40 +502,44 @@ if ($input_form_type == 1):
 
                                                                     <a id="notecountinner-<?= $task_id ?>" class="label label-secondary" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task_id; ?>)"><b> <?= get_project_task_note_count($task_id) ?></b></a>
 
-                                                            <?php
-                                                        }
-                                                        ?>
+                                                                    <?php
+                                                                }
+                                                                ?>
                                                             </span></td>
                                                     </tr>
-            <?php }
-        } else {
-            ?>
+                                                    <?php
+                                                }
+                                            } else {
+                                                ?>
                                                 <div class = "text-center m-t-30">
                                                     <div class = "alert alert-danger">
                                                         <i class = "fa fa-times-circle-o fa-4x"></i>
                                                         <h3><strong>Sorry!</strong> no data found</h3>
                                                     </div>
                                                 </div>
-        <?php } ?>
+                                            <?php } ?>
                                         </table>
+                                    </div>
+                                    <div>
+                                        <input type="button" name="clarification" id="clarification" value="Need Clarification" onclick="need_clarification('<?= $task_id ?>','<?= $client_type ?>','<?= $client_id ?>','<?= $task_data->added_by_user ?>')">
                                     </div>
                                 </div>
 
-    <?php } else if ($bookkeeping_input_type == 3) { ?>
-                                <h3>REVIEW CLIENT MANAGER</h3>
+                            <?php } else if ($bookkeeping_input_type == 3) { ?>
+                                <!--<h3>REVIEW CLIENT MANAGER</h3>-->
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label">Adjustment Needed<span class="text-danger">*</span></label>
                                     <label class="checkbox-inline">
-                                        <input class="checkclass" value="y" type="radio" id="need_adjustment" name="need_adjustment" required title="Input Form" <?= (isset($bookkeeper_details->adjustment) ? ($bookkeeper_details->adjustment == 'y' ? 'checked' : '') : '') ?>> Yes
+                                        <input class="checkclass" value="y" type="radio" id="need_adjustment" name="need_adjustment" checked onclick="check_adjustment(this.value)" required title="Input Form" <?= (isset($bookkeeper_details->adjustment) ? ($bookkeeper_details->adjustment == 'y' ? 'checked' : '') : '') ?>> Yes
                                     </label>
                                     <label class="checkbox-inline">
-                                        <input class="checkclass" value="n" type="radio" id="need_adjustment2" name="need_adjustment" required title="Input Form" <?= (isset($bookkeeper_details->adjustment) ? ($bookkeeper_details->adjustment == 'n' ? 'checked' : '') : '') ?>> No
+                                        <input class="checkclass" value="n" type="radio" id="need_adjustment2" name="need_adjustment" onclick="check_adjustment(this.value)" required title="Input Form" <?= (isset($bookkeeper_details->adjustment) ? ($bookkeeper_details->adjustment == 'n' ? 'checked' : '') : '') ?>> No
                                     </label>
                                     <div class="errorMessage text-danger"></div>
                                 </div>
-                                <?php } endif; ?>
-                            <?php if (!empty($related_service_files)): ?>
-                                <?php if ($bookkeeping_input_type != 1) { ?>
+                            <?php } endif; ?>
+                        <?php if (!empty($related_service_files)): ?>
+                            <?php if ($bookkeeping_input_type != 1) { ?>
                                 <ul class="uploaded-file-list">
                                     <?php
                                     foreach ($related_service_files as $file) :
@@ -548,65 +564,70 @@ if ($input_form_type == 1):
                                                 <p class="text-overflow-e" title="<?= $file_name; ?>"><?= $file_name; ?></p>
                                                 <a class='text-danger text-right show m-t-5 p-5' href="javascript:void(0)" onclick="deleteFile(<?= $file_id; ?>)"><i class='fa fa-times-circle'></i> Remove</a>
                                             </li>
-            <?php
-            endif;
-        endforeach;
-        ?>
+                                        <?php
+                                        endif;
+                                    endforeach;
+                                    ?>
                                 </ul>
-    <?php } endif; ?>
-<?php if ($bookkeeping_input_type != 1 &&  $bookkeeping_input_type != 2) { ?>
-                            <div class="form-group">
-                                <label class="col-sm-3 col-md-2 control-label">Attachment:</label>
-                                <div class="col-sm-9 col-md-10">
-                                    <div class="upload-file-div">
-                                        <input class="file-upload" id="action_file" type="file" name="project_attachment[]" title="Upload File">
-                                        <div class="errorMessage text-danger m-t-5"></div>
-                                    </div>
-                                    <a href="javascript:void(0)" class="text-success add-upload-file"><i class="fa fa-plus"></i> Add File</a>
-                                </div>
-                            </div>
-    <?php
-    if (isset($notes_data)) {
-        foreach ($notes_data as $index => $nl) {
-            $rand = rand(000, 999);
-            if ($nl['user_id'] != $this->session->userdata('user_id')) {
-                ?>
-                                        <div class="form-group">
-                                            <label class="col-lg-2 control-label"><?= $index == 0 ? $note_title : ""; ?></label>
-                                            <div class="col-lg-10">
-                                                <div title="<?= $note_title ?>"><?= $nl['note']; ?></div>
-                                                <div>By: <?= $nl['staff_name']; ?></div>
-                                                <div>Department: <?= staff_department_name($nl['user_id']); ?></div>
-                                                <div>Time: <?= $nl['time']; ?></div>                                            
-                                            </div>
+                            <?php } endif; ?>
+                        <div id="bookkeeping_check3">
+                            <?php if ($bookkeeping_input_type != 1 && $bookkeeping_input_type != 2) { ?>
+                                <div class="form-group">
+                                    <label class="col-sm-3 col-md-2 control-label">Attachment:</label>
+                                    <div class="col-sm-9 col-md-10">
+                                        <div class="upload-file-div">
+                                            <input class="file-upload" id="action_file" type="file" name="project_attachment[]" title="Upload File">
+                                            <div class="errorMessage text-danger m-t-5"></div>
                                         </div>
-                                        <textarea style="display:none;" <?= $required == 'y' ? "required='required'" : ""; ?> class="form-control" name="edit_task_note[]"  title="<?= $note_title ?>"><?= $nl['note']; ?></textarea>
-                                            <?php } else { ?>
-                                        <div class="form-group" id="<?= $table . '_div_' . $index . $rand; ?>">
-                                            <label class="col-lg-2 control-label"><?= $index == 0 ? $note_title : ""; ?></label>
-                                            <div class="col-lg-10">
-                                                <div class="note-textarea">
-                                                    <textarea <?= $required == 'y' ? "required='required'" : ""; ?> class="form-control" name="edit_task_note[]"  title="<?= $note_title ?>"><?= $nl['note']; ?></textarea>
+                                        <a href="javascript:void(0)" class="text-success add-upload-file"><i class="fa fa-plus"></i> Add File</a>
+                                    </div>
+                                </div>
+                                <?php
+                                if (isset($notes_data)) {
+                                    foreach ($notes_data as $index => $nl) {
+                                        $rand = rand(000, 999);
+                                        if ($nl['user_id'] != $this->session->userdata('user_id')) {
+                                            ?>
+                                            <div class="form-group">
+                                                <label class="col-lg-2 control-label"><?= $index == 0 ? $note_title : ""; ?></label>
+                                                <div class="col-lg-10">
+                                                    <div title="<?= $note_title ?>"><?= $nl['note']; ?></div>
+                                                    <div>By: <?= $nl['staff_name']; ?></div>
+                                                    <div>Department: <?= staff_department_name($nl['user_id']); ?></div>
+                                                    <div>Time: <?= $nl['time']; ?></div>                                            
                                                 </div>
-                                                <div class="pull-right"><b>By: <?= $nl['staff_name']; ?> | Department: <?= staff_department_name($nl['user_id']); ?> | Time: <?= $nl['time']; ?></b></div>
-                                        <?php if ($multiple == 'y') { ?><a href="javascript:void(0);" onclick="deleteTaskNote('<?= $table . '_div_' . $index . $rand; ?>', '<?= $nl['note_id']; ?>', '<?= $related_table_id; ?>');" class="text-danger"><i class="fa fa-times"></i> Remove Note</a><?php } ?>
                                             </div>
+                                            <textarea style="display:none;" <?= $required == 'y' ? "required='required'" : ""; ?> class="form-control" name="edit_task_note[]"  title="<?= $note_title ?>"><?= $nl['note']; ?></textarea>
+                                        <?php } else { ?>
+                                            <div class="form-group" id="<?= $table . '_div_' . $index . $rand; ?>">
+                                                <label class="col-lg-2 control-label"><?= $index == 0 ? $note_title : ""; ?></label>
+                                                <div class="col-lg-10">
+                                                    <div class="note-textarea">
+                                                        <textarea <?= $required == 'y' ? "required='required'" : ""; ?> class="form-control" name="edit_task_note[]"  title="<?= $note_title ?>"><?= $nl['note']; ?></textarea>
+                                                    </div>
+                                                    <div class="pull-right"><b>By: <?= $nl['staff_name']; ?> | Department: <?= staff_department_name($nl['user_id']); ?> | Time: <?= $nl['time']; ?></b></div>
+                                                    <?php if ($multiple == 'y') { ?><a href="javascript:void(0);" onclick="deleteTaskNote('<?= $table . '_div_' . $index . $rand; ?>', '<?= $nl['note_id']; ?>', '<?= $related_table_id; ?>');" class="text-danger"><i class="fa fa-times"></i> Remove Note</a><?php } ?>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        }
+                                    }
+                                }
+                                ?>
+                                <div class="form-group">
+                                    <label class="col-sm-3 col-md-2 control-label">Notes:</label>
+                                    <div class="col-sm-9 col-md-10" id="add_note_div">
+                                        <div class="note-textarea">
+                                            <textarea class="form-control" name="task_note[]"  title="Task Note"></textarea>
                                         </div>
-                <?php
-            }
-        }
-    }
-    ?>
-                            <div class="form-group">
-                                <label class="col-sm-3 col-md-2 control-label">Notes:</label>
-                                <div class="col-sm-9 col-md-10" id="add_note_div">
-                                    <div class="note-textarea">
-                                        <textarea class="form-control" name="task_note[]"  title="Task Note"></textarea>
+                                        <a href="javascript:void(0)" class="text-success add-task-note block m-t-10"><i class="fa fa-plus"></i> Add Notes</a>
                                     </div>
-                                    <a href="javascript:void(0)" class="text-success add-task-note block m-t-10"><i class="fa fa-plus"></i> Add Notes</a>
                                 </div>
-                            </div>
-<?php } ?>
+                            <?php } ?>
+                        </div>
+                            <div id="adjustment_no" class="p-l-35 text-success">
+                            <h4 id="adjustment_no_result"></h4>
+                        </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-lg-12 text-right">
@@ -616,9 +637,9 @@ if ($input_form_type == 1):
                                 <input type="hidden" name="base_url" id="base_url" value="<?= base_url() ?>"/>
                                 <input type="hidden" name="editval" id="editval" value="<?= $task_id; ?>">
                                 <input type="hidden" name="bookkeeping_input_type" id="task_key" value=<?= $bookkeeping_input_type ?>>
-<?php if ($input_form_type == 1 && $bookkeeping_input_type == 1) { ?>
+                                <?php if ($input_form_type == 1 && $bookkeeping_input_type == 1) { ?>
                                     <input type="hidden" name="reference_id" id="reference_id" value="<?= $client_id; ?>">
-<?php } ?>
+                                <?php } ?>
                                 <button class="btn btn-success" type="button" onclick="saveInputForms()">Save changes</button> &nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-default" type="button" onclick="go('project')">Cancel</button>
                             </div>
@@ -730,6 +751,9 @@ if ($input_form_type == 1):
 <!--end task note modal-->
 <script>
     get_financial_account_list('<?= $client_id; ?>', 'project', '<?= $task_id; ?>');
+<?php if ($bookkeeping_input_type == 3) { ?>
+        check_adjustment('<?= (isset($bookkeeper_details->adjustment) && $bookkeeper_details->adjustment!=''?$bookkeeper_details->adjustment:'') ?>', 'edit');
+<?php } ?>
     $(function () {
         $('.add-upload-file').on("click", function () {
             var text_file = $(this).prev('.upload-file-div').html();
@@ -780,14 +804,14 @@ if ($input_form_type == 1):
         $("#" + divID).remove();
     }
 <?php if ($bookkeeping_input_type == 2) { ?>
-        var h3 = document.getElementById('total_time'),
-                start = document.getElementById('start'),
-                stop = document.getElementById('stop'),
-                clear = document.getElementById('clear'),
-                seconds = 0, minutes = 0, hours = 0,
+        h3 = document.getElementById('total_time');
+        //                start = document.getElementById('start'),
+        //                stop = document.getElementById('stop'),
+        //                clear = document.getElementById('clear'),
+        seconds = 0, minutes = 0, hours = 0,
                 t;
-        function add() {
-    //        alert('hi');
+        function add(bank_id) {
+            //            h3 = document.getElementById('total_time-'+bank_id),
             seconds++;
             if (seconds >= 60) {
                 seconds = 0;
@@ -797,107 +821,59 @@ if ($input_form_type == 1):
                     hours++;
                 }
             }
-
             h3.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
-
+            //            $("#total_time-"+bank_id).html(a);
             timer();
         }
         function timer() {
-    //        alert('hi');
             t = setTimeout(add, 1000);
         }
-    //     timer();
-        /* Start button */
-        start.onclick = timer;
-
-        /* Stop button */
-        stop.onclick = function () {
-    //        alert('hi');
+        function stop_record() {
             clearTimeout(t);
-
         }
-
-        /* Clear button */
-        clear.onclick = function () {
-    //        alert('hi');
+        function clear_record(bank_id) {
+            var record_time = h3.textContent;
+            $.ajax({
+                type: "POST",
+                data: {record_time: record_time, bank_id: bank_id},
+                url: base_url + 'task/update_project_bookkeeping_record_time',
+                dataType: "html",
+                success: function (result) {
+                    $("#load_record_time-" + bank_id).hide();
+                    $("#timer_result-" + bank_id).html(result);
+                }
+            });
             h3.textContent = "00:00:00";
             seconds = 0;
             minutes = 0;
             hours = 0;
         }
 <?php } ?>
-
-    function change_bookkeeping_finance_input_status(id = '', status = '') {
-        openModal('changetrackinginner');
-        var txt = 'Tracking Account #' + id;
-        $("#changetrackinginner .modal-title").html(txt);
-        if (status == 0) {
-            $("#changetrackinginner #rad0").prop('checked', true);
-            $("#changetrackinginner #rad1").prop('checked', false);
-            $("#changetrackinginner #rad2").prop('checked', false);
-        } else if (status == 1) {
-            $("#changetrackinginner #rad1").prop('checked', true);
-            $("#changetrackinginner #rad0").prop('checked', false).attr('disabled', true);
-            $("#changetrackinginner #rad2").prop('checked', false);
+    function check_adjustment(adjustment, type = '') {
+        if (adjustment == 'n') {
+            $("#bookkeeping_check3").hide();
+            if (type == '') {
+                swal({
+                    title: "Did You Review It With The Client?",
+                    type: "info",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    showLoaderOnConfirm: true
+                }, function () {
+                    setTimeout(function () {
+                        swal("Constant and Confirm Bookkeeping was done correctly..");
+                        $("#adjustment_no_result").html('Confirming Bookkeeping was done correctly');
+                        $("#adjustment_no_result").show();
+                    }, 500);
+                });
+                
+            }else{
+                $("#adjustment_no_result").html('Confirming Bookkeeping was done correctly');
+                $("#adjustment_no_result").show();
+            }
         } else {
-            $("#changetrackinginner #rad2").prop('checked', true);
-            $("#changetrackinginner #rad1").prop('checked', false);
-            $("#changetrackinginner #rad0").prop('checked', false).attr('disabled', true);
-        }
-        $("#changetrackinginner #input_id").val(id);
+            $("#bookkeeping_check3").show();
+            $("#adjustment_no_result").hide();
     }
-    function updateBookkeeping_input1Statusinner() {
-        var statusval = $('#changetrackinginner input:radio[name=radio]:checked').val();
-        var id = $("#input_id").val();
-        var base_url = $('#baseurl').val();
-        $.ajax({
-            type: "POST",
-            data: {statusval: statusval, id: id},
-            url: base_url + 'task/update_project_bookkeeping_input_form_status',
-            dataType: "html",
-            success: function (result) {
-//                alert(result);return false;
-//                var res = JSON.parse(result.trim());
-                if (result == '0') {
-                    var tracking = 'Incomplete';
-                    var trk_class = 'label label-danger';
-                } else if (result == 1) {
-                    var tracking = 'Complete';
-                    var trk_class = 'label label-success';
-                } else {
-                    var tracking = 'Not Required';
-                    var trk_class = 'label label-secondary';
-                }
-                $("#trackinner-" + id).removeClass().addClass(trk_class);
-                $("#trackinner-" + id).parent('a').removeAttr('onclick');
-                $("#trackinner-" + id).parent('a').attr('onclick', 'change_bookkeeping_finance_input_status(' + id + ',' + statusval + ');');
-                $("#trackinner-" + id).html(tracking);
-                if (result.trim() != 0) {
-                    $("#changetrackinginner").modal('hide');
-                }
-            }
-        });
-    }
-    function save_transaction(id,transaction_val){
-        $.ajax({
-            type: "POST",
-            data: {transaction_val: transaction_val, id: id},
-            url: base_url + 'task/update_project_bookkeeping_transaction_val',
-            dataType: "html",
-            success: function (result) {
-//                
-            }
-        });
-    }
-    function save_uncategorized_item(id,uncategorized_item){
-        $.ajax({
-            type: "POST",
-            data: {uncategorized_item: uncategorized_item, id: id},
-            url: base_url + 'task/update_project_bookkeeping_uncategorized_item',
-            dataType: "html",
-            success: function (result) {
-//                
-            }
-        });
     }
 </script>

@@ -83,6 +83,22 @@ class Administration extends CI_Model {
         }
     }
 
+    public function get_all_office_except_inactive_offices() {
+        $staff_info = staff_info();
+        if($staff_info['type']==1 || $staff_info['type']==2 || $staff_info['department']==14){
+//            return $this->db->get_where('office', ['status' => 1])->result_array();
+            $this->db->where_in('status',[1]);
+            $this->db->order_by('status', 'ASC');
+            return $this->db->get("office")->result_array();
+        }else{
+            $this->db->select('o.*');
+            $this->db->from('office o');
+            $this->db->join('office_staff os','os.office_id=o.id','inner');
+            $this->db->where('os.staff_id',$staff_info['id']);
+            return $this->db->get()->result_array();
+        }
+    }
+
     public function get_all_dept() {
         $this->db->order_by('name', 'ASC');
         $this->db->where_not_in('id', array(1, 2));

@@ -172,10 +172,13 @@ class Task extends CI_Controller {
 //            $render_data['bookkeeping_details'] = $this->bookkeeping_model->get_bookkeeping_by_order_id($task_id,'project');
 //            $render_data['list'] = $this->service_model->get_document_list_by_reference($task_id, 'project');
 //            $this->load->view('services/show_document_list', $data);
-            }else if($bookkeeping_input_type==2|| $bookkeeping_input_type==3){
+            }else if($bookkeeping_input_type==2){
                 $render_data['client_id']=$client_dtls->client_id;
+                $render_data['client_type']=$client_dtls->client_type;
                 $render_data['client_account_details']= $this->Project_Template_model->getBookkeepingInput2AccountDetails($client_dtls->client_id,$task_id,$project_id);
 //                $render_data['bookkeeper_details']=$this->Project_Template_model->getProjetBookkeeperDetails($task_id);
+            }else{
+                $render_data['bookkeeper_details']=$this->Project_Template_model->getProjetBookkeeperDetails($task_id);
             }
         }
             $render_data['related_service_files']=$this->Project_Template_model->getTaskFiles($task_id);
@@ -232,6 +235,24 @@ class Task extends CI_Controller {
         $id=post('id');
         $update=$this->Project_Template_model->updateProjectBookkeepingUncategorizedItem($id,$uncategorized_item);
         echo $update;
+    }
+    public function update_project_bookkeeping_record_time(){
+        $record_time=post('record_time');
+        $bank_id=post('bank_id');
+        $ins['record_details']=$this->Project_Template_model->insertBookkeepingBankRecordTime($record_time,$bank_id);
+        $this->load->view('task/bookkeeping_record_details',$ins);
+    }
+    public function delete_bookkeeping_timer_record(){
+        $record_id=post('record_id');
+        $bank_id=post('bank_id');
+        $this->Project_Template_model->deleteBookkeepingTimerRecord($record_id);
+        $ins['record_details']=$this->Project_Template_model->insertBookkeepingBankRecordTime('',$bank_id);
+        $this->load->view('task/bookkeeping_record_details',$ins);
+    }
+    public function add_action_for_bookkeeping_need_clarification(){
+        $data=post();
+//        $this->Project_Template_model->addActionForBookkeepingNeedClarification($data);
+        return true;
     }
 }
 ?>

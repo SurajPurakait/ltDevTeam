@@ -47,6 +47,7 @@ class Service_model extends CI_Model
         $this->order_select[] = '(SELECT department.name FROM department WHERE department.id = srv.dept) AS service_department_name';
         $this->load->model('notes');
         $this->load->model('billing_model');
+        $this->load->model('lead_management');
     }
 
     public function get_staff_by_office_id($office_id)
@@ -612,7 +613,8 @@ class Service_model extends CI_Model
             } elseif (in_array('ord.status = 7', $where)) {
                 $where[] = 'ord.status not in ("0")';
             } else {
-                $where[] = 'ord.status not in ("0","7")';
+                // $where[] = 'ord.status not in ("0","7")';
+                $where[] = 'ord.status in ("2","1","0","7")';
             }
         }
 
@@ -644,11 +646,8 @@ class Service_model extends CI_Model
             $sql .= " ORDER BY ord.id DESC";
         }
         $this->db->query('SET SQL_BIG_SELECTS=1');
-        // echo $sql;exit;
         $result = $this->db->query($sql)->result();
-        //        echo count($result);
-        //        echo $this->db->last_query();
-        //        echo'<pre>';print_r($result);die;
+        //        echo $this->db->last_query();exit;
         return $result;
     }
 
@@ -1639,6 +1638,85 @@ class Service_model extends CI_Model
         }
         $insert_data['status'] = 1;
         $this->db->insert('company', $insert_data);
+
+        // for partner services only
+        if (isset($data->partner_service_name)) {
+            $company_id = $this->db->insert_id();
+            $service_name = $data->partner_service_name;
+            if ($service_name == 'mortgage_and_lending') {
+                if (!isset($data->realtorname)) {
+                    $realtor_name = '';
+                } else {
+                    $realtor_name = $data->realtorname;
+                }
+                if (!isset($data->realtoremail)) {
+                    $realtor_email = '';
+                } else {
+                    $realtor_email = $data->realtoremail;
+                }
+                if (!isset($data->realtorphone)) {
+                    $realtor_phone = '';
+                } else {
+                    $realtor_phone = $data->realtorphone;
+                }
+
+                $reference_id = $this->db->get_where('company', ['company_id' => $company_id])->row_array()['id'];
+
+                $partner_services = array(
+                    'mortgage_status' => $data->status,
+                    'type_of_mortgage' => $data->typeofmortgage,
+                    'purchase_price' => $data->purchase_price,
+                    'what_is_property_for' => $data->whatispropertyfor,
+                    'realtor' => $data->realtor,
+                    'realtor_name' => $realtor_name,
+                    'realtor_email' => $realtor_email,
+                    'realtor_phone' => $realtor_phone,
+                    'reference' => 'company',
+                    'reference_id' => $reference_id,
+                    'created_by' => sess('user_id'),
+                    'assigned_to' => $data->assigned_to
+                );
+                $this->db->insert('partner_services_data', $partner_services);
+
+                $contact_info = $this->db->get_where('contact_info',['reference'=>'company','type'=>'1','reference_id'=>$reference_id])->row_array();
+                $lead_data = array(
+                    'type' => '3',
+                    'type_of_contact' => $data->partner_type,
+                    'first_name' => $contact_info['first_name'],
+                    'last_name' => $contact_info['first_name'],
+                    'company_name' => $data->name_of_business1,
+                    'city' => $contact_info['city'],
+                    'state' => $contact_info['state'],
+                    'country' => $contact_info['country'],
+                    'zip' => $contact_info['zip'],
+                    'phone1' => $contact_info['phone1'],                    
+                    'email' => $contact_info['email1'],
+                    'office' => $data->office,                
+                    'date_of_first_contact' => date('Y-m-d'),
+                    'staff_requested_by' => sess('user_id'),
+                    'status' => '0',
+                    'submission_date' => date('Y-m-d'),
+                    'referred_status' => '1',
+                    'client_reference' => 'company', 
+                    'client_id' => $reference_id
+                    
+                );
+
+                $this->db->insert('lead_management',$lead_data);
+                $last_inserted_lead_id = $this->db->insert_id();
+
+                $partner_staff_id = $this->lead_management->get_ref_partner_id($data->assigned_to);
+                $referred_lead_arr = array(
+                    'referred_by' => sess('user_id'),
+                    'lead_id' => $last_inserted_lead_id,
+                    'referred_to' => $partner_staff_id
+                );
+
+                $this->db->insert('referred_lead',$referred_lead_arr);
+            }
+        }
+
+
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return false;
@@ -1669,6 +1747,81 @@ class Service_model extends CI_Model
             $this->db->trans_begin();
             $this->db->where('id', $data->reference_id);
             $this->db->update('company', $update_data);
+
+            if (isset($data->partner_service_name)) {
+                $company_id = $data->reference_id;
+                $service_name = $data->partner_service_name;
+                if ($service_name == 'mortgage_and_lending') {
+                    if (!isset($data->realtorname)) {
+                        $realtor_name = '';
+                    } else {
+                        $realtor_name = $data->realtorname;
+                    }
+                    if (!isset($data->realtoremail)) {
+                        $realtor_email = '';
+                    } else {
+                        $realtor_email = $data->realtoremail;
+                    }
+                    if (!isset($data->realtorphone)) {
+                        $realtor_phone = '';
+                    } else {
+                        $realtor_phone = $data->realtorphone;
+                    }
+
+                    $partner_services = array(
+                        'mortgage_status' => $data->status,
+                        'type_of_mortgage' => $data->typeofmortgage,
+                        'purchase_price' => $data->purchase_price,
+                        'what_is_property_for' => $data->whatispropertyfor,
+                        'realtor' => $data->realtor,
+                        'realtor_name' => $realtor_name,
+                        'realtor_email' => $realtor_email,
+                        'realtor_phone' => $realtor_phone,
+                        'reference' => 'company',
+                        'reference_id' => $company_id,
+                        'created_by' => sess('user_id'),
+                        'assigned_to' => $data->assigned_to
+                    );
+                    $this->db->insert('partner_services_data', $partner_services);
+
+                    $contact_info = $this->db->get_where('contact_info',['reference'=>'company','type'=>'1','reference_id'=>$company_id])->row_array();
+                    $lead_data = array(
+                        'type' => '3',
+                        'type_of_contact' => $data->partner_type,
+                        'first_name' => $contact_info['first_name'],
+                        'last_name' => $contact_info['first_name'],
+                        'company_name' => $data->name_of_business1,
+                        'city' => $contact_info['city'],
+                        'state' => $contact_info['state'],
+                        'country' => $contact_info['country'],
+                        'zip' => $contact_info['zip'],
+                        'phone1' => $contact_info['phone1'],
+                        'email' => $contact_info['email1'],
+                        'office' => $data->staff_office,                
+                        'date_of_first_contact' => date('Y-m-d'),
+                        'staff_requested_by' => sess('user_id'),
+                        'status' => '0',
+                        'submission_date' => date('Y-m-d'),
+                        'referred_status' => '1',
+                        'client_reference' => 'company', 
+                        'client_id' => $company_id
+                    );
+
+                    $this->db->insert('lead_management',$lead_data);
+                    $last_inserted_lead_id = $this->db->insert_id();
+
+                    $partner_staff_id = $this->lead_management->get_ref_partner_id($data->assigned_to);
+                    $referred_lead_arr = array(
+                        'referred_by' => sess('user_id'),
+                        'lead_id' => $last_inserted_lead_id,
+                        'referred_to' => $partner_staff_id
+                    );
+
+                    $this->db->insert('referred_lead',$referred_lead_arr);
+                }
+            }
+
+
             if ($this->db->trans_status() === FALSE) {
                 $this->db->trans_rollback();
                 return false;
@@ -2265,9 +2418,9 @@ class Service_model extends CI_Model
                company.name AS client_name,ord.reference_id,ord.reference,ord.status,ord.late_status,ord.start_date,ord.complete_date,ord.category_id,ord.service_id,indt.office AS office_id,
                (SELECT ofc.name FROM office as ofc WHERE ofc.id = indt.office) as office,services.description AS service_name,services.ideas AS service_shortname,
                CONCAT((SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = services.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = ord.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),'')) AS all_staffs
-	       FROM `order` AS ord INNER JOIN company ON ord.reference_id=company.id 
+           FROM `order` AS ord INNER JOIN company ON ord.reference_id=company.id 
                INNER JOIN internal_data indt ON indt.reference_id = company.id
-	       INNER JOIN services ON services.id=ord.service_id
+           INNER JOIN services ON services.id=ord.service_id
                INNER JOIN staff AS st ON st.id=ord.staff_requested_service
                WHERE ord.id = '{$order_id}'";
         return $this->db->query($sql)->row_array();
@@ -3289,7 +3442,7 @@ class Service_model extends CI_Model
         return $this->db->get('type_of_mortgage')->result_array();
     }
 
-    public function request_create_mortgages($data)    
+    public function request_create_mortgages($data)
     {
         $this->db->trans_begin();
         # Insert section            
@@ -3316,14 +3469,86 @@ class Service_model extends CI_Model
                     'birth_date' => $this->system->invertDate($data['birth_date']),
                     'ssn_itin' => $data['ssn_itin'],
                     'type' => '',
-                    // 'language' => $data['language'],
-                    // 'country_residence' => $data['country_residence'],
-                    // 'country_citizenship' => $data['country_citizenship'],
-                    'status' => 1,
+                    'status' => '1',
                     "added_by_user" => sess('user_id')
                 );
                 $this->db->insert('individual', $individual_insert_data);
                 $individual_id = $this->db->insert_id();
+
+                if (isset($data['partner_service_name'])) {
+                    $service_name = $data['partner_service_name'];
+                    if ($service_name == 'mortgage_and_lending') {
+                        if (!isset($data['realtorname'])) {
+                            $realtor_name = '';
+                        } else {
+                            $realtor_name = $data['realtorname'];
+                        }
+                        if (!isset($data['realtoremail'])) {
+                            $realtor_email = '';
+                        } else {
+                            $realtor_email = $data['realtoremail'];
+                        }
+                        if (!isset($data['realtorphone'])) {
+                            $realtor_phone = '';
+                        } else {
+                            $realtor_phone = $data['realtorphone'];
+                        }
+
+                        $reference_id = $individual_id;
+
+                        $partner_services = array(
+                            'mortgage_status' => $data['status'],
+                            'type_of_mortgage' => $data['typeofmortgage'],
+                            'purchase_price' => $data['purchase_price'],
+                            'what_is_property_for' => $data['whatispropertyfor'],
+                            'realtor' => $data['realtor'],
+                            'realtor_name' => $realtor_name,
+                            'realtor_email' => $realtor_email,
+                            'realtor_phone' => $realtor_phone,
+                            'reference' => 'individual',
+                            'reference_id' => $reference_id,
+                            'created_by' => sess('user_id'),
+                            'assigned_to' => $data['assigned_to']
+                        );
+                        $this->db->insert('partner_services_data', $partner_services);
+                        
+                        $contact_info = $this->db->get_where('contact_info',['reference'=>'individual','type'=>'1','reference_id'=>$reference_id])->row_array();
+                        $lead_data = array(
+                            'type' => '3',
+                            'type_of_contact' => $data['partner_type'],
+                            'first_name' => $data['first_name'],
+                            'last_name' => $data['last_name'],                            
+                            // 'city' => $contact_info['city'],
+                            // 'state' => $contact_info['state'],
+                            // 'country' => $contact_info['country'],
+                            // 'zip' => $contact_info['zip'],
+                            // 'phone1' => $contact_info['phone1'],
+                            // 'email' => $contact_info['email1'],
+                            // 'office' => $data['staff_office'],                
+                            'date_of_first_contact' => date('Y-m-d'),
+                            'staff_requested_by' => sess('user_id'),
+                            'status' => '0',
+                            'submission_date' => date('Y-m-d'),
+                            'referred_status' => '1',
+                            'client_reference' => 'individual', 
+                            'client_id' => $reference_id
+                        );
+
+                        $this->db->insert('lead_management',$lead_data);
+                        $last_inserted_lead_id = $this->db->insert_id();
+                        $partner_staff_id = $this->lead_management->get_ref_partner_id($data['assigned_to']);
+                        
+                        $referred_lead_arr = array(
+                            'referred_by' => sess('user_id'),
+                            'lead_id' => $last_inserted_lead_id,
+                            'referred_to' => $partner_staff_id
+                        );
+
+                        $this->db->insert('referred_lead',$referred_lead_arr);
+                    }
+                }
+
+
                 $title_insert_data = array(
                     'company_id' => $data['reference_id'],
                     'individual_id' => $individual_id,
@@ -3348,6 +3573,79 @@ class Service_model extends CI_Model
                 }
                 $individual_id = $individual_details['individual_id'];
                 $data['reference_id'] = $individual_details['existing_reference_id'];
+
+                if (isset($data['partner_service_name'])) {
+                    $service_name = $data['partner_service_name'];
+                    if ($service_name == 'mortgage_and_lending') {
+                        if (!isset($data['realtorname'])) {
+                            $realtor_name = '';
+                        } else {
+                            $realtor_name = $data['realtorname'];
+                        }
+                        if (!isset($data['realtoremail'])) {
+                            $realtor_email = '';
+                        } else {
+                            $realtor_email = $data['realtoremail'];
+                        }
+                        if (!isset($data['realtorphone'])) {
+                            $realtor_phone = '';
+                        } else {
+                            $realtor_phone = $data['realtorphone'];
+                        }
+
+                        $reference_id = $individual_id;
+
+                        $partner_services = array(
+                            'mortgage_status' => $data['status'],
+                            'type_of_mortgage' => $data['typeofmortgage'],
+                            'purchase_price' => $data['purchase_price'],
+                            'what_is_property_for' => $data['whatispropertyfor'],
+                            'realtor' => $data['realtor'],
+                            'realtor_name' => $realtor_name,
+                            'realtor_email' => $realtor_email,
+                            'realtor_phone' => $realtor_phone,
+                            'reference' => 'individual',
+                            'reference_id' => $reference_id,
+                            'created_by' => sess('user_id'),
+                            'assigned_to' => $data['assigned_to']
+                        );
+                        $this->db->insert('partner_services_data', $partner_services);
+
+                        $contact_info = $this->db->get_where('contact_info',['reference'=>'individual','type'=>'1','reference_id'=>$reference_id])->row_array();
+                        $lead_data = array(
+                            'type' => '3',
+                            'type_of_contact' => $data['partner_type'],
+                            'first_name' => $contact_info['first_name'],
+                            'last_name' => $contact_info['last_name'],                            
+                            'city' => $contact_info['city'],
+                            'state' => $contact_info['state'],
+                            'country' => $contact_info['country'],
+                            'zip' => $contact_info['zip'],
+                            'phone1' => $contact_info['phone1'],
+                            'email' => $contact_info['email1'],
+                            'office' => staff_info()['office'],                
+                            'date_of_first_contact' => date('Y-m-d'),
+                            'staff_requested_by' => sess('user_id'),
+                            'status' => '0',
+                            'submission_date' => date('Y-m-d'),
+                            'referred_status' => '1',
+                            'client_reference' => 'individual', 
+                            'client_id' => $reference_id                           
+                        );
+                        $this->db->insert('lead_management',$lead_data);
+
+                        $last_inserted_lead_id = $this->db->insert_id();
+                        $partner_staff_id = $this->lead_management->get_ref_partner_id($data['assigned_to']);
+                        
+                        $referred_lead_arr = array(
+                            'referred_by' => sess('user_id'),
+                            'lead_id' => $last_inserted_lead_id,
+                            'referred_to' => $partner_staff_id
+                        );
+
+                        $this->db->insert('referred_lead',$referred_lead_arr);
+                    }
+                }
             }
         }
         if ($this->db->trans_status() === FALSE) {
@@ -3356,10 +3654,22 @@ class Service_model extends CI_Model
         } else {
             $this->db->trans_commit();
             return true;
-        }        
+        }
     }
 
-    public function get_type_of_partner_services() {
-        return $this->db->get_where('partner_services',['ideas'=>'par_m_a_l'])->row_array()['partner_type'];
+    public function get_type_of_partner_services()
+    {
+        return $this->db->get_where('partner_services', ['ideas' => 'par_a_a'])->row_array()['partner_type'];
+    }
+
+    public function get_mortgage_info($reference,$reference_id) {
+        $this->db->select('psd.*,tom.name AS type_of_mortgage_name');
+        $this->db->where('psd.reference',$reference);
+        $this->db->where('psd.reference_id',$reference_id);
+        $this->db->from('type_of_mortgage AS tom');
+        $this->db->join('partner_services_data AS psd','psd.type_of_mortgage = tom.id','inner');
+        return $this->db->get('partner_services_data')->row_array();
+
+        // return $this->db->get_where('partner_services_data', ['reference' => $reference,'reference_id' => $reference_id])->row_array();    
     }
 }

@@ -3523,6 +3523,27 @@ class Project_Template_model extends CI_Model {
         $this->db->where('id',$id);
         return $this->db->update('project_task_bookkeeping_input_form2',['uncategorized_item'=>$uncategorized_item]);
     }
+    public function insertBookkeepingBankRecordTime($record_time='',$bank_id){
+        if($record_time!=''){
+            $this->db->insert('project_bookkeeping_bank_record_time',['bank_id'=>$bank_id,'record_time'=>$record_time]);
+            return $this->db->get_where('project_bookkeeping_bank_record_time',['bank_id'=>$bank_id])->result_array();
+        }else{
+            return $this->db->get_where('project_bookkeeping_bank_record_time',['bank_id'=>$bank_id])->result_array();
+        }
+    }
+    public function deleteBookkeepingTimerRecord($record_id){
+        $this->db->where('id',$record_id);
+        return $this->db->delete('project_bookkeeping_bank_record_time');
+    }
+    public function addActionForBookkeepingNeedClarification($data){
+        $this->load->model('action_model');
+        $task_id=$data['task_id'];
+        $client_type=$data['client_type'];
+        $client_id=$data['client_id'];
+        $action_message=$data['action_message'];
+        $staff_info=$_SESSION['staff_info'];
+    }
+    
 }
 
 ?>

@@ -61,6 +61,17 @@ class Partner_services extends CI_Controller {
            echo 0; 
         }
     }
+
+    public function show_mortgages_information($reference="",$reference_id="") {
+        $this->load->layout = 'dashboard';
+        $title = "View Mortgages And Lending";
+        $render_data['title'] = $title . ' | Tax Leaf';
+        $render_data['main_menu'] = 'services';
+        $render_data['menu'] = 'partner_services';
+        $render_data['header_title'] = $title;
+        $render_data['mortgages_info'] = $this->service_model->get_mortgage_info($reference,$reference_id); 
+        $this->load->template('services/show_mortgages_information',$render_data);
+    }
 }
 
 ?>

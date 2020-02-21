@@ -53,7 +53,8 @@ class Billing_model extends CI_Model {
         ];
         $this->select_billing_2 = [
             'inv.id as invoice_id',
-            'inv.reference_id as reference_id',
+            // 'inv.reference_id as reference_id',
+            'inv.client_id as reference_id',
             'inv.order_id as order_id',
             'inv.new_existing as new_existing',
             'inv.created_time as created_time',
@@ -1516,7 +1517,8 @@ class Billing_model extends CI_Model {
         } else {
             $this->db->select(implode(', ', $this->select_billing_2));
             $this->db->from('invoice_info inv');
-            $this->db->join('title t', 't.company_id = inv.reference_id');
+            // $this->db->join('title t', 't.company_id = inv.reference_id');
+            $this->db->join('title t', 't.individual_id = inv.client_id');
             $this->db->join('individual ind', 'ind.id = t.individual_id');
             $this->db->join('internal_data indt', 'indt.reference_id = t.individual_id and indt.reference = "individual"');
             $where['t.status'] = 1;
@@ -1761,7 +1763,8 @@ class Billing_model extends CI_Model {
             $select[] = 'indt.manager as manager_id';
             $this->db->select(implode(', ', $select));
             $this->db->from('invoice_info inv');
-            $this->db->join('title t', 't.company_id = inv.reference_id');
+            // $this->db->join('title t', 't.company_id = inv.reference_id');
+            $this->db->join('title t', 't.individual_id = inv.client_id');
             $this->db->join('individual ind', 'ind.id = t.individual_id');
             $this->db->join('internal_data indt', 'indt.reference_id = t.individual_id and indt.reference = "individual"');
             $where['t.status'] = 1;
@@ -2130,7 +2133,7 @@ class Billing_model extends CI_Model {
                 }
                 break;
             case 4: {
-                    return $this->administration->get_all_office();
+                    return $this->administration->get_all_office_except_inactive_offices();
                 }
                 break;
             case 5: {
@@ -2171,7 +2174,7 @@ class Billing_model extends CI_Model {
             case 10: {
                     $this->db->select('id, description AS name');
                     $this->db->order_by('name');
-                    return $this->db->get_where("services", ['status' => 1])->result_array();
+                    return $this->db->get_where("services", ['status' => 1, 'is_active' => 'y'])->result_array();
                 }
                 break;
             case 11: {
@@ -2560,7 +2563,7 @@ class Billing_model extends CI_Model {
         $staff_office = $staff_info['office'];
         $departments = explode(',', $staff_info['department']);
         $select = [
-            'inv.id as invoice_id',
+            'inv1.id as invoice_id',
             'inv.reference_id as reference_id',
             'inv.order_id as order_id',
             'inv.new_existing as new_existing',

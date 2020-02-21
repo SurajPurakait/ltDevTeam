@@ -1815,3 +1815,104 @@ function get_pattern_detais(template_id,project_id='',section=''){
         }
     }); 
 }
+function delete_recoded_time(record_id,bank_id){
+//    alert(record_id);
+    $.ajax({
+        type: "POST",
+        data: {record_id : record_id,bank_id:bank_id},
+        url: base_url + 'task/delete_bookkeeping_timer_record',
+        cache:false,
+        success: function (result) {
+//            alert(result);return false;
+            if (result) {
+                $("#load_record_time-" + bank_id).hide();
+                $("#timer_result-" + bank_id).html(result);
+            }
+        },
+    });
+}
+function change_bookkeeping_finance_input_status(id = '', status = '') {
+        openModal('changetrackinginner');
+        var txt = 'Tracking Account #' + id;
+        $("#changetrackinginner .modal-title").html(txt);
+        if (status == 0) {
+            $("#changetrackinginner #rad0").prop('checked', true);
+            $("#changetrackinginner #rad1").prop('checked', false);
+            $("#changetrackinginner #rad2").prop('checked', false);
+        } else if (status == 1) {
+            $("#changetrackinginner #rad1").prop('checked', true);
+            $("#changetrackinginner #rad0").prop('checked', false).attr('disabled', true);
+            $("#changetrackinginner #rad2").prop('checked', false);
+        } else {
+            $("#changetrackinginner #rad2").prop('checked', true);
+            $("#changetrackinginner #rad1").prop('checked', false);
+            $("#changetrackinginner #rad0").prop('checked', false).attr('disabled', true);
+        }
+        $("#changetrackinginner #input_id").val(id);
+    }
+    function updateBookkeeping_input1Statusinner() {
+        var statusval = $('#changetrackinginner input:radio[name=radio]:checked').val();
+        var id = $("#input_id").val();
+        var base_url = $('#baseurl').val();
+        $.ajax({
+            type: "POST",
+            data: {statusval: statusval, id: id},
+            url: base_url + 'task/update_project_bookkeeping_input_form_status',
+            dataType: "html",
+            success: function (result) {
+//                alert(result);return false;
+//                var res = JSON.parse(result.trim());
+                if (result == '0') {
+                    var tracking = 'Incomplete';
+                    var trk_class = 'label label-danger';
+                } else if (result == 1) {
+                    var tracking = 'Complete';
+                    var trk_class = 'label label-success';
+                } else {
+                    var tracking = 'Not Required';
+                    var trk_class = 'label label-secondary';
+                }
+                $("#trackinner-" + id).removeClass().addClass(trk_class);
+                $("#trackinner-" + id).parent('a').removeAttr('onclick');
+                $("#trackinner-" + id).parent('a').attr('onclick', 'change_bookkeeping_finance_input_status(' + id + ',' + statusval + ');');
+                $("#trackinner-" + id).html(tracking);
+                if (result.trim() != 0) {
+                    $("#changetrackinginner").modal('hide');
+                }
+            }
+        });
+    }
+    function save_transaction(id, transaction_val) {
+        $.ajax({
+            type: "POST",
+            data: {transaction_val: transaction_val, id: id},
+            url: base_url + 'task/update_project_bookkeeping_transaction_val',
+            dataType: "html",
+            success: function (result) {
+//                
+            }
+        });
+    }
+    function save_uncategorized_item(id, uncategorized_item) {
+        $.ajax({
+            type: "POST",
+            data: {uncategorized_item: uncategorized_item, id: id},
+            url: base_url + 'task/update_project_bookkeeping_uncategorized_item',
+            dataType: "html",
+            success: function (result) {
+
+            }
+        });
+    }
+    function need_clarification(task_id,client_type,client_id,added_user){
+        var action_message= prompt("Need Clarification?");
+        $.ajax({
+            type: "POST",
+            data: {task_id: task_id, client_type: client_type,client_id:client_id,added_user:added_user,action_message:action_message},
+            url: base_url + 'task/add_action_for_bookkeeping_need_clarification',
+            dataType: "html",
+            success: function (result) {
+                swal("Clarification done successfully.");
+            }
+        });
+    }

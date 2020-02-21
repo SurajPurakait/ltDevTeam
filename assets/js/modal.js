@@ -921,7 +921,7 @@ function sos_filter(dashboard_type, byval) {
                 $(".filter-text").html('<span class="byclass ' + byval + '">Sos ' + by + ' <a href="javascript:void(0);" onclick="clear_sos_filter();"><i class="fa fa-times" aria-hidden="true"></i></a></span>');
                 $("#hiddenflag").val('');
             } else {
-                $("#action_dashboard_div").html(result);
+                $("#action_ajax_dashboard_div").html(result);
                 $("[data-toggle=popover]").popover();
                 $("#clear_filter").html('Sos' + by);
                 $("#clear_filter").show();

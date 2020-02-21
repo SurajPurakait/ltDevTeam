@@ -1,7 +1,8 @@
 <?php 
 // echo '<pre>';
 // print_r($referral_partner_data);
-// echo '</pre>'; exit; ?>
+// echo '</pre>'; exit; 
+?>
 <?php if (!empty($referral_partner_data)): ?>
     <?php foreach ($referral_partner_data as $key => $value):
         $staff_data = staff_info_by_id($value["staff_requested_by"]);
@@ -51,6 +52,7 @@
                                 <th>Inactive Date</th>
                                 <th>Completed Date</th>
                                 <th>Notes</th>
+                                <th></th>
                             </tr>
                             <tr>
                                 <td title="Type"><?= $type; ?></td>
@@ -65,6 +67,13 @@
                                 <td title="Inactive Date"><?= ($value["inactive_date"] != "0000-00-00") ? date('m/d/Y',strtotime($value["inactive_date"])) : "-"; ?></td>
                                 <td title="Completed Date"><?= ($value["complete_date"] != "0000-00-00") ? date('m/d/Y',strtotime($value["complete_date"])) : "-"; ?></td>
                                 <?php echo '<td title="Notes"><span>' . (($notes > 0) ? '<a class="label label-warning" href="javascript:void(0)" onclick="show_ref_partner_notes(\'' . $value["id"] . '\')"><b>' . $notes . '</b></a>' : '<a class="label label-warning" href="javascript:void(0)" onclick="show_ref_partner_notes(\'' . $value["id"] . '\')"><b>' . $notes . '</b></a>') . '</span></td>'; ?>
+                                <?php
+                                    if (!empty($value["client_reference"]) && !empty($value["client_id"])) {
+                                ?>
+                                <td><a href="javascript:void(0)" class="label label-primary" target="_blank" onclick="show_mortgage_information('<?= $value["client_reference"] ?>','<?= $value["client_id"]; ?>')">Mortgage</a></td>
+                                <?php
+                                    }
+                                ?>
                             </tr>
 
                             </tbody>
