@@ -475,14 +475,16 @@ class Project_Template_model extends CI_Model {
                         . 'from project_template_staff_main '
                         . 'where template_id=' . $id . ' and type=2';
                 $data2 = $this->db->query($query)->row_array();
-
-                $query = 'select CONCAT(last_name, ", ",first_name,", ",middle_name) as full_name '
-                        . 'from staff '
-                        . 'where id=' . $data2['staff_id'] . '';
-                $data3 = $this->db->query($query)->row_array();
-
-
-                return $data3['full_name'];
+                if($data2['staff_id']!=''){
+                    $query = 'select CONCAT(last_name, ", ",first_name,", ",middle_name) as full_name '
+                            . 'from staff '
+                            . 'where id=' . $data2['staff_id'] . '';
+                    $data3 = $this->db->query($query)->row_array();
+                    return $data3['full_name'];
+                }
+                else{
+                    return '';
+                }
             }
         }
     }
@@ -3544,7 +3546,7 @@ class Project_Template_model extends CI_Model {
         $action_message=$data['action_message'];
         $staff_info=$_SESSION['staff_info'];
         $practice_id=$this->getProjectClientPracticeId($client_id, $client_type);
-        $subject="#".$project_id." Need Clarification";
+        $subject="#".$project_id."ProjectId Need Clarification";
         $staffids=$this->db->get_where('department_staff',['department_id'=>11])->result_array();
 //        print_r($staffids);die;
         $insert_action=array(
