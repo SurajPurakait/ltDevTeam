@@ -2,7 +2,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">×</button>
-            <h4 class="modal-title">Email Sending</h4>
+            <h4 class="modal-title">Send Email</h4>
         </div>
         <form  method="post" id="invoice_email_form" name="invoice_email_form" onsubmit="sendInvoiceEmail();">    
             <div class="modal-body">
