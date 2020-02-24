@@ -70,7 +70,7 @@
                                 <?php
                                     if (!empty($value["client_reference"]) && !empty($value["client_id"])) {
                                 ?>
-                                <td><a href="javascript:void(0)" class="label label-primary" target="_blank" onclick="show_mortgage_information('<?= $value["client_reference"] ?>','<?= $value["client_id"]; ?>')">Mortgage</a></td>
+                                <td><a href="javascript:void(0)" class="label label-primary" target="_blank" onclick="show_mortgage_information('<?= $value["client_reference"] ?>','<?= $value["client_id"]; ?>','<?= $value["id"]; ?>')">Mortgage</a></td>
                                 <?php
                                     }
                                 ?>
