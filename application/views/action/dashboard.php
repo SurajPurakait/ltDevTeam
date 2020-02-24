@@ -28,9 +28,10 @@ $role = $user_info['role'];
                                                     <?php
                                                     asort($filter_element_list);
                                                     foreach ($filter_element_list as $key => $fel):
-                                                        ?>
+                                                       if ($fel != "Start Date"){ ?>
                                                         <option value="<?= $key ?>"><?= $fel ?></option>
-                                                    <?php endforeach; ?>
+                                                        
+                                                    <?php } endforeach; ?>
                                                 </select>
                                             </div>
                                             <div class="col-sm-4 m-t-10">
