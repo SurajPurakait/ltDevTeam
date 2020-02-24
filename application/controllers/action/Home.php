@@ -117,7 +117,7 @@ class Home extends CI_Controller {
         }
     }
 
-    public function create_action() {
+    public function create_action($client_type = '', $reference_id = '', $office_id = '', $practice_id = '') {
         $this->load->layout = 'dashboard';
         $title = "Create Action";
         $render_data['title'] = $title . ' | Tax Leaf';
@@ -125,6 +125,17 @@ class Home extends CI_Controller {
         $render_data['menu'] = 'create_action';
         $render_data['header_title'] = $title;
         $render_data["departments"] = $this->action_model->get_departments();
+        if($client_type == 1){
+            $render_data['client_type'] = $client_type;
+            $render_data['reference_id'] = $reference_id;
+            $render_data['office_id'] = $office_id;
+            $render_data['practice_id'] = $practice_id; 
+        }else if($client_type == 2){
+            $render_data['client_type'] = $client_type;
+            $render_data['reference_id'] = $this->billing_model->get_title_id_by_individual_id($reference_id);
+            $render_data['office_id'] = $office_id;
+            $render_data['practice_id'] = $practice_id;
+        }
         $this->load->template('action/new_action', $render_data);
     }
 
