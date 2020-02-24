@@ -1252,8 +1252,8 @@ ALTER TABLE `partner_services_data` CHANGE `realtor` `realtor` VARCHAR(50) CHARA
 /* import project_bookkeeping_bank_record_time.sql */
 /* import partner_services_data.sql */
 
-/*live end*/
-
 /*20.02.2020*/
 ALTER TABLE `lead_management` ADD `client_reference` VARCHAR(50) NOT NULL AFTER `day_6_mail_date`, ADD `client_id` INT(11) NOT NULL AFTER `client_reference`;
 ALTER TABLE `lead_management` CHANGE `client_id` `client_id` INT(11) NOT NULL DEFAULT '0';
+
+/*live end*/

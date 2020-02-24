@@ -98,6 +98,77 @@ class Home extends CI_Controller {
         
     }
 
+    public function service_new_dashboard_index($status = '', $category_id = '', $office_id = '') {
+        $this->load->layout = 'dashboard';
+        $title = "New Service Dashboard";
+        $render_data['title'] = $title . ' | Tax Leaf';
+        $render_data['main_menu'] = 'services';
+        $render_data['menu'] = 'new_service_dashboard';
+        $render_data['header_title'] = $title;
+        $render_data['page_heading'] = 'Service Dashboard';
+        $render_data['filter_category']='';
+        $render_data['filter_status'] = '';
+        if($status != ''){
+            $render_data['status'] = $status;
+            if($status==2){
+                $render_data['filter_status']=$status.'-Not Started';
+               if($category_id!=''){
+                   switch ($category_id){
+                       case 1:
+                           $render_data['filter_category']= $category_id.'-Incorporation-category';
+                           break;
+                       case 2:
+                           $render_data['filter_category']= $category_id.'-Accounting Service-category';
+                           break;
+                       case 3:
+                           $render_data['filter_category']= $category_id.'-Tax Services-category';
+                           break;
+                       case 4:
+                           $render_data['filter_category']= $category_id.'-Business Services-category';
+                           break;
+                       case 5:
+                           $render_data['filter_category']= $category_id.'-Partner Services-category';
+                           break;
+                       default :
+                           $render_data['filter_category']='';  
+                   }
+               }
+            }elseif($status==1){
+                $render_data['filter_status']=$status.'-Started';
+               if($category_id!=''){
+                   switch ($category_id){
+                       case 1:
+                           $render_data['filter_category']= $category_id.'-Incorporation-category';
+                           break;
+                       case 2:
+                           $render_data['filter_category']= $category_id.'-Accounting Service-category';
+                           break;
+                       case 3:
+                           $render_data['filter_category']= $category_id.'-Tax Services-category';
+                           break;
+                       case 4:
+                           $render_data['filter_category']= $category_id.'-Business Services-category';
+                           break;
+                       case 5:
+                           $render_data['filter_category']= $category_id.'-Partner Services-category';
+                           break;
+                       default :
+                           $render_data['filter_category']='';  
+                   }
+               }
+            }
+        }else{
+           $render_data['status'] = $status; 
+        }
+        $render_data['category_list'] = $this->service_model->get_service_category();
+        $render_data['staffInfo'] = $this->staff_info;
+        // $render_data['status'] = $status;
+        $render_data['category_id'] = $category_id;
+        $render_data['office_id'] = $office_id;
+        $this->load->template('services/service_new_dashboard', $render_data);
+        
+    }
+
     public function edit($order_id = '') {
         $this->load->layout = 'dashboard';
         $order_id = base64_decode($order_id);
@@ -580,6 +651,26 @@ class Home extends CI_Controller {
         $render_data['result'] = $this->service_model->ajax_services_dashboard_filter($status, $request_type, $category_id, $request_by, $department, $office, $staff_type, $sort);
         $render_data['serviceid'] = $this->service_model->getServiceId();
         $this->load->view('services/ajax_dashboard', $render_data);
+    }
+
+    public function service_new_dashboard_filter() {
+        if (post('request_type') == 'on_load') {
+            $render_data['load_type'] = 'on_load';
+            $request_type = '';
+        } else {
+            $request_type = post('request_type');
+        }
+        $category_id = request('category_id');
+        $status = request('status');
+        $request_by = request('request_by');
+        $department = request('department_id');
+        $office = request('office_id');
+        $staff_type = request('staff_type');
+        $sort = request('sort');
+        $render_data['page_number'] = request('page_number');
+        $render_data['result'] = $this->service_model->ajax_services_dashboard_filter($status, $request_type, $category_id, $request_by, $department, $office, $staff_type, $sort);
+        $render_data['serviceid'] = $this->service_model->getServiceId();
+        $this->load->view('services/service_new_ajax_dashboard', $render_data);
     }
 
     public function load_partner_manager() {
