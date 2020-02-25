@@ -64,9 +64,9 @@ class Reports extends CI_Controller
         $result = $this->billing_model->get_royalty_reports_data($office_id, $daterange);
         echo json_encode($result);
     }
-    public function royalty_reports_max_limit_count() {
+    public function royalty_reports_max_limit_count()
+    {
         echo count($this->billing_model->royalty_reports_max_limit_count());
-        
     }
     /* royalty_reports total calculation */
     public function royalty_reports_totals()

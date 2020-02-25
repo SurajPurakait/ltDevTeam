@@ -3339,7 +3339,13 @@ if (!function_exists('get_lead_list_by_partner')) {
     }
 
 }
-
+if (!function_exists('get_lead_list_associated_with_partner')) {
+    function get_lead_list_associated_with_partner($lead_id) {
+        $ci = &get_instance();
+        $ci->load->model('Referral_partner');
+        return $ci->referral_partner->get_lead_list_associated_with_partner($lead_id);    
+    }
+}
 if (!function_exists('get_partner_to_staff_count')) {
 
     function get_partner_to_staff_count($lead_id) {
