@@ -433,7 +433,7 @@ function show_document_modal(modal_type, reference, reference_id, id) {
     });
 }
 
-function account_modal(modal_type, id, section, reference_id1) {
+function account_modal(modal_type, id, section, reference_id) {
     var reference_id = $("#reference_id").val();
     var exist_client_id=$("#exist_client_id").val();
     if ($("#editval").val() == '') {
@@ -445,7 +445,7 @@ function account_modal(modal_type, id, section, reference_id1) {
         data: {
             modal_type: modal_type,
             id: id,
-            reference_id1: reference_id1,
+            reference_id: reference_id,
             order_id: $("#editval").val(),
             section: section,
             client_id:exist_client_id
