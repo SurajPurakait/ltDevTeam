@@ -136,8 +136,7 @@ if (count($referral_data) != 0): ?>
                                 <th>Client Name</th>
                                 <th>Tracking</th>
                                 <th>Referred Date</th>
-                                <th>Note</th>
-                                <th>Id</th>
+                                <th>Note</th>                                
                             </tr>
                             <?php foreach ($lead_list_referred_by_or_to_me as $all) { 
                                   $notes = get_notes_ref_partner($all['id']);  
@@ -174,8 +173,7 @@ if (count($referral_data) != 0): ?>
                                     </td>
                                     <?php
                                         }
-                                    ?>
-                                    <td><?= $all['id']; ?></td>
+                                    ?>                                    
                                 </tr>
                             <?php }
                             ?>                        
