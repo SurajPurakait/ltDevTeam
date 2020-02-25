@@ -454,10 +454,11 @@
                                                 </tr>
                                                 <?php
                                                 foreach ($client_account_details as $key => $accounts) {
+                                                    $account_length=strlen($accounts['account_number']);
                                                     ?>
                                                     <tr>
                                                         <td title="Bank Name" class="text-center"><?= $accounts['bank_name']; ?></td>
-                                                        <td title="Account Number" class="text-center"><?= $accounts['account_number']; ?></td>
+                                                        <td title="Account Number" class="text-center"><?= substr_replace($accounts['account_number'], str_repeat("*", ($account_length)-4),0,-4); ?></td>
                                                         <td title="Total Transactions" class="text-center"><input type="text" name="total_transaction" id="total_transaction" onblur="save_transaction(<?= $accounts['id'] ?>, this.value)" value="<?= $accounts['total_transaction'] != '' ? $accounts['total_transaction'] : '' ?>" style="border-left: 0;border-right: 0;border-top: 0;border-bottom: 1px solid #676a6c70;text-align: center"></td>
                                                         <td title="Uncategorized Items" class="text-center"><input type="text" name="uncategorized_item" id="uncategorized_item" onblur="save_uncategorized_item(<?= $accounts['id'] ?>, this.value)" value="<?= $accounts['uncategorized_item'] != '' ? $accounts['uncategorized_item'] : '' ?>" style="border-left: 0;border-right: 0;border-top: 0;border-bottom: 1px solid #676a6c70;text-align: center" ></td>
                                                         <td title="Time" class="text-center">
