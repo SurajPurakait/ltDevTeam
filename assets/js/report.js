@@ -3,90 +3,81 @@ var base_url = document.getElementById('base_url').value;
 /* royalty report */
 function loadRoyaltyReportsData(office = '',date_range = '') {
     $('#reports-tab').DataTable().destroy();
-
-    $('#reports-tab').DataTable({
-        'processing': false,
-        'serverSide': true,
-        'scrollX':true,
-        "pageLength": 100,
-        'dom': '<"html5buttons"B>lTfgitp',
-        'buttons': [ 
-            {
-                extend: 'excel', 
-                title: 'RoyaltyReport',
-                exportOptions : {
-                    modifier : {                   
-                        order : 'index',  // 'current', 'applied', 'index',  'original'
-                        page : 'all',      // 'all',     'current'
-                        search : 'none'     // 'none',    'applied', 'removed'
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'reports/royalty_reports_max_limit_count',
+        success: function (result) {
+            $('#reports-tab').DataTable({
+                'processing': false,
+                'serverSide': true,
+                'scrollX':true,        
+                "lengthMenu": [[10, 25,50, 100,result], [10, 25,50, 100,"All"]],
+                "pageLength": 100,
+                'dom': '<"html5buttons"B>lTfgitp',
+                'buttons': [ 
+                    {
+                        extend: 'excel', 
+                        title: 'RoyaltyReport'
+                    },
+                    {
+                        extend: 'print',
+                        title: 'RoyaltyReport',                
+                        customize: function (win){
+                            $(win.document.body).addClass('white-bg');
+                            $(win.document.body).css('font-size', '10px');
+        
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                        }
                     }
-                }
-            },
-            {
-                extend: 'print',
-                title: 'RoyaltyReport',
-                exportOptions : {
-                    modifier : {                   
-                        order : 'index',  // 'current', 'applied', 'index',  'original'
-                        page : 'all',      // 'all',     'current'
-                        search : 'none'     // 'none',    'applied', 'removed'
+                ],
+                'columnDefs': [
+                    { width: '100px', targets: 0 }
+                ],
+                'serverMethod': 'post',
+                'serverMethod': 'post',
+                'ajax': {
+                    'url': base_url + 'reports/get_royalty_reports_data',
+                    'type': 'POST',
+                    'data': {'ofc': office,'daterange':date_range},
+                    beforeSend: function () {
+                        openLoading();
+                    },
+                    complete: function (msg) {
+                        closeLoading();
                     }
                 },
-                customize: function (win){
-                    $(win.document.body).addClass('white-bg');
-                    $(win.document.body).css('font-size', '10px');
-
-                    $(win.document.body).find('table')
-                            .addClass('compact')
-                            .css('font-size', 'inherit');
-                },
-
-            }
-        ],
-        'columnDefs': [
-            { width: '100px', targets: 0 }
-        ],
-        'serverMethod': 'post',
-        'serverMethod': 'post',
-        'ajax': {
-            'url': base_url + 'reports/get_royalty_reports_data',
-            'type': 'POST',
-            'data': {'ofc': office,'daterange':date_range},
-            beforeSend: function () {
-                openLoading();
-            },
-            complete: function (msg) {
-                closeLoading();
-            }
+                'columns': [
+                    {
+                        data: 'date',
+                        render: function ( data, type, row ) {
+                            return data.split('-')[1]+'-'+data.split('-')[2]+'-'+data.split('-')[0];
+                        }
+                    },
+                    {data: 'client_id'},
+                    {data: 'invoice_id'},
+                    {data: 'service_id'},
+                    {data: 'office_id_name'},
+                    {data: 'service_name'},
+                    {data: 'retail_price',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+                    {data: 'override_price',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+                    {data: 'cost',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+                    {data: 'payment_status'},
+                    {data: 'collected',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+                    {data: 'payment_type'},
+                    {data: 'authorization_id'},
+                    {data: 'reference'},
+                    {data: 'total_net',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
+                    {data: 'office_fee',render: $.fn.dataTable.render.number(',', '.', 0,'','%')},
+                    {data: 'fee_with_cost',render: $.fn.dataTable.render.number(',', '.', 2,'$')},
+                    {data: 'fee_without_cost',render: $.fn.dataTable.render.number(',', '.', 2,'$')}
+                ],
+                'columnDefs': [
+                    { width: '100px', targets: 0 }
+                ],
+            });            
         },
-        'columns': [
-            {
-                data: 'date',
-                render: function ( data, type, row ) {
-                    return data.split('-')[1]+'-'+data.split('-')[2]+'-'+data.split('-')[0];
-                }
-            },
-            {data: 'client_id'},
-            {data: 'invoice_id'},
-            {data: 'service_id'},
-            {data: 'office_id_name'},
-            {data: 'service_name'},
-            {data: 'retail_price',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
-            {data: 'override_price',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
-            {data: 'cost',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
-            {data: 'payment_status'},
-            {data: 'collected',render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
-            {data: 'payment_type'},
-            {data: 'authorization_id'},
-            {data: 'reference'},
-            {data: 'total_net',render: $.fn.dataTable.render.number(',', '.', 2, '$')},
-            {data: 'office_fee',render: $.fn.dataTable.render.number(',', '.', 0,'','%')},
-            {data: 'fee_with_cost',render: $.fn.dataTable.render.number(',', '.', 2,'$')},
-            {data: 'fee_without_cost',render: $.fn.dataTable.render.number(',', '.', 2,'$')}
-        ],
-        'columnDefs': [
-            { width: '100px', targets: 0 }
-        ],
     });
 }
 /* royalty report total calculation */

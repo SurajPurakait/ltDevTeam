@@ -3073,4 +3073,8 @@ class Billing_model extends CI_Model {
       return $this->db->query("select is_recurrence from invoice_info where id = $invoice_id")->result_array(); 
       
     }
+
+    public function royalty_reports_max_limit_count() {
+        return $this->db->get('royalty_report')->result_array();
+    }
 }
