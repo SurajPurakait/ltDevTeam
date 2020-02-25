@@ -251,8 +251,11 @@ class Task extends CI_Controller {
     }
     public function add_action_for_bookkeeping_need_clarification(){
         $data=post();
-//        $this->Project_Template_model->addActionForBookkeepingNeedClarification($data);
-        return true;
+        $insert=$this->Project_Template_model->addActionForBookkeepingNeedClarification($data);
+        echo $insert;
+    }
+    public function get_bookkeeping_input_form_tracking_log($id,$table_name){
+        echo json_encode($this->Project_Template_model->getBookkeepingInputFormTrackingLog($id, $table_name));
     }
 }
 ?>

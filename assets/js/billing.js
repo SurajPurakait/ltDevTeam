@@ -368,7 +368,7 @@ function sendInvoiceEmail() {
         cache: false,
         success: function (result) {
             if (result != 0) {
-                swal("Wel Done!", "Successfully send your mail!", "success");
+                swal("Well Done!", "Your email has been sent successfully!", "success");
                 $('#emailsending').modal('hide');
             } else {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");

@@ -501,6 +501,58 @@ function loadServiceDashboard(status, categoryID, requestType, officeID, pageNum
     });
 }
 
+function loadNewServiceDashboard(status, categoryID, requestType, officeID, pageNumber = 0) {
+    var requestBy = $('.staff-dropdown option:selected').val();
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'services/home/service_new_dashboard_filter',
+        data: {
+            category_id: categoryID,
+            request_type: requestType,
+            status: status,
+            request_by: requestBy,
+            office_id: officeID,
+            page_number: pageNumber
+        },
+        success: function (result) {
+            //alert(result);
+            //console.log(result); return false;
+            if (result.trim() != '') {
+                if (pageNumber == 1 || pageNumber == 0) {
+                    $(".ajaxdiv").html(result);
+                    $("a.filter-button span:contains('-')").html(0);
+                    $(".variable-dropdown").val('');
+                    $(".condition-dropdown").val('').removeAttr('disabled');
+                    $(".criteria-dropdown").val('');
+                    $('.criteria-dropdown').removeAttr('readonly').empty().append('<option value="">All Criteria</option>');
+                    $(".criteria-dropdown").trigger("chosen:updated");
+                    $('form#filter-form').children('div.filter-inner').children('div.filter-div').not(':first').remove();
+                    $('#btn_service').css('display', 'none');
+                } else {
+                    $(".ajaxdiv").append(result);
+                    $('.result-header').not(':first').remove();
+                }
+                if (pageNumber != 0) {
+                    $('.load-more-btn').not(':last').remove();
+                }
+                if (requestType == 'on_load') {
+                    $('#btn_service').hide();
+                    //                    clearFilter();
+                }
+            }
+
+
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+            jumpDiv();
+        }
+    });
+}
+
 function insert_document() {
     if (!requiredValidation('form_document')) {
         return false;

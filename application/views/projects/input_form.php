@@ -521,7 +521,7 @@
                                         </table>
                                     </div>
                                     <div>
-                                        <input type="button" name="clarification" id="clarification" value="Need Clarification" onclick="need_clarification('<?= $task_id ?>','<?= $client_type ?>','<?= $client_id ?>','<?= $task_data->added_by_user ?>')">
+                                        <input type="button" name="clarification" id="clarification" value="Need Clarification" onclick="need_clarification('<?= $task_id ?>','<?= $client_type ?>','<?= $client_id ?>','<?= $project_id ?>')">
                                     </div>
                                 </div>
 
@@ -691,6 +691,21 @@
             <div class="modal-footer text-center">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="updateBookkeeping_input1Statusinner()">Save changes</button>
+            </div>
+            <div class="modal-body" style="display: none;" id="log_modal">
+                <div style="height:200px; overflow-y: scroll">
+                    <table id="status_log" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                                <th>time</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

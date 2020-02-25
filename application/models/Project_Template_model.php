@@ -475,14 +475,16 @@ class Project_Template_model extends CI_Model {
                         . 'from project_template_staff_main '
                         . 'where template_id=' . $id . ' and type=2';
                 $data2 = $this->db->query($query)->row_array();
-
-                $query = 'select CONCAT(last_name, ", ",first_name,", ",middle_name) as full_name '
-                        . 'from staff '
-                        . 'where id=' . $data2['staff_id'] . '';
-                $data3 = $this->db->query($query)->row_array();
-
-
-                return $data3['full_name'];
+                if($data2['staff_id']!=''){
+                    $query = 'select CONCAT(last_name, ", ",first_name,", ",middle_name) as full_name '
+                            . 'from staff '
+                            . 'where id=' . $data2['staff_id'] . '';
+                    $data3 = $this->db->query($query)->row_array();
+                    return $data3['full_name'];
+                }
+                else{
+                    return '';
+                }
             }
         }
     }
@@ -3475,6 +3477,17 @@ class Project_Template_model extends CI_Model {
     }
     public function updateProjectBookkeepingInputFormStatus($status,$id){
         $created_at=Date("Y-m-d h:i:sa");
+        $comment='';
+        $this->db->select('COUNT(id) as data_count');
+        $this->db->where('stuff_id', $this->session->userdata("user_id"));
+        $this->db->where('status_value', $status);
+        $this->db->where('section_id', $id);
+        $this->db->where('related_table_name', 'project_task_bookkeeping_finance_account_report');
+        $data_count = $this->db->get('tracking_logs')->row_array();
+//        $task_id=$this->db->get_where('project_task_bookkeeping_finance_account_report',['id'=>$id])->row()->task_id;
+        if ($data_count['data_count'] == 0) {
+            $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => $status, "section_id" => $id, "related_table_name" => "project_task_bookkeeping_finance_account_report", "comment" => $comment]);
+        }
         if($status==0){
             $this->db->where('id',$id);
             $update=$this->db->update('project_task_bookkeeping_finance_account_report',['tracking'=>0,'created_at'=>$created_at]);
@@ -3538,10 +3551,53 @@ class Project_Template_model extends CI_Model {
     public function addActionForBookkeepingNeedClarification($data){
         $this->load->model('action_model');
         $task_id=$data['task_id'];
+        $project_id=$data['project_id'];
         $client_type=$data['client_type'];
         $client_id=$data['client_id'];
         $action_message=$data['action_message'];
         $staff_info=$_SESSION['staff_info'];
+        $practice_id=$this->getProjectClientPracticeId($client_id, $client_type);
+        $subject="#".$project_id."ProjectId Need Clarification";
+        $staffids=$this->db->get_where('department_staff',['department_id'=>11])->result_array();
+//        print_r($staffids);die;
+        $insert_action=array(
+            'office_id'=>$staff_info['office'],
+            'created_office'=>$staff_info['office'],
+            'created_department'=>$staff_info['department'],
+            'department'=>11,
+            'office'=>$staff_info['office'],
+            'client_id'=>$practice_id,
+            'subject'=> $subject,
+            'message'=>$action_message,
+            'priority'=>1,
+            'status'=>0,
+            'added_by_user'=>$staff_info['id'],
+            'my_task'=>0,
+            'is_all'=>1,
+        );
+        $this->db->insert('actions',$insert_action);
+        $insert_id=$this->db->insert_id();
+        if(!empty($staffids)){
+            $staff_id=[];
+            foreach ($staffids as $key=> $value) {
+                $staff_id[$key]=$value['staff_id'];
+                $this->db->insert('action_staffs', ["action_id" => $insert_id, "staff_id" => $value['staff_id']]);
+            }
+        }
+        $insert_client_list=array(
+            'action_id'=>$insert_id,
+            'client_type'=>$client_type,
+            'client_list_id'=>$client_id,
+            'client_id'=>$practice_id
+        );
+        $this->db->insert('action_client_list',$insert_client_list);
+        if($insert_id!='' && !empty($staffids)){
+            $this->system->save_general_notification('action', $insert_id, 'insert', $staff_id);
+            return $insert_id;
+        }
+    }
+    public function getBookkeepingInputFormTrackingLog($id, $table_name) {
+        return $this->db->query("SELECT concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id, (SELECT name from department where id=(SELECT department_id from department_staff where staff_id=s.id )) as department, case when tracking_logs.status_value = '0' then 'Incomplete' when tracking_logs.status_value = '1' then 'Complete' when tracking_logs.status_value = '2' then 'Not Required' else tracking_logs.status_value end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
     }
     
 }

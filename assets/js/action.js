@@ -238,6 +238,7 @@ function request_create_action() {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
+            // alert(result);return false;
             if (result.trim() == "-1") {
                 swal("ERROR!", "Unable To Add Action", "error");
             } else if (result) {
@@ -1784,7 +1785,7 @@ var clear_sos_msg = (value) => {
 
 }
 
-function actionContainerAjax(client_type, client_id = '', action_id = '')
+function actionContainerAjax(client_type = '', client_id = '', action_id = '')
 {
     var url = '';
     if (action_id != '') {

@@ -16,7 +16,7 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                 <button class="btn btn-primary" type="button" onclick="go('action/home/business_dashboard');">Go Back To List</button>
                 <?php if ($usertype == 1 || $usertype == 2) { ?>
 
-                    <!-- <a class="btn btn-primary" href=""><i class="fa fa-plus"></i> Create Action</a> -->
+                    <a class="btn btn-primary" href="<?= base_url()?>action/home/create_action/1/<?= $reference_id?>/<?= $office['id']?>/<?= $company_internal_data[0]['practice_id'] ?>" target="_blank"><i class="fa fa-plus"></i> Create Action</a>
 
                     <a class="btn btn-primary" href="<?php echo base_url(); ?>billing/invoice/index/<?php echo base64_encode($company_name_option_data["id"]); ?>/<?= base64_encode(1); ?>" style="">+ Create Invoice</a>
 
