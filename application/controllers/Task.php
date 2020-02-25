@@ -238,16 +238,21 @@ class Task extends CI_Controller {
     }
     public function update_project_bookkeeping_record_time(){
         $record_time=post('record_time');
-        $bank_id=post('bank_id');
+        $ins['bank_id']=$bank_id=post('bank_id');
         $ins['record_details']=$this->Project_Template_model->insertBookkeepingBankRecordTime($record_time,$bank_id);
         $this->load->view('task/bookkeeping_record_details',$ins);
     }
     public function delete_bookkeeping_timer_record(){
         $record_id=post('record_id');
-        $bank_id=post('bank_id');
+        $ins['bank_id']=$bank_id=post('bank_id');
+        $ins['section']='';
         $this->Project_Template_model->deleteBookkeepingTimerRecord($record_id);
         $ins['record_details']=$this->Project_Template_model->insertBookkeepingBankRecordTime('',$bank_id);
-        $this->load->view('task/bookkeeping_record_details',$ins);
+        if($record_id==''){
+            $this->load->view('task/bookkeeping_record_details',$ins);
+        }else{
+            $this->load->view('task/recoded_time_modal',$ins);
+        }
     }
     public function add_action_for_bookkeeping_need_clarification(){
         $data=post();
@@ -256,6 +261,16 @@ class Task extends CI_Controller {
     }
     public function get_bookkeeping_input_form_tracking_log($id,$table_name){
         echo json_encode($this->Project_Template_model->getBookkeepingInputFormTrackingLog($id, $table_name));
+    }
+    public function show_recoded_time_details(){
+        $bank_id=post('account_id');
+        if(post('section')!=''){
+        $data['section']=post('section');
+        }else{
+            $data['section']='';
+        }
+        $data['record_details']=$this->Project_Template_model->insertBookkeepingBankRecordTime('',$bank_id);
+        $this->load->view('task/recoded_time_modal',$data);
     }
 }
 ?>
