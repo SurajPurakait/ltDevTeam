@@ -71,6 +71,36 @@
                             </div>
                         </div>
 
+                    <?php if(isset($client_type) && $client_type !=''){ ?>
+                        <!--business or individual client-->
+                        <div class="form-group client_type_div0">
+                            <label class="col-lg-2 control-label">Client Type</label>
+                            <div class="col-lg-10">
+                                <select class="form-control client_type_field0" onchange="actionContainerAjax(this.value, '', '');" name="client_type" id="client_type" title="Client Type" disabled>
+                                    <option value="">Select Client Type</option>
+                                    <option value="1" <?= ($client_type == 1)? 'selected':'' ?>>Business Client</option>
+                                    <option value="2" <?= ($client_type == 2)? 'selected':'' ?>>Individual</option>
+                                </select>
+                            </div>
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+                        
+                        <div class="form-group client_type_div0">
+                            <label class="col-lg-2 control-label">Office</label>
+                            <div class="col-lg-10">
+                                <select class="form-control client_type_field0" name="office_id" id="staff_office" onchange="refresh_existing_action_client_list(this.value,'');" title="Office" disabled>
+                                    <option value="">Select Office</option>
+                                    <?php load_ddl_option("staff_office_list",$office_id, (staff_info()['type'] != 1) ? "staff_office" : ""); ?>
+                                </select>
+                           </div>
+                            <div class="errorMessage text-danger"></div>
+                        </div>
+
+                        <input type="hidden" name="client_type" value="<?= $client_type ?>">
+                        <input type="hidden" name="office_id" value="<?= $office_id ?>">
+                        <input type="hidden" name="client_list_id[]" value="<?= $reference_id ?>">
+                    <?php }else{ ?>
+
                         <!--business or individual client-->
                         <div class="form-group client_type_div0">
                             <label class="col-lg-2 control-label">Client Type</label>
@@ -85,7 +115,17 @@
                         </div>
                         <!-- <div class="hr-line-dashed"></div> -->
                         <div id="action_container"></div>
+                    <?php } ?>
 
+                    <?php if(isset($practice_id) && $practice_id !=''){ ?>
+                        <div class="form-group">
+                            <label class="col-sm-3 col-md-2 control-label">Client ID</label>
+                            <div class="col-sm-9 col-md-10">
+                                <input placeholder="" class="form-control" type="text" name="client_id" id="client_id" title="Cient ID" value="<?= $practice_id ?>" readonly>
+                                <!--<div class="errorMessage text-danger"></div>-->
+                            </div>
+                        </div>
+                    <?php }else{ ?>
                         <div class="form-group">
                             <label class="col-sm-3 col-md-2 control-label">Client ID</label>
                             <div class="col-sm-9 col-md-10">
@@ -93,6 +133,7 @@
                                 <!--<div class="errorMessage text-danger"></div>-->
                             </div>
                         </div>
+                    <?php } ?>
                        
                         <div class="form-group">
                             <label class="col-sm-3 col-md-2 control-label">Priority<span class="text-danger">*</span></label>

@@ -2119,7 +2119,9 @@ class Billing_model extends CI_Model {
         ];
         switch ($element_key):
             case 1: {
-                    $invoice_list = $this->billing_list();
+//                    $invoice_list = $this->billing_list();
+                    $this->db->select('id as invoice_id');
+                    $invoice_list=$this->db->get('invoice_info')->result_array();
                     return array_column($invoice_list, 'invoice_id');
                 }
                 break;

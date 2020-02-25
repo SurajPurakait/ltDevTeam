@@ -12,7 +12,7 @@
                 <li><a id="client_id-val" href="javascript:void(0);" onclick="sort_dashboard('act.client_id')">Client ID</a></li>
                 <li><a id="status-val" href="javascript:void(0);" onclick="sort_dashboard('act.status')">Tracking</a></li>
                 <li><a id="creation_date-val" href="javascript:void(0);" onclick="sort_dashboard('act.creation_date')">Requested Date</a></li>
-                <li><a id="start_date-val" href="javascript:void(0);" onclick="sort_dashboard('act.start_date')">Start Date</a></li>
+                <!--<li><a id="start_date-val" href="javascript:void(0);" onclick="sort_dashboard('act.start_date')">Start Date</a></li>-->
                 <li><a id="complete_date-val" href="javascript:void(0);" onclick="sort_dashboard('act.complete_date')">Complete Date</a></li>
                 <li><a id="due_date-val" href="javascript:void(0);" onclick="sort_dashboard('act.due_date')">Due Date</a></li>
             </ul>

@@ -182,6 +182,9 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?= active_menu($menu, "service_dashboard"); ?>>
                             <a href="<?= base_url(); ?>services/home">Dashboard</a>
                         </li>
+                        <li <?= active_menu($menu, "new_service_dashboard"); ?>>
+                            <a href="<?= base_url(); ?>services/home/service_new_dashboard_index">Service Dashboard</a>
+                        </li>
                         <li <?= active_menu($menu, "incorporation"); ?>>
                             <div class="dashboard-icons pull-right">
                                 <a href="<?= base_url(); ?>services/home/index/2/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 1); ?></a>

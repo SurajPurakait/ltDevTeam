@@ -268,7 +268,7 @@ $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border
        
         <?php if ($usertype == 1 || $usertype == 2) { ?>
            
-            <!-- <a class="btn btn-primary" href=""><i class="fa fa-plus"></i> Create Action</a> -->
+            <a class="btn btn-primary" href="<?= base_url()?>action/home/create_action/2/<?= $reference_id?>/<?= $office['id']?>/<?= $get_individual_data['practice_id'] ?>" target="_blank"><i class="fa fa-plus"></i> Create Action</a>
             
             <a class="btn btn-success" href="<?php echo base_url(); ?>action/home/edit_individual/<?php echo $get_individual_data['id'] ?>">Edit Client Info</a>
         
