@@ -180,10 +180,10 @@ $office_id = get_office_id($staff_info['office']);
                     </a>
                     <ul class="nav nav-second-level collapse" style="height: 0px;">
                         <li <?= active_menu($menu, "service_dashboard"); ?>>
-                            <a href="<?= base_url(); ?>services/home">Dashboard</a>
+                            <a href="<?= base_url(); ?>services/home">Order</a>
                         </li>
                         <li <?= active_menu($menu, "new_service_dashboard"); ?>>
-                            <a href="<?= base_url(); ?>services/home/service_new_dashboard_index">Service Dashboard</a>
+                            <a href="<?= base_url(); ?>services/home/service_new_dashboard_index">Services</a>
                         </li>
                         <li <?= active_menu($menu, "incorporation"); ?>>
                             <div class="dashboard-icons pull-right">
@@ -252,7 +252,9 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?= active_menu($menu, "create_invoice"); ?>>
                             <a href="<?= base_url(); ?>billing/invoice">+ Add New Invoice</a>
                         </li>
-                         
+                        <li <?= active_menu($menu, "recurring_plans"); ?>>
+                            <a href="<?= base_url(); ?>billing/home/recurring_plans">Recurring Plans</a>
+                        </li> 
                         <li <?= active_menu($menu, "recurring_invoice"); ?>>                            
                             <a href="<?= base_url(); ?>billing/home/index/y">Recurring Invoice</a>
                         </li>
