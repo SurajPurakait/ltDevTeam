@@ -383,11 +383,13 @@
                                                     $task_staff = ProjectTaskStaffList($task_id);
                                                     $stf = array_column($task_staff, 'staff_id');
                                                     $new_staffs = implode(',', $stf);
+                                                    $account_length= strlen($accounts['account_number']);
+                                                    $routing_length=strlen($accounts['routing_number']);
                                                     ?>
                                                     <tr>
                                                         <td title="Bank Name" class="text-center"><?= $accounts['bank_name']; ?></td>
-                                                        <td title="Account Number" class="text-center"><?= $accounts['account_number']; ?></td>
-                                                        <td title="Routing Number" class="text-center"><?= $accounts['routing_number']; ?></td>
+                                                        <td title="Account Number" class="text-center"><?= substr_replace($accounts['account_number'], str_repeat("*", ($account_length)-4),0,-4); ?></td>
+                                                        <td title="Routing Number" class="text-center"><?= substr_replace($accounts['routing_number'], str_repeat("*", ($routing_length)-4),0,-4); ?></td>
                                                         <td title="Tracking" class="text-center"><a href='javascript:void(0)' onclick='change_bookkeeping_finance_input_status("<?= $accounts['id']; ?>", "<?= $status ?>")'> <span id="trackinner-<?= $accounts['id'] ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                                                         <td title="Time & Date" class="text-center"><?= $created_at; ?></td>
                                                         <td title="Notes" class="text-center"><span> 
@@ -471,12 +473,9 @@
                                                                     <input type="hidden" id="bank_id" value="<?= $accounts['id'] ?>">
                                                                     <div id="load_record_time-<?= $accounts['id'] ?>" >
                                                                         <?php
-                                                                        $record_details = get_bookkeeping_records_details($accounts['id']);
-                                                                        foreach ($record_details as $key => $record) {
-                                                                            ?>
-                                                                            <h4 id="records_time" class="" name='records_time'>Entry <?= $key + 1 . ": " ?><?= $record['record_time'] ?><a href="javascript:void(0)" onclick="delete_recoded_time(<?= $record['id'] ?>,<?= $record['bank_id'] ?>)"><span class="fa fa-times text-danger m-l-4"></span></a></h4>
-                                                                        <?php } ?>
-                                                                    </div>
+                                                                        $record_details = get_bookkeeping_records_details($accounts['id']); ?>
+                                                                        <a href="javascript:void(0)" id="time_modal" onclick="show_record_modal(<?= $accounts['id'] ?>,'add')">Recoded time details(<?= count($record_details) ?>)</a>
+                                                                     </div>
                                                                     <div id="timer_result-<?= $accounts['id'] ?>"></div>
                                                                 </div>
                                                             </div></td>
@@ -530,7 +529,7 @@
                                 <div class="form-group">
                                     <label class="col-lg-2 control-label">Adjustment Needed<span class="text-danger">*</span></label>
                                     <label class="checkbox-inline">
-                                        <input class="checkclass" value="y" type="radio" id="need_adjustment" name="need_adjustment" checked onclick="check_adjustment(this.value)" required title="Input Form" <?= (isset($bookkeeper_details->adjustment) ? ($bookkeeper_details->adjustment == 'y' ? 'checked' : '') : '') ?>> Yes
+                                        <input class="checkclass" value="y" type="radio" id="need_adjustment" name="need_adjustment" onclick="check_adjustment(this.value)" required title="Input Form" <?= (isset($bookkeeper_details->adjustment) ? ($bookkeeper_details->adjustment == 'y' ? 'checked' : '') : '') ?>> Yes
                                     </label>
                                     <label class="checkbox-inline">
                                         <input class="checkclass" value="n" type="radio" id="need_adjustment2" name="need_adjustment" onclick="check_adjustment(this.value)" required title="Input Form" <?= (isset($bookkeeper_details->adjustment) ? ($bookkeeper_details->adjustment == 'n' ? 'checked' : '') : '') ?>> No
@@ -570,7 +569,7 @@
                                     ?>
                                 </ul>
                             <?php } endif; ?>
-                        <div id="bookkeeping_check3">
+                                <div id="bookkeeping_check3" style="display:none">
                             <?php if ($bookkeeping_input_type != 1 && $bookkeeping_input_type != 2) { ?>
                                 <div class="form-group">
                                     <label class="col-sm-3 col-md-2 control-label">Attachment:</label>
@@ -653,6 +652,8 @@
 </div>
 <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
 <div id="document-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
+<div id="recordModal" class="modal fade" role="dialog">
+        </div>
 <!--bookkeeping input form 1 tracking -->
 <div id="changetrackinginner" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -764,6 +765,8 @@
     </div>
 </div>
 <!--end task note modal-->
+<!--recoded time modal-->
+
 <script>
     get_financial_account_list('<?= $client_id; ?>', 'project', '<?= $task_id; ?>');
 <?php if ($bookkeeping_input_type == 3) { ?>
@@ -824,7 +827,7 @@
         //                stop = document.getElementById('stop'),
         //                clear = document.getElementById('clear'),
         seconds = 0, minutes = 0, hours = 0,
-                t;
+                t='';
         function add(bank_id) {
             //            h3 = document.getElementById('total_time-'+bank_id),
             seconds++;
@@ -886,9 +889,12 @@
                 $("#adjustment_no_result").html('Confirming Bookkeeping was done correctly');
                 $("#adjustment_no_result").show();
             }
-        } else {
+        } else if(adjustment=='y') {
             $("#bookkeeping_check3").show();
             $("#adjustment_no_result").hide();
-    }
+        }else{
+            $("#bookkeeping_check3").hide();
+            $("#adjustment_no_result").hide();
+        }
     }
 </script>
