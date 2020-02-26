@@ -1,5 +1,5 @@
 <div class="clearfix result-header">
-    <?php if (count($result) != 0): ?>
+    <?php if (count($result) != 0) : ?>
         <h2 class="text-primary pull-left result-count-h2"><?= isset($page_number) ? ($page_number * 20) : count($result) ?> Results found <?= isset($page_number) ? 'of ' . count($result) : '' ?></h2>
     <?php endif; ?>
     <div class="pull-right text-right p-t-4">
@@ -27,99 +27,110 @@ $user_id = sess('user_id');
 $user_info = staff_info();
 $usertype = $user_info['type'];
 $row_number = 0;
-if (!empty($result)):
-    
-    foreach ($result as $row_count => $row): 
-    
-        if(isset($page_number)){
-            if($page_number != 1){
-                if($row_count < (($page_number - 1) * 20)){
+if (!empty($result)) :
+
+    foreach ($result as $row_count => $row) :
+
+        if (isset($page_number)) {
+            if ($page_number != 1) {
+                if ($row_count < (($page_number - 1) * 20)) {
                     continue;
                 }
             }
-            if($row_count == ($page_number * 20)){
+            if ($row_count == ($page_number * 20)) {
                 break;
             }
-        }?>
-        
-        <div>
-            <div class="panel-body">
+        } ?>
+
+        <div class="panel panel-default service-panel">
+            <div class="panel-heading panel-body">
                 <div class="table-responsive">
                     <table class="table table-borderless">
                         <tr>
-                            <th style='width:11%;  text-align: center;'>Service ID</th>
-                            <th style='width:11%;  text-align: center;'>Assign</th>
-                            <th style='width:11%;  text-align: center;'>Name</th>
-                            <th style='width:11%; text-align: center;'>Retail Price</th>
-                            <th style='width:11%; text-align: center;'>Override Price</th>
-                            <th style='width:11%; text-align: center;'>Responsible Dept</th>
-                            <th style='width:11%; text-align: center;'>Tracking</th>
-                            <th style='width:11%; text-align: center;'>Start</th>
-                            <th style='width:11%; text-align: center;'>Complete</th>
-                            <th style='width:5%; text-align: center;'>Notes</th>
-                            <th style='width:5%; text-align: center;'>SOS</th>
-                            <th style='width:120px; text-align: center; white-space: nowrap; display: flex;'>Input Form</th>
+                            <th class="text-center" style='white-space: nowrap;'>Service ID</th>
+                            <th class="text-center" style='white-space: nowrap;'>Assign</th>
+                            <th class="text-center" style='white-space: nowrap;'>Name</th>
+                            <th class="text-center" style='white-space: nowrap;'>Retail Price</th>
+                            <th class="text-center" style='white-space: nowrap;'>Override Price</th>
+                            <th class="text-center" style='white-space: nowrap;'>Responsible Dept</th>
+                            <th class="text-center" style='white-space: nowrap;'>Tracking</th>
+                            <th class="text-center" style='white-space: nowrap;'>Start</th>
+                            <th class="text-center" style='white-space: nowrap;'>Complete</th>
+                            <th class="text-center" style='white-space: nowrap;'>Notes</th>
+                            <th class="text-center" style='white-space: nowrap;'>SOS</th>
+                            <th class="text-center" style='white-space: nowrap; display: flex;'>Input Form</th>
                         </tr>
                         <tr>
-                            <td title="Service ID" style="text-align: center;"></td>
-                            <td title="Assign" style="text-align: center;"></td>
-                            <td title="Name" style="text-align: center;"></td>
-                            <td title="Retail Price" style="text-align: center;"></td>
-                            <td title="Override Price" style="text-align: center;"></td>
-                            <td title="Responsible Dept" style="text-align: center;"></td>
-                            <td title="Tracking" style="text-align: center;"></td>
-                            <td title="Start" style="text-align: center;"></td>
-                            <td title="Complete" style="text-align: center;"></td>
-                            <td title="Notes" style="text-align: center;"></td>
-                            <td title="SOS" style="text-align: center;"></td>
-                            <td title="Input Form" style="text-align: center;"></td>
+                            <td title="Service ID" class="text-center"><?= $row->invoice_id ?></td>
+                            <td title="Assign" class="text-center"><?= '+assign' ?></td>
+                            <td title="Service Name" class="text-center"><?= $row->service_name; ?></td>
+                            <td title="Retail Price" class="text-center">$<?= $row->retail_price ?></td>
+                            <td title="Override Price" class="text-center">$<?= $row->price_charged; ?></td>
+                            <td title="Responsible Dept" class="text-center">
+                                <?php $dept_name = $row->service_department_name;
+                                if ($dept_name == '') {
+                                    echo "Franchisee<br>";
+                                } else {
+                                    echo $row->service_department_name;
+                                } ?>
+                            </td>
+                            <td title="Tracking" class="text-center"><?= 'Not started' ?></td>
+
+                            <?php
+                            $start_date = date('m/d/Y', strtotime($row->date_started));
+                            $complete_date = date('m/d/Y', strtotime($row->date_completed)); ?>
+
+                            <td title="Start Date" class="text-center"><?= $start_date ?></td>
+                            <td title="Complete Date" class="text-center"><?= $complete_date ?></td>
+                            <td title="Notes" class="text-center"><?= '0' ?></td>
+                            <td title="SOS" class="text-center"><?= '0' ?></td>
+                            <td title="Input Form" class="text-center"><?= '0' ?></td>
                         </tr>
                     </table>
                 </div>
+
             </div>
         </div>
-        
-           <!--  <div id="collapse<?= $row->id; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;"></div> -->
-   
-        <?php
+
+    <?php
         $row_number = $row_count + 1;
     endforeach;
-    if(isset($page_number) && $row_number < count($result)): ?>
+    if (isset($page_number) && $row_number < count($result)) : ?>
         <div class="text-center p-0 load-more-btn">
-            <a href="javascript:void(0);" onclick="loadServiceDashboard('', '', 'on_load', '', <?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more result</a>
+            <a href="javascript:void(0);" onclick="loadNewServiceDashboard('', '', 'on_load', '', <?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more result</a>
         </div>
-    <?php endif; ?>    
-        <script>
-            $(function () {
-                $('h2.result-count-h2').html('<?= $row_number . ' Results found of ' . count($result) ?>');
-                <?php if(isset($page_number) && $row_number == count($result)): ?>
-                    $('.load-more-btn').remove();
-                <?php endif; ?>
-            });
-        </script>
-    <?php if(isset($load_type) && isset($page_number) && $page_number == 1):
+    <?php endif; ?>
+    <script>
+        $(function() {
+            $('h2.result-count-h2').html('<?= $row_number . ' Results found of ' . count($result) ?>');
+            <?php if (isset($page_number) && $row_number == count($result)) : ?>
+                $('.load-more-btn').remove();
+            <?php endif; ?>
+        });
+    </script>
+    <?php if (isset($load_type) && isset($page_number) && $page_number == 1) :
         $filter_array = isset($load_type) ? array_merge(array_count_values(array_column($result, 'tome_filter_value')), array_count_values(array_column($result, 'byothers_filter_value')), array_count_values(array_column($result, 'byme_filter_value')), array_count_values(array_column($result, 'tome_late_filter_value')), array_count_values(array_column($result, 'byothers_late_filter_value')), array_count_values(array_column($result, 'byme_late_filter_value'))) : [];
         $assign_status = isset($load_type) ? array_count_values(array_column($result, 'assign_status')) : [];
-        ?>
+    ?>
         <script>
-            $(function () {
-                <?php foreach ($filter_array as $key => $value): ?>
+            $(function() {
+                <?php foreach ($filter_array as $key => $value) : ?>
                     $('a#filter-<?= $key; ?> span.label').html('<?= $value != '' ? $value : 0; ?>');
                 <?php endforeach; ?>
-                $('a#filter-unassigned-u span.label').html('<?= isset($assign_status['unassigned']) ? $assign_status['unassigned'] : 0; ?>');                    
+                $('a#filter-unassigned-u span.label').html('<?= isset($assign_status['unassigned']) ? $assign_status['unassigned'] : 0; ?>');
             });
-        </script>        
-    <?php endif; 
-else: ?>
+        </script>
+    <?php endif;
+else : ?>
     <div class="text-center m-t-30">
         <div class="alert alert-danger">
-            <i class="fa fa-times-circle-o fa-4x"></i> 
+            <i class="fa fa-times-circle-o fa-4x"></i>
             <h3><strong>Sorry !</strong> no data found</h3>
         </div>
     </div>
 <?php endif; ?>
 <script>
-    $(function () {
+    $(function() {
         $('[data-toggle="tooltip"]').tooltip();
     });
 </script>

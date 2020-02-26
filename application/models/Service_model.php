@@ -651,6 +651,43 @@ class Service_model extends CI_Model
         return $result;
     }
 
+    public function ajax_services_new_dashboard_filter()
+    {
+        $select[] = 'inv.id AS invoice_id';
+        $select[] = 'sr.id AS service_request_id';
+        $select[] = 'sr.services_id AS service_id';
+        $select[] = 'sr.order_id AS order_id';
+        $select[] = 'sr.assign_user AS assign_user_id';
+        $select[] = 'srv.ideas AS service_shortname';
+        $select[] = 'srv.description AS service_name';
+        $select[] = 'sr.price_charged AS price_charged';
+        $select[] = 'sr.tracking AS tracking';
+        $select[] = 'sr.date_started AS date_started';
+        $select[] = 'sr.date_completed AS date_completed';
+        $select[] = 'sr.date_start_actual AS date_start_actual';
+        $select[] = 'sr.date_complete_actual AS date_complete_actual';
+        $select[] = 'sr.beginning_month AS beginning_month';
+        $select[] = 'sr.frequency AS frequency';
+        $select[] = 'sr.status AS status';
+        $select[] = 'srv.retail_price AS retail_price';
+        $select[] = 'srv.category_id AS category_id';
+        $select[] = 'sr.input_form_status AS input_form_status';
+        $select[] = 'srv.retail_price AS retail_price';
+        $select[] = 'sr.responsible_staff AS responsible_staff_id';
+        $select[] = 'CONCAT(st.last_name, \', \', st.first_name) AS responsible_staff_name';
+        $select[] = 'srv.dept as responsible_department_id';
+        $select[] = '(SELECT department.name FROM department WHERE department.id = srv.dept) AS service_department_name';
+        $select[] = '(SELECT target_days.input_form FROM target_days WHERE target_days.service_id = srv.id LIMIT 0,1) AS input_form';
+        $this->db->select(implode(', ', $select));
+        $this->db->from('service_request AS sr');
+        $this->db->join('services AS srv', 'srv.id = sr.services_id');
+        $this->db->join('staff AS st', 'st.id = sr.responsible_staff');
+        $this->db->join('invoice_info AS inv', 'inv.order_id = sr.order_id');
+        $this->db->where('sr.order_id!=',0);
+        $this->db->order_by('inv.id','desc');
+        return $this->db->get()->result();
+    }
+
     public function check_count_reqby_others()
     {
         $user_info = staff_info();

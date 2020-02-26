@@ -1825,8 +1825,10 @@ function delete_recoded_time(record_id,bank_id){
         success: function (result) {
 //            alert(result);return false;
             if (result) {
-                $("#load_record_time-" + bank_id).hide();
-                $("#timer_result-" + bank_id).html(result);
+                $('#recordModal').modal();
+                $('#recordModal').html(result);
+//                $("#load_record_time-" + bank_id).hide();
+//                $("#timer_result-" + bank_id).html(result);
             }
         },
     });
@@ -1841,12 +1843,12 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
             $("#changetrackinginner #rad2").prop('checked', false);
         } else if (status == 1) {
             $("#changetrackinginner #rad1").prop('checked', true);
-            $("#changetrackinginner #rad0").prop('checked', false).attr('disabled', true);
+            $("#changetrackinginner #rad0").prop('checked', false);
             $("#changetrackinginner #rad2").prop('checked', false);
         } else {
             $("#changetrackinginner #rad2").prop('checked', true);
             $("#changetrackinginner #rad1").prop('checked', false);
-            $("#changetrackinginner #rad0").prop('checked', false).attr('disabled', true);
+            $("#changetrackinginner #rad0").prop('checked', false);
         }
         $.get($('#baseurl').val() + "task/get_bookkeeping_input_form_tracking_log/" + id + "/project_task_bookkeeping_finance_account_report", function (data) {
             $("#status_log > tbody > tr").remove();
@@ -1887,9 +1889,7 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
                 $("#trackinner-" + id).parent('a').removeAttr('onclick');
                 $("#trackinner-" + id).parent('a').attr('onclick', 'change_bookkeeping_finance_input_status(' + id + ',' + statusval + ');');
                 $("#trackinner-" + id).html(tracking);
-                if (result.trim() != 0) {
-                    $("#changetrackinginner").modal('hide');
-                }
+                $("#changetrackinginner").modal('hide');
             }
         });
     }
@@ -1928,6 +1928,42 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
                 success: function (result) {
                     swal("Query submited successfully!");
                 }
+            });
+        }
+    }
+    function show_record_modal(account_id,section=''){
+        $.ajax({
+            type: "POST",
+            data: {account_id: account_id,section:section},
+            url: base_url + 'task/show_recoded_time_details',
+            dataType: "html",
+            success: function (result) {
+                $('#recordModal').modal();
+                $('#recordModal').html(result);
+            },
+            beforeSend: function () {
+                openLoading();
+            },
+            complete: function (msg) {
+                closeLoading();
+            }
+        });
+    }
+    function close_recoded_modal(bank_id,section=''){
+        if(section!=''){
+            $("#load_record_time-" + bank_id).show();
+        }else {
+            var record_id='';
+            $.ajax({
+                type: "POST",
+                data: {bank_id: bank_id,record_id:record_id},
+                url: base_url + 'task/delete_bookkeeping_timer_record',
+                dataType: "html",
+                success: function (result) {
+                    $("#load_record_time-" + bank_id).hide();
+                    $('#recordModal').hide();
+                    $("#timer_result-" + bank_id).html(result);
+                },
             });
         }
     }
