@@ -123,7 +123,7 @@
                             </div><!-- ./Recurrence Modal -->
                         </div>
                         <?php } ?>
-
+                        <div id="recurring_section"></div>
                         <div class="hr-line-dashed"></div>
                         <h3>Confirmation</h3>
                         <div class="form-group" style="display: none;">

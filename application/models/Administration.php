@@ -467,7 +467,7 @@ class Administration extends CI_Model {
         $this->db->where('description',$description);
         return $this->db->get('partner_services')->num_rows();    
     }
-    public function add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost,$responsible_assigned,$client_type) {
+    public function add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost,$responsible_assigned,$client_type,$is_recurring) {
         $this->db->trans_begin();
 
         $insert_data = array('id' => '',
@@ -481,7 +481,8 @@ class Administration extends CI_Model {
             'status' => 1,
             'responsible_assign' => $responsible_assigned,
             'client_type_assign' => $client_type,
-            'note' => $note
+            'note' => $note,
+            'is_recurring' => $is_recurring
         );
         $this->db->insert('services', $insert_data);
         $insert_id = $this->db->insert_id();
@@ -514,7 +515,7 @@ class Administration extends CI_Model {
         }
     }
 
-    public function update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost,$responsible_assigned,$client_type) {
+    public function update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode, $note, $fixedcost,$responsible_assigned,$client_type,$is_recurring) {
         $this->db->trans_begin();
 
         $update_data = array('category_id' => $servicecat,
@@ -527,7 +528,8 @@ class Administration extends CI_Model {
             'status' => 1,
             'responsible_assign' => $responsible_assigned,
             'client_type_assign' => $client_type,
-            'note' => $note
+            'note' => $note,
+            'is_recurring' => $is_recurring
         );
         $this->db->set($update_data)->where("id", $service_id)->update("services");
 
@@ -605,7 +607,7 @@ class Administration extends CI_Model {
     }
 
     public function get_service_by_id_for_service_setup($id) {
-        $sql = "select s.id as id, s.description as servicename,s.note,s.fixed_cost as fixedcost,s.retail_price as price, s.category_id as catid, t.start_days, t.end_days, t.input_form, s.dept as department, s.ideas,s.responsible_assign,s.client_type_assign, group_concat(r.related_services_id) as related_services from services as s inner join target_days as t on t.service_id = s.id left join related_services as r on r.services_id = s.id where s.id = '$id'";
+        $sql = "select s.id as id, s.description as servicename,s.note,s.fixed_cost as fixedcost,s.retail_price as price, s.category_id as catid, t.start_days, t.end_days, t.input_form, s.dept as department, s.ideas,s.responsible_assign,s.client_type_assign, group_concat(r.related_services_id) as related_services,s.is_recurring from services as s inner join target_days as t on t.service_id = s.id left join related_services as r on r.services_id = s.id where s.id = '$id'";
         return $this->db->query($sql)->result_array()[0];
     }
 

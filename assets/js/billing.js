@@ -83,7 +83,19 @@ function getServiceInfoById(service_id, category_id, section_id) {
                     $('#service_div_' + section_id).html(result);
                 } else {
                     $('#service_div_' + section_id).html('');
-                }
+                }                
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        service_id: service_id,
+                        section_id: section_id
+                    },
+                    url: base_url + 'billing/invoice/get_recurring_section',
+                    dataType: "html",
+                    success: function (result) {
+                        $("#recurring_section").html(result);        
+                    }
+                });                
             },
             beforeSend: function () {
                 openLoading();

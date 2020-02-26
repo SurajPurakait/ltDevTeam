@@ -311,6 +311,7 @@ function addRelatedservice() {
     var enddays = $('#add-services-form #enddays').val();
     // var dept = $('#add-services-form #dept option:selected').val();
     var input_form = $('#add-services-form input[name="input_form"]:checked').val();
+    var is_recurring = $('#add-services-form input[name="is_recurring"]:checked').val();
     var shortcode = $('#add-services-form #shorthidden').val();
     var note = $('#add-services-form #note').val();
     var fixedcost = $('#add-services-form #fixedcost').val();
@@ -349,12 +350,12 @@ function addRelatedservice() {
             note: note,
             fixedcost: fixedcost,
             responsible_assigned:responsible_assigned,
-            client_type: client_type
+            client_type: client_type,
+            is_recurring: is_recurring
         },
         url: base_url + '/administration/service_setup/add_related_service',
         dataType: "html",
         success: function (result) {
-            // console.log(result);return false;
             if (result.trim() == "1") {
                 swal({
                     title: "Success!",
@@ -651,6 +652,7 @@ function updateRelatedservice() {
     // var dept = $('#edit-services-form #dept option:selected').val();
     var id = $('#edit-services-form #service_id').val();
     var input_form = $('#edit-services-form input[name="input_form"]:checked').val();
+    var is_recurring = $('#edit-services-form input[name="is_recurring"]:checked').val();
     var shortcode = $('#edit-services-form #shorthidden').val();
     var note = $('#edit-services-form #note').val();
     var fixedcost = $('#edit-services-form #fixedcost').val();
@@ -690,12 +692,12 @@ function updateRelatedservice() {
             note: note,
             fixedcost: fixedcost,
             responsible_assigned: responsible_assigned,
-            client_type: client_type
+            client_type: client_type,
+            is_recurring: is_recurring
         },
         url: base_url + '/administration/service_setup/update_related_service',
         dataType: "html",
         success: function (result) {
-            // console.log(result);return false;
             if (result.trim() == "1") {
                 swal({title: "Success!", text: "Successfully Updated!", type: "success"}, function () {
                     goURL(base_url + 'administration/service_setup');
