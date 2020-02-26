@@ -1257,3 +1257,5 @@ ALTER TABLE `lead_management` ADD `client_reference` VARCHAR(50) NOT NULL AFTER 
 ALTER TABLE `lead_management` CHANGE `client_id` `client_id` INT(11) NOT NULL DEFAULT '0';
 
 /*live end*/
+/*26.02.2020*/
+ALTER TABLE `services` ADD `is_recurring` ENUM('n','y') NOT NULL DEFAULT 'n' AFTER `is_active`; 

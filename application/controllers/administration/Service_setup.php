@@ -50,13 +50,11 @@ class Service_setup extends CI_Controller
     }
 
     public function add_related_service()
-    {
+    {   
         $servicename = $this->input->post("servicename");
         $check = $this->administration->check_if_name_exists($servicename);
-        // echo $check;exit;
         if ($check != 0) {
             echo "0";
-            // return;
         } else {
             $retailprice = $this->input->post("retailprice");
             $servicecat = $this->input->post("servicecat");
@@ -70,14 +68,14 @@ class Service_setup extends CI_Controller
             $fixedcost = $this->input->post('fixedcost');
             $responsible_assigned = $this->input->post('responsible_assigned');
             $client_type = $this->input->post('client_type');
+            $is_recurring = post('is_recurring');
 
-            echo $this->administration->add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode,$note,$fixedcost,$responsible_assigned,$client_type);
-
+            echo $this->administration->add_related_services($servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode,$note,$fixedcost,$responsible_assigned,$client_type,$is_recurring);
         }
     }
 
     public function update_related_service()
-    {
+    {   
         $servicename = $this->input->post("servicename");
         $service_id = $this->input->post("id");
         $check = $this->administration->check_if_name_exists($servicename, $service_id);
@@ -96,8 +94,8 @@ class Service_setup extends CI_Controller
             $fixedcost = $this->input->post('fixedcost');
             $responsible_assigned = $this->input->post('responsible_assigned');
             $client_type = $this->input->post('client_type');
-            // echo $fixedcost;exit;
-            echo $this->administration->update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode,$note, $fixedcost,$responsible_assigned,$client_type);
+            $is_recurring = post('is_recurring');
+            echo $this->administration->update_related_services($service_id, $servicename, $retailprice, $servicecat, $relatedserv, $startdays, $enddays, $dept, $input_form, $shortcode,$note, $fixedcost,$responsible_assigned,$client_type,$is_recurring);
 
         }
     }
