@@ -166,7 +166,7 @@ if ($data["status"] == 0) {
                             ?>
                         </td>
                     </tr>
-                    <?php if ($data['department'] != 3) { ?>
+                    <?php // if ($data['department'] != 3) { ?>
                         <tr>
                             <td class="bg-light-green" <?= $style; ?>>
                                 <b>Office:</b>
@@ -190,7 +190,7 @@ if ($data["status"] == 0) {
                                 ?>
                             </td>
                         </tr>
-                    <?php } ?>                    
+                    <?php // } ?>                    
                 </tbody>
             </table>
         </div>
