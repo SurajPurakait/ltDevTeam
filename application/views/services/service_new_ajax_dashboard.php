@@ -75,7 +75,7 @@ if (!empty($result)) :
                             <th class="text-center" style='white-space: nowrap;'>Complete</th>
                             <th class="text-center" style='white-space: nowrap;'>Notes</th>
                             <th class="text-center" style='white-space: nowrap;'>SOS</th>
-                            <th class="text-center" style='white-space: nowrap; display: flex;'>Input Form</th>
+                            <th class="text-center" style='width:120px; text-align: center; white-space: nowrap; display: flex;'>Input Form</th>
                         </tr>
                         <tr>
                             <td title="Service ID" class="text-center"><?= $row->invoice_id ?></td>
