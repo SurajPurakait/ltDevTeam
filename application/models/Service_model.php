@@ -654,6 +654,7 @@ class Service_model extends CI_Model
     public function ajax_services_new_dashboard_filter()
     {
         $select[] = 'inv.id AS invoice_id';
+        $select[] = 'inv.is_order AS is_order';
         $select[] = 'sr.id AS service_request_id';
         $select[] = 'sr.services_id AS service_id';
         $select[] = 'sr.order_id AS order_id';
