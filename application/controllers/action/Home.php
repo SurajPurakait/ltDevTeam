@@ -881,6 +881,9 @@ class Home extends CI_Controller {
         $filter_assign = post("filter_assign");
         $business_client_id = post("business_client_id");
         $individual_client_id = post("individual_client_id");
+        if (post('page_number') != 0) {
+            $render_data['page_number'] = post('page_number');
+        }
         $render_data["action_list"] = $this->action_model->get_action_list($request, $status, $priority, $office_id, $department_id, $filter_assign,'','','','', $business_client_id, $individual_client_id);
         $return["result"] = $this->load->view("action/ajax_dashboard", $render_data, true);
         echo json_encode($return);
