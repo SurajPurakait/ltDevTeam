@@ -251,4 +251,15 @@ class Home extends CI_Controller {
         }
     }
 
+    public function recurring_plans() {
+        $this->load->layout = 'dashboard';
+        $title = 'Billing / Recurring Plans';
+        $render_data['title'] = $title . ' | Tax Leaf';
+        $render_data['main_menu'] = 'billing';
+        $render_data['menu'] = 'recurring_plans';
+        $render_data['header_title'] = $title;
+        // $render_data['page_heading'] = 'Billing / Recurring Plans';
+        $this->load->template('billing/recurring_plans', $render_data);
+    }
+
 }
