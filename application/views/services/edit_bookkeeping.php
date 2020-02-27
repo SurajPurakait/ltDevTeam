@@ -21,7 +21,7 @@ $existing_reference_id = $get_bookkeeping['existing_ref_id'];
                             <label class="col-lg-2 control-label">Your Office<span class="text-danger">*</span></label>
                             <div class="col-lg-10">
                                 <select class="form-control" disabled="" name="staff_office" id="staff_office" title="Office" required="">
-                                    <?php load_ddl_option("staff_office_list", $edit_data[0]['staff_office'], "staff_office"); ?>
+                                    <?php load_ddl_option("staff_office_list", $edit_data['staff_office'], "staff_office"); ?>
                                 </select>
                                 <div class="errorMessage text-danger"></div>
                             </div>
