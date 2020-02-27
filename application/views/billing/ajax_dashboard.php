@@ -51,13 +51,13 @@ foreach ($result as $row_count => $value):
     ?>
     <div class="panel panel-default service-panel">
         <div class="panel-heading" style="padding-right: 0px">
+            <?php if($is_recurrence == 'y') { ?>
+            <div class="priority"><img src="http://localhost/leafnet/assets/img/recurring-btn.png"></div>
+            <?php } ?>
             <a href="<?= base_url("billing/invoice/place/" . base64_encode($row->invoice_id) . "/" . base64_encode('view')); ?>" target="_blank" class="btn btn-primary btn-xs btn-service-lead"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
             <a href="<?= base_url("billing/invoice/details/" . base64_encode($row->invoice_id)); ?>" target="_blank" class="btn btn-primary btn-xs btn-service-lead"><i class="fa fa-dollar" aria-hidden="true"></i> Invoice</a>
             <?php if ($row->invoice_status == 1 && ($usertype == 1 || in_array(14, explode(',', $user_dept)) || in_array(3, explode(',', $user_dept)) || $row->created_by == sess('user_id'))) { ?>
                 <a href="<?= (($row->is_order == 'y' && $row->order_id != 0) || ($row->is_order == 'n' && $row->order_id == 0) || ($row->is_order == 'n' && $row->order_id != 0)) ? base_url("billing/invoice/edit/" . base64_encode($row->invoice_id)) : (edit_order_link($row->order_id) != '' ? base_url() . edit_order_link($row->order_id) : base_url("billing/invoice/edit/" . base64_encode($row->invoice_id))); ?>" target="_blank" class="btn btn-primary btn-xs btn-service-lead"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
-            <?php } ?>
-            <?php if($is_recurrence == 'y') { ?>
-            <a href="javascript:void(none);" class="btn btn-info btn-xs btn-service-lead"></i> Recurring Info</a>    
             <?php } ?>
             <a href="<?= base_url() . 'billing/payments/details/' . base64_encode($row->invoice_id); ?>" target="_blank" class="btn-show-details"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
             <a class="panel-title" style="cursor: default;" data-toggle="collapse" onclick="invoiceServiceListAjax('<?= $row->invoice_id ?>');" data-parent="#accordion" href="#collapse<?= $row->invoice_id; ?>" aria-expanded="false" class="collapsed">
