@@ -1,6 +1,6 @@
 <div class="clearfix action-header">
     <?php if (count($action_list) != 0): ?>
-        <h2 class="text-primary pull-left result-count-h2"><?= isset($page_number) ? (($page_number * 20)-(int)1) : count($action_list) ?> Results found <?= isset($page_number) ? 'of ' . count($action_list) : '' ?></h2>
+        <h2 class="text-primary pull-left result-count-h2"><?= isset($page_number) ? ($page_number * 20) : count($action_list) ?> Results found <?= isset($page_number) ? 'of ' . count($action_list) : '' ?></h2>
     <?php endif; ?>
     <div class="pull-right text-right p-t-5">
         <div class="dropdown" style="display: inline-block;">
@@ -301,16 +301,16 @@ if (!empty($action_list)):
             </div>
         </div>
     <?php endforeach;
-    $row_number = $key + 1;
+    $row_number = $key+1;
     if (isset($page_number) && $row_number < count($action_list)):
         ?>
         <div class="text-center p-0 load-more-btn">
-            <a href="javascript:void(0);" onclick="loadActionDashboard('', '', '', '', '', '', '', '', <?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more results</a>
+            <a href="javascript:void(0);" onclick="loadActionDashboard('<?= $status; ?>', '<?= $request_type != '' ? $request_type : 'byme_tome_task'; ?>', '<?= $priority; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '', '', '', <?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more results</a>
         </div>
     <?php endif; ?>
     <script>
         $(function () {
-            $('h2.result-count-h2').html('<?= ($row_number -1) . ' Results found of ' . count($action_list) ?>');
+            $('h2.result-count-h2').html('<?= ($row_number==count($action_list)?$row_number:($row_number-1)) . ' Results found of ' . count($action_list) ?>');
     <?php if (isset($page_number) && $row_number === count($action_list)): ?>
                 $('.load-more-btn').remove();
     <?php endif; ?>

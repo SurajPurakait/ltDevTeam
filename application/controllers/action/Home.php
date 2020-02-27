@@ -873,11 +873,11 @@ class Home extends CI_Controller {
     }
 
     public function dashboard_ajax() {
-        $request = post("request");
-        $status = post("status");
-        $priority = post("priority");
-        $office_id = post("office_id");
-        $department_id = post("department_id");
+        $render_data['request_type']=$request = post("request");
+        $render_data['status']=$status = post("status");
+        $render_data['priority']=$priority = post("priority");
+        $render_data['office_id']=$office_id = post("office_id");
+        $render_data['department_id']=$department_id = post("department_id");
         $filter_assign = post("filter_assign");
         $business_client_id = post("business_client_id");
         $individual_client_id = post("individual_client_id");
