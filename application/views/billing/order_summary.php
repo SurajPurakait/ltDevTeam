@@ -6,7 +6,7 @@
         <div clas="text-center">
             <?= isset($place) ? $place : ""; ?>
         </div>
-        <h2 class="m-b-20">ORDER ID: <?= (isset($view_type)&& $view_type=='place')?'':$order_summary['invoice_id']; ?></h2>
+        <?= (isset($view_type)&& $view_type=='place')?'':"<h2 class='m-b-20'>ORDER ID: ".$order_summary['invoice_id']. "</h2>" ?>
         <?php $style = 'style="padding: 8px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;"'; ?>
         <table class="table table-striped table-bordered" style="width:100%;">
             <tbody>
