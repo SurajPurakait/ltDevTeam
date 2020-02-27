@@ -108,7 +108,13 @@
                         </label>
                         <div class="errorMessage text-danger" id="input_form_error"></div>
                     </div>
-                    
+                    <div class="form-group">
+                        <label>Is Recurring ?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="checkbox-inline">
+                            <input class="checkboxclass" value="y" type="checkbox" id="is_recurring" name="is_recurring" title="Is Recurring" style="position:relative">
+                        </label>
+                        <div class="errorMessage text-danger"></div>
+                    </div>                    
                     <div class="form-group">
                         <label>Related Services</label>
                         <select title="Related Services" class="form-control" id="relatedserv" name="relatedserv" multiple="multiple">
@@ -278,7 +284,13 @@
                         </label>
                         <div class="errorMessage text-danger" id="input_form_error"></div>
                     </div>
-                    
+                    <div class="form-group">
+                        <label>Is Recurring ?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <label class="checkbox-inline">
+                            <input class="checkboxclass" value="y" type="checkbox" id="is_recurring" name="is_recurring" title="Is Recurring" style="position:relative" <?= ($service_info["is_recurring"] == 'y') ? 'checked' : ''; ?>>
+                        </label>
+                        <div class="errorMessage text-danger"></div>
+                    </div>
                     <div class="form-group">
                         <label>Related Services</label>
                         <select title="Related Services" class="form-control" id="relatedserv" name="relatedserv" multiple="multiple">

@@ -771,7 +771,7 @@ function assignAction(action_id, staff_id) {
         }
     });
 }
-function loadActionDashboard(status, request, priority, officeID, departmentID, filter_assign, business_client_id = '', individual_client_id = '') {
+function loadActionDashboard(status, request, priority, officeID, departmentID, filter_assign, business_client_id = '', individual_client_id = '',page_number= 0) {
 //    if (request != '') {
 //        activeShortColumn(request, short_column);
 //    } else {
@@ -787,7 +787,8 @@ function loadActionDashboard(status, request, priority, officeID, departmentID, 
             department_id: departmentID,
             filter_assign: filter_assign,
             business_client_id: business_client_id,
-            individual_client_id: individual_client_id
+            individual_client_id: individual_client_id,
+            page_number:page_number
         },
         url: base_url + 'action/home/dashboard_ajax',
         success: function (action_result) {
@@ -798,20 +799,28 @@ function loadActionDashboard(status, request, priority, officeID, departmentID, 
 //            } else {
 //                $(".short-value-dropdown").hide();
 //            }
-            $(".status-dropdown").val(status);
-            $(".request-dropdown").val(request);
-            $("#action_ajax_dashboard_div").html(data.result);
-            $("[data-toggle=popover]").popover();
-            var filter_result = '';
-            if (request == 'byme') {
-                filter_result = 'By Me';
-            } else if (request == 'tome') {
-                filter_result = 'To Me';
-            } else if (request == 'byother') {
-                filter_result = 'By Other';
-            } else if (request == 'mytask') {
-                filter_result = 'My Task';
+            if (page_number == 1 || page_number == 0) {
+                $(".status-dropdown").val(status);
+                $(".request-dropdown").val(request);
+                $("#action_ajax_dashboard_div").html(data.result);
+                $("[data-toggle=popover]").popover();
+                var filter_result = '';
+                if (request == 'byme') {
+                    filter_result = 'By Me';
+                } else if (request == 'tome') {
+                    filter_result = 'To Me';
+                } else if (request == 'byother') {
+                    filter_result = 'By Other';
+                } else if (request == 'mytask') {
+                    filter_result = 'My Task';
+                }
+            }else{
+                $("#action_ajax_dashboard_div").append(data.result);
+                $('.action-header').not(':first').remove();
             }
+            if (page_number != 0) {
+                    $('.load-more-btn').not(':last').remove();
+                }
             if (filter_result != '') {
                 var status_arr = ['New', 'Started', 'Resolved', 'Completed', 'Not Completed', 'All'];
                 if (status != '') {

@@ -139,7 +139,6 @@ class Invoice extends CI_Controller {
     }
 
     public function request_create_invoice() {
-        // print_r(post());exit;
         $is_recurrence = $this->input->post('recurring');
         if($is_recurrence != ''){
             $result = $this->billing_model->request_create_invoice(post(),$is_recurrence);
@@ -649,4 +648,11 @@ class Invoice extends CI_Controller {
         echo json_encode($return);
     }
 
+    public function get_recurring_section() {
+        $service_id = post('service_id');
+        $check_recurring_status = $this->service_model->get_service($service_id)['is_recurring'];
+        if ($check_recurring_status == 'y') {
+            $this->load->view('billing/invoice_recurring_information');    
+        }            
+    }
 }

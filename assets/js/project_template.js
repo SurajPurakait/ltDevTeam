@@ -1476,7 +1476,7 @@ function loadProjectDashboard(status = '', request = '', templateID = '', office
                     //$("a.filter-button span:contains('-')").html(0);
                     
                 } else {
-                    $(".ajaxdiv").append(project_result);
+//                    $(".ajaxdiv").append(project_result);
                     $("#action_dashboard_div").append(project_result);
                     $('.result-header').not(':first').remove();
                 }
