@@ -470,7 +470,7 @@ function account_modal(modal_type, id, section, reference_id) {
         }
     });
 }
-function set_exist_bookkeeping_value(account_type,bank_name,account_no,routing_no,bank_url,user,password){
+function set_exist_bookkeeping_value(account_type,bank_name,account_no,routing_no,bank_url,user,password,transactions,total_amount){
     if(bank_name!='' && account_no!=''){
         $("#acc_type").val(account_type);
         $("#bank_name").val(bank_name);
@@ -479,6 +479,8 @@ function set_exist_bookkeeping_value(account_type,bank_name,account_no,routing_n
         $("#website").val(bank_url)
         $("#user_id").val(user);
         $("#password").val(password);
+        $("#no_of_transactions").val(transactions);
+        $("#total_amount").val(total_amount);
         $("#sub_btn").html('Update');
     }else{
         $("#acc_type").val('');
@@ -488,6 +490,8 @@ function set_exist_bookkeeping_value(account_type,bank_name,account_no,routing_n
         $("#website").val('');
         $("#user_id").val('');
         $("#password").val('');
+        $("#no_of_transactions").val(transactions);
+        $("#total_amount").val(total_amount);
         $("#sub_btn").html('Save changes');
     }
 }

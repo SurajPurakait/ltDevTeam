@@ -873,14 +873,17 @@ class Home extends CI_Controller {
     }
 
     public function dashboard_ajax() {
-        $request = post("request");
-        $status = post("status");
-        $priority = post("priority");
-        $office_id = post("office_id");
-        $department_id = post("department_id");
+        $render_data['request_type']=$request = post("request");
+        $render_data['status']=$status = post("status");
+        $render_data['priority']=$priority = post("priority");
+        $render_data['office_id']=$office_id = post("office_id");
+        $render_data['department_id']=$department_id = post("department_id");
         $filter_assign = post("filter_assign");
         $business_client_id = post("business_client_id");
         $individual_client_id = post("individual_client_id");
+        if (post('page_number') != 0) {
+            $render_data['page_number'] = post('page_number');
+        }
         $render_data["action_list"] = $this->action_model->get_action_list($request, $status, $priority, $office_id, $department_id, $filter_assign,'','','','', $business_client_id, $individual_client_id);
         $return["result"] = $this->load->view("action/ajax_dashboard", $render_data, true);
         echo json_encode($return);

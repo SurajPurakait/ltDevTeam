@@ -25,7 +25,9 @@
 <?php
 $user_id = sess('user_id');
 $user_info = staff_info();
+$user_dept = $user_info['department'];
 $usertype = $user_info['type'];
+$role = $user_info['role'];
 $row_number = 0;
 if (!empty($result)) :
 
@@ -40,7 +42,22 @@ if (!empty($result)) :
             if ($row_count == ($page_number * 20)) {
                 break;
             }
-        } ?>
+        }
+
+        if ($row->status == 0) {
+            $tracking = 'Completed';
+            $trk_inner_class = 'label-primary';
+        } elseif ($row->status == 1) {
+            $tracking = 'Started';
+            $trk_inner_class = 'label-yellow';
+        } elseif ($row->status == 2) {
+            $tracking = 'Not Started';
+            $trk_inner_class = 'label-success';
+        } elseif ($row->status == 7) {
+            $tracking = 'Canceled';
+            $trk_inner_class = 'label-danger';
+        } 
+        ?>
 
         <div class="panel panel-default service-panel">
             <div class="panel-heading panel-body">
@@ -58,7 +75,7 @@ if (!empty($result)) :
                             <th class="text-center" style='white-space: nowrap;'>Complete</th>
                             <th class="text-center" style='white-space: nowrap;'>Notes</th>
                             <th class="text-center" style='white-space: nowrap;'>SOS</th>
-                            <th class="text-center" style='white-space: nowrap; display: flex;'>Input Form</th>
+                            <th class="text-center" style='width:120px; text-align: center; white-space: nowrap; display: flex;'>Input Form</th>
                         </tr>
                         <tr>
                             <td title="Service ID" class="text-center"><?= $row->invoice_id ?></td>
@@ -74,7 +91,44 @@ if (!empty($result)) :
                                     echo $row->service_department_name;
                                 } ?>
                             </td>
-                            <td title="Tracking" class="text-center"><?= 'Not started' ?></td>
+                            
+                            <?php if ($usertype == "3"){ ?>
+                            <td align='left' title="Tracking">
+                                <span class='label <?php echo $trk_inner_class; ?> label-block' style="width: 80px;"><?= $tracking; ?></span>
+                            </td>
+                            <?php } else{ ?>
+                            <td align='center' title="Tracking Description">
+                                <?php
+                                if (($usertype == 3 && $role == 1) || ($usertype == 2 && $role == 3)) {
+                                    $check_if_service_already_assigned = check_if_service_already_assigned($row->service_request_id);
+                                    if ($check_if_service_already_assigned == 0) {
+                                        ?>
+                                        <a href='javascript:void(0);' id='trackinginner-<?php echo $row->service_request_id; ?>' onclick='change_status_inner(<?= $row->service_request_id; ?>,<?= $row->status; ?>, <?= $row->service_request_id ?>);'>
+                                            <span class='label <?php echo $trk_inner_class; ?> label-block' style="width: 80px;"><?= $tracking; ?></span>
+                                        </a>
+                                        <?php
+                                    } else {
+                                        if ($check_if_service_already_assigned == sess('user_id')) {
+                                            ?>
+                                            <a href='javascript:void(0);' id='trackinginner-<?php echo $row->service_request_id; ?>' onclick='change_status_inner(<?= $row->service_request_id; ?>,<?= $row->status; ?>, <?= $row->service_request_id ?>);'>
+                                                <span class='label <?php echo $trk_inner_class; ?> label-block' style="width: 80px;"><?= $tracking; ?></span>
+                                            </a>
+                                        <?php } else {
+                                            ?>
+                                            <a href='javascript:void(0);' id='trackinginner-<?php echo $row->service_request_id; ?>'>
+                                                <span class='label <?php echo $trk_inner_class; ?> label-block' style="width: 80px;"><?= $tracking; ?></span>
+                                            </a>
+                                            <?php
+                                        }
+                                    }
+                                } else {
+                                    ?>
+                                    <a href='javascript:void(0);' id='trackinginner-<?php echo $row->service_request_id; ?>' onclick='change_status_inner(<?= $row->service_request_id; ?>,<?= $row->status; ?>, <?= $row->service_request_id ?>);'>
+                                        <span class='label <?php echo $trk_inner_class; ?> label-block' style="width: 80px;"><?= $tracking; ?></span>
+                                    </a>
+                                <?php } ?>
+                            </td>
+                            <?php } ?>
 
                             <?php
                             $start_date = date('m/d/Y', strtotime($row->date_started));
@@ -84,7 +138,42 @@ if (!empty($result)) :
                             <td title="Complete Date" class="text-center"><?= $complete_date ?></td>
                             <td title="Notes" class="text-center"><?= '0' ?></td>
                             <td title="SOS" class="text-center"><?= '0' ?></td>
-                            <td title="Input Form" class="text-center"><?= '0' ?></td>
+                            <!-- <td title="Input Form" class="text-center"><?//= '0' ?></td> -->
+                            <td title="Input Form" class="text-center">
+                                <?php
+                                $input_status = 'complete';
+                                if ($row->is_order=='y') {
+                                    if ($row->input_form != 'y') {
+                                        echo 'N/A';
+                                    } else {
+
+                                        $inputform_attachments = get_inputform_attachments($row->service_request_id);
+                                        $inputform_notes = get_inputform_notes($row->service_request_id);
+                                        
+                                        if ($row->input_form_status == 'n') {
+                                            $input_status = 'incomplete';
+                                            ?>
+                                            <a href="<?= base_url() . 'services/home/related_services/' . $row->service_request_id; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: left;"><i class="fa fa-plus" aria-hidden="true"></i> Edit</a>
+                                            <a href="<?= base_url() . 'services/home/related_services_view/' . $row->service_request_id; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: right;"><i class="fa fa-eye" aria-hidden="true"></i> View </a>
+                                            
+                                        <?php } elseif ($inputform_attachments == '' || $inputform_notes == '') { ?>
+                                            
+                                            <a href="<?= base_url() . 'services/home/related_services/' . $row->service_request_id; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: left;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit </a>
+                                            <a href="<?= base_url() . 'services/home/related_services_view/' . $row->service_request_id; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: right;"><i class="fa fa-eye" aria-hidden="true"></i> View </a>
+                                        
+                                        <?php } else { ?>
+                                             <a href="<?= base_url() . 'services/home/related_services/' . $row->service_request_id; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: left;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit </a>
+                                             <a href="<?= base_url() . 'services/home/related_services_view/' . $row->service_request_id; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: right;"><i class="fa fa-eye" aria-hidden="true"></i> View </a>
+                                        <?php
+                                        }
+                                    }
+                                } else {
+                                    echo 'N/A';
+                                }
+                                ?>
+                                <input type="hidden" class="input-form-status-<?= $row->service_request_id; ?>" value="<?= $input_status; ?>" />
+                            </td>
+
                         </tr>
                     </table>
                 </div>

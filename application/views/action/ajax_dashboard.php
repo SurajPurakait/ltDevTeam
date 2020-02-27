@@ -1,6 +1,6 @@
-<div class="clearfix">
+<div class="clearfix action-header">
     <?php if (count($action_list) != 0): ?>
-        <h2 class="text-primary pull-left"><?= count($action_list); ?> Results found</h2>
+        <h2 class="text-primary pull-left result-count-h2"><?= isset($page_number) ? ($page_number * 20) : count($action_list) ?> Results found <?= isset($page_number) ? 'of ' . count($action_list) : '' ?></h2>
     <?php endif; ?>
     <div class="pull-right text-right p-t-5">
         <div class="dropdown" style="display: inline-block;">
@@ -32,8 +32,19 @@ $user_info = staff_info();
 $user_department = $user_info['department'];
 $user_type = $user_info['type'];
 $role = $user_info['role'];
+$row_number = 0;
 if (!empty($action_list)):
     foreach ($action_list as $key => $action):
+        if (isset($page_number)) {
+            if ($page_number != 1) {
+                if ($key < (($page_number - 1) * 20)) {
+                    continue;
+                }
+            }
+            if ($key == ($page_number * 20)) {
+                break;
+            }
+        }
         $action_staffs = action_staff_by_action_id($action["id"]);
         $added_staff_department = get_dept_name_by_dept_id($action['created_department']);
         $stf = array_column($action_staffs, 'staff_id');
@@ -289,7 +300,22 @@ if (!empty($action_list)):
                 </div>
             </div>
         </div>
-    <?php endforeach; ?>
+    <?php endforeach;
+    $row_number = $key+1;
+    if (isset($page_number) && $row_number < count($action_list)):
+        ?>
+        <div class="text-center p-0 load-more-btn">
+            <a href="javascript:void(0);" onclick="loadActionDashboard('<?= $status; ?>', '<?= $request_type != '' ? $request_type : 'byme_tome_task'; ?>', '<?= $priority; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '', '', '', <?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more results</a>
+        </div>
+    <?php endif; ?>
+    <script>
+        $(function () {
+            $('h2.result-count-h2').html('<?= ($row_number==count($action_list)?$row_number:($row_number-1)) . ' Results found of ' . count($action_list) ?>');
+    <?php if (isset($page_number) && $row_number === count($action_list)): ?>
+                $('.load-more-btn').remove();
+    <?php endif; ?>
+        });
+    </script>
 <?php else: ?>
     <div class="text-center m-t-30">
         <div class="alert alert-danger">
