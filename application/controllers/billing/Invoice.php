@@ -179,10 +179,10 @@ class Invoice extends CI_Controller {
             $render_data['order_summary']['total_price'] = '$' . number_format((float) array_sum(array_column($render_data['order_summary']['services'], 'override_price')), 2, '.', '');
             $render_data['order_summary']['sub_total'] = number_format((float) array_sum(array_column($render_data['order_summary']['services'], 'sub_total')), 2, '.', '');
             if ($type == 'place') {
-                $render_data['place'] = '<div class="text-right">
-                    <button class="btn btn-danger" type="button" onclick="window.location.href = \'' . base_url('billing/invoice') . '\';">Discard</button>
-                    <button class="btn btn-primary" type="button" onclick="go(\'billing/invoice/details/' . base64_encode($invoice_id) . '/' . base64_encode('place') . '\');">Save</button>
-                    <button class="btn btn-warning" type="button" onclick="go(\'billing/invoice/edit/' . base64_encode($invoice_id) . '/' . base64_encode('edit_place') . '\');">Edit</button>
+                $render_data['place'] = '<div class="text-left m-b-10">
+                    <button class="btn btn-danger btn-sm" type="button" onclick="window.location.href = \'' . base_url('billing/invoice') . '\';">Discard</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="go(\'billing/invoice/details/' . base64_encode($invoice_id) . '/' . base64_encode('place') . '\');">Save</button>
+                    <button class="btn btn-warning btn-sm" type="button" onclick="go(\'billing/invoice/edit/' . base64_encode($invoice_id) . '/' . base64_encode('edit_place') . '\');">Edit</button>
                 </div>';
             } else {
                 $render_data['place'] = '<div class="text-right">
