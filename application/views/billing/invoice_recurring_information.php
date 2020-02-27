@@ -83,6 +83,7 @@
 
         </div><!-- ./modal-dialog -->
     </div><!-- ./Recurrence Modal -->
+    <input type="hidden" name="is_recurring" id="is_recurring" value="<?= $is_recurring; ?>">
 </div>
 <script type="text/javascript">
     $(function () {

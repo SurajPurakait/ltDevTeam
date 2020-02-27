@@ -43,12 +43,7 @@ class Invoice extends CI_Controller {
         $render_data['page_heading'] = 'Create Invoice';
         $render_data['client_id'] = '';
         $render_data['office_id'] = '';
-        if($is_recurrence =='y'){
-            $is_recurrence ='y';
-        }else{
-            $is_recurrence='';
-        }
-        $render_data['is_recurrence']=$is_recurrence;
+        
         if (!empty($client_id)) {
             $render_data['client_id'] = base64_decode($client_id);
             $render_data['office_id'] = $this->billing_model->get_office_id_by_individual_id($client_id);
@@ -138,24 +133,13 @@ class Invoice extends CI_Controller {
         }
     }
 
-    public function request_create_invoice() {
-        $is_recurrence = $this->input->post('recurring');
-        if($is_recurrence != ''){
-            $result = $this->billing_model->request_create_invoice(post(),$is_recurrence);
-            if ($result) {
-                echo base64_encode($result);
-            } else {
-                echo 0;
-            } 
-        }else{
-            $result = $this->billing_model->request_create_invoice(post(),'');
-            if ($result) {
-                echo base64_encode($result);
-            } else {
-                echo 0;
-            } 
-        }
-        
+    public function request_create_invoice() {        
+        $result = $this->billing_model->request_create_invoice(post());
+        if ($result) {
+            echo base64_encode($result);
+        } else {
+            echo 0;
+        } 
     }
 
     public function place($invoice_id = "", $type = "place") {
@@ -651,8 +635,9 @@ class Invoice extends CI_Controller {
     public function get_recurring_section() {
         $service_id = post('service_id');
         $check_recurring_status = $this->service_model->get_service($service_id)['is_recurring'];
+        $render_data['is_recurring'] = $check_recurring_status;
         if ($check_recurring_status == 'y') {
-            $this->load->view('billing/invoice_recurring_information');    
+            $this->load->view('billing/invoice_recurring_information',$render_data);    
         }            
     }
 }
