@@ -1,13 +1,13 @@
 <?php
-    // $servername = "localhost";
-    // $username = "leafnet_db_user";
-    // $password = "leafnet@123";
-    // $db = 'leafnet_stagings';
-
     $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $db = 'leafnet';
+    $username = "leafnet_db_user";
+    $password = "leafnet@123";
+    $db = 'leafnet_stagings';
+
+    // $servername = "localhost";
+    // $username = "root";
+    // $password = "";
+    // $db = 'leafnet';
 
     // Create connection
     $conn = mysqli_connect($servername, $username, $password, $db);
@@ -34,9 +34,11 @@
     ];
     
     $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
-    // $where['ord.status'] = 'AND `ord`.`status` NOT IN ("7","10") ';
+    $where['ord.status'] = 'AND `ord`.`status` NOT IN ("7") ';
+    $where['indt.office'] = 'AND `indt`.`office` IS NOT NULL '; 
+     
 
-    $table = '`order` AS ord INNER JOIN service_request AS srv_rq ON srv_rq.order_id = ord.id LEFT JOIN internal_data indt ON indt.reference_id = `ord`.`reference_id` INNER JOIN services AS srv ON srv.id = ord.service_id';
+    $table = '`order` AS ord INNER JOIN service_request AS srv_rq ON srv_rq.order_id = ord.id INNER JOIN internal_data indt ON indt.reference_id = `ord`.`reference_id` INNER JOIN services AS srv ON srv.id = ord.service_id';
 
     $query = 'SELECT ' . implode(', ', $select) . ' FROM ' . $table . ' WHERE ' . implode('', $where)  . 'GROUP BY ord.id ORDER BY ord.id DESC';
     // echo $query;exit;
@@ -101,6 +103,8 @@
             
             $insert_sql = "INSERT INTO `report_dashboard_service`(`service_name`,`service_request_id`, `status`,`order_date` ,`date_completed`, `date_complete_actual`, `late_status`, `sos`, `category`, `department`, `office`)
             VALUES ('$service_name','$service_request_id','$status','$order_date','$date_completed', '$date_complete_actual', '$late_status', '$sos', '$category', '$department', '$office')";
+            echo $insert_sql;
+            echo "<hr>";
             mysqli_query($conn,$insert_sql)or die('Insert Error');
         }
     }

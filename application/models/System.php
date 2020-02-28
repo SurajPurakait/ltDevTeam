@@ -598,7 +598,7 @@ class System extends CI_Model
         if ($reference == 'projects') {
             $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.service_id='" . $service_id . "' group by sn.id order by sn.id asc";
         } else {
-            $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.reference_id='" . $ref_id . "' group by sn.id order by sn.id asc";
+            $query = "select sn.*,sns.staff_id,sns.read_status from sos_notification sn inner join sos_notification_staff sns on sns.sos_notification_id = sn.id where sn.reference='" . $reference . "' and sn.reference_id='" . $ref_id . "' and sns.read_status!=1 group by sn.id order by sn.id asc";
         }
         //        echo $query;die;
         $res = $this->db->query($query)->result_array();
@@ -973,7 +973,7 @@ class System extends CI_Model
         $this->db->from('sos_notification AS sn');
         $this->db->join('sos_notification_staff AS sns', 'sns.sos_notification_id = sn.id');
         $this->db->join('actions AS ac', 'sn.reference_id = ac.id');
-        $this->db->where(['sns.staff_id' => $user_id, 'sns.notification_read' => 0]);
+        $this->db->where(['sns.staff_id' => $user_id, 'sns.notification_read' => 0,'sns.read_status'=>0]);
         //        $this->db->or_where(['sn.added_by_user' => $user_id, 'sns.read_status' => 0]);
         //        $this->db->where(['sns.read_status' => 0]);
         if ($limit != '') {

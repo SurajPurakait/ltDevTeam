@@ -43,12 +43,7 @@ class Invoice extends CI_Controller {
         $render_data['page_heading'] = 'Create Invoice';
         $render_data['client_id'] = '';
         $render_data['office_id'] = '';
-        if($is_recurrence =='y'){
-            $is_recurrence ='y';
-        }else{
-            $is_recurrence='';
-        }
-        $render_data['is_recurrence']=$is_recurrence;
+        
         if (!empty($client_id)) {
             $render_data['client_id'] = base64_decode($client_id);
             $render_data['office_id'] = $this->billing_model->get_office_id_by_individual_id($client_id);
@@ -138,24 +133,13 @@ class Invoice extends CI_Controller {
         }
     }
 
-    public function request_create_invoice() {
-        $is_recurrence = $this->input->post('recurring');
-        if($is_recurrence != ''){
-            $result = $this->billing_model->request_create_invoice(post(),$is_recurrence);
-            if ($result) {
-                echo base64_encode($result);
-            } else {
-                echo 0;
-            } 
-        }else{
-            $result = $this->billing_model->request_create_invoice(post(),'');
-            if ($result) {
-                echo base64_encode($result);
-            } else {
-                echo 0;
-            } 
-        }
-        
+    public function request_create_invoice() {        
+        $result = $this->billing_model->request_create_invoice(post());
+        if ($result) {
+            echo base64_encode($result);
+        } else {
+            echo 0;
+        } 
     }
 
     public function place($invoice_id = "", $type = "place") {
@@ -195,10 +179,10 @@ class Invoice extends CI_Controller {
             $render_data['order_summary']['total_price'] = '$' . number_format((float) array_sum(array_column($render_data['order_summary']['services'], 'override_price')), 2, '.', '');
             $render_data['order_summary']['sub_total'] = number_format((float) array_sum(array_column($render_data['order_summary']['services'], 'sub_total')), 2, '.', '');
             if ($type == 'place') {
-                $render_data['place'] = '<div class="text-right">
-                    <button class="btn btn-danger" type="button" onclick="window.location.href = \'' . base_url('billing/invoice') . '\';">Discard</button>
-                    <button class="btn btn-primary" type="button" onclick="go(\'billing/invoice/details/' . base64_encode($invoice_id) . '/' . base64_encode('place') . '\');">Save</button>
-                    <button class="btn btn-warning" type="button" onclick="go(\'billing/invoice/edit/' . base64_encode($invoice_id) . '/' . base64_encode('edit_place') . '\');">Edit</button>
+                $render_data['place'] = '<div class="text-left m-b-10">
+                    <button class="btn btn-danger btn-sm" type="button" onclick="window.location.href = \'' . base_url('billing/invoice') . '\';">Discard</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="go(\'billing/invoice/details/' . base64_encode($invoice_id) . '/' . base64_encode('place') . '\');">Save</button>
+                    <button class="btn btn-warning btn-sm" type="button" onclick="go(\'billing/invoice/edit/' . base64_encode($invoice_id) . '/' . base64_encode('edit_place') . '\');">Edit</button>
                 </div>';
             } else {
                 $render_data['place'] = '<div class="text-right">
@@ -651,8 +635,9 @@ class Invoice extends CI_Controller {
     public function get_recurring_section() {
         $service_id = post('service_id');
         $check_recurring_status = $this->service_model->get_service($service_id)['is_recurring'];
+        $render_data['is_recurring'] = $check_recurring_status;
         if ($check_recurring_status == 'y') {
-            $this->load->view('billing/invoice_recurring_information');    
+            $this->load->view('billing/invoice_recurring_information',$render_data);    
         }            
     }
 }
