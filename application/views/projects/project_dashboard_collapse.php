@@ -13,7 +13,7 @@
                     <th style="width:8%;  text-align: center;">SOS</th>
                     <th style="width:7%;  text-align: center;">Notes</th>
                     <th style="width:7%;  text-align: center;">Files</th>
-                    <th style="width:8%;  text-align: center;">Input Form</th>
+                    <th style="width:120px; text-align: center; white-space: nowrap; display: flex; ">Input Form</th>
                 </tr>
                 <?php
                 foreach ($task_list as $key=> $task) {
@@ -134,9 +134,11 @@
                                 if ($task->input_form_status == 'n') {
                                     $input_status = 'incomplete';
                                     ?>
-                            <a href="<?= base_url() . 'task/task_input_form/' . $task->id.'/'.$task->bookkeeping_input_type; ?>" class="text-white label input-form-incomplete p-t-10 p-l-10 p-b-10" target="_blank">Incomplete <span class="p-10"><i class="fa fa-plus" aria-hidden="true"></i> </span></a>
-                                <?php } else { ?>
-                                     <a href="<?= base_url() . 'task/task_input_form/' . $task->id.'/'.$task->bookkeeping_input_type; ?>" class="text-white label input-form-complete p-t-10 p-l-10 p-b-10" target="_blank">Completed<span class="p-10"> <i class="fa fa-pencil" aria-hidden="true"></i> </span></a>
+                            <a href="<?= base_url() . 'task/task_input_form/' . $task->id.'/'.$task->bookkeeping_input_type; ?>" class="btn btn-danger btn-xs" target="_blank" style="float: left;"><i class="fa fa-pencil" aria-hidden="true"></i> Incomplete</a>
+                                <?php } else { if($status!=2){ ?>
+                                     <a href="<?= base_url() . 'task/task_input_form/' . $task->id.'/'.$task->bookkeeping_input_type; ?>" class="btn btn-primary btn-xs" target="_blank" style="float: left;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+                                <?php }?>
+                                     <a href="<?= base_url() . 'task/task_input_form/' . $task->id.'/'.$task->bookkeeping_input_type.'/v'; ?>" class="btn btn-warning btn-xs" target="_blank" style="float: right;"><i class="fa fa-eye" aria-hidden="true"></i> View </a>
                                     <?php
                                 }
                             }

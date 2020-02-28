@@ -3165,9 +3165,10 @@ class Project_Template_model extends CI_Model {
         }
     }
     public function getProjectOfficeClient($project_id){
-        $this->db->select('client_id,client_type,office_id');
-        $this->db->from('projects');
-        $this->db->where('id',$project_id);
+        $this->db->select('p.client_id,p.client_type,p.office_id,pm.title');
+        $this->db->from('projects as p');
+        $this->db->join('project_main as pm','p.id=pm.project_id','inner');
+        $this->db->where('p.id',$project_id);
         return $this->db->get()->row();
     }
     public function getProjectOfficeName($office_id){
@@ -3475,34 +3476,34 @@ class Project_Template_model extends CI_Model {
             return $account_exist;
         }
     }
-    public function updateProjectBookkeepingInputFormStatus($status,$id){
+    public function updateProjectBookkeepingInputFormStatus($status,$id,$table_name){
         $created_at=Date("Y-m-d h:i:sa");
         $comment='';
-        $this->db->select('COUNT(id) as data_count');
-        $this->db->where('stuff_id', $this->session->userdata("user_id"));
-        $this->db->where('status_value', $status);
-        $this->db->where('section_id', $id);
-        $this->db->where('related_table_name', 'project_task_bookkeeping_finance_account_report');
-        $data_count = $this->db->get('tracking_logs')->row_array();
-//        $task_id=$this->db->get_where('project_task_bookkeeping_finance_account_report',['id'=>$id])->row()->task_id;
-        if ($data_count['data_count'] == 0) {
-            $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => $status, "section_id" => $id, "related_table_name" => "project_task_bookkeeping_finance_account_report", "comment" => $comment]);
-        }
-        if($status==0){
-            $this->db->where('id',$id);
-            $update=$this->db->update('project_task_bookkeeping_finance_account_report',['tracking'=>0,'created_at'=>$created_at]);
-        }elseif($status==1){
-            $this->db->where('id',$id);
-            $update=$this->db->update('project_task_bookkeeping_finance_account_report',['tracking'=>1,'created_at'=>$created_at]);
-        }else{
-            $this->db->where('id',$id);
-            $update=$this->db->update('project_task_bookkeeping_finance_account_report',['tracking'=>2,'created_at'=>$created_at]);
-        }
-        if($update){
-            return $this->db->get_where('project_task_bookkeeping_finance_account_report',['id'=>$id])->row()->tracking;
-        }else{
-            return false;
-        } 
+            $this->db->select('COUNT(id) as data_count');
+            $this->db->where('stuff_id', $this->session->userdata("user_id"));
+            $this->db->where('status_value', $status);
+            $this->db->where('section_id', $id);
+            $this->db->where('related_table_name', "$table_name");
+            $data_count = $this->db->get('tracking_logs')->row_array();
+    //        $task_id=$this->db->get_where('project_task_bookkeeping_finance_account_report',['id'=>$id])->row()->task_id;
+            if ($data_count['data_count'] == 0) {
+                $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => $status, "section_id" => $id, "related_table_name" => "$table_name", "comment" => $comment]);
+            }
+            if($status==0){
+                $this->db->where('id',$id);
+                $update=$this->db->update("$table_name",['tracking'=>0,'created_at'=>$created_at]);
+            }elseif($status==1){
+                $this->db->where('id',$id);
+                $update=$this->db->update("$table_name",['tracking'=>1,'created_at'=>$created_at]);
+            }else{
+                $this->db->where('id',$id);
+                $update=$this->db->update("$table_name",['tracking'=>2,'created_at'=>$created_at]);
+            }
+            if($update){
+                return $this->db->get_where("$table_name",['id'=>$id])->row()->tracking;
+            }else{
+                return false;
+            }
     }
     public function getBookkeepingInput2AccountDetails($client_id='',$task_id='',$project_id='',$section=''){
         $account_exist=$this->db->get_where('project_task_bookkeeping_input_form2',['task_id'=>$task_id])->result_array();
