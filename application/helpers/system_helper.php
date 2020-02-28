@@ -3642,3 +3642,10 @@ if(!function_exists('get_bookkeeping_records_details')){
         return $ci->Project_Template_model->insertBookkeepingBankRecordTime('',$bank_id);
     }
 }
+if(!function_exists('get_order_info_for_services')){
+    function get_order_info_for_services($order_id){
+        $ci = &get_instance();
+        $ci->load->model('Service_model');
+        return $ci->Service_model->get_order_info_for_services($order_id);
+    }
+}

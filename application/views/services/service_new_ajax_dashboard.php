@@ -59,6 +59,29 @@ if (!empty($result)) :
         } 
         ?>
 
+        <?php $order_info = get_order_info_for_services($row->order_id); 
+            $all_staffs = str_replace(' ', '', $order_info['all_staffs']);
+
+            $requested_staff_id = $order_info['staff_requested_service'];
+            $all_staff_id_list = explode(',', $all_staffs);
+            $all_staff_id_list = array_merge($all_staff_id_list, [$requested_staff_id]);
+            $all_staff_id_list = array_unique($all_staff_id_list);
+            $all_staff_id_list_info = implode(',', $all_staff_id_list);
+
+            $note_count_inner = 0;
+                if ($order_info['service_id'] == '11') {
+                    if ($row->service_id == '11') {
+                        $note_count_inner = getNoteCountforpayrollform('Note', 'n', 4, 'reference_id', $order_info['company_id']);
+                    } elseif ($row->service_id == '42') {
+                        $note_count_inner = getNoteCountforpayrollform('Rt6 Note', 'n', 5, 'reference_id', $order_info['company_id']);
+                    } else {
+                        $note_count_inner = getNoteCount('service', $row->service_request_id);
+                    }
+                } else {
+                    $note_count_inner = getNoteCount('service', $row->service_request_id);
+                }
+        ?>
+
         <div class="panel panel-default service-panel">
             <div class="panel-heading panel-body">
                 <div class="table-responsive">
@@ -79,7 +102,32 @@ if (!empty($result)) :
                         </tr>
                         <tr>
                             <td title="Service ID" class="text-center"><?= $row->invoice_id ?></td>
-                            <td title="Assign" class="text-center"><?= '+assign' ?></td>
+                            
+                             <td title="Assign" class="text-center">
+                                <?php if ($row->assign_user_id == 0): ?>
+                                    <?php
+                                    if ($usertype != 3) {
+                                        if ($usertype == 1 || ($usertype == 2 & $role == 4)) {
+                                            ?>
+                                            <a href="javascript:void(0);" onclick="show_service_assign_modal('<?= $row->service_request_id; ?>', '<?= $all_staffs ; ?>');" class="label label-success status_assign"><i class="fa fa-plus"></i> Assign</a>
+                                        <?php } else { ?>
+                                            <a href="javascript:void(0);" onclick="assignService('<?= $row->service_request_id; ?>', '<?php echo $user_id; ?>');" class="label label-success status_assign"><i class="fa fa-plus"></i> Assign</a>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                <?php else: ?>
+                                    <label class="label label-primary m-b-5 p-t-5 p-b-5 status_assign"><?= staff_info_by_id($row->assign_user_id)['full_name']; ?></label>
+                                    <?php
+                                    if ($usertype == 3 || ($usertype == 2 && $role == 3)) {
+                                        
+                                    } else {
+                                        ?>
+                                        <a href="javascript:void(0);" onclick="assignService(<?= $row->service_request_id; ?>, 0);" class="label label-danger status_assign"><i class="fa fa-remove"></i></a>
+                                    <?php } ?>
+                                <?php endif; ?>
+                            </td> 
+
                             <td title="Service Name" class="text-center"><?= $row->service_name; ?></td>
                             <td title="Retail Price" class="text-center">$<?= $row->retail_price ?></td>
                             <td title="Override Price" class="text-center">$<?= $row->price_charged; ?></td>
@@ -97,7 +145,7 @@ if (!empty($result)) :
                                 <span class='label <?php echo $trk_inner_class; ?> label-block' style="width: 80px;"><?= $tracking; ?></span>
                             </td>
                             <?php } else{ ?>
-                            <td align='center' title="Tracking Description">
+                            <td align='center' title="Tracking">
                                 <?php
                                 if (($usertype == 3 && $role == 1) || ($usertype == 2 && $role == 3)) {
                                     $check_if_service_already_assigned = check_if_service_already_assigned($row->service_request_id);
@@ -136,9 +184,26 @@ if (!empty($result)) :
 
                             <td title="Start Date" class="text-center"><?= $start_date ?></td>
                             <td title="Complete Date" class="text-center"><?= $complete_date ?></td>
-                            <td title="Notes" class="text-center"><?= '0' ?></td>
-                            <td title="SOS" class="text-center"><?= '0' ?></td>
-                            <!-- <td title="Input Form" class="text-center"><?//= '0' ?></td> -->
+                            
+                            <!-- Notes -->
+                            <?php
+                            if ($order_info['service_id'] == '11') {
+                                if ($row->service_id == '11') {
+                                    echo "<td align='center' title=\"Notes\"><span>" . (($note_count_inner > 0) ? '<a id="orderservice-' . $row->service_id .'-'. $row->service_request_id. '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'payrollemp\',\'' . $row->service_request_id . '\',\'' . $row->service_id . '\',\'' . $order_info['company_id'] . '\',\'' . $row->order_id . '\')"><b>' . $note_count_inner . '</b></a>' : '<a id="orderservice-' . $row->service_id .'-'. $row->service_request_id. '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'payrollemp\',\'' . $row->service_request_id . '\',\'' . $row->service_id . '\',\'' . $order_info['company_id'] . '\',\'' . $row->order_id . '\')"><b>' . $note_count_inner . '</b></a>') . "</span></td>";
+                                } else {
+                                    echo "<td align='center' title=\"Notes\"><span>" . (($note_count_inner > 0) ? '<a id="orderservice-' . $row->service_id .'-'. $row->service_request_id. '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'payrollrt6\',\'' . $row->service_request_id . '\',\'' . $row->service_id . '\',\'' . $order_info['company_id'] . '\',\'' . $row->order_id . '\')"><b>' . $note_count_inner . '</b></a>' : '<a id="orderservice-' . $row->service_id .'-'. $row->service_request_id. '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'payrollrt6\',\'' . $row->service_request_id . '\',\'' . $row->service_id . '\',\'' . $order_info['company_id'] . '\',\'' . $row->order_id . '\')"><b>' . $note_count_inner . '</b></a>') . "</span></td>";
+                                }
+                            } else {
+                                echo "<td align='center' title=\"Notes\"><span>" . (($note_count_inner > 0) ? '<a id="orderservice-' . $row->service_id .'-'. $row->service_request_id. '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'service\',\'' . $row->service_request_id . '\',\'' . $row->service_id . '\',\'' . $order_info['company_id'] . '\',\'' . $row->order_id . '\')"><b>' . $note_count_inner . '</b></a>' : '<a id="orderservice-' . $row->service_id .'-'. $row->service_request_id. '" count="' . $note_count_inner . '" class="label label-warning" href="javascript:void(0)" onclick="show_notes(\'service\',\'' . $row->service_request_id . '\',\'' . $row->service_id . '\',\'' . $order_info['company_id'] . '\',\'' . $row->order_id . '\')"><b>' . $note_count_inner . '</b></a>') . "</span></td>";
+                            }
+                            ?>
+
+                            <td title="SOS" style="text-align: center;">
+                                <span>
+                                    <a id="sosservicecount-<?= $row->order_id; ?>" class="d-inline p-t-5 p-b-5 p-r-8 p-l-8 label service-sos-count-<?= $row->service_request_id; ?> <?php echo (get_sos_count('order', $row->service_id, $row->order_id) == 0) ? 'label-primary' : 'label-danger'; ?>" title="SOS" href="javascript:void(0)" onclick="show_sos('order', '<?= $row->service_id; ?>', '<?= $all_staff_id_list_info; ?>', '<?= $row->order_id; ?>', '<?= $row->service_request_id; ?>');"><?php echo (get_sos_count('order', $row->service_id, $row->order_id) == 0) ? '<i class="fa fa-plus"></i>' : '<i class="fa fa-bell"></i>'; ?></a>                                                   
+                                </span>
+                            </td>
+
                             <td title="Input Form" class="text-center">
                                 <?php
                                 $input_status = 'complete';
