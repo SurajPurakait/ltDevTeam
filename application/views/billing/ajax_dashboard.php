@@ -52,7 +52,7 @@ foreach ($result as $row_count => $value):
     <div class="panel panel-default service-panel">
         <div class="panel-heading" style="padding-right: 0px">
             <?php if($is_recurrence == 'y') { ?>
-            <div class="priority"><img src="http://localhost/leafnet/assets/img/recurring-btn.png"></div>
+            <div class="priority"><img src="<?= base_url("assets/img/recurring-btn.png") ?>"></div>
             <?php } ?>
             <a href="<?= base_url("billing/invoice/place/" . base64_encode($row->invoice_id) . "/" . base64_encode('view')); ?>" target="_blank" class="btn btn-primary btn-xs btn-service-lead"><i class="fa fa-eye" aria-hidden="true"></i> View</a>
             <a href="<?= base_url("billing/invoice/details/" . base64_encode($row->invoice_id)); ?>" target="_blank" class="btn btn-primary btn-xs btn-service-lead"><i class="fa fa-dollar" aria-hidden="true"></i> Invoice</a>
