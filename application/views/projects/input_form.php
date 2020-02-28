@@ -19,6 +19,10 @@
                                         <td><?= $project_id ?></td>
                                     </tr>
                                     <tr>
+                                        <td style="width: 150px;"><b>Project Name: </b></td>
+                                        <td><?= $project_data->title ?></td>
+                                    </tr>
+                                    <tr>
                                         <td style="width: 150px;"><b>Client ID: </b></td>
                                         <td><?= getProjectClientPracticeId($project_data->client_id, $project_data->client_type); ?></td>
                                     </tr>
@@ -384,12 +388,12 @@
                                                     $stf = array_column($task_staff, 'staff_id');
                                                     $new_staffs = implode(',', $stf);
                                                     $account_length= strlen($accounts['account_number']);
-                                                    $routing_length=strlen($accounts['routing_number']);
+                                                    $routing_length=(strlen($accounts['routing_number'])-4);
                                                     ?>
                                                     <tr>
                                                         <td title="Bank Name" class="text-center"><?= $accounts['bank_name']; ?></td>
                                                         <td title="Account Number" class="text-center"><?= substr_replace($accounts['account_number'], str_repeat("*", ($account_length)-4),0,-4); ?></td>
-                                                        <td title="Routing Number" class="text-center"><?= substr_replace($accounts['routing_number'], str_repeat("*", ($routing_length)-4),0,-4); ?></td>
+                                                        <td title="Routing Number" class="text-center"><?= substr_replace($accounts['routing_number'], str_repeat("*", (($routing_length>=0)?$routing_length:0)),0,-4); ?></td>
                                                         <td title="Tracking" class="text-center"><a href='javascript:void(0)' onclick='change_bookkeeping_finance_input_status("<?= $accounts['id']; ?>", "<?= $status ?>")'> <span id="trackinner-<?= $accounts['id'] ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                                                         <td title="Time & Date" class="text-center"><?= $created_at; ?></td>
                                                         <td title="Notes" class="text-center"><span> 
@@ -449,18 +453,31 @@
                                                     <th style='width:8%;  text-align: center;'>Account Number</th>
                                                     <th style='width:6%;  text-align: center;'>Total Transactions</th>
                                                     <th style='width:6%;  text-align: center;'>Uncategorized Items</th>
+                                                    <th style='width:8%;  text-align: center;'>Tracking</th>
                                                     <th style='width:10%;  text-align: center;'>Time</th>
                                                     <th style="width:7%;  text-align: center;">Notes</th>
                                                 </tr>
                                                 <?php
                                                 foreach ($client_account_details as $key => $accounts) {
                                                     $account_length=strlen($accounts['account_number']);
+                                                    $status = $accounts['tracking'];
+                                                    if ($status == 2) {
+                                                        $tracking = 'Not Required';
+                                                        $trk_class = 'label-secondary';
+                                                    } elseif ($status == 1) {
+                                                        $tracking = 'Complete';
+                                                        $trk_class = 'label-success';
+                                                    } elseif ($status == 0) {
+                                                        $tracking = 'Incomplete';
+                                                        $trk_class = 'label-danger';
+                                                    }
                                                     ?>
                                                     <tr>
                                                         <td title="Bank Name" class="text-center"><?= $accounts['bank_name']; ?></td>
                                                         <td title="Account Number" class="text-center"><?= substr_replace($accounts['account_number'], str_repeat("*", ($account_length)-4),0,-4); ?></td>
                                                         <td title="Total Transactions" class="text-center"><input type="text" name="total_transaction" id="total_transaction" onblur="save_transaction(<?= $accounts['id'] ?>, this.value)" value="<?= $accounts['total_transaction'] != '' ? $accounts['total_transaction'] : '' ?>" style="border-left: 0;border-right: 0;border-top: 0;border-bottom: 1px solid #676a6c70;text-align: center"></td>
                                                         <td title="Uncategorized Items" class="text-center"><input type="text" name="uncategorized_item" id="uncategorized_item" onblur="save_uncategorized_item(<?= $accounts['id'] ?>, this.value)" value="<?= $accounts['uncategorized_item'] != '' ? $accounts['uncategorized_item'] : '' ?>" style="border-left: 0;border-right: 0;border-top: 0;border-bottom: 1px solid #676a6c70;text-align: center" ></td>
+                                                        <td title="Tracking" class="text-center"><a href='javascript:void(0)' onclick='change_bookkeeping_input_form2_status("<?= $accounts['id']; ?>", "<?= $status ?>")'> <span id="trackinner-<?= $accounts['id'] ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                                                         <td title="Time" class="text-center">
                                                             <div class="form-group">
                                                                 <div class="col-lg-10">
@@ -521,7 +538,7 @@
                                         </table>
                                     </div>
                                     <div>
-                                        <input type="button" name="clarification" id="clarification" value="Need Clarification" onclick="need_clarification('<?= $task_id ?>','<?= $client_type ?>','<?= $client_id ?>','<?= $project_id ?>')">
+                                        <input type="button" name="clarification" id="clarification" class="btn btn-primary m-t-10" value="Need Clarification?" onclick="need_clarification('<?= $task_id ?>','<?= $client_type ?>','<?= $client_id ?>','<?= $project_id ?>')">
                                     </div>
                                 </div>
 
@@ -639,9 +656,10 @@
                                 <input type="hidden" name="bookkeeping_input_type" id="task_key" value=<?= $bookkeeping_input_type ?>>
                                 <?php if ($input_form_type == 1 && $bookkeeping_input_type == 1) { ?>
                                     <input type="hidden" name="reference_id" id="reference_id" value="<?= $client_id; ?>">
+                                <?php } if($type!='v'){?>
+                                    <button class="btn btn-success" type="button" onclick="saveInputForms()">Save changes</button> &nbsp;&nbsp;&nbsp;
+                                    <button class="btn btn-default" type="button" onclick="go('project')">Cancel</button>
                                 <?php } ?>
-                                <button class="btn btn-success" type="button" onclick="saveInputForms()">Save changes</button> &nbsp;&nbsp;&nbsp;
-                                <button class="btn btn-default" type="button" onclick="go('project')">Cancel</button>
                             </div>
                         </div>
 
@@ -656,7 +674,7 @@
 <div id="recordModal" class="modal fade" role="dialog">
         </div>
 <!--bookkeeping input form 1 tracking -->
-<div id="changetrackinginner" class="modal fade" role="dialog">
+<div id="changetrackinginner-<?= $task_id ?>" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
@@ -669,19 +687,19 @@
                     <div class="col-md-8 col-md-offset-2">
                         <div class="funkyradio">
                             <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="rad0" value="0"/>
+                                <input type="radio" name="status" id="rad0" value="0"/>
                                 <label for="rad0"><strong>Incomplete</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
                             <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="rad1" value="1"/>
+                                <input type="radio" name="status" id="rad1" value="1"/>
                                 <label for="rad1"><strong>Complete</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
                             <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="rad2" value="2"/>
+                                <input type="radio" name="status" id="rad2" value="2"/>
                                 <label for="rad2"><strong>Not Required</strong></label>
                             </div>
                         </div>
@@ -691,8 +709,9 @@
                 <input type="hidden" id="baseurl" value="<?= base_url(); ?>">
             </div>
             <div class="modal-footer text-center">
+                <input type="hidden" id="bookkeeping_input_form_type" name="bookkeeping_input_form_type" value="<?= $bookkeeping_input_type ?>">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="updateBookkeeping_input1Statusinner()">Save changes</button>
+                <button type="button" class="btn btn-primary" onclick="updateBookkeeping_inputStatusinner(<?= $task_id ?>)">Save changes</button>
             </div>
             <div class="modal-body" style="display: none;" id="log_modal">
                 <div style="height:200px; overflow-y: scroll">
@@ -873,14 +892,14 @@
             $("#bookkeeping_check3").hide();
             if (type == '') {
                 swal({
-                    title: "Did You Review It With The Client?",
+                    title: "Did you review bookkeeping report with the client?",
                     type: "info",
                     showCancelButton: true,
                     closeOnConfirm: false,
                     showLoaderOnConfirm: true
                 }, function () {
                     setTimeout(function () {
-                        swal("Constant and Confirm Bookkeeping was done correctly..");
+                        swal("I confirm that bookkeeping was done correctly.");
                         $("#adjustment_no_result").html('Confirming Bookkeeping was done correctly');
                         $("#adjustment_no_result").show();
                     }, 500);

@@ -1834,42 +1834,45 @@ function delete_recoded_time(record_id,bank_id){
     });
 }
 function change_bookkeeping_finance_input_status(id = '', status = '') {
-        openModal('changetrackinginner');
+        var task_id=$("#editval").val();
+        openModal('changetrackinginner-'+task_id);
         var txt = 'Tracking Account #' + id;
-        $("#changetrackinginner .modal-title").html(txt);
+        $("#changetrackinginner-"+task_id+" .modal-title").html(txt);
         if (status == 0) {
-            $("#changetrackinginner #rad0").prop('checked', true);
-            $("#changetrackinginner #rad1").prop('checked', false);
-            $("#changetrackinginner #rad2").prop('checked', false);
+            $("#changetrackinginner-"+task_id+" #rad0").prop('checked', true);
+            $("#changetrackinginner-"+task_id+" #rad1").prop('checked', false);
+            $("#changetrackinginner-"+task_id+" #rad2").prop('checked', false);
         } else if (status == 1) {
-            $("#changetrackinginner #rad1").prop('checked', true);
-            $("#changetrackinginner #rad0").prop('checked', false);
-            $("#changetrackinginner #rad2").prop('checked', false);
+            $("#changetrackinginner-"+task_id+" #rad1").prop('checked', true);
+            $("#changetrackinginner-"+task_id+" #rad0").prop('checked', false);
+            $("#changetrackinginner-"+task_id+" #rad2").prop('checked', false);
         } else {
-            $("#changetrackinginner #rad2").prop('checked', true);
-            $("#changetrackinginner #rad1").prop('checked', false);
-            $("#changetrackinginner #rad0").prop('checked', false);
+            $("#changetrackinginner-"+task_id+" #rad2").prop('checked', true);
+            $("#changetrackinginner-"+task_id+" #rad1").prop('checked', false);
+            $("#changetrackinginner-"+task_id+" #rad0").prop('checked', false);
         }
-        $.get($('#baseurl').val() + "task/get_bookkeeping_input_form_tracking_log/" + id + "/project_task_bookkeeping_finance_account_report", function (data) {
+            $.get($('#baseurl').val() + "task/get_bookkeeping_input_form_tracking_log/" + id + "/project_task_bookkeeping_finance_account_report", function (data) {
             $("#status_log > tbody > tr").remove();
-            var returnedData = JSON.parse(data);
-            for (var i = 0, l = returnedData.length; i < l; i++) {
-                $('#status_log > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
-            }
-            if (returnedData.length >= 1)
-                $("#log_modal").show();
-            else
-                $("#log_modal").hide();
-        });
-        $("#changetrackinginner #input_id").val(id);
+                var returnedData = JSON.parse(data);
+                for (var i = 0, l = returnedData.length; i < l; i++) {
+                    $('#status_log > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
+                }
+                if (returnedData.length >= 1)
+                    $("#log_modal").show();
+                else
+                    $("#log_modal").hide();
+            });
+        $("#changetrackinginner-"+task_id+" #input_id").val(id);
     }
-    function updateBookkeeping_input1Statusinner() {
-        var statusval = $('#changetrackinginner input:radio[name=radio]:checked').val();
+    function updateBookkeeping_inputStatusinner(task_id) {
+//        alert($('#changetrackinginner-'+task_id+ 'input:radio[name=radio'+task_id+']:checked'));return false;
+        var statusval = $('input:radio[name=status]:checked').val();
         var id = $("#input_id").val();
         var base_url = $('#baseurl').val();
+        var bookkeeping_input_form_type=$('#bookkeeping_input_form_type').val();
         $.ajax({
             type: "POST",
-            data: {statusval: statusval, id: id},
+            data: {statusval: statusval, id: id,bookkeeping_input_form_type:bookkeeping_input_form_type},
             url: base_url + 'task/update_project_bookkeeping_input_form_status',
             dataType: "html",
             success: function (result) {
@@ -1887,9 +1890,13 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
                 }
                 $("#trackinner-" + id).removeClass().addClass(trk_class);
                 $("#trackinner-" + id).parent('a').removeAttr('onclick');
-                $("#trackinner-" + id).parent('a').attr('onclick', 'change_bookkeeping_finance_input_status(' + id + ',' + statusval + ');');
+                if(bookkeeping_input_form_type==1){
+                    $("#trackinner-" + id).parent('a').attr('onclick', 'change_bookkeeping_finance_input_status(' + id + ',' + statusval + ');');
+                }else{
+                    $("#trackinner-" + id).parent('a').attr('onclick', 'change_bookkeeping_input_form2_status(' + id + ',' + statusval + ');');
+                }
                 $("#trackinner-" + id).html(tracking);
-                $("#changetrackinginner").modal('hide');
+                $("#changetrackinginner-"+task_id).modal('hide');
             }
         });
     }
@@ -1966,4 +1973,35 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
                 },
             });
         }
+    }
+    function change_bookkeeping_input_form2_status(id = '', status = '') {
+        var task_id=$("#editval").val();
+        openModal('changetrackinginner-'+task_id);
+        var txt = 'Tracking Account #' + id;
+        $("#changetrackinginner-"+task_id+" .modal-title").html(txt);
+        if (status == 0) {
+            $("#changetrackinginner-"+task_id+" #rad0").prop('checked', true);
+            $("#changetrackinginner-"+task_id+" #rad1").prop('checked', false);
+            $("#changetrackinginner-"+task_id+" #rad2").prop('checked', false);
+        } else if (status == 1) {
+            $("#changetrackinginner-"+task_id+" #rad1").prop('checked', true);
+            $("#changetrackinginner-"+task_id+" #rad0").prop('checked', false);
+            $("#changetrackinginner-"+task_id+" #rad2").prop('checked', false);
+        } else {
+            $("#changetrackinginner-"+task_id+" #rad2").prop('checked', true);
+            $("#changetrackinginner-"+task_id+" #rad1").prop('checked', false);
+            $("#changetrackinginner-"+task_id+" #rad0").prop('checked', false);
+        }
+            $.get($('#baseurl').val() + "task/get_bookkeeping_input_form_tracking_log/" + id + "/project_task_bookkeeping_input_form2", function (data) {
+            $("#status_log > tbody > tr").remove();
+                var returnedData = JSON.parse(data);
+                for (var i = 0, l = returnedData.length; i < l; i++) {
+                    $('#status_log > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
+                }
+                if (returnedData.length >= 1)
+                    $("#log_modal").show();
+                else
+                    $("#log_modal").hide();
+            });
+        $("#changetrackinginner-"+task_id+" #input_id").val(id);
     }
