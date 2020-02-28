@@ -2369,6 +2369,7 @@ class Billing_model extends CI_Model
         } else {
             $this->db->trans_commit();
             $this->update_payment_status_by_invoice_id($invoice_id);
+            $this->insert_invoice_recurrence_data($invoice_id);
             return $invoice_id;
         }
     }
@@ -3993,5 +3994,14 @@ class Billing_model extends CI_Model
     public function royalty_reports_max_limit_count()
     {
         return $this->db->get('royalty_report')->result_array();
+    }
+
+    public function insert_invoice_recurrence_data($invoice_id='') {
+        $sql = 'SELECT inv.id as invoice_id,ord.service_id as service_id,(SELECT srv.description FROM services as srv WHERE srv.id = ord.service_id) as service_name, inv.created_by AS created_by, inv.created_time AS created_date, inv.payment_status AS payment_status, inv.total_amount AS total_amount, (SELECT SUM(pay_amount) FROM payment_history WHERE payment_history.type = "payment" AND payment_history.invoice_id = inv.id AND payment_history.is_cancel = 0) AS amount_collected ,invr.pattern AS pattern,indt.practice_id AS client_id ,(SELECT concat(stf.first_name, " ", stf.last_name) FROM staff as stf WHERE stf.id = indt.manager) as manager,indt.office AS office_id, (SELECT ofc.name FROM office as ofc WHERE ofc.id = indt.office) as office FROM `invoice_recurence` AS `invr` INNER JOIN `invoice_info` AS `inv` ON `inv`.`id` = `invr`.`invoice_id` INNER JOIN `order` AS `ord` ON `ord`.`invoice_id` = `inv`.`id` INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END) LEFT JOIN `payment_history` AS `pyh` ON `pyh`.`invoice_id` = `inv`.`id`WHERE `inv`.`id` = "'.$invoice_id.'"';
+        $response = $this->db->query($sql)->row_array();
+        if (empty($response['amount_collected'])) {
+            $response['amount_collected'] = '0';
+        }
+        $this->db->insert('invoice_recurring_plans',$response);
     }
 }

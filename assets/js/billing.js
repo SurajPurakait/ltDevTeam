@@ -295,11 +295,11 @@ if(pattern!=''){
                 if (result != 0) {
                     //alert(result);
                     if ($("#recurring").val() == 'y') {
-                         goURL(base_url + 'billing/home/index/y');
+                         goURL(base_url + 'billing/home/index');
                     }else{
                          goURL(base_url + 'billing/invoice/place/' + result);
                     }
-                   
+                    // goURL(base_url + 'billing/invoice/place/' + result);                   
                 } else {
                     swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
                 }
@@ -314,7 +314,7 @@ if(pattern!=''){
                             goURL(base_url + 'billing/invoice/place/' + result);
                         } else {
                             if(is_recurrence =='y'){
-                                   goURL(base_url + 'billing/home/index/y');
+                                   goURL(base_url + 'billing/home/index');
                                 // goURL(base_url + 'billing/home');
                             }else{
                                    goURL(base_url + 'billing/home'); 

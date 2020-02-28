@@ -1268,3 +1268,4 @@ ALTER TABLE `report_dashboard_service` CHANGE `office` `office` VARCHAR(10) NOT 
 ALTER TABLE `project_task_bookkeeping_input_form2` ADD `tracking` INT(2) NOT NULL COMMENT '0 for incomplete, 1 for complete, 2 for not required' AFTER `uncategorized_item`; 
 
 ALTER TABLE `project_task_bookkeeping_input_form2` ADD `created_at` DATE NULL DEFAULT NULL AFTER `tracking`; 
+/* import invoice_recurring_plans.sql */
