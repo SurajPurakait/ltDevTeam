@@ -149,7 +149,7 @@ class Home extends CI_Controller {
         }
         $this->load->layout = 'dashboard';
         $title = "Dashboard";
-        $render_data['title'] = $title . ' | Tax Leaf';
+        $render_data['title'] = $title . ' | Leafnet';
         $render_data['main_menu'] = 'dashboard';
         $render_data['menu'] = 'dashboard';
         $render_data['header_title'] = $title;

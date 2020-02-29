@@ -1262,3 +1262,10 @@ ALTER TABLE `services` ADD `is_recurring` ENUM('n','y') NOT NULL DEFAULT 'n' AFT
 /*27.02.2020*/
 ALTER TABLE `report_dashboard_service` CHANGE `department` `department` VARCHAR(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
 ALTER TABLE `report_dashboard_service` CHANGE `office` `office` VARCHAR(10) NOT NULL;
+
+/*28.02.2020 */
+
+ALTER TABLE `project_task_bookkeeping_input_form2` ADD `tracking` INT(2) NOT NULL COMMENT '0 for incomplete, 1 for complete, 2 for not required' AFTER `uncategorized_item`; 
+
+ALTER TABLE `project_task_bookkeeping_input_form2` ADD `created_at` DATE NULL DEFAULT NULL AFTER `tracking`; 
+/* import invoice_recurring_plans.sql */
