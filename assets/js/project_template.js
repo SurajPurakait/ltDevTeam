@@ -1655,6 +1655,8 @@ var saveInputForms = function () {
     var userid = $("#user_id").val();
     var user_type = $("#user_type").val();
     var total_time=$("#total_time").text();
+    var task_id=$("#editval").val();
+    var input_form_id=$("#task_key").val();
 //    var input_form_type=$("#input_form_type").val();
     var form_data = new FormData(document.getElementById('project_input_form'));
     form_data.append('total_time', total_time);
@@ -1671,7 +1673,8 @@ var saveInputForms = function () {
 //            alert(result);return false;
             if (result != 0) {
                 swal("Success!", "Successfully saved!", "success");
-                goURL(base_url + 'project');
+//                goURL(base_url + 'project');
+                goURL(base_url+'task/task_input_form/'+task_id+'/'+input_form_id);
             } else {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
             }
