@@ -31,19 +31,19 @@ if ($mortgages_info['what_is_property_for'] == '1') {
 			<h3 class="m-b-25">Mortgages And Lending Information</h3>
 			<table class="table table-striped table-bordered p-b-0 w-100">
 				<tr>
-					<td>Mortagage Status</td>
+					<td style="width: 30%;"><b>Mortagage Status</b></td>
 					<td><?= $mortgages_info['mortgage_status']; ?></td>
 				</tr>
 				<tr>
-					<td>Type of Mortgage</td>
+					<td style="width: 30%;"><b>Type of Mortgage</b></td>
 					<td><?= $mortgages_info['type_of_mortgage_name']; ?></td>
 				</tr>
 				<tr>
-					<td>Purchase Price</td>
+					<td style="width: 30%;"><b>Purchase Price</b></td>
 					<td><?= '$ ' . $mortgages_info['purchase_price']; ?></td>
 				</tr>
 				<tr>
-					<td>What is Property For</td>
+					<td style="width: 30%;"><b>What is Property For</b></td>
 					<td>
 						<?= $what_is_property_for; ?>
 					</td>
@@ -59,17 +59,17 @@ if ($mortgages_info['what_is_property_for'] == '1') {
 									<table class="table table-hover table-bordered w-100 m-b-0">
 										<tr>
 											<td>
-												Realtor Name
+												<b>Realtor Name</b>
 											</td>
 										</tr>
 										<tr>
 											<td>
-												Realtor Email
+												<b>Realtor Email</b>
 											</td>
 										</tr>
 										<tr>
 											<td>
-												Realtor Phone
+												<b>Realtor Phone</b>
 											</td>
 										</tr>
 									</table>
