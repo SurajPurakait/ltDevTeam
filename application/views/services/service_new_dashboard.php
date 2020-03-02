@@ -44,26 +44,18 @@ if ($status == '') {
                     <div class="row">
                         <div class="col-lg-7">
                             <div class="filter-outer">
-                                <form name="filter_form" id="filter-form"  method="post" onsubmit="service_filter_form()">
+                                <form name="filter_form" id="filter-form"  method="post" onsubmit="new_service_filter_form()">
                                     <div class="form-group filter-inner">
                                         <div class="filter-div row m-b-10" id="original-filter">
                                             <div class="col-md-3 m-t-5">
                                                 <select class="form-control variable-dropdown" name="variable_dropdown[]" onchange="change_variable_dd(this)">
                                                     <option value="">All Variable</option>
-                                                    <option value="1">Category</option>
-                                                    <option value="10">Client ID</option>
-                                                    <option value="7">Complete Date</option>
-                                                    <option value="13">Creation Date</option>
-                                                    <option value="14">Department</option>
-                                                    <option value="3">Office</option>
-                                                    <option value="9">ORDER#</option>
-                                                    <option value="5">Requested By</option>
-                                                    <option value="15">Request Type</option>
-                                                    <option value="2">Service Name</option>                                                    
-                                                    <option value="6">Start Date</option>
-                                                    <option value="12">Target End Date</option>
-                                                    <option value="11">Target Start Date</option>
-                                                    <option value="4">Tracking</option>                                                    
+                                                    <option value="1">Service ID</option>
+                                                    <option value="2">Service Name</option>
+                                                    <option value="3">Department</option>
+                                                    <option value="4">Tracking</option>
+                                                    <option value="5">Start Date</option>
+                                                    <option value="6">Complete Date</option>                     
                                                 </select>
                                             </div>
                                             <div class="col-md-4 m-t-5">
@@ -91,8 +83,8 @@ if ($status == '') {
                                     <div class="row">
                                         <div class="col-xs-12">  
                                             <div class="m-b-10">
-                                                <button class="btn btn-success" type="button" onclick="service_filter_form()">Apply Filter</button>
-                                                <a href='javascript:void(0);' id=btn_service onclick="loadServiceDashboard('','','on_load','',1);" class="btn btn-ghost" style="display: none;"><i class='fa fa-times' aria-hidden='true'></i> Clear filter</a>
+                                                <button class="btn btn-success" type="button" onclick="new_service_filter_form()">Apply Filter</button>
+                                                <a href='javascript:void(0);' id=btn_service onclick="loadNewServiceDashboard('','','on_load','',1);" class="btn btn-ghost" style="display: none;"><i class='fa fa-times' aria-hidden='true'></i> Clear filter</a>
                                                 <!--<label class="filter-text"></label>-->
                                             </div>
                                         </div>
@@ -861,17 +853,15 @@ if ($status == '') {
 
     function change_condition_dd(element) {
         var divid = $(element).parent().parent().attr('id');
-        //alert(divid);
         var val = $(element).children("option:selected").val();
-
         var variable_ddval = $(element).parent().parent().find(".variable-dropdown option:selected").val();
 
-        if (variable_ddval == 6 || variable_ddval == 7 || variable_ddval == 11 || variable_ddval == 12 || variable_ddval == 13) {
+        if (variable_ddval == 5 || variable_ddval == 6) {
             if (val == 2 || val == 4) {
                 $.ajax({
                     type: "POST",
                     data: {val: val, variable_ddval: variable_ddval},
-                    url: '<?= base_url(); ?>' + 'services/home/get_filter_dropdown_options_multiple_dateval',
+                    url: '<?= base_url(); ?>' + 'services/home/get_filter_dropdown_options_multiple_dateval_for_services',
                     dataType: "html",
                     success: function (result) {
                         $("#" + divid).find('.criteria-div').html(result);
@@ -889,7 +879,7 @@ if ($status == '') {
                     data: {
                         val: variable_ddval
                     },
-                    url: '<?= base_url(); ?>' + 'services/home/get_filter_dropdown_options',
+                    url: '<?= base_url(); ?>' + 'services/home/get_filter_dropdown_options_for_services',
                     dataType: "html",
                     success: function (result) {
                         $("#" + divid).find('.criteria-div').html(result);
@@ -919,9 +909,9 @@ if ($status == '') {
     }
     function change_variable_dd(element) {
         var divid = $(element).parent().parent().attr('id');
-        //alert(divid);
         var val = $(element).children("option:selected").val();
         var check_element = element_array.includes(element);
+
         if (check_element == true) {
             variable_dd_array.pop();
             variable_dd_array.push(val);
@@ -929,32 +919,16 @@ if ($status == '') {
             element_array.push(element);
             variable_dd_array.push(val);
         }
-        if (val == 5) {
-            var check_ofc_val = variable_dd_array.includes('3');
-            if (check_ofc_val == true) {
-                var ofc_val = $("select[name='criteria_dropdown[office][]']").val();
-            } else {
-                var ofc_val = '';
-            }
-        } else {
-            var ofc_val = '';
-        }
         $.ajax({
             type: "POST",
             data: {
-                val: val,
-                ofc_val: ofc_val
+                val: val
             },
-            url: '<?= base_url(); ?>' + 'services/home/get_filter_dropdown_options',
+            url: '<?= base_url(); ?>' + 'services/home/get_filter_dropdown_options_for_services',
             dataType: "html",
             success: function (result) {
                 $("#" + divid).find('.criteria-div').html(result);
                 $("#" + divid).find('.condition-dropdown').removeAttr('disabled').val('');
-                if (val == 15) {
-                    $("#" + divid).find('.condition-dropdown option:not(:eq(0),:eq(1))').remove();
-                } else {
-                    $("#" + divid).find('.condition-dropdown').html('<option value="">All Condition</option><option value="1">Is</option><option value="2">Is in the list</option><option value="3">Is not</option><option value="4">Is not in the list</option>');
-                }
                 $(".chosen-select").chosen();
                 $("#" + divid).nextAll(".filter-div").each(function () {
                     $(this).find('.remove-filter-button').trigger('click');

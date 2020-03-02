@@ -533,6 +533,19 @@ class System extends CI_Model
         return $this->db->query($query)->result_array();
     }
 
+    public function get_filter_dropdown_options_for_services($val)
+    {
+        $staff_info = staff_info();
+        if ($val == 1) {
+            $query = "select * from `invoice_info`";
+        } elseif ($val == 2) {
+            $query = "select * from services where is_active = 'y' ";
+        } elseif ($val == 3) {
+            $query = "select * from department";
+        }
+        return $this->db->query($query)->result_array();
+    }
+
     public function get_filter_dropdown_options_ref_partner($val)
     {
         if ($val == 1) {

@@ -2178,6 +2178,16 @@ if (!function_exists('get_filter_dropdown_options')) {
 
 }
 
+if (!function_exists('get_filter_dropdown_options_for_services')) {
+
+    function get_filter_dropdown_options_for_services($val) {
+        $ci = &get_instance();
+        $ci->load->model('system');
+        return $ci->system->get_filter_dropdown_options_for_services($val);
+    }
+
+}
+
 if (!function_exists('get_filter_dropdown_options_ref_partner')) {
 
     function get_filter_dropdown_options_ref_partner($val) {
