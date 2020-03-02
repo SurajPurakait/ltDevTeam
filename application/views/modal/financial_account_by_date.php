@@ -16,7 +16,7 @@
                                 
                                     <div class="col-md-6">
                                         <div class="form-group" id="bookkeeping_account_list">
-                                            <a class="btn btn-success"  href="javascript:void(0)" onclick="set_exist_bookkeeping_value('<?= $val['type_of_account'] ?>', '<?= $val['bank_name'] ?>', '<?= $val['account_number'] ?>', '<?= $val['routing_number'] ?>', '<?= $val['bank_website'] ?>', '<?= $val['user'] ?>', '<?= $val['password'] ?>')">
+                                            <a class="btn btn-success"  href="javascript:void(0)" onclick="set_exist_bookkeeping_value('<?= $val['type_of_account'] ?>', '<?= $val['bank_name'] ?>', '<?= $val['account_number'] ?>', '<?= $val['routing_number'] ?>', '<?= $val['bank_website'] ?>', '<?= $val['user'] ?>', '<?= $val['password'] ?>','<?= $val['number_of_transactions'] ?>','<?= $val['total_amount'] ?>')">
                                                 <b>Bank Name: <?= $val['bank_name'] ?></b><br>
                                                 <b>Account Number: </b><?= $val['account_number'] ?><br>
                                             </a>
@@ -30,7 +30,7 @@
                    </div>
                     <div class="form-group">
                         <label>Type Of Account</label>
-                        <select class="form-control" name="type_of_account" title="Type Of Account" id="type_of_account" required="">
+                        <select class="form-control" name="type_of_account" title="Type Of Account" id="acc_type" required="">
                             <option value="">Select</option>
                             <option value="Bank Account">Bank Account</option>
                             <option value="Credit Card Account">Credit Card Account</option>
@@ -47,17 +47,17 @@
                     </div>
                     <div class="form-group">
                         <label>Account Number<span class="text-danger">*</span></label>
-                        <input class="form-control" type="text" name="account_number" id="account_number" zipval="" title="Account Number" required>
+                        <input class="form-control" type="text" name="account_number" id="acc_no" zipval="" title="Account Number" required>
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
                         <label>Routing Number</label>
-                        <input class="form-control" type="text" name="routing_number" id="routing_number" zipval="" title="Routing Number">
+                        <input class="form-control" type="text" name="routing_number" id="routing_no" zipval="" title="Routing Number">
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
                         <label>User Id</label>
-                        <input class="form-control" type="text" name="user" id="user" title="User Id">
+                        <input class="form-control" type="text" name="user" id="user_id" title="User Id">
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">
@@ -76,7 +76,7 @@
                     </div>
                     <div class="form-group">
                         <label>Website URL<span class="text-danger">*</span></label>
-                        <input class="form-control" type="text" name="bank_website" id="bank_website" title="Website URL" required>
+                        <input class="form-control" type="text" name="bank_website" id="website" title="Website URL" required>
                         <div class="errorMessage text-danger"></div>
                     </div>
                     <div class="form-group">

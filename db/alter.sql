@@ -1252,8 +1252,20 @@ ALTER TABLE `partner_services_data` CHANGE `realtor` `realtor` VARCHAR(50) CHARA
 /* import project_bookkeeping_bank_record_time.sql */
 /* import partner_services_data.sql */
 
-/*live end*/
-
 /*20.02.2020*/
 ALTER TABLE `lead_management` ADD `client_reference` VARCHAR(50) NOT NULL AFTER `day_6_mail_date`, ADD `client_id` INT(11) NOT NULL AFTER `client_reference`;
 ALTER TABLE `lead_management` CHANGE `client_id` `client_id` INT(11) NOT NULL DEFAULT '0';
+
+/*live end*/
+/*26.02.2020*/
+ALTER TABLE `services` ADD `is_recurring` ENUM('n','y') NOT NULL DEFAULT 'n' AFTER `is_active`; 
+/*27.02.2020*/
+ALTER TABLE `report_dashboard_service` CHANGE `department` `department` VARCHAR(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;
+ALTER TABLE `report_dashboard_service` CHANGE `office` `office` VARCHAR(10) NOT NULL;
+
+/*28.02.2020 */
+
+ALTER TABLE `project_task_bookkeeping_input_form2` ADD `tracking` INT(2) NOT NULL COMMENT '0 for incomplete, 1 for complete, 2 for not required' AFTER `uncategorized_item`; 
+
+ALTER TABLE `project_task_bookkeeping_input_form2` ADD `created_at` DATE NULL DEFAULT NULL AFTER `tracking`; 
+/* import invoice_recurring_plans.sql */

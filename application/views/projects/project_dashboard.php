@@ -34,7 +34,7 @@ $role = $user_info['role'];
 
 <?php
 $due_day = array(1, 2, 3, 4, 5, 6, 7);
-$due_m = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'Jun', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
+$due_m = array(1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sept', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec');
 $row_number = 0;
 if (!empty($project_list)) {
     foreach ($project_list as $row_count => $list) {
@@ -98,23 +98,28 @@ if (!empty($project_list)) {
         }
         $recurrence_is_created=$pattern_details->generated_by_cron;
         $start_months='';
-        if($pattern_details->start_month!=''){
+        $start_year='';
+        if($pattern_details->start_month!='' && $pattern_details->start_year!=''){
             if($pattern_details->pattern=='quarterly'){
                 switch ($pattern_details->start_month){
                     case 1:{
-                        $start_months='January';
+                        $start_months='Jan';
+                        $start_year=substr($pattern_details->start_year,-2);
                         break;
                     }
                     case 2:{
-                       $start_months='April';
+                       $start_months='Apr';
+                       $start_year=substr($pattern_details->start_year,-2);
                         break; 
                     }
                     case 3:{
-                       $start_months='July';
+                       $start_months='Jul';
+                       $start_year=substr($pattern_details->start_year,-2);
                         break; 
                     }
                     case 4:{
-                       $start_months='October';
+                       $start_months='Oct';
+                       $start_year=substr($pattern_details->start_year,-2);
                         break; 
                     }
                 }
@@ -123,6 +128,8 @@ if (!empty($project_list)) {
             }
             else{
                 $start_months=$due_m[$pattern_details->start_month];
+                $start_year=substr($pattern_details->start_year,-2);
+                
             }
         }
         ?>
@@ -141,11 +148,11 @@ if (!empty($project_list)) {
                                     <th style="width:8%; text-align: center">Project ID</th>
                                     <!--<th style="width:8%; text-align: center">Category</th>-->
                                     <th style="width:8%; text-align: center">Project Name</th>
-                                    <th style="width:10%; text-align: center">Pattern</th>
+                                    <!--<th style="width:10%; text-align: center">Pattern</th>-->
                                     <!--<th style="width:8%; text-align: center">Client Type</th>-->
                                     <th style="width:8%; text-align: center">Client Id</th>
                                     <th style="width:8%; text-align: center">Responsible</th>
-                                    <th style="width:8%; text-align: center">Requested By</th>
+                                    <!--<th style="width:8%; text-align: center">Requested By</th>-->
                                     <th style="width:8%; text-align: center">Assigned To</th>
                                     <th style="width:8%; text-align: center">Tracking</th>
                                     <!--<th style="width:8%; text-align: center">Start Date</th>-->
@@ -157,9 +164,9 @@ if (!empty($project_list)) {
                                     <td title="ID"><?= $list['id'] ?></td>
                                     <!--<td title="Category"><= get_template_category_name($list['template_cat_id']) ?></td>-->
                                     <td title="Project Name">
-                                        <span class=""><?= $templatedetails->title.($pattern_details->start_month!=''?' #'.$start_months:'') ?></span>
+                                        <span class=""><?= $templatedetails->title.($pattern_details->start_month!=''?' #'.$start_months.$start_year:'') ?></span>
                                     </td>
-                                    <td title="Pattern"><?= ucfirst($pattern_details->pattern) ?></td>
+                                    <!--<td title="Pattern"><?= ucfirst($pattern_details->pattern) ?></td>-->
                                     <!--<td title="Client Type"><? ($list['client_type'] == '1') ? 'Business Client' : 'Individual Client' ?></td>-->
                                     <!--<td title="Client"><?php // echo getProjectClientName($list['client_id'], $list['client_type']); ?><br><span class="text-info"><?php // echo getProjectClient($list['office_id']);      ?> </span></td>--> 
                                     <td title="Client"><?php echo getProjectClientPracticeId($list['client_id'], $list['client_type']); ?><br><span class="text-info"><?php // echo getProjectClient($list['office_id']);      ?> </span></td>                                                 
@@ -183,7 +190,7 @@ if (!empty($project_list)) {
                                         }
                                         echo $resp_name . "<br><span class='text-info'>" . $office_name . " </span></td>";
                                         ?> </td>   
-                                    <td title="Requested By"><?php echo isset(staff_info_by_id($list['added_by_user'])['full_name']) ? staff_info_by_id($list['added_by_user'])['full_name'] : ''; ?><br><span class='text-info'><?= get_office_id($added_user_office); ?></span></td>
+                                    <!--<td title="Requested By"><?php // echo isset(staff_info_by_id($list['added_by_user'])['full_name']) ? staff_info_by_id($list['added_by_user'])['full_name'] : ''; ?><br><span class='text-info'><= get_office_id($added_user_office); ?></span></td>-->
                                     <td title="Assign To"><span class="text-success"><?php echo get_assigned_dept_staff_project_main($list['id']); ?></span><br><?php
                                         if ($list['office_id'] != '2') {
                                             echo get_department_name_by_id($list['department_id']);

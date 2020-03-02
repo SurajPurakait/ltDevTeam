@@ -4,11 +4,14 @@ class Service_model extends CI_Model
 {
 
     private $order_select;
+    private $select_data;
 
     public function __construct()
     {
         parent::__construct();
         $this->load->model("system");
+
+        // Order Dashboard
         $this->order_select[] = 'ord.id AS id';
         $this->order_select[] = 'cpn.id AS company_id';
         $this->order_select[] = 'ord.order_serial_id AS order_id';
@@ -45,6 +48,46 @@ class Service_model extends CI_Model
         $this->order_select[] = 'inv.id AS invoiced_id';
         $this->order_select[] = 'inv.is_order AS is_order';
         $this->order_select[] = '(SELECT department.name FROM department WHERE department.id = srv.dept) AS service_department_name';
+
+        // Service Dashboard
+        $this->select_data[] = 'ord.id AS id';
+        $this->select_data[] = 'cpn.id AS company_id';
+        $this->select_data[] = 'ord.order_serial_id AS order_serial_id';
+        $this->select_data[] = 'ord.order_date AS create_date';
+        $this->select_data[] = 'ord.start_date AS start_date';
+        $this->select_data[] = 'ord.complete_date AS complete_date';
+        $this->select_data[] = 'ord.target_start_date AS target_start_date';
+        $this->select_data[] = 'ord.target_complete_date AS target_complete_date';
+        $this->select_data[] = 'ord.total_of_order AS total_of_order';
+        $this->select_data[] = 'ord.new_existing AS new_existing';
+        $this->select_data[] = 'ord.staff_requested_service AS staff_requested_service';
+        $this->select_data[] = '(SELECT CONCAT(staff.last_name, ", ",staff.first_name," ",staff.middle_name) FROM staff WHERE id = ord.staff_requested_service) AS requested_staff_name';
+        $this->select_data[] = 'ord.invoice_id AS invoice_id';
+        $this->select_data[] = 'ord.staff_office AS staff_office';
+        $this->select_data[] = 'ord.service_id AS service_id';
+        $this->select_data[] = 'srv.description AS service_name';
+        $this->select_data[] = 'ord.category_id AS category_id';
+        $this->select_data[] = 'ctr.name AS service_category';
+        $this->select_data[] = 'srv.ideas AS service_shortname';
+        $this->select_data[] = 'srv.retail_price AS retail_price';
+        $this->select_data[] = 'srv_rq.price_charged AS price_charged';
+        $this->select_data[] = 'ord.status AS main_order_status';
+        $this->select_data[] = 'ord.assign_user AS assign_user';
+        $this->select_data[] = 'cpn.name AS company_name';
+        $this->select_data[] = 'cpn.type AS company_type';
+        $this->select_data[] = 'cpn.state_others AS state_others';
+        $this->select_data[] = 'cpn.state_opened AS state_opened';
+        $this->select_data[] = 'cpn.business_description AS business_description';
+        $this->select_data[] = 'cpn.fye AS fiscal_year_end';
+        $this->select_data[] = 'cpn.fein AS fein';
+        $this->select_data[] = 'cpn.dba AS dba';
+        $this->select_data[] = 'cpn.start_month_year AS start_month_year';
+        $this->select_data[] = 'ord.status AS status';
+        $this->select_data[] = 'inv.id AS invoiced_id';
+        $this->select_data[] = 'inv.is_order AS is_order';
+        $this->select_data[] = '(SELECT department.name FROM department WHERE department.id = srv.dept) AS service_department_name';
+        $this->select_data[] =  "CONCAT(',', (SELECT GROUP_CONCAT(department_staff.staff_id) FROM department_staff WHERE department_staff.department_id = srv.dept OR department_staff.department_id IN (SELECT sr2.dept FROM services sr2 WHERE sr2.id IN (SELECT srq.services_id FROM `service_request` AS srq WHERE srq.`order_id` = ord.id))), ',', COALESCE((SELECT GROUP_CONCAT(st1.id) FROM staff AS st1 WHERE st1.role = 2 AND st1.id IN(SELECT staff_id FROM office_staff WHERE office_staff.office_id = indt.office)),''), ',') AS all_staffs"; 
+
         $this->load->model('notes');
         $this->load->model('billing_model');
         $this->load->model('lead_management');
@@ -649,6 +692,44 @@ class Service_model extends CI_Model
         $result = $this->db->query($sql)->result();
         //        echo $this->db->last_query();exit;
         return $result;
+    }
+
+    public function ajax_services_new_dashboard_filter()
+    {
+        $select[] = 'inv.id AS invoice_id';
+        $select[] = 'inv.is_order AS is_order';
+        $select[] = 'sr.id AS service_request_id';
+        $select[] = 'sr.services_id AS service_id';
+        $select[] = 'sr.order_id AS order_id';
+        $select[] = 'sr.assign_user AS assign_user_id';
+        $select[] = 'srv.ideas AS service_shortname';
+        $select[] = 'srv.description AS service_name';
+        $select[] = 'sr.price_charged AS price_charged';
+        $select[] = 'sr.tracking AS tracking';
+        $select[] = 'sr.date_started AS date_started';
+        $select[] = 'sr.date_completed AS date_completed';
+        $select[] = 'sr.date_start_actual AS date_start_actual';
+        $select[] = 'sr.date_complete_actual AS date_complete_actual';
+        $select[] = 'sr.beginning_month AS beginning_month';
+        $select[] = 'sr.frequency AS frequency';
+        $select[] = 'sr.status AS status';
+        $select[] = 'srv.retail_price AS retail_price';
+        $select[] = 'srv.category_id AS category_id';
+        $select[] = 'sr.input_form_status AS input_form_status';
+        $select[] = 'srv.retail_price AS retail_price';
+        $select[] = 'sr.responsible_staff AS responsible_staff_id';
+        $select[] = 'CONCAT(st.last_name, \', \', st.first_name) AS responsible_staff_name';
+        $select[] = 'srv.dept as responsible_department_id';
+        $select[] = '(SELECT department.name FROM department WHERE department.id = srv.dept) AS service_department_name';
+        $select[] = '(SELECT target_days.input_form FROM target_days WHERE target_days.service_id = srv.id LIMIT 0,1) AS input_form';
+        $this->db->select(implode(', ', $select));
+        $this->db->from('service_request AS sr');
+        $this->db->join('services AS srv', 'srv.id = sr.services_id');
+        $this->db->join('staff AS st', 'st.id = sr.responsible_staff');
+        $this->db->join('invoice_info AS inv', 'inv.order_id = sr.order_id');
+        $this->db->where('sr.order_id!=',0);
+        $this->db->order_by('inv.id','desc');
+        return $this->db->get()->result();
     }
 
     public function check_count_reqby_others()
@@ -1920,6 +2001,20 @@ class Service_model extends CI_Model
         $this->db->join('category AS ctr', 'ctr.id = srv.category_id');
         $this->db->join('service_request AS srv_rq', 'srv_rq.order_id = ord.id AND srv_rq.services_id = ord.service_id');
         $this->db->join('invoice_info AS inv', 'inv.order_id = ord.id');
+        $this->db->where(['ord.id' => $id]);
+        return $this->db->get()->row_array();
+    }
+
+    public function get_order_info_for_services($id)
+    {
+        $this->db->select(implode(', ', $this->select_data));
+        $this->db->from('order AS ord');
+        $this->db->join('company AS cpn', 'ord.reference_id = cpn.id');
+        $this->db->join('services AS srv', 'srv.id = ord.service_id');
+        $this->db->join('category AS ctr', 'ctr.id = srv.category_id');
+        $this->db->join('service_request AS srv_rq', 'srv_rq.order_id = ord.id AND srv_rq.services_id = ord.service_id');
+        $this->db->join('invoice_info AS inv', 'inv.order_id = ord.id');
+        $this->db->join('internal_data AS indt', 'indt.reference_id = ord.reference_id AND indt.reference = ord.reference');
         $this->db->where(['ord.id' => $id]);
         return $this->db->get()->row_array();
     }
@@ -3663,13 +3758,12 @@ class Service_model extends CI_Model
     }
 
     public function get_mortgage_info($reference,$reference_id) {
-        $this->db->select('psd.*,tom.name AS type_of_mortgage_name');
+        $this->db->select('psd.*,tom.name AS type_of_mortgage_name,tocr.name AS type_of_contact_name');
         $this->db->where('psd.reference',$reference);
         $this->db->where('psd.reference_id',$reference_id);
         $this->db->from('type_of_mortgage AS tom');
         $this->db->join('partner_services_data AS psd','psd.type_of_mortgage = tom.id','inner');
-        return $this->db->get('partner_services_data')->row_array();
-
-        // return $this->db->get_where('partner_services_data', ['reference' => $reference,'reference_id' => $reference_id])->row_array();    
+        $this->db->join('type_of_contact_referral tocr','tocr.id = psd.type_of_mortgage');
+        return $this->db->get('partner_services_data')->row_array();    
     }
 }

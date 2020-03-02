@@ -368,9 +368,10 @@ function show_lead_notes(id) {
     });
 }
 
-function assign_ref_partner_password(id,requested_by_staff_id) {
+function assign_ref_partner_password(id,requested_by_staff_id,email) {
     $("#setpwd #hiddenid").val(id);
     $("#setpwd #staffrequestedby").val(requested_by_staff_id);
+    $("#setpwd #lead_email").html('User Email : '+email);
     openModal('setpwd');
 }
 
@@ -432,7 +433,7 @@ function show_document_modal(modal_type, reference, reference_id, id) {
     });
 }
 
-function account_modal(modal_type, id, section, reference_id1) {
+function account_modal(modal_type, id, section, reference_id) {
     var reference_id = $("#reference_id").val();
     var exist_client_id=$("#exist_client_id").val();
     if ($("#editval").val() == '') {
@@ -444,7 +445,7 @@ function account_modal(modal_type, id, section, reference_id1) {
         data: {
             modal_type: modal_type,
             id: id,
-            reference_id1: reference_id1,
+            reference_id: reference_id,
             order_id: $("#editval").val(),
             section: section,
             client_id:exist_client_id
@@ -469,7 +470,7 @@ function account_modal(modal_type, id, section, reference_id1) {
         }
     });
 }
-function set_exist_bookkeeping_value(account_type,bank_name,account_no,routing_no,bank_url,user,password){
+function set_exist_bookkeeping_value(account_type,bank_name,account_no,routing_no,bank_url,user,password,transactions,total_amount){
     if(bank_name!='' && account_no!=''){
         $("#acc_type").val(account_type);
         $("#bank_name").val(bank_name);
@@ -478,6 +479,8 @@ function set_exist_bookkeeping_value(account_type,bank_name,account_no,routing_n
         $("#website").val(bank_url)
         $("#user_id").val(user);
         $("#password").val(password);
+        $("#no_of_transactions").val(transactions);
+        $("#total_amount").val(total_amount);
         $("#sub_btn").html('Update');
     }else{
         $("#acc_type").val('');
@@ -487,6 +490,8 @@ function set_exist_bookkeeping_value(account_type,bank_name,account_no,routing_n
         $("#website").val('');
         $("#user_id").val('');
         $("#password").val('');
+        $("#no_of_transactions").val(transactions);
+        $("#total_amount").val(total_amount);
         $("#sub_btn").html('Save changes');
     }
 }

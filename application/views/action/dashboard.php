@@ -474,7 +474,7 @@ $role = $user_info['role'];
 </div>
 <script>
     reflactFilterWithSummery('<?= $filter_val ?>', '<?= $fileter_request_type ?>');
-    loadActionDashboard('<?= $status; ?>', '<?= $request_type != '' ? $request_type : 'byme_tome_task'; ?>', '<?= $priority; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '');
+    loadActionDashboard('<?= $status; ?>', '<?= $request_type != '' ? $request_type : 'byme_tome_task'; ?>', '<?= $priority; ?>', '<?= $office_id; ?>', '<?= $department_id; ?>', '','','',1);
     
     $(document).ready(function () {
         $('.add-action-note').click(function () {

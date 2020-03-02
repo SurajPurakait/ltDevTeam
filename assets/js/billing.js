@@ -83,7 +83,19 @@ function getServiceInfoById(service_id, category_id, section_id) {
                     $('#service_div_' + section_id).html(result);
                 } else {
                     $('#service_div_' + section_id).html('');
-                }
+                }                
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        service_id: service_id,
+                        section_id: section_id
+                    },
+                    url: base_url + 'billing/invoice/get_recurring_section',
+                    dataType: "html",
+                    success: function (result) {
+                        $("#recurring_section").html(result);        
+                    }
+                });                
             },
             beforeSend: function () {
                 openLoading();
@@ -283,11 +295,11 @@ if(pattern!=''){
                 if (result != 0) {
                     //alert(result);
                     if ($("#recurring").val() == 'y') {
-                         goURL(base_url + 'billing/home/index/y');
+                         goURL(base_url + 'billing/home/index');
                     }else{
                          goURL(base_url + 'billing/invoice/place/' + result);
                     }
-                   
+                    // goURL(base_url + 'billing/invoice/place/' + result);                   
                 } else {
                     swal("ERROR!", "An error ocurred! \n Please, try again.", "error");
                 }
@@ -302,7 +314,7 @@ if(pattern!=''){
                             goURL(base_url + 'billing/invoice/place/' + result);
                         } else {
                             if(is_recurrence =='y'){
-                                   goURL(base_url + 'billing/home/index/y');
+                                   goURL(base_url + 'billing/home/index');
                                 // goURL(base_url + 'billing/home');
                             }else{
                                    goURL(base_url + 'billing/home'); 
@@ -368,7 +380,7 @@ function sendInvoiceEmail() {
         cache: false,
         success: function (result) {
             if (result != 0) {
-                swal("Wel Done!", "Successfully send your mail!", "success");
+                swal("Well Done!", "Your email has been sent successfully!", "success");
                 $('#emailsending').modal('hide');
             } else {
                 swal("ERROR!", "An error ocurred! \n Please, try again.", "error");

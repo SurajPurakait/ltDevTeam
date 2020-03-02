@@ -3339,7 +3339,13 @@ if (!function_exists('get_lead_list_by_partner')) {
     }
 
 }
-
+if (!function_exists('get_lead_list_associated_with_partner')) {
+    function get_lead_list_associated_with_partner($lead_id) {
+        $ci = &get_instance();
+        $ci->load->model('Referral_partner');
+        return $ci->referral_partner->get_lead_list_associated_with_partner($lead_id);    
+    }
+}
 if (!function_exists('get_partner_to_staff_count')) {
 
     function get_partner_to_staff_count($lead_id) {
@@ -3634,5 +3640,12 @@ if(!function_exists('get_bookkeeping_records_details')){
         $ci = &get_instance();
         $ci->load->model('Project_Template_model');
         return $ci->Project_Template_model->insertBookkeepingBankRecordTime('',$bank_id);
+    }
+}
+if(!function_exists('get_order_info_for_services')){
+    function get_order_info_for_services($order_id){
+        $ci = &get_instance();
+        $ci->load->model('Service_model');
+        return $ci->Service_model->get_order_info_for_services($order_id);
     }
 }

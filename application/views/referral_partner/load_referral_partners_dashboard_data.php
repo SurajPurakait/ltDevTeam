@@ -29,7 +29,7 @@
      ?>
         <div class="panel panel-default service-panel type2 filter-active">
             <div class="panel-heading">                           
-              <a href="<?= base_url("/lead_management/home/view/{$value["id"]}/1/"); ?>" class="btn btn-primary btn-xs btn-service-view"><i class="fa fa-eye" aria-hidden="true"></i>
+              <a href="<?= base_url("/lead_management/home/view/{$value["id"]}/1/"); ?>" class="btn btn-primary btn-xs btn-service-view" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i>
                     View</a> 
                 <a href="<?= base_url("/referral_partner/referral_partners/edit_lead_prospect/{$value["id"]}"); ?>"
                        class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i>
@@ -70,7 +70,7 @@
                                 <?php
                                     if (!empty($value["client_reference"]) && !empty($value["client_id"])) {
                                 ?>
-                                <td><a href="javascript:void(0)" class="label label-primary" target="_blank" onclick="show_mortgage_information('<?= $value["client_reference"] ?>','<?= $value["client_id"]; ?>')">Mortgage</a></td>
+                                <td><a href="javascript:void(0)" class="label label-primary" target="_blank" onclick="show_mortgage_information('<?= $value["client_reference"] ?>','<?= $value["client_id"]; ?>','<?= $value["id"]; ?>')">Mortgage</a></td>
                                 <?php
                                     }
                                 ?>

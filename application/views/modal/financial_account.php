@@ -15,7 +15,7 @@ if ($modal_type != "edit"):
                     <div class="m-t-10">
                         <div class="col-md-6">
                             <div class="form-group" id="bookkeeping_account_list">
-                                <a class="btn btn-success"  href="javascript:void(0)" onclick="set_exist_bookkeeping_value('<?= $val['type_of_account'] ?>', '<?= $val['bank_name'] ?>', '<?= $val['account_number'] ?>', '<?= $val['routing_number'] ?>', '<?= $val['bank_website'] ?>', '<?= $val['user'] ?>', '<?= $val['password'] ?>')">
+                                <a class="btn btn-success"  href="javascript:void(0)" onclick="set_exist_bookkeeping_value('<?= $val['type_of_account'] ?>', '<?= $val['bank_name'] ?>', '<?= $val['account_number'] ?>', '<?= $val['routing_number'] ?>', '<?= $val['bank_website'] ?>', '<?= $val['user'] ?>', '<?= $val['password'] ?>','<?= $val['number_of_transactions'] ?>','<?= $val['total_amount'] ?>')">
                                     <b>Bank Name: <?= $val['bank_name'] ?></b><br>
                                     <b>Account Number: </b><?= $val['account_number'] ?><br>
                                 </a>
@@ -83,7 +83,7 @@ if ($modal_type != "edit"):
                     </div>
                     <div class="form-group">
                         <label>Number Of Transactions<span class="text-danger">*</span></label>
-                        <select class="form-control" name="number_of_transactions" id="number_of_transactions" title="Number Of Transactions" required="">
+                        <select class="form-control" name="number_of_transactions" id="no_of_transactions" title="Number Of Transactions" required="">
                             <option value="">Select</option>
                             <option value="0-100">0-100</option>
                             <option value="101-200">101-200</option>
@@ -105,7 +105,7 @@ if ($modal_type != "edit"):
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="order_id" id="order_id" value="<?= $order_id; ?>">
-                    <input type="hidden" name="company_id" id="company_id" value="<?= $reference_id1; ?>">
+                    <input type="hidden" name="company_id" id="company_id" value="<?= $reference_id; ?>">
                     <input type="hidden" name="edit_id" value="">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="sub_btn" onclick="save_account('');">Save changes</button>

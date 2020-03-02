@@ -219,9 +219,10 @@ class Referral_partner extends CI_Model {
         }
         
         return $this->db->get()->result_array();
+        
     }
 
-    public function load_referred_leads_dashboard_data($status,$lead_id="") {
+    public function load_referred_leads_dashboard_data($status="",$lead_id="") {
         $lead_email = $this->db->get_where('lead_management',array('id'=>$lead_id,'type'=>'2'))->row_array()['email'];
         $staff_id = $this->db->get_where('staff',array('user'=>$lead_email))->row_array()['id'];
 
@@ -234,6 +235,22 @@ class Referral_partner extends CI_Model {
             $this->db->where('rl.referred_to',sess('user_id'));    
         }
         $this->db->where('lm.referred_status','1');
+        return $this->db->get()->result_array();
+    }
+    public function get_lead_list_associated_with_partner($lead_id="") {
+        $lead_email = $this->db->get_where('lead_management',array('id'=>$lead_id,'type'=>'2'))->row_array()['email'];
+        $staff_id = $this->db->get_where('staff',array('user'=>$lead_email))->row_array()['id'];
+
+        $this->db->select('rl.*,lm.*');
+        $this->db->from('referred_lead rl');
+        $this->db->join('lead_management lm', 'lm.id = rl.lead_id');
+        if ($lead_id != '') {
+            $this->db->where('rl.referred_to',$staff_id);
+            $this->db->or_where('rl.referred_by',$staff_id);
+        } else {
+            $this->db->where('rl.referred_to',sess('user_id'));
+            $this->db->or_where('rl.referred_by',sess('user_id'));
+        }
         return $this->db->get()->result_array();
     }
 
