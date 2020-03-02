@@ -663,6 +663,14 @@ $role = $user_info['role'];
             $("#changeStatusinner #rad1").prop('checked', false).attr('disabled', true);
             $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
         }
+        else if (status == 5) {
+            $("#changeStatusinner #rad5").prop('checked', true);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad2").prop('checked', false);
+            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+        }
         $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
             $("#status_log > tbody > tr").remove();
             var returnedData = JSON.parse(data);

@@ -472,6 +472,12 @@ $role = $user_info['role'];
                                 <label for="rad4"><strong>Canceled</strong></label>
                             </div>
                         </div>
+                        <div class="funkyradio">
+                            <div class="funkyradio-success">
+                                <input type="radio" name="radio" id="rad5" value="5"/>
+                                <label for="rad5"><strong>Clarification</strong></label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <input type="hidden" id="prosubid" value="">
@@ -518,6 +524,7 @@ $role = $user_info['role'];
         });
     });
     function change_project_status_inner(id, status, section_id) {
+    alert(status);
         openModal('changeStatusinner');
         var txt = 'Tracking Task #' + id;
         $("#changeStatusinner .modal-title").html(txt);
