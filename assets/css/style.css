@@ -8852,9 +8852,18 @@ color:#0f47f0;
     font-size: 21px;
 color:#3f9f2b;
 }
+.start i:hover,
+.stop i:hover,
+.save i:hover{
+    transform: scale(1.3);
+    transition: 500ms;
+}
 .watch a{
     display: inline-block;
 margin-left: 8px;
+}
+.sweet-alert button.cancel{
+    background-color: #EA0C0C !important;
 }
 /* Responsive design */
 
