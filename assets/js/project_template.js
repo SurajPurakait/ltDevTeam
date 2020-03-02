@@ -1923,20 +1923,31 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
         });
     }
     function need_clarification(task_id,client_type,client_id,project_id){
-        var action_message= prompt("Need Clarification?");
-        if(!action_message){
-            swal("Need Message to Complete Clarification.");
-        }else{
-            $.ajax({
-                type: "POST",
-                data: {task_id: task_id, client_type: client_type,client_id:client_id,project_id:project_id,action_message:action_message},
-                url: base_url + 'task/add_action_for_bookkeeping_need_clarification',
-                dataType: "html",
-                success: function (result) {
-                    swal("Query submited successfully!");
+        swal({   title: "Need Clarification?",
+//            text: "Enter your clarification:",
+            type: "input",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            animation: "slide-from-top",
+            inputPlaceholder: "Enter your clarification message"
+        },
+            function(inputValue){
+                if (!inputValue){
+                   swal("Need Message to Complete Clarification.");
+                }else{
+                    var action_message=inputValue;
+                    $.ajax({
+                        type: "POST",
+                        data: {task_id: task_id, client_type: client_type,client_id:client_id,project_id:project_id,action_message:action_message},
+                        url: base_url + 'task/add_action_for_bookkeeping_need_clarification',
+                        dataType: "html",
+                        success: function (result) {
+                            swal("Query submited successfully!");
+                        }
+                    });
                 }
-            });
-        }
+            }
+        );  
     }
     function show_record_modal(account_id,section=''){
         $.ajax({

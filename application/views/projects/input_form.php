@@ -870,6 +870,7 @@
             clearTimeout(t);
         }
         function clear_record(bank_id) {
+            clearTimeout(t);
             var record_time = h3.textContent;
             $.ajax({
                 type: "POST",
@@ -896,7 +897,10 @@
                     type: "info",
                     showCancelButton: true,
                     closeOnConfirm: false,
-                    showLoaderOnConfirm: true
+                    showLoaderOnConfirm: true,
+                    confirmButtonText: 'Yes',
+                    confirmButtonColor: 'green',
+                    cancelButtonText: 'No'
                 }, function () {
                     setTimeout(function () {
                         swal("I confirm that bookkeeping was done correctly.");

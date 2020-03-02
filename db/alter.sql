@@ -1269,3 +1269,7 @@ ALTER TABLE `project_task_bookkeeping_input_form2` ADD `tracking` INT(2) NOT NUL
 
 ALTER TABLE `project_task_bookkeeping_input_form2` ADD `created_at` DATE NULL DEFAULT NULL AFTER `tracking`; 
 /* import invoice_recurring_plans.sql */
+
+/* 02.03.2020 */
+
+ALTER TABLE `project_bookkeeping_bank_record_time` ADD `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `record_time`; 
