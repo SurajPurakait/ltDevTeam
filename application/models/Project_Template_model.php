@@ -2994,33 +2994,7 @@ class Project_Template_model extends CI_Model {
 //            echo $insert_id;die;
         }if($input_form_type==1){
             if($bookkeeping_input_type==1){
-//                $exist=$this->db->get_where('bookkeeping',['order_id'=>$data['task_id'],'reference'=>'project'])->row();
-//                if(!empty($exist)){
-//                    $this->db->where(['order_id'=>$data['task_id'],'reference'=>'project']);
-//                    $this->db->delete('bookkeeping');
-//                }
-//                $bookdata=array(
-//                   'company_id'=>$data['reference_id'],
-//                    'order_id'=>$data['task_id'],
-//                    'frequency'=>$data['frequency'],
-//                    'reference'=>'project'
-//                );
-//            $this->db->insert('bookkeeping',$bookdata);
             }else if($bookkeeping_input_type==2){
-//                $exist=$this->db->get_where('project_task_bookkeeper_department',['task_id'=>$data['task_id']])->row();
-//                if(!empty($exist)){
-//                    $this->db->where('task_id',$data['task_id']);
-//                    $this->db->delete('project_task_bookkeeper_department');
-//                }
-//                $bookkeeper_data=array(
-//                    'task_id'=>$data['task_id'],
-//                    'bank_account_no'=>$data['bank_account_no'],
-//                    'transaction'=>$data['transaction'],
-//                    'item_uncategorize'=>$data['item_uncategorize'],
-//                    'reconciled'=>$data['reconciled'],
-//                    'total_time'=>$data['total_time']
-//                );
-//                $this->db->insert('project_task_bookkeeper_department',$bookkeeper_data);
             }else if($bookkeeping_input_type==3){
                 $exist=$this->db->get_where('project_task_bookkeeper_department',['task_id'=>$data['task_id']])->row();
                 if(!empty($exist)){
@@ -3031,7 +3005,14 @@ class Project_Template_model extends CI_Model {
                     'task_id'=>$data['task_id'],
                     'adjustment'=>$data['need_adjustment']
                 );
-                $this->db->insert('project_task_bookkeeper_department',$client_data);
+                $ins=$this->db->insert('project_task_bookkeeper_department',$client_data);
+                if($ins && $data['need_adjustment']=='n'){
+                    $project_id=$this->db->get_where('project_task',['id'=>$data['task_id']])->row()->project_id;
+                    $taskids=$this->db->get_where('project_task',['project_id'=>$project_id,'bookkeeping_input_type'=>2])->result_array();
+                    $task_id= array_pop($taskids);
+                    $this->db->where('id',$task_id['id']);
+                    $this->db->update('project_task',['tracking_description'=>5]);
+                }
             }
         }
         if($bookkeeping_input_type!=1 && $bookkeeping_input_type!=2){
