@@ -521,7 +521,6 @@ class Service_model extends CI_Model
 
     public function ajax_services_dashboard_filter($status = '', $request_type = '', $category_id = '', $request_by = "", $department_id = "", $office_id = "", $staff_type = "", $sort = "", $form_data = "", $sos_value = "", $sort_criteria = "", $sort_type = "")
     {
-        //        print_r($form_data);die;
         $staff_id = sess('user_id');
         $staff_info = staff_info();
         $select[] = 'ord.id AS id';
@@ -694,7 +693,7 @@ class Service_model extends CI_Model
         return $result;
     }
 
-    public function ajax_services_new_dashboard_filter()
+    public function ajax_services_new_dashboard_filter($form_data = "")
     {
         $select[] = 'inv.id AS invoice_id';
         $select[] = 'inv.is_order AS is_order';
@@ -722,14 +721,170 @@ class Service_model extends CI_Model
         $select[] = 'srv.dept as responsible_department_id';
         $select[] = '(SELECT department.name FROM department WHERE department.id = srv.dept) AS service_department_name';
         $select[] = '(SELECT target_days.input_form FROM target_days WHERE target_days.service_id = srv.id LIMIT 0,1) AS input_form';
-        $this->db->select(implode(', ', $select));
-        $this->db->from('service_request AS sr');
-        $this->db->join('services AS srv', 'srv.id = sr.services_id');
-        $this->db->join('staff AS st', 'st.id = sr.responsible_staff');
-        $this->db->join('invoice_info AS inv', 'inv.order_id = sr.order_id');
-        $this->db->where('sr.order_id!=',0);
-        $this->db->order_by('inv.id','desc');
-        return $this->db->get()->result();
+        $sql = "SELECT " . implode(', ', $select) . "
+                FROM service_request AS sr
+                INNER JOIN services srv ON srv.id = sr.services_id
+                INNER JOIN staff st ON st.id = sr.responsible_staff
+                INNER JOIN invoice_info inv ON inv.order_id = sr.order_id";
+
+        $where = $having = [];
+        if (isset($form_data)) {
+            if (isset($form_data['variable_dropdown'])) {
+                foreach ($form_data['variable_dropdown'] as $key => $variable_val) {
+                    if (isset($variable_val) && $variable_val != '') {
+                        $condition_val = isset($form_data['condition_dropdown'][$key]) ? $form_data['condition_dropdown'][$key] : 1;
+                        if (isset($condition_val) && $condition_val != '') {
+                            $column_name = $this->get_column_name_for_services($variable_val);
+                                $where[] = $this->build_query_for_services($variable_val, $condition_val, $form_data['criteria_dropdown'], $column_name);
+                                // print_r($where);exit;
+                                if($where[0] == 'srv.dept = 2' || $where[0] == 'srv.dept in (2)'){
+                                    $where[0] = 'srv.dept = "NULL"';
+                                }else if($where[0] == 'srv.dept != 2' || $where[0] == 'srv.dept not in (2)'){
+                                    $where[0] = 'srv.dept != "NULL"';
+                                }
+                        }
+                    }
+                }
+            }
+        }
+
+        $where[] = "sr.order_id NOT IN (0)";
+        $sql .= " WHERE " . implode(' AND ', $where) . ' ORDER BY inv.id DESC';
+        if (count($having) != 0) {
+            $sql .= " HAVING " . implode(' OR ', $having);
+        }
+
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        $result = $this->db->query($sql)->result();
+        //        echo $this->db->last_query();exit;
+        return $result;
+    }
+
+    public function get_column_name_for_services($variable_val)
+    {
+        if ($variable_val == 1) {
+            $column_name = 'inv.id';
+        } elseif ($variable_val == 2) {
+            $column_name = 'sr.services_id';
+        } elseif ($variable_val == 3) {
+            $column_name = 'srv.dept';
+        } elseif ($variable_val == 4) {
+            $column_name = 'sr.status';
+        } elseif ($variable_val == 5) {
+            $column_name = 'sr.date_started';
+        } elseif ($variable_val == 6) {
+            $column_name = 'sr.date_completed';
+        }
+        return $column_name;
+    }
+
+    public function build_query_for_services($variable_val, $condition_val, $criteria_dd, $column_name)
+    {
+        $query = '';
+        if ($variable_val == 1) {
+            $criteria_val = $criteria_dd['invoiceno'];
+        } elseif ($variable_val == 2) {
+            $criteria_val = $criteria_dd['servicename'];
+        } elseif ($variable_val == 3) {
+            $criteria_val = $criteria_dd['department'];
+        } elseif ($variable_val == 4) {
+            $criteria_val = $criteria_dd['tracking'];
+        } elseif ($variable_val == 5) {
+            $criteria_val = $criteria_dd['startdate'];
+        } elseif ($variable_val == 6) {
+            $criteria_val = $criteria_dd['completedate'];
+        }
+
+        if ($variable_val == 5 || $variable_val == 6) { // dates
+            if ($condition_val == 1 || $condition_val == 3) {
+                $dateval = date("Y-m-d", strtotime($criteria_val[0]));
+                $query = $column_name . (($condition_val == 1) ? ' like ' : ' not like ') . '"' . $dateval . '%"';
+            } elseif ($condition_val == 2 || $condition_val == 4) {
+                if ($variable_val == 5) {
+                    $criterias = explode(" - ", $criteria_val[0]);
+                } elseif ($variable_val == 6) {
+                    $criterias = explode(" - ", $criteria_val[0]);
+                }
+                foreach ($criterias as $key => $c) {
+                    $criterias[$key] = "'" . date("Y-m-d", strtotime($c)) . "'";
+                }
+                $query = 'Date(' . $column_name . ')' . (($condition_val == 2) ? ' between ' : ' not between ') . implode(' AND ', $criterias);
+            }
+        } elseif ($variable_val == 4) { //tracking
+            if ($condition_val == 1 || $condition_val == 3) {
+                if ($criteria_val[0] != 3) {
+                    $query = $column_name . (($condition_val == 1) ? ' = ' : ' != ') . $criteria_val[0];
+                } else {
+                    if ($condition_val == 1) {
+                        $query = 'sr.status not in ("0","7")';
+                    } else {
+                        $query = 'sr.status not in ("0","7")';
+                    }
+                }
+            } elseif ($condition_val == 2 || $condition_val == 4) {
+                if ($variable_val == 4) {
+                    $criterias = implode(",", $criteria_val);
+                }
+                if (in_array("3", $criteria_val)) {
+                    $q = '';
+                    $i = 0;
+                    $len = count($criteria_val);
+                    foreach ($criteria_val as $ck => $cv) {
+                        if ($i == 0) {
+                            if ($cv == 3) {
+                                if ($condition_val == 2) {
+                                    $q .= '(sr.status not in ("0","7")';
+                                } else {
+                                    $q .= '(sr.status not in ("0","7")';
+                                }
+                            } else {
+                                $q .= '(' . $column_name . (($condition_val == 2) ? ' = ' : ' != ') . $cv;
+                            }
+                        } else if ($i == $len - 1) {
+                            if ($cv == 3) {
+                                if ($condition_val == 2) {
+                                    $q .= ' AND sr.status not in ("0","7"))';
+                                } else {
+                                    $q .= ' AND sr.status not in ("0","7"))';
+                                }
+                            } else {
+                                $q .= ' AND ' . $column_name . (($condition_val == 2) ? ' = ' : ' != ') . $cv . ')';
+                            }
+                        } else {
+                            if ($cv == 3) {
+                                if ($condition_val == 2) {
+                                    $q .= ' AND sr.status not in ("0","7")';
+                                } else {
+                                    $q .= ' AND sr.status not in ("0","7")';
+                                }
+                            } else {
+                                $q .= ' AND ' . $column_name . (($condition_val == 2) ? ' = ' : ' != ') . $cv;
+                            }
+                        }
+                        $i++;
+                    }
+                    $query = $q;
+                } else {
+                    $query = $column_name . (($condition_val == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
+                }
+            }
+        } else {
+            if ($condition_val == 1 || $condition_val == 3) {
+                $query = $column_name . (($condition_val == 1) ? ' = ' : ' != ') . $criteria_val[0];
+            } elseif ($condition_val == 2 || $condition_val == 4) {
+                if ($variable_val == 1) {
+                    $criterias = implode(",", $criteria_val);
+                } elseif ($variable_val == 2) {
+                    $criterias = implode(",", $criteria_val);
+                } elseif ($variable_val == 3) {
+                    $criterias = implode(",", $criteria_val);
+                } elseif ($variable_val == 4) {
+                    $criterias = implode(",", $criteria_val);
+                }
+                $query = $column_name . (($condition_val == 2) ? ' in ' : ' not in ') . '(' . $criterias . ')';
+            }
+        }
+        return $query;
     }
 
     public function check_count_reqby_others()
