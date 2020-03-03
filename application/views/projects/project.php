@@ -24,7 +24,7 @@ $role = $user_info['role'];
                                 <button type="button" class="btn btn-primary"  onclick="CreateProjectModal('add', '');" ><i class="fa fa-plus"></i> &nbsp;Create Project</button>
                             <?php } ?>
                             <button type="button" class="btn btn-success"  onclick="taskDashboard();" >&nbsp;Task Dahsboard</button>
-                            <a class="btn btn-info btn-xs" target="new_blank" href="<?= base_url().'project_recurrence_patch.php' ?>">&nbsp;Recurrence</a>
+                            <a class="btn btn-info pull-right" target="new_blank" href="<?= base_url().'project_recurrence_patch.php' ?>">&nbsp;Recurrence</a>
                         </div>
                     </div>
                     <div class="clearfix"></div>
