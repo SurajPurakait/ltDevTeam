@@ -1,13 +1,13 @@
 <?php
-//$servername = "localhost";
-//$username = "leafnet_db_user";
-//$password = "leafnet@123";
-//$db = 'leafnet_stagings';
-
 $servername = "localhost";
-$username = "root";
-$password = "root";
-$db = 'leafnet_new';
+$username = "leafnet_db_user";
+$password = "leafnet@123";
+$db = 'leafnet_stagings';
+
+//$servername = "localhost";
+//$username = "root";
+//$password = "root";
+//$db = 'live_leafnet';
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $db);
 // Check connection
@@ -155,6 +155,7 @@ if ($result = mysqli_query($conn, $sql)) {
                                 $old_due_date = $row3['due_date'];
                                 $old_next_due_date= $row3['next_due_date'];
                                 $old_generation_date= $row3['generation_date'];
+                                $start_year=date('Y',strtotime($old_generation_date));
                                 if($row3['pattern'] == 'annually'){
                                     $start_month=date('Y',strtotime($old_generation_date));
                                 }elseif($row3['pattern'] == 'quarterly'){
@@ -367,6 +368,7 @@ if ($result = mysqli_query($conn, $sql)) {
 //                                echo $generation_date;die;
                                 $insert_project_recurrence_main_data['generation_date'] = "'".$generation_date."'";
                                 $insert_project_recurrence_main_data['start_month']="'".$start_month."'";
+                                $insert_project_recurrence_main_data['start_year']="'".$start_year."'";
                                 $columns4 = implode(", ", array_keys($insert_project_recurrence_main_data));
                                 $escaped_values4 = array_values($insert_project_recurrence_main_data);
                                 $values4 = implode(", ", $escaped_values4);

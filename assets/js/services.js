@@ -2616,6 +2616,32 @@ function service_filter_form() {
     });
 }
 
+function new_service_filter_form() {
+    var form_data = new FormData(document.getElementById('filter-form'));
+    $.ajax({
+        type: "POST",
+        data: form_data,
+        url: base_url + 'services/home/filter_form_for_services',
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        cache: false,
+        success: function (result) {
+            //console.log("Result: " + result);
+            $(".ajaxdiv").html(result);
+            $("#btn_service").show();
+            $("#hiddenflag").val('');
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    });
+}
+
 function changeService(state, section_id_dl, retail_price_dl, section_id_fl, retail_price_fl) {
     if (state == 10) {  // Florida
         $('#service_id').val(section_id_fl);

@@ -1555,17 +1555,33 @@ class Home extends CI_Controller {
         $this->load->view('services/filter_options', $resultval);
     }
 
+    public function get_filter_dropdown_options_for_services() {
+        $resultval['val'] = post('val');
+        $this->load->view('services/filter_options_for_services', $resultval);
+    }
+
     public function get_filter_dropdown_options_multiple_dateval() {
         $resultval['val'] = post('val');
         $resultval['variable_ddval'] = post('variable_ddval');
         $this->load->view('services/filter_options_multiple_dateval', $resultval);
     }
 
+     public function get_filter_dropdown_options_multiple_dateval_for_services() {
+        $resultval['val'] = post('val');
+        $resultval['variable_ddval'] = post('variable_ddval');
+        $this->load->view('services/filter_options_multiple_dateval_for_services', $resultval);
+    }
+
     public function filter_form() {
         $render_data['result'] = $this->service_model->ajax_services_dashboard_filter('', '', '', '', '', '', '', '', post());
-//print_r($render_data['result']);
         $render_data['serviceid'] = $this->service_model->getServiceId();
         $this->load->view('services/ajax_dashboard', $render_data);
+    }
+
+    public function filter_form_for_services() {
+        $render_data['result'] = $this->service_model->ajax_services_new_dashboard_filter(post());
+        // $render_data['serviceid'] = $this->service_model->getServiceId();
+        $this->load->view('services/service_new_ajax_dashboard', $render_data);
     }
 
     public function assign_order() {
