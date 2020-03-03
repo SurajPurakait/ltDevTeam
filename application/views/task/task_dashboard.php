@@ -115,7 +115,7 @@ if (!empty($task_list)) {
                                 <th style="width:8%;  text-align: center;">SOS</th>
                                 <th style="width:8%;  text-align: center;">Note</th>
                                 <th style="width:8%;  text-align: center;">Files</th>
-                                <th style="width:120px; text-align: center; white-space: nowrap; display: flex; ">Input Form</th>
+                                <th style="width:12%; text-align: center; white-space: nowrap;">Input Form</th>
                             </tr>
 
                             <tr>
