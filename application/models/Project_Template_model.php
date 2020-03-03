@@ -1920,7 +1920,7 @@ class Project_Template_model extends CI_Model {
     }
 
     public function get_project_tracking_log($id, $table_name) {
-        return $this->db->query("SELECT concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id, (SELECT name from department where id=(SELECT department_id from department_staff where staff_id=s.id )) as department, case when tracking_logs.status_value = '0' then 'New' when tracking_logs.status_value = '1' then 'Started' when tracking_logs.status_value = '2' then 'Resolved' when tracking_logs.status_value = '3' then 'Ready' else tracking_logs.status_value end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
+        return $this->db->query("SELECT concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id, (SELECT name from department where id=(SELECT department_id from department_staff where staff_id=s.id )) as department, case when tracking_logs.status_value = '0' then 'New' when tracking_logs.status_value = '1' then 'Started' when tracking_logs.status_value = '2' then 'Resolved' when tracking_logs.status_value = '3' then 'Ready' when tracking_logs.status_value = '4' then 'Canceled' when tracking_logs.status_value = '5' then 'Clarification' else tracking_logs.status_value end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
     }
 
     public function getStaffType() {
@@ -2994,33 +2994,7 @@ class Project_Template_model extends CI_Model {
 //            echo $insert_id;die;
         }if($input_form_type==1){
             if($bookkeeping_input_type==1){
-//                $exist=$this->db->get_where('bookkeeping',['order_id'=>$data['task_id'],'reference'=>'project'])->row();
-//                if(!empty($exist)){
-//                    $this->db->where(['order_id'=>$data['task_id'],'reference'=>'project']);
-//                    $this->db->delete('bookkeeping');
-//                }
-//                $bookdata=array(
-//                   'company_id'=>$data['reference_id'],
-//                    'order_id'=>$data['task_id'],
-//                    'frequency'=>$data['frequency'],
-//                    'reference'=>'project'
-//                );
-//            $this->db->insert('bookkeeping',$bookdata);
             }else if($bookkeeping_input_type==2){
-//                $exist=$this->db->get_where('project_task_bookkeeper_department',['task_id'=>$data['task_id']])->row();
-//                if(!empty($exist)){
-//                    $this->db->where('task_id',$data['task_id']);
-//                    $this->db->delete('project_task_bookkeeper_department');
-//                }
-//                $bookkeeper_data=array(
-//                    'task_id'=>$data['task_id'],
-//                    'bank_account_no'=>$data['bank_account_no'],
-//                    'transaction'=>$data['transaction'],
-//                    'item_uncategorize'=>$data['item_uncategorize'],
-//                    'reconciled'=>$data['reconciled'],
-//                    'total_time'=>$data['total_time']
-//                );
-//                $this->db->insert('project_task_bookkeeper_department',$bookkeeper_data);
             }else if($bookkeeping_input_type==3){
                 $exist=$this->db->get_where('project_task_bookkeeper_department',['task_id'=>$data['task_id']])->row();
                 if(!empty($exist)){
@@ -3031,7 +3005,16 @@ class Project_Template_model extends CI_Model {
                     'task_id'=>$data['task_id'],
                     'adjustment'=>$data['need_adjustment']
                 );
-                $this->db->insert('project_task_bookkeeper_department',$client_data);
+                $ins=$this->db->insert('project_task_bookkeeper_department',$client_data);
+                if($ins && $data['need_adjustment']=='n'){
+                    $comment='';
+                    $project_id=$this->db->get_where('project_task',['id'=>$data['task_id']])->row()->project_id;
+                    $taskids=$this->db->get_where('project_task',['project_id'=>$project_id,'bookkeeping_input_type'=>2])->result_array();
+                    $task_id= array_pop($taskids);
+                    $this->db->where('id',$task_id['id']);
+                    $this->db->update('project_task',['tracking_description'=>5]);
+                    $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => 5, "section_id" => $task_id['id'], "related_table_name" => "project_task", "comment" => $comment]);
+                }
             }
         }
         if($bookkeeping_input_type!=1 && $bookkeeping_input_type!=2){

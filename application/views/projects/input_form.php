@@ -644,6 +644,7 @@
                         </div>
                             <div id="adjustment_no" class="p-l-35 text-success">
                             <h4 id="adjustment_no_result"></h4>
+                            <h4><?= (isset($bookkeeper_details->created_at)?'on '.(date("m/d/Y h:i:sa",strtotime($bookkeeper_details->created_at))):'') ?></h4>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
@@ -870,6 +871,7 @@
             clearTimeout(t);
         }
         function clear_record(bank_id) {
+            clearTimeout(t);
             var record_time = h3.textContent;
             $.ajax({
                 type: "POST",
@@ -896,8 +898,21 @@
                     type: "info",
                     showCancelButton: true,
                     closeOnConfirm: false,
-                    showLoaderOnConfirm: true
+                    showLoaderOnConfirm: true,
+                    confirmButtonText: 'Yes',
+                    confirmButtonColor: 'green',
+                    cancelButtonText: 'No'
                 }, function () {
+//                    $.ajax({
+//                        type: "POST",
+//                        data: {record_time: record_time, bank_id: bank_id},
+//                        url: base_url + 'task/update_project_bookkeeping_record_time',
+//                        dataType: "html",
+//                        success: function (result) {
+//                            $("#load_record_time-" + bank_id).hide();
+//                            $("#timer_result-" + bank_id).html(result);
+//                        }
+//                    });
                     setTimeout(function () {
                         swal("I confirm that bookkeeping was done correctly.");
                         $("#adjustment_no_result").html('Confirming Bookkeeping was done correctly');
