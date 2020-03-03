@@ -2019,3 +2019,6 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
             });
         $("#changetrackinginner-"+task_id+" #input_id").val(id);
     }
+    function project_recurrence_patch(){
+        goURL(base_url+'');
+    }
