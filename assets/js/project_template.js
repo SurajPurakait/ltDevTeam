@@ -1830,7 +1830,7 @@ function delete_recoded_time(record_id,bank_id){
             if (result) {
                 $('#recordModal').modal();
                 $('#recordModal').html(result);
-//                $("#load_record_time-" + bank_id).hide();
+//                $("#load_record_time-" + bank_id).show();
 //                $("#timer_result-" + bank_id).html(result);
             }
         },
@@ -1981,9 +1981,9 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
                 url: base_url + 'task/delete_bookkeeping_timer_record',
                 dataType: "html",
                 success: function (result) {
-                    $("#load_record_time-" + bank_id).hide();
+                    $("#load_record_time-" + bank_id).show();
                     $('#recordModal').hide();
-                    $("#timer_result-" + bank_id).html(result);
+//                    $("#timer_result-" + bank_id).html(result);
                 },
             });
         }
