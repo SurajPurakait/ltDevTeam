@@ -639,38 +639,43 @@ $role = $user_info['role'];
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad3").prop('checked', false);
             $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
         } else if (status == 1) {
             $("#changeStatusinner #rad1").prop('checked', true);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
+            $("#changeStatusinner #rad0").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad3").prop('checked', false);
             $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
         } else if (status == 2) {
             $("#changeStatusinner #rad2").prop('checked', true);
             $("#changeStatusinner #rad1").prop('checked', false);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
-            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled', true);
+            $("#changeStatusinner #rad0").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
             $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
         } else if (status == 3) {
             $("#changeStatusinner #rad3").prop('checked', true);
+            $("#changeStatusinner #rad5").prop('checked', false);
             $("#changeStatusinner #rad4").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad1").prop('checked', false);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
+            $("#changeStatusinner #rad0").prop('checked', false);
         } else if (status == 4) {
             $("#changeStatusinner #rad4").prop('checked', true);
-            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled', true);
-            $("#changeStatusinner #rad2").prop('checked', false).attr('disabled', true);
-            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled', true);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
+            $("#changeStatusinner #rad5").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad2").prop('checked', false);
+            $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad0").prop('checked', false);
         }
         else if (status == 5) {
             $("#changeStatusinner #rad5").prop('checked', true);
             $("#changeStatusinner #rad4").prop('checked', false);
-            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad3").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
-            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled',true);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad0").prop('checked', false);
         }
         $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
             $("#status_log > tbody > tr").remove();
