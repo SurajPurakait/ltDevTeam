@@ -74,7 +74,7 @@
                                     ?>
                                     <tr>
                                         <td style="width: 150px;"><b>Task ID: </b></td>
-                                        <td><?= $task_data->id ?></td>
+                                        <td><?= $project_id.'-'.$task_data->task_order ?></td>
                                     </tr>
                                     <tr>
                                         <td style="width: 150px;"><b>Task Title: </b></td>

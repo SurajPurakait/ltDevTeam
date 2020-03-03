@@ -90,7 +90,7 @@
                         <?php } ?>
                             <td title="Start Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetstartDate)) ?> <br /> <?= ($task->date_started !=''?'A: '.date('m-d-Y',strtotime($task->date_started)):'') ?></td>
                         <td title="Complete Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetCompleteDate)) ?> <br /><?= ($task->date_completed!=''?'A: '.date('m-d-Y',strtotime($task->date_completed)):'') ?></td>
-                        <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task->id; ?>,<?= $status; ?>, <?= $task->id ?>);'><span id="trackinner-<?= $task->id ?>" projectid="<?= $id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
+                        <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task->id; ?>,<?= $status; ?>, <?= $task->id ?>,<?= $task->project_id ?>,"<?= $task->task_order ?>");'><span id="trackinner-<?= $task->id ?>" projectid="<?= $id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                         <td title="SOS" style="text-align: center;">
                             <span>
                                 <a id="projectsoscount-<?= $id; ?>-<?php echo $task->id; ?>" class="d-inline p-t-5 p-b-5 p-r-8 p-l-8 label <?php echo (get_sos_count('projects', $task->id, $id) == 0) ? 'label-primary' : 'label-danger'; ?>" title="SOS" href="javascript:void(0)" onclick="show_sos('projects', '<?= $task->id; ?>', '<?= $new_staffs ?>', '<?= $id; ?>', '<?= $task->project_id; ?>');"><?php echo (get_sos_count('projects', $task->id, $id) == 0) ? '<i class="fa fa-plus"></i>' : '<i class="fa fa-bell"></i>'; ?></a>                                                   
@@ -150,6 +150,7 @@
                             <input type="hidden" class="input-form-status-<?= $task->id; ?>" value="<?= $input_status; ?>" />
                         </td>
                     </tr>
+                    
                     <?php
                 }
             } else {

@@ -3007,7 +3007,7 @@ class Project_Template_model extends CI_Model {
                     'created_at'=>date('Y-m-d H:i:s')
                 );
                 $ins=$this->db->insert('project_task_bookkeeper_department',$client_data);
-                if($ins && $data['need_adjustment']=='n'){
+                if($ins && $data['need_adjustment']=='y'){
                     $comment='';
                     $project_id=$this->db->get_where('project_task',['id'=>$data['task_id']])->row()->project_id;
                     $taskids=$this->db->get_where('project_task',['project_id'=>$project_id,'bookkeeping_input_type'=>2])->result_array();

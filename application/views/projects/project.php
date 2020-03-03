@@ -629,9 +629,9 @@ $role = $user_info['role'];
             $(newHtml).insertAfter($(this).closest('.form-group'));
         });
     });
-    function change_project_status_inner(id, status, section_id) {
+    function change_project_status_inner(id, status, section_id,project_id='',task_order='') {
         openModal('changeStatusinner');
-        var txt = 'Tracking Project #' + id;
+        var txt = 'Tracking Project #' + project_id+'-'+task_order;
         $("#changeStatusinner .modal-title").html(txt);
         if (status == 0) {
             $("#changeStatusinner #rad0").prop('checked', true);
