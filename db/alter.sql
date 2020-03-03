@@ -1269,3 +1269,17 @@ ALTER TABLE `project_task_bookkeeping_input_form2` ADD `tracking` INT(2) NOT NUL
 
 ALTER TABLE `project_task_bookkeeping_input_form2` ADD `created_at` DATE NULL DEFAULT NULL AFTER `tracking`; 
 /* import invoice_recurring_plans.sql */
+
+/* 02.03.2020 */
+
+ALTER TABLE `project_bookkeeping_bank_record_time` ADD `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `record_time`; 
+ALTER TABLE `project_task_bookkeeper_department`
+  DROP `bank_account_no`,
+  DROP `transaction`,
+  DROP `item_uncategorize`,
+  DROP `reconciled`,
+  DROP `total_time`;
+
+ALTER TABLE `project_task_bookkeeper_department` ADD `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `adjustment`; 
+
+ALTER TABLE `project_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for started, 2 for resolved, 3 for ready, 4 for canceled, 5 for clarification'; 

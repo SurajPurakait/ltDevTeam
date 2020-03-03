@@ -42,6 +42,10 @@
                         $tracking = 'Canceled';
                         $trk_class = 'label-danger';
                     }
+                    elseif ($status == 5) {
+                        $tracking = 'Clarification';
+                        $trk_class = 'label-info';
+                    }
 
                     $pattern_details = get_project_pattern($task->project_id);
                     $due_date = '';

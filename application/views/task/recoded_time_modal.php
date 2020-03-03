@@ -1,19 +1,35 @@
-<?php if(isset($record_details) && !empty($record_details)){?>
-<div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Recoded Time List</h5>
-        </button>
-      </div>
-      <div class="modal-body">
-          <?php 
-        foreach($record_details as $key=>$record){?>
-        <h4 id="records_time" name='records_time'>Entry <?= $key+1 .": " ?><?= $record['record_time'] ?><a href="javascript:void(0)" onclick="delete_recoded_time(<?= $record['id'] ?>,<?= $record['bank_id'] ?>)"><span class="fa fa-times text-danger m-l-4"></span></a></h4>
-        <?php } ?>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="close_recoded_modal(<?= $record['bank_id'];?>,'<?= $section ?>')">Close</button>
-      </div>
+<?php if (isset($record_details) && !empty($record_details)) { ?>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Recoded Time List</h3>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">#</th>
+                            <th style="text-align:center">Recoded Time</th>
+                            <th style="text-align:center">Entry Time</th>
+                            <th style="text-align:center">Delete</th>
+                        </tr> 
+                    </thead>
+                    <tbody>
+                        <?php foreach ($record_details as $key => $record) { ?>
+                            <tr>
+                                <td style="text-align:center"><?= $key + 1 ?></td>
+                                <td style="text-align:center"><?= $record['record_time'] ?></td>
+                                <td style="text-align:center"><?= date('m/d/Y h:i:sa', strtotime($record['created_at'])) ?></td>
+                                <td style="text-align:center"><a href="javascript:void(0)" onclick="delete_recoded_time(<?= $record['id'] ?>,<?= $record['bank_id'] ?>)"><span class="fa fa-trash text-danger m-l-4"></span></a></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="close_recoded_modal(<?= $record['bank_id']; ?>, '<?= $section ?>')">Close</button>
+            </div>
+        </div>
     </div>
-  </div>
 <?php } ?>

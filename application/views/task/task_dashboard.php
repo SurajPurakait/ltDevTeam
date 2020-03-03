@@ -68,6 +68,10 @@ if (!empty($task_list)) {
             $tracking = 'Canceled';
             $trk_class = 'label-danger';
         }
+        elseif ($status == 5) {
+            $tracking = 'Clarification';
+            $trk_class = 'label-info';
+        }
         $pattern_details = get_project_pattern($task['project_id']);
         $created_at =strtotime(get_project_created_date($task['project_id']));
         $due_date = strtotime($pattern_details->due_date);
