@@ -72,7 +72,7 @@
                     }
                     ?>
                     <tr>
-                        <td title="Task Id" class="text-center"><?= $task->project_id.'-'.$taskId; ?></td>
+                        <td title="Task Id" class="text-center"><?= $task->project_id.'-'.$task->task_order; ?></td>
                         <td title="Task Id" class="text-center"><?= $task->task_title; ?></td>
                         <td title="Description" class="text-center"><a href="javascript:void(0);" data-toggle="popover" data-placement="top" data-content="<?= $data_description ?>" data-trigger="hover" title="" data-original-title=""><?= $description ?></a></td>
                         <!--<td title="Order" class="text-center"><?//= date('Y-m-d', strtotime($task->created_at)); ?></td>-->

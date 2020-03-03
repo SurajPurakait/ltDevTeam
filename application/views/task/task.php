@@ -524,7 +524,6 @@ $role = $user_info['role'];
         });
     });
     function change_project_status_inner(id, status, section_id) {
-    alert(status);
         openModal('changeStatusinner');
         var txt = 'Tracking Task #' + id;
         $("#changeStatusinner .modal-title").html(txt);
