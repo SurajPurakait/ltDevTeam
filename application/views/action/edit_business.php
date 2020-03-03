@@ -121,13 +121,30 @@
                             </div>
                         </div>
                         <!-- <div class="hidden"> -->
+                        <?php
+                            $staff_info = staff_info(sess('user_id'));
+                            if ($staff_info['type'] == '1' || ($staff_info['role'] == '4' && $staff_info['type'] == '2')) {
+                        ?>
                         <div class="form-group">
-                            <label class="col-lg-2 control-label">Practice Id</label>
+                            <label class="col-lg-2 control-label">Client Id</label>
                             <div class="col-lg-10">
-                                <input placeholder="Practice Id" class="form-control" type="text" name="internal_data[practice_id]" id="practice_id" value="<?= $company_internal_data[0]['practice_id']; ?>" title="Practice Id" readonly>
+                                <input placeholder="Practice Id" class="form-control" type="text" name="internal_data[practice_id]" id="practice_id" value="<?= $company_internal_data[0]['practice_id']; ?>" title="Practice Id">
                                 <div class="errorMessage text-danger"></div>
                             </div>
                         </div>
+                        <?php
+                            } else {
+                        ?>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Client Id</label>
+                            <div class="col-lg-10">
+                                <input placeholder="Practice Id" class="form-control" type="text" name="internal_data[practice_id]" id="practice_id" value="<?= $company_internal_data[0]['practice_id']; ?>" title="Practice Id" disabled>
+                                <div class="errorMessage text-danger"></div>
+                            </div>
+                        </div>
+                        <?php        
+                            }
+                        ?>
                         <!-- </div> -->
                         <div class="form-group">
                             <label class="col-lg-2 control-label">Referred By Source<span class="text-danger">*</span></label>
