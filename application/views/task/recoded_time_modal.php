@@ -12,7 +12,7 @@
                             <th style="text-align:center">#</th>
                             <th style="text-align:center">Recoded Time</th>
                             <th style="text-align:center">Entry Time</th>
-                            <th style="text-align:center">Is Delete</th>
+                            <th style="text-align:center">Delete</th>
                         </tr> 
                     </thead>
                     <tbody>

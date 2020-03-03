@@ -8860,7 +8860,8 @@ color:#3f9f2b;
 }
 .watch a{
     display: inline-block;
-margin-left: 8px;
+    margin-left: 8px;
+    vertical-align: middle;
 }
 .sweet-alert button.cancel{
     background-color: #EA0C0C !important;
@@ -9245,6 +9246,7 @@ margin-left: 8px;
     padding: 10px;
     width: 25%;
     margin-right: 15px;
+    border-radius: 4px;
 }
 .alert-primar-grid-container{
     display: flex;

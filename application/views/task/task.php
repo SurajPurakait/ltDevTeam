@@ -445,7 +445,7 @@ $role = $user_info['role'];
                         <div class="funkyradio">
                             <div class="funkyradio-success">
                                 <input type="radio" name="radio" id="rad0" value="0"/>
-                                <label for="rad0"><strong>New</strong></label>
+                                <label for="rad0"><strong>Not Started</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
@@ -463,7 +463,7 @@ $role = $user_info['role'];
                         <div class="funkyradio">
                             <div class="funkyradio-success">
                                 <input type="radio" name="radio" id="rad2" value="2"/>
-                                <label for="rad2"><strong>Resolved</strong></label>
+                                <label for="rad2"><strong>Completed</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
@@ -523,10 +523,9 @@ $role = $user_info['role'];
             $(newHtml).insertAfter($(this).closest('.form-group'));
         });
     });
-    function change_project_status_inner(id, status, section_id) {
-    alert(status);
+    function change_project_status_inner(id, status, section_id,project_id='',task_order='') {
         openModal('changeStatusinner');
-        var txt = 'Tracking Task #' + id;
+        var txt = 'Tracking Task #' + project_id+'-'+task_order;
         $("#changeStatusinner .modal-title").html(txt);
         if (status == 0) {
             $("#changeStatusinner #rad0").prop('checked', true);
