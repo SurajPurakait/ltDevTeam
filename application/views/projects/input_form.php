@@ -363,8 +363,7 @@
                                                     <th style='width:8%;  text-align: center;'>Routing Number</th>
                                                     <th style='width:8%;  text-align: center;'>Tracking</th>
                                                     <th style='width:10%;  text-align: center;'>Time & Date</th>
-                                                    <th style="width:7%;  text-align: center;">Notes</th>
-                                                    <th style="width:7%;  text-align: center;">Attachments</th>
+                                                    <!--<th style="width:7%;  text-align: center;">Attachments</th>-->
                                                 </tr>
                                                 <?php
                                                 foreach ($client_account_details as $key => $accounts) {
@@ -396,7 +395,11 @@
                                                         <td title="Routing Number" class="text-center"><?= substr_replace($accounts['routing_number'], str_repeat("*", (($routing_length>=0)?$routing_length:0)),0,-4); ?></td>
                                                         <td title="Tracking" class="text-center"><a href='javascript:void(0)' onclick='change_bookkeeping_finance_input_status("<?= $accounts['id']; ?>", "<?= $status ?>")'> <span id="trackinner-<?= $accounts['id'] ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                                                         <td title="Time & Date" class="text-center"><?= $created_at; ?></td>
-                                                        <td title="Notes" class="text-center"><span> 
+                                                        
+                                                    </tr>
+                                                    <?php
+                                                }?>
+                                                <td title="Notes" class="text-center"><span> 
                                                                 <?php
                                                                 $read_status = project_task_notes_readstatus($task_id);
                                                                 // print_r($read_status);
@@ -422,15 +425,12 @@
                                                                 }
                                                                 ?>
                                                             </span></td>
-                                                        <?php
+                                                            <?php
                                                         $file_count = getTaskFilesCount($task_id);
                                                         $unread_files_count = getUnreadTaskFileCount($task_id, 'task');
                                                         ?>
                                                         <?= '<td title="Files" class="text-center" ><span id="taskfilespan' . $task_id . '">' . (($unread_files_count->unread_files_count > 0) ? '<a class="label label-danger" href="javascript:void(0)" count="' . $file_count->files . '" id="taskfile' . $task_id . '" onclick="show_task_files(\'' . $task_id . '\',\'' . $new_staffs . $task_data->added_by_user . '\')"><b>' . $file_count->files . '</b></a>' : '<a class="label label-success" href="javascript:void(0)" count="' . $file_count->files . '" id="actionfile' . $task_id . '" onclick="show_task_files(\'' . $task_id . '\',\'' . $new_staffs . $task_data->added_by_user . '\')"><b>' . $file_count->files . '</b></a>') . '</span></td>'; ?>
-                                                    </tr>
-                                                    <?php
-                                                }
-                                            } else {
+                                           <?php } else {
                                                 ?>
                                                 <div class = "text-center m-t-30">
                                                     <div class = "alert alert-danger">
@@ -455,7 +455,7 @@
                                                     <th style='width:6%;  text-align: center;'>Uncategorized Items</th>
                                                     <th style='width:8%;  text-align: center;'>Tracking</th>
                                                     <th style='width:10%;  text-align: center;'>Time</th>
-                                                    <th style="width:7%;  text-align: center;">Notes</th>
+                                                    <th style="width:7%;  text-align: center;"></th>
                                                 </tr>
                                                 <?php
                                                 foreach ($client_account_details as $key => $accounts) {
@@ -485,7 +485,6 @@
                                                                         <a href="javascript:void(0)" class="start" title="Record" id="start" name="start" onclick="add(<?= $accounts['id'] ?>)"><i class="fa fa-dot-circle-o" aria-hidden="true"></i></a>
                                                                         <a href="javascript:void(0)" class="stop" title="Pause" id="stop" name="stop" onclick="stop_record()"><i class="fa fa-pause-circle" aria-hidden="true"></i></a>
                                                                         <a href="javascript:void(0)" class="save" title="Save Entry" id="clear" name="clear" onclick="clear_record(<?= $accounts['id'] ?>)"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
-                                                                        <h3 id="total_time"></h3>
                                                                     </div>
 
                                                                     <input type="hidden" id="bank_id" value="<?= $accounts['id'] ?>">
@@ -496,8 +495,14 @@
                                                                      </div>
                                                                     <div id="timer_result-<?= $accounts['id'] ?>"></div>
                                                                 </div>
-                                                            </div></td>
-                                                        <td title="Notes" class="text-center"><span> 
+                                                            </div>
+                                                            
+                                                        </td>
+                                                        <td><h3 id="total_time" class="text-left"></h3></td>
+                                                    </tr>
+                                                    <?php
+                                                } ?>
+                                                    <td title="Notes" class="text-center"><span> 
                                                                 <?php
                                                                 $read_status = project_task_notes_readstatus($task_id);
                                                                 // print_r($read_status);
@@ -523,10 +528,7 @@
                                                                 }
                                                                 ?>
                                                             </span></td>
-                                                    </tr>
-                                                    <?php
-                                                }
-                                            } else {
+                                          <?php  } else {
                                                 ?>
                                                 <div class = "text-center m-t-30">
                                                     <div class = "alert alert-danger">
