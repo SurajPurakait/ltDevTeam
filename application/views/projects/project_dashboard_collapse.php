@@ -26,13 +26,13 @@
                     $created_at=get_project_created_date($task->project_id);
                     $status = $task->tracking_description;
                     if ($status == 2) {
-                        $tracking = 'Resolved';
+                        $tracking = 'Completed';
                         $trk_class = 'label-primary';
                     } elseif ($status == 1) {
                         $tracking = 'Started';
                         $trk_class = 'label-yellow';
                     } elseif ($status == 0) {
-                        $tracking = 'New';
+                        $tracking = 'Not Started';
                         $trk_class = 'label-success';
                     }elseif ($status == 3) {
                         $tracking = 'Ready';

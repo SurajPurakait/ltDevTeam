@@ -1920,7 +1920,7 @@ class Project_Template_model extends CI_Model {
     }
 
     public function get_project_tracking_log($id, $table_name) {
-        return $this->db->query("SELECT concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id, (SELECT name from department where id=(SELECT department_id from department_staff where staff_id=s.id )) as department, case when tracking_logs.status_value = '0' then 'New' when tracking_logs.status_value = '1' then 'Started' when tracking_logs.status_value = '2' then 'Resolved' when tracking_logs.status_value = '3' then 'Ready' when tracking_logs.status_value = '4' then 'Canceled' when tracking_logs.status_value = '5' then 'Clarification' else tracking_logs.status_value end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
+        return $this->db->query("SELECT concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id, (SELECT name from department where id=(SELECT department_id from department_staff where staff_id=s.id )) as department, case when tracking_logs.status_value = '0' then 'Not Started' when tracking_logs.status_value = '1' then 'Started' when tracking_logs.status_value = '2' then 'Completed' when tracking_logs.status_value = '3' then 'Ready' when tracking_logs.status_value = '4' then 'Canceled' when tracking_logs.status_value = '5' then 'Clarification' else tracking_logs.status_value end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
     }
 
     public function getStaffType() {
@@ -3003,7 +3003,8 @@ class Project_Template_model extends CI_Model {
                 }
                 $client_data=array(
                     'task_id'=>$data['task_id'],
-                    'adjustment'=>$data['need_adjustment']
+                    'adjustment'=>$data['need_adjustment'],
+                    'created_at'=>date('Y-m-d H:i:s')
                 );
                 $ins=$this->db->insert('project_task_bookkeeper_department',$client_data);
                 if($ins && $data['need_adjustment']=='n'){
