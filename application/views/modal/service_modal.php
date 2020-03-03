@@ -1,4 +1,4 @@
-<?php if ($modal_type != "edit"): ?>
+<?php if ($modal_type != "edit") { ?>
 
     <div class="modal-dialog">
         <div class="modal-content">
@@ -23,9 +23,9 @@
                                             <?php
                                             if (!empty($categories)) {
                                                 foreach ($categories as $value) {
-                                                    ?>
+                                            ?>
                                                     <option value="<?= $value['id']; ?>"><?= $value['name']; ?></option>
-                                                    <?php
+                                            <?php
                                                 }
                                             }
                                             ?>
@@ -66,16 +66,16 @@
                                         <div class="errorMessage text-danger"></div>
                                     </div>
 
-                                    <div class="form-group" id="corporate_dept_div"  style="display: none;">
+                                    <div class="form-group" id="corporate_dept_div" style="display: none;">
                                         <label>Select Department<span class="text-danger">*</span></label>
                                         <select id="dept" name="dept" class="form-control" title="Department" required>
                                             <?php
                                             if (!empty($department_list)) {
                                                 foreach ($department_list as $key => $value) {
                                                     if ($value['id'] != 1 && $value['id'] != 2) {
-                                                        ?>
+                                            ?>
                                                         <option value="<?= $value['id']; ?>"><?= $value['name']; ?></option>
-                                                        <?php
+                                            <?php
                                                     }
                                                 }
                                             }
@@ -123,7 +123,7 @@
                                                 <input class="checkboxclass" value="y" type="checkbox" id="is_recurring" name="is_recurring" title="Is Recurring" style="position:relative">
                                             </label>
                                             <div class="errorMessage text-danger"></div>
-                                    </div>                    
+                                    </div>
                                     <div class="form-group">
                                         <label>Related Services</label>
                                         <select title="Related Services" class="form-control" id="relatedserv" name="relatedserv" multiple="multiple">
@@ -135,9 +135,9 @@
                                         <label>Notes</label>
                                         <textarea class="form-control" name="note" id="note"></textarea>
                                     </div>
-                                    <div class="text-right">
+<!--                                     <div class="text-right">
                                         <button type="button" class="btn btn-primary">Save Changes</button>
-                                    </div>
+                                    </div> -->
                                 </form>
 
                             </div>
@@ -153,17 +153,17 @@
                 </div>
 
             </div>
-            <!--                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <input type="hidden" id="baseurl" value="<?= base_url(); ?>">
-                                    <button type="button" class="btn btn-primary" onclick="addRelatedservice()">Save Changes</button>
-                                </div>-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <input type="hidden" id="baseurl" value="<?= base_url(); ?>">
+                <button type="button" class="btn btn-primary" onclick="addRelatedservice()">Save Changes</button>
+            </div>
 
         </div>
     </div>
 
     <script>
-        $(function () {
+        $(function() {
             get_related_services("", "");
             generate_shortcode();
         });
@@ -178,7 +178,7 @@
         }
     </script>
 
-<?php else: ?>
+<?php } else { ?>
 
     <div class="modal-dialog">
         <div class="modal-content">
@@ -204,9 +204,9 @@
                                             <?php
                                             if (!empty($categories)) {
                                                 foreach ($categories as $value) {
-                                                    ?>
+                                            ?>
                                                     <option value="<?= $value['id']; ?>" <?= ($service_info["catid"] == $value["id"]) ? "selected" : ""; ?>><?= $value['name']; ?></option>
-                                                    <?php
+                                            <?php
                                                 }
                                             }
                                             ?>
@@ -254,9 +254,9 @@
                                                 if (!empty($department_list)) {
                                                     foreach ($department_list as $key => $value) {
                                                         if ($value['id'] != 1 && $value['id'] != 2) {
-                                                            ?>
+                                                ?>
                                                             <option value="<?= $value['id']; ?>" <?= ($service_info["department"] == $value["id"]) ? "selected" : ""; ?>><?= $value['name']; ?></option>
-                                                            <?php
+                                                <?php
                                                         }
                                                     }
                                                 }
@@ -272,9 +272,9 @@
                                                 if (!empty($department_list)) {
                                                     foreach ($department_list as $key => $value) {
                                                         if ($value['id'] != 1 && $value['id'] != 2) {
-                                                            ?>
+                                                ?>
                                                             <option value="<?= $value['id']; ?>" <?= ($service_info["department"] == $value["id"]) ? "selected" : ""; ?>><?= $value['name']; ?></option>
-                                                            <?php
+                                                <?php
                                                         }
                                                     }
                                                 }
@@ -335,10 +335,10 @@
                                     <div class="form-group">
                                         <label>Notes</label>
                                         <textarea class="form-control" name="note" id="note"><?php echo $service_info['note'] ?></textarea>
-                                    </div> 
-                                    <div class="text-right">
-                                        <button type="button" class="btn btn-primary">Save Changes</button>
                                     </div>
+<!--                                     <div class="text-right">
+                                        <button type="button" class="btn btn-primary">Save Changes</button>
+                                    </div> -->
                                 </form>
                             </div>
                         </div>
@@ -353,17 +353,17 @@
                 </div>
 
             </div>
-            <!--                <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <input type="hidden" id="baseurl" value="<?= base_url(); ?>">
-                                <button type="button" class="btn btn-primary" onclick="updateRelatedservice()">Save Changes</button>
-                            </div>-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <input type="hidden" id="baseurl" value="<?= base_url(); ?>">
+                <button type="button" class="btn btn-primary" onclick="updateRelatedservice()">Save Changes</button>
+            </div>
 
         </div>
     </div>
 
     <script>
-        $(function () {
+        $(function() {
             get_related_services('<?= $service_info["related_services"]; ?>', '<?= $service_info["id"]; ?>');
         });
 
@@ -377,4 +377,4 @@
         }
     </script>
 
-<?php endif; ?>
+<?php } ?>
