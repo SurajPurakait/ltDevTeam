@@ -29,7 +29,6 @@ foreach ($result as $row_count => $value):
         }
     }
     $row = (object) $value;
-    
     $status_class = 'label-yellow';
     if ($row->payment_status == 1) {
         $status_class = 'label-yellow';
@@ -74,7 +73,9 @@ foreach ($result as $row_count => $value):
                             <th class="text-center" width="5%">Manager</th>
                             <th class="text-center" width="10%">Tracking</th>
                             <th class="text-center" width="10%">Requested&nbsp;by</th>
+                            <?php if($row->created_date!=''){ ?>
                             <th class="text-center" width="10%">Created&nbsp;Date</th>
+                            <?php } ?>
                             <th class="text-center" width="5%">Due Date</th>
                             <th class="text-center" width="5%">Services</th>
                             <th class="text-center" width="5%">Total</th>
@@ -90,7 +91,9 @@ foreach ($result as $row_count => $value):
                             <td title="Manager"><?= $row->manager; ?></td>
                             <td title="Tracking"><a href="javascript:void(0)" onclick="billingDashboardTrackingModal(<?= $row->invoice_id; ?>, <?= $row->invoice_status; ?>);"><span class="label <?= $tracking_class ?> invoice-tracking-span-<?= $row->invoice_id; ?>"><b><?= $tracking[$row->invoice_status]; ?></b></span></a></td>
                             <td title="Requested by"><?= $row->created_by_name; ?></td>
+                            <?php if($row->created_date!=''){ ?>
                             <td title="Create Time"><?= date('m/d/Y', strtotime($row->created_date)); ?></td>
+                            <?php } ?>
                             <td title="Due Date"><?php $month= date('m', strtotime($row->created_time))+1;
                                      $date = date('Y', strtotime($row->created_time))."-".$month."-".date('d', strtotime($row->created_time)); 
                                      echo date('m/d/Y', strtotime($date)); ?></td>                    

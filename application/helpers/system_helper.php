@@ -3659,3 +3659,10 @@ if(!function_exists('get_order_info_for_services')){
         return $ci->Service_model->get_order_info_for_services($order_id);
     }
 }
+if (!function_exists('get_client_list_on_recurrence_pattern')) {
+    function get_client_list_on_recurrence_pattern($service_name,$pattern) {
+        $ci = &get_instance();
+        $ci->load->model('billing_model');
+        return $ci->billing_model->get_client_list_on_recurrence_pattern($service_name,$pattern);    
+    }
+}

@@ -63,24 +63,22 @@ if (!empty($task_list)) {
         } elseif ($status == 3) {
             $tracking = 'Ready';
             $trk_class = 'label-secondary';
-        }
-        elseif ($status == 4) {
+        } elseif ($status == 4) {
             $tracking = 'Canceled';
             $trk_class = 'label-danger';
-        }
-        elseif ($status == 5) {
+        } elseif ($status == 5) {
             $tracking = 'Clarification';
             $trk_class = 'label-info';
         }
         $pattern_details = get_project_pattern($task['project_id']);
-        $created_at =strtotime(get_project_created_date($task['project_id']));
+        $created_at = strtotime(get_project_created_date($task['project_id']));
         $due_date = strtotime($pattern_details->due_date);
         $start_date = $task['target_start_date'] . 'days';
         $complete_date = $task['target_complete_date'] . 'days';
         if ($task['target_start_day'] == 1) {
             $targetSstartDate = date("Y-m-d", strtotime(("+$start_date"), $created_at));
         } else {
-            $targetSstartDate = date("Y-m-d", strtotime(("-$start_date"),$due_date));
+            $targetSstartDate = date("Y-m-d", strtotime(("-$start_date"), $due_date));
         }
         if ($task['target_complete_day'] == 1) {
             $targetCompleteDate = date("Y-m-d", strtotime(("+$complete_date"), $created_at));
@@ -89,10 +87,10 @@ if (!empty($task_list)) {
         }
         if (strlen($task['description']) > 20) {
             $description = substr($task['description'], 0, 20) . '...';
-            $data_description=$task['description'];
+            $data_description = $task['description'];
         } else {
             $description = $task['description'];
-            $data_description=$task['description'];
+            $data_description = $task['description'];
         }
         ?>
         <div class="panel panel-default service-panel type2 filter-active" id="action">
@@ -104,9 +102,9 @@ if (!empty($task_list)) {
                 <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $task['id']; ?>" aria-expanded="false" class="collapsed">
                     <div class="table-responsive">
                         <table class="table table-borderless">
-                            <?php
-                            $due_m = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'Jun', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
-                            ?>
+        <?php
+        $due_m = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'Jun', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December');
+        ?>
                             <tr>
                                 <th style='width:8%;  text-align: center;'>Task ID</th>
                                 <th style='width:8%;  text-align: center;'>Task Title</th>
@@ -117,28 +115,28 @@ if (!empty($task_list)) {
                                 <th style="width:8%;  text-align: center;">SOS</th>
                                 <th style="width:8%;  text-align: center;">Note</th>
                                 <th style="width:8%;  text-align: center;">Files</th>
-                                <th style="width:8%;  text-align: center;">Input Form</th>
+                                <th style="width:12%; text-align: center; white-space: nowrap;">Input Form</th>
                             </tr>
 
                             <tr>
-                                <td title="ID" class="text-center"><?= $task['project_id'].'-'.$task['task_order'] ?></td>
+                                <td title="ID" class="text-center"><?= $task['project_id'] . '-' . $task['task_order'] ?></td>
                                 <td title="Order" class="text-center"><?= $task['task_title']; ?></td>
                                 <!--<td title="Order" class="text-center"><?//= date('Y-m-d', strtotime($task->created_at)); ?></td>-->
         <!--                                                                <td title="Target Start Date" class="text-center"><?= $task->target_start_date; ?></td>
                                 <td title="Target Complete Date" class="text-center"><?= $task['target_complete_date']; ?></td>-->
                                 <!--<td title="assign to"></td>-->
-                                <?php if ($task['department_id'] == 2) { ?>
+        <?php if ($task['department_id'] == 2) { ?>
                                     <td title="Assign To" class="text-center"><?php
-                                    $resp_value = get_assigned_office_staff_project_task($task['id'],$task['project_id'], $task['responsible_task_staff']);
-                                    echo "<span class='text-success'>". $resp_value['staff_name'] ."</span><br>" . $resp_value['office'] . "</td>";
+                                    $resp_value = get_assigned_office_staff_project_task($task['id'], $task['project_id'], $task['responsible_task_staff']);
+                                    echo "<span class='text-success'>" . $resp_value['staff_name'] . "</span><br>" . $resp_value['office'] . "</td>";
                                     ?> 
                                     </td> <?php } else { ?> 
                                     <td title="Assign To" class="text-center"><span class="text-success"><?php echo get_assigned_project_task_staff($task['id']); ?></span><br><?php echo get_assigned_project_task_department($task['id']); ?></td>                                                     
-                                <?php } ?>
-                <!--<td title="Assign To" class="text-center"><span class="text-success"><?php // echo get_assigned_project_task_staff($task['id']);   ?></span><br><?php // echo get_assigned_project_task_department($task['id']);   ?></td>-->                                                     
-                                <td title="Start Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetSstartDate)) ?></td>
-                                <td title="Complete Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetCompleteDate)) ?></td>
-                                <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task['id']; ?>,<?= $status; ?>, <?= $task['id'] ?>);'><span class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
+        <?php } ?>
+            <!--<td title="Assign To" class="text-center"><span class="text-success"><?php // echo get_assigned_project_task_staff($task['id']);    ?></span><br><?php // echo get_assigned_project_task_department($task['id']);    ?></td>-->                                                     
+                                <td title="Start Date" class="text-center">T: <?= date('m-d-Y', strtotime($targetSstartDate)) ?></td>
+                                <td title="Complete Date" class="text-center">T: <?= date('m-d-Y', strtotime($targetCompleteDate)) ?></td>
+                                <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task['id']; ?>,<?= $status; ?>, <?= $task['id'] ?>,<?= $task['project_id']?>,"<?= $task['task_order'] ?>");'><span class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                                 <td title="SOS" style="text-align: center;">
                                     <span>
                                         <a id="projectsoscount-<?= $task['project_id']; ?>-<?php echo $task['id']; ?>" class="d-inline p-t-5 p-b-5 p-r-8 p-l-8 label <?php echo (get_sos_count('projects', $task['id'], $task['project_id']) == 0) ? 'label-primary' : 'label-danger'; ?>" title="SOS" href="javascript:void(0)" onclick="show_sos('projects', '<?= $task['id']; ?>', '<?= $new_staffs ?>', '<?= $task['project_id']; ?>', '');"><?php echo (get_sos_count('projects', $task['id'], $task['project_id']) == 0) ? '<i class="fa fa-plus"></i>' : '<i class="fa fa-bell"></i>'; ?></a>                                                   
@@ -147,49 +145,52 @@ if (!empty($task_list)) {
                                <!--  <td title='Note' class="text-center"><a id="notecount-<?//= $task['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_task_notes(<?//= $task['id']; ?>)"><b> <?//= get_project_task_note_count($task['id']) ?></b></a></td>
                                 -->
                                 <td title="Notes" class="text-center"><span> 
-                                        <?php
-                                        $read_status = project_task_notes_readstatus($task['id']);
-                                        // print_r($read_status);
+        <?php
+        $read_status = project_task_notes_readstatus($task['id']);
+        // print_r($read_status);
 
-                                        if (get_project_task_note_count($task['id']) > 0 && in_array(0, $read_status)) {
-                                            ?> 
+        if (get_project_task_note_count($task['id']) > 0 && in_array(0, $read_status)) {
+            ?> 
 
                                             <a id="notecount-<?= $task['id'] ?>" class="label label-danger" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task['id']; ?>)"><b> <?= get_project_task_note_count($task['id']) ?></b></a>
 
-                                            <?php
-                                        } elseif (get_project_task_note_count($task['id']) > 0 && in_array(1, $read_status)) {
-                                            ?> 
+            <?php
+        } elseif (get_project_task_note_count($task['id']) > 0 && in_array(1, $read_status)) {
+            ?> 
 
                                             <a id="notecount-<?= $task['id'] ?>" class="label label-success" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task['id']; ?>)"><b> <?= get_project_task_note_count($task['id']) ?></b></a>
 
-                                            <?php
-                                        } else {
-                                            ?>
+            <?php
+        } else {
+            ?>
 
                                             <a id="notecount-<?= $task['id'] ?>" class="label label-warning" href="javascript:void(0)" onclick="show_project_task_notes(<?= $task['id']; ?>)"><b> <?= get_project_task_note_count($task['id']) ?></b></a>
 
-                                            <?php
-                                        }
-                                        ?>
+            <?php
+        }
+        ?>
                                     </span></td>
-                                <?php
-                                $file_count = getTaskFilesCount($task['id']);
-                                $unread_files_count = getUnreadTaskFileCount($task['id'], 'task');
-                                ?>
+                                        <?php
+                                        $file_count = getTaskFilesCount($task['id']);
+                                        $unread_files_count = getUnreadTaskFileCount($task['id'], 'task');
+                                        ?>
                                 <?= '<td title="Files" class="text-center" ><span id="taskfilespan' . $task['id'] . '">' . (($unread_files_count->unread_files_count > 0) ? '<a class="label label-danger" href="javascript:void(0)" count="' . $file_count->files . '" id="taskfile' . $task['id'] . '" onclick="show_task_files(\'' . $task['id'] . '\',\'' . $new_staffs . $task['added_by_user'] . '\')"><b>' . $file_count->files . '</b></a>' : '<a class="label label-success" href="javascript:void(0)" count="' . $file_count->files . '" id="actionfile' . $task['id'] . '" onclick="show_task_files(\'' . $task['id'] . '\',\'' . $new_staffs . $task['added_by_user'] . '\')"><b>' . $file_count->files . '</b></a>') . '</span></td>'; ?>
-                                
+
                                 <td style="text-align: center;">
-                                    <?php
-                                    $input_status = 'complete';
-                                    if ($task['is_input_form'] != 'y') {
-                                        echo 'N/A';
-                                    } else {
-                                        if ($task['input_form_status'] == 'n') {
-                                            $input_status = 'incomplete';
-                                            ?>
-                                    <a href="<?= base_url() . 'task/task_input_form/' . $task['id'].'/'.$task['bookkeeping_input_type']; ?>" class="text-white label input-form-incomplete p-t-10 p-l-10 p-b-10" target="_blank">Incomplete <span class="p-10"><i class="fa fa-plus" aria-hidden="true"></i> </span></a>
-                                        <?php } else { ?>
-                                             <a href="<?= base_url() . 'task/task_input_form/' . $task['id'].'/'.$task['bookkeeping_input_type']; ?>" class="text-white label input-form-complete p-t-10 p-l-10 p-b-10" target="_blank">Completed<span class="p-10"> <i class="fa fa-pencil" aria-hidden="true"></i> </span></a>
+        <?php
+        $input_status = 'complete';
+        if ($task['is_input_form'] != 'y') {
+            echo 'N/A';
+        } else {
+            if ($task['input_form_status'] == 'n') {
+                $input_status = 'incomplete';
+                ?>
+                                            <a href="<?= base_url() . 'task/task_input_form/' . $task['id'] . '/' . $task['bookkeeping_input_type']; ?>" onclick="open_input_form()" class="btn btn-danger btn-xs" target="new_blank" style="float: left;"><i class="fa fa-pencil" aria-hidden="true"></i> Incomplete</a>
+                                        <?php } else {
+                                            if ($status != 2) { ?>
+                                                <a href="<?= base_url() . 'task/task_input_form/' . $task['id'] . '/' . $task['bookkeeping_input_type']; ?>" onclick="open_input_form()" class="btn btn-primary btn-xs" target="new_blank" style="float: left;"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+                                            <?php } ?>
+                                            <a href="<?= base_url() . 'task/task_input_form/' . $task['id'] . '/' . $task['bookkeeping_input_type'] . '/v'; ?>" onclick="open_input_form()" class="btn btn-warning btn-xs" target="new_blank" style="float: right;"><i class="fa fa-eye" aria-hidden="true"></i> View </a>
                                             <?php
                                         }
                                     }
@@ -256,3 +257,13 @@ if (!empty($task_list)) {
         </div>
     </div>
 </div>
+<script>
+    function open_input_form() {
+        if (!e)
+            var e = window.event;
+        e.cancelBubble = true;
+        if (e.stopPropagation)
+            e.stopPropagation();
+        
+    }
+</script>

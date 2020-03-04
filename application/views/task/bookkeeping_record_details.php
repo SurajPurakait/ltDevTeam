@@ -4,5 +4,5 @@
 <?php // } 
 if(isset($bank_id) && $bank_id!=''){
  $record_detail = get_bookkeeping_records_details($bank_id); ?>
-<a href="javascript:void(0)" id="time_modal" onclick="show_record_modal(<?= $bank_id ?>,'')">Recoded time details(<?= count($record_detail) ?>)</a>
+<a href="javascript:void(0)" id="time_modal" onclick="show_record_modal(<?= $bank_id ?>,'')" class="label label-success"><?= count($record_detail) ?></a>
 <?php } ?>
