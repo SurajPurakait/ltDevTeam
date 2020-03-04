@@ -1362,3 +1362,29 @@ function closeInvoiceRecurrenceModal() {
     $('#pattern_show').html(patterntext);
     $('#RecurranceModal').modal('hide');
 }
+function show_recurrence_clients(invoice_id='',service_name='',pattern='',section='') {
+    // if (section != 'filter') {
+        $("#collapse-recurring-"+invoice_id).slideToggle();    
+    // }
+    var office_id ='';
+    var client_id ='';
+    // var office_id = document.getElementById('ofc').value;
+    // var client_id = document.getElementById('client').value;
+    // alert(office_id+client_id);
+    $.ajax({
+        type: 'POST',
+        url: base_url + 'billing/home/show_recurrence_client_details',
+        data: { 'service_name':service_name,'pattern':pattern,'office_id':office_id,'client_id':client_id },
+        success: function (result) {
+            $("#clients-recurring-data"+invoice_id).html(result);          
+            // $("#clients-recurring-data"+invoice_id).show();
+            
+        },
+        beforeSend: function () {
+            openLoading();
+        },
+        complete: function (msg) {
+            closeLoading();
+        }
+    })
+}
