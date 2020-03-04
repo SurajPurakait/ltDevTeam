@@ -6,6 +6,7 @@ class Project_Template_model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
+        $this->load->model("administration");
         $this->filter_element = [
             1 => "id",
             2 => "template_id",
@@ -19,7 +20,8 @@ class Project_Template_model extends CI_Model {
             10 => "added_by_user",
             11 => "due_date",
             12 => "template_cat_id",
-            13 => 'input_form_status'
+            13 => 'input_form_status',
+            14 => 'office_id'
         ];
 
         // $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id),(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts left join project_task AS pt on pt.id=pts.task_id WHERE pt.project_id = pro.id),","), " ", "") AS all_project_staffs';
@@ -2742,6 +2744,9 @@ class Project_Template_model extends CI_Model {
                 return $input_form_array;
                 break;
             }
+            case 14:{
+                return $this->administration->get_all_office_except_inactive_offices();
+            }
                 
             default: {
                     return [];
@@ -2786,6 +2791,9 @@ class Project_Template_model extends CI_Model {
         }
         elseif ($variable_value == 13) {
             $criteria_value = $criteria['input_form'];
+        }
+        elseif ($variable_value == 14) {
+            $criteria_value = $criteria['office_id'];
         }
         if ($variable_value == 9 || $variable_value == 11) { 
             if ($condition_value == 1 || $condition_value == 3) {
