@@ -586,31 +586,31 @@ $role = $user_info['role'];
         });
         $("#changeStatusinner #prosubid").val(id);
     }
-    function updateProjectStatusinner(type = '') {
-        var statusval = $('#changeStatusinner input:radio[name=radio]:checked').val();
-        var prosubid = $('#changeStatusinner #prosubid').val();
-//        alert(prosubid);
-        var base_url = $('#baseurl').val();
-        $.ajax({
-            type: "POST",
-            data: {statusval: statusval, prosubid: prosubid},
-            url: base_url + 'project/update_project_task_status',
-            dataType: "html",
-            success: function (result) {
-//                alert(result);return false;
-                if (result.trim() != 0) {
-                    $("#changeStatusinner").modal('hide');
-//                    return false;
-                    //swal("Success!", "Successfully updated!", "success");
-                    if (type == 'task') {
-                        goURL(base_url + 'task');
-                    } else {
-                        goURL(base_url + 'project');
-                    }
-                }
-            }
-        });
-    }
+//    function updateProjectStatusinner(type = '') {
+//        var statusval = $('#changeStatusinner input:radio[name=radio]:checked').val();
+//        var prosubid = $('#changeStatusinner #prosubid').val();
+////        alert(prosubid);
+//        var base_url = $('#baseurl').val();
+//        $.ajax({
+//            type: "POST",
+//            data: {statusval: statusval, prosubid: prosubid},
+//            url: base_url + 'project/update_project_task_status',
+//            dataType: "html",
+//            success: function (result) {
+////                alert(result);return false;
+//                if (result.trim() != 0) {
+//                    $("#changeStatusinner").modal('hide');
+////                    return false;
+//                    //swal("Success!", "Successfully updated!", "success");
+//                    if (type == 'task') {
+//                        goURL(base_url + 'task');
+//                    } else {
+//                        goURL(base_url + 'project');
+//                    }
+//                }
+//            }
+//        });
+//    }
     var content = $(".filter-div").html();
     var variableArray = [];
     var elementArray = [];

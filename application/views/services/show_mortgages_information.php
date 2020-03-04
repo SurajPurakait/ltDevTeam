@@ -14,15 +14,16 @@ if ($mortgages_info['what_is_property_for'] == '1') {
 	<div class="ibox-content m-b-md m-t-15">
 		<div class="row p-5 m-1 bg-warning">
 			<div class="col-md-6">
-				<p><b>Lead Type : </b><?= $mortgages_info['type_of_contact_name']; ?></p>
-				<p><b>Lead Name : </b><?= $lead_details['first_name'].' '.$lead_details['last_name']; ?></p>
-				<p><b>Lead Email : </b><?= $lead_details['email']; ?></p>
+				<p><b>Type : </b><?= ($mortgages_info['type_of_contact_name'] != '') ? $mortgages_info['type_of_contact_name']:'N/A'; ?></p>
+				<p><b>Name : </b><?= ($lead_details['first_name'] != '' && $lead_details['last_name'] != '') ? $lead_details['first_name'].' '.$lead_details['last_name']:'N/A'; ?></p>
+				<p><b>Email : </b><?= ($lead_details['email'] != '') ? $lead_details['email']:'N/A'; ?></p>
+				<p><b>Phone : </b><?= ($lead_details['phone1'] != '') ? $lead_details['phone1']:'N/A'; ?></p>
 			</div>
 			<div class="col-md-6 text-right">
 				<div class="client-details">
 					<p><b>Date :</b> <?= date('m-d-Y',strtotime($lead_details['referred_date'])); ?></p>
 					<p><b>Assigned To :</b> <?= $assigned_to['first_name'].' '.$assigned_to['last_name']; ?></p>
-					<p><b>Requested by :</b> <?= $requested_by['first_name'].' '.$requested_by['last_name']; ?></p>
+					<p><b>Submitted by :</b> <?= $requested_by['first_name'].' '.$requested_by['last_name']; ?></p>
 				</div>
 			</div>
 		</div>

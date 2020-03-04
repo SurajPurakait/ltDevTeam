@@ -31,9 +31,9 @@
             <div class="panel-heading">                           
               <a href="<?= base_url("/lead_management/home/view/{$value["id"]}/1/"); ?>" class="btn btn-primary btn-xs btn-service-view" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i>
                     View</a> 
-                <a href="<?= base_url("/referral_partner/referral_partners/edit_lead_prospect/{$value["id"]}"); ?>"
+                <!-- <a href="<?//= base_url("/referral_partner/referral_partners/edit_lead_prospect/{$value["id"]}"); ?>"
                        class="btn btn-primary btn-xs btn-service-edit"><i class="fa fa-pencil" aria-hidden="true"></i>
-                        Edit</a>                                                                             
+                        Edit</a> -->                                                                             
                 <h5 class="panel-title" data-toggle="collapse" data-parent="#accordion"
                     href="#collapse89"
                     aria-expanded="false">                                                                             
@@ -41,37 +41,41 @@
                         <table class="table table-borderless" style="margin-bottom: 0px;">
                             <tbody>
                             <tr>
-                                <th style="width:120px;">Type</th>
-                                <th style="width:120px;">Name</th>
-                                <th>Tracking</th>
-                                <th>Requested By</th>
+                                <th class="text-center" style="width: 14%">Type</th>
+                                <th class="text-center" style="width: 14%">Name</th>
+                                <th class="text-center" style="width: 14%">Tracking</th>
+                                <th class="text-center" style="width: 14%">Requested By</th>
                                 <!-- <th>Referred By</th>
                                 <th>Referred Date</th> -->
-                                <th>Submission Date</th>
-                                <th>Active Date</th>
+                                <th class="text-center" style="width: 14%">Submission Date</th>
+<!--                                 <th>Active Date</th>
                                 <th>Inactive Date</th>
-                                <th>Completed Date</th>
-                                <th>Notes</th>
-                                <th></th>
+                                <th>Completed Date</th> -->
+                                <th class="text-center" style="width: 14%">Notes</th>
+                                <th class="text-center" style="width: 14%">Input Form</th>
                             </tr>
                             <tr>
-                                <td title="Type"><?= $type; ?></td>
-                                <td title="Name"><?= $value["last_name"].', '.$value["first_name"]; ?></td>
-                                <td align='left' title="Tracking Description"><a
+                                <td title="Type" class="text-center" style="width: 14%"><?= $type; ?></td>
+                                <td title="Name" style="width: 14%" class="text-center"><?= $value["last_name"].', '.$value["first_name"]; ?></td>
+                                <td title="Tracking Description" class="text-center" style="width: 14%"><a
                                             href='javascript:void(0);'
                                             onclick='show_ref_partner_tracking_modal("<?= $value["id"]; ?>")'><span style="width: 80px; display: inline-block; text-align: center;"
                                                 class=<?= $trk_class; ?>><?= $status; ?></span></a></td>
-                                <td title="Requested By"><?= $staff_data["last_name"].', '.$staff_data["first_name"]; ?></td>
-                                <td title="Submission Date"><?= ($value["submission_date"] != "0000-00-00") ? date('m/d/Y',strtotime($value["submission_date"])) : "-"; ?></td>
-                                <td title="Active Date"><?= ($value["active_date"] != "0000-00-00") ? date('m/d/Y',strtotime($value["active_date"])) : "-"; ?></td>
-                                <td title="Inactive Date"><?= ($value["inactive_date"] != "0000-00-00") ? date('m/d/Y',strtotime($value["inactive_date"])) : "-"; ?></td>
-                                <td title="Completed Date"><?= ($value["complete_date"] != "0000-00-00") ? date('m/d/Y',strtotime($value["complete_date"])) : "-"; ?></td>
-                                <?php echo '<td title="Notes"><span>' . (($notes > 0) ? '<a class="label label-warning" href="javascript:void(0)" onclick="show_ref_partner_notes(\'' . $value["id"] . '\')"><b>' . $notes . '</b></a>' : '<a class="label label-warning" href="javascript:void(0)" onclick="show_ref_partner_notes(\'' . $value["id"] . '\')"><b>' . $notes . '</b></a>') . '</span></td>'; ?>
+                                <td title="Requested By" class="text-center" style="width: 14%"><?= $staff_data["last_name"].', '.$staff_data["first_name"]; ?></td>
+                                <td title="Submission Date" class="text-center" style="width: 14%"><?= ($value["submission_date"] != "0000-00-00") ? date('m/d/Y',strtotime($value["submission_date"])) : "-"; ?></td>
+                                <!-- <td title="Active Date"><?//= ($value["active_date"] != "0000-00-00") ? date('m/d/Y',strtotime($value["active_date"])) : "-"; ?></td>
+                                <td title="Inactive Date"><?//= ($value["inactive_date"] != "0000-00-00") ? date('m/d/Y',strtotime($value["inactive_date"])) : "-"; ?></td>
+                                <td title="Completed Date"><?//= ($value["complete_date"] != "0000-00-00") ? date('m/d/Y',strtotime($value["complete_date"])) : "-"; ?></td> -->
+                                <?php echo '<td title="Notes" style="width: 14%" class="text-center"><span>' . (($notes > 0) ? '<a class="label label-warning" href="javascript:void(0)" onclick="show_ref_partner_notes(\'' . $value["id"] . '\')"><b>' . $notes . '</b></a>' : '<a class="label label-warning" href="javascript:void(0)" onclick="show_ref_partner_notes(\'' . $value["id"] . '\')"><b>' . $notes . '</b></a>') . '</span></td>'; ?>
                                 <?php
                                     if (!empty($value["client_reference"]) && !empty($value["client_id"])) {
                                 ?>
-                                <td><a href="javascript:void(0)" class="label label-primary" target="_blank" onclick="show_mortgage_information('<?= $value["client_reference"] ?>','<?= $value["client_id"]; ?>','<?= $value["id"]; ?>')">Mortgage</a></td>
+                                <td class="text-center" class="text-center" style="width: 14%"><a href="javascript:void(0)" class="label label-primary" target="_blank" onclick="show_mortgage_information('<?= $value["client_reference"] ?>','<?= $value["client_id"]; ?>','<?= $value["id"]; ?>')">Mortgage</a></td>
                                 <?php
+                                    } else {
+                                ?>
+                                <td class="text-center" style="width: 14%">N/A</td>
+                                <?php        
                                     }
                                 ?>
                             </tr>

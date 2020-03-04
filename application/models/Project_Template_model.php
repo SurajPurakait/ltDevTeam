@@ -3534,6 +3534,8 @@ class Project_Template_model extends CI_Model {
         return $this->db->delete('project_bookkeeping_bank_record_time');
     }
     public function addActionForBookkeepingNeedClarification($data){
+        $this->db->where('task_id',$data['task_id']);
+        $this->db->update('project_task_bookkeeping_input_form2',['need_clarification'=>1]);
         $this->load->model('action_model');
         $task_id=$data['task_id'];
         $project_id=$data['project_id'];
@@ -3578,11 +3580,15 @@ class Project_Template_model extends CI_Model {
         $this->db->insert('action_client_list',$insert_client_list);
         if($insert_id!='' && !empty($staffids)){
             $this->system->save_general_notification('action', $insert_id, 'insert', $staff_id);
-            return $insert_id;
+            return 1;
         }
     }
     public function getBookkeepingInputFormTrackingLog($id, $table_name) {
         return $this->db->query("SELECT concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id, (SELECT name from department where id=(SELECT department_id from department_staff where staff_id=s.id )) as department, case when tracking_logs.status_value = '0' then 'Incomplete' when tracking_logs.status_value = '1' then 'Complete' when tracking_logs.status_value = '2' then 'Not Required' else tracking_logs.status_value end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
+    }
+    public function getTotalRecordedTime($bank_id){
+        $this->db->select("SEC_TO_TIME(SUM(TIME_TO_SEC(record_time))) as total_time");
+        return $this->db->get_where("project_bookkeeping_bank_record_time",['bank_id'=>$bank_id])->result_array();
     }
     
 }

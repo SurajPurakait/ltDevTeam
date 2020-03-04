@@ -70,6 +70,10 @@
                         $description = $task->description;
                         $data_description=$task->description;
                     }
+                    $text_dangeer='';
+                    if($status!=2 && $targetstartDate<date('Y-m-d')){
+                        $text_dangeer='text-danger';
+                    }
                     ?>
                     <tr>
                         <td title="Task Id" class="text-center"><?= $task->project_id.'-'.$task->task_order; ?></td>
@@ -88,7 +92,7 @@
                             </td> <?php } else { ?> 
                             <td title="Assign To" class="text-center"><span class="text-success"><?php echo get_assigned_project_task_staff($task->id); ?></span><br><?php echo get_assigned_project_task_department($task->id); ?></td>                                                     
                         <?php } ?>
-                            <td title="Start Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetstartDate)) ?> <br /> <?= ($task->date_started !=''?'A: '.date('m-d-Y',strtotime($task->date_started)):'') ?></td>
+                        <td title="Start Date" class="text-center <?= $text_dangeer ?>">T: <?= date('m-d-Y',strtotime($targetstartDate)) ?> <br /> <?= ($task->date_started !=''?'A: '.date('m-d-Y',strtotime($task->date_started)):'') ?></td>
                         <td title="Complete Date" class="text-center">T: <?= date('m-d-Y',strtotime($targetCompleteDate)) ?> <br /><?= ($task->date_completed!=''?'A: '.date('m-d-Y',strtotime($task->date_completed)):'') ?></td>
                         <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task->id; ?>,<?= $status; ?>, <?= $task->id ?>,<?= $task->project_id ?>,"<?= $task->task_order ?>");'><span id="trackinner-<?= $task->id ?>" projectid="<?= $id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                         <td title="SOS" style="text-align: center;">

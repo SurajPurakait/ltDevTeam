@@ -258,8 +258,13 @@ class Home extends CI_Controller {
         $render_data['main_menu'] = 'billing';
         $render_data['menu'] = 'recurring_plans';
         $render_data['header_title'] = $title;
-        // $render_data['page_heading'] = 'Billing / Recurring Plans';
+        $render_data['recurrence_pattern_data'] = $this->billing_model->get_recurrence_pattern_data();
         $this->load->template('billing/recurring_plans', $render_data);
+    }
+
+    public function show_recurrence_client_details() {
+        $render_data['recurrence_client_details'] = $this->billing_model->show_recurrence_client_details(post());
+        $this->load->view('billing/show_recurrence_client_details', $render_data);
     }
 
 }
