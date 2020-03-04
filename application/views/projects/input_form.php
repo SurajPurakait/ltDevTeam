@@ -108,7 +108,7 @@
                                     </tr>
                                     <tr>
                                         <td style="width:150px;"><b>Tracking</b></td>
-                                        <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task_data->id; ?>,<?= $status; ?>, <?= $task_data->id ?>,<?= $task_data->project_id ?>,"<?= $task_data->task_order ?>");'><span id="trackinner-<?= $task_data->id ?>" projectid="<?= $task_data->project_id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
+                                        <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner_input(<?= $task_data->id; ?>,<?= $status; ?>, <?= $task_data->id ?>,<?= $task_data->project_id ?>,"<?= $task_data->task_order ?>");'><span id="trackinner-<?= $task_data->id ?>" projectid="<?= $task_data->project_id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                                     </tr>
 
                                 </table>
@@ -879,8 +879,8 @@
                     <div class="col-md-8 col-md-offset-2">
                         <div class="funkyradio">
                             <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="rad0" value="0"/>
-                                <label for="rad0"><strong>Not Started</strong></label>
+                                <input type="radio" name="radio" id="not_start" value="0"/>
+                                <label for="not_start"><strong>Not Started</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
@@ -891,14 +891,14 @@
                         </div>
                         <div class="funkyradio">
                             <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="rad1" value="1"/>
-                                <label for="rad1"><strong>Started</strong></label>
+                                <input type="radio" name="radio" id="start1" value="1"/>
+                                <label for="start1"><strong>Started</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
                             <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="rad2" value="2"/>
-                                <label for="rad2"><strong>Completed</strong></label>
+                                <input type="radio" name="radio" id="complete" value="2"/>
+                                <label for="complete"><strong>Completed</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
@@ -1109,67 +1109,67 @@
 //    $("#watch-active").click(function(){
 //  $("#watch-active").addClass("active");
 //});
-//    function change_project_status_inner_input(id, status, section_id,project_id='',task_order='') {
-//        openModal('changeStatusinner');
-//        var txt = 'Tracking Task #' + project_id+'-'+task_order;
-//        $("#changeStatusinner .modal-title").html(txt);
-//        if (status == 0) {
-//            $("#changeStatusinner #rad0").prop('checked', true);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//        } else if (status == 1) {
-//            $("#changeStatusinner #rad1").prop('checked', true);
-//            $("#changeStatusinner #rad0").prop('checked', false);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//        } else if (status == 2) {
-//            $("#changeStatusinner #rad2").prop('checked', true);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad0").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//        }
-//        else if (status == 3) {
-//            $("#changeStatusinner #rad3").prop('checked', true);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad0").prop('checked', false);
-//        }
-//        else if (status == 4) {
-//            $("#changeStatusinner #rad4").prop('checked', true);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad0").prop('checked', false);
-//        }
-//        else if (status == 5) {
-//            $("#changeStatusinner #rad5").prop('checked', true);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad0").prop('checked', false);
-//        }
-//        $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
-//            $("#status_log > tbody > tr").remove();
-//            var returnedData = JSON.parse(data);
-//            for (var i = 0, l = returnedData.length; i < l; i++) {
-//                $('#status_log > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
-//            }
-//            if (returnedData.length >= 1)
-//                $("#log_modal").show();
-//            else
-//                $("#log_modal").hide();
-//        });
-//        $("#changeStatusinner #prosubid").val(id);
-//    }
+    function change_project_status_inner_input(id, status, section_id,project_id='',task_order='') {
+        openModal('changeStatusinner');
+        var txt = 'Tracking Task #' + project_id+'-'+task_order;
+        $("#changeStatusinner .modal-title").html(txt);
+        if (status == 0) {
+            $("#changeStatusinner #not_start").prop('checked', true);
+            $("#changeStatusinner #start1").prop('checked', false);
+            $("#changeStatusinner #complete").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
+        } else if (status == 1) {
+            $("#changeStatusinner #start1").prop('checked', true);
+            $("#changeStatusinner #not_start").prop('checked', false);
+            $("#changeStatusinner #complete").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
+        } else if (status == 2) {
+            $("#changeStatusinner #complete").prop('checked', true);
+            $("#changeStatusinner #start1").prop('checked', false);
+            $("#changeStatusinner #not_start").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
+        }
+        else if (status == 3) {
+            $("#changeStatusinner #rad3").prop('checked', true);
+            $("#changeStatusinner #rad5").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #complete").prop('checked', false);
+            $("#changeStatusinner #start1").prop('checked', false);
+            $("#changeStatusinner #not_start").prop('checked', false);
+        }
+        else if (status == 4) {
+            $("#changeStatusinner #rad4").prop('checked', true);
+            $("#changeStatusinner #rad5").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #complete").prop('checked', false);
+            $("#changeStatusinner #start1").prop('checked', false);
+            $("#changeStatusinner #not_start").prop('checked', false);
+        }
+        else if (status == 5) {
+            $("#changeStatusinner #rad5").prop('checked', true);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #complete").prop('checked', false);
+            $("#changeStatusinner #start1").prop('checked', false);
+            $("#changeStatusinner #not_start").prop('checked', false);
+        }
+        $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
+            $("#status_log > tbody > tr").remove();
+            var returnedData = JSON.parse(data);
+            for (var i = 0, l = returnedData.length; i < l; i++) {
+                $('#status_log > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
+            }
+            if (returnedData.length >= 1)
+                $("#log_modal").show();
+            else
+                $("#log_modal").hide();
+        });
+        $("#changeStatusinner #prosubid").val(id);
+    }
 </script>
