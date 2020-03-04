@@ -255,6 +255,7 @@ class Task extends CI_Controller {
         $ins['section']='';
         $this->Project_Template_model->deleteBookkeepingTimerRecord($record_id);
         $ins['record_details']=$this->Project_Template_model->insertBookkeepingBankRecordTime('',$bank_id);
+        $ins['total_record_time']=$this->Project_Template_model->getTotalRecordedTime($bank_id);
         if($record_id==''){
             $this->load->view('task/bookkeeping_record_details',$ins);
         }else{
@@ -277,6 +278,7 @@ class Task extends CI_Controller {
             $data['section']='';
         }
         $data['record_details']=$this->Project_Template_model->insertBookkeepingBankRecordTime('',$bank_id);
+        $data['total_record_time']=$this->Project_Template_model->getTotalRecordedTime($bank_id);
         $this->load->view('task/recoded_time_modal',$data);
     }
 }
