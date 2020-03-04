@@ -511,9 +511,10 @@
 
                             <?php } else if ($bookkeeping_input_type == 2) { ?>
                                 <div class="panel-body">
+                                    <?php if (!empty($client_account_details)) { ?>
                                     <div class="table-responsive">
                                         <table class="table table-borderless">
-                                            <?php if (!empty($client_account_details)) { ?>
+                                            
                                                 <tr>
                                                     <th style='text-align: center;'>Bank Name</th>
                                                     <th style='width:8%;  text-align: center;'>Account Number</th>
@@ -559,6 +560,7 @@
                                                                             <?php $record_details = get_bookkeeping_records_details($accounts['id']); ?>
                                                                             <a href="javascript:void(0)" onclick="show_record_modal(<?= $accounts['id'] ?>, 'add')" class="label label-success"><?= count($record_details) ?></a>
                                                                         </div>
+                                                                        <div id="timer_result-<?= $accounts['id'] ?>" style="display: inline-block;"></div>
                                                                     </div>
                                                                     <input type="hidden" id="bank_id" value="<?= $accounts['id'] ?>">                                                                    
                                                                 </div>
@@ -597,20 +599,25 @@
                                                     $i++;
                                                 }
                                                 ?>
-                                            <?php } else {
-                                                ?>
-                                                <div class = "text-center m-t-30">
-                                                    <div class = "alert alert-danger">
-                                                        <i class = "fa fa-times-circle-o fa-4x"></i>
-                                                        <h3><strong>Sorry!</strong> no data found</h3>
-                                                    </div>
-                                                </div>
-                                            <?php } ?>
                                         </table>
+                                        <div>
+                                            <input type="button" name="clarification" id="clarification" class="btn btn-primary m-t-10 m-b-10" value="Need Clarification?" onclick="need_clarification('<?= $task_id ?>', '<?= $client_type ?>', '<?= $client_id ?>', '<?= $project_id ?>')">
+                                            <?php if(!empty($client_account_details) && $client_account_details[0]['need_clarification']==1){ ?>
+                                            <div class="alert alert-info text-center" id="clarification_msg">
+                                                Clarification has been submitted successfully
+                                            </div>
+                                            <?php } ?>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <input type="button" name="clarification" id="clarification" class="btn btn-primary m-t-10" value="Need Clarification?" onclick="need_clarification('<?= $task_id ?>', '<?= $client_type ?>', '<?= $client_id ?>', '<?= $project_id ?>')">
-                                    </div>
+                                    <?php } else {
+                                        ?>
+                                        <div class = "text-center m-t-30">
+                                            <div class = "alert alert-danger">
+                                                <i class = "fa fa-times-circle-o fa-4x"></i>
+                                                <h3><strong>Sorry!</strong> no data found</h3>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
                                 </div>
 
                             <?php } else if ($bookkeeping_input_type == 3) { ?>
@@ -713,10 +720,10 @@
                                 </div>
                             <?php } ?>
                         </div>
-                        <div id="adjustment_no">
                             <div class="text-center" id="adjustment_no_result"></div>
-                            <?= (isset($bookkeeper_details->created_at) && $bookkeeper_details->adjustment == 'y' ? '<div class="alert alert-info text-center"><b>Adjustment needed on ' . (date("m/d/Y h:i:s", strtotime($bookkeeper_details->created_at))).'</b></div>' : '') ?>
-                        </div>
+                            <div id="adjustment_no">
+                                <?= (isset($bookkeeper_details->created_at) && $bookkeeper_details->adjustment == 'y' ? '<div class="alert alert-info text-center"><b>Adjustment needed on ' . (date("m/d/Y h:i:s", strtotime($bookkeeper_details->created_at))).'</b></div>' : '') ?>
+                            </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-lg-12 text-right">
@@ -934,10 +941,10 @@
         </div>
     </div>
 </div>
-
 <script>
     get_financial_account_list('<?= $client_id; ?>', 'project', '<?= $task_id; ?>');
-<?php if ($bookkeeping_input_type == 3) { ?>
+<?php if ($bookkeeping_input_type == 3) { 
+    ?>
         check_adjustment('<?= (isset($bookkeeper_details->adjustment) && $bookkeeper_details->adjustment != '' ? $bookkeeper_details->adjustment : '') ?>', 'edit');
 <?php } ?>
     $(function () {
@@ -998,7 +1005,6 @@
                 t = '';
         function add(bank_id) {
             $("#watch-active-"+bank_id).addClass("active");
-            
             //            h3 = document.getElementById('total_time-'+bank_id),
             seconds++;
             if (seconds >= 60) {
@@ -1028,8 +1034,9 @@
                 url: base_url + 'task/update_project_bookkeeping_record_time',
                 dataType: "html",
                 success: function (result) {
-                    //$("#load_record_time-" + bank_id).hide();
-                    $("#load_record_time-" + bank_id).html(result);
+                    $("#load_record_time-" + bank_id).hide();
+//                    $("#load_record_time-" + bank_id).html(result);
+                    $("#timer_result-" + bank_id).html(result);
                 }
             });
             h3.textContent = "00:00:00";
@@ -1049,6 +1056,7 @@
     function check_adjustment(adjustment, type = '') {
         if (adjustment == 'n') {
             $("#bookkeeping_check3").hide();
+            $("#upload_list").hide();
             if (type == '') {
                 swal({
                     title: "Did you review bookkeeping report with the client?",
@@ -1072,25 +1080,30 @@
 //                    });
                     setTimeout(function () {
                         swal("I confirm that bookkeeping was done correctly.");
-                        $("#adjustment_no_result").html('<div class="alert alert-success text-center m-b-15">Confirming Bookkeeping was done correctly</div>');
                         $("#adjustment_no_result").show();
+                        $("#adjustment_no_result").html('<div class="alert alert-success text-center m-b-15">Confirming Bookkeeping was done correctly</div>');
                         $("#upload_list").hide();
-                    }, 500);
+                        $("#adjustment_no").hide();
+                    }
+                    , 500);
                 });
 
             } else {
-                $("#adjustment_no_result").html('Confirming Bookkeeping was done correctly');
                 $("#adjustment_no_result").show();
+                $("#adjustment_no_result").html('<div class="alert alert-success text-center m-b-15">Confirming Bookkeeping was done correctly</div>');
+                $("#adjustment_no").hide();
                 $("#upload_list").hide();
             }
         } else if (adjustment == 'y') {
             $("#bookkeeping_check3").show();
             $("#upload_list").show();
             $("#adjustment_no_result").hide();
+            $("#adjustment_no").show();
         } else {
             $("#bookkeeping_check3").hide();
             $("#upload_list").hide();
-            $("#adjustment_no_result").hide();
+            $("#adjustment_no_result").show();
+            $("#adjustment_no").hide();
     }
     }
 //    $("#watch-active").click(function(){

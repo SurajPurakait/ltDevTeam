@@ -1946,6 +1946,7 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
                         dataType: "html",
                         success: function (result) {
                             swal("Query submited successfully!");
+                            $("#clarification_msg").html("<div class='alert alert-info text-center' id='clarification_msg'>Clarification has been submitted successfully</div>")
                         }
                     });
                 }
@@ -1981,9 +1982,9 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
                 url: base_url + 'task/delete_bookkeeping_timer_record',
                 dataType: "html",
                 success: function (result) {
-                    $("#load_record_time-" + bank_id).show();
+                    $("#load_record_time-" + bank_id).hide();
                     $('#recordModal').hide();
-//                    $("#timer_result-" + bank_id).html(result);
+                    $("#timer_result-" + bank_id).html(result);
                 },
             });
         }
