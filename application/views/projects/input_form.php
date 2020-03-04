@@ -554,7 +554,7 @@
                                                                         <a href="javascript:void(0)" class="start" title="Record" id="start" name="start" onclick="add(<?= $accounts['id'] ?>)"><i class="fa fa-dot-circle-o" aria-hidden="true"></i></a>
                                                                         <a href="javascript:void(0)" class="stop" title="Pause" id="stop" name="stop" onclick="stop_record()"><i class="fa fa-pause-circle" aria-hidden="true"></i></a>
                                                                         <a href="javascript:void(0)" class="save" title="Save Entry" id="save" name="save" onclick="save_record(<?= $accounts['id'] ?>)"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
-                                                                        <a href="javascript:void(0)" class="clear" title="Clear" id="clear" name="clear" onclick="clear_record(<?= $accounts['id'] ?>)"><i class="fa fa-stop-circle-o" aria-hidden="true"></i></a>
+                                                                        <a href="javascript:void(0)" class="clear-icon" title="Clear" id="clear-icon" name="clear" onclick="clear_record(<?= $accounts['id'] ?>)"><i class="fa fa-stop-circle-o" aria-hidden="true"></i></a>
                                                                         <div id="load_record_time-<?= $accounts['id'] ?>" style="display: inline-block;">
                                                                             <?php $record_details = get_bookkeeping_records_details($accounts['id']); ?>
                                                                             <a href="javascript:void(0)" onclick="show_record_modal(<?= $accounts['id'] ?>, 'add')" class="label label-success"><?= count($record_details) ?></a>
@@ -998,6 +998,7 @@
                 t = '';
         function add(bank_id) {
             $("#watch-active-"+bank_id).addClass("active");
+            
             //            h3 = document.getElementById('total_time-'+bank_id),
             seconds++;
             if (seconds >= 60) {
@@ -1042,6 +1043,7 @@
             seconds = 0;
             minutes = 0;
             hours = 0;
+            $("#watch-active-"+bank_id).removeClass("active");
         }
 <?php } ?>
     function check_adjustment(adjustment, type = '') {
