@@ -1363,22 +1363,23 @@ function closeInvoiceRecurrenceModal() {
     $('#RecurranceModal').modal('hide');
 }
 function show_recurrence_clients(invoice_id='',service_name='',pattern='',section='') {
-    // if (section != 'filter') {
-        $("#collapse-recurring-"+invoice_id).slideToggle();    
-    // }
-    var office_id ='';
-    var client_id ='';
-    // var office_id = document.getElementById('ofc').value;
-    // var client_id = document.getElementById('client').value;
-    // alert(office_id+client_id);
+    var client_id = '';
+    var office_id = '';
+    if (section == 'main') {
+        $("#collapse-recurring-"+invoice_id).slideToggle();   
+        // $("#client_list"+invoice_id).clear();           
+        // $("#ofc"+invoice_id+":first").attr('selected','selected');           
+    }
+    if (section == 'filter') {
+        var client_id = $('#client_id').val();
+        var office_id = $('#office_id').val();
+    }
     $.ajax({
         type: 'POST',
         url: base_url + 'billing/home/show_recurrence_client_details',
-        data: { 'service_name':service_name,'pattern':pattern,'office_id':office_id,'client_id':client_id },
+        data: { 'service_name':service_name,'pattern':pattern,'client_id':client_id,'office_id':office_id },
         success: function (result) {
-            $("#clients-recurring-data"+invoice_id).html(result);          
-            // $("#clients-recurring-data"+invoice_id).show();
-            
+            $("#clients-recurring-data"+invoice_id).html(result);
         },
         beforeSend: function () {
             openLoading();
@@ -1386,5 +1387,13 @@ function show_recurrence_clients(invoice_id='',service_name='',pattern='',sectio
         complete: function (msg) {
             closeLoading();
         }
-    })
+    });
+}
+
+function get_office_id(office_id ='') {
+    $("#office_id").val(office_id);
+}
+
+function get_client_id(client_id='') {
+    $("#client_id").val(client_id);
 }

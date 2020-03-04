@@ -4022,16 +4022,16 @@ class Billing_model extends CI_Model
         $this->db->select('service_name,client_id,COUNT(invoice_id) AS no_of_invoices,SUM(total_amount) AS total_billed,SUM(amount_collected) AS amount_collected,manager,pattern');
         $this->db->where('service_name',$data['service_name']);
         $this->db->where('pattern',$data['pattern']);
-        // if ($data['office_id'] != '0' && $data['client_id'] != '0') {
-        //     $this->db->where('office_id',$data['office_id']);
-        //     $this->db->where('client_id',$data['client_id']);
-        // }
-        // if ($data['office_id'] != '0') {
-        //     $this->db->where('office_id',$data['office_id']);
-        // }
-        // if ($data['client_id'] != '0') {
-        //     $this->db->where('client_id',$data['client_id']);
-        // }
+        if ($data['office_id'] != '' && $data['client_id'] != '') {
+            $this->db->where('office_id',$data['office_id']);
+            $this->db->where('client_id',$data['client_id']);
+        }
+        if ($data['office_id'] != '') {
+            $this->db->where('office_id',$data['office_id']);
+        }
+        if ($data['client_id'] != '') {
+            $this->db->where('client_id',$data['client_id']);
+        }
         $this->db->group_by('client_id');
         return $this->db->get('invoice_recurring_plans')->result_array();
     }
