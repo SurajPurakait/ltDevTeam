@@ -8836,9 +8836,15 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
     margin-left: 0.5em;
 }
 .watch {
-    width: 235px;
+    width: 190px;
     padding: 0px;
     /*border-radius: 5px;*/
+    padding: 4px 0;
+}
+.watch.active {
+    background: #d3d3d3;
+    padding: 4px 0;
+    border-radius: 50px;
 }
 .start i{
   font-size: 21px;
@@ -8852,8 +8858,13 @@ color:#0f47f0;
     font-size: 21px;
 color:#3f9f2b;
 }
+.clear i{
+    font-size: 21px;
+color:#3f9f2b;
+}
 .start i:hover,
 .stop i:hover,
+.clear i:hover,
 .save i:hover{
     transform: scale(1.3);
     transition: 500ms;
