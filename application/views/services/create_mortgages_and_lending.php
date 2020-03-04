@@ -22,7 +22,7 @@
 							<label class="col-lg-2 control-label" style="font: 24px;">Assigned To<span class="text-danger">*</span></label>
 							<div class="col-lg-10">
 								<select class="form-control" id="assigned_to" name="assigned_to" required="">
-									<option value="">Select Partner</option>
+									<option value="">Select an option</option>
 									<?php
 									foreach ($all_partners_list as $apl) {
 									?>
@@ -39,6 +39,7 @@
 							<label class="col-lg-2 control-label" style="font: 24px;">Status<span class="text-danger">*</span></label>
 							<div class="col-lg-10">
 								<select class="form-control" id="status" name="status" required="">
+									<option value="">Select an option</option>
 									<option value="1">Foreign</option>
 									<option value="2">Domestic</option>
 								</select>
@@ -49,6 +50,7 @@
 							<label class="col-lg-2 control-label" style="font: 24px;">Type of Mortgage<span class="text-danger">*</span></label>
 							<div class="col-lg-10">
 								<select class="form-control" id="typeofmortgage" name="typeofmortgage" required="">
+									<option value="">Select an option</option>
 									<?php
 									foreach ($mortgages_list as $val) {
 									?>
@@ -72,6 +74,7 @@
 							<label class="col-lg-2 control-label" style="font: 24px;">What is Property Intended For ?<span class="text-danger">*</span></label>
 							<div class="col-lg-10">
 								<select class="form-control" id="whatispropertyfor" name="whatispropertyfor" required="">
+									<option value="">Select an option</option>
 									<option value="1">Primary Residence</option>
 									<option value="2">Vacation or Secondary Home</option>
 									<option value="3">Investment Property</option>
