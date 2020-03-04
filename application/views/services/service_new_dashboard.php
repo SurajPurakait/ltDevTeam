@@ -55,7 +55,8 @@ if ($status == '') {
                                                     <option value="3">Department</option>
                                                     <option value="4">Tracking</option>
                                                     <option value="5">Start Date</option>
-                                                    <option value="6">Complete Date</option>                     
+                                                    <option value="6">Complete Date</option>
+                                                    <option value="7">Request Type</option>                     
                                                 </select>
                                             </div>
                                             <div class="col-md-4 m-t-5">
@@ -929,6 +930,11 @@ if ($status == '') {
             success: function (result) {
                 $("#" + divid).find('.criteria-div').html(result);
                 $("#" + divid).find('.condition-dropdown').removeAttr('disabled').val('');
+                if (val == 7) {
+                    $("#" + divid).find('.condition-dropdown option:not(:eq(0),:eq(1))').remove();
+                } else {
+                    $("#" + divid).find('.condition-dropdown').html('<option value="">All Condition</option><option value="1">Is</option><option value="2">Is in the list</option><option value="3">Is not</option><option value="4">Is not in the list</option>');
+                }
                 $(".chosen-select").chosen();
                 $("#" + divid).nextAll(".filter-div").each(function () {
                     $(this).find('.remove-filter-button').trigger('click');
@@ -969,13 +975,13 @@ if ($status == '') {
                     // variable_dd_array.push(1);
                 } else {
                     add_new_filter_row();
-                    $("select.variable-dropdown:eq(1)").val(15);
+                    $("select.variable-dropdown:eq(1)").val(7);
                     var requestTypeArray = requestType.split('-');
                     $('select.criteria-dropdown:eq(1)').empty().html('<option value="' + requestTypeArray[0] + '">' + requestTypeArray[1] + '</option>').attr({'readonly': true, 'name': 'criteria_dropdown[request_type][]'});
                     $("select.criteria-dropdown:eq(1)").trigger("chosen:updated");
                     $("select.condition-dropdown:eq(1)").val(1).attr('disabled', true);
                     element_array.push($("select.condition-dropdown:eq(1)"));
-                    variable_dd_array.push(15);
+                    variable_dd_array.push(7);
                 }
             }
         }
