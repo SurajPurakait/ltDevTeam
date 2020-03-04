@@ -550,10 +550,11 @@
                                                         <td title="Time" class="text-center">
                                                             <div class="form-group">
                                                                 <div class="col-lg-10">
-                                                                    <div class="watch">
+                                                                    <div class="watch" id="watch-active-<?= $accounts['id'] ?>">
                                                                         <a href="javascript:void(0)" class="start" title="Record" id="start" name="start" onclick="add(<?= $accounts['id'] ?>)"><i class="fa fa-dot-circle-o" aria-hidden="true"></i></a>
                                                                         <a href="javascript:void(0)" class="stop" title="Pause" id="stop" name="stop" onclick="stop_record()"><i class="fa fa-pause-circle" aria-hidden="true"></i></a>
-                                                                        <a href="javascript:void(0)" class="save" title="Save Entry" id="clear" name="clear" onclick="clear_record(<?= $accounts['id'] ?>)"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+                                                                        <a href="javascript:void(0)" class="save" title="Save Entry" id="save" name="save" onclick="save_record(<?= $accounts['id'] ?>)"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+                                                                        <a href="javascript:void(0)" class="clear" title="Clear" id="clear" name="clear" onclick="clear_record(<?= $accounts['id'] ?>)"><i class="fa fa-stop-circle-o" aria-hidden="true"></i></a>
                                                                         <div id="load_record_time-<?= $accounts['id'] ?>" style="display: inline-block;">
                                                                             <?php $record_details = get_bookkeeping_records_details($accounts['id']); ?>
                                                                             <a href="javascript:void(0)" onclick="show_record_modal(<?= $accounts['id'] ?>, 'add')" class="label label-success"><?= count($record_details) ?></a>
@@ -615,12 +616,12 @@
                             <?php } else if ($bookkeeping_input_type == 3) { ?>
                                 <!--<h3>REVIEW CLIENT MANAGER</h3>-->
                                 <div class="form-group">
-                                    <label class="col-lg-2 control-label">Adjustment Needed <span class="text-danger">*</span></label>
-                                    <label class="checkbox-inline">
-                                        <input class="checkclass" value="y" type="radio" id="need_adjustment" name="need_adjustment" onclick="check_adjustment(this.value)" required title="Input Form" <?= (isset($bookkeeper_details->adjustment) ? ($bookkeeper_details->adjustment == 'y' ? 'checked' : '') : '') ?>> Yes
+                                    <label class="col-lg-3 control-label">Adjustment Needed <span class="text-danger">*</span></label>
+                                    <label class="checkbox-inline p-t-3">
+                                        <input style="vertical-align: text-bottom;" class="checkclass" value="y" type="radio" id="need_adjustment" name="need_adjustment" onclick="check_adjustment(this.value)" required title="Input Form" <?= (isset($bookkeeper_details->adjustment) ? ($bookkeeper_details->adjustment == 'y' ? 'checked' : '') : '') ?>> Yes
                                     </label>
-                                    <label class="checkbox-inline">
-                                        <input class="checkclass" value="n" type="radio" id="need_adjustment2" name="need_adjustment" onclick="check_adjustment(this.value)" required title="Input Form" <?= (isset($bookkeeper_details->adjustment) ? ($bookkeeper_details->adjustment == 'n' ? 'checked' : '') : '') ?>> No
+                                    <label class="checkbox-inline  p-t-3">
+                                        <input style="vertical-align: text-bottom;" class="checkclass" value="n" type="radio" id="need_adjustment2" name="need_adjustment" onclick="check_adjustment(this.value)" required title="Input Form" <?= (isset($bookkeeper_details->adjustment) ? ($bookkeeper_details->adjustment == 'n' ? 'checked' : '') : '') ?>> No
                                     </label>
                                     <div class="errorMessage text-danger"></div>
                                 </div>
@@ -996,6 +997,7 @@
         seconds = 0, minutes = 0, hours = 0,
                 t = '';
         function add(bank_id) {
+            $("#watch-active-"+bank_id).addClass("active");
             //            h3 = document.getElementById('total_time-'+bank_id),
             seconds++;
             if (seconds >= 60) {
@@ -1016,7 +1018,7 @@
         function stop_record() {
             clearTimeout(t);
         }
-        function clear_record(bank_id) {
+        function save_record(bank_id) {
             clearTimeout(t);
             var record_time = h3.textContent;
             $.ajax({
@@ -1029,6 +1031,13 @@
                     $("#load_record_time-" + bank_id).html(result);
                 }
             });
+            h3.textContent = "00:00:00";
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+        }
+        function clear_record(bank_id){
+            clearTimeout(t);
             h3.textContent = "00:00:00";
             seconds = 0;
             minutes = 0;
@@ -1082,6 +1091,9 @@
             $("#adjustment_no_result").hide();
     }
     }
+//    $("#watch-active").click(function(){
+//  $("#watch-active").addClass("active");
+//});
 //    function change_project_status_inner_input(id, status, section_id,project_id='',task_order='') {
 //        openModal('changeStatusinner');
 //        var txt = 'Tracking Task #' + project_id+'-'+task_order;
