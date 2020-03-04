@@ -8847,24 +8847,24 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
     border-radius: 50px;
 }
 .start i{
-  font-size: 21px;
-color:#f00;
+    font-size: 21px;
+    color:#f00;
 }
 .stop i{
     font-size: 22px;
-color:#0f47f0;
+    color:#0f47f0;
 }
 .save i{
     font-size: 21px;
-color:#3f9f2b;
+    color:#3f9f2b;
 }
-.clear i{
+.clear-icon i{
     font-size: 21px;
-color:#3f9f2b;
+    color: #f8ac59;
 }
 .start i:hover,
 .stop i:hover,
-.clear i:hover,
+.clear-icon i:hover,
 .save i:hover{
     transform: scale(1.3);
     transition: 500ms;
