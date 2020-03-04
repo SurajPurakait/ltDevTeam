@@ -1043,6 +1043,7 @@
             seconds = 0;
             minutes = 0;
             hours = 0;
+            $("#watch-active-"+bank_id).removeClass("active");
         }
         function clear_record(bank_id){
             clearTimeout(t);
