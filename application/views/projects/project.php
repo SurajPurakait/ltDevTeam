@@ -24,6 +24,7 @@ $role = $user_info['role'];
                                 <button type="button" class="btn btn-primary"  onclick="CreateProjectModal('add', '');" ><i class="fa fa-plus"></i> &nbsp;Create Project</button>
                             <?php } ?>
                             <button type="button" class="btn btn-success"  onclick="taskDashboard();" >&nbsp;Task Dahsboard</button>
+                            <a class="btn btn-info pull-right" target="new_blank" href="<?= base_url().'project_recurrence_patch.php' ?>">&nbsp;Recurrence</a>
                         </div>
                     </div>
                     <div class="clearfix"></div>
@@ -526,7 +527,7 @@ $role = $user_info['role'];
                         <div class="funkyradio">
                             <div class="funkyradio-success">
                                 <input type="radio" name="radio" id="rad0" value="0"/>
-                                <label for="rad0"><strong>New</strong></label>
+                                <label for="rad0"><strong>Not Started</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
@@ -544,7 +545,7 @@ $role = $user_info['role'];
                         <div class="funkyradio">
                             <div class="funkyradio-success">
                                 <input type="radio" name="radio" id="rad2" value="2"/>
-                                <label for="rad2"><strong>Resolved</strong></label>
+                                <label for="rad2"><strong>Completed</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
@@ -628,9 +629,9 @@ $role = $user_info['role'];
             $(newHtml).insertAfter($(this).closest('.form-group'));
         });
     });
-    function change_project_status_inner(id, status, section_id) {
+    function change_project_status_inner(id, status, section_id,project_id='',task_order='') {
         openModal('changeStatusinner');
-        var txt = 'Tracking Project #' + id;
+        var txt = 'Tracking Project #' + project_id+'-'+task_order;
         $("#changeStatusinner .modal-title").html(txt);
         if (status == 0) {
             $("#changeStatusinner #rad0").prop('checked', true);
@@ -638,38 +639,43 @@ $role = $user_info['role'];
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad3").prop('checked', false);
             $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
         } else if (status == 1) {
             $("#changeStatusinner #rad1").prop('checked', true);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
+            $("#changeStatusinner #rad0").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad3").prop('checked', false);
             $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
         } else if (status == 2) {
             $("#changeStatusinner #rad2").prop('checked', true);
             $("#changeStatusinner #rad1").prop('checked', false);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
-            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled', true);
+            $("#changeStatusinner #rad0").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
             $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
         } else if (status == 3) {
             $("#changeStatusinner #rad3").prop('checked', true);
+            $("#changeStatusinner #rad5").prop('checked', false);
             $("#changeStatusinner #rad4").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
             $("#changeStatusinner #rad1").prop('checked', false);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
+            $("#changeStatusinner #rad0").prop('checked', false);
         } else if (status == 4) {
             $("#changeStatusinner #rad4").prop('checked', true);
-            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled', true);
-            $("#changeStatusinner #rad2").prop('checked', false).attr('disabled', true);
-            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled', true);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled', true);
+            $("#changeStatusinner #rad5").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad2").prop('checked', false);
+            $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad0").prop('checked', false);
         }
         else if (status == 5) {
             $("#changeStatusinner #rad5").prop('checked', true);
             $("#changeStatusinner #rad4").prop('checked', false);
-            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad3").prop('checked', false);
             $("#changeStatusinner #rad2").prop('checked', false);
-            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled',true);
-            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad0").prop('checked', false);
         }
         $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
             $("#status_log > tbody > tr").remove();
@@ -699,13 +705,13 @@ $role = $user_info['role'];
                 var res = JSON.parse(result.trim());
 //                    alert(res.task_status+','+res.project_status);return false;
                 if (res.task_status == '0') {
-                    var tracking = 'New';
+                    var tracking = 'Not Started';
                     var trk_class = 'label label-success';
                 } else if (res.task_status == 1) {
                     var tracking = 'Started';
                     var trk_class = 'label label-yellow';
                 } else if (res.task_status == 2) {
-                    var tracking = 'Resolved';
+                    var tracking = 'Completed';
                     var trk_class = 'label label-primary';
                 } else if (res.task_status == 3) {
                     var tracking = 'Ready';
@@ -716,7 +722,7 @@ $role = $user_info['role'];
                 }
 
                 if (res.project_status == 0) {
-                    var tracking_main = 'New';
+                    var tracking_main = 'Not Started';
                     var trk_class_main = 'label label-success';
                 } else if (res.project_status == 1) {
                     var tracking_main = 'Started';
@@ -736,7 +742,7 @@ $role = $user_info['role'];
                     $("#trackinner-" + res.sub_taskid).html(tracking_sub);
                 }
                 if (res.sub_taskid_status == 0) {
-                    var tracking_sub = 'New';
+                    var tracking_sub = 'Not Started';
                     var trk_class_sub = 'label label-success';
                     $("#trackinner-" + res.sub_taskid).removeClass().addClass(trk_class_sub);
                     $("#trackinner-" + res.sub_taskid).html(tracking_sub);

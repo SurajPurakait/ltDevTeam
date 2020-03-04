@@ -199,7 +199,7 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     }
     $actual_year = date('Y', strtotime($due_date));
     $total_days = cal_days_in_month(CAL_GREGORIAN, $actual_month, $actual_year);
-    $generation_days = ((int) $project_recurrence_main_data['generation_month'] * (int) $total_days) + (int) $project_recurrence_main_data['generation_day'];
+    $generation_days = ((int) $project_recurrence_main_data['generation_month'] * (int) 30) + (int) $project_recurrence_main_data['generation_day'];
 //    echo $generation_days;
     $project_recurrence_main_data['due_date'] = $due_date;
 //                    echo $due_date;die;
@@ -243,18 +243,14 @@ if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data
     $month_array = array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'Dececmber');
     $quarter_array=array(1=>'Q1-Jan/Mar',2=>'Q2-Apr/Jun',3=>'Q3-Jul/Sep',4=>'Q4-Oct/Dec');
     //project start date section
-    $actual_month = date('m', strtotime('-1 month', strtotime($due_date)));
+    $actual_month = date('m', strtotime('1 month', strtotime($due_date)));
     $actual_year = date('Y', strtotime($due_date));
     $total_days = cal_days_in_month(CAL_GREGORIAN, $actual_month, $actual_year);
-    $project_start_day = ((int) $project_recurrence_main_data['target_start_months'] * $total_days) + (int) $project_recurrence_main_data['target_start_days'];
+    $project_start_day = ((int) $project_recurrence_main_data['target_start_months'] * 30) + (int) $project_recurrence_main_data['target_start_days'];
     if($project_recurrence_main_data['pattern']!='annually'){
         $project_start_date = date('Y-m-d', strtotime('-' . $project_start_day . ' days', strtotime($due_date)));
     }else{
-        if($template_cat_id==3){
-            $project_start_date = date("Y-m-d",strtotime($project_date));
-        }else{
-            $project_start_date=date("Y-m-d",strtotime($project_date));
-        }
+        $project_start_date=date("Y-m-d",strtotime($project_date));
     }
     $dueDate = strtotime($due_date);
     if($project_id!=''){
