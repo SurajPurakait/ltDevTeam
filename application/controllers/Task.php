@@ -176,6 +176,7 @@ class Task extends CI_Controller {
             }else if($bookkeeping_input_type==2){
                 $render_data['client_id']=$client_dtls->client_id;
                 $render_data['client_type']=$client_dtls->client_type;
+                $render_data['office_id']=$client_dtls->office_id;
                 $render_data['client_account_details']= $this->Project_Template_model->getBookkeepingInput2AccountDetails($client_dtls->client_id,$task_id,$project_id);
 //                $render_data['bookkeeper_details']=$this->Project_Template_model->getProjetBookkeeperDetails($task_id);
             }else{

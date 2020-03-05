@@ -601,7 +601,7 @@
                                                 ?>
                                         </table>
                                         <div>
-                                            <input type="button" name="clarification" id="clarification" class="btn btn-primary m-t-10 m-b-10" value="Need Clarification?" onclick="need_clarification('<?= $task_id ?>', '<?= $client_type ?>', '<?= $client_id ?>', '<?= $project_id ?>')">
+                                            <input type="button" name="clarification" id="clarification" class="btn btn-primary m-t-10 m-b-10" value="Need Clarification?" onclick="need_clarification('<?= $task_id ?>', '<?= $client_type ?>', '<?= $client_id ?>', '<?= $project_id ?>','<?= $office_id ?>')">
                                             <?php if(!empty($client_account_details) && $client_account_details[0]['need_clarification']==1){ ?>
                                             <div class="alert alert-info text-center" id="clarification_msg">
                                                 Clarification has been submitted successfully
