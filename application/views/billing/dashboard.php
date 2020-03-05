@@ -33,7 +33,6 @@ $staff_info = staff_info();
 $staff_department = explode(',', $staff_info['department']);
 $stafftype = $staff_info['type'];
 $staffrole = $staff_info['role'];
-//echo 'ss'.$is_recurrence;die;
 ?>
 <div class="wrapper wrapper-content">
     <div class="row">
@@ -333,10 +332,14 @@ $staffrole = $staff_info['role'];
     </div>
 </div> 
 <script>
-    loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1,'<?= $is_recurrence ?>');
+    if ('<?= isset($client_id_r); ?>') {
+        loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1,'<?= $is_recurrence ?>','<?= $client_id_r; ?>','<?= $pattern_r; ?>');
+    } else {
+        loadBillingDashboard('<?= isset($status) ? $status : ''; ?>', '', '<?= $office_id; ?>', '', 'on_load', 1,'<?= $is_recurrence ?>');    
+    }
     var content = $(".filter-div").html();
     var variableArray = [];
-    var elementArray = [];
+    var elementArray = [];    
     function addFilterRow() {
         var random = Math.floor((Math.random() * 999) + 1);
         var clone = '<div class="filter-div row m-b-20" id="clone-' + random + '">' + content + '<div class="col-sm-1 text-right p-l-0"><a href="javascript:void(0);" onclick="removeFilterRow(' + random + ')" class="remove-filter-button text-danger btn btn-white" data-toggle="tooltip" title="Remove filter" data-placement="top"><i class="fa fa-times" aria-hidden="true"></i> </a></div></div>';
