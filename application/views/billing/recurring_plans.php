@@ -6,7 +6,7 @@
 		<div class="col-md-12 m-t-20">
 			<input type="hidden" id="recurrence_invoice_id" value="<?= $rpd['invoice_id']; ?>">
 			<!-- main div -->
-			<div aria-expanded="false" class="r_monthly" data-toggle="tooltip" data-placement="top" onclick="show_recurrence_clients('<?= $rpd['invoice_id']; ?>','<?= $rpd['service_name']; ?>','<?= $rpd['pattern']; ?>')">
+			<div aria-expanded="false" class="r_monthly" data-toggle="tooltip" data-placement="top" onclick="show_recurrence_clients('<?= $rpd['invoice_id']; ?>','<?= $rpd['service_name']; ?>','<?= $rpd['pattern']; ?>','main')">
 				<table class="table text-white m-b-0" style="background: #263949">
 					<thead>
 	                    <tr>                        
@@ -34,16 +34,16 @@
 			<div id="collapse-recurring-<?= $rpd['invoice_id']; ?>" class="panel-collapse collapse" aria-expanded="false" style="display: none;">
 				<div class="row m-t-15 m-b-15">
 		            <div class="col-md-4" id="ofc-multiselect-div">
-		                <select name="ofc[]" id="ofc" class="form-control chosen-select ofc" data-placeholder="Select Office">
-		                    <!-- <option value="0">Select Office</option> -->
+		                <select name="ofc[]" id="ofc<?= $rpd['invoice_id']; ?>" class="form-control chosen-select ofc" data-placeholder="Select Office" onchange="get_office_id(this.value)">
+		                    <option value="">All Office</option>
 		                    <?php
 		                    load_ddl_option("staff_office_list", "", "");
 		                    ?>
 		                </select>                        
 		            </div>
 		            <div class="col-md-3">
-		                <select name="client[]" id="client" class="form-control chosen-select client" data-placeholder="Select Client">
-		                	<!-- <option value="0">Select Client</option> -->
+		                <select name="client" id="client_list<?= $rpd['invoice_id']; ?>" class="form-control" onchange="get_client_id(this.value)">
+		                	<option value="">All Client</option>
 		                	<?php
 		                		$client_list = get_client_list_on_recurrence_pattern($rpd['service_name'],$rpd['pattern']);
 		                		foreach ($client_list as $cl) {
@@ -55,9 +55,9 @@
 		                </select>		 
 		            </div>
 		            <div class="col-md-2">
-		            	<button type="button" class="btn btn-success" id="btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;" onclick="show_recurrence_clients('<?= $rpd['invoice_id']; ?>','<?= $rpd['service_name']; ?>','<?= $rpd['pattern']; ?>','filter')">Apply</button>
+		            	<button type="button" class="btn btn-success" id="apply-btn" style="margin: 0px 0px 0px 5px;border: 0px;border-radius: 0px;" onclick="show_recurrence_clients('<?= $rpd['invoice_id']; ?>','<?= $rpd['service_name']; ?>','<?= $rpd['pattern']; ?>','filter')">Apply</button>
 		            </div>
-		        </div>
+		        </div>	
 				<div id="clients-recurring-data<?= $rpd['invoice_id']; ?>">
 					
 				</div>
@@ -65,6 +65,8 @@
 		</div>
 		<?php
 			}
-		?> 
+		?>
+		<input type="hidden" name="client_id" id="client_id" value="">
+		<input type="hidden" name="office_id" id="office_id" value=""> 
 	</div>
 </div>    	

@@ -326,42 +326,7 @@ $office_id = get_office_id($staff_info['office']);
                         </ul>
                     </li>
                 <?php // } ?>
-                <!--Task Dashboard-->
-                <?php // if ($staff_info['type'] != 3) { ?>
-                    <!-- <li <?//= active_menu($main_menu, "task_dashboard"); ?> >
-                        <a href="<?//= base_url(); ?>task"><i class="fa fa-tasks"></i> <span class="nav-label">Tasks</span></a> -->
-                        <!--                        <ul class="nav nav-second-level collapse" style="height: 0px;">
-                                                    <li <?//= active_menu($menu, "project"); ?>>                            
-                                                        <a href="<?//= base_url(); ?>project">Dashboard</a>
-                                                    </li>
-                                                    <li <?//= active_menu($menu, "project_dashboard"); ?>>
-                                                        <a href="javascript:void(0);" onclick="CreateProjectModal('add', '');">- Add New Project</a>
-                                                    </li>
-                                                </ul>-->
-                    <!-- </li> -->
-                <?php // } ?>
-    <!--                <li <?//= active_menu($main_menu, "messages"); ?> >
-    <a href="javascript:void(0);">
-        <i class="fa fa-envelope"></i>
-        <span class="nav-label">Messages</span>
-        <span class="fa arrow"></span>
-    </a>
-    <ul class="nav nav-second-level collapse" style="height: 0px;">
-                <?php //if ($staff_info['type'] == 2 || $staff_info['type'] == 1) : ?>
-                                <li <?//= active_menu($menu, "messages_2"); ?>>
-                                    <a href="<?//= base_url(); ?>messages/index/2">For Corporate</a>
-                                </li>
-                <?php //endif; ?>
-                <?php// if ($staff_info['type'] == 3 || $staff_info['type'] == 1) : ?>
-                                <li <?//= active_menu($menu, "messages_3"); ?>>
-                                    <a href="<?//= base_url(); ?>messages/index/3">For Franchise</a>
-                                </li>
-                <?php //endif; ?>
-    </ul>
-    </li>-->
-
-        
-                
+                <!--Task Dashboard-->                
                 <!-- Clients -->
                 <li <?= active_menu($main_menu, "clients"); ?> >
                     <a href="javascript:void(0);"><i class="fa fa-address-card"></i> <span class="nav-label">Clients</span><span class="fa arrow"></span></a>

@@ -6,6 +6,7 @@ class Project_Template_model extends CI_Model {
 
     public function __construct() {
         parent::__construct();
+        $this->load->model("administration");
         $this->filter_element = [
             1 => "id",
             2 => "template_id",
@@ -19,7 +20,8 @@ class Project_Template_model extends CI_Model {
             10 => "added_by_user",
             11 => "due_date",
             12 => "template_cat_id",
-            13 => 'input_form_status'
+            13 => 'input_form_status',
+            14 => 'office_id'
         ];
 
         // $this->project_select[] = 'REPLACE(CONCAT(",",(SELECT GROUP_CONCAT(psm2.staff_id) FROM project_staff_main AS psm2 WHERE psm2.project_id = pro.id),(SELECT GROUP_CONCAT(pts.staff_id) FROM project_task_staff AS pts left join project_task AS pt on pt.id=pts.task_id WHERE pt.project_id = pro.id),","), " ", "") AS all_project_staffs';
@@ -2742,6 +2744,9 @@ class Project_Template_model extends CI_Model {
                 return $input_form_array;
                 break;
             }
+            case 14:{
+                return $this->administration->get_all_office_except_inactive_offices();
+            }
                 
             default: {
                     return [];
@@ -2786,6 +2791,9 @@ class Project_Template_model extends CI_Model {
         }
         elseif ($variable_value == 13) {
             $criteria_value = $criteria['input_form'];
+        }
+        elseif ($variable_value == 14) {
+            $criteria_value = $criteria['office_id'];
         }
         if ($variable_value == 9 || $variable_value == 11) { 
             if ($condition_value == 1 || $condition_value == 3) {
@@ -3534,6 +3542,8 @@ class Project_Template_model extends CI_Model {
         return $this->db->delete('project_bookkeeping_bank_record_time');
     }
     public function addActionForBookkeepingNeedClarification($data){
+        $this->db->where('task_id',$data['task_id']);
+        $this->db->update('project_task_bookkeeping_input_form2',['need_clarification'=>1]);
         $this->load->model('action_model');
         $task_id=$data['task_id'];
         $project_id=$data['project_id'];
@@ -3578,11 +3588,15 @@ class Project_Template_model extends CI_Model {
         $this->db->insert('action_client_list',$insert_client_list);
         if($insert_id!='' && !empty($staffids)){
             $this->system->save_general_notification('action', $insert_id, 'insert', $staff_id);
-            return $insert_id;
+            return 1;
         }
     }
     public function getBookkeepingInputFormTrackingLog($id, $table_name) {
         return $this->db->query("SELECT concat(s.last_name, ', ', s.first_name, ' ', s.middle_name) as stuff_id, (SELECT name from department where id=(SELECT department_id from department_staff where staff_id=s.id )) as department, case when tracking_logs.status_value = '0' then 'Incomplete' when tracking_logs.status_value = '1' then 'Complete' when tracking_logs.status_value = '2' then 'Not Required' else tracking_logs.status_value end as status, date_format(tracking_logs.created_time, '%m/%d/%Y - %r') as created_time FROM `tracking_logs` inner join staff as s on tracking_logs.stuff_id = s.id where tracking_logs.section_id = '$id' and tracking_logs.related_table_name = '$table_name' order by tracking_logs.id desc")->result_array();
+    }
+    public function getTotalRecordedTime($bank_id){
+        $this->db->select("SEC_TO_TIME(SUM(TIME_TO_SEC(record_time))) as total_time");
+        return $this->db->get_where("project_bookkeeping_bank_record_time",['bank_id'=>$bank_id])->result_array();
     }
     
 }

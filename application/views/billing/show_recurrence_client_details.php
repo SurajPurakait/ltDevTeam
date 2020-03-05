@@ -1,4 +1,4 @@
-<table class="table table-hover table-striped">
+<table class="table table-hover table-striped" style="cursor: pointer;">
 	<thead>
         <tr>                        
             <th class="text-center">Client Id</th>

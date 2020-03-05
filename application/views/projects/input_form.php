@@ -108,7 +108,7 @@
                                     </tr>
                                     <tr>
                                         <td style="width:150px;"><b>Tracking</b></td>
-                                        <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner(<?= $task_data->id; ?>,<?= $status; ?>, <?= $task_data->id ?>,<?= $task_data->project_id ?>,"<?= $task_data->task_order ?>");'><span id="trackinner-<?= $task_data->id ?>" projectid="<?= $task_data->project_id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
+                                        <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner_input(<?= $task_data->id; ?>,<?= $status; ?>, <?= $task_data->id ?>,<?= $task_data->project_id ?>,"<?= $task_data->task_order ?>");'><span id="trackinner-<?= $task_data->id ?>" projectid="<?= $task_data->project_id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
                                     </tr>
 
                                 </table>
@@ -511,9 +511,10 @@
 
                             <?php } else if ($bookkeeping_input_type == 2) { ?>
                                 <div class="panel-body">
+                                    <?php if (!empty($client_account_details)) { ?>
                                     <div class="table-responsive">
                                         <table class="table table-borderless">
-                                            <?php if (!empty($client_account_details)) { ?>
+                                            
                                                 <tr>
                                                     <th style='text-align: center;'>Bank Name</th>
                                                     <th style='width:8%;  text-align: center;'>Account Number</th>
@@ -559,6 +560,7 @@
                                                                             <?php $record_details = get_bookkeeping_records_details($accounts['id']); ?>
                                                                             <a href="javascript:void(0)" onclick="show_record_modal(<?= $accounts['id'] ?>, 'add')" class="label label-success"><?= count($record_details) ?></a>
                                                                         </div>
+                                                                        <div id="timer_result-<?= $accounts['id'] ?>" style="display: inline-block;"></div>
                                                                     </div>
                                                                     <input type="hidden" id="bank_id" value="<?= $accounts['id'] ?>">                                                                    
                                                                 </div>
@@ -597,20 +599,25 @@
                                                     $i++;
                                                 }
                                                 ?>
-                                            <?php } else {
-                                                ?>
-                                                <div class = "text-center m-t-30">
-                                                    <div class = "alert alert-danger">
-                                                        <i class = "fa fa-times-circle-o fa-4x"></i>
-                                                        <h3><strong>Sorry!</strong> no data found</h3>
-                                                    </div>
-                                                </div>
-                                            <?php } ?>
                                         </table>
+                                        <div>
+                                            <input type="button" name="clarification" id="clarification" class="btn btn-primary m-t-10 m-b-10" value="Need Clarification?" onclick="need_clarification('<?= $task_id ?>', '<?= $client_type ?>', '<?= $client_id ?>', '<?= $project_id ?>')">
+                                            <?php if(!empty($client_account_details) && $client_account_details[0]['need_clarification']==1){ ?>
+                                            <div class="alert alert-info text-center" id="clarification_msg">
+                                                Clarification has been submitted successfully
+                                            </div>
+                                            <?php } ?>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <input type="button" name="clarification" id="clarification" class="btn btn-primary m-t-10" value="Need Clarification?" onclick="need_clarification('<?= $task_id ?>', '<?= $client_type ?>', '<?= $client_id ?>', '<?= $project_id ?>')">
-                                    </div>
+                                    <?php } else {
+                                        ?>
+                                        <div class = "text-center m-t-30">
+                                            <div class = "alert alert-danger">
+                                                <i class = "fa fa-times-circle-o fa-4x"></i>
+                                                <h3><strong>Sorry!</strong> no data found</h3>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
                                 </div>
 
                             <?php } else if ($bookkeeping_input_type == 3) { ?>
@@ -713,10 +720,10 @@
                                 </div>
                             <?php } ?>
                         </div>
-                        <div id="adjustment_no">
                             <div class="text-center" id="adjustment_no_result"></div>
-                            <?= (isset($bookkeeper_details->created_at) && $bookkeeper_details->adjustment == 'y' ? '<div class="alert alert-info text-center"><b>Adjustment needed on ' . (date("m/d/Y h:i:s", strtotime($bookkeeper_details->created_at))).'</b></div>' : '') ?>
-                        </div>
+                            <div id="adjustment_no">
+                                <?= (isset($bookkeeper_details->created_at) && $bookkeeper_details->adjustment == 'y' ? '<div class="alert alert-info text-center"><b>Adjustment needed on ' . (date("m/d/Y h:i:s", strtotime($bookkeeper_details->created_at))).'</b></div>' : '') ?>
+                            </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <div class="col-lg-12 text-right">
@@ -872,8 +879,8 @@
                     <div class="col-md-8 col-md-offset-2">
                         <div class="funkyradio">
                             <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="rad0" value="0"/>
-                                <label for="rad0"><strong>Not Started</strong></label>
+                                <input type="radio" name="radio" id="not_start" value="0"/>
+                                <label for="not_start"><strong>Not Started</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
@@ -884,14 +891,14 @@
                         </div>
                         <div class="funkyradio">
                             <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="rad1" value="1"/>
-                                <label for="rad1"><strong>Started</strong></label>
+                                <input type="radio" name="radio" id="start1" value="1"/>
+                                <label for="start1"><strong>Started</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
                             <div class="funkyradio-success">
-                                <input type="radio" name="radio" id="rad2" value="2"/>
-                                <label for="rad2"><strong>Completed</strong></label>
+                                <input type="radio" name="radio" id="complete" value="2"/>
+                                <label for="complete"><strong>Completed</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
@@ -934,10 +941,10 @@
         </div>
     </div>
 </div>
-
 <script>
     get_financial_account_list('<?= $client_id; ?>', 'project', '<?= $task_id; ?>');
-<?php if ($bookkeeping_input_type == 3) { ?>
+<?php if ($bookkeeping_input_type == 3) { 
+    ?>
         check_adjustment('<?= (isset($bookkeeper_details->adjustment) && $bookkeeper_details->adjustment != '' ? $bookkeeper_details->adjustment : '') ?>', 'edit');
 <?php } ?>
     $(function () {
@@ -998,7 +1005,6 @@
                 t = '';
         function add(bank_id) {
             $("#watch-active-"+bank_id).addClass("active");
-            
             //            h3 = document.getElementById('total_time-'+bank_id),
             seconds++;
             if (seconds >= 60) {
@@ -1028,14 +1034,16 @@
                 url: base_url + 'task/update_project_bookkeeping_record_time',
                 dataType: "html",
                 success: function (result) {
-                    //$("#load_record_time-" + bank_id).hide();
-                    $("#load_record_time-" + bank_id).html(result);
+                    $("#load_record_time-" + bank_id).hide();
+//                    $("#load_record_time-" + bank_id).html(result);
+                    $("#timer_result-" + bank_id).html(result);
                 }
             });
             h3.textContent = "00:00:00";
             seconds = 0;
             minutes = 0;
             hours = 0;
+            $("#watch-active-"+bank_id).removeClass("active");
         }
         function clear_record(bank_id){
             clearTimeout(t);
@@ -1049,6 +1057,7 @@
     function check_adjustment(adjustment, type = '') {
         if (adjustment == 'n') {
             $("#bookkeeping_check3").hide();
+            $("#upload_list").hide();
             if (type == '') {
                 swal({
                     title: "Did you review bookkeeping report with the client?",
@@ -1072,91 +1081,96 @@
 //                    });
                     setTimeout(function () {
                         swal("I confirm that bookkeeping was done correctly.");
-                        $("#adjustment_no_result").html('<div class="alert alert-success text-center m-b-15">Confirming Bookkeeping was done correctly</div>');
                         $("#adjustment_no_result").show();
+                        $("#adjustment_no_result").html('<div class="alert alert-success text-center m-b-15">Confirming Bookkeeping was done correctly</div>');
                         $("#upload_list").hide();
-                    }, 500);
+                        $("#adjustment_no").hide();
+                    }
+                    , 500);
                 });
 
             } else {
-                $("#adjustment_no_result").html('Confirming Bookkeeping was done correctly');
                 $("#adjustment_no_result").show();
+                $("#adjustment_no_result").html('<div class="alert alert-success text-center m-b-15">Confirming Bookkeeping was done correctly</div>');
+                $("#adjustment_no").hide();
                 $("#upload_list").hide();
             }
         } else if (adjustment == 'y') {
             $("#bookkeeping_check3").show();
             $("#upload_list").show();
             $("#adjustment_no_result").hide();
+            $("#adjustment_no").show();
         } else {
             $("#bookkeeping_check3").hide();
             $("#upload_list").hide();
-            $("#adjustment_no_result").hide();
+            $("#adjustment_no_result").show();
+            $("#adjustment_no").hide();
     }
     }
 //    $("#watch-active").click(function(){
 //  $("#watch-active").addClass("active");
 //});
-//    function change_project_status_inner_input(id, status, section_id,project_id='',task_order='') {
-//        openModal('changeStatusinner');
-//        var txt = 'Tracking Task #' + project_id+'-'+task_order;
-//        $("#changeStatusinner .modal-title").html(txt);
-//        if (status == 0) {
-//            $("#changeStatusinner #rad0").prop('checked', true);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//        } else if (status == 1) {
-//            $("#changeStatusinner #rad1").prop('checked', true);
-//            $("#changeStatusinner #rad0").prop('checked', false);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//        } else if (status == 2) {
-//            $("#changeStatusinner #rad2").prop('checked', true);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad0").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//        }
-//        else if (status == 3) {
-//            $("#changeStatusinner #rad3").prop('checked', true);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad0").prop('checked', false);
-//        }
-//        else if (status == 4) {
-//            $("#changeStatusinner #rad4").prop('checked', true);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad0").prop('checked', false);
-//        }
-//        else if (status == 5) {
-//            $("#changeStatusinner #rad5").prop('checked', true);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad0").prop('checked', false);
-//        }
-//        $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
-//            $("#status_log > tbody > tr").remove();
-//            var returnedData = JSON.parse(data);
-//            for (var i = 0, l = returnedData.length; i < l; i++) {
-//                $('#status_log > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
-//            }
-//            if (returnedData.length >= 1)
-//                $("#log_modal").show();
-//            else
-//                $("#log_modal").hide();
-//        });
-//        $("#changeStatusinner #prosubid").val(id);
-//    }
+    function change_project_status_inner_input(id, status, section_id,project_id='',task_order='') {
+        openModal('changeStatusinner');
+        var txt = 'Tracking Task #' + project_id+'-'+task_order;
+        $("#changeStatusinner .modal-title").html(txt);
+        if (status == 0) {
+            $("#changeStatusinner #not_start").prop('checked', true);
+            $("#changeStatusinner #start1").prop('checked', false);
+            $("#changeStatusinner #complete").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
+        } else if (status == 1) {
+            $("#changeStatusinner #start1").prop('checked', true);
+            $("#changeStatusinner #not_start").prop('checked', false);
+            $("#changeStatusinner #complete").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
+        } else if (status == 2) {
+            $("#changeStatusinner #complete").prop('checked', true);
+            $("#changeStatusinner #start1").prop('checked', false);
+            $("#changeStatusinner #not_start").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
+        }
+        else if (status == 3) {
+            $("#changeStatusinner #rad3").prop('checked', true);
+            $("#changeStatusinner #rad5").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #complete").prop('checked', false);
+            $("#changeStatusinner #start1").prop('checked', false);
+            $("#changeStatusinner #not_start").prop('checked', false);
+        }
+        else if (status == 4) {
+            $("#changeStatusinner #rad4").prop('checked', true);
+            $("#changeStatusinner #rad5").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #complete").prop('checked', false);
+            $("#changeStatusinner #start1").prop('checked', false);
+            $("#changeStatusinner #not_start").prop('checked', false);
+        }
+        else if (status == 5) {
+            $("#changeStatusinner #rad5").prop('checked', true);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #complete").prop('checked', false);
+            $("#changeStatusinner #start1").prop('checked', false);
+            $("#changeStatusinner #not_start").prop('checked', false);
+        }
+        $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
+            $("#status_log > tbody > tr").remove();
+            var returnedData = JSON.parse(data);
+            for (var i = 0, l = returnedData.length; i < l; i++) {
+                $('#status_log > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
+            }
+            if (returnedData.length >= 1)
+                $("#log_modal").show();
+            else
+                $("#log_modal").hide();
+        });
+        $("#changeStatusinner #prosubid").val(id);
+    }
 </script>

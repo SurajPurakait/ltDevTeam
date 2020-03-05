@@ -55,7 +55,14 @@ if ($val == 1) { // Service Id (invoice id)
     $return = '<input placeholder="dd/mm/yyyy" class="form-control datepicker_mdy" type="text" title="Start Date" name="criteria_dropdown[startdate][]" value="">';
 } elseif ($val == 6) { // Complete date
     $return = '<input placeholder="dd/mm/yyyy" class="form-control datepicker_mdy" type="text" title="Complete Date" name="criteria_dropdown[completedate][]" value="">';
-}else {
+} elseif ($val == 7) { //Request type
+    $return .= "<select class='form-control criteria-dropdown chosen-select' placeholder='All Criteria' name='criteria_dropdown[request_type][]'>";
+    $return .= "<option value=''>All Criteria</option>";
+    $return .= '<option value="byme">By ME</option>';
+    $return .= '<option value="tome">To ME</option>';
+    $return .= '<option value="byothers">Others</option>';
+    $return .= "</select>";
+} else {
     $return .= '<select class="form-control criteria-dropdown chosen-select" placeholder="All Criteria" name="criteria_dropdown[][]">';
     $return .= "<option value=''>All Criteria</option>";
     $return .= '</select>';
