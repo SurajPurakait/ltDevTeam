@@ -404,7 +404,7 @@ function printOrder() {
     doPrint.print();
     doPrint.close();
 }
-function loadBillingDashboard(status = '', by = '', office = '', payment_status = '', reference_id = '', pageNumber = 0,is_recurrence='') {
+function loadBillingDashboard(status = '', by = '', office = '', payment_status = '', reference_id = '', pageNumber = 0,is_recurrence='',invoice_id='',pattern='') {
     $.ajax({
         type: "POST",
         url: base_url + 'billing/home/dashboard_ajax',
@@ -415,7 +415,9 @@ function loadBillingDashboard(status = '', by = '', office = '', payment_status 
             payment_status: payment_status,
             reference_id: reference_id,
             page_number: pageNumber,
-            is_recurrence:is_recurrence
+            is_recurrence:is_recurrence,
+            invoice_id:invoice_id,
+            pattern:pattern
         },
         dataType: "html",
         success: function (result) {

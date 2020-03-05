@@ -1283,3 +1283,6 @@ ALTER TABLE `project_task_bookkeeper_department`
 ALTER TABLE `project_task_bookkeeper_department` ADD `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `adjustment`; 
 
 ALTER TABLE `project_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for started, 2 for resolved, 3 for ready, 4 for canceled, 5 for clarification'; 
+/* 05.03.2020 */
+ALTER TABLE `invoice_recurring_plans` ADD `order_id` VARCHAR(20) NOT NULL AFTER `invoice_id`; 
+ALTER TABLE `invoice_recurring_plans` CHANGE `order_id` `order_id` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0'; 

@@ -43,14 +43,22 @@ class Home extends CI_Controller {
         asort($this->sorting_element);
     }
 
-    public function index($is_recurrence='',$status = '', $office_id = '') {
-//        echo $status;die;
+    public function index($is_recurrence='',$status = '', $office_id = '',$pattern='') {
         $this->load->layout = 'dashboard';
         $render_data['main_menu'] = 'billing';
         if($is_recurrence=='y'){
             $title = "Recurring Invoice";
             $render_data['menu'] = 'recurring_invoice';
         }else{
+            $client_id_r = base64_decode($is_recurrence);
+            $pattern_r = base64_decode($pattern);
+            if (!empty($client_id_r)) {
+                $render_data['client_id_r'] = $client_id_r;
+                $render_data['pattern_r'] = $pattern_r;
+            }else {
+                $render_data['client_id_r'] = '';
+                $render_data['pattern_r'] = '';
+            }
             $title = "Invoice Dashboard";
             $render_data['menu'] = 'billing_dashboard';
         }
@@ -64,6 +72,9 @@ class Home extends CI_Controller {
         }
         if ($status == 0) {
             $status = '';
+        }
+        if ($office_id == 0) {
+            $office_id = '';
         }
         $render_data['status'] = $status;
         $render_data['office_id'] = $office_id;
@@ -90,9 +101,20 @@ class Home extends CI_Controller {
         if (post('page_number') != 0) {
             $render_data['page_number'] = request('page_number');
         }
+        if (post('invoice_id')) {
+            $invoice_id = post('invoice_id');
+        } else {
+            $invoice_id = '';
+        }
+        if (post('pattern')) {
+            $pattern = post('pattern');
+        } else {
+            $pattern = '';
+        }
+        
         $render_data['is_recurrence']=$is_recurrence=post('is_recurrence');
         $render_data['filter_status'] = post('payment_status');
-        $render_data['result'] = $this->billing_model->billing_list($status, $by, $office, $payment_status, $reference_id,'','',$is_recurrence);
+        $render_data['result'] = $this->billing_model->billing_list($status, $by, $office, $payment_status, $reference_id,'','',$is_recurrence,$invoice_id,$pattern);
         $this->load->view('billing/ajax_dashboard', $render_data);
     }
 
@@ -264,6 +286,7 @@ class Home extends CI_Controller {
 
     public function show_recurrence_client_details() {
         $render_data['recurrence_client_details'] = $this->billing_model->show_recurrence_client_details(post());
+        $render_data['pattern'] = post('pattern');
         $this->load->view('billing/show_recurrence_client_details', $render_data);
     }
 
