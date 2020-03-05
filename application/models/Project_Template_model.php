@@ -3083,7 +3083,7 @@ class Project_Template_model extends CI_Model {
         return $this->db->get('template_category')->result_array();
     }
     public function getClientDtlsByTaskId($task_id){
-        $this->db->select('p.client_id,p.client_type,pt.project_id');
+        $this->db->select('p.client_id,p.client_type,pt.project_id,p.office_id');
         $this->db->from('project_task pt');
         $this->db->join('projects p','p.id=pt.project_id','inner');
         $this->db->where('pt.id',$task_id);
@@ -3553,14 +3553,15 @@ class Project_Template_model extends CI_Model {
         $staff_info=$_SESSION['staff_info'];
         $practice_id=$this->getProjectClientPracticeId($client_id, $client_type);
         $subject="#".$project_id."ProjectId Need Clarification";
-        $staffids=$this->db->get_where('department_staff',['department_id'=>11])->result_array();
+        $staffids[0]['staff_id']=$this->getClientManagerId($client_id,$client_type);
+//        $staffids=$this->db->get_where('department_staff',['department_id'=>11])->result_array();
 //        print_r($staffids);die;
         $insert_action=array(
             'office_id'=>$staff_info['office'],
             'created_office'=>$staff_info['office'],
             'created_department'=>$staff_info['department'],
-            'department'=>11,
-            'office'=>$staff_info['office'],
+            'department'=>2,
+            'office'=>$data['office_id'],
             'client_id'=>$practice_id,
             'subject'=> $subject,
             'message'=>$action_message,
@@ -3568,7 +3569,7 @@ class Project_Template_model extends CI_Model {
             'status'=>0,
             'added_by_user'=>$staff_info['id'],
             'my_task'=>0,
-            'is_all'=>1,
+            'is_all'=>0,
         );
         $this->db->insert('actions',$insert_action);
         $insert_id=$this->db->insert_id();
@@ -3598,7 +3599,20 @@ class Project_Template_model extends CI_Model {
         $this->db->select("SEC_TO_TIME(SUM(TIME_TO_SEC(record_time))) as total_time");
         return $this->db->get_where("project_bookkeeping_bank_record_time",['bank_id'=>$bank_id])->result_array();
     }
-    
+    public function getClientManagerId($client_id,$client_type){
+        $managerid='';
+        if($client_type==1){
+            $this->db->select('manager as staff_id');
+            $managerid=$this->db->get_where('internal_data',['reference_id'=>$client_id])->row()->staff_id;
+        }else{
+            $this->db->select('intd.manager as  staff_id');
+            $this->db->from('internal_data as intd');
+            $this->db->join('title as t','t.individual_id=intd.reference_id','inner');
+            $this->db->where('t.id',$client_id);
+            $managerid=$this->db->get()->row()->staff_id;
+        }
+        return $managerid;
+    }
 }
 
 ?>
