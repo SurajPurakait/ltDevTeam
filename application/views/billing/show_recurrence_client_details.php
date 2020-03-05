@@ -39,7 +39,7 @@
         var encoded_client_id = window.btoa(client_id);
         var encoded_pattern = window.btoa(pattern);
         window.open(
-          'http://localhost/leafnet/billing/home/index/'+encoded_client_id+'/0/0/'+encoded_pattern,
+          base_url+'billing/home/index/'+encoded_client_id+'/0/0/'+encoded_pattern,
           '_blank'
         );
     }
