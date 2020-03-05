@@ -647,16 +647,15 @@ class Service_model extends CI_Model
                 $where[] = 'ord.status = "' . $status . '"';
             }
         } else {
-            // if (isset($form_data) && !empty($form_data)) {
-            //     $where[] = 'ord.status in ("2","1","0","7")';
-            // }
-            if (in_array('ord.status = 0', $where)) {
+            if (isset($form_data) && !empty($form_data)) {
+                $where[] = 'ord.status in ("2","1","0","7")';
+            } elseif (in_array('ord.status = 0', $where)) {
                 $where[] = 'ord.status not in ("7")';
             } elseif (in_array('ord.status = 7', $where)) {
                 $where[] = 'ord.status not in ("0")';
             } else {
-                // $where[] = 'ord.status not in ("0","7")';
-                $where[] = 'ord.status in ("2","1","0","7")';
+                $where[] = 'ord.status not in ("0","7")';
+                // $where[] = 'ord.status in ("2","1","0","7")';
             }
         }
 
@@ -689,7 +688,7 @@ class Service_model extends CI_Model
         }
         $this->db->query('SET SQL_BIG_SELECTS=1');
         $result = $this->db->query($sql)->result();
-        //        echo $this->db->last_query();exit;
+               // echo $this->db->last_query();exit;
         return $result;
     }
 
