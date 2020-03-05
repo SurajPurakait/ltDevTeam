@@ -3333,6 +3333,10 @@ class Billing_model extends CI_Model
                 $this->db->where(['id' => $invoice_id]);
                 $this->db->update('invoice_info', ['order_id' => $order_id]);
             }
+            if ($save_type == 'create') {
+                $this->db->where(['invoice_id' => $invoice_id]);
+                $this->db->update('invoice_recurring_plans', array('order_id' => $order_id));
+            }
         } else if ($invoice_info['type'] == 2) { //Individual client
 
             $service_request_columns = $this->db->list_fields('service_request');
@@ -3450,6 +3454,10 @@ class Billing_model extends CI_Model
                 $this->db->where(['id' => $invoice_id]);
                 $this->db->update('invoice_info', array('order_id' => $order_id));
             }
+            if ($save_type == 'create') {
+                $this->db->where(['invoice_id' => $invoice_id]);
+                $this->db->update('invoice_recurring_plans', array('order_id' => $order_id));
+            }
         }
 
         // $this->db->trans_begin();
@@ -3464,7 +3472,7 @@ class Billing_model extends CI_Model
         }
     }
 
-    public function billing_list($status = '', $by = '', $office = '', $payment_status = '', $reference_id = '', $filter_data = [], $sort = [], $is_recurrence = '')
+    public function billing_list($status = '', $by = '', $office = '', $payment_status = '', $reference_id = '', $filter_data = [], $sort = [], $is_recurrence = '',$client_id = '',$pattern='')
     {
         $staff_info = staff_info();
         $staff_id = $staff_info['id'];
@@ -3506,9 +3514,14 @@ class Billing_model extends CI_Model
             '(SELECT next_occurance_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as next_generation_date',
             '(SELECT total_generation_time FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as total_generation_time',
             '(SELECT duration_time FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as total_duration_time',
-            '(SELECT start_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as created_date',
+            // '(SELECT start_date FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as created_date',
             '(SELECT duration_type FROM invoice_recurence WHERE invoice_recurence.invoice_id = inv.id) as duration_type',
         ];
+        if ($client_id != '') {
+            $where['indt.practice_id'] = '`indt`.`practice_id` = "' . $client_id . '" AND';
+            $where['inv.is_recurrence'] = '`inv`.`is_recurrence` = "y" AND';
+            $where['irp.pattern'] = '`irp`.`pattern` = "' . $pattern . '" AND';
+        }
         $where['ord.reference'] = '`ord`.`reference` = \'invoice\' ';
         $where['status'] = 'AND `inv`.`status` != 0 ';
         
@@ -3686,7 +3699,7 @@ class Billing_model extends CI_Model
 
         $table = '`invoice_info` AS `inv` ' .
             'INNER JOIN `order` AS `ord` ON `ord`.`invoice_id` = `inv`.`id` ' .
-            'INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END) ';
+            'INNER JOIN `internal_data` AS `indt` ON (CASE WHEN `inv`.`type` = 1 THEN `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "company" ELSE `indt`.`reference_id` = `inv`.`client_id` AND `indt`.`reference` = "individual" END) LEFT JOIN `invoice_recurring_plans` AS `irp` ON `irp`.`invoice_id` = `inv`.`id`';
 
         $this->db->query('SET SQL_BIG_SELECTS=1');
         return $this->db->query('SELECT ' . implode(', ', $select) . ' FROM ' . $table . 'WHERE ' . implode('', $where) . (isset($where_or) ? $where_or : '') . ' GROUP BY `ord`.`invoice_id` ' . $order_by . ' ')->result_array();
@@ -4013,13 +4026,14 @@ class Billing_model extends CI_Model
     public function get_recurrence_pattern_data() {
         $this->db->select('service_name,pattern,invoice_id,COUNT(invoice_id) AS no_of_invoices,COUNT(DISTINCT(client_id)) AS no_of_clients,SUM(total_amount) AS total_billed,SUM(amount_collected) AS amount_collected');
         $this->db->having('pattern !=','');
+        $this->db->where('order_id !=','0');
         $this->db->group_by(array('service_name','pattern'));
         $this->db->order_by('service_name', 'ASC');
         return $this->db->get('invoice_recurring_plans')->result_array();
     }
 
     public function show_recurrence_client_details($data) {
-        $this->db->select('service_name,client_id,COUNT(invoice_id) AS no_of_invoices,SUM(total_amount) AS total_billed,SUM(amount_collected) AS amount_collected,manager,pattern');
+        $this->db->select('invoice_id,service_name,client_id,COUNT(invoice_id) AS no_of_invoices,SUM(total_amount) AS total_billed,SUM(amount_collected) AS amount_collected,manager,pattern');
         $this->db->where('service_name',$data['service_name']);
         $this->db->where('pattern',$data['pattern']);
         if ($data['office_id'] != '' && $data['client_id'] != '') {
@@ -4032,8 +4046,31 @@ class Billing_model extends CI_Model
         if ($data['client_id'] != '') {
             $this->db->where('client_id',$data['client_id']);
         }
+        $this->db->where('order_id !=','0');
         $this->db->group_by('client_id');
         return $this->db->get('invoice_recurring_plans')->result_array();
+    }
+    public function show_recurrence_client_details1($data) {
+        $this->db->select('invr.invoice_id,invr.service_name,invr.client_id,COUNT(invr.invoice_id) AS no_of_invoices,SUM(invr.total_amount) AS total_billed,SUM(invr.amount_collected) AS amount_collected,invr.manager,invr.pattern');
+        $this->db->where('invr.service_name',$data['service_name']);
+        $this->db->where('invr.pattern',$data['pattern']);
+        if ($data['office_id'] != '' && $data['client_id'] != '') {
+            $this->db->where('invr.office_id',$data['office_id']);
+            $this->db->where('invr.client_id',$data['client_id']);
+        }
+        if ($data['office_id'] != '') {
+            $this->db->where('invr.office_id',$data['office_id']);
+        }
+        if ($data['client_id'] != '') {
+            $this->db->where('invr.client_id',$data['client_id']);
+        }
+        $this->db->where('inv.order_id !=','0');
+        $this->db->group_by('invr.client_id');
+        
+        $this->db->from('invoice_recurring_plans AS invr');
+        $this->db->join('invoice_info AS inv', 'inv.id = invr.invoice_id');
+        return $this->db->get()->result_array();
+        // return $this->db->get('invoice_recurring_plans')->result_array();
     }
     public function get_client_list_on_recurrence_pattern($service_name,$pattern) {
         $this->db->where('service_name',$service_name);

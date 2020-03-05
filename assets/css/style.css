@@ -8846,6 +8846,13 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
     padding: 4px 0;
     border-radius: 50px;
 }
+
+.start {
+    border: none;
+    background: none;
+    padding: 0;
+    vertical-align: bottom;
+}
 .start i{
     font-size: 21px;
     color:#f00;

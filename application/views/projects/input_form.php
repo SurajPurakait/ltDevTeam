@@ -552,8 +552,8 @@
                                                             <div class="form-group">
                                                                 <div class="col-lg-10">
                                                                     <div class="watch" id="watch-active-<?= $accounts['id'] ?>">
-                                                                        <a href="javascript:void(0)" class="start" title="Record" id="start" name="start" onclick="add(<?= $accounts['id'] ?>)"><i class="fa fa-dot-circle-o" aria-hidden="true"></i></a>
-                                                                        <a href="javascript:void(0)" class="stop" title="Pause" id="stop" name="stop" onclick="stop_record()"><i class="fa fa-pause-circle" aria-hidden="true"></i></a>
+                                                                        <button type="button" class="start" title="Record" id="start<?= $accounts['id'] ?>" name="start" onclick="add(<?= $accounts['id'] ?>)" /><i class="fa fa-dot-circle-o" aria-hidden="true"></i></button>
+                                                                        <a href="javascript:void(0)" class="stop" title="Pause" id="stop" name="stop" onclick="stop_record(<?= $accounts['id'] ?>)"><i class="fa fa-pause-circle" aria-hidden="true"></i></a>
                                                                         <a href="javascript:void(0)" class="save" title="Save Entry" id="save" name="save" onclick="save_record(<?= $accounts['id'] ?>)"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
                                                                         <a href="javascript:void(0)" class="clear-icon" title="Clear" id="clear-icon" name="clear" onclick="clear_record(<?= $accounts['id'] ?>)"><i class="fa fa-stop-circle-o" aria-hidden="true"></i></a>
                                                                         <div id="load_record_time-<?= $accounts['id'] ?>" style="display: inline-block;">
@@ -601,7 +601,7 @@
                                                 ?>
                                         </table>
                                         <div>
-                                            <input type="button" name="clarification" id="clarification" class="btn btn-primary m-t-10 m-b-10" value="Need Clarification?" onclick="need_clarification('<?= $task_id ?>', '<?= $client_type ?>', '<?= $client_id ?>', '<?= $project_id ?>')">
+                                            <input type="button" name="clarification" id="clarification" class="btn btn-primary m-t-10 m-b-10" value="Need Clarification?" onclick="need_clarification('<?= $task_id ?>', '<?= $client_type ?>', '<?= $client_id ?>', '<?= $project_id ?>','<?= $office_id ?>')">
                                             <?php if(!empty($client_account_details) && $client_account_details[0]['need_clarification']==1){ ?>
                                             <div class="alert alert-info text-center" id="clarification_msg">
                                                 Clarification has been submitted successfully
@@ -1005,6 +1005,7 @@
                 t = '';
         function add(bank_id) {
             $("#watch-active-"+bank_id).addClass("active");
+            $("#start"+bank_id).attr("disabled", true);
             //            h3 = document.getElementById('total_time-'+bank_id),
             seconds++;
             if (seconds >= 60) {
@@ -1022,8 +1023,9 @@
         function timer() {
             t = setTimeout(add, 1000);
         }
-        function stop_record() {
+         function stop_record(bank_id) {
             clearTimeout(t);
+            $("#start"+bank_id).attr("disabled", false);
         }
         function save_record(bank_id) {
             clearTimeout(t);
