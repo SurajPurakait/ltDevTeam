@@ -523,69 +523,69 @@ $role = $user_info['role'];
             $(newHtml).insertAfter($(this).closest('.form-group'));
         });
     });
-//    function change_project_status_inner(id, status, section_id,project_id='',task_order='') {
-//        openModal('changeStatusinner');
-//        var txt = 'Tracking Task #' + project_id+'-'+task_order;
-//        $("#changeStatusinner .modal-title").html(txt);
-//        if (status == 0) {
-//            $("#changeStatusinner #rad0").prop('checked', true);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//        } else if (status == 1) {
-//            $("#changeStatusinner #rad1").prop('checked', true);
-//            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//        } else if (status == 2) {
-//            $("#changeStatusinner #rad2").prop('checked', true);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
-//            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//        }
-//        else if (status == 3) {
-//            $("#changeStatusinner #rad3").prop('checked', true);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//            $("#changeStatusinner #rad4").prop('checked', false);
-//            $("#changeStatusinner #rad2").prop('checked', false);
-//            $("#changeStatusinner #rad1").prop('checked', false);
-//            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
-//        }
-//        else if (status == 4) {
-//            $("#changeStatusinner #rad4").prop('checked', true);
-//            $("#changeStatusinner #rad5").prop('checked', false);
-//            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
-//            $("#changeStatusinner #rad2").prop('checked', false).attr('disabled',true);
-//            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled',true);
-//            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
-//        }
-//        else if (status == 5) {
-//            $("#changeStatusinner #rad5").prop('checked', true);
-//            $("#changeStatusinner #rad4").prop('checked', true).attr('disabled',true);
-//            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
-//            $("#changeStatusinner #rad2").prop('checked', false).attr('disabled',true);
-//            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled',true);
-//            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
-//        }
-//        $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
-//            $("#status_log > tbody > tr").remove();
-//            var returnedData = JSON.parse(data);
-//            for (var i = 0, l = returnedData.length; i < l; i++) {
-//                $('#status_log > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
-//            }
-//            if (returnedData.length >= 1)
-//                $("#log_modal").show();
-//            else
-//                $("#log_modal").hide();
-//        });
-//        $("#changeStatusinner #prosubid").val(id);
-//    }
+    function change_project_status_inner(id, status, section_id,project_id='',task_order='') {
+        openModal('changeStatusinner');
+        var txt = 'Tracking Task #' + project_id+'-'+task_order;
+        $("#changeStatusinner .modal-title").html(txt);
+        if (status == 0) {
+            $("#changeStatusinner #rad0").prop('checked', true);
+            $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad2").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
+        } else if (status == 1) {
+            $("#changeStatusinner #rad1").prop('checked', true);
+            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad2").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
+        } else if (status == 2) {
+            $("#changeStatusinner #rad2").prop('checked', true);
+            $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
+        }
+        else if (status == 3) {
+            $("#changeStatusinner #rad3").prop('checked', true);
+            $("#changeStatusinner #rad5").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad2").prop('checked', false);
+            $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+        }
+        else if (status == 4) {
+            $("#changeStatusinner #rad4").prop('checked', true);
+            $("#changeStatusinner #rad5").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad2").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+        }
+        else if (status == 5) {
+            $("#changeStatusinner #rad5").prop('checked', true);
+            $("#changeStatusinner #rad4").prop('checked', true).attr('disabled',true);
+            $("#changeStatusinner #rad3").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad2").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad1").prop('checked', false).attr('disabled',true);
+            $("#changeStatusinner #rad0").prop('checked', false).attr('disabled',true);
+        }
+        $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
+            $("#status_log > tbody > tr").remove();
+            var returnedData = JSON.parse(data);
+            for (var i = 0, l = returnedData.length; i < l; i++) {
+                $('#status_log > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
+            }
+            if (returnedData.length >= 1)
+                $("#log_modal").show();
+            else
+                $("#log_modal").hide();
+        });
+        $("#changeStatusinner #prosubid").val(id);
+    }
 //    function updateProjectStatusinner(type = '') {
 //        var statusval = $('#changeStatusinner input:radio[name=radio]:checked').val();
 //        var prosubid = $('#changeStatusinner #prosubid').val();

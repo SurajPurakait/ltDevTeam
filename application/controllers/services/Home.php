@@ -654,21 +654,21 @@ class Home extends CI_Controller {
     }
 
     public function service_new_dashboard_filter() {
-        // if (post('request_type') == 'on_load') {
-        //     $render_data['load_type'] = 'on_load';
-        //     $request_type = '';
-        // } else {
-        //     $request_type = post('request_type');
-        // }
+        if (post('request_type') == 'on_load') {
+            $render_data['load_type'] = 'on_load';
+            $request_type = '';
+        } else {
+            $request_type = post('request_type');
+        }
         // $category_id = request('category_id');
-        // $status = request('status');
+        $status = request('status');
         // $request_by = request('request_by');
         // $department = request('department_id');
         // $office = request('office_id');
         // $staff_type = request('staff_type');
         // $sort = request('sort');
         $render_data['page_number'] = request('page_number');
-        $render_data['result'] = $this->service_model->ajax_services_new_dashboard_filter();
+        $render_data['result'] = $this->service_model->ajax_services_new_dashboard_filter('',$status,$request_type);
         // echo "<pre>";
         // print_r($render_data);exit;
         $this->load->view('services/service_new_ajax_dashboard', $render_data);

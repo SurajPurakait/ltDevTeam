@@ -8836,24 +8836,42 @@ table#report-tab thead .sorting::after, table#report-tab thead .sorting_desc::af
     margin-left: 0.5em;
 }
 .watch {
-    width: 235px;
+    width: 190px;
     padding: 0px;
     /*border-radius: 5px;*/
+    padding: 4px 0;
+}
+.watch.active {
+    background: #d3d3d3;
+    padding: 4px 0;
+    border-radius: 50px;
+}
+
+.start {
+    border: none;
+    background: none;
+    padding: 0;
+    vertical-align: bottom;
 }
 .start i{
-  font-size: 21px;
-color:#f00;
+    font-size: 21px;
+    color:#f00;
 }
 .stop i{
     font-size: 22px;
-color:#0f47f0;
+    color:#0f47f0;
 }
 .save i{
     font-size: 21px;
-color:#3f9f2b;
+    color:#3f9f2b;
+}
+.clear-icon i{
+    font-size: 21px;
+    color: #f8ac59;
 }
 .start i:hover,
 .stop i:hover,
+.clear-icon i:hover,
 .save i:hover{
     transform: scale(1.3);
     transition: 500ms;

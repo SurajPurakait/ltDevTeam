@@ -1256,7 +1256,6 @@ ALTER TABLE `partner_services_data` CHANGE `realtor` `realtor` VARCHAR(50) CHARA
 ALTER TABLE `lead_management` ADD `client_reference` VARCHAR(50) NOT NULL AFTER `day_6_mail_date`, ADD `client_id` INT(11) NOT NULL AFTER `client_reference`;
 ALTER TABLE `lead_management` CHANGE `client_id` `client_id` INT(11) NOT NULL DEFAULT '0';
 
-/*live end*/
 /*26.02.2020*/
 ALTER TABLE `services` ADD `is_recurring` ENUM('n','y') NOT NULL DEFAULT 'n' AFTER `is_active`; 
 /*27.02.2020*/
@@ -1283,3 +1282,14 @@ ALTER TABLE `project_task_bookkeeper_department`
 ALTER TABLE `project_task_bookkeeper_department` ADD `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `adjustment`; 
 
 ALTER TABLE `project_task` CHANGE `tracking_description` `tracking_description` INT(4) NOT NULL COMMENT '0 for new, 1 for started, 2 for resolved, 3 for ready, 4 for canceled, 5 for clarification'; 
+
+/*live end*/
+/*04.03.2020 */
+
+ALTER TABLE `project_bookkeeping_bank_record_time` CHANGE `record_time` `record_time` TIME NOT NULL; 
+
+ALTER TABLE `project_task_bookkeeping_input_form2` ADD `need_clarification` INT(2) NOT NULL DEFAULT '0' AFTER `created_at`; 
+
+/* 05.03.2020 */
+ALTER TABLE `invoice_recurring_plans` ADD `order_id` VARCHAR(20) NOT NULL AFTER `invoice_id`; 
+ALTER TABLE `invoice_recurring_plans` CHANGE `order_id` `order_id` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0'; 

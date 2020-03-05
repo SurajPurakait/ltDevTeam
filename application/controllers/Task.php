@@ -176,6 +176,7 @@ class Task extends CI_Controller {
             }else if($bookkeeping_input_type==2){
                 $render_data['client_id']=$client_dtls->client_id;
                 $render_data['client_type']=$client_dtls->client_type;
+                $render_data['office_id']=$client_dtls->office_id;
                 $render_data['client_account_details']= $this->Project_Template_model->getBookkeepingInput2AccountDetails($client_dtls->client_id,$task_id,$project_id);
 //                $render_data['bookkeeper_details']=$this->Project_Template_model->getProjetBookkeeperDetails($task_id);
             }else{
@@ -255,6 +256,7 @@ class Task extends CI_Controller {
         $ins['section']='';
         $this->Project_Template_model->deleteBookkeepingTimerRecord($record_id);
         $ins['record_details']=$this->Project_Template_model->insertBookkeepingBankRecordTime('',$bank_id);
+        $ins['total_record_time']=$this->Project_Template_model->getTotalRecordedTime($bank_id);
         if($record_id==''){
             $this->load->view('task/bookkeeping_record_details',$ins);
         }else{
@@ -277,6 +279,7 @@ class Task extends CI_Controller {
             $data['section']='';
         }
         $data['record_details']=$this->Project_Template_model->insertBookkeepingBankRecordTime('',$bank_id);
+        $data['total_record_time']=$this->Project_Template_model->getTotalRecordedTime($bank_id);
         $this->load->view('task/recoded_time_modal',$data);
     }
 }

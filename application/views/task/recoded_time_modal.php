@@ -1,7 +1,7 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true"><i class = "fa fa-times"></i></span>
         </button>
         <?php if (isset($record_details) && !empty($record_details)) { ?>
             <div class="modal-header">
@@ -28,6 +28,9 @@
                                 <td style="text-align:center"><a href="javascript:void(0)" onclick="delete_recoded_time(<?= $record['id'] ?>,<?= $record['bank_id'] ?>)"><span class="fa fa-trash text-danger m-l-4"></span></a></td>
                             </tr>
                         <?php } ?>
+                            <tr>
+                                <td style="text-align:center" colspan="4"><b>Total Recoded Time: <?= $total_record_time[0]['total_time'] ?></b></td>
+                            </tr>
                     </tbody>
 
                 </table>
@@ -37,7 +40,7 @@
             </div>
         <?php } else { ?>
             <div class = "text-center m-t-30">
-                <div class = "alert alert-danger">
+                <div class = "text text-danger">
                     <i class = "fa fa-times-circle-o fa-4x"></i>
                     <h3><strong>Sorry!</strong> no data found</h3>
                 </div>
