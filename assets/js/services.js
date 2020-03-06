@@ -3701,7 +3701,7 @@ function show_mortgage_information(reference='',reference_id='',lead_id='') {
 
 function printMortgage() {
     var doPrint = window.open();
-    var printHtml = '<style type="text/css">body {background: #fff !important;} *{ font-size: 13px;}</style>';
+    var printHtml = '<style type="text/css">body {background: #fff !important;} *{ font-size: 13px;} table{width:100% !important} .m-info{width:50%;float:left;} th{width:50%} td{width:50%} .mortgage-heading{float:left;width:100%;border-bottom:1px solid #000;border-top:1px solid #000;padding:5px 0px;}</style>';
     printHtml = printHtml + $('.mortgage_container').html();
     doPrint.document.write(printHtml);
     doPrint.print();
