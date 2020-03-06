@@ -726,14 +726,14 @@ class Service_model extends CI_Model
         $select[] = '(CASE WHEN ord.late_status = 1 THEN (CASE WHEN sr.responsible_staff = ' . sess('user_id') . ' THEN \'byme-3\' ELSE \'not-late\' END) ELSE \'not-late\' END) AS byme_late_filter_value';
         $select[] = '(CASE WHEN ord.assign_user = 0 THEN \'unassigned\' ELSE \'assigned\' END) as assign_status';
 
-        if ($staff_info['type'] == 3) {      #Franchise
+        // if ($staff_info['type'] == 3) {      #Franchise
             
-        } else {    #Admin & Corporate
+        // } else {    #Admin & Corporate
             $select[] = '(CASE WHEN (SELECT COUNT(service_request.id) FROM service_request WHERE service_request.order_id = ord.id AND service_request.assign_user IN (' . $staff_id . ')) != 0 THEN CONCAT(\'tome-\', sr.status) ELSE \'non-filter\' END) as tome_filter_value';
             $select[] = '(CASE WHEN ((SELECT COUNT(service_request.id) FROM service_request WHERE service_request.order_id = ord.id AND service_request.responsible_department NOT IN (' . $staff_info['department'] . ')) != 0 AND sr.responsible_staff != ' . sess('user_id') . ') THEN CONCAT(\'byothers-\', sr.status) ELSE \'non-filter\' END) as byothers_filter_value';
             $select[] = '(CASE WHEN ord.late_status = 1 THEN (CASE WHEN (SELECT COUNT(service_request.id) FROM service_request WHERE service_request.order_id = ord.id AND service_request.assign_user IN (' . $staff_id . ')) != 0 THEN \'tome-3\' ELSE \'not-late\' END) ELSE \'not-late\' END) AS tome_late_filter_value';
             $select[] = '(CASE WHEN ord.late_status = 1 THEN (CASE WHEN ((SELECT COUNT(service_request.id) FROM service_request WHERE service_request.order_id = ord.id AND service_request.responsible_department NOT IN (' . $staff_info['department'] . ')) != 0 AND sr.responsible_staff != ' . sess('user_id') . ') THEN \'byothers-3\' ELSE \'not-late\' END) ELSE \'not-late\' END) AS byothers_late_filter_value';
-        }
+        // }
 
         $sql = "SELECT " . implode(', ', $select) . "
                 FROM service_request AS sr
@@ -750,7 +750,7 @@ class Service_model extends CI_Model
             } elseif ($request_type == 'tome') {
                 $where[] = 'sr.assign_user IN (' . $staff_id . ')';
             } elseif ($request_type == 'byothers') {
-                if ($staff_info['type'] == 1 || ($staff_info['type'] == 2 && $staff_info['role'] == 4)) {   #Admin & Corporate(Manager)
+                if ($staff_info['type'] == 1 || ($staff_info['type'] == 2 && $staff_info['role'] == 4) || ($staff_info['type'] == 3 && $staff_info['role'] == 2)) {   #Admin & Corporate(Manager) + #Franchise(Manager) 
                     $where[] = '(sr.responsible_department NOT IN (' . $staff_info['department'] . ') AND sr.responsible_staff != "' . $staff_id . '")';
                 } 
                 // else if ($staff_info['type'] == 3 && $staff_info['role'] == 2) {      #Franchise(Manager)
@@ -877,7 +877,7 @@ class Service_model extends CI_Model
             } elseif ($criteria_val[0] == 'tome') {    
                  $where[] = 'sr.assign_user IN (' . $staff_id . ')';
             } elseif ($criteria_val[0] == 'byothers') {
-                if ($staff_info['type'] == 1 || ($staff_info['type'] == 2 && $staff_info['role'] == 4)) {   #Admin & Corporate(Manager)
+                if ($staff_info['type'] == 1 || ($staff_info['type'] == 2 && $staff_info['role'] == 4) || ($staff_info['type'] == 3 && $staff_info['role'] == 2)) {   #Admin & Corporate(Manager) + #Franchise(Manager)
                     $query = '(sr.responsible_department NOT IN (' . $staff_info['department'] . ') AND sr.responsible_staff != "' . $staff_id . '")';
                 } 
                 // else if ($staff_info['type'] == 3 && $staff_info['role'] == 2) {      #Franchise(Manager)
