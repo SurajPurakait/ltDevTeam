@@ -3698,3 +3698,12 @@ function show_mortgage_information(reference='',reference_id='',lead_id='') {
       "_blank"
     );
 }
+
+function printMortgage() {
+    var doPrint = window.open();
+    var printHtml = '<style type="text/css">body {background: #fff !important;} *{ font-size: 13px;}</style>';
+    printHtml = printHtml + $('.mortgage_container').html();
+    doPrint.document.write(printHtml);
+    doPrint.print();
+    doPrint.close();
+}
