@@ -83,7 +83,7 @@ if ($modal_type != "edit"):
                     </div>
                     <div class="form-group">
                         <label>Number Of Transactions<span class="text-danger">*</span></label>
-                        <select class="form-control" name="number_of_transactions" id="no_of_transactions" title="Number Of Transactions" required="">
+                        <select class="form-control" name="number_of_transactions" id="number_of_transactions" title="Number Of Transactions" required="">
                             <option value="">Select</option>
                             <option value="0-100">0-100</option>
                             <option value="101-200">101-200</option>
@@ -199,7 +199,7 @@ if ($modal_type != "edit"):
                     { ?>
                     <div class="form-group" style="display:none;">
                         <label>Number Of Transactions<span class="text-danger">*</span></label>
-                        <select class="form-control" name="number_of_transactions" id="no_of_transactions" title="Number Of Transactions">
+                        <select class="form-control" name="number_of_transactions" id="number_of_transactions" title="Number Of Transactions">
                             <option value="">Select</option>
                             <option value="0-100" <?= ($data["number_of_transactions"] == "0-100") ? "selected" : ""; ?>>0-100</option>
                             <option value="101-200" <?= ($data["number_of_transactions"] == "101-200") ? "selected" : ""; ?>>101-200</option>
@@ -210,7 +210,7 @@ if ($modal_type != "edit"):
                     <?php } else { ?>
                        <div class="form-group" style="display:block;">
                         <label>Number Of Transactions<span class="text-danger">*</span></label>
-                        <select class="form-control" name="number_of_transactions" id="no_of_transactions" title="Number Of Transactions" required="">
+                        <select class="form-control" name="number_of_transactions" id="number_of_transactions" title="Number Of Transactions" required="">
                             <option value="">Select</option>
                             <option value="0-100" <?= ($data["number_of_transactions"] == "0-100") ? "selected" : ""; ?>>0-100</option>
                             <option value="101-200" <?= ($data["number_of_transactions"] == "101-200") ? "selected" : ""; ?>>101-200</option>
