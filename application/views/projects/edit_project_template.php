@@ -1,4 +1,5 @@
-<?php $staff_info = staff_info(); ?>
+<?php $staff_info = staff_info();
+?>
 <div class="wrapper wrapper-content">
     <div class="ibox">
         <div class="ibox-content">
@@ -151,11 +152,11 @@
                                         <hr class="hr-line-dashed"/>
                                         <h3>Assigned:</h3>
                                         <?php
-                                        foreach ($departments as $key => $value) {
-                                            if ($value['id'] == '2') {
-                                                unset($departments[$key]);
-                                            }
-                                        }
+//                                        foreach ($departments as $key => $value) {
+//                                            if ($value['id'] == '2') {
+//                                                unset($departments[$key]);
+//                                            }
+//                                        }
                                         ?>
                                         <div class="row">
 
@@ -660,7 +661,7 @@ if (!empty($dept_staff)) {
 <script>
     get_template_responsible_staff('<?php echo $template_details->responsible_department ?>', '<?php echo $template_details->responsible_staff ?>', '<?php echo $template_details->ofc_is_all ?>',<?= $staff_id ?>);
 //    get_template_office_staff(<? $template_details->ofc_is_all ?>,<? $template_details->office_id ?>,'<? $staff_id ?>','<? $template_details->partner_id ?>','<? $template_details->manager_id ?>','<? $template_details->associate_id ?>');
-    get_template_office_new(<?= $template_details->dept_is_all ?>,<?= $template_details->department_id ?>, '<?= $dept_staff_id ?>');
+    get_template_office_new(<?= $template_details->dept_is_all ?>,<?= $template_details->department_id ?>, '<?= $dept_staff_id ?>','<?= $template_details->assign_staff ?>');
     getServiceList(<?= $template_details->category_id ?>,<?= $template_details->service_id ?>);
 
     $(document).ready(function () {
