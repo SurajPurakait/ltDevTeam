@@ -2,40 +2,40 @@
 $project_date = date('Y-m-d');
 if (isset($project_recurrence_main_data) && !empty($project_recurrence_main_data)) {
     $template_cat_id=get_template_cat_id($project_recurrence_main_data['template_id']);
-    if ($project_recurrence_main_data['client_fiscal_year_end'] == 1) {
-        $get_client_fye = get_client_fye($client_reference_id);
-        $current_year = date('Y', strtotime($project_date));
-        if ($project_recurrence_main_data['fye_type'] == 1) {
-
-            $get_project_creation_date = $this->db->get_where('projects', ['id' => $insert_id])->row_array();
-            $creation_date = date('Y-m-d', strtotime($project_date));
-
-            $fye_day = $project_recurrence_main_data['fye_day'];
-            $fye_is_weekday = $project_recurrence_main_data['fye_is_weekday'];
-            $fye_month = $project_recurrence_main_data['fye_month'];
-
-            $after_days = (int) $fye_month * 30;
-            $current_due = $project_recurrence_main_data['actual_due_year'] . '-' . $get_client_fye;
-
-            $newDate = strtotime($current_due . ' + ' . $after_days . ' days');
-
-            $project_recurrence_main_data['actual_due_day'] = $fye_day;
-            $project_recurrence_main_data['actual_due_month'] = date('m', $newDate);
-            $project_recurrence_main_data['actual_due_year'] = date('Y', $newDate);
-
-            if ($project_recurrence_main_data['actual_due_month'] <= 12) {
-                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
-            } else {
-                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . ($project_recurrence_main_data['actual_due_month'] % 12) . '-' . $project_recurrence_main_data['actual_due_day'];
-            }
-
-            if ($due_date <= $creation_date) {
-                $project_recurrence_main_data['actual_due_year'] = $project_recurrence_main_data['actual_due_year'] + 1;
-            } else {
-                $project_recurrence_main_data['actual_due_year'] = $project_recurrence_main_data['actual_due_year'];
-            }
-        }
-    }
+//    if ($project_recurrence_main_data['client_fiscal_year_end'] == 1) {
+//        $get_client_fye = get_client_fye($client_reference_id);
+//        $current_year = date('Y', strtotime($project_date));
+//        if ($project_recurrence_main_data['fye_type'] == 1) {
+//
+//            $get_project_creation_date = $this->db->get_where('projects', ['id' => $insert_id])->row_array();
+//            $creation_date = date('Y-m-d', strtotime($project_date));
+//
+//            $fye_day = $project_recurrence_main_data['fye_day'];
+//            $fye_is_weekday = $project_recurrence_main_data['fye_is_weekday'];
+//            $fye_month = $project_recurrence_main_data['fye_month'];
+//
+//            $after_days = (int) $fye_month * 30;
+//            $current_due = $project_recurrence_main_data['actual_due_year'] . '-' . $get_client_fye;
+//
+//            $newDate = strtotime($current_due . ' + ' . $after_days . ' days');
+//
+//            $project_recurrence_main_data['actual_due_day'] = $fye_day;
+//            $project_recurrence_main_data['actual_due_month'] = date('m', $newDate);
+//            $project_recurrence_main_data['actual_due_year'] = date('Y', $newDate);
+//
+//            if ($project_recurrence_main_data['actual_due_month'] <= 12) {
+//                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . $project_recurrence_main_data['actual_due_month'] . '-' . $project_recurrence_main_data['actual_due_day'];
+//            } else {
+//                $due_date = $project_recurrence_main_data['actual_due_year'] . '-' . ($project_recurrence_main_data['actual_due_month'] % 12) . '-' . $project_recurrence_main_data['actual_due_day'];
+//            }
+//
+//            if ($due_date <= $creation_date) {
+//                $project_recurrence_main_data['actual_due_year'] = $project_recurrence_main_data['actual_due_year'] + 1;
+//            } else {
+//                $project_recurrence_main_data['actual_due_year'] = $project_recurrence_main_data['actual_due_year'];
+//            }
+//        }
+//    }
 //                    day month and year creation
     unset($project_recurrence_main_data['actual_due_day']);
     unset($project_recurrence_main_data['actual_due_month']);
