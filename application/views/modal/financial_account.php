@@ -279,7 +279,6 @@ if ($modal_type != "edit"):
             } else {
                 amt = 149;
             }
-            alert(amt);
             var count_fc_ac = document.getElementsByClassName('total_amounts').length;
             if (count_fc_ac > 0) {
                 if (val != '') {
