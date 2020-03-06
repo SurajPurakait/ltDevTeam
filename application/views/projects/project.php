@@ -715,10 +715,13 @@ $role = $user_info['role'];
                     var trk_class = 'label label-primary';
                 } else if (res.task_status == 3) {
                     var tracking = 'Ready';
-                    var trk_class = 'label label-info';
+                    var trk_class = 'label label-secondary';
                 } else if (res.task_status == 4) {
                     var tracking = 'Canceled';
                     var trk_class = 'label label-danger';
+                }else if (res.task_status == 5) {
+                    var tracking = 'Clarification';
+                    var trk_class = 'label label-info';
                 }
 
                 if (res.project_status == 0) {
@@ -733,6 +736,9 @@ $role = $user_info['role'];
                 } else if (res.project_status == 4) {
                     var tracking_main = 'Canceled';
                     var trk_class_main = 'label label-danger';
+                } else if (res.project_status == 5) {
+                    var tracking_main = 'Clarification';
+                    var trk_class_main = 'label label-info';
                 }
 
                 if (res.sub_taskid_status == 3) {
