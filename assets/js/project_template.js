@@ -30,7 +30,7 @@ function getServiceList(category_id, service_id = '') {
 }
 
 //department staff uttam (new)
-function get_template_office_new(is_all = '', department_id = '', staff_id = '') {
+function get_template_office_new(is_all = '', department_id = '', staff_id = '',assign_staff='') {
 //    alert(department_id);
     var department_id = $("#department option:selected").val();
     if (department_id != '') {
@@ -42,7 +42,8 @@ function get_template_office_new(is_all = '', department_id = '', staff_id = '')
                 department_id: department_id,
                 select_staffs: staff_id,
                 is_all: is_all,
-                ismyself: 0
+                ismyself: 0,
+                assign_staff:assign_staff
             },
             url: base_url + 'administration/template/get_template_office_ajax_new',
             dataType: "html",
@@ -489,7 +490,7 @@ if (!requiredValidation('save_template_main')) {
         enctype: 'multipart/form-data',
         cache: false,
         success: function (result) {
-//            alert(result); 
+//            alert(result); return false;
 //console.log(result); return false;
             if (result.trim() != "-1") {
                 swal({

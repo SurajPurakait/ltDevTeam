@@ -1295,3 +1295,6 @@ ALTER TABLE `invoice_recurring_plans` ADD `order_id` VARCHAR(20) NOT NULL AFTER 
 ALTER TABLE `invoice_recurring_plans` CHANGE `order_id` `order_id` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0'; 
 /* 06.03.2020 */
 ALTER TABLE `financial_accounts` CHANGE `total_amount` `total_amount` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0';
+
+ALTER TABLE `project_template_main` ADD `assign_staff` INT(2) NULL DEFAULT NULL AFTER `responsible_staff`; 
+ ALTER TABLE `project_main` ADD `assign_staff` INT(2) NULL DEFAULT NULL AFTER `responsible_staff`;

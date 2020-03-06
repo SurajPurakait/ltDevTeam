@@ -71,7 +71,11 @@ class Project_Template_model extends CI_Model {
             $temp_main_ins['status'] = $post['template_main']['status'];
             $temp_main_ins['department_id'] = $post['template_main']['department'];
 //            $temp_main_ins['ofc_is_all'] = $post['template_main']['ofc_is_all'];
-            $temp_main_ins['dept_is_all'] = $post['template_main']['dept_is_all'];
+            if(isset($post['template_main']['dept_is_all']) && $post['template_main']['dept_is_all']!=''){
+                $temp_main_ins['dept_is_all'] = $post['template_main']['dept_is_all'];
+            }else{
+                $temp_main_ins['dept_is_all']=0;
+            }
             $temp_main_ins['office_id'] = $post['template_main']['office'];
             if ($temp_main_ins['office_id'] == 3) {
                 $temp_main_ins['responsible_staff'] = $post['template_main']['francise_staff'];
@@ -81,6 +85,11 @@ class Project_Template_model extends CI_Model {
             }
             if (isset($post['template_main']['is_all']) && $post['template_main']['is_all'] != '') {
                 $temp_main_ins['ofc_is_all'] = $post['template_main']['is_all'];
+            }
+            $assign_staff='';
+            if(isset($post['template_main']['assign_staff']) && $post['template_main']['assign_staff']!=''){
+                $assign_staff=$post['template_main']['assign_staff'];
+                unset($post['template_main']['assign_staff']);
             }
             $template_staff_list = $this->get_department_staff_by_department_id($post['template_main']['department']);
 //            echo "<pre>";
@@ -115,6 +124,9 @@ class Project_Template_model extends CI_Model {
 
                     $this->db->insert('project_template_staff_main', ['template_id' => $last_id, 'staff_id' => $ins_staff_id, 'type' => 1]);
                 }
+            }else{
+                $this->db->where('id',$last_id);
+                $this->db->update('project_template_main',['assign_staff'=>$assign_staff]);
             }
             if (isset($post['template_main']['res_dept_staff']) && !empty($post['template_main']['res_dept_staff'])) {
 
@@ -407,51 +419,67 @@ class Project_Template_model extends CI_Model {
 
     public function get_assigned_dept_staff_project_template($id) {
 
-        $query = 'select dept_is_all from project_template_main where id=' . $id . '';
+        $query = 'select dept_is_all,assign_staff from project_template_main where id=' . $id . '';
         $data1 = $this->db->query($query)->row_array();
 
         if ($data1['dept_is_all'] == 1) {
 
             return "All Staff";
         } else {
+            if($data1['assign_staff']!=''){
+                if($data1['assign_staff']==1){
+                    return 'Partner';
+                }elseif($data1['assign_staff']==2){
+                    return "Manager";
+                }else{
+                    return "Client Association";
+                }
+            }else{
 
-            $query = 'select staff_id '
-                    . 'from project_template_staff_main '
-                    . 'where template_id=' . $id . ' and type=1';
-            $data2 = $this->db->query($query)->row_array();
+                $query = 'select staff_id '
+                        . 'from project_template_staff_main '
+                        . 'where template_id=' . $id . ' and type=1';
+                $data2 = $this->db->query($query)->row_array();
 
-            $query = 'select CONCAT(last_name, ", ",first_name,", ",middle_name) as full_name '
-                    . 'from staff '
-                    . 'where id=' . $data2['staff_id'] . '';
-            $data3 = $this->db->query($query)->row_array();
+                $query = 'select CONCAT(last_name, ", ",first_name,", ",middle_name) as full_name '
+                        . 'from staff '
+                        . 'where id=' . $data2['staff_id'] . '';
+                $data3 = $this->db->query($query)->row_array();
 
 
-            return $data3['full_name'];
+                return $data3['full_name'];
+            }
         }
     }
 
     public function get_assigned_dept_staff_project_main($id) {
 
-        $query = 'select dept_is_all from project_main where project_id=' . $id . '';
+        $query = 'select dept_is_all,assign_staff from project_main where project_id=' . $id . '';
         $data1 = $this->db->query($query)->row_array();
 
         if ($data1['dept_is_all'] == 1) {
             return '';
 //            return "All Staff";
         } else {
+            if($data1['assign_staff']!=''){
+                $staff_ids=$this->db->get_where('project_staff_main',['project_id'=>$id])->result_array();
+                $staff_id=array_pop($staff_ids);
+                $this->db->select('CONCAT(last_name, ", ",first_name) as full_name ');
+                return $this->db->get_where('staff',['id'=>$staff_id['staff_id']])->row()->full_name;
+            }else{
+                $query = 'select staff_id '
+                        . 'from project_staff_main '
+                        . 'where project_id=' . $id ;
+                $data2 = $this->db->query($query)->row_array();
 
-            $query = 'select staff_id '
-                    . 'from project_staff_main '
-                    . 'where project_id=' . $id ;
-            $data2 = $this->db->query($query)->row_array();
-
-            $query = 'select CONCAT(last_name, ", ",first_name) as full_name '
-                    . 'from staff '
-                    . 'where id=' . $data2['staff_id'] . '';
-            $data3 = $this->db->query($query)->row_array();
+                $query = 'select CONCAT(last_name, ", ",first_name) as full_name '
+                        . 'from staff '
+                        . 'where id=' . $data2['staff_id'] . '';
+                $data3 = $this->db->query($query)->row_array();
 
 
-            return $data3['full_name'];
+                return $data3['full_name'];
+            }
         }
     }
 
@@ -826,7 +854,11 @@ class Project_Template_model extends CI_Model {
             $temp_main_ins['status'] = $post['template_main']['status'];
             $temp_main_ins['department_id'] = $post['template_main']['department'];
 //            $temp_main_ins['ofc_is_all'] = $post['template_main']['ofc_is_all'];
-            $temp_main_ins['dept_is_all'] = $post['template_main']['dept_is_all'];
+            if(isset($post['template_main']['dept_is_all']) && $post['template_main']['dept_is_all']!=''){
+                $temp_main_ins['dept_is_all'] = $post['template_main']['dept_is_all'];
+            }else{
+                $temp_main_ins['dept_is_all']=0;
+            }
             $temp_main_ins['office_id'] = $post['template_main']['office'];
             if ($temp_main_ins['office_id'] == 3) {
                 $temp_main_ins['responsible_staff'] = $post['template_main']['francise_staff'];
@@ -837,6 +869,14 @@ class Project_Template_model extends CI_Model {
             }
             if (isset($post['template_main']['is_all']) && $post['template_main']['is_all'] != '') {
                 $temp_main_ins['ofc_is_all'] = $post['template_main']['is_all'];
+            }
+            
+            if(isset($post['template_main']['assign_staff']) && $post['template_main']['assign_staff']!=''){
+                $assign_staff=$post['template_main']['assign_staff'];
+                unset($post['template_main']['assign_staff']);
+            }else{
+                 $this->db->where('id',$template_id);
+                $this->db->update('project_template_main',['assign_staff'=>NULL]);
             }
             $template_staff_list = $this->get_department_staff_by_department_id($post['template_main']['department']);
 //            if (isset($post['template_main']['partner']) && $post['template_main']['partner'] != '' && ($post['template_main']['ofc_is_all']) != 1) {
@@ -869,6 +909,10 @@ class Project_Template_model extends CI_Model {
 
                     $this->db->insert('project_template_staff_main', ['template_id' => $template_id, 'staff_id' => $ins_staff_id, 'type' => 1]);
                 }
+            }
+            if(isset($assign_staff)){
+                $this->db->where('id',$template_id);
+                $this->db->update('project_template_main',['assign_staff'=>$assign_staff]);
             }
             if (isset($post['template_main']['res_dept_staff']) && !empty($post['template_main']['res_dept_staff'])) {
 //                $this->db->where('template_id', $template_id);
@@ -1194,12 +1238,20 @@ class Project_Template_model extends CI_Model {
                     $this->db->insert('project_main', $project_main_data);
                 }
                 //get partner or manager id for project responsible staff 
-                $this->db->select('p.client_id,p.client_type,pm.office_id,pm.responsible_staff');
+                $this->db->select('p.client_id,p.client_type,pm.office_id,pm.responsible_staff,pm.assign_staff');
                 $this->db->from('projects AS p');
                 $this->db->join('project_main AS pm', 'p.id=pm.project_id', 'inner');
                 $this->db->where('project_id', $insert_id);
                 $manage_result = $this->db->get()->row();
-                $res = $this->db->get_where('internal_data', ['reference_id' => $manage_result->client_id])->row();
+                if($manage_result->client_type==1){
+                    $res = $this->db->get_where('internal_data', ['reference_id' => $manage_result->client_id])->row();
+                }else{
+                    $this->db->select('intd.partner,intd.manager');
+                    $this->db->from('internal_data as intd');
+                    $this->db->join('title as t','t.individual_id=intd.reference_id','inner');
+                    $this->db->where('t.id',$manage_result->client_id);
+                    $res=$this->db->get()->row();
+                }
                 if(!empty($res)){
                     if ($manage_result->office_id == 3 && $manage_result->responsible_staff == 1) {
                         $partner_id = $res->partner;
@@ -1207,7 +1259,14 @@ class Project_Template_model extends CI_Model {
                     if ($manage_result->office_id == 3 && $manage_result->responsible_staff == 2) {
                         $manager_id = $res->manager;
                     }
+                    if($manage_result->assign_staff!='' && $manage_result->assign_staff==1){
+                        $partner_id = $res->partner;
+                    }
+                    if($manage_result->assign_staff!='' && $manage_result->assign_staff==2){
+                        $manager_id = $res->manager;
+                    }
                 }
+                
 
                 if (isset($partner_id) && $partner_id != '') {
                     $project_staff_main_data[$new_key]['id'] = '';
@@ -2030,7 +2089,11 @@ class Project_Template_model extends CI_Model {
             $temp_main_ins['status'] = $post['template_main']['status'];
             $temp_main_ins['department_id'] = $post['template_main']['department'];
 //            $temp_main_ins['ofc_is_all'] = $post['template_main']['ofc_is_all'];
-            $temp_main_ins['dept_is_all'] = $post['template_main']['dept_is_all'];
+            if(isset($post['template_main']['dept_is_all']) && $post['template_main']['dept_is_all']!=''){
+                $temp_main_ins['dept_is_all'] = $post['template_main']['dept_is_all'];
+            }else{
+                $temp_main_ins['dept_is_all'] = 0;
+            }
             $temp_main_ins['office_id'] = $post['template_main']['office'];
             if ($temp_main_ins['office_id'] == 3) {
                 $temp_main_ins['responsible_staff'] = $post['template_main']['francise_staff'];
@@ -2041,6 +2104,13 @@ class Project_Template_model extends CI_Model {
             }
             if (isset($post['template_main']['is_all']) && $post['template_main']['is_all'] != '') {
                 $temp_main_ins['ofc_is_all'] = $post['template_main']['is_all'];
+            }
+            if(isset($post['template_main']['assign_staff']) && $post['template_main']['assign_staff']!=''){
+                $assign_staff=$post['template_main']['assign_staff'];
+                unset($post['template_main']['assign_staff']);
+            }else{
+                $this->db->where('project_id', $project_id);
+                $this->db->update('project_main',['assign_staff'=>null]);
             }
             $template_staff_list = $this->get_department_staff_by_department_id($post['template_main']['department']);
             $template_responsible_list = $this->get_department_staff_by_department_id($post['template_main']['office']);
@@ -2074,6 +2144,10 @@ class Project_Template_model extends CI_Model {
 
                     $this->db->insert('project_staff_main', ['project_id' => $project_id, 'staff_id' => $ins_staff_id, 'type' => 1]);
                 }
+            }
+            if(isset($assign_staff)){
+                $this->db->where('project_id', $project_id);
+                $this->db->update('project_main',['assign_staff'=>$assign_staff]);
             }
             if (isset($post['template_main']['res_dept_staff']) && !empty($post['template_main']['res_dept_staff'])) {
 //                $this->db->where('template_id', $template_id);
