@@ -18,7 +18,7 @@ class Reports extends CI_Controller
         $this->load->model("action_model");
         $this->load->model('Project_Template_model');
     }
-    public function index($type = 1)
+    public function index($type = 1,$office='',$dept="")
     {
         $this->load->layout = 'dashboard';
         $title = "Manage Reports";
@@ -32,7 +32,8 @@ class Reports extends CI_Controller
         $render_data['action_start_date'] = $this->action_model->get_action_start_date();
         $render_data['lead_start_date'] = $this->lead_management->get_lead_start_date();
         $render_data['partner_start_date'] = $this->lead_management->get_partner_start_date();
-        // $render_data['client_start_date'] = '';
+        $render_data['franchisee_office'] = $office;
+        $render_data['franchisee_department'] = $dept;
         $this->load->template('reports/reports', $render_data);
     }
     /* royalty_reports */

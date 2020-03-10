@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-10">
-        <div id="select_peroid_billing" class="pull-left"></div>
+        <div id="select_peroid_billing" class="pull-left"></div>            
         <table class="table table-bordered billing-report-table table-striped text-center m-b-0" id="report-billing-invoice">
             <thead>
                 <tr>
@@ -50,6 +50,9 @@
             </tbody>
         </table>
     </div>
+    <?php
+        if (staff_info()['type'] != 3) {
+    ?>
     <div class="col-md-2" style="margin-top: 80px">
         <h4 class="text-center">Offices</h4>
     <?php 
@@ -113,6 +116,9 @@
         }
     ?>
 </div>
+<?php
+    }
+?>
 </div>
 <script type="text/javascript">
     $('#report-billing-invoice').DataTable().destroy();
