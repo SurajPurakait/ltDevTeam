@@ -63,6 +63,9 @@ if (!empty($project_list)) {
         }elseif($status==4){
             $tracking = 'Canceled';
             $trk_class = 'label-danger';
+        }elseif($status==5){
+            $tracking = 'Clarification';
+            $trk_class = 'label-info';
         }
         $due_date = '';
         $actual_day = $pattern_details->actual_due_day;

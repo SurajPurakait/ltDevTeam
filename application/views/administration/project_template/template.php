@@ -134,11 +134,11 @@
                                         <hr class="hr-line-dashed"/>
                                         <h3>Assigned :</h3>
                                         <?php
-                                        foreach ($departments as $key => $value) {
-                                            if ($value['id'] == '2') {
-                                                unset($departments[$key]);
-                                            }
-                                        }
+//                                        foreach ($departments as $key => $value) {
+//                                            if ($value['id'] == '2') {
+//                                                unset($departments[$key]);
+//                                            }
+//                                        }
                                         ?>
                                         <div class="row">
 
