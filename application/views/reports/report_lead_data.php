@@ -32,6 +32,9 @@
             </tbody>
         </table>
     </div>
+    <?php
+        if (staff_info()['type'] != 3) {
+    ?>
     <div class="col-md-2" style="margin-top: 80px">
         <h4 class="text-center">Offices</h4>
     <?php 
@@ -97,6 +100,9 @@
         }
     ?>
     </div>
+    <?php
+        }
+    ?>
 </div>
 <?php
     }
@@ -129,6 +135,9 @@
             </tbody>
         </table>
     </div>
+    <?php
+        if (staff_info()['type'] != 3) {
+    ?>
     <div class="col-md-2" style="margin-top: 80px">
         <h4 class="text-center">Offices</h4>
     <?php 
@@ -190,6 +199,9 @@
         }
     ?>
     </div>
+    <?php
+        }
+    ?>
 </div>        
 <?php
     }
@@ -228,7 +240,10 @@
             </tbody>
         </table>
     </div>
-        <div class="col-md-2" style="margin-top: 80px">
+    <?php
+        if (staff_info()['type'] != 3) {
+    ?>
+    <div class="col-md-2" style="margin-top: 80px">
         <h4 class="text-center">Offices</h4>
     <?php 
         foreach ($reports as $key => $value) {
@@ -289,6 +304,9 @@
         }
     ?>
     </div>
+    <?php
+        }
+    ?>
 </div>
 <?php
     }

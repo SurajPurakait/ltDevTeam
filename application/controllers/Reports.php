@@ -200,7 +200,8 @@ class Reports extends CI_Controller
     {
         $category = post('category');
         $date_range = post('date_range');
-        $render_data['projects_list'] = $this->Project_Template_model->get_projects_data($category, $date_range);
+        $fran_office = post('fran_office');
+        $render_data['projects_list'] = $this->Project_Template_model->get_projects_data($category, $date_range, $fran_office);
         $render_data['reports'] = array('report' => 'leafnet_report');
         $render_data['category'] = $category;
         $render_data['date_range_service_report'] = post('date_range');
@@ -214,7 +215,8 @@ class Reports extends CI_Controller
     public function get_clients_data()
     {
         $category = post('category');
-        $render_data['client_list'] = $this->action_model->get_clients_data($category);
+        $fran_office = post('fran_office');
+        $render_data['client_list'] = $this->action_model->get_clients_data($category,$fran_office);
         $render_data['reports'] = array('report' => 'leafnet_report');
         $render_data['category'] = $category;
         $this->load->view('reports/report_client_data', $render_data);

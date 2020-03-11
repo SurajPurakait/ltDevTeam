@@ -3573,9 +3573,13 @@ class Action_model extends CI_Model {
     }
 
     // report dashboard's client data
-    public function get_clients_data($category) {
-        $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
-        // $data_office = $this->system->get_staff_office_list();
+    public function get_clients_data($category,$fran_office) {
+        if ($fran_office != '' && staff_info()['type'] == 3) {
+            $data_office = $this->db->get_where('office',['id'=>$fran_office,'status !='=> '2'])->result_array();
+        } else {
+            $data_office = $this->db->get_where('office',['status !='=> '2'])->result_array();
+        }
+        
         if ($category == 'clients_by_office') {
             $all_client_details = [];
             foreach ($data_office as $do) {
@@ -3630,7 +3634,7 @@ class Action_model extends CI_Model {
 
     // report dashboard's action data
     public function get_action_data($data) {
-        if ($data['fran_office'] != '') {
+        if ($data['fran_office'] != '' && staff_info()['type'] == 3) {
             $fran_office = $data['fran_office'];
         } else {
             $fran_office = '';

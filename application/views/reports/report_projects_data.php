@@ -38,6 +38,9 @@
 	            </tbody>
 	        </table>
 	    </div>
+	    <?php
+	    	if (staff_info()['type'] != 3) {
+	    ?>
 	    <div class="col-md-2 m-t-40">
 	    	<h4 class="text-center m-t-40">Offices</h4>
 	        <?php 
@@ -102,6 +105,9 @@
 		        }
 		    ?>
 	    </div>
+	    <?php
+	    	}
+	    ?>
     </div>    
 
 <?php
@@ -144,6 +150,9 @@
 	            </tbody>
 	        </table>
 	    </div>
+	    <?php
+	    	if (staff_info()['type'] != 3) {
+	    ?>
 	    <div class="col-md-2 m-t-40">
 	    	<h4 class="text-center m-t-40">Offices</h4>
 	        <?php 
@@ -208,6 +217,9 @@
 		        }
 		    ?>
 	    </div>
+	    <?php
+	    	}
+	    ?>
     </div>  
 
 <?php
