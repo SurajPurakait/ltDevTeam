@@ -9,6 +9,7 @@ if(isset($ismyself)){
     $req = 'required';
 }
 ?>
+<?php if($department_id!=2){ ?>
 <div class="form-group clearfix">
     <label class="col-lg-2 control-label text-right">Assign Type<span class="text-danger">*</span></label>
     <div class="col-lg-10">
@@ -29,6 +30,20 @@ if(isset($ismyself)){
         <div class="errorMessage text-danger"></div>
     </div>
 </div>
+<?php }else{ ?>
+<div class="form-group">
+        <label class="col-lg-2 control-label">Assigned Staff<span class="spanclass text-danger">*</span></label>
+        <div class="col-lg-10">
+            <select required class="form-control" title="Assign Staff" name="template_main[assign_staff]" id="assign_staff" <?php echo $disabled; ?>>
+                <option value="">Select an option</option>
+                <option value="1" <?= $assign_staff == 1 ? 'selected' : '' ?>>Partner</option>
+                <option value="2" <?= $assign_staff == 2 ? 'selected' : '' ?>>Manager</option> 
+                <option value="3" <?= $assign_staff == 3 ? 'selected' : '' ?>>Client Association</option>
+            </select>
+            <div class="errorMessage text-danger"></div>
+        </div>
+    </div>
+<?php } ?>
 <script>
     selectDeptStaffAll(<?= $is_all ?>)
     $(function () {

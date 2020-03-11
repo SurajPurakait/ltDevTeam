@@ -74,6 +74,7 @@ class Template extends CI_Controller {
         $render_data['select_staffs'] = post('select_staffs');
         $render_data['section'] = 'office';
         $render_data['is_all'] = post('is_all');
+        $render_data['assign_staff']=post('assign_staff');
         $render_data["dept_staff_list"] = $this->Project_Template_model->get_department_staff_by_department_id($department_id);
 //        print_r($render_data["dept_staff_list"]);die;
         $this->load->view('administration/project_template/get_department_staff_list', $render_data);

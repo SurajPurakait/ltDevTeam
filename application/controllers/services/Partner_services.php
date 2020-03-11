@@ -69,11 +69,39 @@ class Partner_services extends CI_Controller {
         $render_data['main_menu'] = 'services';
         $render_data['menu'] = 'partner_services';
         $render_data['header_title'] = $title;
+        $render_data['reference'] = $reference;
+        $render_data['reference_id'] = $reference_id;
+        $render_data['lead_id'] = $lead_id;
+        $render_data['export_type'] = '';
         $render_data['mortgages_info'] = $this->service_model->get_mortgage_info($reference,$reference_id);
         $render_data['lead_details'] = $this->lead_management->get_lead_details_by_id($lead_id);
         $render_data['referred_staff'] = $this->lead_management->get_referred_staff_id($lead_id);
         $this->load->template('services/show_mortgages_information',$render_data);
     }
+
+    public function export($reference="",$reference_id="",$lead_id="") {
+        $render_data['export_type'] = 'download';
+        $render_data['mortgages_info'] = $this->service_model->get_mortgage_info($reference,$reference_id);
+        $render_data['lead_details'] = $this->lead_management->get_lead_details_by_id($lead_id);
+        $render_data['referred_staff'] = $this->lead_management->get_referred_staff_id($lead_id);
+        $this->load->helper('pdf_helper');
+        tcpdf();
+        $obj_pdf = new TCPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $obj_pdf->SetCreator(PDF_CREATOR);
+        $title = "PDF Report";
+        $obj_pdf->SetTitle($title);
+        $obj_pdf->AddPage();
+        ob_start();
+        // echo "<pre>";
+        // print_r($render_data);
+        // echo "</pre>";die;
+        
+        $content = $this->load->view('services/show_mortgages_information', $render_data, TRUE);
+        ob_end_clean();
+        $obj_pdf->writeHTML($content, true, false, true, false, '');
+        $obj_pdf->Output("Taxleaf_" . date('dmY') . ".pdf", 'D');            
+    }
+
 }
 
 ?>

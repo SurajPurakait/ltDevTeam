@@ -75,16 +75,8 @@
                                                                 $office_name[]=$ofc;
                                                             }
                                                             ?>
-                                                            <td title="Responsible"><span class="text-success"><?php echo get_assigned_office_staff_project_template($list['id']); ?></span><br><span><?php echo $office_name[0]; ?></span><br><span class="text-info"> <?php // echo $office_name[1]; ?> </span></td>   <!--
-                                                            <-->
-                                                            <!--<td></td>-->
-                                                            <td title="Assign To"><span class="text-success"><?php echo get_assigned_dept_staff_project_template($list['id']); ?></span><br><?php echo get_assigned_template_department($list['id']); ?></td>                                                  
-<!--                                                            <td title="Tracking Description" class="text-center" align="left">
-                                                                <a href="javascript:void(0);" onclick="show_action_tracking_modal( & quot; 147 & quot; )">
-                                                                    <span class="label <?= $trk_class ?>"><?= $tracking ?></span>
-                                                                </a>
-                                                            </td>-->
-                                                            <!--<td title="Creation Date"><?= date('Y-m-d', strtotime($list['created_at'])) ?></td>/-->
+                                                            <td title="Responsible"><span class="text-success"><?php echo get_assigned_office_staff_project_template($list['id']); ?></span><br><span><?php echo $office_name[0]; ?></span><br><span class="text-info"> <?php // echo $office_name[1]; ?> </span></td> 
+                                                            <td title="Assign To"><span class="text-success"><?php echo get_assigned_dept_staff_project_template($list['id']); ?></span><br><?php echo get_assigned_template_department($list['id']); ?></td> 
                                                             <td title="Pattern"><?= ucfirst(get_template_pattern($list['id'])->pattern); ?> </td>
                                                             
                                                         </tr>

@@ -36,11 +36,11 @@
                                                 </div>
                                             </div>
                                             <?php 
-                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
+                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2 || $staff_info['type'] == 3){
                                                 $dateRangeService = $order_start_date.' - '.$current_date;  
                                             ?>
                                             <input type="hidden" name="service_range_report_value" id="service_range_report">
-                                            <div class="ibox m-t-25" id="service_by_franchise_1" onclick="show_service_franchise_result('franchise','')">
+                                            <div class="ibox m-t-25" id="service_by_franchise_1" onclick="show_service_franchise_result('franchise','','','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Franchisee</h5>
                                                     <div class="ibox-tools">
@@ -53,9 +53,9 @@
                                             <div class="ibox-content p-0" id="service_by_franchise" style="display: none;"></div>
                                             <?php   
                                                 } 
-                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
+                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2 || $staff_info['type'] == 3){
                                             ?>
-                                            <div class="ibox" id="service_by_department_1" onclick="show_service_franchise_result('department','')">
+                                            <div class="ibox" id="service_by_department_1" onclick="show_service_franchise_result('department','','','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Department</h5>
                                                     <div class="ibox-tools">
@@ -68,9 +68,9 @@
                                             <div class="ibox-content p-0" id="service_by_department" style="display: none;"></div>
                                             <?php
                                                 } 
-                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2) {
+                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2 || $staff_info['type'] == 3) {
                                             ?>
-                                            <div class="ibox" id="service_by_category_1" onclick="show_service_franchise_result('service_category','')">
+                                            <div class="ibox" id="service_by_category_1" onclick="show_service_franchise_result('service_category','','','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Services By Category</h5>
                                                     <div class="ibox-tools">
@@ -109,7 +109,7 @@
                                                 $dateRangeBilling = $order_start_date.' - '.$current_date;
                                             ?>    
                                             <input type="hidden" name="billing_range_report_value" id="billing_range_report">
-                                            <div class="ibox m-t-5 m-b-15" id="billing_invoice_payments_section" onclick="show_billing_data()">
+                                            <div class="ibox m-t-5 m-b-15" id="billing_invoice_payments_section" onclick="show_billing_data('','','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Invoice Payments</h5>
                                                     <div class="ibox-tools">
@@ -427,7 +427,7 @@
 
             $("#report-service-range-btn").click(function () {
                 var report_range = document.getElementById('reportrange').value;
-                show_service_franchise_date(report_range,'range_btn');       
+                show_service_franchise_date(report_range,'range_btn','','<?= $franchisee_office ?>');       
             });
         }); 
         
@@ -623,7 +623,7 @@
             $("#report-billing-range-btn").click(function () {
                 var report_range_billing = document.getElementById('reportrangebilling').value;
                 // get_billing_date_range(report_range_billing,rangeText);    
-                show_billing_data(report_range_billing,'<?= $order_start_date; ?>');    
+                show_billing_data(report_range_billing,'<?= $order_start_date; ?>','<?= $franchisee_office ?>');    
             });
         });
 </script>
