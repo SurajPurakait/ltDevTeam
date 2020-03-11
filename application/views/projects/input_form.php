@@ -63,6 +63,40 @@
                                         <td style="width: 150px;"><b>Office ID: </b></td>
                                         <td><?= get_project_office_name($project_data->office_id); ?></td>
                                     </tr>
+                                    <tr>
+                                        <td style="width: 150px;"><b>Responsible: </b></td>
+                                        <td title="Responsible"><?php
+                                        $resp_value = get_assigned_office_staff_project_main($project_id, $project_data->client_id);
+                                        if (is_numeric($resp_value['name'])) {
+                                            $resp_name = get_assigned_by_staff_name($resp_value['name']);
+                                        } else {
+                                            $resp_name = $resp_value['name'];
+                                        }
+                                        if ($resp_value['office'] != 0) {
+                                            $office_name = get_office_id($resp_value['office']);
+                                        } else {
+                                            if ($project_data->project_office_id == 1) {
+                                                $office_name = 'Admin';
+                                            } elseif ($project_data->project_office_id == 2) {
+                                                $office_name = 'Corporate';
+                                            } else {
+                                                $office_name = 'Franchise';
+                                            }
+                                        }
+                                        echo $resp_name . "<br><span class='text-info'>" . $office_name . " </span></td>";
+                                        ?> </td> 
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 150px;"><b>Assign To: </b></td>
+                                        <td title="Assign To"><span class="text-success"><?php echo get_assigned_dept_staff_project_main($project_id); ?></span><br><?php
+                                            if ($project_data->office_id != '2') {
+                                                echo get_department_name_by_id($project_data->department_id);
+                                            } else {
+                                                echo get_office_id($project_data->office_id);
+                                            }
+                                            ?>
+                                        </td>
+                                    </tr>
 
                                 </table>
                             </div>
@@ -109,6 +143,18 @@
                                     <tr>
                                         <td style="width:150px;"><b>Tracking</b></td>
                                         <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner_input(<?= $task_data->id; ?>,<?= $status; ?>, <?= $task_data->id ?>,<?= $task_data->project_id ?>,"<?= $task_data->task_order ?>");'><span id="trackinner-<?= $task_data->id ?>" projectid="<?= $task_data->project_id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 150px;"><b>Assign To: </b></td>
+                                        <?php if ($task_data->department_id == 2) {?>
+                                            <td title="Assign To" class="text-center">
+                                                <?php
+                                                $resp_value = get_assigned_office_staff_project_task($task_data->id,$task_data->project_id, $task_data->responsible_task_staff);
+                                                    echo "<span class='text-success'>". $resp_value['staff_name'] ."</span><br>" . $resp_value['office'] . "</td>";
+                                                ?> 
+                                            </td> <?php } else { ?> 
+                                            <td title="Assign To" class="text-center"><span class="text-success"><?php echo get_assigned_project_task_staff($task_data->id); ?></span><br><?php echo get_assigned_project_task_department($task_data->id); ?></td>                                                     
+                                        <?php } ?>
                                     </tr>
 
                                 </table>
@@ -922,9 +968,9 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="button" id="project-tracking-save" class="btn btn-primary" onclick="updateProjectStatusinner()">Save changes</button>
             </div>
-            <div class="modal-body" style="display: none;" id="log_modal">
+            <div class="modal-body" style="display: none;" id="log_modal1">
                 <div style="height:200px; overflow-y: scroll">
-                    <table id="status_log" class="table table-bordered">
+                    <table id="status_log1" class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>User</th>
@@ -1163,15 +1209,15 @@
             $("#changeStatusinner #not_start").prop('checked', false);
         }
         $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
-            $("#status_log > tbody > tr").remove();
+            $("#status_log1 > tbody > tr").remove();
             var returnedData = JSON.parse(data);
             for (var i = 0, l = returnedData.length; i < l; i++) {
-                $('#status_log > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
+                $('#status_log1 > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
             }
             if (returnedData.length >= 1)
-                $("#log_modal").show();
+                $("#log_modal1").show();
             else
-                $("#log_modal").hide();
+                $("#log_modal1").hide();
         });
         $("#changeStatusinner #prosubid").val(id);
     }

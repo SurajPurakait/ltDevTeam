@@ -427,6 +427,82 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
         </div>
     </div>
     <div id="accounts-form" class="modal fade" aria-hidden="true" style="display: none;"></div>
+    <!--tracking modal-->
+<div id="changeStatusinner" class="modal fade" role="dialog">
+    <div class="modal-dialog"> 
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title text-center"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="funkyradio">
+                            <div class="funkyradio-success">
+                                <input type="radio" name="radio" id="rad0" value="0"/>
+                                <label for="rad0"><strong>Not Started</strong></label>
+                            </div>
+                        </div>
+                        <div class="funkyradio">
+                            <div class="funkyradio-success">
+                                <input type="radio" name="radio" id="rad3" value="3"/>
+                                <label for="rad3"><strong>Ready</strong></label>
+                            </div>
+                        </div>
+                        <div class="funkyradio">
+                            <div class="funkyradio-success">
+                                <input type="radio" name="radio" id="rad1" value="1"/>
+                                <label for="rad1"><strong>Started</strong></label>
+                            </div>
+                        </div>
+                        <div class="funkyradio">
+                            <div class="funkyradio-success">
+                                <input type="radio" name="radio" id="rad2" value="2"/>
+                                <label for="rad2"><strong>Clarification</strong></label>
+                            </div>
+                        </div>
+                        <div class="funkyradio">
+                            <div class="funkyradio-success">
+                                <input type="radio" name="radio" id="rad4" value="4"/>
+                                <label for="rad4"><strong>Canceled</strong></label>
+                            </div>
+                        </div>
+                        <div class="funkyradio">
+                            <div class="funkyradio-success">
+                                <input type="radio" name="radio" id="rad5" value="5"/>
+                                <label for="rad5"><strong>Clarification</strong></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="prosubid" value="">
+                <input type="hidden" id="baseurl" value="<?= base_url(); ?>">
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="project-tracking-save" class="btn btn-primary" onclick="updateProjectStatusinner('view')">Save changes</button>
+            </div>
+            <div class="modal-body" style="display: none;" id="log_modal">
+                <div style="height:200px; overflow-y: scroll">
+                    <table id="status_log" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                                <th>time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <script>
         function loadbusinesstab(tab_value, projectval = '') {
             if (tab_value == 'invoice') {
@@ -446,5 +522,66 @@ $check_project_exist = getProjectCountByClientId($company_name_option_data["id"]
                 loadActionDashboard('', '', '', '', '', '','<?= $reference_id . '-company'; ?>','');
             }
         }
+        function change_project_status_inner(id, status, section_id,project_id='',task_order='') {
+        openModal('changeStatusinner');
+        var txt = 'Tracking Project #' + project_id+'-'+task_order;
+        $("#changeStatusinner .modal-title").html(txt);
+        if (status == 0) {
+            $("#changeStatusinner #rad0").prop('checked', true);
+            $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad2").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
+        } else if (status == 1) {
+            $("#changeStatusinner #rad1").prop('checked', true);
+            $("#changeStatusinner #rad0").prop('checked', false);
+            $("#changeStatusinner #rad2").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
+        } else if (status == 2) {
+            $("#changeStatusinner #rad2").prop('checked', true);
+            $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad0").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad5").prop('checked', false);
+        } else if (status == 3) {
+            $("#changeStatusinner #rad3").prop('checked', true);
+            $("#changeStatusinner #rad5").prop('checked', false);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad2").prop('checked', false);
+            $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad0").prop('checked', false);
+        } else if (status == 4) {
+            $("#changeStatusinner #rad4").prop('checked', true);
+            $("#changeStatusinner #rad5").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad2").prop('checked', false);
+            $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad0").prop('checked', false);
+        }
+        else if (status == 5) {
+            $("#changeStatusinner #rad5").prop('checked', true);
+            $("#changeStatusinner #rad4").prop('checked', false);
+            $("#changeStatusinner #rad3").prop('checked', false);
+            $("#changeStatusinner #rad2").prop('checked', false);
+            $("#changeStatusinner #rad1").prop('checked', false);
+            $("#changeStatusinner #rad0").prop('checked', false);
+        }
+        $.get($('#baseurl').val() + "project/get_project_tracking_log/" + section_id + "/project_task", function (data) {
+            $("#status_log > tbody > tr").remove();
+            var returnedData = JSON.parse(data);
+            for (var i = 0, l = returnedData.length; i < l; i++) {
+                $('#status_log > tbody:last-child').append("<tr><td>" + returnedData[i]["stuff_id"] + "</td>" + "<td>" + returnedData[i]["department"] + "</td>" + "<td>" + returnedData[i]["status"] + "</td>" + "<td>" + returnedData[i]["created_time"] + "</td></tr>");
+            }
+            if (returnedData.length >= 1)
+                $("#log_modal").show();
+            else
+                $("#log_modal").hide();
+        });
+        $("#changeStatusinner #prosubid").val(id);
+    }
 
     </script>

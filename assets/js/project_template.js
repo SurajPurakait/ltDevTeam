@@ -2104,7 +2104,32 @@ function change_bookkeeping_finance_input_status(id = '', status = '') {
                     //swal("Success!", "Successfully updated!", "success");
                     if (type == 'task') {
                         goURL(base_url + 'task');
-                    } else {
+                    }else if(type=='view'){
+                        if (statusval == '0') {
+                            var tracking = 'Not Started';
+                            var trk_class = 'label label-success';
+                        } else if (statusval == 1) {
+                            var tracking = 'Started';
+                            var trk_class = 'label label-yellow';
+                        } else if (statusval == 2) {
+                            var tracking = 'Completed';
+                            var trk_class = 'label label-primary';
+                        } else if (statusval == 3) {
+                            var tracking = 'Ready';
+                            var trk_class = 'label label-secondary';
+                        } else if (statusval == 4) {
+                            var tracking = 'Canceled';
+                            var trk_class = 'label label-danger';
+                        }else if (statusval == 5) {
+                            var tracking = 'Clarification';
+                            var trk_class = 'label label-info';
+                        }
+                        $("#trackinner-" + prosubid).removeClass().addClass(trk_class);
+                        $("#trackinner-" + prosubid).parent('a').removeAttr('onclick');
+                        $("#trackinner-" + prosubid).parent('a').attr('onclick', 'change_project_status_inner(' + prosubid + ',' + statusval + ', ' + prosubid + ');');
+                        $("#trackinner-" + prosubid).html(tracking);
+                    } 
+                    else {
                        goURL(base_url+'task/task_input_form/'+task_id+'/'+input_form_id);
                     }
                 }

@@ -2536,7 +2536,7 @@ class Project_Template_model extends CI_Model {
     }
 
     public function get_project_list($request = '', $status = '', $template_id = '', $office_id = '', $department_id = '', $filter_assign = '', $filter_data = [], $sos_value = '', $sort_criteria = '', $sort_type = '', $client_type = '', $client_id = '',$template_cat_id='',$month='',$year='') {
-//        echo 'hi'.$template_cat_id.'<br/>';die;
+//        echo 'hi'.$request.'<br/>'.$status;die;
 //        print_r($filter_data);die;
         $user_info = $this->session->userdata('staff_info');
         $user_department = $user_info['department'];
@@ -2598,7 +2598,7 @@ class Project_Template_model extends CI_Model {
 //                $having[]= 'assign_staff LIKE "%,' . $staff_id . ',%"';
             }
             if ($status != '') {
-                if ($status == 0 || $status == 1 || $status == 2) {
+                if ($status == 0 || $status == 1 || $status == 5) {
                     $this->db->where('pm.status', $status);
                 }
             } else {
@@ -2624,7 +2624,7 @@ class Project_Template_model extends CI_Model {
                 $having[] = '(all_project_staffs LIKE "%,' . $staff_id . ',%" OR all_task_staffs LIKE "%,' . $staff_id . ',%" OR added_by_user = "' . $staff_id . '")';
             }
             if ($status != '') {
-                if ($status == 0 || $status == 1 || $status == 2) {
+                if ($status == 0 || $status == 1 || $status == 5) {
                     $this->db->where('pm.status', $status);
                 }
             } else {
@@ -3108,6 +3108,7 @@ class Project_Template_model extends CI_Model {
             if($bookkeeping_input_type==1){
             }else if($bookkeeping_input_type==2){
             }else if($bookkeeping_input_type==3){
+                $project_id=$this->db->get_where('project_task',['id'=>$data['task_id']])->row()->project_id;
                 $exist=$this->db->get_where('project_task_bookkeeper_department',['task_id'=>$data['task_id']])->row();
                 if(!empty($exist)){
                     $this->db->where('task_id',$data['task_id']);
@@ -3121,12 +3122,22 @@ class Project_Template_model extends CI_Model {
                 $ins=$this->db->insert('project_task_bookkeeper_department',$client_data);
                 if($ins && $data['need_adjustment']=='y'){
                     $comment='';
+                    
+//                    previous task status update
                     $project_id=$this->db->get_where('project_task',['id'=>$data['task_id']])->row()->project_id;
                     $taskids=$this->db->get_where('project_task',['project_id'=>$project_id,'bookkeeping_input_type'=>2])->result_array();
                     $task_id= array_pop($taskids);
                     $this->db->where('id',$task_id['id']);
                     $this->db->update('project_task',['tracking_description'=>5]);
                     $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => 5, "section_id" => $task_id['id'], "related_table_name" => "project_task", "comment" => $comment]);
+                    
+//                    present task status update
+                    $this->db->where('id',$data['task_id']);
+                    $this->db->update('project_task',['tracking_description'=>1]);
+                    $this->db->insert("tracking_logs", ["stuff_id" => $this->session->userdata("user_id"), "status_value" => 1, "section_id" => $data['task_id'], "related_table_name" => "project_task", "comment" => $comment]);
+//                    project main status update
+                    $this->db->where('project_id',$project_id);
+                    $this->db->update('project_main',['status'=>5]);
                 }
             }
         }
@@ -3261,7 +3272,7 @@ class Project_Template_model extends CI_Model {
         }
     }
     public function getProjectOfficeClient($project_id){
-        $this->db->select('p.client_id,p.client_type,p.office_id,pm.title');
+        $this->db->select('p.client_id,p.client_type,p.office_id,pm.title,pm.office_id as project_office_id,pm.department_id');
         $this->db->from('projects as p');
         $this->db->join('project_main as pm','p.id=pm.project_id','inner');
         $this->db->where('p.id',$project_id);
