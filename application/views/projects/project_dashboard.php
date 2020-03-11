@@ -6,8 +6,34 @@ $role = $user_info['role'];
 ?>
 <div class="clearfix result-header">
     <?php if (count($project_list) != 0): ?>
-        <h2 class="text-primary pull-left result-count-h2"><?= isset($page_number) ? ($page_number * 20) : count($project_list) ?> Results found <?= isset($page_number) ? 'of ' . count($project_list) : '' ?></h2>
+        <h2 class="text-primary pull-left result-count-h2"><?= isset($page_number) ? ($page_number * 20) : count($project_list) ?> Results found <?= isset($page_number) ? 'of ' . count($project_list).' For Bookkeeping Monthly' : '' ?> </h2>
     <?php endif; ?>
+        <div class="col-md-4">
+            <div class="row">
+                <?php
+                $months=array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'Dececmber');
+//                if ($select_month != '') {
+//                    $presenet_month = $select_month;
+//                } else {
+//                    $presenet_month = '';
+//                }
+                ?>
+                <div class="col-md-6">
+                    <!--<input placeholder="January" readonly="" class="form-control" type="text" value="January" name="" id="" required="" title="">-->
+                <select class="form-control month-dropdown" id="due_month" name="due_month" onchange="change_project_month(this.value)">
+                    <option value="">All Month</option>
+                    <?php foreach ($months as $key => $month): ?>
+                        <option value="<?= $key ?>"><?= $month ?></option>
+                    <?php endforeach; ?>
+                </select>
+                </div>
+                <div class="col-md-2 m-t-10 p-l-0"> 
+                    <p class="text-left control-label font-bold">Month </p>
+                </div>
+                <!--<div class="errorMessage text-danger"></div>-->
+
+            </div>
+        </div>
     <div class="pull-right text-right p-t-5">
         <div class="dropdown" style="display: inline-block;">
             <a href="javascript:void(0);" id="sort-by-dropdown" data-toggle="dropdown" class="dropdown-toggle btn btn-success">Sort By <span class="caret"></span></a>
@@ -269,7 +295,7 @@ if (!empty($project_list)) {
     <?php endif; ?>
     <script>
         $(function () {
-            $('h2.result-count-h2').html('<?= $row_number . ' Results found of ' . count($project_list) ?>');
+            $('h2.result-count-h2').html('<?= $row_number . ' Results found of ' . count($project_list).' For Bookkeeping Monthly' ?>');
     <?php if (isset($page_number) && $row_number === count($project_list)): ?>
                 $('.load-more-btn').remove();
     <?php endif; ?>
