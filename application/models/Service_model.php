@@ -3446,7 +3446,7 @@ class Service_model extends CI_Model
         } else {
             $daterange = '';
         }
-        if($data['fran_office'] != '') {
+        if($data['fran_office'] != '' && $staff_info['type'] == 3) {
             $fran_office = $data['fran_office'];    
         } else {
             $fran_office = '';

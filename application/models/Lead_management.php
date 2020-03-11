@@ -2310,7 +2310,11 @@ class Lead_management extends CI_Model
         } else {
             $daterange = '';
         }
-        $data_office = $this->db->get_where('office', ['status !=' => '2'])->result_array();
+        if ($data['fran_office'] != '' && staff_info()['type'] == 3) {
+            $data_office = $this->db->get_where('office', ['id'=>$data['fran_office'],'status !=' => '2'])->result_array();
+        } else {
+            $data_office = $this->db->get_where('office', ['status !=' => '2'])->result_array();
+        }        
         $lead_details = [];
         if ($data['category'] == 'status') {
             foreach ($data_office as $do) {
@@ -2422,8 +2426,14 @@ class Lead_management extends CI_Model
         return date('m/d/Y', strtotime($partner_date));
     }
     public function get_partner_data($data)
-    {
-        $data_office = $this->db->get_where('office', ['status !=' => '2'])->result_array();
+    {           
+        if($data['fran_office'] != '' && staff_info()['type'] == 3) {
+            $data_office = $this->db->get_where('office', ['id'=> $data['fran_office'],'status !=' => '2'])->result_array();
+        } else {
+            $data_office = $this->db->get_where('office', ['status !=' => '2'])->result_array();
+        }
+
+        
         $partner_data = [];
         if ($data['date_range'] != '') {
             $daterange = $data['date_range'];

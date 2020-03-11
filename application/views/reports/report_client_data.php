@@ -28,6 +28,9 @@
             </tbody>
         </table>
     </div>
+    <?php
+        if (staff_info()['type'] != 3) {
+    ?>
     <div class="col-md-2 m-t-40">
         <h4 class="text-center">Offices</h4>
         <?php 
@@ -90,7 +93,10 @@
         <?php
             }
         ?>    
-        </div> 
+        </div>
+        <?php
+            }
+        ?> 
     </div>
 <?php
     } else if ($category == 'business_clients_by_office') { 
@@ -135,6 +141,9 @@
             </tbody>
         </table>
     </div>
+    <?php
+        if (staff_info()['type'] != 3) {
+    ?>
     <div class="col-md-2">
         <h4 class="text-center">Offices</h4>
         <?php 
@@ -206,6 +215,9 @@
             }
         ?>    
     </div>
+    <?php
+        }
+    ?>
 </div>
 <?php 
     } else if ($category == 'individual_clients_by_office') {
@@ -241,6 +253,9 @@
             </tbody>
         </table>
     </div>
+    <?php
+        if (staff_info()['type'] != 3) {
+    ?>
     <div class="col-md-2">
         <h4 class="text-center">Offices</h4>
         <?php 
@@ -304,6 +319,9 @@
             }
         ?>    
     </div>
+    <?php
+        }
+    ?>
 </div>
 <?php
     }

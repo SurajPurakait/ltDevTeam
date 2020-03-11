@@ -53,7 +53,7 @@
                                             <div class="ibox-content p-0" id="service_by_franchise" style="display: none;"></div>
                                             <?php   
                                                 } 
-                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2 || $staff_info['type'] == 3){
+                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
                                             ?>
                                             <div class="ibox" id="service_by_department_1" onclick="show_service_franchise_result('department','','','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
@@ -68,7 +68,7 @@
                                             <div class="ibox-content p-0" id="service_by_department" style="display: none;"></div>
                                             <?php
                                                 } 
-                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2 || $staff_info['type'] == 3) {
+                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2) {
                                             ?>
                                             <div class="ibox" id="service_by_category_1" onclick="show_service_franchise_result('service_category','','','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
@@ -142,7 +142,7 @@
                                                 $dateRangeAction = $action_start_date.' - '.$current_date;
                                             ?>
                                             <input type="hidden" name="action_range_report_value" id="action_range_report">
-                                            <div class="ibox m-t-25" id="action_by_office_section" onclick="show_action_data('action_by_office')">
+                                            <div class="ibox m-t-25" id="action_by_office_section" onclick="show_action_data('action_by_office','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions By Office</h5>
                                                     <div class="ibox-tools">
@@ -153,7 +153,7 @@
                                                 </div>    
                                             </div>
                                             <div class="ibox-content p-0" id="action_by_office" style="display: none;"></div>                                        
-                                            <div class="ibox m-t-25" id="action_to_office_section" onclick="show_action_data('action_to_office')">
+                                            <div class="ibox m-t-25" id="action_to_office_section" onclick="show_action_data('action_to_office','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions To Office</h5>
                                                     <div class="ibox-tools">
@@ -164,7 +164,10 @@
                                                 </div>
                                             </div>
                                             <div class="ibox-content p-0" id="action_to_office" style="display: none;"></div>
-                                            <div class="ibox m-t-25" id="action_by_department_section" onclick="show_action_data('action_by_department')">
+                                            <?php                                                  
+                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
+                                            ?>
+                                            <div class="ibox m-t-25" id="action_by_department_section" onclick="show_action_data('action_by_department','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions By Department</h5>
                                                     <div class="ibox-tools">
@@ -175,7 +178,7 @@
                                                 </div>
                                             </div>
                                             <div class="ibox-content p-0" id="action_by_department" style="display: none;"></div>
-                                            <div class="ibox m-t-25" id="action_to_department_section" onclick="show_action_data('action_to_department')">
+                                            <div class="ibox m-t-25" id="action_to_department_section" onclick="show_action_data('action_to_department','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions To Department</h5>
                                                     <div class="ibox-tools">
@@ -186,6 +189,9 @@
                                                 </div>
                                             </div>
                                             <div class="ibox-content p-0" id="action_to_department" style="display: none;"></div>
+                                            <?php
+                                                }
+                                            ?>
                                         </div>
                                     </div>
                                     <div role="tabpanel" id="tab-projects" class="tab-pane">
@@ -208,7 +214,7 @@
                                                 $dateRangeProject = $project_start_date.' - '.$current_date;
                                             ?>  
                                             <input type="hidden" name="project_range_report_value" id="project_range_report">
-                                            <div class="ibox m-t-25" id="projects_by_office_section" onclick="show_project_data('projects_by_office')">
+                                            <div class="ibox m-t-25" id="projects_by_office_section" onclick="show_project_data('projects_by_office','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Projects By Office</h5>
                                                     <div class="ibox-tools">
@@ -219,7 +225,7 @@
                                                 </div>
                                             </div>
                                             <div class="ibox-content p-0" id="projects_by_office" style="display: none;"></div>                              
-                                            <div class="ibox m-t-25" id="tasks_by_office_section" onclick="show_project_data('tasks_by_office')">
+                                            <div class="ibox m-t-25" id="tasks_by_office_section" onclick="show_project_data('tasks_by_office','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Tasks By Office</h5>
                                                     <div class="ibox-tools">
@@ -230,6 +236,9 @@
                                                 </div>
                                             </div>
                                             <div class="ibox-content p-0" id="tasks_by_office" style="display: none;"></div>
+                                            <?php
+                                                if (($staff_info['type'] == 1 || $staff_info['department'] == 14) || $staff_info['type'] == 2){
+                                            ?>
                                             <div class="ibox m-t-25" id="projects_to_department_section" onclick="show_project_data('projects_to_department')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Projects To Department</h5>
@@ -252,6 +261,9 @@
                                                 </div>
                                             </div>
                                             <div class="ibox-content p-0" id="tasks_to_department" style="display: none;"></div>
+                                            <?php
+                                                }
+                                            ?>
                                         </div>
                                     </div>
                                     <div role="tabpanel" id="tab-clients" class="tab-pane">
@@ -259,7 +271,7 @@
                                             <div class="col-md-5 col-md-offset-7 m-t-6 text-right">
                                                 <button type="button" class="btn btn-warning" id="report-client-refresh-btn" style="border-radius: 0;" onclick="refresh_client_report()"><i class="fa fa-refresh"></i>&nbsp;Refresh</button>
                                             </div>
-                                            <div class="ibox m-t-25" id="total_clients_by_office_section" onclick="show_clients_data('clients_by_office')">
+                                            <div class="ibox m-t-25" id="total_clients_by_office_section" onclick="show_clients_data('clients_by_office','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Total Clients By Office</h5>
                                                     <div class="ibox-tools">
@@ -270,7 +282,7 @@
                                                 </div>
                                                 <div class="ibox-content p-0" id="total_clients_by_office" style="display: none;"></div>
                                             </div>                                        
-                                            <div class="ibox m-t-25" id="business_clients_by_office_section" onclick="show_clients_data('business_clients_by_office')">
+                                            <div class="ibox m-t-25" id="business_clients_by_office_section" onclick="show_clients_data('business_clients_by_office','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Business Clients By Office</h5>
                                                     <div class="ibox-tools">
@@ -281,7 +293,7 @@
                                                 </div>
                                             </div>
                                             <div class="ibox-content p-0" id="business_clients_by_office" style="display: none;"></div>
-                                            <div class="ibox m-t-25" id="individual_clients_by_office_section" onclick="show_clients_data('individual_clients_by_office')">
+                                            <div class="ibox m-t-25" id="individual_clients_by_office_section" onclick="show_clients_data('individual_clients_by_office','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Individual Clients By Office</h5>
                                                     <div class="ibox-tools">
@@ -314,7 +326,7 @@
                                                 $dateRangePartner = $partner_start_date.' - '.$current_date;
                                             ?>
                                             <input type="hidden" name="partners_range_report_value" id="partners_range_report">
-                                            <div class="ibox m-t-25" id="partners_by_type_section" onclick="show_partner_data()">
+                                            <div class="ibox m-t-25" id="partners_by_type_section" onclick="show_partner_data('<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Partners By Type</h5>
                                                     <div class="ibox-tools">
@@ -347,7 +359,7 @@
                                                 $dateRangeLead = $lead_start_date.' - '.$current_date;
                                             ?>
                                             <input type="hidden" name="leads_range_report_value" id="leads_range_report">   
-                                            <div class="ibox m-t-25" id="leads_by_status_section" onclick="show_lead_data('status')">
+                                            <div class="ibox m-t-25" id="leads_by_status_section" onclick="show_lead_data('status','','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads By Status</h5>
                                                     <div class="ibox-tools">
@@ -358,7 +370,7 @@
                                                 </div>
                                             </div>
                                             <div class="ibox-content p-0" id="leads_by_status" style="display: none;"></div>                                     
-                                            <div class="ibox m-t-25" id="leads_by_type_section" onclick="show_lead_data('type')">
+                                            <div class="ibox m-t-25" id="leads_by_type_section" onclick="show_lead_data('type','','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads By Type</h5>
                                                     <div class="ibox-tools">
@@ -369,7 +381,7 @@
                                                 </div>
                                             </div>
                                             <div class="ibox-content p-0" id="leads_by_type" style="display: none;"></div>
-                                            <div class="ibox m-t-25" id="leads_email_campaign_section" onclick="show_lead_data('mail_campaign')">
+                                            <div class="ibox m-t-25" id="leads_email_campaign_section" onclick="show_lead_data('mail_campaign','','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Leads Email Campaign</h5>
                                                     <div class="ibox-tools">
@@ -393,6 +405,21 @@
 </div>
 <script type="text/javascript">
         $(function () {
+            if (<?= $staff_info['type']; ?> == 3) {
+               show_service_franchise_result('franchise','','','<?= $franchisee_office ?>');
+               show_billing_data('','','<?= $franchisee_office ?>');
+               show_action_data('action_by_office','<?= $franchisee_office ?>');
+               show_action_data('action_to_office','<?= $franchisee_office ?>');
+               show_project_data('projects_by_office','<?= $franchisee_office ?>');
+               show_project_data('tasks_by_office','<?= $franchisee_office ?>');
+               show_clients_data('clients_by_office','<?= $franchisee_office ?>');
+               show_clients_data('business_clients_by_office','<?= $franchisee_office ?>');
+               show_clients_data('individual_clients_by_office','<?= $franchisee_office ?>');
+               show_partner_data('<?= $franchisee_office ?>');
+               show_lead_data('status','','<?= $franchisee_office ?>');
+               show_lead_data('type','','<?= $franchisee_office ?>');
+               show_lead_data('mail_campaign','','<?= $franchisee_office ?>');
+            }
             if('<?= $dateRangeService; ?>' != '') {
                 var range = '<?= $dateRangeService ?>';
                 var start = range.split("-")[0];
@@ -465,7 +492,8 @@
 
             $("#report-leads-range-btn").click(function () {
                 var report_range_lead = document.getElementById('reportrangelead').value;
-                get_lead_range(report_range_lead);
+                // alert(report_range_lead);return false;
+                get_lead_range(report_range_lead,'<?= $franchisee_office ?>');
             });
         }); 
         
@@ -503,7 +531,7 @@
 
             $("#report-partners-range-btn").click(function () {
                 var report_range_partners = document.getElementById('reportrangepartners').value;
-                get_partner_date_range(report_range_partners);
+                get_partner_date_range(report_range_partners,'<?= $franchisee_office ?>');
             });
         }); 
         
@@ -541,7 +569,7 @@
 
             $("#report-projects-range-btn").click(function () {
                 var report_range_project = document.getElementById('reportrangeproject').value;
-                get_project_date(report_range_project);    
+                get_project_date(report_range_project,'<?= $franchisee_office ?>');    
             });
         }); 
         
@@ -584,7 +612,7 @@
 
             $("#report-actions-range-btn").click(function () {
                 var report_range_action = document.getElementById('reportrangeaction').value;
-                get_action_range_date(report_range_action);    
+                get_action_range_date(report_range_action,'<?= $franchisee_office ?>');    
             });
         });
         

@@ -43,29 +43,7 @@ $role = $user_info['role'];
                                     <div class="col-md-8">
                                         <a href="#" class="btn btn-primary m-t-15" id="project_add_filter">Show Filter</a>
                                     </div>
-                                    <div class="col-md-2">
-                                        <div>
-                                            <label class="text-left control-label">Month: </label>
-                                            <?php
-                                            if ($select_month != '') {
-                                                $presenet_month = $select_month;
-                                            } else {
-                                                $presenet_month = '';
-                                            }
-                                            ?>
-                                                <!--<input placeholder="January" readonly="" class="form-control" type="text" value="January" name="" id="" required="" title="">-->
-                                            <select class="form-control month-dropdown" id="due_month" name="due_month" onchange="change_project_month(this.value)">
-                                                <option value="">Select Month</option>
-                                                <?php foreach ($months as $key => $month): ?>
-                                                    <option value="<?= $key ?>" <?= $presenet_month == $key ? 'selected' : '' ?>>
-                                                        <?= $month ?>
-                                                    </option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                            <div class="errorMessage text-danger"></div>
-
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-md-2">
                                         <div>
                                             <label class="text-left control-label">Year: </label>
@@ -187,8 +165,8 @@ $role = $user_info['role'];
                                                                     <td><span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 1);"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td style="text-align: right; padding-right: 5px;">Completed</td>
-                                                                    <td><span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 1);"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span>   </td>
+                                                                    <td style="text-align: right; padding-right: 5px;">Clarification</td>
+                                                                    <td><span class="label label-info label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('1-bookkeeping', '5-Clarification');loadProjectDashboard(5, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 1);"> <?= isset($status_array[5]) ? $status_array[5] : 0; ?> </span>   </td>
                                                                 </tr>
                                                             </table>
                                                             
@@ -196,7 +174,7 @@ $role = $user_info['role'];
                                                         <div class="alert-primar-grid">
                                                                 <div class="project-bookkeeping-campaigns-donut-<?= $key ?> text-center" data-size="65" id="project_bookkeeping_donut_<?= $key ?>" data-json="project_bookkeeping_data_<?= $key ?>"></div>
                                                                 <script>
-                                                                    var project_bookkeeping_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': '#309f77'}];
+                                                                    var project_bookkeeping_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Clarification', 'value': <?= isset($status_array[5]) ? $status_array[5] : 0; ?>, 'color': '#23c6c8'}];
                                                                 </script>
                                                             </div>
                                                         </div>
@@ -243,8 +221,8 @@ $role = $user_info['role'];
                                                                     <td><span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('2-tax_returns', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 2);"> <?= isset($status_array[1]) ? $status_array[1] : 0; ?> </span></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td style="text-align: right; padding-right: 5px;">Completed</td>
-                                                                    <td><span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('2-tax_returns', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 2);"> <?= isset($status_array[2]) ? $status_array[2] : 0; ?> </span>   </td>
+                                                                    <td style="text-align: right; padding-right: 5px;">Clarification</td>
+                                                                    <td><span class="label label-info label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('2-tax_returns', '5-Clarification');loadProjectDashboard(5, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 2);"> <?= isset($status_array[5]) ? $status_array[5] : 0; ?> </span>   </td>
                                                                 </tr>
                                                             </table>
                                                             
@@ -252,7 +230,7 @@ $role = $user_info['role'];
                                                         <div class="alert-primar-grid">
                                                             <div class="project-tax-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_tax_donut_<?= $key ?>" data-json="project_tax_data_<?= $key ?>"></div>
                                                             <script>
-                                                                var project_tax_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array[2]) ? $status_array[2] : 0; ?>, 'color': '#309f77'}];
+                                                                var project_tax_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array[1]) ? $status_array[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array[0]) ? $status_array[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Clarification', 'value': <?= isset($status_array[5]) ? $status_array[5] : 0; ?>, 'color': '#23c6c8'}];
                                                             </script>
                                                         </div>
                                                         </div>
@@ -298,8 +276,8 @@ $role = $user_info['role'];
                                                                         <td><span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[1]) ? $status_array1[1] : 0; ?> </span></td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td style="text-align: right; padding-right: 5px;">Completed</td>
-                                                                        <td><span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span></td>
+                                                                        <td style="text-align: right; padding-right: 5px;">Clarification</td>
+                                                                        <td><span class="label label-info label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('3-sales_tax', '5-Clarification');loadProjectDashboard(5, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 3);"> <?= isset($status_array1[5]) ? $status_array1[5] : 0; ?> </span></td>
                                                                     </tr>
                                                                    
                                                                 </table>
@@ -307,7 +285,7 @@ $role = $user_info['role'];
                                                             <div class="alert-primar-grid">
                                                                 <div class="project-sales-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_sales_donut_<?= $key ?>" data-json="project_sales_data_<?= $key ?>"></div>
                                                                 <script>
-                                                                    var project_sales_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': '#309f77'}];
+                                                                    var project_sales_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Clarification', 'value': <?= isset($status_array1[5]) ? $status_array1[5] : 0; ?>, 'color': '#23c6c8'}];
                                                                 </script>
                                                             </div>
                                                         </div>
@@ -356,8 +334,8 @@ $role = $user_info['role'];
                                                                     <td><span class="label label-warning label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('4-annual_report', '1-Started');loadProjectDashboard(1, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 4);"> <?= isset($status_array1[1]) ? $status_array1[1] : 0; ?> </span></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td style="text-align: right; padding-right: 5px;">Completed</td>
-                                                                    <td><span class="label label-primary label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('4-annual_report', '2-Completed');loadProjectDashboard(2, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 4);"> <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?> </span></td>
+                                                                    <td style="text-align: right; padding-right: 5px;">Clarification</td>
+                                                                    <td><span class="label label-info label-block" style="width: 40px; display: inline-block; text-align: center; cursor: pointer;" onclick="reflactProjectFilterWithCategory('4-annual_report', '5-Clarification');loadProjectDashboard(5, '', '<?= $value['template_id'] ?>', '', '', '', '', '', '', '', '', '', '', 1, 4);"> <?= isset($status_array1[5]) ? $status_array1[5] : 0; ?> </span></td>
                                                                 </tr>
                                                             </table>
                                                                
@@ -365,7 +343,7 @@ $role = $user_info['role'];
                                                         <div class="alert-primar-grid">
                                                             <div class="project-annual-campaigns-donut-<?= $key ?> text-center" data-size="60" id="project_annual_donut_<?= $key ?>" data-json="project_annual_data_<?= $key ?>"></div>
                                                             <script>
-                                                                var project_annual_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Completed', 'value': <?= isset($status_array1[2]) ? $status_array1[2] : 0; ?>, 'color': '#309f77'}];
+                                                                var project_annual_data_<?= $key ?> = [{'section_label': 'Start', 'value': <?= isset($status_array1[1]) ? $status_array1[1] : 0 ?>, 'color': '#FFB046'}, {'section_label': 'Not Started', 'value': <?= isset($status_array1[0]) ? $status_array1[0] : 0; ?>, 'color': '#06a0d6'}, {'section_label': 'Clarification', 'value': <?= isset($status_array1[5]) ? $status_array1[5] : 0; ?>, 'color': '#23c6c8'}];
                                                             </script>
                                                         </div>
                                                         </div>
@@ -545,7 +523,7 @@ $role = $user_info['role'];
                         <div class="funkyradio">
                             <div class="funkyradio-success">
                                 <input type="radio" name="radio" id="rad2" value="2"/>
-                                <label for="rad2"><strong>Completed</strong></label>
+                                <label for="rad2"><strong>Clarification</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
@@ -731,8 +709,8 @@ $role = $user_info['role'];
                     var tracking_main = 'Started';
                     var trk_class_main = 'label label-yellow';
                 } else if (res.project_status == 2) {
-                    var tracking_main = 'Completed';
-                    var trk_class_main = 'label label-primary';
+                    var tracking_main = 'Clarification';
+                    var trk_class_main = 'label label-info';
                 } else if (res.project_status == 4) {
                     var tracking_main = 'Canceled';
                     var trk_class_main = 'label label-danger';

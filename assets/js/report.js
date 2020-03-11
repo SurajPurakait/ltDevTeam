@@ -305,7 +305,7 @@ function show_billing_data(date_range = '', start_date = '', fran_office = '') {
 }
 
 // report action section js
-function show_action_data(category = '') {
+function show_action_data(category = '',fran_office='') {
     var date_range = $("#action_range_report").val();
     if (category == 'action_by_office') {
         $("#action_by_office").toggle();
@@ -319,7 +319,7 @@ function show_action_data(category = '') {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_action_data',
-        data: { 'category': category, 'date_range': date_range },
+        data: { 'category': category, 'date_range': date_range ,'fran_office':fran_office },
         success: function (result) {
             if (category == 'action_by_office') {
                 $("#action_by_office").html(result);
@@ -340,7 +340,7 @@ function show_action_data(category = '') {
     });
 }
 
-function get_action_range_date(date_range = "") {
+function get_action_range_date(date_range = "",fran_office = "") {
     // alert($date_range);return false;
     if ($("#action_by_office").css('display') == 'block') {
         category = 'action_by_office';
@@ -361,16 +361,16 @@ function get_action_range_date(date_range = "") {
         success: function (result) {
             $("#action_range_report").val(result);
             if (category == 'action_by_office') {
-                show_action_data(category, result);
+                show_action_data(category, fran_office);
                 $("#action_by_office").show();
             } else if (category == 'action_to_office') {
-                show_action_data(category, result);
+                show_action_data(category, fran_office);
                 $("#action_to_office").show();
             } else if (category == 'action_by_department') {
-                show_action_data(category, result);
+                show_action_data(category, fran_office);
                 $("#action_by_department").show();
             } else if (category == 'action_to_department') {
-                show_action_data(category, result);
+                show_action_data(category, fran_office);
                 $("#action_to_department").show();
             }
         },
@@ -384,7 +384,7 @@ function get_action_range_date(date_range = "") {
 }
 
 // report project section js
-function show_project_data(category = '') {
+function show_project_data(category = '',fran_office='') {
     var date_range_project = $("#project_range_report").val();
 
     if (category == 'projects_by_office') {
@@ -399,7 +399,7 @@ function show_project_data(category = '') {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_project_data',
-        data: { 'category': category, 'date_range': date_range_project },
+        data: { 'category': category, 'date_range': date_range_project ,'fran_office':fran_office },
         success: function (result) {
             if (category == 'projects_by_office') {
                 $("#projects_by_office").html(result);
@@ -420,7 +420,7 @@ function show_project_data(category = '') {
     });
 }
 
-function get_project_date(date_range = '') {
+function get_project_date(date_range = '',fran_office='') {
     if ($("#projects_by_office").css('display') == 'block') {
         category = 'projects_by_office';
     } else if ($("#tasks_by_office").css('display') == 'block') {
@@ -440,16 +440,16 @@ function get_project_date(date_range = '') {
         success: function (result) {
             $("#project_range_report").val(result);
             if (category == 'projects_by_office') {
-                show_project_data(category, result);
+                show_project_data(category, fran_office);
                 $("#projects_by_office").show();
             } else if (category == 'tasks_by_office') {
-                show_project_data(category, result);
+                show_project_data(category, fran_office);
                 $("#tasks_by_office").show();
             } else if (category == 'projects_to_department') {
-                show_project_data(category, result);
+                show_project_data(category, fran_office);
                 $("#projects_to_department").show();
             } else if (category == 'tasks_to_department') {
-                show_project_data(category, result);
+                show_project_data(category, fran_office);
                 $("#tasks_to_department").show();
             }
         },
@@ -463,7 +463,7 @@ function get_project_date(date_range = '') {
 }
 
 // report lead section js
-function show_lead_data(category, date_range = '') {
+function show_lead_data(category, date_range = '',fran_office = '') {
     if (category == 'status') {
         $("#leads_by_status").toggle();
     } else if (category == 'type') {
@@ -474,7 +474,7 @@ function show_lead_data(category, date_range = '') {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_leads_data',
-        data: { 'category': category, 'date_range': date_range },
+        data: { 'category': category, 'date_range': date_range, 'fran_office':fran_office },
         success: function (result) {
             if (category == 'status') {
                 $("#leads_by_status").html(result);
@@ -492,7 +492,7 @@ function show_lead_data(category, date_range = '') {
         }
     });
 }
-function get_lead_range(date_range = '') {
+function get_lead_range(date_range = '',fran_office='') {
     if ($("#leads_by_status").css('display') == 'block') {
         category = 'status';
     } else if ($("#leads_by_type").css('display') == 'block') {
@@ -509,13 +509,13 @@ function get_lead_range(date_range = '') {
         success: function (result) {
             $("#leads_range_report").val(result);
             if (category == 'status') {
-                show_lead_data(category, result);
+                show_lead_data(category, result, fran_office);
                 $("#leads_by_status").show();
             } else if (category == 'type') {
-                show_lead_data(category, result);
+                show_lead_data(category,result ,fran_office);
                 $("#leads_by_type").show();
             } else if (category == 'mail_campaign') {
-                show_lead_data(category, result);
+                show_lead_data(category, result,fran_office);
                 $("#leads_email_campaign").show();
             }
         },
@@ -528,14 +528,14 @@ function get_lead_range(date_range = '') {
     })
 }
 
-function get_partner_date_range(date_range = '') {
+function get_partner_date_range(date_range = '',fran_office = '') {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_range_partners_report',
         data: { 'date_range_partner': date_range },
         success: function (result) {
             $("#partners_range_report").val(result);
-            show_partner_data();
+            show_partner_data(fran_office);
             $("#partners_by_type").show();
         },
         beforeSend: function () {
@@ -548,14 +548,14 @@ function get_partner_date_range(date_range = '') {
 }
 
 // report partner section js
-function show_partner_data() {
+function show_partner_data(fran_office= '') {
     $("#partners_by_type").toggle();
     var date_range_partner = $("#partners_range_report").val();
 
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_partner_data',
-        data: { 'date_range': date_range_partner },
+        data: { 'date_range': date_range_partner , 'fran_office':fran_office },
         success: function (result) {
             $("#partners_by_type").html(result);
         },
@@ -569,7 +569,7 @@ function show_partner_data() {
 }
 
 // report service section js
-function show_clients_data(category) {
+function show_clients_data(category,fran_office='') {
     if (category == 'clients_by_office') {
         $("#total_clients_by_office").toggle();
     } else if (category == 'business_clients_by_office') {
@@ -580,9 +580,8 @@ function show_clients_data(category) {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_clients_data',
-        data: { 'category': category },
+        data: { 'category': category ,'fran_office':fran_office},
         success: function (result) {
-            // console.log(result);
             if (category == 'clients_by_office') {
                 $("#total_clients_by_office").html(result);
             } else if (category == 'business_clients_by_office') {
