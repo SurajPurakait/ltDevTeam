@@ -501,7 +501,7 @@ function loadServiceDashboard(status, categoryID, requestType, officeID, pageNum
     });
 }
 
-function loadNewServiceDashboard(status, categoryID, requestType, officeID, pageNumber = 0) {
+function loadNewServiceDashboard(status = "", categoryID = "", requestType = "", officeID = "", pageNumber = 0) {
     var requestBy = $('.staff-dropdown option:selected').val();
     $.ajax({
         type: 'POST',
