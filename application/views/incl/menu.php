@@ -148,27 +148,33 @@ $office_id = get_office_id($staff_info['office']);
                 <!-- Services -->
                 <li <?= active_menu($main_menu, "services"); ?>>
                     <div class="dashboard-icons pull-right">
-                        <a href="<?= base_url(); ?>services/home/index/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started">
+                        <a href="<?= base_url(); ?>services/home/service_new_dashboard_index/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started">
                             <!--<a href="javascript:void(0)" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started" onclick="reflactFilterWithService1('2-Not Started');loadServiceDashboard('2','','','',1);">-->
                             <?php
                             if ($staff_info['type'] == 2) {
-                                echo count_services(2, 'tome');
+                                // echo count_services(2, 'tome');
+                                echo count_new_services(2, 'tome');
                             } elseif ($staff_info['type'] == 3) {
-                                echo count_services(2, 'byme');
+                                // echo count_services(2, 'byme');
+                                echo count_new_services(2, 'byme');
                             } else {
-                                echo count_services(2);
+                                // echo count_services(2);
+                                echo count_new_services(2);
                             }
                             ?>
                         </a>
-                        <a href="<?= base_url(); ?>services/home/index/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started">
+                        <a href="<?= base_url(); ?>services/home/service_new_dashboard_index/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started">
                         <!--<a href="javascript:void(0)" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started" onclick="reflactFilterWithService1('1-Started');loadServiceDashboard('1','','','',1);">-->
                             <?php
                             if ($staff_info['type'] == 2) {
-                                echo count_services(1, 'tome');
+                                // echo count_services(1, 'tome');
+                                echo count_new_services(1, 'tome');
                             } elseif ($staff_info['type'] == 3) {
-                                echo count_services(1, 'byme');
+                                // echo count_services(1, 'byme');
+                                echo count_new_services(1, 'byme');
                             } else {
-                                echo count_services(1);
+                                // echo count_services(1);
+                                echo count_new_services(1);
                             }
                             ?>        
                         </a>
@@ -185,39 +191,76 @@ $office_id = get_office_id($staff_info['office']);
                         <li <?= active_menu($menu, "new_service_dashboard"); ?>>
                             <a href="<?= base_url(); ?>services/home/service_new_dashboard_index">Services</a>
                         </li>
+                        <!-- <li <?//= active_menu($menu, "incorporation"); ?>>
+                            <div class="dashboard-icons pull-right">
+                                <a href="<?//= base_url(); ?>services/home/index/2/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?//= count_services(2, '', 1); ?></a>
+                                <a href="<?//= base_url(); ?>services/home/index/1/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?//= count_services(1, '', 1); ?></a>
+                            </div>
+                            <a href="<?//= base_url(); ?>services/incorporation">+ Incorporation</a>
+                        </li> -->
                         <li <?= active_menu($menu, "incorporation"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <a href="<?= base_url(); ?>services/home/index/2/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 1); ?></a>
-                                <a href="<?= base_url(); ?>services/home/index/1/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 1); ?></a>
+                                <a href="<?= base_url(); ?>services/home/service_new_dashboard_index/2/1" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_new_services(2, '', 1); ?></a>
+                                <a href="<?= base_url(); ?>services/home/service_new_dashboard_index/1/1" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_new_services(1, '', 1); ?></a>
                             </div>
                             <a href="<?= base_url(); ?>services/incorporation">+ Incorporation</a>
                         </li>
+                        <!-- <li <?//= active_menu($menu, "accounting_services"); ?>>
+                            <div class="dashboard-icons pull-right">
+                                <a href="<?//= base_url(); ?>services/home/index/2/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?//= count_services(2, '', 2); ?></a>
+                                <a href="<?//= base_url(); ?>services/home/index/1/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?//= count_services(1, '', 2); ?></a>
+                               
+                            </div>
+                            <a href="<?//= base_url(); ?>services/accounting_services">+ Accounting</a>
+                        </li> -->
                         <li <?= active_menu($menu, "accounting_services"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <a href="<?= base_url(); ?>services/home/index/2/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 2); ?></a>
-                                <a href="<?= base_url(); ?>services/home/index/1/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 2); ?></a>
+                                <a href="<?= base_url(); ?>services/home/service_new_dashboard_index/2/2" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_new_services(2, '', 2); ?></a>
+                                <a href="<?= base_url(); ?>services/home/service_new_dashboard_index/1/2" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_new_services(1, '', 2); ?></a>
                                
                             </div>
                             <a href="<?= base_url(); ?>services/accounting_services">+ Accounting</a>
                         </li>
+                        <!-- <li <?//= active_menu($menu, "tax_services"); ?>>
+                            <div class="dashboard-icons pull-right">
+                                <a href="<?//= base_url(); ?>services/home/index/2/3" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?//= count_services(2, '', 3); ?></a>
+                                <a href="<?//= base_url(); ?>services/home/index/1/3" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?//= count_services(1, '', 3); ?></a>
+                            </div>
+                            <a href="<?//= base_url(); ?>services/tax_services">+ Taxes</a>
+                        </li> -->
                         <li <?= active_menu($menu, "tax_services"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <a href="<?= base_url(); ?>services/home/index/2/3" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 3); ?></a>
-                                <a href="<?= base_url(); ?>services/home/index/1/3" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 3); ?></a>
+                                <a href="<?= base_url(); ?>services/home/service_new_dashboard_index/2/3" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_new_services(2, '', 3); ?></a>
+                                <a href="<?= base_url(); ?>services/home/service_new_dashboard_index/1/3" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_new_services(1, '', 3); ?></a>
                             </div>
                             <a href="<?= base_url(); ?>services/tax_services">+ Taxes</a>
                         </li>
+                        <!-- <li <?//= active_menu($menu, "business_services"); ?>>
+                            <div class="dashboard-icons pull-right">
+                                <a href="<?//= base_url(); ?>services/home/index/2/4" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?//= count_services(2, '', 4); ?></a>
+                                <a href="<?//= base_url(); ?>services/home/index/1/4" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?//= count_services(1, '', 4); ?></a>
+                            </div>
+                            <a href="<?//= base_url(); ?>services/business_services">+ Business</a>
+                        </li> -->
                         <li <?= active_menu($menu, "business_services"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <a href="<?= base_url(); ?>services/home/index/2/4" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 4); ?></a>
-                                <a href="<?= base_url(); ?>services/home/index/1/4" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 4); ?></a>
+                                <a href="<?= base_url(); ?>services/home/service_new_dashboard_index/2/4" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_new_services(2, '', 4); ?></a>
+                                <a href="<?= base_url(); ?>services/home/service_new_dashboard_index/1/4" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_new_services(1, '', 4); ?></a>
                             </div>
                             <a href="<?= base_url(); ?>services/business_services">+ Business</a>
                         </li>
+                        <!-- <li <?//= active_menu($menu, "partner_services"); ?>>
+                            <div class="dashboard-icons pull-right">
+                                <a href="<?//= base_url(); ?>services/home/index/2/5" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?//= count_services(2, '', 5); ?></a>
+                                <a href="<?//= base_url(); ?>services/home/index/1/5" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?//= count_services(1, '', 5); ?></a>
+                          
+                            </div>
+                            <a href="<?//= base_url(); ?>services/partner_services">+ Partner</a>
+                        </li> -->
                         <li <?= active_menu($menu, "partner_services"); ?>>
                             <div class="dashboard-icons pull-right">
-                                <a href="<?= base_url(); ?>services/home/index/2/5" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_services(2, '', 5); ?></a>
-                                <a href="<?= base_url(); ?>services/home/index/1/5" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_services(1, '', 5); ?></a>
+                                <a href="<?= base_url(); ?>services/home/service_new_dashboard_index/2/5" class="icon-complete-new" data-toggle="tooltip" data-placement="top" title="Not Started"><?= count_new_services(2, '', 5); ?></a>
+                                <a href="<?= base_url(); ?>services/home/service_new_dashboard_index/1/5" class="icon-incomplete" data-toggle="tooltip" data-placement="top" title="Started"><?= count_new_services(1, '', 5); ?></a>
                           
                             </div>
                             <a href="<?= base_url(); ?>services/partner_services">+ Partner</a>
