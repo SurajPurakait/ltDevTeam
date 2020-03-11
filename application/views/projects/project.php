@@ -43,51 +43,45 @@ $role = $user_info['role'];
                                     <div class="col-md-8">
                                         <a href="#" class="btn btn-primary m-t-15" id="project_add_filter">Show Filter</a>
                                     </div>
-<!--                                    <div class="col-md-2">
-                                        <div>
-                                            <label class="text-left control-label">Month: </label>
-                                            <?php
-//                                            if ($select_month != '') {
-//                                                $presenet_month = $select_month;
-//                                            } else {
-//                                                $presenet_month = '';
-//                                            }
-                                            ?>
-                                                <input placeholder="January" readonly="" class="form-control" type="text" value="January" name="" id="" required="" title="">
-                                            <select class="form-control month-dropdown" id="due_month" name="due_month" onchange="change_project_month(this.value)">
-                                                <option value="">Select Month</option>
-                                                <?php //foreach ($months as $key => $month): ?>
-                                                    <option value="<= $key ?>" <= $presenet_month == $key ? 'selected' : '' ?>>
-                                                        <= $month ?>
-                                                    </option>
-                                                <?php //endforeach; ?>
-                                            </select>
-                                            <div class="errorMessage text-danger"></div>
-
-                                        </div>
-                                    </div>-->
-<!--                                    <div class="col-md-2">
+                                    
+                                    <div class="col-md-2">
                                         <div>
                                             <label class="text-left control-label">Year: </label>
                                             <?php
-//                                            if ($select_year != '') {
-//                                                $presenet_year = $select_year;
-//                                            } else {
-//                                                $presenet_year = date('Y');
-//                                            }
+                                            if ($select_year != '') {
+                                                $presenet_year = $select_year;
+                                            } else {
+                                                $presenet_year = date('Y');
+                                            }
                                             ?>
-                                                <input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">
+                                                <!--<input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">-->
                                             <select class="form-control year-dropdown" id="due_year" name="due_year" onchange="change_project_year(this.value)">
-                                                <?php // foreach ($due_years as $key => $year): ?>
-                                                    <option value="<= $year['due_year'] ?>" <= $presenet_year == $year['due_year'] ? 'selected' : '' ?>>
-                                                        <= $year['due_year'] ?>
+                                                <?php foreach ($due_years as $key => $year): ?>
+                                                    <option value="<?= $year['due_year'] ?>" <?= $presenet_year == $year['due_year'] ? 'selected' : '' ?>>
+                                                        <?= $year['due_year'] ?>
                                                     </option>
-                                                <?php // endforeach; ?>
+                                                <?php endforeach; ?>
                                             </select>
                                             <div class="errorMessage text-danger"></div>
 
                                         </div>
-                                    </div>-->
+                                        <!--                                    <div class="pull-right">
+                                                                                <label class="col-lg-2 m-t-5 control-label">Month: </label>
+                                                                                <div class="col-lg-10">
+                                        <?php // $presenet_month=date('m'); ?>
+                                                                                    <input placeholder="2019" readonly="" class="form-control" type="text" value="2019" name="" id="" required="" title="">
+                                                                                    <select class="form-control year-dropdown" name="due_year" onchange="change_project_year(this.value)" readonly style="pointer-events: none;">
+                                                                                        <option value="">All Months</option>
+                                        <?php // foreach ($months as $key => $month): ?>
+                                                                                            <option value="<? $key ?>" <? $presenet_month== $key?'selected':'' ?> >
+                                                                                                <? $month ?>
+                                                                                            </option>
+                                        <?php // endforeach; ?>
+                                                                                    </select>
+                                                                                    <div class="errorMessage text-danger"></div>
+                                                                                </div>
+                                                                            </div>-->
+                                    </div>
                                     <div class="col-lg-12">
                                         <div class="filter-outer" id="project_apply_filter" style="display:none">
                                             <form name="filter_form" id="filter-form"  method="post" onsubmit="projectFilter()">
