@@ -142,7 +142,7 @@
                                                 $dateRangeAction = $action_start_date.' - '.$current_date;
                                             ?>
                                             <input type="hidden" name="action_range_report_value" id="action_range_report">
-                                            <div class="ibox m-t-25" id="action_by_office_section" onclick="show_action_data('action_by_office')">
+                                            <div class="ibox m-t-25" id="action_by_office_section" onclick="show_action_data('action_by_office','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions By Office</h5>
                                                     <div class="ibox-tools">
@@ -153,7 +153,7 @@
                                                 </div>    
                                             </div>
                                             <div class="ibox-content p-0" id="action_by_office" style="display: none;"></div>                                        
-                                            <div class="ibox m-t-25" id="action_to_office_section" onclick="show_action_data('action_to_office')">
+                                            <div class="ibox m-t-25" id="action_to_office_section" onclick="show_action_data('action_to_office','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions To Office</h5>
                                                     <div class="ibox-tools">
@@ -164,7 +164,7 @@
                                                 </div>
                                             </div>
                                             <div class="ibox-content p-0" id="action_to_office" style="display: none;"></div>
-                                            <div class="ibox m-t-25" id="action_by_department_section" onclick="show_action_data('action_by_department')">
+                                            <div class="ibox m-t-25" id="action_by_department_section" onclick="show_action_data('action_by_department','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions By Department</h5>
                                                     <div class="ibox-tools">
@@ -175,7 +175,7 @@
                                                 </div>
                                             </div>
                                             <div class="ibox-content p-0" id="action_by_department" style="display: none;"></div>
-                                            <div class="ibox m-t-25" id="action_to_department_section" onclick="show_action_data('action_to_department')">
+                                            <div class="ibox m-t-25" id="action_to_department_section" onclick="show_action_data('action_to_department','<?= $franchisee_office ?>')">
                                                 <div class="ibox-title p-t-15 p-b-40">
                                                     <h5 class="m-0 f-s-16">Actions To Department</h5>
                                                     <div class="ibox-tools">
