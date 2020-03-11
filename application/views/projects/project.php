@@ -40,8 +40,68 @@ $role = $user_info['role'];
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-8">
                                         <a href="#" class="btn btn-primary m-t-15" id="project_add_filter">Show Filter</a>
+                                    </div>
+                                    <?php
+                                    if ($select_year != '') {
+                                        $presenet_year = $select_year;
+                                    } else {
+                                        $presenet_year = date('Y');
+                                    }
+                                    ?>
+                                    <div class="col-lg-12">
+                                        <div class="filter-outer" id="project_apply_filter" style="display:none">
+                                            <form name="filter_form" id="filter-form"  method="post" onsubmit="projectFilter()">
+                                                <div class="form-group filter-inner">
+
+                                                    <div class="filter-div m-b-10 row" id="original-filter">
+                                                        <div class="col-sm-4 m-t-10">
+                                                            <?php asort($filter_element_list); ?>
+                                                            <select class="form-control variable-dropdown" name="variable_dropdown[]" onchange="changeVariableProject(this)">
+                                                                <option value="">All Variable</option>
+                                                                <?php foreach ($filter_element_list as $key => $fel): ?>
+                                                                    <option value="<?= $key ?>">
+                                                                        <?= $fel ?>
+                                                                    </option>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-4 m-t-10">
+                                                            <select class="form-control condition-dropdown" id='project_condition' name="condition_dropdown[]" onchange="changeCondition(this)">
+                                                                <option value="">All Condition</option>
+                                                                <option value="1">Is</option>
+                                                                <option value="2">Is in the list</option>
+                                                                <option value="3">Is not</option>
+                                                                <option value="4">Is not in the list</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-3 m-t-10 criteria-div">
+                                                            <select class="form-control criteria-dropdown chosen-select" placeholder="All Criteria" name="criteria_dropdown[][]">
+                                                                <option value="">All Criteria</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-1 m-t-10 p-l-0">
+                                                            <div class="add_filter_div text-center"> <a href="javascript:void(0);" onclick="addProjectFilterRow()" class="add-filter-button btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add Filter"> <i class="fa fa-plus" aria-hidden="true"></i> </a> </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12 m-b-10">
+                                                        <div class="" style="display: inline-block;">
+                                                            <button class="btn btn-success" type="button" onclick="projectFilter(<?= $presenet_year ?>)">Apply Filter</button>
+                                                        </div>
+                                                        <!--                                                    <div class="" style="display: inline-block;"> col-lg-1 row clear-project-btn-one 
+                                                                                                                <span class="text-success" style="display: none;" id="clear_filter">&nbsp; </span><a href="javascript:void(0);" onclick="clearProjectFilter();loadProjectDashboard('', '', '', '', '', '', 'clear', '', '', '', '', '', '', 1);" class="btn btn-ghost" id="bookkeeping_btn_clear_filter" style="display: none;"><i class="fa fa-times" aria-hidden="true"></i> Clear filter</a>
+                                                                                                            </div>-->
+                                                    </div>
+                                                    <div class="col-sm-2">
+
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                                 <div role="tabpanel" class="tab-pane <?= ($category == '1-bookkeeping') ? 'active' : '' ?>" id="bookkeeping">
@@ -431,7 +491,7 @@ $role = $user_info['role'];
                         <div class="funkyradio">
                             <div class="funkyradio-success">
                                 <input type="radio" name="radio" id="rad2" value="2"/>
-                                <label for="rad2"><strong>Completed</strong></label>
+                                <label for="rad2"><strong>Clarification</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
@@ -617,7 +677,7 @@ $role = $user_info['role'];
                     var tracking_main = 'Started';
                     var trk_class_main = 'label label-yellow';
                 } else if (res.project_status == 2) {
-                    var tracking_main = 'Completed';
+                    var tracking_main = 'Clarification';
                     var trk_class_main = 'label label-info';
                 } else if (res.project_status == 4) {
                     var tracking_main = 'Canceled';
