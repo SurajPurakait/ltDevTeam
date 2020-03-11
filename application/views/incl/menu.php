@@ -717,17 +717,15 @@ $office_id = get_office_id($staff_info['office']);
                         </ul>
                             
                         </li>
-<!--                        <li <?php // echo active_menu($menu, "report_4"); ?>>
-                            <a href="<?php // echo base_url() ?>reports/index/4">Franchisees</a>
-                        </li>-->
-
                     <?php 
-                       // } 
-                    ?>
-                        
+                        if ($staff_info['type'] != 3) {
+                    ?>                        
                         <li <?= active_menu($menu, "report_3"); ?>>
                             <a href="<?= base_url() ?>reports/index/3">Leafnet</a>
                         </li>
+                    <?php
+                        }
+                    ?>    
                         <li <?= active_menu($menu, ""); ?>>
                             <a href="#">Reviews</a>
                         </li>
