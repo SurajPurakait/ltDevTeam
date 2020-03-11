@@ -584,7 +584,7 @@
 
             $("#report-actions-range-btn").click(function () {
                 var report_range_action = document.getElementById('reportrangeaction').value;
-                get_action_range_date(report_range_action);    
+                get_action_range_date(report_range_action,'<?= $franchisee_office ?>');    
             });
         });
         

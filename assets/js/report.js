@@ -340,7 +340,7 @@ function show_action_data(category = '',fran_office='') {
     });
 }
 
-function get_action_range_date(date_range = "") {
+function get_action_range_date(date_range = "",fran_office = "") {
     // alert($date_range);return false;
     if ($("#action_by_office").css('display') == 'block') {
         category = 'action_by_office';
@@ -361,16 +361,16 @@ function get_action_range_date(date_range = "") {
         success: function (result) {
             $("#action_range_report").val(result);
             if (category == 'action_by_office') {
-                show_action_data(category, result);
+                show_action_data(category, fran_office);
                 $("#action_by_office").show();
             } else if (category == 'action_to_office') {
-                show_action_data(category, result);
+                show_action_data(category, fran_office);
                 $("#action_to_office").show();
             } else if (category == 'action_by_department') {
-                show_action_data(category, result);
+                show_action_data(category, fran_office);
                 $("#action_by_department").show();
             } else if (category == 'action_to_department') {
-                show_action_data(category, result);
+                show_action_data(category, fran_office);
                 $("#action_to_department").show();
             }
         },
