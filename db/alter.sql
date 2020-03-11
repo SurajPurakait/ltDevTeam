@@ -1297,4 +1297,10 @@ ALTER TABLE `invoice_recurring_plans` CHANGE `order_id` `order_id` VARCHAR(20) C
 ALTER TABLE `financial_accounts` CHANGE `total_amount` `total_amount` VARCHAR(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0';
 
 ALTER TABLE `project_template_main` ADD `assign_staff` INT(2) NULL DEFAULT NULL AFTER `responsible_staff`; 
- ALTER TABLE `project_main` ADD `assign_staff` INT(2) NULL DEFAULT NULL AFTER `responsible_staff`;
+ALTER TABLE `project_main` ADD `assign_staff` INT(2) NULL DEFAULT NULL AFTER `responsible_staff`;
+
+/* 11.03.2020 */
+CREATE TRIGGER `after_insert_update_amount_collected` AFTER INSERT ON `payment_history`
+ FOR EACH ROW UPDATE `invoice_recurring_plans` SET `invoice_recurring_plans`.`amount_collected` = (SELECT SUM(`payment_history`.`pay_amount`) FROM `payment_history` WHERE `payment_history`.`type` = 'payment' AND `payment_history`.`invoice_id` = NEW.invoice_id AND `payment_history`.`is_cancel` = 0) WHERE `invoice_recurring_plans`.`invoice_id` = NEW.invoice_id;
+CREATE TRIGGER `after_update_update_amount_collected` AFTER UPDATE ON `payment_history`
+ FOR EACH ROW UPDATE `invoice_recurring_plans` SET `invoice_recurring_plans`.`amount_collected` = (SELECT SUM(`payment_history`.`pay_amount`) FROM `payment_history` WHERE `payment_history`.`type` = 'payment' AND `payment_history`.`invoice_id` = NEW.invoice_id AND `payment_history`.`is_cancel` = 0) WHERE `invoice_recurring_plans`.`invoice_id` = NEW.invoice_id 
