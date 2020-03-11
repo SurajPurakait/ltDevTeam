@@ -431,7 +431,7 @@ $role = $user_info['role'];
                         <div class="funkyradio">
                             <div class="funkyradio-success">
                                 <input type="radio" name="radio" id="rad2" value="2"/>
-                                <label for="rad2"><strong>Clarification</strong></label>
+                                <label for="rad2"><strong>Completed</strong></label>
                             </div>
                         </div>
                         <div class="funkyradio">
