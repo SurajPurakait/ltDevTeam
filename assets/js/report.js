@@ -305,7 +305,7 @@ function show_billing_data(date_range = '', start_date = '', fran_office = '') {
 }
 
 // report action section js
-function show_action_data(category = '') {
+function show_action_data(category = '',fran_office='') {
     var date_range = $("#action_range_report").val();
     if (category == 'action_by_office') {
         $("#action_by_office").toggle();
@@ -319,7 +319,7 @@ function show_action_data(category = '') {
     $.ajax({
         type: 'POST',
         url: base_url + 'reports/get_action_data',
-        data: { 'category': category, 'date_range': date_range },
+        data: { 'category': category, 'date_range': date_range ,'fran_office':fran_office },
         success: function (result) {
             if (category == 'action_by_office') {
                 $("#action_by_office").html(result);
