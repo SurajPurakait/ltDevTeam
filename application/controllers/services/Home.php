@@ -660,7 +660,7 @@ class Home extends CI_Controller {
         } else {
             $request_type = post('request_type');
         }
-        // $category_id = request('category_id');
+        $category_id = request('category_id');
         $status = request('status');
         // $request_by = request('request_by');
         // $department = request('department_id');
@@ -668,9 +668,9 @@ class Home extends CI_Controller {
         // $staff_type = request('staff_type');
         // $sort = request('sort');
         $render_data['page_number'] = request('page_number');
-        $render_data['result'] = $this->service_model->ajax_services_new_dashboard_filter('',$status,$request_type);
-        // echo "<pre>";
-        // print_r($render_data);exit;
+        $render_data['result'] = $this->service_model->ajax_services_new_dashboard_filter('', $status, $request_type, $category_id);
+        $render_data['category_id'] = $category_id;
+        $render_data['status'] = $status;
         $this->load->view('services/service_new_ajax_dashboard', $render_data);
     }
 

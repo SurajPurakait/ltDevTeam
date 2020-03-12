@@ -251,7 +251,7 @@ if (!empty($result)) :
     endforeach;
     if (isset($page_number) && $row_number < count($result)) : ?>
         <div class="text-center p-0 load-more-btn">
-            <a href="javascript:void(0);" onclick="loadNewServiceDashboard('', '', 'on_load', '', <?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more result</a>
+            <a href="javascript:void(0);" onclick="loadNewServiceDashboard('<?= $status; ?>', '<?= $category_id ?>', 'on_load', '', <?= $page_number + 1; ?>);" class="btn btn-success btn-sm m-t-30 p-l-15 p-r-15"><i class="fa fa-arrow-down"></i> Load more result</a>
         </div>
     <?php endif; ?>
     <script>

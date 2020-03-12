@@ -141,22 +141,21 @@
                                         <td><?= $task_data->description; ?></td>
                                     </tr>
                                     <tr>
-                                        <td style="width:150px;"><b>Tracking</b></td>
-                                        <td title="Tracking Description" class="text-center"><a href='javascript:void(0)' onclick='change_project_status_inner_input(<?= $task_data->id; ?>,<?= $status; ?>, <?= $task_data->id ?>,<?= $task_data->project_id ?>,"<?= $task_data->task_order ?>");'><span id="trackinner-<?= $task_data->id ?>" projectid="<?= $task_data->project_id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
-                                    </tr>
-                                    <tr>
                                         <td style="width: 150px;"><b>Assign To: </b></td>
                                         <?php if ($task_data->department_id == 2) {?>
-                                            <td title="Assign To" class="text-center">
+                                            <td title="Assign To">
                                                 <?php
                                                 $resp_value = get_assigned_office_staff_project_task($task_data->id,$task_data->project_id, $task_data->responsible_task_staff);
                                                     echo "<span class='text-success'>". $resp_value['staff_name'] ."</span><br>" . $resp_value['office'] . "</td>";
                                                 ?> 
                                             </td> <?php } else { ?> 
-                                            <td title="Assign To" class="text-center"><span class="text-success"><?php echo get_assigned_project_task_staff($task_data->id); ?></span><br><?php echo get_assigned_project_task_department($task_data->id); ?></td>                                                     
+                                            <td title="Assign To"><span class="text-success"><?php echo get_assigned_project_task_staff($task_data->id); ?></span><br><?php echo get_assigned_project_task_department($task_data->id); ?></td>                                                     
                                         <?php } ?>
                                     </tr>
-
+                                    <tr>
+                                        <td style="width:150px;"><b>Tracking</b></td>
+                                        <td title="Tracking Description" ><a href='javascript:void(0)' onclick='change_project_status_inner_input(<?= $task_data->id; ?>,<?= $status; ?>, <?= $task_data->id ?>,<?= $task_data->project_id ?>,"<?= $task_data->task_order ?>");'><span id="trackinner-<?= $task_data->id ?>" projectid="<?= $task_data->project_id; ?>" class="label <?= $trk_class ?>"><?= $tracking ?></span></a></td>
+                                    </tr>
                                 </table>
                             </div>
                         </div>
